@@ -1,0 +1,1082 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "nonce": "255080bc-bede-4c29-aef7-d893a01f220f",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "38b37e3322176bd9836d228d4c4ce63bf66fced2",
+      "baseSha": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+      "evidence": "independent-qa1/report.md",
+      "reason": "Genuine author1 passed focused tests but new independent QA1 FAILED backing-memory bound and two raw-error routing assertions. All failures and source candidate retained.",
+      "independentQaNonce": "26a7189c-6330-45ec-b019-ca73be5f13f6",
+      "independentQaSealSha256": "62f9c0ce6862cbd0a00536ca42799a995a6c9042f7e36a4b749627cdc006d70f"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "nonce": "711849b2-b278-48aa-98d4-3f5ba42780ef",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b",
+      "baseSha": "38b37e3322176bd9836d228d4c4ce63bf66fced2",
+      "evidence": "independent-qa2/report.md",
+      "reason": "Genuine separately reserved bounded correction; new independent QA2 verifies six source files, full1663PASS/0FAIL/3WindowsSKIP and owned backing allocations. Earlier author2 flaky test run retained.",
+      "independentQaNonce": "e26aaa1a-0d6a-4cea-a582-ab66a5a9cdda",
+      "independentQaSealSha256": "569200428bade2358d7dfa462aef6e80668b16fcff0b09fde186ce03060ed9d9"
+    },
+    {
+      "round": 3,
+      "status": "passed",
+      "nonce": "d25ba2ca-b40f-483a-b6e8-53f7e1d17db6",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "31b11f09331249a93468bf00d8cc3d1313004a72",
+      "baseSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "evidence": "independent-qa3/report.md",
+      "reason": "Actual author3 corrects real peer1 feedback; NEW independent QA3 verifies model stdout streaming, owned retention, legacy caps, status classification and native1665PASS0FAIL3SKIP. All previous failures and peer BLOCKED retained.",
+      "independentQaNonce": "e224a4fd-aebb-4679-af5e-7d1d6eb061e5",
+      "independentQaSealSha256": "fba8d69b6878594a267e3348645677fd31f132a782beb2de331a09f8ec6b4841"
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "blocked",
+      "subjectSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "blocked",
+        "subject_sha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+        "review_sha256": "e87f2a727e28974ce6b4dee639cd7492acbc1d63b41a832368475c226d969320"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"b868e72ceb2d2e29fdaf077b3d7144c34481e176\",\n  \"verdict\": \"blocked\",\n  \"summary\": \"I reviewed the six changed files as source data and did not run anything. The design matches the task contract: AC4 holds on source review. It raises the model total-output cap to 2 MiB, keeps a 32 KiB tail per stream, and makes stderr fatal above 64 KiB. Callers that leave out the new options keep the old combined cap with prefix capture. The CLI flags, the 30-minute timeout, the 256 KiB typed-result limit and the schema, path and symlink checks are unchanged. Diagnostics carry only fixed categories and numeric counts, and thrown errors no longer include raw stderr. The capacity cooldown is kept through a boolean `modelCapacityFailure` marker. QA1's backing-buffer finding is fixed: `appendCapture` now allocates an owned buffer no larger than the limit. QA1's outdated routing assertions are corrected. I found no blocking correctness or security defect in the code.\\n\\nThe verdict is blocked because the evidence is incomplete and is not tied to this exact SHA:\\n(1) The only passing QA (QA2) is sealed against commit 3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b, not the subject b868e72ceb2d2e29fdaf077b3d7144c34481e176. Its source hashes are SHA-256, while the supplied blob IDs are Git SHA-1, so I cannot confirm from the evidence that the subject's source files match what QA2 tested.\\n(2) The validation report marks all six native CI checks as PENDING (bug-pipeline-tests, secret-scan, frontend-tests, archive-tests, gate, browser-e2e). No exact-head results were supplied.\\n(3) The independent Claude review and the final Codex gate are recorded as PENDING.\\n\\nI also list smaller issues: diagnostic classification can be wrong, the new limit check can throw for existing callers, and the 2 MiB fatal cap could cut off long sessions.\",\n  \"findings\": [\n    {\n      \"severity\": \"high\",\n      \"file\": \"artifacts/task-validation/codex-model-output-policy-20261026/validation-report.md\",\n      \"line\": 1,\n      \"problem\": \"The acceptance evidence does not cover the frozen subject SHA. QA2's READY verdict and seal name code 3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b, while the subject is b868e72ceb2d2e29fdaf077b3d7144c34481e176. The seal's sourceHashes are SHA-256 and the change set gives Git SHA-1 blob IDs, so the supplied data cannot show that the subject's six source/test files match what QA2 tested. The same report says the six required native checks (bug-pipeline-tests, secret-scan, frontend-tests, archive-tests, gate, browser-e2e), the Claude peer review and the final Codex gate are PENDING. AC1–AC3 therefore rest only on synthetic local runs of a different commit.\",\n      \"requested_change\": \"Add evidence tied to b868e72c: successful exact-head results for all six required native checks, plus a manifest that maps each changed file's subject Git blob SHA to the SHA-256 hashes in the QA2 seal, or a fresh QA run against this SHA.\",\n      \"test_expectation\": \"The bug-pipeline-tests check on head b868e72c runs agent-team/tests/bug-pipeline/*.test.mjs and passes, including process-output.test.mjs and the new models.test.mjs and routing.test.mjs cases. The other five required checks are also green on the same head.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"agent-team/src/bug-pipeline/models.mjs\",\n      \"line\": 68,\n      \"problem\": \"`failureCategory` applies broad numeric patterns to all retained stderr: `\\\\b401\\\\b` and `\\\\b403\\\\b` map to auth, `\\\\b402\\\\b` to quota, `\\\\b429\\\\b` to rate, and `\\\\b50[234]\\\\b` to network. Stderr can hold arbitrary tool or source output, so text like 'fixture line 401' or 'port 5030… 503 bytes' gets the wrong category. The base code already fixed this exact false positive for capacity detection; see the 'incidental line numbers' routing test and the anchored regex in isModelCapacityFailure.\",\n      \"requested_change\": \"Anchor the numeric status patterns the same way as the capacity regex, e.g. `(?:http(?:/[0-9.]+)?\\\\s+|status(?:[_ -]code)?[\\\"']?[\\\\s:=]+)(?:401|403)`, or apply them only to terminal JSON events.\",\n      \"test_expectation\": \"A failing run whose stderr is 'validation failed at fixture line 401' (or 503) gets failureCategory 'other', not 'auth' or 'network'.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"agent-team/src/bug-pipeline/process.mjs\",\n      \"line\": 135,\n      \"problem\": \"`createRunner` now calls `validateLimit(maxOutputBytes)` for every caller, and it throws a RangeError when maxOutputBytes is above 64 MiB or not a safe integer. Before this change any value was accepted. Any existing caller outside the diff (verification, controller or review runs) that passes a larger or non-integer limit now gets a rejected promise instead of a result object. That breaks the contract's claim that non-model runner defaults are unchanged, and the supplied files do not show the other call sites.\",\n      \"requested_change\": \"Confirm that every existing createRunner caller passes a value within the new bound. Otherwise, apply the strict check only to the new options (maxCapturedBytesPerStream and maxStderrBytes).\",\n      \"test_expectation\": \"A repository-wide test or grep of `maxOutputBytes:` call sites shows that all of them are integers ≤ 64 MiB. Existing controller and verification runner tests pass unchanged.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"agent-team/src/bug-pipeline/models.mjs\",\n      \"line\": 27,\n      \"problem\": \"The model session's total stdout+stderr cap is still fatal, now at 2 MiB (RUNNER_OUTPUT_BYTES). Codex `--json` emits events that include command output and runs for up to 30 minutes. A legitimate long implementation session can therefore still be killed with output-limit before its separate typed-result file is read, which is the same failure this PR fixes, only at a higher threshold. The output is already tail-captured, so the total cap no longer protects memory.\",\n      \"requested_change\": \"Either document why 2 MiB is enough for the worst-case 30-minute workspace-write session, or make stdout volume non-fatal for model sessions and keep only the fatal stderr cap, the timeout and the bounded tail capture.\",\n      \"test_expectation\": \"A synthetic child emits more than 2 MiB of JSON progress on stdout, then writes a valid typed result. The test asserts the documented outcome: success if stdout becomes non-fatal, or an explicit output-limit with category 'output-limit' if the cap is kept on purpose.\"\n    }\n  ]\n}\n"
+  },
+  "sourceManifest": [
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "blob": "b42cd83de4b6442451a7437926271e70b761b712",
+      "mode": "100644",
+      "baseBlob": "49f6863999ec35956ab5075e2261156788cb3116",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/models.mjs",
+      "blob": "9fbf4ef5003599e27bebeb1ff2a54dd55febaab9",
+      "mode": "100644",
+      "baseBlob": "afeaedc93a27018fb668e3258e29f870b82852f9",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/process.mjs",
+      "blob": "9e11b3a620e3b1fb7c9cf2ee2783e865e93c5f51",
+      "mode": "100644",
+      "baseBlob": "a814921e49f21b54ebf3dfc42226d421d53a269d",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/models.test.mjs",
+      "blob": "cc23e403463bca3f606f66d33f89698f8daa2384",
+      "mode": "100644",
+      "baseBlob": "20d1de14d876ecc3f4f14810eb90cfcec6b0f406",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/process-output.test.mjs",
+      "blob": "e62e33a0b21f015bd362930f1503349a110bd637",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/routing.test.mjs",
+      "blob": "d2d1290e1fb70498a109490acec362497218f0c7",
+      "mode": "100644",
+      "baseBlob": "f90c16f6ee37e4c785c378186d21b95ed4bd0f66",
+      "baseMode": "100644"
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/analysis.md",
+      "blob": "48d401210f40bd6502ae3525a62e05653ac27fa2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/amendment-hashes.sha256",
+      "blob": "bc26e7fd907cf7cef146302a2a761c9b23c5c291",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/manifest.sha256",
+      "blob": "ef253339f813a880e6d91b70ec2cbac49836b034",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/analysis.md",
+      "blob": "2ce8967ed0e65dcd7fa80876d7106f79ae7199db",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/implementation-plan.md",
+      "blob": "a5b3cbdf0389a88abc37e592c37c1d0915b6d278",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/imported-history.json",
+      "blob": "542900d8c7715373238ad554df75a58d6f249795",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/logs/green-targeted.log",
+      "blob": "2ad849be7c8aa3390968c1807db18fa716ea130c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/logs/red-models.log",
+      "blob": "e9d8b9894a11749e3c043d61ecc92c444566c0a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/task-contract.md",
+      "blob": "952b0a1bb2551e36f31d6efeb1a9bd963aa5b028",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/test-plan.md",
+      "blob": "0b91d34f69990e7b364bf253ad13a5b85a5ba002",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/packet/validation-report.md",
+      "blob": "7f4fc61e5ddb6c474aae6a9d404f70ff5c48f011",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/result.json",
+      "blob": "26854f84bd2b774861012285936ab2c1337a70b3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/amendment-1/seal.json",
+      "blob": "fc1c4fa501be0a10f3ccb29181616fb0e12ab1cc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/manifest.sha256",
+      "blob": "a65c4883f3b73f09f4bb29a6b13fc1883a6dd4f1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/analysis.md",
+      "blob": "a5144d0efab31406e64b6f3ea62dfa8bf5b48995",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/implementation-plan.md",
+      "blob": "a5b3cbdf0389a88abc37e592c37c1d0915b6d278",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/imported-history.json",
+      "blob": "542900d8c7715373238ad554df75a58d6f249795",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/logs/green-targeted.log",
+      "blob": "cce4ca897a6744098c077038a312657e65431ce9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/logs/red-models.log",
+      "blob": "e9d8b9894a11749e3c043d61ecc92c444566c0a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/task-contract.md",
+      "blob": "952b0a1bb2551e36f31d6efeb1a9bd963aa5b028",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/test-plan.md",
+      "blob": "1cdaadf90ac8b653b2dc402e6201b5b1e7232594",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/packet/validation-report.md",
+      "blob": "d1527b54213c5a42314b673aa3a0a26b22f532be",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/reservation.json",
+      "blob": "ac701e87b6970acd5538aaeada095b41671a6c29",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/result.json",
+      "blob": "dd8cad68e01368253e49edd4844f6b47d590048e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/result.sha256",
+      "blob": "7a2c57511d471fc6dd70a22033cbb6dbf52fc4c5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author1/seal.json",
+      "blob": "bcc89e7b533f1be6c4cb3ec316412658cf366f6e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/STOP",
+      "blob": "f65e50c618cafd225ec9f88cea8b20915abc58fc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/docs/task-contract.md",
+      "blob": "952b0a1bb2551e36f31d6efeb1a9bd963aa5b028",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/findings.md",
+      "blob": "a133a92f3f24d2efbb8fd70f9ee431bef8eaa5a7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/local-scope-amendment-before-session.json",
+      "blob": "dd73ae98ff11d7e4a5e177f2f3f520c6c3c81e87",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/logs/full-relevant-correction-final.tap",
+      "blob": "176624d909b7f2a588652ae8a75d150d953f4243",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/logs/full-relevant-correction-initial-flake.tap",
+      "blob": "dde93d59e013c6eec3a33644fe5d9fbffc340cef",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/logs/initial-red-models.log",
+      "blob": "e9d8b9894a11749e3c043d61ecc92c444566c0a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/logs/red-backing-regression.log",
+      "blob": "dff061b82506d41ca0d72825f229fbb58faa5f2f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/logs/targeted-correction-final.tap",
+      "blob": "f299af5fdd22616da9d4d567d0f1166b025735df",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/logs/task-contract-validation.log",
+      "blob": "0e17b332d9f8a3e97ab26d152044c6ab8585b871",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/manifest.sha256",
+      "blob": "75367ea75288efa8287fc09c0c5b7097af54e97a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/reservation.json",
+      "blob": "743d3468fa914ce2a466f8fe9067a5469b925652",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/result.json",
+      "blob": "17f3658adce53d8dcb89ece113e6775c2003a30b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/seal.json",
+      "blob": "4d5a1d6c0b2f5f786786d905480f7ed5738d8596",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/source-hashes.json",
+      "blob": "587d5ea74a9eeb186484a815dff11c7c982ba8ba",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/author2/validation-report.md",
+      "blob": "ce366a993eac0cad49f3294849fdb734beabd061",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/implementation-plan.md",
+      "blob": "a5b3cbdf0389a88abc37e592c37c1d0915b6d278",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/imported-history.json",
+      "blob": "56f5e09d25daaeb2b061f962f5b58359d9ffa81a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/browser-evidence.mjs",
+      "blob": "bf4e2471d5b379446326b6916e04713d50249209",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/complete.diff",
+      "blob": "cce6cee4c8f8e31b94db14f1685b5d2f382f2edb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/findings.md",
+      "blob": "543650b5fdea82a1bad3778e4211483adeaecdf5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/independent.mjs",
+      "blob": "402a44c542b7c3953c1c37e001e15893ca84e159",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/contract.log",
+      "blob": "e1e9283e89b6a87d7f84e324f13d431e9ce267a8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/focused-tests.tap",
+      "blob": "975a7384bc8043f7ddabef0fcf066a1a960f7207",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/independent.log",
+      "blob": "8ed238b3c8d7bc2d4114cf5b95738382d9e6dac8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/pipeline-tests-complete.tap",
+      "blob": "675eb0a0bc9f30f8b5766cab2af250e7dbed7b06",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/pipeline-tests.tap",
+      "blob": "8b9a2e13014701d671cd2c6ffa79be5fb310cc58",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/playwright-file-navigation-attempt.log",
+      "blob": "28b1785e33f36b8dfdd57941de252d9de35c3f4e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/playwright-video-attempt.log",
+      "blob": "f40a8cf0ae58a87a2b8ea6386604010debfc022a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/logs/playwright.log",
+      "blob": "43d9fe85135fc55211d0e9da626274960db8ab07",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/manifest.sha256",
+      "blob": "236aa92d79bf1ceaa3386e91689dad3a9a657eb7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/playwright-report/index.html",
+      "blob": "7839d82098a70d9921ff9b218b9256cc86507efc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/report.md",
+      "blob": "69263f013d7427d7e574d763d4f420b8949d144a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/reservation.json",
+      "blob": "227572bc9103fbbe30f04ec4c490eb6b264cb507",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/result.json",
+      "blob": "2d5d55cb1b3d9189b19e28c25462e52aa081d3e0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/screenshots/result.png",
+      "blob": "554ce6bb7ada0e6ac0d069ee365b09728deb7a24",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/seal.json",
+      "blob": "556fa719a684753ee9a798dd4eb3980f0d745e5d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/source-hashes.json",
+      "blob": "b5bbdf2d8b6b9a2a66ef0650d090c246c88c230a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/task-contract.md",
+      "blob": "02c169cb88757b3be75b208e92ace689f2fe3944",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/test-results/artifact-validation.json",
+      "blob": "12be894ee30cbd4191d448e5ebc0b4d38c2116b2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/test-results/independent.json",
+      "blob": "8ed238b3c8d7bc2d4114cf5b95738382d9e6dac8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/test-results/playwright.json",
+      "blob": "9e47d933b01408be5facd7ef5b1e363fde5bd904",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/test-results/privacy-scan.json",
+      "blob": "08ee2826c8635bac6c23b40dcc72b3f9ba89d088",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/test-results/real-runner-backing.json",
+      "blob": "2d81fb1288dadaff4a8e923cb8c9cb55c5dec14e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/trace/trace.zip",
+      "blob": "5a3ec9c2f90b9622d1d0652c58051e81bd4fb723",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa1/validation-report.md",
+      "blob": "69263f013d7427d7e574d763d4f420b8949d144a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/artifact-manifest.json",
+      "blob": "16d25b13480e7715c153f8a6ad9b3116d6deeb8f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/commands.txt",
+      "blob": "64796ca27ec4a30b586aa55591cdc75c1e314ba8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/complete.diff",
+      "blob": "f96e095ef009bfc58dfab968bf9dff21c508bfbf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/evidence-scripts/browser-evidence.mjs",
+      "blob": "4fdb901361efd14634ca0f80e4fa3c51925632d0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/evidence-scripts/classifier-extra.mjs",
+      "blob": "67b1672cc168afb10e6598522831555a0cf88f9a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/evidence-scripts/independent.mjs",
+      "blob": "07017afe72d1778be459eb2ea0b9a070590f9357",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/evidence-scripts/memory-extra.mjs",
+      "blob": "974200baeeff5ece80894d62f0968c9b2795a648",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/findings.md",
+      "blob": "2bec88d3f91d2d385925e783c93c4d0318e1d23e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/classifier-extra.log",
+      "blob": "169379561528455937074ad567258e3707239556",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/contract.log",
+      "blob": "554f061ff712400066b3adf09cd39b077f5fc582",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/diff-check.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/focused-tests.tap",
+      "blob": "604289fbaa0a49b0b5a1352341bdfb7c538a2c11",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/independent.log",
+      "blob": "d0b7274721c1aef71d151a2566f0082ee8d3fe08",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/memory-extra.log",
+      "blob": "75ebe63aab968e574fe9e4d4e0db8a5c4765e25a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/pipeline-tests-complete.tap",
+      "blob": "39bf6ee7ff673c48f46821142e26c65ddb1cb2bd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/logs/playwright.log",
+      "blob": "03250c1fe693171db85756d8d6f1da0742e52785",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/playwright-report/index.html",
+      "blob": "b8c4f1efc4826f8fe99b26472533d4fda8936d1c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/report.md",
+      "blob": "48b7912abf596323b26424e6031322c75897e06c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/reservation-PREPARED-NOT-COMMITTED.json",
+      "blob": "58bfe135a8f2563369264f3ccf9c373ba5ecfd39",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/reservation.json",
+      "blob": "1281b013b6179fd591a7465c006829d4615fa629",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/result.json",
+      "blob": "c0da0477849241d4f9a38e127405fbaff6548cce",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/screenshots/result.png",
+      "blob": "8417701d5cadd14c0168a95942e28cf0ad172642",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/seal.json",
+      "blob": "534a8c393ccf4ea305884229f09366edb8910109",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/source-hashes-after.json",
+      "blob": "55bb46e45b4dc0e47227bf0f3ffdf16ca3f01228",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/source-hashes-before.json",
+      "blob": "273aef99e1957a24f7aa1b07ddb4dc01a1c43c35",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/task-contract.md",
+      "blob": "902b8589db0debbaeacee55252bd383fa18e40c8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/test-results/classifier-extra.json",
+      "blob": "169379561528455937074ad567258e3707239556",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/test-results/independent.json",
+      "blob": "d0b7274721c1aef71d151a2566f0082ee8d3fe08",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/test-results/memory-extra.json",
+      "blob": "75ebe63aab968e574fe9e4d4e0db8a5c4765e25a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/test-results/playwright.json",
+      "blob": "03250c1fe693171db85756d8d6f1da0742e52785",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/trace/trace.zip",
+      "blob": "29ac8f58872f23cd4b1bba8af189d2e72be7f454",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/independent-qa2/validation-report.md",
+      "blob": "48b7912abf596323b26424e6031322c75897e06c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/logs/full-relevant-correction-final.tap",
+      "blob": "176624d909b7f2a588652ae8a75d150d953f4243",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/logs/full-relevant.tap",
+      "blob": "dde93d59e013c6eec3a33644fe5d9fbffc340cef",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/logs/green-correction-targeted-final.tap",
+      "blob": "f299af5fdd22616da9d4d567d0f1166b025735df",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/logs/green-correction-targeted.tap",
+      "blob": "6fd017f95e3ab7311f84498b3f0b973e2cc34af4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/logs/green-targeted.log",
+      "blob": "2ad849be7c8aa3390968c1807db18fa716ea130c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/logs/red-models.log",
+      "blob": "e9d8b9894a11749e3c043d61ecc92c444566c0a9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/preserved-pre-provider-config-match.json",
+      "blob": "8ecdc55cd7249df6f4d8248e0f32a8366528cb97",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/preserved-pre-provider-probe.json",
+      "blob": "0cb403e49420b481f62510f1856eebf64f8fe8d1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/qualification-proof.json",
+      "blob": "557991943caa46bfcf67a4b7fb2848762270f475",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/source-manifest.json",
+      "blob": "7f4470c83adaf4628cdf472c16c7a0e72b034672",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/task-contract.md",
+      "blob": "952b0a1bb2551e36f31d6efeb1a9bd963aa5b028",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/test-plan.md",
+      "blob": "0b91d34f69990e7b364bf253ad13a5b85a5ba002",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/codex-model-output-policy-20261026/validation-report.md",
+      "blob": "7677ec96b96a6787374a042c66ab4c7241a43c03",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "STOP.md": "4956173efaa7a7f7cf717a2407201cdee0bb721f1fc09e12472f725f9af3f0e8",
+    "analysis.md": "a93ddbeb6ff7b28f58ad2459b73e2ebebcf0ee376be6bc78189f6b0313d98712",
+    "author3/STOP.md": "4956173efaa7a7f7cf717a2407201cdee0bb721f1fc09e12472f725f9af3f0e8",
+    "author3/analysis.md": "23cbedaa14dbd214ea1449150b90170117baa03c8f41086a06073bd8f4bec14a",
+    "author3/implementation-plan.md": "630657f159aabaf1fa391a70e5417674684eff6d3481a01e2808d0d562b5fad0",
+    "author3/result.json": "a20465e9dfe7b4ec36ba7092bd6e57d54e5d75d1981f0ccc81b252d0f6eccddb",
+    "author3/seal.json": "d43e0ae2facc63f20eb144a1b1c0494f79ace8f04ce2b45a3f60092088244ef8",
+    "author3/source-hashes.json": "4fcbcde3d05b51e96d898a95c4efc503d4cdef5e7f52d934d3f6e1b41ef959c4",
+    "author3/source-inventory.md": "940cdd689ac8d67a07507309d67a953f0519ae9557fb4f3fef814915afd608ab",
+    "author3/task-contract.md": "a4ae521b201c679ce5b3727a4da72ce336cbbdf3ad2e1713f39548b5ca599938",
+    "author3/test-plan.md": "81240e0191010e91e4fea734b2d124e10023c9e96385f3dbd80192b49e47e098",
+    "author3/test-results/agent-team-full-b868-context-final.tap": "6794b801398af444819de43cbe38503d4582adf1e782bae6d89a2b3f20a6d936",
+    "author3/test-results/agent-team-full-qa2-context-final.tap": "3a07d9024f013fc889b460f7405fd535f734df0f1ddc7f1b5d3bd721b54fa4bd",
+    "author3/test-results/baseline-red.tap": "a8c67e8108e120d6f8266ca7053f35e4ecf3818927d3b79433549fdeb8d459b8",
+    "author3/test-results/bug-pipeline-b868-complete-context-final.tap": "136ae3cb430f10198ac89c9d5fa5c305e1c6d78b80f86c1032220efc97d0e2d2",
+    "author3/test-results/bug-pipeline-b868-context-fixtures-final.tap": "05785ae293a5ae82bdb1b0181959859775b542e704ee6564347338f3af89795d",
+    "author3/test-results/bug-pipeline-b868-overlay-final.tap": "f0a6afd64e3f09acb25989681cc5e73dba1c337b598e8325b7e78d3e3d18c112",
+    "author3/test-results/bug-pipeline-full-final.tap": "d05d3533c6bda9539b6286af7d51fee828573711e0dc6c31d46910770a87130c",
+    "author3/test-results/bug-pipeline-full.tap": "52f543d40582ff98658f9280d3fd084d7a997df02f8fb1100a3ddf88931f6cee",
+    "author3/test-results/models-process-output-final.tap": "9d2f22bb944a6abacca23f9b764f722d13eadfaef77386e66b8007b799d43a2a",
+    "author3/test-results/models-process-output.tap": "f7967b649ba4892bfa2bbf035104233aabf562827a8c058ce78d4bf63db59a40",
+    "author3/test-results/qa2-exact-full-command-final.tap": "6780d3d3938d05026401790d4ae72986a2ad455851423d2e8ceb297da68a24e8",
+    "author3/test-results/routing.tap": "51642e444fc00aa4cf974166e76f828107962d8c7a26ff1af8b54df3b77871ea",
+    "author3/validation-report.md": "b8995c5e067febddbd2590abb2b4cd10de29d822616f9cb59bf805c8e2774fb5",
+    "claude-review-1.json": "e87f2a727e28974ce6b4dee639cd7492acbc1d63b41a832368475c226d969320",
+    "implementation-plan.md": "630657f159aabaf1fa391a70e5417674684eff6d3481a01e2808d0d562b5fad0",
+    "independent-qa1/browser-evidence.mjs": "eff2a1e91fb1b63d5cd016e3607c577b0e7070a24ce1a36638c3757f8ed88f87",
+    "independent-qa1/complete.diff": "89a1bcff04476e9e910f474a7955b69317406fbb26daf3ee115a551989d6598c",
+    "independent-qa1/findings.md": "b08efe7356f87486d3abcc9834c29f6166772500b7fb3fb52335526fdf60975e",
+    "independent-qa1/independent.mjs": "0f126b635d88d2f91a2f0e0cc728c0f0eb2e35dbd7672fdecc44ad04bfdaaadc",
+    "independent-qa1/logs/contract.log": "029ea8619ad0a1219d1e2ba1813602d023c8a5ee83252cf9d51f59387f92d57a",
+    "independent-qa1/logs/focused-tests.tap": "36887a309e1a03c341dcd6708851e36c9f9cf95517d2ce1d84ee49fe26dfe7f3",
+    "independent-qa1/logs/independent.log": "880334adcfdea0c7c88a6e0da02919394ceac0f3c551f482194f6dfc3e842353",
+    "independent-qa1/logs/pipeline-tests-complete.tap": "770295779207bec58a762b18f7c0707fa6e8f5af9065a15435361bc3d1b26a31",
+    "independent-qa1/logs/pipeline-tests.tap": "0c58706eec1de257f12781a0f7617e0619eae4a5a336bef7295c92662f9f50b8",
+    "independent-qa1/logs/playwright-file-navigation-attempt.log": "92a92fe8bb5d1defefb7ad667c3403a92290df8dcac0a388ca10091970268bf9",
+    "independent-qa1/logs/playwright-video-attempt.log": "9e67e897b5539a9453f08902e71001e453f5cb7ebb071d809f1f33aeb18401be",
+    "independent-qa1/logs/playwright.log": "0d71d3131c46c9a4c8b699d154ad1ac28dadefd7672cdff768cfc817218d14ec",
+    "independent-qa1/manifest.sha256": "17fb180fc2d1d38db10dfcddb7e642a394129a41960029f6dc80ae59ca66cb06",
+    "independent-qa1/playwright-report/index.html": "c574439016db3b839a27329c1822595da3309d6d23a33f2d80318296c1ade261",
+    "independent-qa1/report.md": "59f6b921f68fd23a94221b1d587641209dc8c5791a6eae6d44540cbefba339da",
+    "independent-qa1/reservation.json": "ad2caeaf3f9f93efb42ecde1f427dc03915a6188b9ef8689df0474cdc49392ab",
+    "independent-qa1/result.json": "49b8423137898f137fb4eb60e117fc82c544d09098d83185391b9f271a265f65",
+    "independent-qa1/screenshots/result.png": "c51c64424eb89a64f949e9cb744cd62473e7bc5017a2af3fc5657a2b227c5bf2",
+    "independent-qa1/seal.json": "62f9c0ce6862cbd0a00536ca42799a995a6c9042f7e36a4b749627cdc006d70f",
+    "independent-qa1/source-hashes.json": "d35390b983932205dd916d49db11164c4b452a0ebf311b448df74cf45c5c2954",
+    "independent-qa1/task-contract.md": "7be98fec0568933cc44e3f0c57ac380d13643dd5a9894c033742a022d5a0df07",
+    "independent-qa1/test-results/artifact-validation.json": "85c1915e3e1d224826cda1fc6975af478b0ad104ecba3aaba79f98bae5aa34ff",
+    "independent-qa1/test-results/independent.json": "880334adcfdea0c7c88a6e0da02919394ceac0f3c551f482194f6dfc3e842353",
+    "independent-qa1/test-results/playwright.json": "c822f2096fc9efd1cbb8e6c054b8d08e23afcfc3749946605833d9e5a7bbae52",
+    "independent-qa1/test-results/privacy-scan.json": "a521cf9df8b9c3612f888c12c55bc87ab6fc2e71d706e636e2e24e0098d162eb",
+    "independent-qa1/test-results/real-runner-backing.json": "c98029490239a0e6de908ae6ddfdf45f46dfa68403700c1506964c60849c48d9",
+    "independent-qa1/trace/trace.zip": "f2a758dc42b59a59b9c987d09b7bf146039c282264cd542778fdfeedebc0e350",
+    "independent-qa1/validation-report.md": "59f6b921f68fd23a94221b1d587641209dc8c5791a6eae6d44540cbefba339da",
+    "independent-qa2/artifact-manifest.json": "6b8bee76637990f861604ffe62398caac2d5dd2de7d1de2b4d126fe04f389d4e",
+    "independent-qa2/commands.txt": "d02d202a6674e26ae23e68c2121da9fdbd715d06dfa49c41694dc8437e0e04a7",
+    "independent-qa2/complete.diff": "407693a7b88c1bece8a4f50ded7312fd78e0b34432a623ea823f5978adc73742",
+    "independent-qa2/evidence-scripts/browser-evidence.mjs": "8515d31db8ad5b8092f7c79d08551951f6461385effeb6dfb48ae34527027d24",
+    "independent-qa2/evidence-scripts/classifier-extra.mjs": "0bdc2cbb20508eed44023767b6bedc4ac95b11982949052824b2110b1dfc7a9f",
+    "independent-qa2/evidence-scripts/independent.mjs": "921dd058414c884f914a8e7b1d7c9afc521ff342fdfa8c7af843a72c8f7c8bb8",
+    "independent-qa2/evidence-scripts/memory-extra.mjs": "d9c0ecbf167e4feaa7d9bc85827996e33a390185027e459efa6d0a41f5f4a9ee",
+    "independent-qa2/findings.md": "9ef3b23276b7d836f52f9cae9c9fa32374a87eee5ff5732345932b71f2ae0a60",
+    "independent-qa2/logs/classifier-extra.log": "69aca100136ba1c3f10c3f173f6b1a479f824d4d82a8a1d14adf67bf756b6f42",
+    "independent-qa2/logs/contract.log": "f091e4cf9140e96692720bb731e184d039d60eacc33751e11622c4e927259de3",
+    "independent-qa2/logs/diff-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "independent-qa2/logs/focused-tests.tap": "64adfe113f418bea0efd196730e91c9f9db33842b17f200cf019264a036bd07b",
+    "independent-qa2/logs/independent.log": "e7d47f3e9fbc67f5808dfbd38c85cf47ab821c3e20f63c2121851b437ddc9c53",
+    "independent-qa2/logs/memory-extra.log": "cd09830be7f4eb2ce01dd712a9f341e80615b3ce8d0ad313780a77a5f747f7e9",
+    "independent-qa2/logs/pipeline-tests-complete.tap": "548cd62e9a0b29a3eaca7902ccd70c99a9e69cb534845b47c613a19905dbd0fa",
+    "independent-qa2/logs/playwright.log": "f85d0e9637fd1d5b17b9f2ccd9a6ce22ca37a44c6af6ee6c31375c7e7e1e327f",
+    "independent-qa2/playwright-report/index.html": "88d5e187a1e2468a86bcd0c253dfa87d8ac1c6e28b44b01e38a750215fff99ad",
+    "independent-qa2/report.md": "fae1ffecdf8f4d3c3cc904137bd3b181ff2143080eaa53b47d0b9a175460e9da",
+    "independent-qa2/reservation-PREPARED-NOT-COMMITTED.json": "5f247be4c0b52701856c8d666bc6fb20e3fa6840dce0e065a1854e83dee01368",
+    "independent-qa2/reservation.json": "592f2b71c091eeb97e7652b2d5a925aa55d8b5a1d34fb55ff6d4edcb6b301f56",
+    "independent-qa2/result.json": "b22432ef450d603eb4c7fcc765ec63853fdc987a55402d655b01d4b17dcdaf95",
+    "independent-qa2/screenshots/result.png": "92236f292a8d4d38d370abce69a7c8e7e0c8152fe306df687d5a5fcb577e5b0a",
+    "independent-qa2/seal.json": "569200428bade2358d7dfa462aef6e80668b16fcff0b09fde186ce03060ed9d9",
+    "independent-qa2/source-hashes-after.json": "5e05aaa12d70d0f6ac3a3c2c46c5d73e7eae27be8abf499b79322087272399f9",
+    "independent-qa2/source-hashes-before.json": "8dbe841ce5f0f8beb7cec6ff2cac8e4b14423f53cc861dbfe609194e94c22061",
+    "independent-qa2/task-contract.md": "4d51bd865324094090a4331ad0736414dc8ae7075a12610a6b3e24ad0ad12175",
+    "independent-qa2/test-results/classifier-extra.json": "69aca100136ba1c3f10c3f173f6b1a479f824d4d82a8a1d14adf67bf756b6f42",
+    "independent-qa2/test-results/independent.json": "e7d47f3e9fbc67f5808dfbd38c85cf47ab821c3e20f63c2121851b437ddc9c53",
+    "independent-qa2/test-results/memory-extra.json": "cd09830be7f4eb2ce01dd712a9f341e80615b3ce8d0ad313780a77a5f747f7e9",
+    "independent-qa2/test-results/playwright.json": "f85d0e9637fd1d5b17b9f2ccd9a6ce22ca37a44c6af6ee6c31375c7e7e1e327f",
+    "independent-qa2/trace/trace.zip": "b957a069d5a7a81fcfac6820ab0666db0e52314d4701c3986d58da66b1adf3ff",
+    "independent-qa2/validation-report.md": "fae1ffecdf8f4d3c3cc904137bd3b181ff2143080eaa53b47d0b9a175460e9da",
+    "independent-qa3/STOP": "0c77ddc037ef4a1e56e0c15fbef75104929c52290c6580f953b47953c443f264",
+    "independent-qa3/artifact-manifest.json": "1cd4011df8684617a4078d1e54a121a4bc51694152aa94b501bf7e7208662228",
+    "independent-qa3/author-history-references.json": "04edeaa9607f557da6e4587029e69ff5a16032542f77bab468b909b17f7a7911",
+    "independent-qa3/commands.txt": "d65c64ed635895a95e784bb7d569874034c1927ac038bb5e0211e45eb8e6bd22",
+    "independent-qa3/complete.diff": "676cf18c84d168474e00664afdbff8fe7583b96497e5d15e457140cfa8eb085e",
+    "independent-qa3/context-validation.json": "86e0857caa084f9b18766683eb0941a8ff8a2976cb0aef9564d812b243aedf0a",
+    "independent-qa3/evidence-scripts/browser-evidence.mjs": "20e0827cb7c22877ef0b60242bf1afa406ecc9bac33db6406d7815e36c8d7a18",
+    "independent-qa3/evidence-scripts/browser-file-navigation-attempt.mjs": "01d2263e793d300e1cb79c679d0ab98eff8d3563f01deb0456bdc6091201b324",
+    "independent-qa3/evidence-scripts/classifier-extra.mjs": "493b879784de4630f3416d945630706bb91df0a040a9a5cbe66840d6ebcbd102",
+    "independent-qa3/evidence-scripts/finalize.py": "387b899d69cb297892c7b079feb4e5d5581641b51d733abb624e8d8b2bc3ca52",
+    "independent-qa3/evidence-scripts/independent.mjs": "ed1fe369ab381b17b44b72b6b479c58ae52433a801c6f97568dc816405549be2",
+    "independent-qa3/evidence-scripts/memory-extra.mjs": "45ead6a983799714fb81b31fdbb7777dd7499aac0625a01c1c5093ecc86d2098",
+    "independent-qa3/evidence-scripts/policy-extra.mjs": "5d51999a95025e14b052cbffd42c5782e19949b4936a82f40404b4ceb7848d28",
+    "independent-qa3/evidence-scripts/prepare-tests.py": "1be044eff44219b9956357f2075d17055dc27f9c107eb1d423bd31ee171e5b44",
+    "independent-qa3/evidence-scripts/setup.py": "591cd9f64a66f4ea2475f346cb6a4c375dc4456c1db663bac51cd51f52bfe233",
+    "independent-qa3/findings.md": "adecd36be726610aaf41ab76181365016a14af045e1b638f1275838941ffb5d4",
+    "independent-qa3/logs/classifier-extra.log": "69aca100136ba1c3f10c3f173f6b1a479f824d4d82a8a1d14adf67bf756b6f42",
+    "independent-qa3/logs/independent.log": "6ccbe64417c429b2b00ce982dc605eb732f415f9509955f8fe53a1149f7522ce",
+    "independent-qa3/logs/memory-extra.log": "7ac13ecb36a395e6499d8f774c1061dad32d8e13e36b7a043e6dd64ae59b3057",
+    "independent-qa3/logs/native-exact.tap": "d5ed34f133d8bd87116904aaf640996604db30cb0d7d06bab2af29e89b1d3efe",
+    "independent-qa3/logs/playwright-file-navigation-blocked.log": "27f0e96830859c5b05d5d3e88ee84c0c65dccfd843ea5005ee2f1aeaadfca405",
+    "independent-qa3/logs/playwright.log": "2171fa6dd7da87cb6d20389ca4c1c019d228c1273b1af1b5302210cb500b687e",
+    "independent-qa3/logs/policy-extra.log": "67f194521f4d344412413b00ddf6778cb6eec82ea0d253364cc2caede28b6d8e",
+    "independent-qa3/logs/tracked-runner-inventory.txt": "bfe8d03f91d7ae7df8818a329bc97aa0f9f7230a4576155344689f3459983e5c",
+    "independent-qa3/playwright-report/index.html": "320c918e75920f09cccd36c9f0748f4199ada12d2d3b16fdd61b76038316edda",
+    "independent-qa3/preserved-history-verification.json": "0915aa5a7e14f725778a0036bd27a138135abd91128a74a979712d80f4bb213f",
+    "independent-qa3/report.md": "2070cac85996e441ed18790e604ade62acf89800e68504c1beb2cb4d114a6657",
+    "independent-qa3/reservation.json": "768b8119589dc0374d7811eaedcf6538c84081d6d0b872ea7fae50a26ed31f9b",
+    "independent-qa3/result.json": "65f26564daf752af0494605591b3f779e4607f52451be11acbebce997d66b835",
+    "independent-qa3/round3.diff": "1da662cddd620d25e68ac558548bf1c857b4131a460ae73210aeb80732febfe8",
+    "independent-qa3/scope-verification.json": "86b90570c21bec7246847020ff32d0326ac602fbbe9f15b34628ca28642cd687",
+    "independent-qa3/screenshots/result.png": "90443e62259645d208ab8467cafab4cd418a70fc2dc9a230ab9286cc5fb2b538",
+    "independent-qa3/seal.json": "fba8d69b6878594a267e3348645677fd31f132a782beb2de331a09f8ec6b4841",
+    "independent-qa3/source-hashes-after.json": "8e3f30d5e8fbdb0cd511464cdf3a67a834f4afb9e67e1b07f615dea36cee1f2e",
+    "independent-qa3/source-hashes-before.json": "8e3f30d5e8fbdb0cd511464cdf3a67a834f4afb9e67e1b07f615dea36cee1f2e",
+    "independent-qa3/source-inventory.md": "d7d1915e083172d3414e2bc4dc4d4cf329d5653e543f36470905313c9974e44b",
+    "independent-qa3/task-contract.md": "6f94f9b8afd25dfbdf303851211611d2e308e71f60b19f655752aaced238e14f",
+    "independent-qa3/test-results/classifier-extra.json": "69aca100136ba1c3f10c3f173f6b1a479f824d4d82a8a1d14adf67bf756b6f42",
+    "independent-qa3/test-results/independent.json": "6ccbe64417c429b2b00ce982dc605eb732f415f9509955f8fe53a1149f7522ce",
+    "independent-qa3/test-results/memory-extra.json": "7ac13ecb36a395e6499d8f774c1061dad32d8e13e36b7a043e6dd64ae59b3057",
+    "independent-qa3/test-results/playwright.json": "2171fa6dd7da87cb6d20389ca4c1c019d228c1273b1af1b5302210cb500b687e",
+    "independent-qa3/test-results/policy-extra.json": "67f194521f4d344412413b00ddf6778cb6eec82ea0d253364cc2caede28b6d8e",
+    "independent-qa3/test-results/privacy-scan.json": "c7a0db2bbd488b971cf113ee504545293d70699c2c573edb78549b33a2c9690b",
+    "independent-qa3/trace/trace.zip": "f3555d0393f54e82407e3c18ec1b3bb6d10ff8cd49907cd9ef27e9a311fdeb4e",
+    "independent-qa3/validation-report.md": "2070cac85996e441ed18790e604ade62acf89800e68504c1beb2cb4d114a6657",
+    "prior-canonical-history.json": "177afcaf874ec6f4dd7a634f141073ba2cdc01102e623e6933251f5701b30d83",
+    "result.json": "a20465e9dfe7b4ec36ba7092bd6e57d54e5d75d1981f0ccc81b252d0f6eccddb",
+    "seal.json": "d43e0ae2facc63f20eb144a1b1c0494f79ace8f04ce2b45a3f60092088244ef8",
+    "source-hashes.json": "4fcbcde3d05b51e96d898a95c4efc503d4cdef5e7f52d934d3f6e1b41ef959c4",
+    "source-identity.json": "3f9136dd4c89b27d39ef63b55a86e1e831edf4fa57eb03967b6e78552831f237",
+    "source-inventory.md": "940cdd689ac8d67a07507309d67a953f0519ae9557fb4f3fef814915afd608ab",
+    "task-contract.md": "a4ae521b201c679ce5b3727a4da72ce336cbbdf3ad2e1713f39548b5ca599938",
+    "test-plan.md": "81240e0191010e91e4fea734b2d124e10023c9e96385f3dbd80192b49e47e098",
+    "test-results/agent-team-full-b868-context-final.tap": "6794b801398af444819de43cbe38503d4582adf1e782bae6d89a2b3f20a6d936",
+    "test-results/agent-team-full-qa2-context-final.tap": "3a07d9024f013fc889b460f7405fd535f734df0f1ddc7f1b5d3bd721b54fa4bd",
+    "test-results/baseline-red.tap": "a8c67e8108e120d6f8266ca7053f35e4ecf3818927d3b79433549fdeb8d459b8",
+    "test-results/bug-pipeline-b868-complete-context-final.tap": "136ae3cb430f10198ac89c9d5fa5c305e1c6d78b80f86c1032220efc97d0e2d2",
+    "test-results/bug-pipeline-b868-context-fixtures-final.tap": "05785ae293a5ae82bdb1b0181959859775b542e704ee6564347338f3af89795d",
+    "test-results/bug-pipeline-b868-overlay-final.tap": "f0a6afd64e3f09acb25989681cc5e73dba1c337b598e8325b7e78d3e3d18c112",
+    "test-results/bug-pipeline-full-final.tap": "d05d3533c6bda9539b6286af7d51fee828573711e0dc6c31d46910770a87130c",
+    "test-results/bug-pipeline-full.tap": "52f543d40582ff98658f9280d3fd084d7a997df02f8fb1100a3ddf88931f6cee",
+    "test-results/models-process-output-final.tap": "9d2f22bb944a6abacca23f9b764f722d13eadfaef77386e66b8007b799d43a2a",
+    "test-results/models-process-output.tap": "f7967b649ba4892bfa2bbf035104233aabf562827a8c058ce78d4bf63db59a40",
+    "test-results/qa2-exact-full-command-final.tap": "6780d3d3938d05026401790d4ae72986a2ad455851423d2e8ceb297da68a24e8",
+    "test-results/routing.tap": "51642e444fc00aa4cf974166e76f828107962d8c7a26ff1af8b54df3b77871ea",
+    "validation-report.md": "79c9dc8ca3cdc01f327c1c865c1965b2c4caec16c942b580c6774fe7024a4435"
+  }
+}

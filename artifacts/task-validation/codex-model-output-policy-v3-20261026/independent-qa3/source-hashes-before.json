@@ -1,0 +1,32 @@
+[
+  {
+    "path": "agent-team/src/bug-pipeline/cli.mjs",
+    "gitBlobSha1": "b42cd83de4b6442451a7437926271e70b761b712",
+    "rawSha256": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/models.mjs",
+    "gitBlobSha1": "9fbf4ef5003599e27bebeb1ff2a54dd55febaab9",
+    "rawSha256": "57af56be98574342f296f773d7ebf1b3155de1bf3557d37e606974ffe46fcd38"
+  },
+  {
+    "path": "agent-team/src/bug-pipeline/process.mjs",
+    "gitBlobSha1": "9e11b3a620e3b1fb7c9cf2ee2783e865e93c5f51",
+    "rawSha256": "078765e34f5941de29f801e68b5d8ab438a05d86c6d7331177bbea105d956f6d"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/models.test.mjs",
+    "gitBlobSha1": "cc23e403463bca3f606f66d33f89698f8daa2384",
+    "rawSha256": "7214b96a5e82420fa9e7e412a84cb4f3f17adbb33c03820a0f266bca10a18ce8"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/process-output.test.mjs",
+    "gitBlobSha1": "e62e33a0b21f015bd362930f1503349a110bd637",
+    "rawSha256": "96bc65bc79dc398fc6d021c0ca95573790a3085d23970212037d47f409ea5553"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/routing.test.mjs",
+    "gitBlobSha1": "d2d1290e1fb70498a109490acec362497218f0c7",
+    "rawSha256": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd"
+  }
+]

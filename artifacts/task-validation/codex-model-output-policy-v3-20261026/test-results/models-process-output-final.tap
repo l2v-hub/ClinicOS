@@ -1,0 +1,142 @@
+TAP version 13
+# Subtest: independent Codex QA uses a fresh read-only analyst session and cannot return implementation status
+ok 1 - independent Codex QA uses a fresh read-only analyst session and cannot return implementation status
+  ---
+  duration_ms: 24.305423
+  type: 'test'
+  ...
+# Subtest: plan, implementation and simplification use distinct bounded Codex sessions and models
+ok 2 - plan, implementation and simplification use distinct bounded Codex sessions and models
+  ---
+  duration_ms: 23.567989
+  type: 'test'
+  ...
+# Subtest: missing model IDs fail explicitly before starting Codex
+ok 3 - missing model IDs fail explicitly before starting Codex
+  ---
+  duration_ms: 1.607721
+  type: 'test'
+  ...
+# Subtest: missing, invalid and symlink output fail closed
+ok 4 - missing, invalid and symlink output fail closed
+  ---
+  duration_ms: 11.569538
+  type: 'test'
+  ...
+# Subtest: Codex failure is surfaced and does not parse stale output
+ok 5 - Codex failure is surfaced and does not parse stale output
+  ---
+  duration_ms: 6.135025
+  type: 'test'
+  ...
+# Subtest: model worktree cannot contain the runtime output directory
+ok 6 - model worktree cannot contain the runtime output directory
+  ---
+  duration_ms: 4.357914
+  type: 'test'
+  ...
+# Subtest: preflight probes CLI support without invoking a model or reading credentials
+ok 7 - preflight probes CLI support without invoking a model or reading credentials
+  ---
+  duration_ms: 1.443137
+  type: 'test'
+  ...
+# Subtest: standalone independent QA treats repository instructions as data and forbids PR code execution
+ok 8 - standalone independent QA treats repository instructions as data and forbids PR code execution
+  ---
+  duration_ms: 4.737661
+  type: 'test'
+  ...
+# Subtest: multi-megabyte JSON progress does not prevent reading a separate valid structured result
+ok 9 - multi-megabyte JSON progress does not prevent reading a separate valid structured result
+  ---
+  duration_ms: 89.354618
+  type: 'test'
+  ...
+# Subtest: model failure diagnostics use finite enums and omit raw output
+ok 10 - model failure diagnostics use finite enums and omit raw output
+  ---
+  duration_ms: 13.098549
+  type: 'test'
+  ...
+# Subtest: failure classifier checks retained stdout and stderr without copying their text
+ok 11 - failure classifier checks retained stdout and stderr without copying their text
+  ---
+  duration_ms: 25.753861
+  type: 'test'
+  ...
+# Subtest: finite capacity metadata preserves delegate cooldown without exposing raw output
+ok 12 - finite capacity metadata preserves delegate cooldown without exposing raw output
+  ---
+  duration_ms: 4.560443
+  type: 'test'
+  ...
+# Subtest: missing runner byte counters remain unknown in finite diagnostics
+ok 13 - missing runner byte counters remain unknown in finite diagnostics
+  ---
+  duration_ms: 3.088532
+  type: 'test'
+  ...
+# Subtest: classifier ignores provider words inside progress and source/tool output
+ok 14 - classifier ignores provider words inside progress and source/tool output
+  ---
+  duration_ms: 7.491753
+  type: 'test'
+  ...
+# Subtest: tail capture owns a bounded backing allocation and preserves byte semantics
+ok 15 - tail capture owns a bounded backing allocation and preserves byte semantics
+  ---
+  duration_ms: 10.692162
+  type: 'test'
+  ...
+# Subtest: synthetic model child permits separate progress and structured-result channels above 64 KiB
+ok 16 - synthetic model child permits separate progress and structured-result channels above 64 KiB
+  ---
+  duration_ms: 59.181628
+  type: 'test'
+  ...
+# Subtest: synthetic runner fails on independent total and stderr limits
+ok 17 - synthetic runner fails on independent total and stderr limits
+  ---
+  duration_ms: 109.868846
+  type: 'test'
+  ...
+# Subtest: stdout can be counted and tail-captured without contributing to the fatal byte limit
+ok 18 - stdout can be counted and tail-captured without contributing to the fatal byte limit
+  ---
+  duration_ms: 60.176179
+  type: 'test'
+  ...
+# Subtest: runner option validation rejects unbounded or invalid limits
+ok 19 - runner option validation rejects unbounded or invalid limits
+  ---
+  duration_ms: 6.159316
+  type: 'test'
+  ...
+# Subtest: timed out process groups terminate surviving descendants
+ok 20 - timed out process groups terminate surviving descendants
+  ---
+  duration_ms: 2413.089262
+  type: 'test'
+  ...
+# Subtest: non-fatal model stdout does not disable the process timeout
+ok 21 - non-fatal model stdout does not disable the process timeout
+  ---
+  duration_ms: 272.805864
+  type: 'test'
+  ...
+# Subtest: runner defaults retain the existing combined ceiling and prefix capture
+ok 22 - runner defaults retain the existing combined ceiling and prefix capture
+  ---
+  duration_ms: 108.159484
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3143.550072

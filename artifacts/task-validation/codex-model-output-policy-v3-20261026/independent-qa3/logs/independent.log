@@ -1,0 +1,102 @@
+{
+  "code": "31b11f09331249a93468bf00d8cc3d1313004a72",
+  "qaNonce": "e224a4fd-aebb-4679-af5e-7d1d6eb061e5",
+  "synthetic": true,
+  "providerCalls": 0,
+  "results": [
+    {
+      "name": "real-child baseline RED 3 MiB progress",
+      "status": "PASS",
+      "expectedFailure": true,
+      "runnerError": "output-limit",
+      "rawStdoutBytes": 3069696,
+      "progressPayloadBytes": 3145728
+    },
+    {
+      "name": "real-child candidate GREEN 3 MiB progress",
+      "status": "PASS",
+      "stdoutBytes": 3145813,
+      "capturedBytes": 32768
+    },
+    {
+      "name": "real-child exact stderr boundary accepts",
+      "status": "PASS",
+      "stderrBytes": 65536,
+      "capturedBytes": 32768
+    },
+    {
+      "name": "real-child stderr overflow fails",
+      "status": "PASS",
+      "runnerError": "stderr-limit"
+    },
+    {
+      "name": "real-child exact total boundary accepts",
+      "status": "PASS",
+      "stdoutBytes": 2097152,
+      "capturedBytes": 32768
+    },
+    {
+      "name": "real-child total overflow fails",
+      "status": "PASS",
+      "runnerError": "output-limit"
+    },
+    {
+      "name": "real-child multibyte split and byte accounting",
+      "status": "PASS",
+      "stdoutBytes": 9
+    },
+    {
+      "name": "real-child zero capture retains zero",
+      "status": "PASS",
+      "capturedBytes": 0
+    },
+    {
+      "name": "runner option negative validation matrix",
+      "status": "PASS",
+      "invalidInputsRejected": 21
+    },
+    {
+      "name": "typed-result negatives and cleanup",
+      "status": "PASS",
+      "typedNegativesRejected": 9
+    },
+    {
+      "name": "model input size and serialization guards",
+      "status": "PASS",
+      "inputsRejected": 3
+    },
+    {
+      "name": "finite diagnostics and raw-secret exclusion",
+      "status": "PASS",
+      "diagnosticsChecked": 2
+    },
+    {
+      "name": "terminal failure classifier and capacity cooldown",
+      "status": "PASS",
+      "modelsSelected": [
+        "delegate",
+        "synthetic",
+        "delegate"
+      ]
+    },
+    {
+      "name": "diagnostic callback exception cannot alter success",
+      "status": "PASS",
+      "callbackErrorIgnored": true
+    },
+    {
+      "name": "tail retained backing allocation respects 32 KiB limit",
+      "status": "PASS",
+      "visibleBytes": 32768,
+      "backingBytes": 32768
+    },
+    {
+      "name": "source-extracted CLI collector stays at 64 entries",
+      "status": "PASS",
+      "retainedEntries": 64,
+      "stdoutDiagnosticEvents": 100
+    }
+  ],
+  "passed": 16,
+  "failed": 0
+}

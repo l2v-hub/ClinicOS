@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: auto routes difficulty/direct requests to senior and only bounded work to a delegate
+ok 1 - auto routes difficulty/direct requests to senior and only bounded work to a delegate
+  ---
+  duration_ms: 1.852057
+  type: 'test'
+  ...
+# Subtest: fixed 6.1-Sol override runs implementation and simplification entirely with senior
+ok 2 - fixed 6.1-Sol override runs implementation and simplification entirely with senior
+  ---
+  duration_ms: 19.277439
+  type: 'test'
+  ...
+# Subtest: actual overlapping sessions divert bounded work to senior without starting a second delegate
+ok 3 - actual overlapping sessions divert bounded work to senior without starting a second delegate
+  ---
+  duration_ms: 15.30697
+  type: 'test'
+  ...
+# Subtest: capacity errors consume their call and influence only a later requested attempt
+ok 4 - capacity errors consume their call and influence only a later requested attempt
+  ---
+  duration_ms: 8.459262
+  type: 'test'
+  ...
+# Subtest: automatic high-difficulty and legacy execution use the senior model in real CLI arguments
+ok 5 - automatic high-difficulty and legacy execution use the senior model in real CLI arguments
+  ---
+  duration_ms: 10.400165
+  type: 'test'
+  ...
+# Subtest: incidental line numbers in diagnostics do not invent provider capacity pressure
+ok 6 - incidental line numbers in diagnostics do not invent provider capacity pressure
+  ---
+  duration_ms: 9.290279
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 180.273048

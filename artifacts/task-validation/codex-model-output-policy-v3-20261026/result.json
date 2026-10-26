@@ -1,0 +1,39 @@
+{
+  "task": "codex-model-output-policy-v3-20261026",
+  "status": "IMPLEMENTED \u2014 NOT VERIFIED",
+  "baseline": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+  "tests": {
+    "focused": {
+      "total": 22,
+      "pass": 22,
+      "fail": 0,
+      "skip": 0
+    },
+    "routing": {
+      "total": 6,
+      "pass": 6,
+      "fail": 0,
+      "skip": 0
+    },
+    "fullQa2Command": {
+      "total": 1668,
+      "pass": 1665,
+      "fail": 0,
+      "skip": 3
+    },
+    "baselineRed": {
+      "total": 1,
+      "pass": 0,
+      "fail": 1,
+      "expected": true
+    }
+  },
+  "pending": [
+    "exact-head six native CI checks",
+    "independent peer round 2",
+    "final Codex review",
+    "final source SHA mapping"
+  ],
+  "sourceHashes": "source-hashes.json",
+  "fullTestOutput": "test-results/qa2-exact-full-command-final.tap"
+}

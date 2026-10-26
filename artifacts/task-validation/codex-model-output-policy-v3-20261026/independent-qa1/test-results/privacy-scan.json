@@ -1,0 +1,6 @@
+{
+  "status": "PASS",
+  "checkedTextAndZipMembers": 31,
+  "syntheticOnly": true,
+  "note": "Credential-shape scan plus manual synthetic-data review; no raw source/provider/clinical values in new diagnostic records"
+}

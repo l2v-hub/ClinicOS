@@ -1,0 +1,30 @@
+{
+  "baseline_commit": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+  "note": "Candidate content hashes only; coordinator must map final published source blobs to raw SHA-256 after final-head composition.",
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/process.mjs",
+      "bytes": 9348,
+      "candidate_git_blob_sha1": "9e11b3a620e3b1fb7c9cf2ee2783e865e93c5f51",
+      "sha256": "078765e34f5941de29f801e68b5d8ab438a05d86c6d7331177bbea105d956f6d"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/models.mjs",
+      "bytes": 21630,
+      "candidate_git_blob_sha1": "9fbf4ef5003599e27bebeb1ff2a54dd55febaab9",
+      "sha256": "57af56be98574342f296f773d7ebf1b3155de1bf3557d37e606974ffe46fcd38"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/process-output.test.mjs",
+      "bytes": 8549,
+      "candidate_git_blob_sha1": "e62e33a0b21f015bd362930f1503349a110bd637",
+      "sha256": "96bc65bc79dc398fc6d021c0ca95573790a3085d23970212037d47f409ea5553"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/models.test.mjs",
+      "bytes": 17334,
+      "candidate_git_blob_sha1": "cc23e403463bca3f606f66d33f89698f8daa2384",
+      "sha256": "7214b96a5e82420fa9e7e412a84cb4f3f17adbb33c03820a0f266bca10a18ce8"
+    }
+  ]
+}

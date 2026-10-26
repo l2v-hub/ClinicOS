@@ -1,0 +1,39 @@
+{
+  "subject_sha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+  "verdict": "blocked",
+  "summary": "I reviewed the six changed files as source data and did not run anything. The design matches the task contract: AC4 holds on source review. It raises the model total-output cap to 2 MiB, keeps a 32 KiB tail per stream, and makes stderr fatal above 64 KiB. Callers that leave out the new options keep the old combined cap with prefix capture. The CLI flags, the 30-minute timeout, the 256 KiB typed-result limit and the schema, path and symlink checks are unchanged. Diagnostics carry only fixed categories and numeric counts, and thrown errors no longer include raw stderr. The capacity cooldown is kept through a boolean `modelCapacityFailure` marker. QA1's backing-buffer finding is fixed: `appendCapture` now allocates an owned buffer no larger than the limit. QA1's outdated routing assertions are corrected. I found no blocking correctness or security defect in the code.\n\nThe verdict is blocked because the evidence is incomplete and is not tied to this exact SHA:\n(1) The only passing QA (QA2) is sealed against commit 3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b, not the subject b868e72ceb2d2e29fdaf077b3d7144c34481e176. Its source hashes are SHA-256, while the supplied blob IDs are Git SHA-1, so I cannot confirm from the evidence that the subject's source files match what QA2 tested.\n(2) The validation report marks all six native CI checks as PENDING (bug-pipeline-tests, secret-scan, frontend-tests, archive-tests, gate, browser-e2e). No exact-head results were supplied.\n(3) The independent Claude review and the final Codex gate are recorded as PENDING.\n\nI also list smaller issues: diagnostic classification can be wrong, the new limit check can throw for existing callers, and the 2 MiB fatal cap could cut off long sessions.",
+  "findings": [
+    {
+      "severity": "high",
+      "file": "artifacts/task-validation/codex-model-output-policy-20261026/validation-report.md",
+      "line": 1,
+      "problem": "The acceptance evidence does not cover the frozen subject SHA. QA2's READY verdict and seal name code 3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b, while the subject is b868e72ceb2d2e29fdaf077b3d7144c34481e176. The seal's sourceHashes are SHA-256 and the change set gives Git SHA-1 blob IDs, so the supplied data cannot show that the subject's six source/test files match what QA2 tested. The same report says the six required native checks (bug-pipeline-tests, secret-scan, frontend-tests, archive-tests, gate, browser-e2e), the Claude peer review and the final Codex gate are PENDING. AC1–AC3 therefore rest only on synthetic local runs of a different commit.",
+      "requested_change": "Add evidence tied to b868e72c: successful exact-head results for all six required native checks, plus a manifest that maps each changed file's subject Git blob SHA to the SHA-256 hashes in the QA2 seal, or a fresh QA run against this SHA.",
+      "test_expectation": "The bug-pipeline-tests check on head b868e72c runs agent-team/tests/bug-pipeline/*.test.mjs and passes, including process-output.test.mjs and the new models.test.mjs and routing.test.mjs cases. The other five required checks are also green on the same head."
+    },
+    {
+      "severity": "low",
+      "file": "agent-team/src/bug-pipeline/models.mjs",
+      "line": 68,
+      "problem": "`failureCategory` applies broad numeric patterns to all retained stderr: `\\b401\\b` and `\\b403\\b` map to auth, `\\b402\\b` to quota, `\\b429\\b` to rate, and `\\b50[234]\\b` to network. Stderr can hold arbitrary tool or source output, so text like 'fixture line 401' or 'port 5030… 503 bytes' gets the wrong category. The base code already fixed this exact false positive for capacity detection; see the 'incidental line numbers' routing test and the anchored regex in isModelCapacityFailure.",
+      "requested_change": "Anchor the numeric status patterns the same way as the capacity regex, e.g. `(?:http(?:/[0-9.]+)?\\s+|status(?:[_ -]code)?[\"']?[\\s:=]+)(?:401|403)`, or apply them only to terminal JSON events.",
+      "test_expectation": "A failing run whose stderr is 'validation failed at fixture line 401' (or 503) gets failureCategory 'other', not 'auth' or 'network'."
+    },
+    {
+      "severity": "low",
+      "file": "agent-team/src/bug-pipeline/process.mjs",
+      "line": 135,
+      "problem": "`createRunner` now calls `validateLimit(maxOutputBytes)` for every caller, and it throws a RangeError when maxOutputBytes is above 64 MiB or not a safe integer. Before this change any value was accepted. Any existing caller outside the diff (verification, controller or review runs) that passes a larger or non-integer limit now gets a rejected promise instead of a result object. That breaks the contract's claim that non-model runner defaults are unchanged, and the supplied files do not show the other call sites.",
+      "requested_change": "Confirm that every existing createRunner caller passes a value within the new bound. Otherwise, apply the strict check only to the new options (maxCapturedBytesPerStream and maxStderrBytes).",
+      "test_expectation": "A repository-wide test or grep of `maxOutputBytes:` call sites shows that all of them are integers ≤ 64 MiB. Existing controller and verification runner tests pass unchanged."
+    },
+    {
+      "severity": "low",
+      "file": "agent-team/src/bug-pipeline/models.mjs",
+      "line": 27,
+      "problem": "The model session's total stdout+stderr cap is still fatal, now at 2 MiB (RUNNER_OUTPUT_BYTES). Codex `--json` emits events that include command output and runs for up to 30 minutes. A legitimate long implementation session can therefore still be killed with output-limit before its separate typed-result file is read, which is the same failure this PR fixes, only at a higher threshold. The output is already tail-captured, so the total cap no longer protects memory.",
+      "requested_change": "Either document why 2 MiB is enough for the worst-case 30-minute workspace-write session, or make stdout volume non-fatal for model sessions and keep only the fatal stderr cap, the timeout and the bounded tail capture.",
+      "test_expectation": "A synthetic child emits more than 2 MiB of JSON progress on stdout, then writes a valid typed result. The test asserts the documented outcome: success if stdout becomes non-fatal, or an explicit output-limit with category 'output-limit' if the cap is kept on purpose."
+    }
+  ]
+}
