@@ -9,7 +9,7 @@
   "operatorSha": "b3f12af905e20a9ed7babdceee3c31386c332a10",
   "runId": "40260746637",
   "runAttempt": "1",
-  "stage": "single-native-review-request-intent",
+  "stage": "genuine-hosted-review-requested-ready-label-deferred",
   "prCreatesUsed": 0,
   "reviewRequestsUsed": 1,
   "mergeCalls": 0,
@@ -61,5 +61,6 @@
     }
   ],
   "nativePacketVerified": true,
-  "observedAt": "2026-10-26T02:50:02.060Z"
+  "reviewRequestId": "aa222d48-9105-46ba-afd7-5816b03b42a2",
+  "observedAt": "2026-10-26T02:51:50.498Z"
 }
