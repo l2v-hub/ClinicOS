@@ -1,0 +1,80 @@
+TAP version 13
+# Subtest: trusted cloud generation contract precedes untrusted JSON and states strict verdict consistency
+not ok 1 - trusted cloud generation contract precedes untrusted JSON and states strict verdict consistency
+  ---
+  duration_ms: 18.888838
+  type: 'test'
+  location: '/tmp/clinicos-permanent-semantic-author4/agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs:891:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'undefined'
+    - 'string'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'string'
+  actual: 'undefined'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/clinicos-permanent-semantic-author4/agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs:893:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: cloud semantic diagnostics preserve actual native standalone failure and publication outcomes
+not ok 2 - cloud semantic diagnostics preserve actual native standalone failure and publication outcomes
+  ---
+  duration_ms: 37.666873
+  type: 'test'
+  location: '/tmp/clinicos-permanent-semantic-author4/agent-team/tests/bug-pipeline/standalone-review.test.mjs:2992:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/clinicos-permanent-semantic-author4/agent-team/tests/bug-pipeline/standalone-review.test.mjs:3017:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: local review uses the same trusted generation contract with frozen SHA and read-only rules
+not ok 3 - local review uses the same trusted generation contract with frozen SHA and read-only rules
+  ---
+  duration_ms: 3.578443
+  type: 'test'
+  location: '/tmp/clinicos-permanent-semantic-author4/scripts/quality-gate/claude-bug-review.test.mjs:282:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'undefined'
+    - 'string'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'string'
+  actual: 'undefined'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/clinicos-permanent-semantic-author4/scripts/quality-gate/claude-bug-review.test.mjs:284:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 0
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13277.826162

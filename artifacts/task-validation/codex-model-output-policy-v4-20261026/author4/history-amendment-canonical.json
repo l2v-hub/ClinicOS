@@ -1,0 +1,14 @@
+{
+  "authorNonce": "96c30272-a025-47de-bd41-1dd8cd076ee9",
+  "amendment": {
+    "id": "preserve-native-review-handoff-history",
+    "at": "2026-10-26T07:02:07.468Z",
+    "actualFinding": "Trusted995 native standalone.adopt preserves many journal fields but omits reviewHandoffHistory, which contains spent handoffs and real host authorization receipts.",
+    "scope": "Add one preservation key plus actual native adoption fixture to same Source4 before NEWindependentQA; preserve first sealed1688/1685/0/3 candidate and allprior artifacts before amendment.",
+    "userAuthority": "Explicit standing user continues untilresolution preserving allhistory; parent directed this necessary preservationfix.",
+    "beforeUpdatedMain": "Controlled native-store transport may restore ONLY old canonical reviewHandoffHistory byteexact prior-to-adoptproposed, allnativepredicates/validations unchanged; no grant reuse/newauthority."
+  },
+  "additionalProviderCalls": 0,
+  "stateCommit": "ebac6c80a4b5bd1bfa15b23369707b3ce3151755",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/fa11e07f-307e-4605-83fd-6bbd502c9f8a/accepted.json"
+}

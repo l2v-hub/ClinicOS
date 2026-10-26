@@ -1,0 +1,10 @@
+# Source revision 4 implementation plan
+
+1. Read the reserved binding and proven classifier. Materialize selected tracked source bytes from exact parent via read-only Git show; verify source fixture inventory without copying untracked tests.
+2. Record failing fixtures against unchanged implementation for missing shared generation instructions and missing native contradiction diagnostics.
+3. Export the trusted generation contract from the existing review module; reuse it before cloud untrusted JSON and in the existing local prompt. Add supported nonempty string patterns and descriptions while keeping the native validator function unchanged.
+4. Add a small pure metadata classifier using native schema, semantic and communication validators. Add finite runner-throw/diagnostic-error flags and an optional isolated observer. Return diagnostics on existing result paths and log finite metadata to workflow stderr, preserving one stdout JSON receipt.
+5. Test schema, contradiction, stale/count, location, text, unsafe, envelope, post-communication, valid, runner/callback errors and exact result/exception preservation. Exercise actual native standalone failure/publication with approved+3, approved-empty, low changes and blocked-empty reports. Fixture marker contents must not enter diagnostics.
+6. Run targeted tests, repair only test context/assertions actually diagnosed, then run the exact authoritative source-native command. Preserve all interim failures and truthful totals. Check narrow scope, runtime byte preservation and source freeze; emit final source/patch/result/seal without any repository or provider mutation.
+
+7. Parent-authorized amendment before handoff: preserve the sealed initial source4 packet and hashes, record actual-native adoption RED, then add only `reviewHandoffHistory` to the existing adoption preserved-fields list. Prove serialized old failed-request history/consumption nonce, attempt arrays, ledger and budgets unchanged through adoption; rerun affected native controller/authorization tests and the exact native full command for the amended candidate.

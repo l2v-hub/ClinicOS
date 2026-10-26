@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "status": "sealed-independent-semantic-qa-completion",
+  "qaNonce": "7f147816-563d-424c-96e9-69a0f2909985",
+  "sourceCode": "88b9a33d4a879b85bbf8b543fd474b390461d304",
+  "sourceParent": "895e6bd54461fcc6a00be4117e4792bde6fc4e07",
+  "trustedMain": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "sourceTree": "e3d193d097540a27e6c592ae9a23cc571c292de1",
+  "authorSealSha256": "b247b733b721edf42979bb0db3857dd0e4b3eae530cfb8f59c89b13dbdc6759d",
+  "artifactManifestSha256": "8893c7223cb5b55fb06f2a27e0c467d509d4882e80e564a6f4e5720c4b798640",
+  "resultSha256": "032886479158e7cb4fa3ee62ddea050f1b0277c648b1474d96bba1896cde4a72",
+  "reportSha256": "d8da2763fd464939de7f2a0a4cc51d9cdd3d2c1e7ef5de82556a62b50a30fefd",
+  "sourceProjectionSha256": "f3d4e8911f67c0cbf3e90abe20af0fff3a34d585b279d9db0a12cc7c9d5e3d22",
+  "integritySha256": "cc41ff963be325f9d0c7c41f291767e6a828372545e06fff0771e086d524978f",
+  "independentReplayTapSha256": "c1f00ff701d617762a7b4080d5402c52fbb56cb9e433e5c47d47f265ff346cf7",
+  "peerApproval": false,
+  "mergeAuthorized": false,
+  "at": "2026-10-26T07:26:57.726533+00:00"
+}
