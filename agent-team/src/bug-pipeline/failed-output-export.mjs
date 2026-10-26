@@ -68,13 +68,21 @@ async function baseline(root, sha, file) {
   }
 }
 export async function exportFailedCode({ batch, workspace, outputRoot }) {
-  assert.ok(knownFailedCorrection(batch) &&
-    ['verify-before', 'verify-after'].includes(batch.controllerProgress.failedStep) &&
-    batch.controllerProgress.failureCode === 'workspace-verification-failed',
+  const progress = batch.controllerProgress;
+  const initialVerificationFailure = progress?.status === 'failed' &&
+    progress.flow === 'implementation' &&
+    ['verify-before', 'verify-after'].includes(progress.failedStep) &&
+    progress.failureCode === 'workspace-verification-failed' &&
+    progress.sourceSha === undefined && batch.sha == null &&
+    !batch.reviews?.some((entry) => entry.status === 'running');
+  assert.ok((knownFailedCorrection(batch) || initialVerificationFailure) &&
+    ['verify-before', 'verify-after'].includes(progress.failedStep) &&
+    progress.failureCode === 'workspace-verification-failed',
   'Exact failed verification required');
-  const checkpoint = batch.controllerProgress.checkpoint;
-  assert.ok(checkpoint?.schemaVersion === 1 && checkpoint.head === batch.sha &&
-    /^[a-f0-9]{40}$/.test(batch.sha) && /^[a-f0-9]{40}$/.test(checkpoint.baseSha) &&
+  const checkpoint = progress.checkpoint;
+  const sourceSha = initialVerificationFailure ? checkpoint?.head : batch.sha;
+  assert.ok(checkpoint?.schemaVersion === 1 && checkpoint.head === sourceSha &&
+    /^[a-f0-9]{40}$/.test(sourceSha) && /^[a-f0-9]{40}$/.test(checkpoint.baseSha) &&
     checkpoint.baseSha === batch.baseSha &&
     checkpoint.planSha256 === sha256(JSON.stringify(batch.plan)), 'Exact failed checkpoint required');
   assert.deepEqual(await workspace.captureCheckpoint(batch), checkpoint, 'Failed output checkpoint changed');
@@ -127,7 +135,7 @@ export async function exportFailedCode({ batch, workspace, outputRoot }) {
   }
   const manifest = { schemaVersion: 1, kind: 'partial-failed-code-retention',
     completeness: 'allowed-source-and-sanitized-verification-metadata-only',
-    batchId: batch.id, sourceSha: batch.sha, baseSha: checkpoint.baseSha,
+    batchId: batch.id, sourceSha, baseSha: checkpoint.baseSha,
     failedStep: batch.controllerProgress.failedStep, failureCode: batch.controllerProgress.failureCode,
     round: batch.controllerProgress.round, feedbackSha256: batch.controllerProgress.feedbackSha256,
     planSha256: checkpoint.planSha256, checkpointSha256: sha256(JSON.stringify(checkpoint)),

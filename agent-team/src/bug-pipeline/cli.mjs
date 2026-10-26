@@ -26,6 +26,16 @@ export const STANDALONE_INFRASTRUCTURE_FILES = Object.freeze(
   ].filter((file) => !requiresHumanReview(file)),
 );
 
+export async function retainFailedOutputsAfterControllerError({ observe, exportFailures }) {
+  try {
+    const state = await observe();
+    return { failedOutputExports: await exportFailures(state) };
+  } catch (error) {
+    return { failedOutputExports: [{ status: 'retention-failed',
+      failureCode: controllerFailureCode(error) }] };
+  }
+}
+
 export async function doctor({ run, models, env = process.env, cwd }) {
   const codex = await models.preflight();
   const login = env.CODEX_API_KEY
@@ -131,8 +141,11 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
         const manifest = await exportFailedCode({ batch, workspace, outputRoot: failedOutputRoot });
         exports.push({ batchId: batch.id, status: 'local-export-created',
           checkpointSha256: manifest.checkpointSha256, files: manifest.files.length });
-      } catch {
-        exports.push({ batchId: batch.id, status: 'guard-refused-or-output-unavailable' });
+      } catch (error) {
+        const status = /already exists/.test(error.message) ? 'local-export-already-exists'
+          : /Exact failed verification required/.test(error.message) ? 'flow-not-eligible'
+            : 'guard-refused-or-output-unavailable';
+        exports.push({ batchId: batch.id, status });
       }
     }
     return exports;
@@ -195,13 +208,18 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   } catch (error) {
     // A controller exception may follow a persisted FAILED attempt. Observe the
     // canonical state read-only; export guards still require the exact owned output.
-    try { await exportKnownFailures(await store.observe()); } catch { /* original failure wins */ }
+    const { failedOutputExports } = await retainFailedOutputsAfterControllerError({
+      observe: typeof store.observe === 'function' ? () => store.observe()
+        : () => { throw new Error('durable observation unavailable'); },
+      exportFailures: exportKnownFailures,
+    });
     await writeFile(
       path.join(diagnosticRoot, 'diagnostic.json'),
       JSON.stringify(
         {
           status: 'blocked-controller',
           failureCode: controllerFailureCode(error),
+          failedOutputExports,
           modelDiagnostics,
           verificationDiagnostics: workspace.verificationDiagnostics().slice(-64),
           reason:

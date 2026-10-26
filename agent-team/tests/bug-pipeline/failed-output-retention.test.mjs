@@ -12,6 +12,7 @@ import { exportFailedCode } from '../../src/bug-pipeline/failed-output-export.mj
 import { archiveUnavailableFailedOutput } from '../../src/bug-pipeline/operator-authorization.mjs';
 import { historyDigest } from '../../src/bug-pipeline/attempt-budget.mjs';
 import { sha256 } from '../../src/bug-pipeline/contracts.mjs';
+import { retainFailedOutputsAfterControllerError } from '../../src/bug-pipeline/cli.mjs';
 const execFile = promisify(execFileCallback);
 
 test('partial exit zero still schedules diagnostic and failed code artifact upload', async () => {
@@ -23,7 +24,9 @@ test('partial exit zero still schedules diagnostic and failed code artifact uplo
   assert.match(workflow, /agent-team\/\.runtime\/bug-pipeline\/verification\//);
   const cli = await readFile(path.resolve(path.dirname(fileURLToPath(import.meta.url)),
     '../../src/bug-pipeline/cli.mjs'), 'utf8');
-  assert.match(cli, /catch \(error\) \{[\s\S]*?exportKnownFailures\(await store\.observe\(\)\)/);
+  assert.match(cli, /observe: typeof store\.observe === 'function'/);
+  assert.match(cli, /retainFailedOutputsAfterControllerError/);
+  assert.match(cli, /failedOutputExports,/);
   assert.match(cli, /finally \{[\s\S]*?writeVerificationDiagnostic\(\)/);
 });
 
@@ -167,6 +170,40 @@ test('guarded failed code export retains only exact allowed source, bounded patc
   assert.deepEqual((await readdir(path.join(f.outputRoot, f.batch.id))).sort(),
     [`round-1-verify-before-${manifest.checkpointSha256}`,
       `round-2-verify-before-${manifest.checkpointSha256}`]);
+});
+
+test('first implementation verification failure retains the exact checkpoint and rejects duplicate export distinctly', async (t) => {
+  const f = await exportFixture(t);
+  const sourceSha = f.batch.sha;
+  f.batch.sha = null;
+  f.batch.controllerProgress.flow = 'implementation';
+  delete f.batch.controllerProgress.sourceSha;
+  f.checkpoint.head = sourceSha;
+  f.batch.controllerProgress.checkpoint = f.checkpoint;
+  const manifest = await exportFailedCode(f);
+  assert.equal(manifest.sourceSha, sourceSha);
+  assert.equal(manifest.baseSha, f.batch.baseSha);
+  await assert.rejects(exportFailedCode(f), /already exists/);
+});
+
+test('controller throw path exports observed failed state and returns explicit observe failure markers', async () => {
+  const state = { batches: [{ id: 'bug-batch-81', controllerProgress: { status: 'failed' } }] };
+  let attempted = null;
+  const result = await retainFailedOutputsAfterControllerError({
+    observe: async () => state,
+    exportFailures: async (observed) => { attempted = observed; return [{ batchId: 'bug-batch-81', status: 'local-export-created' }]; },
+  });
+  assert.equal(attempted, state);
+  assert.deepEqual(result.failedOutputExports, [{ batchId: 'bug-batch-81', status: 'local-export-created' }]);
+  const absent = await retainFailedOutputsAfterControllerError({
+    observe: async () => { throw new Error('observe unavailable'); }, exportFailures: async () => [],
+  });
+  assert.equal(absent.failedOutputExports[0].status, 'retention-failed');
+  assert.ok(absent.failedOutputExports[0].failureCode);
+  const missing = await retainFailedOutputsAfterControllerError({
+    observe: async () => { throw new Error('durable observation unavailable'); }, exportFailures: async () => [],
+  });
+  assert.equal(missing.failedOutputExports[0].status, 'retention-failed');
 });
 
 test('export refuses changed checkpoint, hash, size, symlink, secret, traversal and outside-plan files', async (t) => {
