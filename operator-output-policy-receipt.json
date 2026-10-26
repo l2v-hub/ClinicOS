@@ -36,8 +36,8 @@
       "name": "frontend-tests",
       "id": 121362831894,
       "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
-      "status": "in_progress",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "success"
     },
     {
       "name": "archive-tests",
@@ -61,5 +61,5 @@
       "conclusion": null
     }
   ],
-  "observedAt": "2026-10-26T02:09:12.491Z"
+  "observedAt": "2026-10-26T02:12:23.535Z"
 }
