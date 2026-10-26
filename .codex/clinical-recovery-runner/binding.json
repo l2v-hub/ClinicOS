@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "repository": "l2v-hub/ClinicOS",
+  "sourcePr": 514,
+  "sourceHead": "8bf42e2752df202c8210f2835cd1d52ac62a94aa",
+  "candidateCode": "c3711b74a71b60923e5ac75cc57d80fa3d2958e8",
+  "acceptedMainSha": "13c71ce0e2cdf6e72b4c7eeeb036754fac7e4f73",
+  "nonce": "7fb13711-857c-4278-b93e-fa20ebce3900",
+  "operatorBranch": "codex/clinical-recovery-runner-20261026",
+  "markerBranch": "codex/clinical-recovery-control-20261026",
+  "targets": [
+    {
+      "id": "bug-batch-506",
+      "issue": 506,
+      "pr": 508,
+      "sha": "5737fc3ae01dc5b8b5b01124daeac1e805fc288f",
+      "round": 2,
+      "next": 3
+    },
+    {
+      "id": "bug-batch-507",
+      "issue": 507,
+      "pr": 509,
+      "sha": "fc42859d7c73f9c90d9d49d8cdafe2d752893de7",
+      "round": 3,
+      "next": 4
+    }
+  ],
+  "sourceProjection": [
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "gitBlobSha1": "b42cd83de4b6442451a7437926271e70b761b712",
+      "rawSha256": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "gitBlobSha1": "3ab67169e44fa898f1b2f3fe8269907bb62bd8ae",
+      "rawSha256": "b9bb543eb127e35c7e123af83e0ffda2c934bfc9c2cefafe82f9edd0a145f22b"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/models.mjs",
+      "gitBlobSha1": "9fbf4ef5003599e27bebeb1ff2a54dd55febaab9",
+      "rawSha256": "57af56be98574342f296f773d7ebf1b3155de1bf3557d37e606974ffe46fcd38"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/process.mjs",
+      "gitBlobSha1": "9e11b3a620e3b1fb7c9cf2ee2783e865e93c5f51",
+      "rawSha256": "078765e34f5941de29f801e68b5d8ab438a05d86c6d7331177bbea105d956f6d"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/review-validation-diagnostic.mjs",
+      "gitBlobSha1": "47fd29e6cd7bd58c0db879b0911f1240c8672ac3",
+      "rawSha256": "c4a3d6cd6d1a0b0ef67a22cfc6941fa2c9b9cdaa964357860d103271e9a7e58b"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "gitBlobSha1": "3fed5fd8a434f035c5c4f97770e924798d5b9704",
+      "rawSha256": "ceef3f9e4bfce8ffe545688e9af7ed1d15e90bc681a6b1290486c456e173917d"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "gitBlobSha1": "9d48a4d3e9ff6dc80fab9efe9793f73bd6c70148",
+      "rawSha256": "1ff13bd96f218a219be8d86fe1015c8e9418f0ec9b55fec81cd313197cd8001c"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/models.test.mjs",
+      "gitBlobSha1": "cc23e403463bca3f606f66d33f89698f8daa2384",
+      "rawSha256": "7214b96a5e82420fa9e7e412a84cb4f3f17adbb33c03820a0f266bca10a18ce8"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/process-output.test.mjs",
+      "gitBlobSha1": "e62e33a0b21f015bd362930f1503349a110bd637",
+      "rawSha256": "96bc65bc79dc398fc6d021c0ca95573790a3085d23970212037d47f409ea5553"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/review-validation-diagnostic.test.mjs",
+      "gitBlobSha1": "3753bfdb97132f53e84feaa9f5262aa6da6c6e6c",
+      "rawSha256": "01e77e175d77d42554d15aaaf95b42ff45bd293735dc8f3ab4200058584209cf"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/routing.test.mjs",
+      "gitBlobSha1": "d2d1290e1fb70498a109490acec362497218f0c7",
+      "rawSha256": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review-semantic-history.test.mjs",
+      "gitBlobSha1": "7971cafe61f3d02fc4d1da4abc5e30c1c5d732c8",
+      "rawSha256": "b60a158014bfb7ce273ff30eeea3b1b81fa22d3c7598126e1700e071869902e2"
+    },
+    {
+      "path": "docs/cloud-claude-review.md",
+      "gitBlobSha1": "01a1db5803063d738625ddf1fea9413230a10a94",
+      "rawSha256": "649717fddf093153e54f95e8cc4a27cb91fa8afb563f68741baf30a4cf22de1b"
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.mjs",
+      "gitBlobSha1": "e10296976b8c29c59291a96c985995b24e7d7627",
+      "rawSha256": "0050f0e980ad9901852b5e2f12138d5738969e025131343e11f0a8a8485a3b0a"
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.test.mjs",
+      "gitBlobSha1": "bba489a21e74fb75c2107d3e8513f5284e59adcd",
+      "rawSha256": "9590c0681563897222bd88c8861c0a66b3458c4256571e2d772f67108fd2c83f"
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+name: Fixed published-baseline clinical recovery
+on:
+  push:
+    branches: [codex/clinical-recovery-runner-20261026]
+    paths:
+      - .github/workflows/clinical-recovery-fixed.yml
+      - .codex/clinical-recovery-runner/**
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  actions: read
+  checks: read
+jobs:
+  recover:
+    concurrency:
+      group: codex-bug-pipeline-${{ github.repository }}
+      cancel-in-progress: false
+    runs-on: ubuntu-22.04
+    timeout-minutes: 180
+    steps:
+      - name: Checkout exact operator commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          path: operator
+          persist-credentials: false
+          sparse-checkout: .codex/clinical-recovery-runner
+      - name: Read immutable accepted-main binding
+        id: binding
+        run: |
+          node --input-type=module - <<'JS'
+          import { readFile, appendFile } from 'node:fs/promises';
+          import { validateBinding } from './operator/.codex/clinical-recovery-runner/runner.mjs';
+          const b=validateBinding(JSON.parse(await readFile('operator/.codex/clinical-recovery-runner/binding.json')));
+          await appendFile(process.env.GITHUB_OUTPUT,'main='+b.acceptedMainSha+'\n');
+          JS
+      - name: Checkout bound accepted main
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ steps.binding.outputs.main }}
+          path: source
+          persist-credentials: false
+      - name: Set up Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Hold exclusive recovery group at bound accepted source
+        env:
+          RECOVERY_SOURCE_ROOT: ${{ github.workspace }}/source
+        run: node operator/.codex/clinical-recovery-runner/runner.mjs started
+      - name: Install repository dependencies before controller credentials
+        working-directory: source
+        env:
+          HUSKY: 0
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Set up local mock AI runtime dependencies
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install local validation tools before controller credentials
+        working-directory: source
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/clinicos-verification-browsers
+        run: |
+          bash scripts/quality-gate/install-verification-tools.sh
+          python -m pip install -r clinicos-ai-runtime/requirements.txt
+          node node_modules/playwright/cli.js install --with-deps chromium
+      - name: Install pinned Codex CLI outside source before credentials
+        run: >-
+          npm install --prefix "$RUNNER_TEMP/bug-pipeline-tools"
+          --no-audit --no-fund --no-save @openai/codex@0.159.2
+      - name: Wait for exact host settlement and allowance marker
+        env:
+          RECOVERY_SOURCE_ROOT: ${{ github.workspace }}/source
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN || github.token }}
+        run: node operator/.codex/clinical-recovery-runner/runner.mjs wait
+      - name: Native resume and clean published-baseline restoration
+        env:
+          RECOVERY_SOURCE_ROOT: ${{ github.workspace }}/source
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN || github.token }}
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/clinicos-verification-browsers
+        run: node operator/.codex/clinical-recovery-runner/runner.mjs bootstrap
+      - name: Run normal controller with actual canonical state and new attempts
+        env:
+          RECOVERY_SOURCE_ROOT: ${{ github.workspace }}/source
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN || github.token }}
+          CODEX_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          BUG_PIPELINE_REVIEW_MODE: external
+          CODEX_PLANNER_MODEL: ${{ vars.CODEX_PLANNER_MODEL || 'gpt-6.1-sol' }}
+          CODEX_EXECUTOR_MODEL: ${{ vars.CODEX_EXECUTOR_MODEL || 'auto' }}
+          CODEX_SMALL_EXECUTOR_MODEL: ${{ vars.CODEX_SMALL_EXECUTOR_MODEL || 'gpt-6-luna' }}
+          CODEX_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/codex
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/clinicos-verification-browsers
+        run: node operator/.codex/clinical-recovery-runner/runner.mjs execute
+      - name: Retain finite native diagnostics for every outcome
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: clinical-recovery-native-diagnostic-${{ github.run_id }}
+          path: source/agent-team/.runtime/bug-pipeline/diagnostic.json
+          if-no-files-found: ignore
+          retention-days: 14
