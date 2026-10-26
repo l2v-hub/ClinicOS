@@ -6,6 +6,7 @@ import {
   consumeOperatorAuthorization,
   authorizeObservationResume,
   settleImplementationAttempt,
+  archiveUnavailableFailedOutput,
   implementationCheckpointRecovery,
 } from './operator-authorization.mjs';
 import {
@@ -125,6 +126,7 @@ export function createCommentReviewHandoff({
   nonce = randomUUID,
   subjectAdapter,
   authorizationVerifier,
+  unavailabilityObserver,
   workspace,
   operationTimeouts = {},
   automatic = () => false,
@@ -786,7 +788,8 @@ export function createCommentReviewHandoff({
   }
   async function recover(
     pr,
-    { action, expectedSha, token, reason, round, forceLive = false, authorizationRef },
+    { action, expectedSha, token, checkpointSha256, reason, round, forceLive = false,
+      authorizationRef, unavailabilityEvidence },
   ) {
     const login = await maintainer(),
       { state, batch } = await load(pr, { includeManual: true });
@@ -799,6 +802,23 @@ export function createCommentReviewHandoff({
     let nextFailureCode;
     let reuseFinalQa = false;
     if (action !== 'release-merge-reservation') recoveryHead = await recoveryLive(batch);
+    if (action === 'archive-unavailable-failed-output') {
+      assert.ok(!subjectAdapter, 'Failed output archive requires a native controller journal');
+      assert.equal(recoveryHead, batch.sha, 'Published source changed');
+      await archiveUnavailableFailedOutput({
+        state, subject: batch, actor: login, reference: authorizationRef,
+        verifier: authorizationVerifier, verifyUnavailability: unavailabilityObserver,
+        evidence: unavailabilityEvidence, progressSha256: token, checkpointSha256,
+        reason, now,
+      });
+      await save(state, batch, login, {
+        recoveryHead,
+        guard: async () => {
+          assert.ok(await github.authorizedMaintainer(login), 'Maintainer authorization revoked');
+        },
+      });
+      return clone(batch);
+    }
     if (action === 'abandon-claim') {
       previous = clone(batch.externalReview);
       assert.equal(previous?.status, 'comment-running');

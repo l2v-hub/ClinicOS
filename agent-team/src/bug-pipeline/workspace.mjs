@@ -8,6 +8,19 @@ import { runBugReview } from '../../../scripts/quality-gate/claude-bug-review.mj
 import { relativeFile, editableFile, safeText, sha256 } from './contracts.mjs';
 import { validatePng, validateTrace } from './evidence.mjs';
 import { verificationArguments } from './verification.mjs';
+import { sanitizeText } from '../core/sanitize.mjs';
+
+const SENSITIVE_VERIFICATION_LINE = /\b(?:patient(?:id|_id)?|resident(?:id|_id)?|provider|nome|cognome|birth|dob|email|phone|authorization|cookie|token|secret|password|api[_-]?key|database_url)\b|\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b/i;
+export function safeVerificationText(value) {
+  return sanitizeText(value).split(/\r?\n/).map((line) =>
+    SENSITIVE_VERIFICATION_LINE.test(line) ? '[REDACTED_SENSITIVE_LINE]' : line).join('\n');
+}
+function excerpt(value) {
+  const useful = value.split('\n').filter((line) =>
+    /\b(?:error|failed?|not ok|assertion|syntaxerror|typeerror|referenceerror|enoent|etimedout|econnrefused|cannot find|no test files)\b|^\s*(?:at |# (?:tests|pass|fail)|npm ERR!|Test Files)/i.test(line) ||
+    line === '[REDACTED_SENSITIVE_LINE]').join('\n');
+  return Buffer.from(useful).subarray(-8192).toString('utf8');
+}
 
 export async function regularFile(root, file) {
   relativeFile(file);
@@ -93,6 +106,11 @@ export function knownFailedCorrection(batch) {
 }
 
 export function createWorkspace({ root, repo, run, models }) {
+  const verificationDiagnostics = [];
+  const recordVerificationDiagnostic = (entry) => {
+    if (verificationDiagnostics.length === 64) verificationDiagnostics.shift();
+    verificationDiagnostics.push(entry);
+  };
   const coordinates = (batch) => ({
     cwd: path.join(root, 'agent-team', '.worktrees', batch.id),
     packet: `artifacts/task-validation/${batch.id}`,
@@ -186,16 +204,37 @@ export function createWorkspace({ root, repo, run, models }) {
     await rm(evidenceDir, { recursive: true, force: true });
     await mkdir(evidenceDir, { recursive: true });
     const results = [];
-    for (const entry of batch.plan.verification) {
+    for (const [index, entry] of batch.plan.verification.entries()) {
       // Run model-selected test commands inside the actual Codex sandbox, with NO API/GitHub keys.
-      const result = await run({
-        command: 'codex',
-        args: verificationArguments(cwd, entry.command, entry.args),
-        cwd,
-        envMode: 'verification',
-        timeoutMs: 15 * 60_000,
-        maxOutputBytes: 1024 * 1024,
-      });
+      let result;
+      try {
+        result = await run({
+          command: 'codex',
+          args: verificationArguments(cwd, entry.command, entry.args),
+          cwd,
+          envMode: 'verification',
+          timeoutMs: 15 * 60_000,
+          maxOutputBytes: 1024 * 1024,
+        });
+      } catch (error) {
+        recordVerificationDiagnostic({ batchId: batch.id, index, command: entry.command,
+          argsSha256: sha256(JSON.stringify(entry.args)), exitCode: null,
+          runnerError: 'runner-threw', stdoutSanitizedCapturedBytes: 0, stderrSanitizedCapturedBytes: 0,
+          stdoutSanitizedSha256: sha256(''), stderrSanitizedSha256: sha256('') });
+        throw error;
+      }
+      const stdout = safeVerificationText(typeof result.stdout === 'string' ? result.stdout : '');
+      const stderr = safeVerificationText(typeof result.stderr === 'string' ? result.stderr : '');
+      const noTestsSignal = /(?:# tests 0\b|0 tests? passed|No test files found)/i.test(result.stdout + result.stderr);
+      recordVerificationDiagnostic({ batchId: batch.id, index, command: entry.command,
+        argsSha256: sha256(JSON.stringify(entry.args)), exitCode: result.code ?? null,
+        ok: result.ok === true, noTestsSignal,
+        runnerError: ['timeout', 'output-limit', 'stderr-limit', 'spawn-failed'].includes(result.error)
+          ? result.error : result.error ? 'other-runner-error' : null,
+        stdoutSanitizedCapturedBytes: Buffer.byteLength(stdout),
+        stderrSanitizedCapturedBytes: Buffer.byteLength(stderr),
+        stdoutSanitizedSha256: sha256(stdout), stderrSanitizedSha256: sha256(stderr),
+        stdoutSanitizedExcerpt: excerpt(stdout), stderrSanitizedExcerpt: excerpt(stderr) });
       results.push({
         command: entry.command,
         args: entry.args,
@@ -210,8 +249,7 @@ export function createWorkspace({ root, repo, run, models }) {
         JSON.stringify(results, null, 2) + '\n',
       );
       if (
-        !result.ok ||
-        /(?:# tests 0\b|0 tests? passed|No test files found)/i.test(result.stdout + result.stderr)
+        !result.ok || noTestsSignal
       )
         throw new Error('required verification failed or executed no tests');
     }
@@ -273,6 +311,7 @@ export function createWorkspace({ root, repo, run, models }) {
   }
   return {
     root,
+    verificationDiagnostics: () => structuredClone(verificationDiagnostics),
     captureCheckpoint,
     async inspectRecoveryCheckpoint(batch, { sourceSha, checkpointSha }) {
       const { cwd } = coordinates(batch);
