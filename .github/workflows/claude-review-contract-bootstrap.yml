@@ -33,12 +33,19 @@ jobs:
           ref: ${{ github.sha }}
           path: operator
           persist-credentials: false
+          sparse-checkout: |
+            .github/workflows/claude-review-contract-bootstrap.yml
+            agent-team/diagnostics/claude-review-contract-bootstrap
+          sparse-checkout-cone-mode: false
       - name: Checkout immutable trusted controller
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: 995e2ff6d14a96b5d67e0d14d708f4a95c4c816f
           path: trusted
           persist-credentials: false
+          sparse-checkout: |
+            scripts
+            agent-team/src
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22

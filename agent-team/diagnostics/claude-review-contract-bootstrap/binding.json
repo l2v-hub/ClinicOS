@@ -6,13 +6,13 @@
   "pr": 514,
   "round": 5,
   "priorRounds": 4,
-  "nonce": "35abffff-196d-4c0d-ad7f-5e8877b5c980",
+  "nonce": "304a5d2f-2166-4c64-833d-e591add317d1",
   "operatorBranch": "codex/claude-review-contract-bootstrap-20261026",
   "workflowPath": ".github/workflows/claude-review-contract-bootstrap.yml",
   "operatorDirectory": "agent-team/diagnostics/claude-review-contract-bootstrap",
-  "controlBranch": "codex/claude-review-contract-bootstrap-control-20261026",
-  "markerPath": "claude-review-contract-bootstrap-host-marker5.json",
-  "receiptPath": "claude-review-contract-bootstrap-receipt5.json",
+  "controlBranch": "codex/claude-review-contract-bootstrap-control2-20261026",
+  "markerPath": "claude-review-contract-bootstrap-delivery2-host-marker.json",
+  "receiptPath": "claude-review-contract-bootstrap-delivery2-receipt.json",
   "officialWorkflowId": 396294191,
   "officialWorkflowPath": ".github/workflows/claude-cloud-review.yml",
   "concurrencyGroup": "clinicos-claude-cloud-review-l2v-hub/ClinicOS",
@@ -23,5 +23,5 @@
   "waitIterations": 32,
   "waitIntervalMs": 15000,
   "priorFailedRequestId": "c7fe6290-344d-430d-a4a6-5648b245950e",
-  "publication": "Private SOURCE5 binding after genuineimpl4-to5 allowance, mechanicalsplitNEW independentQA and finalcompletepacket649286/716800 including32KiBheadroom; all6newheadCI/nativeverify/realhostreview4-to5allowance stillmandatory."
+  "publication": "Audited replacementDELIVERYONLY after actualoldjobcancelled withversion/profile/review/nativeRequest all0; sameunused globalprofile1/review1/normalrequest1cap. Trusted/operator sparsecheckout shortens measuredsetup without changing sourcecontext/guards/timeouts. FreshindependentQA beforepush."
 }
