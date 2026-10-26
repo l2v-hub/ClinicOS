@@ -1,0 +1,13 @@
+{
+  "freeze": true,
+  "sealedAt": "2026-10-26T21:14:02.337Z",
+  "sourceProjectionSha256": "c5e6f33e9e95d1b7c2e9763d52b66bcdd9406e4b6f672ec06634816f4fd4d775",
+  "reportSha256": "eaeb480260885d6235ed7695f6e090829c767eb54b29c1cb18e72a4d8c14ef68",
+  "artifacts": {
+    "source-projection.json": "c5e6f33e9e95d1b7c2e9763d52b66bcdd9406e4b6f672ec06634816f4fd4d775",
+    "implementation-report.md": "eaeb480260885d6235ed7695f6e090829c767eb54b29c1cb18e72a4d8c14ef68",
+    "domain-green.log": "f3aebff5c964a4271176e3c29a3bf9509eddd4ee84e23b2db2e323090200d594",
+    "focused-green.log": "c1c65c26a171dcbb9c9418b080c711a61ba2c92a59dc36bb131ed8da1896a9b7",
+    "initial-native-null-red.log": "d2fab4dbf033fbaf77e46aebacdb22e8fffac5db9a702bf592acc39ad78b2f17"
+  }
+}

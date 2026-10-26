@@ -1,0 +1,13 @@
+source OK .github/workflows/codex-bug-pipeline.yml
+source OK agent-team/src/bug-pipeline/cli.mjs
+source OK agent-team/src/bug-pipeline/comment-review-handoff.mjs
+source OK agent-team/src/bug-pipeline/failed-output-export.mjs
+source OK agent-team/src/bug-pipeline/operator-authorization.mjs
+source OK agent-team/src/bug-pipeline/workspace.mjs
+source OK agent-team/tests/bug-pipeline/failed-output-retention.test.mjs
+director seal OK source-projection.json
+director seal OK implementation-report.md
+director seal OK domain-green.log
+director seal OK focused-green.log
+director seal OK initial-native-null-red.log
+native domain/focused/red summaries and author seal OK

@@ -84,11 +84,14 @@ jobs:
           CODEX_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/codex
         run: node agent-team/src/bug-pipeline/cli.mjs
 
-      - name: Upload sanitized pipeline diagnostic on failure
-        if: failure()
+      - name: Upload bounded pipeline diagnostic and retained failed code
+        if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: codex-bug-pipeline-diagnostic-${{ github.run_id }}
-          path: agent-team/.runtime/bug-pipeline/diagnostic.json
+          path: |
+            agent-team/.runtime/bug-pipeline/diagnostic.json
+            agent-team/.runtime/bug-pipeline/verification/
+            agent-team/.runtime/bug-pipeline/failed-code/
           if-no-files-found: ignore
           retention-days: 14

@@ -1,0 +1,9 @@
+# Implementation plan
+
+1. Keep all source514, real clinical40307355899 attempts and zero-provider40312718377 results unchanged. Do not infer an earlier command failure cause or claim lost worktree bytes were recovered.
+2. Add finite sanitized verification observations and immutable guarded failed code exports at the existing failure boundary. Preserve original outcomes and existing execution limits. Upload diagnostics and safe code with always(), including controller partial exit zero and throws.
+3. Add an explicit host-authorized unavailable FAILED verification checkpoint archive. Validate exact progress, checkpoint metadata, external observation and one-shot authorization before removing the current checkpoint; append the complete previous progress to history and preserve every counter/status/budget.
+4. Preserve source1/QA1 BLOCKED3. Correct only its emitted credential excerpt, unsafe source assignment and malformed checkpoint inventory findings; test their actual RED/GREEN behavior and run the existing required domain.
+5. Obtain a new independent exact-byte QA. Publish a v3 packet with five required documents, imported implementation1 FAILED and implementation2 PASSED only after QA success, source Git blob/raw byte mappings and all historical evidence references.
+6. Protect the actual new standalone subject before native handoff. Verify the immutable packet with the native constructor and reader; require six actual current-head checks and a plain authenticated proof comment before genuine Claude review.
+7. After genuine approval, obtain a new independent final review and ordinary protected merge. Bind the subsequent exclusive clinical recovery runner to that accepted main and qualify its trusted import closure before using the native archive action. A clean published baseline is a new baseline, never the original lost output.

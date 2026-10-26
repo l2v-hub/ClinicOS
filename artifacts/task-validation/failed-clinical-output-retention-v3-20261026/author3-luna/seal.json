@@ -1,0 +1,10 @@
+{
+  "freeze": true,
+  "sealedAt": "2026-10-26T20:56:09.800Z",
+  "sourceProjectionSha256": "06dfa368db9b012502e73b3f499897abab2dc8ebf8c5795cd2a8e57024676448",
+  "reportSha256": "7b477d5175e8d9ba1df079ed078f2faffe04610a5e28ac597ea85c373733c912",
+  "artifacts": {
+    "source-projection.json": "06dfa368db9b012502e73b3f499897abab2dc8ebf8c5795cd2a8e57024676448",
+    "implementation-report.md": "7b477d5175e8d9ba1df079ed078f2faffe04610a5e28ac597ea85c373733c912"
+  }
+}

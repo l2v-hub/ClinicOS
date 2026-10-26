@@ -1,0 +1,94 @@
+TAP version 13
+# Subtest: partial exit zero still schedules diagnostic and failed code artifact upload
+ok 1 - partial exit zero still schedules diagnostic and failed code artifact upload
+  ---
+  duration_ms: 13.411361
+  type: 'test'
+  ...
+# Subtest: actual verification failure records command and sanitized captured stream identities without changing failure
+ok 2 - actual verification failure records command and sanitized captured stream identities without changing failure
+  ---
+  duration_ms: 20.909512
+  type: 'test'
+  ...
+# Subtest: actual verification excerpt redacts spaced known credential assignments
+ok 3 - actual verification excerpt redacts spaced known credential assignments
+  ---
+  duration_ms: 7.428023
+  type: 'test'
+  ...
+# Subtest: verification sanitization covers every core known credential key with spacing, quotes and case
+ok 4 - verification sanitization covers every core known credential key with spacing, quotes and case
+  ---
+  duration_ms: 1.0177
+  type: 'test'
+  ...
+# Subtest: verification boundary observes real stripped-environment child exit and redacted capture
+ok 5 - verification boundary observes real stripped-environment child exit and redacted capture
+  ---
+  duration_ms: 81.090956
+  type: 'test'
+  ...
+# Subtest: guarded failed code export retains only exact allowed source, bounded patch and metadata
+ok 6 - guarded failed code export retains only exact allowed source, bounded patch and metadata
+  ---
+  duration_ms: 80.520234
+  type: 'test'
+  ...
+# Subtest: first implementation verification failure retains the exact checkpoint and rejects duplicate export distinctly
+ok 7 - first implementation verification failure retains the exact checkpoint and rejects duplicate export distinctly
+  ---
+  duration_ms: 55.557865
+  type: 'test'
+  ...
+# Subtest: controller throw path exports observed failed state and returns explicit observe failure markers
+ok 8 - controller throw path exports observed failed state and returns explicit observe failure markers
+  ---
+  duration_ms: 0.924842
+  type: 'test'
+  ...
+# Subtest: export refuses changed checkpoint, hash, size, symlink, secret, traversal and outside-plan files
+ok 9 - export refuses changed checkpoint, hash, size, symlink, secret, traversal and outside-plan files
+  ---
+  duration_ms: 318.682817
+  type: 'test'
+  ...
+# Subtest: export rejects spaced GH_TOKEN source before creating patch or copied source
+ok 10 - export rejects spaced GH_TOKEN source before creating patch or copied source
+  ---
+  duration_ms: 327.719095
+  type: 'test'
+  ...
+# Subtest: native archive consumes exact external observation and authorization while preserving FAILED history and counts
+ok 11 - native archive consumes exact external observation and authorization while preserving FAILED history and counts
+  ---
+  duration_ms: 4.038996
+  type: 'test'
+  ...
+# Subtest: native archive rejects unknown/running/stale and malformed checkpoint proof before consuming authorization
+ok 12 - native archive rejects unknown/running/stale and malformed checkpoint proof before consuming authorization
+  ---
+  duration_ms: 1.31011
+  type: 'test'
+  ...
+# Subtest: persisted failed verification followed by pipeline throw writes the actual blocked diagnostic and guarded code
+ok 13 - persisted failed verification followed by pipeline throw writes the actual blocked diagnostic and guarded code
+  ---
+  duration_ms: 75.790221
+  type: 'test'
+  ...
+# Subtest: missing or throwing observation writes an explicit marker in actual diagnostic JSON
+ok 14 - missing or throwing observation writes an explicit marker in actual diagnostic JSON
+  ---
+  duration_ms: 38.324896
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1158.231971

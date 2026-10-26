@@ -1,0 +1,89 @@
+{
+  "status": "VERIFIED",
+  "at": "2026-10-26T19:48:29.610Z",
+  "sourceCode": "24f669b706193eef9ac08bd7a02ab440be692189",
+  "baseSha": "13c71ce0e2cdf6e72b4c7eeeb036754fac7e4f73",
+  "findings": 0,
+  "sourceProjection": [
+    {
+      "path": ".github/workflows/codex-bug-pipeline.yml",
+      "gitBlobSha1": "8c788d7dbab5f83bd6e03bed5204cd134d8ce2fe",
+      "rawSha256": "9a041cf6f4ebfd505fd588983743213587840656c9ae6ca576582c8ab34ea27f",
+      "bytes": 4162
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "gitBlobSha1": "5dd3688e4b48d34115b6c194be4e9fe398f2f419",
+      "rawSha256": "a19585fd5b9ffc318d6d7810013253373e1eaaf44eef4693970ec6db1f83b8b4",
+      "bytes": 9454
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "gitBlobSha1": "ea6cec8a0cace0dbb3876dce48e3efe8daf796be",
+      "rawSha256": "086ee18c81a07353d8dbc1d835b39e2338d4b7c1bed1a38e65ab6570dceea435",
+      "bytes": 48980
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "gitBlobSha1": "c288d593820c593ea007bdaf70175be60144bc23",
+      "rawSha256": "6ad6b78372763bff5ad8a2d009a6dbe4f752e79a8ad0b500f922052842f49497",
+      "bytes": 9972
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/operator-authorization.mjs",
+      "gitBlobSha1": "f40ca1a1b58e168e7c9bb9dbb76e582367a96fbf",
+      "rawSha256": "3eda3d4607725db16ee4749318f12a0ee907f3d6381df19f0f729e2aee9e316a",
+      "bytes": 21316
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/workspace.mjs",
+      "gitBlobSha1": "248d04d93959696bbf3d4095d6828e33c70983cc",
+      "rawSha256": "42ab2d9fce6dadd30749acc15d11903343fdb6eccf7b474712ba46307a8499f3",
+      "bytes": 35458
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/failed-output-retention.test.mjs",
+      "gitBlobSha1": "ff539d02f357a211603ad52e4e9dda36ec9be623",
+      "rawSha256": "55f30802dd0db15cc3ed896e010b21a5bdc1e50d8fb5d7c629a59d4f13ff44d9",
+      "bytes": 17503
+    }
+  ],
+  "artifacts": {
+    "qa-report.md": {
+      "bytes": 3489,
+      "sha256": "af53acc5f877a60904d6655e545cd37b8a6f0c62f5b9e3ded03c52df363185d8"
+    },
+    "check-projection.py": {
+      "bytes": 2235,
+      "sha256": "defcd63525d31228773ca7bc7de87111f5ebaa823916476647385a87e1aacbc1"
+    },
+    "projection.log": {
+      "bytes": 257,
+      "sha256": "2206fe1cf90fd17441d0adeca580412119a02a6f118576c04b01fd8e94514e2c"
+    },
+    "independent-repro.mjs": {
+      "bytes": 7121,
+      "sha256": "5fa1e67cdce44908b63e39840564f94c1fbe4f18c545cc90b1bf9213bf51bfb2"
+    },
+    "independent-repro.log": {
+      "bytes": 424,
+      "sha256": "7a30ae80c0f7441fc27131d0d24d604fceb4b820187d1723997925674b00372a"
+    },
+    "targeted-tests.log": {
+      "bytes": 18429,
+      "sha256": "f7a8585da46bd99695ef6d332d6d13f7d7cf3b2d04ca41609cd3673f5fa23b8e"
+    },
+    "static-checks.log": {
+      "bytes": 246,
+      "sha256": "f826e7afe0aaf36bd10a13f83ac80b628dcc31a7f5325525a2610d06929014a2"
+    }
+  },
+  "targetedTests": {
+    "total": 71,
+    "passed": 71,
+    "failed": 0
+  },
+  "remoteClaims": false,
+  "candidateEdited": false,
+  "reservationNonce": "039809ec-e5e6-4bb1-b520-fafb6eb26896"
+}

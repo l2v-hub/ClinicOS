@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import path from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { spentAttempts } from './attempt-budget.mjs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -7,6 +8,7 @@ import { createRunner } from './process.mjs';
 import { createGitHub, controllerFailureCode } from './github.mjs';
 import { createModels } from './models.mjs';
 import { createWorkspace } from './workspace.mjs';
+import { exportFailedCode } from './failed-output-export.mjs';
 import { runPipeline } from './pipeline.mjs';
 import { requiresHumanReview } from './review-policy.mjs';
 import { createStandaloneReview } from './standalone-review.mjs';
@@ -23,6 +25,51 @@ export const STANDALONE_INFRASTRUCTURE_FILES = Object.freeze(
     'docs/standalone-pr-review.md',
   ].filter((file) => !requiresHumanReview(file)),
 );
+
+export async function exportKnownFailedOutputs({ state, workspace, outputRoot }) {
+    const exports = [];
+    for (const batch of (state?.batches ?? []).filter((b) =>
+      b.controllerProgress?.status === 'failed' &&
+      ['verify-before', 'verify-after'].includes(b.controllerProgress.failedStep) &&
+      b.controllerProgress.failureCode === 'workspace-verification-failed')) {
+      try {
+        const manifest = await exportFailedCode({ batch, workspace, outputRoot });
+        exports.push({ batchId: batch.id, status: 'local-export-created',
+          checkpointSha256: manifest.checkpointSha256, files: manifest.files.length });
+      } catch (error) {
+        const status = /already exists/.test(error.message) ? 'local-export-already-exists'
+          : /Exact failed verification required/.test(error.message) ? 'flow-not-eligible'
+            : 'guard-refused-or-output-unavailable';
+        exports.push({ batchId: batch.id, status });
+      }
+    }
+    return exports;
+}
+
+export async function retainFailedOutputsAfterControllerError({ observe, exportFailures }) {
+  try {
+    const state = await observe();
+    return { failedOutputExports: await exportFailures(state) };
+  } catch (error) {
+    return { failedOutputExports: [{ status: 'retention-failed',
+      failureCode: controllerFailureCode(error) }] };
+  }
+}
+
+export async function writeBlockedControllerDiagnostic({ diagnosticRoot, error, observe,
+  exportFailures, modelDiagnostics = [], verificationDiagnostics = [] }) {
+  const { failedOutputExports } = await retainFailedOutputsAfterControllerError({ observe, exportFailures });
+  const diagnostic = {
+    status: 'blocked-controller',
+    failureCode: controllerFailureCode(error),
+    failedOutputExports,
+    modelDiagnostics,
+    verificationDiagnostics: verificationDiagnostics.slice(-64),
+    reason: 'Inspect GitHub permissions, durable state and pending triage; no automatic budget reset.',
+  };
+  await writeFile(path.join(diagnosticRoot, 'diagnostic.json'), JSON.stringify(diagnostic, null, 2) + '\n');
+  return diagnostic;
+}
 
 export async function doctor({ run, models, env = process.env, cwd }) {
   const codex = await models.preflight();
@@ -78,6 +125,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   };
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
   const diagnosticRoot = path.join(root, 'agent-team', '.runtime', 'bug-pipeline');
+  const failedOutputRoot = path.join(diagnosticRoot, 'failed-code');
   // Outputs must be OUTSIDE both the source checkout and every model worktree.
   const runtimeRoot = path.join(env.RUNNER_TEMP || path.dirname(root), '.clinicos-bug-sessions');
   await mkdir(runtimeRoot, { recursive: true, mode: 0o700 });
@@ -118,6 +166,18 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   const gh = createGitHub({ cwd: root, repo, run });
   const store = gh.createStateStore();
   const workspace = createWorkspace({ root, repo, run, models });
+  const exportKnownFailures = (state) => exportKnownFailedOutputs({
+    state, workspace, outputRoot: failedOutputRoot,
+  });
+  const writeVerificationDiagnostic = async () => {
+    const entries = workspace.verificationDiagnostics();
+    if (!entries.length) return;
+    const directory = path.join(diagnosticRoot, 'verification');
+    await mkdir(directory, { recursive: true, mode: 0o700 });
+    await writeFile(path.join(directory, `${randomUUID()}.json`),
+      JSON.stringify({ schemaVersion: 1, kind: 'bounded-sanitized-verification-failure',
+        entries }, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
+  };
   try {
     const state = await runPipeline({
       repo,
@@ -131,9 +191,12 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
       standaloneInfrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
     });
     const blocked = state.batches.filter((b) => b.phase === 'blocked').length;
+    const failedOutputExports = await exportKnownFailures(state);
     const summary = {
       status: blocked ? 'partial' : 'reconciled',
       blocked,
+      verificationDiagnostics: workspace.verificationDiagnostics().slice(-64),
+      failedOutputExports,
       modelDiagnostics,
       batches: state.batches.map((b) => ({
         id: b.id,
@@ -162,24 +225,21 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
     console.log(JSON.stringify(summary));
     return 0;
   } catch (error) {
-    await writeFile(
-      path.join(diagnosticRoot, 'diagnostic.json'),
-      JSON.stringify(
-        {
-          status: 'blocked-controller',
-          failureCode: controllerFailureCode(error),
-          modelDiagnostics,
-          reason:
-            'Inspect GitHub permissions, durable state and pending triage; no automatic budget reset.',
-        },
-        null,
-        2,
-      ) + '\n',
-    );
+    // A controller exception may follow a persisted FAILED attempt. Observe the
+    // canonical state read-only; export guards still require the exact owned output.
+    await writeBlockedControllerDiagnostic({
+      diagnosticRoot, error,
+      observe: typeof store.observe === 'function' ? () => store.observe() : undefined,
+      exportFailures: exportKnownFailures,
+      modelDiagnostics,
+      verificationDiagnostics: workspace.verificationDiagnostics(),
+    });
     console.error(
       'Pipeline blocked: GitHub permissions, durable state, triage or execution failed. No budget reset.',
     );
     return 1;
+  } finally {
+    try { await writeVerificationDiagnostic(); } catch { /* original result wins */ }
   }
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
