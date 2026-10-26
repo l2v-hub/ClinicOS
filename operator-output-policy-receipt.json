@@ -9,7 +9,7 @@
   "operatorSha": "d41e0bbbe6b76dafa25a57e0604c51c11ce905c9",
   "runId": "40257353325",
   "runAttempt": "1",
-  "stage": "actual-pr-created-and-root-protected",
+  "stage": "waiting-exact-six-native-checks",
   "prCreatesUsed": 1,
   "reviewRequestsUsed": 0,
   "mergeCalls": 0,
@@ -17,5 +17,49 @@
   "prCreateConfirmed": true,
   "prNumber": 514,
   "prUrl": "https://github.com/l2v-hub/ClinicOS/pull/514",
-  "observedAt": "2026-10-26T02:05:55.554Z"
+  "checks": [
+    {
+      "name": "bug-pipeline-tests",
+      "id": null,
+      "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "status": "not-started",
+      "conclusion": null
+    },
+    {
+      "name": "secret-scan",
+      "id": 121362067872,
+      "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "name": "frontend-tests",
+      "id": null,
+      "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "status": "not-started",
+      "conclusion": null
+    },
+    {
+      "name": "archive-tests",
+      "id": null,
+      "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "status": "not-started",
+      "conclusion": null
+    },
+    {
+      "name": "gate",
+      "id": null,
+      "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "status": "not-started",
+      "conclusion": null
+    },
+    {
+      "name": "browser-e2e",
+      "id": null,
+      "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "status": "not-started",
+      "conclusion": null
+    }
+  ],
+  "observedAt": "2026-10-26T02:05:58.830Z"
 }
