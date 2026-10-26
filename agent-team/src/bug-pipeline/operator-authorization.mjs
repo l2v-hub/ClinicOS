@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { historyDigest, implementationAttempts } from './attempt-budget.mjs';
 import { knownFailedCorrection } from './workspace.mjs';
-import { safeText } from './contracts.mjs';
+import { relativeFile, safeText } from './contracts.mjs';
 
 // This module cannot authenticate JSON. The verifier is injected by a trusted host
 // that observes the actual user session, or verifies an external maintainer source.
@@ -299,9 +299,27 @@ export async function archiveUnavailableFailedOutput({
       progress.failureCode === subject.failureCode &&
       ['verify-before', 'verify-after'].includes(progress.failedStep) &&
       progress.checkpoint?.schemaVersion === 1 &&
+      typeof progress.checkpoint.cwd === 'string' && progress.checkpoint.cwd.length > 0 &&
+      typeof progress.checkpoint.branch === 'string' && progress.checkpoint.branch.length > 0 &&
       progress.checkpoint.head === subject.sha &&
       progress.checkpoint.planSha256 === progress.planSha256 &&
       progress.checkpoint.baseSha === subject.baseSha &&
+      progress.checkpoint.output !== null &&
+      typeof progress.checkpoint.output === 'object' &&
+      !Array.isArray(progress.checkpoint.output) &&
+      Object.entries(progress.checkpoint.output).every(([file, identity]) =>
+        relativeFile(file) === file && (identity === null || (
+          identity !== null && typeof identity === 'object' && !Array.isArray(identity) &&
+          /^[a-f0-9]{64}$/.test(identity.sha256) &&
+          Number.isSafeInteger(identity.bytes) && identity.bytes >= 0 &&
+          typeof identity.executable === 'boolean' &&
+          Object.keys(identity).sort().join(',') === 'bytes,executable,sha256'
+        ))),
+      progress.checkpoint.packetHashes !== null &&
+      typeof progress.checkpoint.packetHashes === 'object' &&
+      !Array.isArray(progress.checkpoint.packetHashes) &&
+      Object.entries(progress.checkpoint.packetHashes).every(([file, digest]) =>
+        relativeFile(file) === file && /^[a-f0-9]{64}$/.test(digest)),
       Number.isSafeInteger(progress.next) &&
       progress.next === (progress.failedStep === 'verify-before' ? 1 : 3) &&
       Array.isArray(progress.completed) && progress.completed.length === progress.next &&

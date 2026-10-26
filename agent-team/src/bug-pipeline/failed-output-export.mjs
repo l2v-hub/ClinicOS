@@ -13,7 +13,8 @@ const MAX_FILES = 20;
 const MAX_FILE_BYTES = 256 * 1024;
 const MAX_TOTAL_BYTES = 2 * 1024 * 1024;
 const MAX_PACKET_BYTES = 1024 * 1024 + 16 * 1024;
-const secretPattern = /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|(?:password|secret|api[_-]?key|access[_-]?token)\s*[:=]\s*['"][A-Za-z0-9_+./=-]{12,}['"]|(?:postgres(?:ql)?|https?):\/\/[^\s/@]+:[^\s/@]+@/i;
+const knownCredentialKey = `["']?(?:OPENAI_API_KEY|ANTHROPIC_API_KEY|CLAUDE_CODE_OAUTH_TOKEN|CODEX_ACCESS_TOKEN|DATABASE_URL|GITHUB_TOKEN|GH_TOKEN)["']?`;
+const secretPattern = new RegExp(`-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|(?:${knownCredentialKey}\\s*(?::\\s*[^=;\\n]+)?=\\s*(?:['"][^'"\\r\\n]+['"]|[^\\s;]+)|${knownCredentialKey}\\s*:\\s*['"][^'"\\r\\n]+['"])|(?:password|secret|api[_-]?key|access[_-]?token)\\s*[:=]\\s*['"][A-Za-z0-9_+./=-]{12,}['"]|(?:postgres(?:ql)?|https?):\\/\\/[^\\s/@]+:[^\\s/@]+@`, 'i');
 function safeSource(bytes) {
   assert.ok(bytes.length <= MAX_FILE_BYTES, 'Retained source exceeds per-file limit');
   const content = bytes.toString('utf8');

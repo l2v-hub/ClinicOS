@@ -6,7 +6,7 @@ import { execFile as execFileCallback } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { mkdtemp, mkdir, readFile, readdir, rm, symlink, unlink, writeFile } from 'node:fs/promises';
-import { createWorkspace, knownFailedCorrection } from '../../src/bug-pipeline/workspace.mjs';
+import { createWorkspace, knownFailedCorrection, safeVerificationText } from '../../src/bug-pipeline/workspace.mjs';
 import { createRunner } from '../../src/bug-pipeline/process.mjs';
 import { exportFailedCode } from '../../src/bug-pipeline/failed-output-export.mjs';
 import { archiveUnavailableFailedOutput } from '../../src/bug-pipeline/operator-authorization.mjs';
@@ -69,6 +69,33 @@ test('actual verification failure records command and sanitized captured stream 
   const packet = JSON.parse(await readFile(path.join(cwd, `artifacts/task-validation/${batch.id}/test-results/controller-verification.json`)));
   assert.equal(packet[0].code, 2);
   assert.equal(packet[0].ok, false);
+});
+
+test('actual verification excerpt redacts spaced known credential assignments', async (t) => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'verification-credential-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const { batch } = failedBatch();
+  batch.packetHashes = {};
+  const cwd = path.join(root, 'agent-team/.worktrees', batch.id);
+  await mkdir(cwd, { recursive: true });
+  const run = async ({ command }) => command === 'git'
+    ? { ok: true, code: 0, stdout: '', stderr: '' }
+    : { ok: false, code: 2, error: null,
+      stdout: 'Error: GH_TOKEN = fixtureCredential123456\n', stderr: '' };
+  const workspace = createWorkspace({ root, repo: 'l2v-hub/ClinicOS', run, models: {} });
+  await assert.rejects(workspace.verify(batch), /required verification failed/);
+  const [entry] = workspace.verificationDiagnostics();
+  assert.equal(entry.stdoutSanitizedExcerpt, '[REDACTED_SENSITIVE_LINE]');
+  assert.ok(!JSON.stringify(entry).includes('fixtureCredential123456'));
+});
+
+test('verification sanitization covers every core known credential key with spacing, quotes and case', () => {
+  const keys = ['OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'CLAUDE_CODE_OAUTH_TOKEN',
+    'CODEX_ACCESS_TOKEN', 'DATABASE_URL', 'GITHUB_TOKEN', 'GH_TOKEN'];
+  const input = keys.map((key) => `Error: ${key.toLowerCase()} = "fixture-${key}"`).join('\n');
+  const output = safeVerificationText(input);
+  assert.deepEqual(output.split('\n'), keys.map(() => '[REDACTED_SENSITIVE_LINE]'));
+  assert.ok(!output.includes('fixture-'));
 });
 
 test('verification boundary observes real stripped-environment child exit and redacted capture', async (t) => {
@@ -167,6 +194,29 @@ test('export refuses changed checkpoint, hash, size, symlink, secret, traversal 
   }
 });
 
+test('export rejects spaced GH_TOKEN source before creating patch or copied source', async (t) => {
+  for (const key of ['OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'CLAUDE_CODE_OAUTH_TOKEN',
+    'CODEX_ACCESS_TOKEN', 'DATABASE_URL', 'GITHUB_TOKEN', 'GH_TOKEN']) {
+    const f = await exportFixture(t);
+    await writeFile(f.file, `export const ${key} = "x";\n`);
+    const bytes = await readFile(f.file);
+    f.checkpoint.output['src/feature.ts'] = { sha256: sha256(bytes), bytes: bytes.length, executable: false };
+    await assert.rejects(exportFailedCode(f), /credential material/);
+    assert.deepEqual(await readdir(f.outputRoot).catch(() => []), []);
+  }
+  for (const declaration of [
+    'const config = { GH_TOKEN: "fixtureCredential123456" };\n',
+    'const config = { "GH_TOKEN": "fixtureCredential123456" };\n',
+  ]) {
+    const f = await exportFixture(t);
+    await writeFile(f.file, declaration);
+    const bytes = await readFile(f.file);
+    f.checkpoint.output['src/feature.ts'] = { sha256: sha256(bytes), bytes: bytes.length, executable: false };
+    await assert.rejects(exportFailedCode(f), /credential material/);
+    assert.deepEqual(await readdir(f.outputRoot).catch(() => []), []);
+  }
+});
+
 test('native archive consumes exact external observation and authorization while preserving FAILED history and counts', async () => {
   const { batch } = failedBatch();
   batch.baseSha = batch.controllerProgress.checkpoint.baseSha = 'b'.repeat(40);
@@ -206,12 +256,15 @@ test('native archive consumes exact external observation and authorization while
   delete batch.controllerProgress.checkpoint;
 });
 
-test('native archive rejects unknown/running/stale proof before consuming authorization', async () => {
-  for (const fault of ['running', 'unknown', 'stale', 'badCheckpoint', 'unverified']) {
+test('native archive rejects unknown/running/stale and malformed checkpoint proof before consuming authorization', async () => {
+  for (const fault of ['running', 'unknown', 'stale', 'badCheckpoint', 'unverified', 'nullOutput', 'arrayOutput', 'badMetadata']) {
     const { batch } = failedBatch();
     batch.baseSha = batch.controllerProgress.checkpoint.baseSha = 'b'.repeat(40);
     if (fault === 'running') batch.controllerProgress.status = 'running';
     if (fault === 'unknown') batch.controllerProgress.failureCode = 'other';
+    if (fault === 'nullOutput') batch.controllerProgress.checkpoint.output = null;
+    if (fault === 'arrayOutput') batch.controllerProgress.checkpoint.output = [];
+    if (fault === 'badMetadata') batch.controllerProgress.checkpoint.output = { 'src/feature.ts': { sha256: 'bad', bytes: -1, executable: 'no' } };
     const state = { repository: 'l2v-hub/ClinicOS', batches: [batch] };
     const evidence = { origin: 'github-actions', runId: 1, conclusion: 'success',
       artifactName: 'codex-bug-pipeline-diagnostic-1', outputStatus: 'unavailable',

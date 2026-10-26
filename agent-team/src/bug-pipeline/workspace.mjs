@@ -10,7 +10,7 @@ import { validatePng, validateTrace } from './evidence.mjs';
 import { verificationArguments } from './verification.mjs';
 import { sanitizeText } from '../core/sanitize.mjs';
 
-const SENSITIVE_VERIFICATION_LINE = /\b(?:patient(?:id|_id)?|resident(?:id|_id)?|provider|nome|cognome|birth|dob|email|phone|authorization|cookie|token|secret|password|api[_-]?key|database_url)\b|\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b/i;
+const SENSITIVE_VERIFICATION_LINE = /\b(?:patient(?:id|_id)?|resident(?:id|_id)?|provider|nome|cognome|birth|dob|email|phone|authorization|cookie|token|secret|password|api[_-]?key|database_url|OPENAI_API_KEY|ANTHROPIC_API_KEY|CLAUDE_CODE_OAUTH_TOKEN|CODEX_ACCESS_TOKEN|DATABASE_URL|GITHUB_TOKEN|GH_TOKEN)\b|\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b/i;
 export function safeVerificationText(value) {
   return sanitizeText(value).split(/\r?\n/).map((line) =>
     SENSITIVE_VERIFICATION_LINE.test(line) ? '[REDACTED_SENSITIVE_LINE]' : line).join('\n');
