@@ -9,7 +9,7 @@
   "operatorSha": "b3f12af905e20a9ed7babdceee3c31386c332a10",
   "runId": "40260746637",
   "runAttempt": "1",
-  "stage": "native-adopt-intent",
+  "stage": "native-verify-intent",
   "prCreatesUsed": 0,
   "reviewRequestsUsed": 0,
   "mergeCalls": 0,
@@ -60,5 +60,5 @@
       "conclusion": "success"
     }
   ],
-  "observedAt": "2026-10-26T02:46:53.086Z"
+  "observedAt": "2026-10-26T02:48:38.000Z"
 }
