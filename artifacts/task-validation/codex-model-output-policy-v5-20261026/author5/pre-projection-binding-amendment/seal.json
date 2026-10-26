@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-26T08:00:14.463Z",
+  "authorNonce": "497769ef-a2b3-4253-895d-f5a0266b6220",
+  "sourceCode": "c3711b74a71b60923e5ac75cc57d80fa3d2958e8",
+  "sourceProjectionSha256": "655328660e6e15ad87fc9758d24614bceb0edb83d2fad88c5fda9e814c7e01e9",
+  "artifactManifestSha256": "0aa18dc2fd5416e6e6333078fd3e96f8c1a83961750a8c98990b9d11e665bb78",
+  "resultSha256": "84bf3da6954c6c6fe205395dff314129fc38562adc09df948bf8f6dc4d9a3494",
+  "mechanicalOnly": true,
+  "noPeerApproval": true
+}
