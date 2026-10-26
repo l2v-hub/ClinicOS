@@ -9,12 +9,56 @@
   "operatorSha": "b3f12af905e20a9ed7babdceee3c31386c332a10",
   "runId": "40260746637",
   "runAttempt": "1",
-  "stage": "existing-exact-pr-and-root-protection-verified",
+  "stage": "waiting-exact-six-native-checks",
   "prCreatesUsed": 0,
   "reviewRequestsUsed": 0,
   "mergeCalls": 0,
   "providerCalls": 0,
   "prNumber": 514,
   "prUrl": "https://github.com/l2v-hub/ClinicOS/pull/514",
-  "observedAt": "2026-10-26T02:46:47.444Z"
+  "checks": [
+    {
+      "name": "bug-pipeline-tests",
+      "id": 121362775896,
+      "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "secret-scan",
+      "id": 121362067872,
+      "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "frontend-tests",
+      "id": 121362831894,
+      "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "archive-tests",
+      "id": 121362831155,
+      "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "gate",
+      "id": 121362831102,
+      "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "browser-e2e",
+      "id": 121366433236,
+      "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "observedAt": "2026-10-26T02:46:50.643Z"
 }
