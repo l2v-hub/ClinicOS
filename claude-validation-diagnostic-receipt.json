@@ -9,7 +9,7 @@
   "operatorSha": "8b8ec749a847f3a1b11c7d138246ae12f013044f",
   "runId": "40276313012",
   "runAttempt": "1",
-  "stage": "started",
+  "stage": "final",
   "requestId": null,
   "probeMax": 1,
   "reviewMax": 1,
@@ -27,5 +27,5 @@
   "runnerThrew": false,
   "observationFailed": false,
   "proofFailed": false,
-  "diagnosticError": null
+  "diagnosticError": "marker-timeout"
 }
