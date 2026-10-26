@@ -9,7 +9,7 @@
   "operatorSha": "bc0a9200e8d03e107a758ffaf166649e1a8466f2",
   "runId": "40279159071",
   "runAttempt": "1",
-  "stage": "review-classified",
+  "stage": "final",
   "requestId": "c7fe6290-344d-430d-a4a6-5648b245950e",
   "probeMax": 1,
   "reviewMax": 1,
@@ -17,7 +17,17 @@
   "concurrencyGroup": "clinicos-claude-cloud-review-l2v-hub/ClinicOS",
   "holdingGroup": true,
   "markerAccepted": true,
-  "nativeOutcome": null,
+  "nativeOutcome": {
+    "status": "provider-failed",
+    "pr": 514,
+    "sha": "895e6bd54461fcc6a00be4117e4792bde6fc4e07",
+    "round": 4,
+    "providerExecuted": true,
+    "verdict": null,
+    "findingCount": null,
+    "reportSha256": null,
+    "failureCode": "review-validation-failed"
+  },
   "diagnostic": {
     "capturedSanitizedStdoutStringBytes": 12361,
     "capturedSanitizedStdoutSha256": "81b044c179f2e80379f74d7e6500b27502c0eb5ca35b70e87d28f49538ac23d7",
