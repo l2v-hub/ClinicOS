@@ -22,8 +22,8 @@
       "name": "bug-pipeline-tests",
       "id": 121362775896,
       "headSha": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
-      "status": "in_progress",
-      "conclusion": null
+      "status": "completed",
+      "conclusion": "success"
     },
     {
       "name": "secret-scan",
@@ -61,5 +61,5 @@
       "conclusion": null
     }
   ],
-  "observedAt": "2026-10-26T02:12:57.368Z"
+  "observedAt": "2026-10-26T02:15:53.259Z"
 }
