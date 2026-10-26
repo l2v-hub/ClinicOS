@@ -1,0 +1,262 @@
+name: Publish and hand off verified output-policy source
+on:
+  push:
+    branches: [codex/output-policy-source-pr-operator-20261026]
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: read
+  checks: read
+concurrency:
+  group: clinicos-output-policy-source-pr-operator-20261026
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/codex/output-policy-source-pr-operator-20261026' && github.run_attempt == 1
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact trusted controller
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 995e2ff6d14a96b5d67e0d14d708f4a95c4c816f
+          persist-credentials: false
+          sparse-checkout: |
+            agent-team
+            scripts
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Materialize and syntax-check exact operator before credentials
+        run: |
+          mkdir -p "$RUNNER_TEMP/output-policy-operator"
+          cat > "$RUNNER_TEMP/output-policy-operator/operator.mjs" <<'JS'
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          import { createHash } from 'node:crypto';
+          import { mkdtemp, mkdir } from 'node:fs/promises';
+          import path from 'node:path';
+          import { pathToFileURL } from 'node:url';
+          
+          const REPO = 'l2v-hub/ClinicOS';
+          const MAIN = '995e2ff6d14a96b5d67e0d14d708f4a95c4c816f';
+          const HEAD = 'b868e72ceb2d2e29fdaf077b3d7144c34481e176';
+          const BRANCH = 'codex/codex-model-output-policy-20261026';
+          const OPERATOR_BRANCH = 'codex/output-policy-source-pr-operator-20261026';
+          const NONCE = '8e678bd0-fc68-42e4-9c9c-063321cc7924';
+          const MANIFEST = JSON.parse(Buffer.from('eyJzY2hlbWFWZXJzaW9uIjoxLCJyZXBvc2l0b3J5IjoibDJ2LWh1Yi9DbGluaWNPUyIsInNoYSI6ImI4NjhlNzJjZWIyZDJlMjlmZGFmMDc3YjNkNzE0NGMzNDQ4MWUxNzYiLCJiYXNlU2hhIjoiOTk1ZTJmZjZkMTRhOTZiNWQ2N2UwZDE0ZDcwOGY0YTk1YzRjODE2ZiIsImJhc2VSZWYiOiJtYWluIiwiYnJhbmNoIjoiY29kZXgvY29kZXgtbW9kZWwtb3V0cHV0LXBvbGljeS0yMDI2MTAyNiIsImlzc3VlcyI6W10sInBhY2tldCI6eyJwYXRoIjoiYXJ0aWZhY3RzL3Rhc2stdmFsaWRhdGlvbi9jb2RleC1tb2RlbC1vdXRwdXQtcG9saWN5LTIwMjYxMDI2IiwiZmlsZXMiOnsiYW5hbHlzaXMubWQiOiJhNjQ5NzE4ZDY3MTkzMWM4NGUwMDllZWMxZTVlMjkzZjRkNTE1YWNhMzQ4MmM0YTVlN2YwYzlhOGEyMTRmOWVhIiwiYXV0aG9yMS9hbWVuZG1lbnQtMS9hbWVuZG1lbnQtaGFzaGVzLnNoYTI1NiI6IjQ3ZGI3OGI0ZDYwNzMyYzdiZjg1ZGUwM2MwMGFmNGNjZTQ2ZjhiZGM3ZGUyM2Q0YzdiZjA5NmE3N2VkOTJhZmMiLCJhdXRob3IxL2FtZW5kbWVudC0xL21hbmlmZXN0LnNoYTI1NiI6IjdiN2E5YzJmMjE0N2E2ZDA4MWU2OGNmYzdjNzY4ZDgwNjFkMTY0YTcyNzgyZTk0ZmMzY2Q1OTAyOTE3NDE5OGMiLCJhdXRob3IxL2FtZW5kbWVudC0xL3BhY2tldC9hbmFseXNpcy5tZCI6IjUwNjcxY2QwZmYwMTgzNDdiYzQ0YTM0OTY1YTlkOWU2ZjJmZWJiMmY4Mjg5NmJlZjE3MjNlOTYyZmI3YzhiNGUiLCJhdXRob3IxL2FtZW5kbWVudC0xL3BhY2tldC9pbXBsZW1lbnRhdGlvbi1wbGFuLm1kIjoiMjRmZWIyNDU0MjUzMjVhYjdjZmU3ZDQwNzQ1MWRkYTdiOWM3MjY4ZTdiNjM1ODIxOTRjYzQwYTBlNWM4MmEwYiIsImF1dGhvcjEvYW1lbmRtZW50LTEvcGFja2V0L2ltcG9ydGVkLWhpc3RvcnkuanNvbiI6IjQ4NTBkYTMwMzIwN2MyODdjZmRjNTRiNjNkMWVhMjc0NTdiODBjZGRjOWRhNTg1Mzk1MDJkNmE1MGJhNjg0MzQiLCJhdXRob3IxL2FtZW5kbWVudC0xL3BhY2tldC9sb2dzL2dyZWVuLXRhcmdldGVkLmxvZyI6IjVmOGUxOTMyYTNlMTA0OTAzYTg0NmVjMzk2ZDIwOGUyZGFjYmUyNzgxZWEyZTNhNmMzNjhlMjA4YmIxZDBmNmYiLCJhdXRob3IxL2FtZW5kbWVudC0xL3BhY2tldC9sb2dzL3JlZC1tb2RlbHMubG9nIjoiNWYzNDZmNzgyYTdjZjhhYjYyMjVmZDc4Y2FmNjE0YTE2NTkzYTc4NWFjNDZlYTRmNTVkMzliNmViNjYwZmE4NiIsImF1dGhvcjEvYW1lbmRtZW50LTEvcGFja2V0L3Rhc2stY29udHJhY3QubWQiOiJlMzk4YTUxNzY5NDk4NTYxMTBmMGYwMzdjN2VhZDUzNjEwZDcyZGY5ZjEwYmE0OWZkYjI2ZGM4MGM4ZWU1OGM1IiwiYXV0aG9yMS9hbWVuZG1lbnQtMS9wYWNrZXQvdGVzdC1wbGFuLm1kIjoiZDM1MDI5M2Q5ZDMwMTMwZDIwZjE5NDZjNmY4ODVhNDZhYjIwZjBkNDA3OGU1OGUxNGRlODMxNjc0MDMyMTUyMSIsImF1dGhvcjEvYW1lbmRtZW50LTEvcGFja2V0L3ZhbGlkYXRpb24tcmVwb3J0Lm1kIjoiNTcyZTg2MDZmOWRjZWRlNmFmZWE0YTYzNDNkZTZkZWJiNGVhZDVmNDdjMWU1NDdmYjM0MGJmMDU2MTFiNDQ2OCIsImF1dGhvcjEvYW1lbmRtZW50LTEvcmVzdWx0Lmpzb24iOiIxMGJhNzFiODBlNmIzYWI5OTQzYjQ2ZGNiNGVlOWI4YmI0YTRhM2YyYmI4ZjkwNjM0MmU5NWFjMTBkZDA5YzNkIiwiYXV0aG9yMS9hbWVuZG1lbnQtMS9zZWFsLmpzb24iOiIwODNjYzE0NTFiNjAxMDU1YjVhNjgxNTJjZTM0OTk5Nzg4MThiNWU4MzMzMGY2MTg1NjA3NDE0NTAxN2JjMzQ4IiwiYXV0aG9yMS9tYW5pZmVzdC5zaGEyNTYiOiJlYWRhMDdiNTE4NTFhYmJhYTk1YzAxZGU4ODQxODlkZDczMWVmNTIwZGVmOTFjNzZjMjMzNjczOGM4NjAwYzE0IiwiYXV0aG9yMS9wYWNrZXQvYW5hbHlzaXMubWQiOiJiNDkwOTlmZjE0Y2EyODQyN2NiNzU3OGE2NTIwMzhhNjFhNzMxOGJkYzdkOWU5MGRhZDAyZDMxZDNmNDU3ZWY4IiwiYXV0aG9yMS9wYWNrZXQvaW1wbGVtZW50YXRpb24tcGxhbi5tZCI6IjI0ZmViMjQ1NDI1MzI1YWI3Y2ZlN2Q0MDc0NTFkZGE3YjljNzI2OGU3YjYzNTgyMTk0Y2M0MGEwZTVjODJhMGIiLCJhdXRob3IxL3BhY2tldC9pbXBvcnRlZC1oaXN0b3J5Lmpzb24iOiI0ODUwZGEzMDMyMDdjMjg3Y2ZkYzU0YjYzZDFlYTI3NDU3YjgwY2RkYzlkYTU4NTM5NTAyZDZhNTBiYTY4NDM0IiwiYXV0aG9yMS9wYWNrZXQvbG9ncy9ncmVlbi10YXJnZXRlZC5sb2ciOiI1MGZlZmNiYTYwZGYyYzhiYzBiZGQwNDU4M2I0YjI2MDhmNWU2MzZjNWQyZGQ1YTBjMTVkYTRkZGJlZmI4YmMzIiwiYXV0aG9yMS9wYWNrZXQvbG9ncy9yZWQtbW9kZWxzLmxvZyI6IjVmMzQ2Zjc4MmE3Y2Y4YWI2MjI1ZmQ3OGNhZjYxNGExNjU5M2E3ODVhYzQ2ZWE0ZjU1ZDM5YjZlYjY2MGZhODYiLCJhdXRob3IxL3BhY2tldC90YXNrLWNvbnRyYWN0Lm1kIjoiZTM5OGE1MTc2OTQ5ODU2MTEwZjBmMDM3YzdlYWQ1MzYxMGQ3MmRmOWYxMGJhNDlmZGIyNmRjODBjOGVlNThjNSIsImF1dGhvcjEvcGFja2V0L3Rlc3QtcGxhbi5tZCI6IjgzNzI1NDU5OWIyMjk0OTc3Yjk4NWNjMDZjZjExNDhmYTQ4ZjVmY2YwZmUzNTEyYjM5ZWIyMjBkNmIzYzYwMGUiLCJhdXRob3IxL3BhY2tldC92YWxpZGF0aW9uLXJlcG9ydC5tZCI6IjI0NzExY2NhNGQ2OTFjODdmMGI3NzM3ZTY3OTQzYWY1MTA3NDE3ZjA1N2FiYTMwNGM4MzkxODQxYmRiZTRiYWUiLCJhdXRob3IxL3Jlc2VydmF0aW9uLmpzb24iOiJiMDVmMDc1OGFiOGMwZmVjYzQ1OWRiNWE4MjA3MzEzYzBhZWNiZWMyMmRmODA1MGQyYmZlMGU1OGU3ZmM3MTA0IiwiYXV0aG9yMS9yZXN1bHQuanNvbiI6ImY5YzZhNTQ2ODU1ZjBiOGYyMTk0ZDg4Yzc5NGY3Y2NjMzQ3ZGNmNjQ0MDg0NjhlYjRhOTEyOTIyZTRhZTQxYzMiLCJhdXRob3IxL3Jlc3VsdC5zaGEyNTYiOiIzZGU0ZDg1MDY1NzgzYTA4NDY3ZmQ5NzI5ZGE3MWYzOWFiYTI5ZDY3NWMwN2MxNjI2YmNiNjQ2ZDM0YWU0MDhiIiwiYXV0aG9yMS9zZWFsLmpzb24iOiI2NTliOTlhNGM1YmU4ZDU0OTJkZWYzNDc3MGE1MDNkY2Y3ZWQyOTU3MTNmODk3ZmViY2M1ZDIyYWE3MWY5NTE1IiwiYXV0aG9yMi9TVE9QIjoiMjVjYTJjYWFiMzFkMzIxMTNjNjQzZGNkODUzM2IwYWQ2YTVhNzE3NTk4YzZmOGI2YTA4OThkOTMzZmQ0N2U2MSIsImF1dGhvcjIvZG9jcy90YXNrLWNvbnRyYWN0Lm1kIjoiZTM5OGE1MTc2OTQ5ODU2MTEwZjBmMDM3YzdlYWQ1MzYxMGQ3MmRmOWYxMGJhNDlmZGIyNmRjODBjOGVlNThjNSIsImF1dGhvcjIvZmluZGluZ3MubWQiOiI4M2RiMTk3ODAxYWJhMjhlZTA1M2VhNDI4MDhmMjJkNmFhNjE2YTA3YmEzYWY3YjI3NDMxMWI5NjJhZjM0ZDZhIiwiYXV0aG9yMi9sb2NhbC1zY29wZS1hbWVuZG1lbnQtYmVmb3JlLXNlc3Npb24uanNvbiI6ImYwZmU3ZjMyNjZiMzcyZDU2MjAwZmVmZTc5YTZlOGMwNWI4ODRhYzQ1MzM2ZjcyZjI2ZmE1ZjM2OTYwZGMzMzMiLCJhdXRob3IyL2xvZ3MvZnVsbC1yZWxldmFudC1jb3JyZWN0aW9uLWZpbmFsLnRhcCI6IjgwMjNlNDJhNzE4ZTliNzE0MzVmYmJhNjRmNjEzY2I1NzhmODEzNGI5NjQ2ZmZlZWQ2NzE3YjMyMmFlMWNkNzkiLCJhdXRob3IyL2xvZ3MvZnVsbC1yZWxldmFudC1jb3JyZWN0aW9uLWluaXRpYWwtZmxha2UudGFwIjoiNDBkYzUzYWU3NzJmY2JmZWY2NTFlMGQxODJiM2YzNzcxZjQzZGRhYWNlMDU0YmZjODNiMjM0ODczNWExYzgzNyIsImF1dGhvcjIvbG9ncy9pbml0aWFsLXJlZC1tb2RlbHMubG9nIjoiNWYzNDZmNzgyYTdjZjhhYjYyMjVmZDc4Y2FmNjE0YTE2NTkzYTc4NWFjNDZlYTRmNTVkMzliNmViNjYwZmE4NiIsImF1dGhvcjIvbG9ncy9yZWQtYmFja2luZy1yZWdyZXNzaW9uLmxvZyI6ImM0MjI5OTliOGU1ODhiMTY3ZDdhMmVkOTZkNWM3NDNkNGI1ZjYwZDZkNWYzNThhN2Y4MDE1YWQ4OGIzYzg2MzMiLCJhdXRob3IyL2xvZ3MvdGFyZ2V0ZWQtY29ycmVjdGlvbi1maW5hbC50YXAiOiI2MjUzY2I4ZGExMWE2YzI1NDUzM2EwNmFhM2QyNDkxZWJkNjFmZDA5OWUxNjQ2NTdlN2MzMzk5ZGZlYjNkNWFjIiwiYXV0aG9yMi9sb2dzL3Rhc2stY29udHJhY3QtdmFsaWRhdGlvbi5sb2ciOiJjNTRjYzgxYTE0ODdlMWE4MDQ2OGFhOTU2ZjQ3NDVjYTY4ZWViNmQ1OTlkM2ZlOThiNzM2MzE0ZDBhOGQ4ZjI1IiwiYXV0aG9yMi9tYW5pZmVzdC5zaGEyNTYiOiI5NTYyZjRkOTdlNTMzYzMzNjJlYzBkZWY0NDM0NTgxODU0OWI3MGEyZmJlZTY2OTlkOTg0NTM4ZmY4ODcwYzViIiwiYXV0aG9yMi9yZXNlcnZhdGlvbi5qc29uIjoiZTU1M2VhNzg0MDcyMDQxZDQ3ZTY4YzQxNDlmZDQyMzdlZmFiZjgzNDRhMmZiZjU3ZjNlZTQ5ZmIzNjAyZTMxMSIsImF1dGhvcjIvcmVzdWx0Lmpzb24iOiI4MGJmOWM1MWU5ZmIyODgxNmI0ZmM5ZWRlYmU3MzM2ZWJjMmE5NjIzZTFhNjVmOWI0N2NiZjExOGU2M2U3NzFjIiwiYXV0aG9yMi9zZWFsLmpzb24iOiI2NzZlZjEyMGUwNDVjOTI4YjY1MjRhMTRmNWU4NjEwMGEwMTdkODAxYjk4YTlhM2JhZTU4MDE3NzM3NjNkZTQ0IiwiYXV0aG9yMi9zb3VyY2UtaGFzaGVzLmpzb24iOiJiNjM0OGI3MGIwNWJkMThkOTcxNDg3ODk3ZGY1N2JhZGY3Yzg3MDM0ZGUwYzUyNzJmYTJiNWUyM2MwMGNjNTYwIiwiYXV0aG9yMi92YWxpZGF0aW9uLXJlcG9ydC5tZCI6ImY2YzM5MzM0ZDhkNTlmNmU5Y2FiNGQ0MTUxZjhkYTA2ZGE1ZDgzYTE2N2NiNTljMDM5YTU0YWE1OGNhNWYyYjUiLCJpbXBsZW1lbnRhdGlvbi1wbGFuLm1kIjoiMjRmZWIyNDU0MjUzMjVhYjdjZmU3ZDQwNzQ1MWRkYTdiOWM3MjY4ZTdiNjM1ODIxOTRjYzQwYTBlNWM4MmEwYiIsImluZGVwZW5kZW50LXFhMS9icm93c2VyLWV2aWRlbmNlLm1qcyI6ImVmZjJhMWU5MWZiMWI2M2Q1Y2QwMTZlMzYwN2M1NzdiMGU3MDcwYTI0Y2UxYTM2NjM4YzM3NTdmOGVkODhmODciLCJpbmRlcGVuZGVudC1xYTEvY29tcGxldGUuZGlmZiI6Ijg5YTFiY2ZmMDQ0NzZlOWU5MTBmNDc0YTc5NTViNjkzMTc0MDZmYmIyNmRhZjNlZTExNWE1NTE5ODlkNjU5OGMiLCJpbmRlcGVuZGVudC1xYTEvZmluZGluZ3MubWQiOiJiMDhlZmU3MzU2Zjg3NDg2ZDNhYmNjOTgzNGMyOWY2MTY2NzcyNTAwYjdmYjNmYjUyMzM1NTI2ZmRmNjA5NzVlIiwiaW5kZXBlbmRlbnQtcWExL2luZGVwZW5kZW50Lm1qcyI6IjBmMTI2YjYzNWQ4OGQyZjkxYTJmMGUwY2M3MjhjMGYwZWIyZTM1ZGJkNzY3MmZkZWNjNDRhZDA0YmZkYWFhZGMiLCJpbmRlcGVuZGVudC1xYTEvbG9ncy9jb250cmFjdC5sb2ciOiIwMjllYTg2MTlhZDBhMTIxOWQxZTJiYTE4MTM2MDJkMDIzYzhhNWVlODMyNTJjZjlkNTFmNTkzODdmOTJkNTdhIiwiaW5kZXBlbmRlbnQtcWExL2xvZ3MvZm9jdXNlZC10ZXN0cy50YXAiOiIzNjg4N2EzMDllMWEwM2MzNDFkY2Q2NzA4ODUxZTM2YzlmOWNmOTU1MTdkMmNlMWQ4NGVlNDlmZTI2ZGZlN2YzIiwiaW5kZXBlbmRlbnQtcWExL2xvZ3MvaW5kZXBlbmRlbnQubG9nIjoiODgwMzM0YWRjZmRlYTBjN2M4OGE2ZTBkYTAyOTE5Mzk0Y2VhYzBmM2M1NTFmNDgyMTk0ZjZkZmMzZTg0MjM1MyIsImluZGVwZW5kZW50LXFhMS9sb2dzL3BpcGVsaW5lLXRlc3RzLWNvbXBsZXRlLnRhcCI6Ijc3MDI5NTc3OTIwN2JlYzU4YTc2MmIxOGY3YzA3MDdmYTZlOGY1YWY5MDY1YTE1NDM1MzYxYmMzZDFiMjZhMzEiLCJpbmRlcGVuZGVudC1xYTEvbG9ncy9waXBlbGluZS10ZXN0cy50YXAiOiIwYzU4NzA2ZWVjMWRlMjU3ZjEyNzgxYTBmNzYxN2UwNjE5ZWFlNGE1YTMzNmJlZjcyOTVjOTI2NjJmOWY1MGI4IiwiaW5kZXBlbmRlbnQtcWExL2xvZ3MvcGxheXdyaWdodC1maWxlLW5hdmlnYXRpb24tYXR0ZW1wdC5sb2ciOiI5MmE5MmZlOGJiNWQxZGVmZWZiN2FkNjY3YzM0MDNhOTIyOTBkZjhkY2FjMGEzODhjYTEwMDkxOTcwMjY4YmY5IiwiaW5kZXBlbmRlbnQtcWExL2xvZ3MvcGxheXdyaWdodC12aWRlby1hdHRlbXB0LmxvZyI6IjllNjdlODk3YjU1MzlhOTQ1M2YwODkwMmU3MTAwMWU0NTNmNWNiN2ViYjA3MWQ4MDlmMWYzM2FlYjE4NDAxYmUiLCJpbmRlcGVuZGVudC1xYTEvbG9ncy9wbGF5d3JpZ2h0LmxvZyI6IjBkNzFkMzEzMWM0NmM5YTRjOGI2OTlkMTU0YWQxYWMyOGRhZGVmZDc2NzJjZGZmNzY4Y2ZjODE3MjE4ZDE0ZWMiLCJpbmRlcGVuZGVudC1xYTEvbWFuaWZlc3Quc2hhMjU2IjoiMTdmYjE4MGZjMmQxZDM4ZGIxMGRmY2RkYjdlNjQyYTM5NDEyOWE0MTk2MDAyOWY2ZGM4MGFlNTljYTY2Y2IwNiIsImluZGVwZW5kZW50LXFhMS9wbGF5d3JpZ2h0LXJlcG9ydC9pbmRleC5odG1sIjoiYzU3NDQzOTAxNmRiM2I4MzlhMjczMjljMTgyMjU5NWRhMzMwOWQ2ZDIzYTMzZjJkODAzMTgyOTZjMWFkZTI2MSIsImluZGVwZW5kZW50LXFhMS9yZXBvcnQubWQiOiI1OWY2YjkyMWY2OGZkMjNhOTQyMjFiMWQ1ODc2NDEyMDlkYzhjNTc5MWE2ZWFlNmQ0NDU0MGNiZWZiYTMzOWRhIiwiaW5kZXBlbmRlbnQtcWExL3Jlc2VydmF0aW9uLmpzb24iOiJhZDJjYWVhZjNmOWY5M2VmYjQyZWNkZTFmNDI3ZGMwMzkxNWE2MTg4YjllZjg2ODlkZjA0NzRjZGM0OTM5MmFiIiwiaW5kZXBlbmRlbnQtcWExL3Jlc3VsdC5qc29uIjoiNDliODQyMzEzNzg5OGYxMzdmYjRlYjYwZTExN2ZjODJjNTQ0ZDA5MDk4ZDgzMTg1MzkxYjlmMjcxYTI2NWY2NSIsImluZGVwZW5kZW50LXFhMS9zY3JlZW5zaG90cy9yZXN1bHQucG5nIjoiYzUxYzY0NDI0ZWI4OWE2NGY5NDllOWNiNzQ0Y2Q2MjQ3M2U3YmM1MDE3YTJhZjNmYzU2NTdhMmIyMjdjNWJmMiIsImluZGVwZW5kZW50LXFhMS9zZWFsLmpzb24iOiI2MmY5YzBjZTY4NjJjYmQwYTAwNTM2Y2E0Mjc5OWE5OTVhNmM5MDQyZjdlMzZhNGI3NDk2MjdjZGMwMDZkNzBmIiwiaW5kZXBlbmRlbnQtcWExL3NvdXJjZS1oYXNoZXMuanNvbiI6ImQzNTM5MGI5ODM5MzIyMDVkZDkxNmQ0OWRiMTExNjRjNGI0NTJhMGViZjMxMWI0NDhkZjc0Y2Y0NWM1YzI5NTQiLCJpbmRlcGVuZGVudC1xYTEvdGFzay1jb250cmFjdC5tZCI6IjdiZTk4ZmVjMDU2ODkzM2NjNDRlM2YwYzU3YWMzODBkMTM2NDNkZDVhOTg5NGMwMzM3NDJhMDIyZDVhMGRmMDciLCJpbmRlcGVuZGVudC1xYTEvdGVzdC1yZXN1bHRzL2FydGlmYWN0LXZhbGlkYXRpb24uanNvbiI6Ijg1YzE5MTVlM2UxZDIyNDgyNmNkYTFmYzY5NzVhZjQ3OGIwYWQxMDRlY2JhM2FhYmE3OWY5OGJhZTVhYTM0ZmYiLCJpbmRlcGVuZGVudC1xYTEvdGVzdC1yZXN1bHRzL2luZGVwZW5kZW50Lmpzb24iOiI4ODAzMzRhZGNmZGVhMGM3Yzg4YTZlMGRhMDI5MTkzOTRjZWFjMGYzYzU1MWY0ODIxOTRmNmRmYzNlODQyMzUzIiwiaW5kZXBlbmRlbnQtcWExL3Rlc3QtcmVzdWx0cy9wbGF5d3JpZ2h0Lmpzb24iOiJjODIyZjIwOTZmYzllZmQxY2JiOGU2YzA1NGI4ZDA4ZTIzYWZjZmMzNzQ5OTQ2NjA1ODMzZDllNWE3YmJhZTUyIiwiaW5kZXBlbmRlbnQtcWExL3Rlc3QtcmVzdWx0cy9wcml2YWN5LXNjYW4uanNvbiI6ImE1MjFjZjlkZjhiOWMzNjEyZjg4OGMxMmM1NWJjODdhYjZmYzJlNzFkNzA2ZTYzNmUyZTI0ZTAwOThkMTYyZWIiLCJpbmRlcGVuZGVudC1xYTEvdGVzdC1yZXN1bHRzL3JlYWwtcnVubmVyLWJhY2tpbmcuanNvbiI6ImM5ODAyOTQ5MDIzOWEwZTZkZTkwOGFlNmRkZmRmNDVmNDZkZmE2ODQwMzcwMGMxNTA2OTY0YzYwODQ5YzQ4ZDkiLCJpbmRlcGVuZGVudC1xYTEvdHJhY2UvdHJhY2UuemlwIjoiZjJhNzU4ZGM0MmI1OWE1OWI5Yzk4N2QwOWI3YmYxNDYwMzljMjgyMjY0Y2Q1NDI3NzhmZGZlZWRlYmMwZTM1MCIsImluZGVwZW5kZW50LXFhMS92YWxpZGF0aW9uLXJlcG9ydC5tZCI6IjU5ZjZiOTIxZjY4ZmQyM2E5NDIyMWIxZDU4NzY0MTIwOWRjOGM1NzkxYTZlYWU2ZDQ0NTQwY2JlZmJhMzM5ZGEiLCJpbmRlcGVuZGVudC1xYTIvYXJ0aWZhY3QtbWFuaWZlc3QuanNvbiI6IjZiOGJlZTc2NjM3OTkwZjg2MTYwNGZmZTYyMzk4Y2FhYzJkNWRkMmRlN2QxZGUyYjRkMTI2ZmUwNGYzODlkNGUiLCJpbmRlcGVuZGVudC1xYTIvY29tbWFuZHMudHh0IjoiZDAyZDIwMmE2Njc0ZTI2YWUyM2U2OGMyMTIxZGE5ZmRiZDcxNWQwNmRmYTQ5YzQxNjk0ZGM4NDM3ZTBlMDRhNyIsImluZGVwZW5kZW50LXFhMi9jb21wbGV0ZS5kaWZmIjoiNDA3NjkzYTdiODhjMWJlY2U4YTRmNTBkZWQ3MzEyZmQ3OGUwYjM0NDMyYTYyM2VhODIzZjU5NzhhZGM3Mzc0MiIsImluZGVwZW5kZW50LXFhMi9ldmlkZW5jZS1zY3JpcHRzL2Jyb3dzZXItZXZpZGVuY2UubWpzIjoiODUxNWQzMWRiOGFkNWI4MDkyZjdjNzlkMDg1NTE5NTFmNjQ2MTM4NWVmZmViNmRmYjQ4YWUzNDUyNzAyN2QyNCIsImluZGVwZW5kZW50LXFhMi9ldmlkZW5jZS1zY3JpcHRzL2NsYXNzaWZpZXItZXh0cmEubWpzIjoiMGJkYzJjYmIyMDUwOGVlZDQ0MDIzNzY3YjZiZWRjNGFjOTViMTE5ODI5NDkwNTI4MjRiMjExMGIxZGZjN2E5ZiIsImluZGVwZW5kZW50LXFhMi9ldmlkZW5jZS1zY3JpcHRzL2luZGVwZW5kZW50Lm1qcyI6IjkyMWRkMDU4NDE0Yzg4NGY5MTRhOGU3YjFkN2M5YWZjNTIxZmYzNDJmZGZhOGM3YWY4NDNhNzJjOGY3YzhiYjgiLCJpbmRlcGVuZGVudC1xYTIvZXZpZGVuY2Utc2NyaXB0cy9tZW1vcnktZXh0cmEubWpzIjoiZDljMGVjYmYxNjdlNGZlYWE3ZDliYzg1ODI3OTk2ZTMzYTM5MDE4NTAyN2U0NTllZmE2ZDBhNDFmNWY0YTllZSIsImluZGVwZW5kZW50LXFhMi9maW5kaW5ncy5tZCI6IjllZjNiMjMyNzZiN2Q4MzZmNTJmOWNhZTljOWZhMzIzNzRhODdlZWU1ZmY1NzMyMzQ1OTMyYjcxZjJhZTBhNjAiLCJpbmRlcGVuZGVudC1xYTIvbG9ncy9jbGFzc2lmaWVyLWV4dHJhLmxvZyI6IjY5YWNhMTAwMTM2YmExYzNmMTBjM2YxNzNmNmIxYTQ3OWY4MjRkNGQ4MmE4YTFkMTRhZGY2N2JmNzU2YjZmNDIiLCJpbmRlcGVuZGVudC1xYTIvbG9ncy9jb250cmFjdC5sb2ciOiJmMDkxZTRjZjkxNDBlOTY2OTI3MjBiYjczMWUxODRkMDM5ZDYwZWFjYzMzNzUxZTExNjIyYzRlOTI3MjU5ZGUzIiwiaW5kZXBlbmRlbnQtcWEyL2xvZ3MvZGlmZi1jaGVjay5sb2ciOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiaW5kZXBlbmRlbnQtcWEyL2xvZ3MvZm9jdXNlZC10ZXN0cy50YXAiOiI2NGFkZmUxMTNmNDE4YmVhMGVmZDE5NjczMGU5MWM5ZjlkYjMzODQyYjE3ZjIwMGNmMDE5MjY0YTAzNmJkMDdiIiwiaW5kZXBlbmRlbnQtcWEyL2xvZ3MvaW5kZXBlbmRlbnQubG9nIjoiZTdkNDdmM2U5ZmJjNjdmNTgwOGRmYmQzOGM4NWNmNDdhYjgyMWMzZTIwZjYzYzIxMjE4NTFiNDM3ZGRjOWM1MyIsImluZGVwZW5kZW50LXFhMi9sb2dzL21lbW9yeS1leHRyYS5sb2ciOiJjZDA5ODMwYmU3ZjRlYjJjZTAxZGQ3MTJhOWYzNDFlODA2MTViM2NlOGQwYWQzMTM3ODBhNzdhNWY3NDdmN2U5IiwiaW5kZXBlbmRlbnQtcWEyL2xvZ3MvcGlwZWxpbmUtdGVzdHMtY29tcGxldGUudGFwIjoiNTQ4Y2Q2MmU5YTBiMjlhM2VhY2E3OTAyY2NkNzBjOTlhOWU2OWNiNTM0ODQ1YjQ3YzYxM2ExOTkwNWRiZDBmYSIsImluZGVwZW5kZW50LXFhMi9sb2dzL3BsYXl3cmlnaHQubG9nIjoiZjg1ZDBlOTYzN2ZkMWQ1YjE3YjlmMmNjZDlhNmNlMjJjYTM3YTQ0YzZhZjZlZTZjMzEzNzVjN2U3ZTFlMzI3ZiIsImluZGVwZW5kZW50LXFhMi9wbGF5d3JpZ2h0LXJlcG9ydC9pbmRleC5odG1sIjoiODhkNWUxODdhMWUyNDY4YTg2YmNkMGMyNTNkZmE4N2Q4YWMxYzZlMjhiNDRiMDFlMzhhNzUwMjE1ZmZmOTlhZCIsImluZGVwZW5kZW50LXFhMi9yZXBvcnQubWQiOiJmYWUxZmZlY2RmOGY0ZDNjM2NjOTA0MTM3YmQzYjE4MWZmMjE0MzA4MGVhYTUzYjQ3ZDBiOWExNzU0NjBlOWRhIiwiaW5kZXBlbmRlbnQtcWEyL3Jlc2VydmF0aW9uLVBSRVBBUkVELU5PVC1DT01NSVRURUQuanNvbiI6IjVmMjQ3YmU0YzBiNTI3MDE4NTZjOGQ2NjZiYzZmYjIwZTNmYTY4NDBkY2UwZTA2NWExODU0ZTgzZGVlMDEzNjgiLCJpbmRlcGVuZGVudC1xYTIvcmVzZXJ2YXRpb24uanNvbiI6IjU5MmYyYjcxYzA5MWVlYjk3ZTc2NTJiMmQ1YTkyNWFhNTVkOGI1YTFkMzRmYjU1ZmY2ZDRlZGNiNmIzMDFmNTYiLCJpbmRlcGVuZGVudC1xYTIvcmVzdWx0Lmpzb24iOiJiMjI0MzJlZjQ1MGQ2MDNlYjRjN2ZjYzc2NWVjNjM4NTNmZGM5ODdhNTU0MDJkNjU1YjAxZDRiMTdkY2RhZjk1IiwiaW5kZXBlbmRlbnQtcWEyL3NjcmVlbnNob3RzL3Jlc3VsdC5wbmciOiI5MjIzNmYyOTJhOGQ0ZDM4ZDM3MGFiY2U2OWE3YzhlN2UwYzgxNTJmZTMwNmRmNjg3ZDVhNWZjYjU3N2U1YjBhIiwiaW5kZXBlbmRlbnQtcWEyL3NlYWwuanNvbiI6IjU2OTIwMDQyOGJhZGUyMzU4ZDdkZmE0NjJhZWY2ZTgwNjY4YjE2ZmNmZjBiMDlmZGUxODZjZTAzMDYwZWQ5ZDkiLCJpbmRlcGVuZGVudC1xYTIvc291cmNlLWhhc2hlcy1hZnRlci5qc29uIjoiNWUwNWFhYTEyZDcwZDBmNmFjM2EzYzJjNDZjNWQ3M2U3ZWFlMjdiZThhYmY0OTliNzkzMjIwODcyNzIzOTlmOSIsImluZGVwZW5kZW50LXFhMi9zb3VyY2UtaGFzaGVzLWJlZm9yZS5qc29uIjoiOGRiZTg0MWNlNWYwZjhiZWI3Y2VjNmZmMmNhYzhlNGIxNDQyM2Y1M2NjODYxZGJmZTYwOTE5NGU5NGMyMjA2MSIsImluZGVwZW5kZW50LXFhMi90YXNrLWNvbnRyYWN0Lm1kIjoiNGQ1MWJkODY1MzI0MDk0MDkwYTQzMzFhZDA3MzY0MTRkYzhhZTcwNzVhMTI2MTBhNmIzZTI0YWQwYWQxMjE3NSIsImluZGVwZW5kZW50LXFhMi90ZXN0LXJlc3VsdHMvY2xhc3NpZmllci1leHRyYS5qc29uIjoiNjlhY2ExMDAxMzZiYTFjM2YxMGMzZjE3M2Y2YjFhNDc5ZjgyNGQ0ZDgyYThhMWQxNGFkZjY3YmY3NTZiNmY0MiIsImluZGVwZW5kZW50LXFhMi90ZXN0LXJlc3VsdHMvaW5kZXBlbmRlbnQuanNvbiI6ImU3ZDQ3ZjNlOWZiYzY3ZjU4MDhkZmJkMzhjODVjZjQ3YWI4MjFjM2UyMGY2M2MyMTIxODUxYjQzN2RkYzljNTMiLCJpbmRlcGVuZGVudC1xYTIvdGVzdC1yZXN1bHRzL21lbW9yeS1leHRyYS5qc29uIjoiY2QwOTgzMGJlN2Y0ZWIyY2UwMWRkNzEyYTlmMzQxZTgwNjE1YjNjZThkMGFkMzEzNzgwYTc3YTVmNzQ3ZjdlOSIsImluZGVwZW5kZW50LXFhMi90ZXN0LXJlc3VsdHMvcGxheXdyaWdodC5qc29uIjoiZjg1ZDBlOTYzN2ZkMWQ1YjE3YjlmMmNjZDlhNmNlMjJjYTM3YTQ0YzZhZjZlZTZjMzEzNzVjN2U3ZTFlMzI3ZiIsImluZGVwZW5kZW50LXFhMi90cmFjZS90cmFjZS56aXAiOiJiOTU3YTA2OWQ1YTdhODFmY2ZhYzY4MjBhYjA2NjZkYjBlNTIzMTRkNDcwMWMzOTg2ZDU4ZGE2NmIxYWRmM2ZmIiwiaW5kZXBlbmRlbnQtcWEyL3ZhbGlkYXRpb24tcmVwb3J0Lm1kIjoiZmFlMWZmZWNkZjhmNGQzYzNjYzkwNDEzN2JkM2IxODFmZjIxNDMwODBlYWE1M2I0N2QwYjlhMTc1NDYwZTlkYSIsImxvZ3MvZnVsbC1yZWxldmFudC1jb3JyZWN0aW9uLWZpbmFsLnRhcCI6IjgwMjNlNDJhNzE4ZTliNzE0MzVmYmJhNjRmNjEzY2I1NzhmODEzNGI5NjQ2ZmZlZWQ2NzE3YjMyMmFlMWNkNzkiLCJsb2dzL2Z1bGwtcmVsZXZhbnQudGFwIjoiNDBkYzUzYWU3NzJmY2JmZWY2NTFlMGQxODJiM2YzNzcxZjQzZGRhYWNlMDU0YmZjODNiMjM0ODczNWExYzgzNyIsImxvZ3MvZ3JlZW4tY29ycmVjdGlvbi10YXJnZXRlZC1maW5hbC50YXAiOiI2MjUzY2I4ZGExMWE2YzI1NDUzM2EwNmFhM2QyNDkxZWJkNjFmZDA5OWUxNjQ2NTdlN2MzMzk5ZGZlYjNkNWFjIiwibG9ncy9ncmVlbi1jb3JyZWN0aW9uLXRhcmdldGVkLnRhcCI6IjgwZDRmZmNjNzFiODI5YjJiNmJkYzBmYzM3NGIwNTE3Mjg0Y2Y3MmI5NGRkNTk2ZjhlOTVjZmE4ZmEzMjUwM2EiLCJsb2dzL2dyZWVuLXRhcmdldGVkLmxvZyI6IjVmOGUxOTMyYTNlMTA0OTAzYTg0NmVjMzk2ZDIwOGUyZGFjYmUyNzgxZWEyZTNhNmMzNjhlMjA4YmIxZDBmNmYiLCJsb2dzL3JlZC1tb2RlbHMubG9nIjoiNWYzNDZmNzgyYTdjZjhhYjYyMjVmZDc4Y2FmNjE0YTE2NTkzYTc4NWFjNDZlYTRmNTVkMzliNmViNjYwZmE4NiIsInByZXNlcnZlZC1wcmUtcHJvdmlkZXItY29uZmlnLW1hdGNoLmpzb24iOiI0N2FmMDM5NTI2NWM0NWEyZjA2ZTQxNDg1OTgyZWY4NjcyMjc2YzkyNWUxNjZjNDZlYmNlNGZiODhiMzQwMThlIiwicHJlc2VydmVkLXByZS1wcm92aWRlci1wcm9iZS5qc29uIjoiMDZlYzk0NTYxYzliYmQxZDk2N2I0NzhkZDJmYWMwNWIyOWJlNGJlOGM4NDVjODcwZmI4ZDY2ODNmN2I5ZmRkZiIsInF1YWxpZmljYXRpb24tcHJvb2YuanNvbiI6IjllOTI2NmVhMmM5YjE0MWM4ZTVjNzhiZDJiODY5NWY1YTg3ZjU1NzlkYzQ2OTVmNmEwNjFlZDI2N2VjN2EzNDQiLCJzb3VyY2UtbWFuaWZlc3QuanNvbiI6ImUxMTMzYzI2NzQ1ZjhkZmQ0NTBlYzViMjk2YWI0ZjBiZjY5ODRiNTQ4NmFhNTJlN2Y0ZDcyYmFiODUxNDFkZDgiLCJ0YXNrLWNvbnRyYWN0Lm1kIjoiZTM5OGE1MTc2OTQ5ODU2MTEwZjBmMDM3YzdlYWQ1MzYxMGQ3MmRmOWYxMGJhNDlmZGIyNmRjODBjOGVlNThjNSIsInRlc3QtcGxhbi5tZCI6ImQzNTAyOTNkOWQzMDEzMGQyMGYxOTQ2YzZmODg1YTQ2YWIyMGYwZDQwNzhlNThlMTRkZTgzMTY3NDAzMjE1MjEiLCJ2YWxpZGF0aW9uLXJlcG9ydC5tZCI6IjllNTJiMDMxZmVmMTQzMTNhZTIyMWFjMGQ0MDYyNjYyODQ1MTE4OWYzYTE2NDRkZDY2YzMzNWQ5YTA1MGZhM2EiLCJpbXBvcnRlZC1oaXN0b3J5Lmpzb24iOiI0MDVjNTg3YmQ0NjhjYzVlNjFiMGMxNjY0MTI1NjBmMmI0ODY2ZjNiZjE3MWJiZTg0MWY1ZTBlZjYwYjVhNTlmIn19LCJzb3VyY2VNYW5pZmVzdCI6W3sicGF0aCI6ImFnZW50LXRlYW0vc3JjL2J1Zy1waXBlbGluZS9jbGkubWpzIiwiYmxvYiI6ImI0MmNkODNkZTRiNjQ0MjQ1MWE3NDM3OTI2MjcxZTcwYjc2MWI3MTIiLCJtb2RlIjoiMTAwNjQ0IiwiYmFzZUJsb2IiOiI0OWY2ODYzOTk5ZWMzNTk1NmFiNTA3NWUyMjYxMTU2Nzg4Y2IzMTE2IiwiYmFzZU1vZGUiOiIxMDA2NDQifSx7InBhdGgiOiJhZ2VudC10ZWFtL3NyYy9idWctcGlwZWxpbmUvbW9kZWxzLm1qcyIsImJsb2IiOiJmYjQxNWExM2UzY2RjZTcxNmFiNGJhZTg0ZmM3NWY4NDJmODk3ZWUxIiwibW9kZSI6IjEwMDY0NCIsImJhc2VCbG9iIjoiYWZlYWVkYzkzYTI3MDE4ZmI2NjhlMzI1OGUyOWY4NzBiODI4NTJmOSIsImJhc2VNb2RlIjoiMTAwNjQ0In0seyJwYXRoIjoiYWdlbnQtdGVhbS9zcmMvYnVnLXBpcGVsaW5lL3Byb2Nlc3MubWpzIiwiYmxvYiI6IjgxY2ZlMjk5NGQzNGYwYTgzNWU0NmU1MTJlZDg5ZmIxMzEwMTViMWUiLCJtb2RlIjoiMTAwNjQ0IiwiYmFzZUJsb2IiOiJhODE0OTIxZTQ5ZjIxYjU0ZWJmM2RmYzQyMjI2ZDQyMWQ1M2EyNjlkIiwiYmFzZU1vZGUiOiIxMDA2NDQifSx7InBhdGgiOiJhZ2VudC10ZWFtL3Rlc3RzL2J1Zy1waXBlbGluZS9tb2RlbHMudGVzdC5tanMiLCJibG9iIjoiOWQzY2YzOTdiYzAyZjg2ZjZjZjkzODVmMWEzYWZjYTU2ZDI3MGMzNSIsIm1vZGUiOiIxMDA2NDQiLCJiYXNlQmxvYiI6IjIwZDFkZTE0ZDg3NmVjYzNmNGYxNDgxMGViOTBjZmNlYzZiMGY0MDYiLCJiYXNlTW9kZSI6IjEwMDY0NCJ9LHsicGF0aCI6ImFnZW50LXRlYW0vdGVzdHMvYnVnLXBpcGVsaW5lL3Byb2Nlc3Mtb3V0cHV0LnRlc3QubWpzIiwiYmxvYiI6IjAzOWU1YjQ0MTExOWJkMGUxZjQ4ODY3Njg2NTY0OWNlYjg0MWIyM2UiLCJtb2RlIjoiMTAwNjQ0IiwiYmFzZUJsb2IiOm51bGwsImJhc2VNb2RlIjpudWxsfSx7InBhdGgiOiJhZ2VudC10ZWFtL3Rlc3RzL2J1Zy1waXBlbGluZS9yb3V0aW5nLnRlc3QubWpzIiwiYmxvYiI6ImQyZDEyOTBlMWZiNzA0OThhMTA5NDkwYWNlYzM2MjQ5NzIxOGYwYzciLCJtb2RlIjoiMTAwNjQ0IiwiYmFzZUJsb2IiOiJmOTBjMTZmNmVlMzdlNGM3ODVjMzc4MTg2ZDIxYjk1ZWQ0YmQwZjY2IiwiYmFzZU1vZGUiOiIxMDA2NDQifV0sImltcGxlbWVudGF0aW9uIjpbeyJyb3VuZCI6MSwic3RhdHVzIjoiZmFpbGVkIiwibm9uY2UiOiIyNTUwODBiYy1iZWRlLTRjMjktYWVmNy1kODkzYTAxZjIyMGYiLCJvd25lciI6ImNvZGV4LWNsb3VkLXJvb3QiLCJtb2RlbCI6ImdwdC02LWx1bmEiLCJzdWJqZWN0U2hhIjoiMzhiMzdlMzMyMjE3NmJkOTgzNmQyMjhkNGM0Y2U2M2JmNjZmY2VkMiIsImJhc2VTaGEiOiI5OTVlMmZmNmQxNGE5NmI1ZDY3ZTBkMTRkNzA4ZjRhOTVjNGM4MTZmIiwiZXZpZGVuY2UiOiJpbmRlcGVuZGVudC1xYTEvcmVwb3J0Lm1kIiwicmVhc29uIjoiR2VudWluZSBhdXRob3IxIHBhc3NlZCBmb2N1c2VkIHRlc3RzIGJ1dCBuZXcgaW5kZXBlbmRlbnQgUUExIEZBSUxFRCBiYWNraW5nLW1lbW9yeSBib3VuZCBhbmQgdHdvIHJhdy1lcnJvciByb3V0aW5nIGFzc2VydGlvbnMuIEFsbCBmYWlsdXJlcyBhbmQgc291cmNlIGNhbmRpZGF0ZSByZXRhaW5lZC4iLCJpbmRlcGVuZGVudFFhTm9uY2UiOiIyNmE3MTg5Yy02MzMwLTQ1ZWMtYjAxOS1jYTczYmU1ZjEzZjYiLCJpbmRlcGVuZGVudFFhU2VhbFNoYTI1NiI6IjYyZjljMGNlNjg2MmNiZDBhMDA1MzZjYTQyNzk5YTk5NWE2YzkwNDJmN2UzNmE0Yjc0OTYyN2NkYzAwNmQ3MGYifSx7InJvdW5kIjoyLCJzdGF0dXMiOiJwYXNzZWQiLCJub25jZSI6IjcxMTg0OWIyLWIyNzgtNDhhYS05OGQ0LTNmNWJhNDI3ODBlZiIsIm93bmVyIjoiY29kZXgtY2xvdWQtcm9vdCIsIm1vZGVsIjoiZ3B0LTYtbHVuYSIsInN1YmplY3RTaGEiOiIzZjEzMTFkYmRmMmJjMTdkMmFlNWExZWM0MmU4YWRiNGVhOWJhOTRiIiwiYmFzZVNoYSI6IjM4YjM3ZTMzMjIxNzZiZDk4MzZkMjI4ZDRjNGNlNjNiZjY2ZmNlZDIiLCJldmlkZW5jZSI6ImluZGVwZW5kZW50LXFhMi9yZXBvcnQubWQiLCJyZWFzb24iOiJHZW51aW5lIHNlcGFyYXRlbHkgcmVzZXJ2ZWQgYm91bmRlZCBjb3JyZWN0aW9uOyBuZXcgaW5kZXBlbmRlbnQgUUEyIHZlcmlmaWVzIHNpeCBzb3VyY2UgZmlsZXMsIGZ1bGwxNjYzUEFTUy8wRkFJTC8zV2luZG93c1NLSVAgYW5kIG93bmVkIGJhY2tpbmcgYWxsb2NhdGlvbnMuIEVhcmxpZXIgYXV0aG9yMiBmbGFreSB0ZXN0IHJ1biByZXRhaW5lZC4iLCJpbmRlcGVuZGVudFFhTm9uY2UiOiJlMjZhYWExYS0wZDZhLTRjZWEtYTU4Mi1hYjY2YTVhOWNkZGEiLCJpbmRlcGVuZGVudFFhU2VhbFNoYTI1NiI6IjU2OTIwMDQyOGJhZGUyMzU4ZDdkZmE0NjJhZWY2ZTgwNjY4YjE2ZmNmZjBiMDlmZGUxODZjZTAzMDYwZWQ5ZDkifV0sInJldmlld3MiOltdLCJyZXZpZXdMZWRnZXIiOm51bGwsInJldmlld1JlcG9ydHMiOnt9LCJyZWxlYXNlSG9sZCI6IlByb3RlY3RlZCBvcmNoZXN0cmF0aW9uIHNvdXJjZS4gQXV0b21hdGljIHRydXN0LXJvb3QgcmVsZWFzZSByZW1haW5zIGJsb2NrZWQuIFVzZXItZGlyZWN0ZWQgbm9ybWFsIHByb3RlY3RlZCBtYW51YWwgbWVyZ2UgcmVxdWlyZXMgYWN0dWFsIGV4YWN0LWhlYWQgcGVlciwgTkVXIGZpbmFsIGluZGVwZW5kZW50IENvZGV4IGFuZCBhbGwgc2l4IHJlcXVpcmVkIG5hdGl2ZSBjaGVja3M7IG5vIGZha2UgbmF0aXZlIGh1bWFuIGFwcHJvdmFsIG9yIGFkbWluIGJ5cGFzcy4ifQ==', 'base64').toString('utf8'));
+          const REQUIRED = ['bug-pipeline-tests', 'secret-scan', 'frontend-tests', 'archive-tests', 'gate', 'browser-e2e'];
+          const trusted = process.cwd();
+          const digest = value => createHash('sha256').update(value).digest('hex');
+          const proof = { schemaVersion: 1, nonce: NONCE, repository: REPO, sourceMain: MAIN,
+            sourceHead: HEAD, sourceBranch: BRANCH, operatorBranch: OPERATOR_BRANCH,
+            operatorSha: process.env.GITHUB_SHA, runId: process.env.GITHUB_RUN_ID,
+            runAttempt: process.env.GITHUB_RUN_ATTEMPT, stage: 'initializing',
+            prCreatesUsed: 0, reviewRequestsUsed: 0, mergeCalls: 0, providerCalls: 0 };
+          let receiptParent = process.env.GITHUB_SHA;
+          let receiptAvailable = false;
+          
+          async function api(token, endpoint, method = 'GET', body) {
+            assert(endpoint === `repos/${REPO}` || endpoint.startsWith(`repos/${REPO}/`) || endpoint === 'user');
+            assert(['GET', 'POST', 'PATCH'].includes(method));
+            let response;
+            try {
+              response = await fetch(`https://api.github.com/${endpoint}`, {
+                method, redirect: 'error', signal: AbortSignal.timeout(30000),
+                headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json',
+                  'X-GitHub-Api-Version': '2022-11-28', 'Content-Type': 'application/json' },
+                ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+              });
+            } catch { throw Object.assign(new Error('operator-transport-unknown'), { finiteCode: 'transport-unknown' }); }
+            if (!response.ok) throw Object.assign(new Error('operator-http-failed'), {
+              finiteCode: 'http-failed', httpStatus: response.status,
+            });
+            if (response.status === 204) return null;
+            const text = await response.text();
+            assert(Buffer.byteLength(text) <= 16 * 1024 * 1024, 'Operator API response bound');
+            return JSON.parse(text);
+          }
+          
+          async function persistProof() {
+            const token = process.env.RECEIPT_GH_TOKEN;
+            assert(token);
+            const refEndpoint = `repos/${REPO}/git/ref/heads/${OPERATOR_BRANCH}`;
+            const writeRefEndpoint = `repos/${REPO}/git/refs/heads/${OPERATOR_BRANCH}`;
+            const ref = await api(token, refEndpoint);
+            assert.equal(ref.object.sha, receiptParent, 'Receipt branch changed; no retry');
+            const parent = await api(token, `repos/${REPO}/git/commits/${receiptParent}`);
+            const content = JSON.stringify({ ...proof, observedAt: new Date().toISOString() }, null, 2) + '\n';
+            assert(Buffer.byteLength(content) <= 32768);
+            const blob = await api(token, `repos/${REPO}/git/blobs`, 'POST', { content, encoding: 'utf-8' });
+            const tree = await api(token, `repos/${REPO}/git/trees`, 'POST', {
+              base_tree: parent.tree.sha,
+              tree: [{ path: 'operator-output-policy-receipt.json', mode: '100644', type: 'blob', sha: blob.sha }],
+            });
+            const commit = await api(token, `repos/${REPO}/git/commits`, 'POST', {
+              message: 'chore: preserve finite output-policy operator receipt', tree: tree.sha,
+              parents: [receiptParent],
+            });
+            assert.equal((await api(token, refEndpoint)).object.sha, receiptParent, 'Receipt CAS changed');
+            await api(token, writeRefEndpoint, 'PATCH', { sha: commit.sha, force: false });
+            assert.equal((await api(token, refEndpoint)).object.sha, commit.sha, 'Receipt readback failed');
+            receiptParent = commit.sha;
+            receiptAvailable = true;
+            console.log(JSON.stringify({ type: 'finite-operator-proof', ...proof, receiptCommit: receiptParent }));
+          }
+          
+          try {
+            assert.equal(process.env.GITHUB_REPOSITORY, REPO);
+            assert.equal(process.env.GITHUB_REF, `refs/heads/${OPERATOR_BRANCH}`);
+            assert.match(process.env.GITHUB_SHA, /^[a-f0-9]{40}$/);
+            assert.match(process.env.GITHUB_RUN_ID, /^[0-9]{1,20}$/);
+            assert.equal(process.env.GITHUB_RUN_ATTEMPT, '1', 'Reruns require independent reconciliation');
+            assert.equal(execFileSync('git', ['rev-parse', 'HEAD'], { cwd: trusted, encoding: 'utf8' }).trim(), MAIN);
+            assert.equal(MANIFEST.sha, HEAD);
+            assert.equal(MANIFEST.baseSha, MAIN);
+            assert.equal(MANIFEST.branch, BRANCH);
+            assert(!MANIFEST.pr, 'Returned actual PR identity is required');
+            assert(process.env.GH_TOKEN);
+            const temp = await mkdtemp(path.join(process.env.RUNNER_TEMP, 'output-policy-operator-'));
+            await mkdir(path.join(temp, 'home'), { mode: 0o700 });
+            const loadTrusted = relative => import(pathToFileURL(path.join(trusted, relative)).href);
+            const { createRunner } = await loadTrusted('agent-team/src/bug-pipeline/process.mjs');
+            const { createGitHub, MAX_DURABLE_STATE_BYTES, pendingResultBytes } = await loadTrusted('agent-team/src/bug-pipeline/github.mjs');
+            const { validateState } = await loadTrusted('agent-team/src/bug-pipeline/contracts.mjs');
+            const { validateOperatorContinuations } = await loadTrusted('agent-team/src/bug-pipeline/attempt-budget.mjs');
+            const { createStandaloneReview, validateStandaloneState } = await loadTrusted('agent-team/src/bug-pipeline/standalone-review.mjs');
+            const run = createRunner({ env: { PATH: process.env.PATH, HOME: path.join(temp, 'home'),
+              GH_TOKEN: process.env.GH_TOKEN }, runtimeRoot: temp });
+            const github = createGitHub({ repo: REPO, cwd: trusted, run });
+            const controller = createStandaloneReview({ github, run, cwd: trusted });
+            const updateState = async edit => {
+              const store = github.createStateStore(), before = await store.load(), state = structuredClone(before);
+              await edit(state);
+              state.updatedAt = new Date().toISOString();
+              validateState(state, REPO); validateOperatorContinuations(state); validateStandaloneState(state);
+              const bytes = Buffer.byteLength(JSON.stringify(state) + '\n');
+              const pending = [...state.batches, ...(state.manualBatches ?? []), ...state.standaloneReviews]
+                .reduce((sum, subject) => sum + pendingResultBytes(subject), 0);
+              assert(bytes + pending <= MAX_DURABLE_STATE_BYTES, 'Official 8 MiB including pending results');
+              await store.save(state, { guard: async () => {
+                assert.deepEqual(await github.createStateStore().load(), before, 'Concurrent state owner; no retry');
+                return true;
+              } });
+              assert.deepEqual(await github.createStateStore().load(), state, 'State readback differs');
+            };
+            const diagnostic = state => state.operatorInfrastructureFollowups
+              .find(item => item.id === 'claude-hosted-activation-20261025').codexExecutionDiagnostics;
+            proof.stage = 'credential-read-and-execution-intent';
+            await persistProof();
+            const token = process.env.GH_TOKEN;
+            const repo = await api(token, `repos/${REPO}`);
+            assert.equal(repo.full_name, REPO);
+            assert.equal((await api(token, `repos/${REPO}/git/ref/heads/main`)).object.sha, MAIN);
+            assert.equal((await api(token, `repos/${REPO}/git/ref/heads/${BRANCH}`)).object.sha, HEAD);
+            const existing = await api(token, `repos/${REPO}/pulls?state=all&head=${encodeURIComponent('l2v-hub:' + BRANCH)}&base=main&per_page=100`);
+            assert(Array.isArray(existing) && existing.length === 0, 'Existing PR must be reconciled, never duplicated');
+            await updateState(state => {
+              const d = diagnostic(state), allowance = d.sourcePrOperator;
+              assert.equal(d.sourcePublicationReservation.sha, HEAD);
+              assert.equal(allowance.nonce, NONCE);
+              assert.equal(allowance.operationalCommit, process.env.GITHUB_SHA);
+              assert.equal(allowance.maximumExecutions, 1);
+              assert.equal(allowance.used, 1, 'Execution was durably consumed before branch push');
+              assert.equal(allowance.status, 'consumed-before-operator-push');
+              allowance.status = 'running-single-pr-create';
+              allowance.startedAt = new Date().toISOString();
+            });
+            proof.stage = 'single-pr-create-intent';
+            proof.prCreatesUsed = 1;
+            await persistProof();
+            const title = 'fix: bound Codex progress and retain finite execution diagnostics';
+            const body = 'Codex model sessions currently terminate after 64 KiB of combined JSON progress, so a legitimate tool read can prevent a valid separately guarded typed result. This change uses the established 2 MiB total ceiling, retains owned 32 KiB tails per stream, keeps fatal 64 KiB stderr and all timeout/process-group/typed-result guards, and records only finite diagnostics.\n\nA real child fixture fails the old policy and passes the new one. Fresh independent QA2 on source 3f1311db reports 1,663 PASS / 0 FAIL / 3 Windows SKIP, focused 26 PASS and independent 16 PASS, including exact backing allocations and adversarial routing/privacy cases. Failed candidate 38, QA1 and all prior failed runs remain in the frozen packet. Original clinical run40249337703 exact cause remains unknown; no clinical recovery or resolution is claimed. Current exact-main real provider qualification40251755127 succeeded.\n\nRoot-owned protected source bootstrap: actual six new-head native checks, native packet verification, genuine Claude cloud review and NEW final Codex precede any ordinary protected manual merge. Automatic release eligibility and hold remain unchanged; no fake human approval/admin bypass.\n\nRefs #455';
+            const pr = await api(token, `repos/${REPO}/pulls`, 'POST', { title, body, head: BRANCH, base: 'main', draft: false });
+            assert(Number.isSafeInteger(pr.number) && pr.number > 0);
+            assert.equal(pr.state, 'open'); assert.equal(pr.head.sha, HEAD);
+            assert.equal(pr.head.ref, BRANCH); assert.equal(pr.head.repo.full_name, REPO);
+            assert.equal(pr.base.ref, 'main'); assert.equal(pr.base.repo.full_name, REPO);
+            assert.equal(pr.head.repo.fork, false);
+            assert.equal(pr.html_url, `https://github.com/${REPO}/pull/${pr.number}`);
+            proof.prCreateConfirmed = true; proof.prNumber = pr.number; proof.prUrl = pr.html_url;
+            await updateState(state => {
+              const all = [...state.batches, ...(state.manualBatches ?? []), ...state.standaloneReviews];
+              assert(!all.some(subject => subject.pr?.number === pr.number || subject.id === `standalone-pr-${pr.number}`),
+                'Unexpected existing native owner; stop, do not clobber');
+              const takeover = state.operatorTakeover, automation = takeover.automation;
+              assert.equal(takeover.active, true);
+              assert.equal(takeover.nonce, '5ef4558e-2243-4380-8330-453cfa1df672');
+              assert.equal(automation.mode, 'new-unclaimed-only');
+              assert.equal(automation.enabled, true);
+              assert.equal(automation.protectedSubjects.length, 30);
+              const old = structuredClone(automation.protectedSubjects);
+              automation.protectedSubjects.push({ collection: 'standaloneReviews', id: `standalone-pr-${pr.number}`,
+                pr: pr.number, shaAtReservation: HEAD, reservedAt: new Date().toISOString(),
+                reason: 'Root-owned exact source bootstrap; genuine read-only Claude handoff allowed, automatic Codex source ownership prohibited.' });
+              assert.deepEqual(automation.protectedSubjects.slice(0, -1), old);
+              diagnostic(state).sourcePrOperator.createdPr = { number: pr.number, url: pr.html_url,
+                sha: HEAD, protectedSubject: `standalone-pr-${pr.number}`, registeredAt: new Date().toISOString() };
+            });
+            proof.stage = 'actual-pr-created-and-root-protected';
+            await persistProof();
+            let checks;
+            let previous = '';
+            for (let poll = 0; poll < 80; poll++) {
+              assert.equal((await api(token, `repos/${REPO}/pulls/${pr.number}`)).head.sha, HEAD);
+              const inventory = await api(token, `repos/${REPO}/commits/${HEAD}/check-runs?per_page=100`);
+              checks = REQUIRED.map(name => inventory.check_runs.filter(check => check.name === name
+                && check.head_sha === HEAD && check.app?.id === 15368).sort((a, b) => b.id - a.id)[0]);
+              proof.checks = checks.map((check, i) => ({ name: REQUIRED[i], id: Number.isSafeInteger(check?.id) ? check.id : null,
+                headSha: HEAD, status: ['queued', 'in_progress', 'completed'].includes(check?.status) ? check.status : 'not-started',
+                conclusion: check?.conclusion === 'success' ? 'success' : check?.conclusion ? 'not-success' : null }));
+              if (checks.some(check => check?.status === 'completed' && check.conclusion !== 'success'))
+                throw Object.assign(new Error('native-check-failed'), { finiteCode: 'native-check-failed' });
+              const fingerprint = digest(JSON.stringify(proof.checks));
+              if (fingerprint !== previous) { proof.stage = 'waiting-exact-six-native-checks'; await persistProof(); previous = fingerprint; }
+              if (checks.every(check => check?.status === 'completed' && check.conclusion === 'success')) break;
+              if (poll === 79) throw Object.assign(new Error('native-check-deadline'), { finiteCode: 'native-check-deadline' });
+              await new Promise(resolve => setTimeout(resolve, 15000));
+            }
+            assert(checks.every(check => check?.head_sha === HEAD && check.app.id === 15368 && check.conclusion === 'success'));
+            const manifest = { ...MANIFEST, pr: { number: pr.number, url: pr.html_url } };
+            await controller.adopt(manifest);
+            const subject = (await controller.load(pr.number)).batch;
+            assert.equal(subject.sha, HEAD);
+            await controller.verify(subject);
+            proof.nativePacketVerified = true;
+            proof.stage = 'native-packet-verified-before-handoff';
+            await persistProof();
+            const evidenceBody = '<!-- codex-bug-pipeline:operator-exact-source-checks -->\nActual exact-head source evidence for ' + HEAD
+              + ': all six required GitHub Actions app15368 checks completed SUCCESS.\n```json\n' + JSON.stringify(proof.checks, null, 2)
+              + '\n```\nNative standalone controller verified the immutable117-file packet, full source/blob/mode inventory and preserved implementation history. Root-owned protected subject; ready-label projection deferred to the genuine hosted claim. Actual Claude and NEW final Codex remain required; no native human approval or automatic trust-root release is claimed.';
+            await api(token, `repos/${REPO}/issues/${pr.number}/comments`, 'POST', { body: evidenceBody });
+            proof.stage = 'single-native-review-request-intent';
+            proof.reviewRequestsUsed = 1;
+            await persistProof();
+            const requested = await controller.request(pr.number);
+            assert.equal(requested.sha, HEAD);
+            assert.match(requested.externalReview.requestId, /^[a-f0-9-]{36}$/);
+            proof.reviewRequestsUsed = 1;
+            proof.reviewRequestId = requested.externalReview.requestId;
+            proof.stage = 'genuine-hosted-review-requested-ready-label-deferred';
+            await persistProof();
+          } catch (error) {
+            const allowed = new Set(['transport-unknown', 'http-failed', 'native-check-failed', 'native-check-deadline']);
+            proof.failure = allowed.has(error?.finiteCode) ? error.finiteCode : 'controller-or-binding-failed';
+            proof.httpStatus = Number.isInteger(error?.httpStatus) ? error.httpStatus : null;
+            proof.failedAtStage = proof.stage;
+            proof.stage = 'blocked-preserve-intent-no-replay';
+            try { await persistProof(); } catch {
+              console.log(JSON.stringify({ type: 'finite-operator-proof', ...proof, receiptAvailable }));
+            }
+            process.exitCode = 1;
+          }
+          JS
+          node --check "$RUNNER_TEMP/output-policy-operator/operator.mjs"
+          node -e 'if (process.versions.node.split(".")[0] !== "22") process.exit(1)'
+          gh --version > /dev/null
+      - name: Execute one bound PR and native handoff operation
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN || github.token }}
+          RECEIPT_GH_TOKEN: ${{ github.token }}
+        run: node "$RUNNER_TEMP/output-policy-operator/operator.mjs"
