@@ -1,0 +1,59 @@
+name: Zero-provider clinical verification qualification
+on:
+  push:
+    branches: [codex/clinical-verification-qualification-20261026]
+    paths:
+      - .github/workflows/clinical-verification-qualification.yml
+      - .codex/clinical-verification-qualification/probe.mjs
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    steps:
+      - name: Checkout exact bounded operator
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          path: operator
+          persist-credentials: false
+          sparse-checkout: .codex/clinical-verification-qualification
+      - name: Checkout exact accepted main
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 13c71ce0e2cdf6e72b4c7eeeb036754fac7e4f73
+          path: source
+          persist-credentials: false
+      - name: Set up Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Install trusted repository dependencies without lifecycle hooks
+        working-directory: source
+        env:
+          HUSKY: 0
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Set up local mock AI runtime dependencies
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install same native verification tools
+        working-directory: source
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/clinicos_test?schema=public
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/clinicos-verification-browsers
+        run: |
+          bash scripts/quality-gate/install-verification-tools.sh
+          python -m pip install -r clinicos-ai-runtime/requirements.txt
+          node node_modules/playwright/cli.js install --with-deps chromium
+          npm run db:generate
+      - name: Install same pinned official CLI outside source
+        run: >-
+          npm install --prefix "$RUNNER_TEMP/bug-pipeline-tools"
+          --no-audit --no-fund --no-save @openai/codex@0.159.2
+      - name: One native sandbox synthetic database and Node marker qualification
+        env:
+          CODEX_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/codex
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/clinicos-verification-browsers
+        run: node operator/.codex/clinical-verification-qualification/probe.mjs
