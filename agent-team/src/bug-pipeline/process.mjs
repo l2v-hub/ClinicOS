@@ -3,6 +3,25 @@ import path from 'node:path';
 import { mkdir } from 'node:fs/promises';
 import { sanitizeText } from '../core/sanitize.mjs';
 
+const MAX_RUNNER_LIMIT = 64 * 1024 * 1024;
+function validateLimit(value, name, { allowZero = false } = {}) {
+  const minimum = allowZero ? 0 : 1;
+  if (!Number.isSafeInteger(value) || value < minimum || value > MAX_RUNNER_LIMIT) {
+    throw new RangeError(`invalid ${name} limit`);
+  }
+  return value;
+}
+
+function appendCapture(previous, chunk, limit, tail) {
+  if (limit === 0) return Buffer.alloc(0);
+  if (tail) {
+    const combined = Buffer.concat([previous, chunk]);
+    return combined.length > limit ? combined.subarray(combined.length - limit) : combined;
+  }
+  const remaining = Math.max(0, limit - previous.length);
+  return remaining ? Buffer.concat([previous, chunk.subarray(0, remaining)]) : previous;
+}
+
 // Models/tests never receive the controller's GitHub or deployment credentials.
 export function childEnvironment(mode, env, runtimeRoot) {
   const binPaths = [env.CODEX_CLI_PATH, env.CLAUDE_CLI_PATH]
@@ -100,8 +119,18 @@ export function createRunner({ env = process.env, runtimeRoot }) {
     input,
     timeoutMs = 30_000,
     maxOutputBytes = 2 * 1024 * 1024,
+    maxCapturedBytesPerStream,
+    maxStderrBytes,
+    captureTail = false,
     envMode = 'controller',
   }) => {
+    validateLimit(maxOutputBytes, 'maxOutputBytes');
+    const legacyCapture =
+      maxCapturedBytesPerStream === undefined && maxStderrBytes === undefined && !captureTail;
+    maxCapturedBytesPerStream ??= maxOutputBytes;
+    validateLimit(maxCapturedBytesPerStream, 'maxCapturedBytesPerStream', { allowZero: true });
+    if (typeof captureTail !== 'boolean') throw new TypeError('captureTail must be a boolean');
+    if (maxStderrBytes !== undefined) validateLimit(maxStderrBytes, 'maxStderrBytes');
     const childEnv = childEnvironment(envMode, env, runtimeRoot);
     if (
       envMode === 'review' &&
@@ -140,10 +169,11 @@ export function createRunner({ env = process.env, runtimeRoot }) {
           ? env.CLAUDE_CLI_PATH || command
           : command;
     return new Promise((resolve) => {
-      let stdout = '',
-        stderr = '',
+      let stdout = Buffer.alloc(0),
+        stderr = Buffer.alloc(0),
         failure = null,
-        bytes = 0,
+        stdoutBytes = 0,
+        stderrBytes = 0,
         finished = false;
       const javascriptCli = ['claude', 'codex'].includes(command) && /\.[cm]?js$/i.test(executable);
       const child = spawn(
@@ -173,10 +203,18 @@ export function createRunner({ env = process.env, runtimeRoot }) {
       };
       const timer = setTimeout(() => fail('timeout'), timeoutMs);
       const data = (kind, chunk) => {
-        bytes += chunk.length;
-        if (bytes > maxOutputBytes) return fail('output-limit');
-        if (kind === 'out') stdout += chunk;
-        else stderr += chunk;
+        if (kind === 'out') stdoutBytes = Math.min(Number.MAX_SAFE_INTEGER, stdoutBytes + chunk.length);
+        else stderrBytes = Math.min(Number.MAX_SAFE_INTEGER, stderrBytes + chunk.length);
+        if (stdoutBytes + stderrBytes > maxOutputBytes && legacyCapture) {
+          fail('output-limit');
+          return;
+        }
+        if (kind === 'out') stdout = appendCapture(stdout, chunk, maxCapturedBytesPerStream, captureTail);
+        else {
+          stderr = appendCapture(stderr, chunk, maxCapturedBytesPerStream, captureTail);
+          if (maxStderrBytes !== undefined && stderrBytes > maxStderrBytes) fail('stderr-limit');
+        }
+        if (stdoutBytes + stderrBytes > maxOutputBytes) fail('output-limit');
       };
       child.stdout.on('data', (c) => data('out', c));
       child.stderr.on('data', (c) => data('err', c));
@@ -190,8 +228,12 @@ export function createRunner({ env = process.env, runtimeRoot }) {
           ok: code === 0 && !failure && !error,
           code,
           error: failure ?? error,
-          stdout: sanitizeText(stdout),
-          stderr: sanitizeText(stderr),
+          stdout: sanitizeText(stdout.toString('utf8')),
+          stderr: sanitizeText(stderr.toString('utf8')),
+          stdoutBytes,
+          stderrBytes,
+          stdoutCapturedBytes: stdout.length,
+          stderrCapturedBytes: stderr.length,
         });
       };
       child.on('error', () => finish(null, 'spawn-failed'));

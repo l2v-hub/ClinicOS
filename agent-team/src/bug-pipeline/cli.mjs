@@ -83,12 +83,18 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   await mkdir(runtimeRoot, { recursive: true, mode: 0o700 });
   await mkdir(diagnosticRoot, { recursive: true });
   const run = createRunner({ env, runtimeRoot });
+  const modelDiagnostics = [];
   const models = createModels({
     plannerModel: env.CODEX_PLANNER_MODEL,
     executorModel: env.CODEX_EXECUTOR_MODEL,
     delegateModel: env.CODEX_SMALL_EXECUTOR_MODEL,
     run,
     runtimeRoot,
+    onDiagnostic: (diagnostic) => {
+      if (modelDiagnostics.length === 64) modelDiagnostics.shift();
+      modelDiagnostics.push(diagnostic);
+      console.log(JSON.stringify({ type: 'model-diagnostic', ...diagnostic }));
+    },
   });
   const report = await doctor({ run, models, env, cwd: root });
   if (args.includes('--doctor')) {
@@ -100,7 +106,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
   if (!report.ready) {
     await writeFile(
       path.join(diagnosticRoot, 'diagnostic.json'),
-      JSON.stringify({ status: 'blocked-prerequisites', ...report }, null, 2) + '\n',
+      JSON.stringify({ status: 'blocked-prerequisites', ...report, modelDiagnostics }, null, 2) + '\n',
     );
     console.log(JSON.stringify({ status: 'blocked-prerequisites', ...report }));
     return 1;
@@ -128,6 +134,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
     const summary = {
       status: blocked ? 'partial' : 'reconciled',
       blocked,
+      modelDiagnostics,
       batches: state.batches.map((b) => ({
         id: b.id,
         phase: b.phase,
@@ -161,6 +168,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
         {
           status: 'blocked-controller',
           failureCode: controllerFailureCode(error),
+          modelDiagnostics,
           reason:
             'Inspect GitHub permissions, durable state and pending triage; no automatic budget reset.',
         },
