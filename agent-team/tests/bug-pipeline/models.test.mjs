@@ -294,18 +294,28 @@ test('standalone independent QA treats repository instructions as data and forbi
   assert.doesNotMatch(calls[0].input, /controller has independently executed/);
 });
 
-test('large JSON progress does not prevent reading a separate valid structured result', async (t) => {
+test('multi-megabyte JSON progress does not prevent reading a separate valid structured result', async (t) => {
   const { cwd, runtimeRoot } = await fixture(t);
+  const diagnostics = [];
   const { createRunner } = await import('../../src/bug-pipeline/process.mjs');
   const cli = path.join(runtimeRoot, 'synthetic-codex.mjs');
   await writeFile(cli, `
     const output = process.argv[process.argv.indexOf('--output-last-message') + 1];
-    process.stdout.write(JSON.stringify({type:'progress', text:'x'.repeat(80 * 1024)}) + '\\n');
+    process.stdout.write(JSON.stringify({type:'progress', text:'OLD-OUTPUT-MARKER' + 'x'.repeat(3 * 1024 * 1024)}) + '\\n');
     await import('node:fs/promises').then(({writeFile}) => writeFile(output, JSON.stringify(${JSON.stringify(IMPLEMENTED)}), {flag:'wx', mode:0o600}));
   `);
   const run = createRunner({ runtimeRoot, env: { PATH: process.env.PATH, CODEX_CLI_PATH: cli } });
-  const models = createModels({ plannerModel: 'planner', executorModel: 'executor', runtimeRoot, run });
+  const models = createModels({
+    plannerModel: 'planner',
+    executorModel: 'executor',
+    runtimeRoot,
+    run,
+    onDiagnostic: (entry) => diagnostics.push(entry),
+  });
   assert.deepEqual(await models.execute({ cwd, packet: {}, plan: {}, phase: 'implementation', round: 1 }), IMPLEMENTED);
+  assert.ok(diagnostics[0].stdoutBytes > 2 * 1024 * 1024);
+  assert.ok(diagnostics[0].stdoutCapturedBytes <= 32 * 1024);
+  assert.equal(diagnostics[0].stderrBytes, 0);
 });
 
 test('model failure diagnostics use finite enums and omit raw output', async (t) => {
@@ -345,6 +355,11 @@ test('failure classifier checks retained stdout and stderr without copying their
     ['stderr', 'structured output invalid', 'schema'],
     ['stdout', JSON.stringify({ type: 'error', message: 'rate_limit_exceeded' }), 'rate'],
     ['stderr', 'connection refused', 'network'],
+    ['stderr', 'fixture line 401', 'other'],
+    ['stderr', 'fixture line 503', 'other'],
+    ['stderr', 'HTTP 401 Unauthorized', 'auth'],
+    ['stderr', 'status_code=429', 'rate'],
+    ['stderr', 'HTTP/2 503 unavailable', 'network'],
     ['stdout', 'opaque private text', 'other'],
   ]) {
     const diagnostics = [];

@@ -24,7 +24,6 @@ const QA_SCHEMA = {
 const MAX_RESULT_BYTES = 256 * 1024;
 const MAX_PROMPT_BYTES = 512 * 1024;
 const EXEC_TIMEOUT_MS = 30 * 60 * 1000;
-const RUNNER_OUTPUT_BYTES = 2 * 1024 * 1024;
 const CAPTURE_BYTES_PER_STREAM = 32 * 1024;
 const STDERR_LIMIT_BYTES = 64 * 1024;
 const MODEL_OPERATIONS = new Set(['plan', 'execute', 'simplify', 'qa']);
@@ -65,15 +64,29 @@ function failureCategory({ runnerError, result, error }) {
   if (error) return 'schema';
   if (result?.ok) return null;
   const text = `${terminalStdoutText(result?.stdout)}\n${result?.stderr ?? ''}`.toLowerCase();
-  if (/invalid_api_key|authentication_error|unauthorized|forbidden|\b401\b|\b403\b|login required/.test(text))
+  const hasStatus = (codes) =>
+    new RegExp(
+      `(?:http(?:/[0-9.]+)?\\s+|status(?:[_ -]code)?["']?[\\s:=]+)(?:${codes})\\b`,
+      'i',
+    ).test(text);
+  if (
+    /invalid_api_key|authentication_error|unauthorized|forbidden|login required/.test(text) ||
+    hasStatus('401|403')
+  )
     return 'auth';
-  if (/insufficient_quota|quota_exceeded|billing_hard_limit|payment_required|\b402\b/.test(text))
+  if (
+    /insufficient_quota|quota_exceeded|billing_hard_limit|payment_required/.test(text) ||
+    hasStatus('402')
+  )
     return 'quota';
-  if (/rate_limit_exceeded|too many requests|\b429\b/.test(text)) return 'rate';
+  if (/rate_limit_exceeded|too many requests/.test(text) || hasStatus('429')) return 'rate';
   if (/model_not_found|model_capacity_exceeded|overloaded_error|unsupported_model/.test(text))
     return 'model';
   if (/schema_validation|invalid_json|structured output invalid/.test(text)) return 'schema';
-  if (/network_error|connection refused|connect_timeout|dns lookup|\b50[234]\b/.test(text))
+  if (
+    /network_error|connection refused|connect_timeout|dns lookup/.test(text) ||
+    hasStatus('502|503|504')
+  )
     return 'network';
   return 'other';
 }
@@ -348,10 +361,11 @@ export function createModels({
         cwd,
         input,
         timeoutMs: EXEC_TIMEOUT_MS,
-        maxOutputBytes: RUNNER_OUTPUT_BYTES,
+        maxOutputBytes: STDERR_LIMIT_BYTES,
         maxCapturedBytesPerStream: CAPTURE_BYTES_PER_STREAM,
         captureTail: true,
         maxStderrBytes: STDERR_LIMIT_BYTES,
+        limitStdout: false,
         envMode: 'model',
       });
       const emit = (error = null, resultError = null) => {

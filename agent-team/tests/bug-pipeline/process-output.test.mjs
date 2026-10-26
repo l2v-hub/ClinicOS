@@ -80,12 +80,36 @@ test('synthetic runner fails on independent total and stderr limits', async (t) 
   assert.equal(Buffer.byteLength(err.stderr) <= 1024, true);
 });
 
+test('stdout can be counted and tail-captured without contributing to the fatal byte limit', async (t) => {
+  const { root, runtimeRoot } = await fixture(t);
+  const script = await childScript(
+    root,
+    `process.stdout.write('OLD-OUTPUT-MARKER' + 'x'.repeat(3 * 1024 * 1024));`,
+  );
+  const result = await runner(runtimeRoot, script)({
+    command: 'codex', cwd: root, envMode: 'model', timeoutMs: 5000,
+    maxOutputBytes: 64 * 1024, maxCapturedBytesPerStream: 32 * 1024,
+    captureTail: true, maxStderrBytes: 64 * 1024, limitStdout: false,
+  });
+  assert.equal(result.ok, true);
+  assert.equal(result.stdoutBytes, 3 * 1024 * 1024 + Buffer.byteLength('OLD-OUTPUT-MARKER'));
+  assert.equal(result.stdoutCapturedBytes, 32 * 1024);
+  assert.equal(Buffer.byteLength(result.stdout), 32 * 1024);
+  assert.equal(result.stdout.includes('OLD-OUTPUT-MARKER'), false);
+});
+
 test('runner option validation rejects unbounded or invalid limits', async (t) => {
   const { root, runtimeRoot } = await fixture(t);
   const script = await childScript(root, 'process.exit(0);');
   const run = runner(runtimeRoot, script);
   for (const value of [-1, 1.5, Number.MAX_SAFE_INTEGER + 1, Infinity]) {
     await assert.rejects(() => run({ command: 'codex', cwd: root, envMode: 'model', maxCapturedBytesPerStream: value }), /invalid.*limit/i);
+  }
+  for (const value of ['false', 0, 1, null]) {
+    await assert.rejects(
+      () => run({ command: 'codex', cwd: root, envMode: 'model', limitStdout: value }),
+      /limitStdout must be a boolean/,
+    );
   }
 });
 
@@ -105,6 +129,19 @@ test('timed out process groups terminate surviving descendants', async (t) => {
   assert.equal(result.error, 'timeout', JSON.stringify(result));
   await new Promise((resolve) => setTimeout(resolve, 1700));
   await assert.rejects(() => import('node:fs/promises').then(({ stat }) => stat(marker)), { code: 'ENOENT' });
+});
+
+test('non-fatal model stdout does not disable the process timeout', async (t) => {
+  const { root, runtimeRoot } = await fixture(t);
+  const script = await childScript(root, `setInterval(() => process.stdout.write('x'.repeat(8192)), 10);`);
+  const result = await runner(runtimeRoot, script)({
+    command: 'codex', cwd: root, envMode: 'model', timeoutMs: 250,
+    maxOutputBytes: 64 * 1024, maxCapturedBytesPerStream: 32 * 1024,
+    captureTail: true, maxStderrBytes: 64 * 1024, limitStdout: false,
+  });
+  assert.equal(result.error, 'timeout');
+  assert.ok(result.stdoutBytes > 64 * 1024);
+  assert.equal(result.stdoutCapturedBytes, 32 * 1024);
 });
 
 test('runner defaults retain the existing combined ceiling and prefix capture', async (t) => {

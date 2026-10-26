@@ -127,14 +127,19 @@ export function createRunner({ env = process.env, runtimeRoot }) {
     maxCapturedBytesPerStream,
     maxStderrBytes,
     captureTail = false,
+    limitStdout = true,
     envMode = 'controller',
   }) => {
     validateLimit(maxOutputBytes, 'maxOutputBytes');
     const legacyCapture =
-      maxCapturedBytesPerStream === undefined && maxStderrBytes === undefined && !captureTail;
+      maxCapturedBytesPerStream === undefined &&
+      maxStderrBytes === undefined &&
+      !captureTail &&
+      limitStdout;
     maxCapturedBytesPerStream ??= maxOutputBytes;
     validateLimit(maxCapturedBytesPerStream, 'maxCapturedBytesPerStream', { allowZero: true });
     if (typeof captureTail !== 'boolean') throw new TypeError('captureTail must be a boolean');
+    if (typeof limitStdout !== 'boolean') throw new TypeError('limitStdout must be a boolean');
     if (maxStderrBytes !== undefined) validateLimit(maxStderrBytes, 'maxStderrBytes');
     const childEnv = childEnvironment(envMode, env, runtimeRoot);
     if (
@@ -210,7 +215,8 @@ export function createRunner({ env = process.env, runtimeRoot }) {
       const data = (kind, chunk) => {
         if (kind === 'out') stdoutBytes = Math.min(Number.MAX_SAFE_INTEGER, stdoutBytes + chunk.length);
         else stderrBytes = Math.min(Number.MAX_SAFE_INTEGER, stderrBytes + chunk.length);
-        if (stdoutBytes + stderrBytes > maxOutputBytes && legacyCapture) {
+        const limitedBytes = limitStdout ? stdoutBytes + stderrBytes : stderrBytes;
+        if (limitedBytes > maxOutputBytes && legacyCapture) {
           fail('output-limit');
           return;
         }
@@ -219,7 +225,7 @@ export function createRunner({ env = process.env, runtimeRoot }) {
           stderr = appendCapture(stderr, chunk, maxCapturedBytesPerStream, captureTail);
           if (maxStderrBytes !== undefined && stderrBytes > maxStderrBytes) fail('stderr-limit');
         }
-        if (stdoutBytes + stderrBytes > maxOutputBytes) fail('output-limit');
+        if (limitedBytes > maxOutputBytes) fail('output-limit');
       };
       child.stdout.on('data', (c) => data('out', c));
       child.stderr.on('data', (c) => data('err', c));
