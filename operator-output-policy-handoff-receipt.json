@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "nonce": "a4c95ac9-c957-494a-a2cb-5d40ced62563",
+  "repository": "l2v-hub/ClinicOS",
+  "sourceMain": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "sourceHead": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+  "sourceBranch": "codex/codex-model-output-policy-20261026",
+  "operatorBranch": "codex/output-policy-native-handoff-20261026",
+  "operatorSha": "b3f12af905e20a9ed7babdceee3c31386c332a10",
+  "runId": "40260746637",
+  "runAttempt": "1",
+  "stage": "credential-read-and-execution-intent",
+  "prCreatesUsed": 0,
+  "reviewRequestsUsed": 0,
+  "mergeCalls": 0,
+  "providerCalls": 0,
+  "observedAt": "2026-10-26T02:46:31.724Z"
+}
