@@ -9,7 +9,7 @@
   "operatorSha": "d41e0bbbe6b76dafa25a57e0604c51c11ce905c9",
   "runId": "40257353325",
   "runAttempt": "1",
-  "stage": "waiting-exact-six-native-checks",
+  "stage": "blocked-preserve-intent-no-replay",
   "prCreatesUsed": 1,
   "reviewRequestsUsed": 0,
   "mergeCalls": 0,
@@ -61,5 +61,8 @@
       "conclusion": null
     }
   ],
-  "observedAt": "2026-10-26T02:23:04.838Z"
+  "failure": "native-check-deadline",
+  "httpStatus": null,
+  "failedAtStage": "waiting-exact-six-native-checks",
+  "observedAt": "2026-10-26T02:27:03.478Z"
 }
