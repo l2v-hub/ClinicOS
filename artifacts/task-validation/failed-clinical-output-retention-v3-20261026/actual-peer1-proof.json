@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-26T20:49:02.181Z",
+  "head": "6c25842fec463302d129edf653be060d1746dd6e",
+  "round": 1,
+  "verdict": "changes-requested",
+  "findings": 2,
+  "workflowRunId": "40396918783",
+  "workflowConclusion": "success",
+  "requestId": "903f372b-799a-4987-a805-362c24b38495",
+  "claimId": "242c843d-35cb-4684-8a9a-201f8e8b0d90",
+  "commentId": 6426832233,
+  "reportSha256": "ce00f26998a1270e619fdfc394c5ad15ae37f59585b9cbb2c82bfe811c16ed42",
+  "reportCommentBodySha256": "6c1ca983c1f6b47a7c89b4b94f55dd60f59a5492771a9891d19e9e92a30af61e",
+  "genuineNativeReview": true
+}

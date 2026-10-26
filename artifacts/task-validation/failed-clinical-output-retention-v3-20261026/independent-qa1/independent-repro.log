@@ -1,0 +1,4 @@
+{"case":"spaced-credential-verification-diagnostic","result":"LEAK_REPRODUCED","captured":"Error: GH_TOKEN = fixtureCredential123456\n"}
+{"case":"actual-verification-diagnostic-excerpt","result":"LEAK_REPRODUCED","excerpt":"Error: GH_TOKEN = fixtureCredential123456"}
+{"case":"spaced-credential-guarded-source-export","result":"LEAK_REPRODUCED","retained":"export const GH_TOKEN = \"fixtureCredential123456\";\n"}
+{"case":"malformed-checkpoint-output-inventory","result":"ARCHIVE_ACCEPTED","historyPreserved":true}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "sealedAt": "2026-10-26T11:52:07.146Z",
+  "sourceProjectionSha256": "8e1a6db66ebf6861b1c353775c8e9358ffb163fb668910037a8c5e246b1ac8bc",
+  "reportSha256": "07788db550c0b74fce1564d4e6b2383ecc1f94ae647af593df805403247755cd",
+  "logSha256": {
+    "failed-output-focused-final.log": "ad4a48f0fdb88d080972fa784f4c4a59cce59826c08a7f79a4449996c5f54dea",
+    "failed-output-domain-final.log": "16bb0f04b3614d24db45fe864d559a9610af6e049ec60bedd368678debee63e8",
+    "failed-output-full-native-final.log": "a4d2f6d19ec35dd7a9b0a6dfe7a9b7c68646ad3ac270c03df89bc15d24af5bc0",
+    "process-test-baseline.log": "b292d655a7a9afd86817a4a2c3687637d34bef33ba39a4b75a66e5314ef9eb48"
+  },
+  "freeze": true
+}

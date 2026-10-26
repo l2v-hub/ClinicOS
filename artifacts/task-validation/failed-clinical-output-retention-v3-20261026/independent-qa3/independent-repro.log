@@ -1,0 +1,107 @@
+TAP version 13
+# Subtest: native null initial journal creates exact partial export; duplicate is distinct
+ok 1 - native null initial journal creates exact partial export; duplicate is distinct
+  ---
+  duration_ms: 145.952485
+  type: 'test'
+  ...
+# Subtest: native initial export refuses stale, active, mismatched plan, feedback, source, head and PR
+    # Subtest: running
+    ok 1 - running
+      ---
+      duration_ms: 56.903279
+      type: 'test'
+      ...
+    # Subtest: latestAttempt
+    ok 2 - latestAttempt
+      ---
+      duration_ms: 57.106752
+      type: 'test'
+      ...
+    # Subtest: activeAttempt
+    ok 3 - activeAttempt
+      ---
+      duration_ms: 38.986865
+      type: 'test'
+      ...
+    # Subtest: planDigest
+    ok 4 - planDigest
+      ---
+      duration_ms: 48.053412
+      type: 'test'
+      ...
+    # Subtest: feedbackDigest
+    ok 5 - feedbackDigest
+      ---
+      duration_ms: 40.41941
+      type: 'test'
+      ...
+    # Subtest: sourceSha
+    ok 6 - sourceSha
+      ---
+      duration_ms: 46.460657
+      type: 'test'
+      ...
+    # Subtest: checkpointHead
+    ok 7 - checkpointHead
+      ---
+      duration_ms: 65.493344
+      type: 'test'
+      ...
+    # Subtest: checkpointBase
+    ok 8 - checkpointBase
+      ---
+      duration_ms: 49.820495
+      type: 'test'
+      ...
+    # Subtest: pr
+    ok 9 - pr
+      ---
+      duration_ms: 60.979549
+      type: 'test'
+      ...
+    # Subtest: noFailedAttempt
+    ok 10 - noFailedAttempt
+      ---
+      duration_ms: 44.561436
+      type: 'test'
+      ...
+    # Subtest: runningReview
+    ok 11 - runningReview
+      ---
+      duration_ms: 49.177016
+      type: 'test'
+      ...
+    1..11
+ok 2 - native initial export refuses stale, active, mismatched plan, feedback, source, head and PR
+  ---
+  duration_ms: 563.48676
+  type: 'test'
+  ...
+# Subtest: collector distinguishes ineligible verification flow from guard refusal
+ok 3 - collector distinguishes ineligible verification flow from guard refusal
+  ---
+  duration_ms: 55.864198
+  type: 'test'
+  ...
+# Subtest: actual blocked diagnostic reads persisted failed state, exports code and preserves throw identity
+ok 4 - actual blocked diagnostic reads persisted failed state, exports code and preserves throw identity
+  ---
+  duration_ms: 90.979029
+  type: 'test'
+  ...
+# Subtest: missing and throwing observe write explicit sanitized retention marker
+ok 5 - missing and throwing observe write explicit sanitized retention marker
+  ---
+  duration_ms: 56.19593
+  type: 'test'
+  ...
+1..5
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1048.311057

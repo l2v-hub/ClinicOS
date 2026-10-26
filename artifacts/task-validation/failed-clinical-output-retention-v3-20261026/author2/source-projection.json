@@ -1,0 +1,43 @@
+{
+  "baseSha": "13c71ce0e2cdf6e72b4c7eeeb036754fac7e4f73",
+  "reservationNonce": "76c2f780-5e52-462d-aa38-294b107d5875",
+  "amendment": 1,
+  "supersedes": "../source-projection.json",
+  "files": [
+    {
+      "path": ".github/workflows/codex-bug-pipeline.yml",
+      "sha256": "9a041cf6f4ebfd505fd588983743213587840656c9ae6ca576582c8ab34ea27f",
+      "bytes": 4162
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "sha256": "a19585fd5b9ffc318d6d7810013253373e1eaaf44eef4693970ec6db1f83b8b4",
+      "bytes": 9454
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "sha256": "086ee18c81a07353d8dbc1d835b39e2338d4b7c1bed1a38e65ab6570dceea435",
+      "bytes": 48980
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "sha256": "6ad6b78372763bff5ad8a2d009a6dbe4f752e79a8ad0b500f922052842f49497",
+      "bytes": 9972
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/operator-authorization.mjs",
+      "sha256": "3eda3d4607725db16ee4749318f12a0ee907f3d6381df19f0f729e2aee9e316a",
+      "bytes": 21316
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/workspace.mjs",
+      "sha256": "42ab2d9fce6dadd30749acc15d11903343fdb6eccf7b474712ba46307a8499f3",
+      "bytes": 35458
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/failed-output-retention.test.mjs",
+      "sha256": "55f30802dd0db15cc3ed896e010b21a5bdc1e50d8fb5d7c629a59d4f13ff44d9",
+      "bytes": 17503
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "subject_sha": "6c25842fec463302d129edf653be060d1746dd6e",
+  "verdict": "changes-requested",
+  "summary": "I reviewed the frozen diff statically. I ran no tests and executed nothing. Most of the change holds up: verification diagnostics are bounded and sanitized, the command result, 1 MiB output cap and timeout are unchanged, and the source export is guarded. It checks the exact checkpoint, plan scope, regular-file identity, hashes, sizes, credential patterns and sensitive paths, and writes to immutable destinations. The workflow now uploads with always(). The new archive action checks that the checkpoint is well-formed and that the external observer agrees before it consumes any authorization, and it keeps the full failed history and every attempt count. The supplied QA2 evidence says all three QA1 findings are fixed. Two gaps remain. First, the CLI picks out every verification failure for export, but the export only works for correction flows, so a failure in the first implementation flow can never keep its source and is reported as an ambiguous refusal. Second, the export on the thrown-controller path calls a store method that does not appear in the diff, swallows every error, and is tested only by matching the CLI source text with a regex. These are behavioural gaps in AC2 and AC3, so I am requesting changes.",
+  "findings": [
+    {
+      "severity": "medium",
+      "file": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "line": 74,
+      "problem": "exportFailedCode requires knownFailedCorrection, which only accepts the pr-feedback, review-correction and external-review-correction flows. The CLI selector (exportKnownFailures in cli.mjs) picks every batch whose progress failed at verify-before or verify-after with workspace-verification-failed, including the first 'implementation' flow. For a first-implementation verification failure, the export is therefore always refused. The source is never kept, and the diagnostic records the generic status 'guard-refused-or-output-unavailable', which looks the same as a real guard rejection. AC2/AC3 say failed source should be kept whenever a known verification failure happens, but the most common first-attempt failure is silently excluded.",
+      "requested_change": "Pick one of two fixes. (a) Let the export accept the first-implementation flow under equally exact guards: a failed status, the exact failed step and code, and a checkpoint that matches the plan and base (the head may come from the local worktree when no PR SHA exists yet). Or (b) make the CLI selector use the same predicate as the export and record a distinct, explicit status such as 'flow-not-eligible' for skipped flows. Also tell 'destination already exists' apart from a guard refusal in the reported status.",
+      "test_expectation": "Add a native fixture with a first-implementation verify-before failure. Assert that either a guarded export is created with the expected manifest, or the summary records the explicit not-eligible status instead of the generic refusal. Add a fixture that exports the same checkpoint twice and assert that the second status says the export already exists."
+    },
+    {
+      "severity": "low",
+      "file": "agent-team/src/bug-pipeline/cli.mjs",
+      "line": 198,
+      "problem": "On the thrown-controller path, the export calls store.observe() inside a try/catch that swallows every error. observe is not defined or changed anywhere in this diff. The only test for this path (failed-output-retention.test.mjs) matches the CLI source text with a regex and never runs it. If the state store has no observe method, or it throws, the throw-path export required by AC3 silently never happens and nothing in tests or diagnostics shows it.",
+      "requested_change": "Show that the state store returned by createGitHub(...).createStateStore() provides a read-only observe() with the expected shape. When the throw-path export itself fails, record an explicit marker in the blocked-controller diagnostic, such as failedOutputExports or exportError, rather than discarding the failure silently.",
+      "test_expectation": "Add a behavioural test that runs main(), or an extracted helper, with a stub runPipeline that persists a failed verification batch and then throws. Assert that the blocked-controller diagnostic.json is written and that the failed-code export is attempted against the state from observe(). Assert that a missing or throwing observe() leaves an explicit marker in the diagnostic."
+    }
+  ]
+}
