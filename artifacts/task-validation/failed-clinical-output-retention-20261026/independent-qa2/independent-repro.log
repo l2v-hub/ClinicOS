@@ -1,0 +1,5 @@
+{"case":"known-credential-verification-lines","keys":7,"forms":2,"result":"REDACTED"}
+{"case":"actual-verification-diagnostic","result":"REDACTED","exitCode":7}
+{"case":"known-credential-source-export","attempts":14,"result":"REFUSED_BEFORE_STAGE"}
+{"case":"exact-allowed-source-export","result":"RETAINED","files":1}
+{"case":"malformed-checkpoint-inventory","result":"REFUSED_BEFORE_AUTHORITY","observers":0,"verifiers":0}

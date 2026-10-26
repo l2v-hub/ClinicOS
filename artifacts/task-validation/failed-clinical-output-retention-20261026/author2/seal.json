@@ -1,0 +1,20 @@
+{
+  "freeze": true,
+  "frozenAt": "2026-10-26 19:43:54 UTC",
+  "baseSha": "13c71ce0e2cdf6e72b4c7eeeb036754fac7e4f73",
+  "reservationNonce": "76c2f780-5e52-462d-aa38-294b107d5875",
+  "amendment": 1,
+  "hashes": {
+    ".github/workflows/codex-bug-pipeline.yml": "9a041cf6f4ebfd505fd588983743213587840656c9ae6ca576582c8ab34ea27f",
+    "agent-team/src/bug-pipeline/cli.mjs": "a19585fd5b9ffc318d6d7810013253373e1eaaf44eef4693970ec6db1f83b8b4",
+    "agent-team/src/bug-pipeline/comment-review-handoff.mjs": "086ee18c81a07353d8dbc1d835b39e2338d4b7c1bed1a38e65ab6570dceea435",
+    "agent-team/src/bug-pipeline/failed-output-export.mjs": "6ad6b78372763bff5ad8a2d009a6dbe4f752e79a8ad0b500f922052842f49497",
+    "agent-team/src/bug-pipeline/operator-authorization.mjs": "3eda3d4607725db16ee4749318f12a0ee907f3d6381df19f0f729e2aee9e316a",
+    "agent-team/src/bug-pipeline/workspace.mjs": "42ab2d9fce6dadd30749acc15d11903343fdb6eccf7b474712ba46307a8499f3",
+    "agent-team/tests/bug-pipeline/failed-output-retention.test.mjs": "55f30802dd0db15cc3ed896e010b21a5bdc1e50d8fb5d7c629a59d4f13ff44d9",
+    "source-projection.json": "e438836ec4cdc3a641a73e4fae85631fcefc1ce95b8e93a34ecbe7c996fa0465",
+    "implementation-report.md": "3418c5b2e9e1e56dee5cd3469b177a3fefe302c18268c1e43c8c1377d03c3d7b",
+    "focused-tests.log": "d2c5c45cf633b9421669e34a50f7d88b08043ae7ea09c3c2d6b853e556efea2a",
+    "domain-tests.log": "ce6653ba8b32b86aef98f31ada5b9ad39d7bbb1b66bd723d988887ee81b74119"
+  }
+}

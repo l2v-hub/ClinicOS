@@ -1,0 +1,100 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "subjectSha": "09be584076e3bb4f7131be94608f063d9b20a98b",
+      "evidence": "independent-qa1/qa-report.md",
+      "nonce": "cace566b-942f-4735-a50f-6cf30d7e1188",
+      "reason": "Independent QA1 BLOCKED3; original candidate and exact reports retained."
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "subjectSha": "24f669b706193eef9ac08bd7a02ab440be692189",
+      "evidence": "independent-qa2/qa-report.md",
+      "nonce": "76c2f780-5e52-462d-aa38-294b107d5875",
+      "reason": "Bounded correction of QA1 three concrete findings; new independent exact-byte QA2 VERIFIED0.",
+      "independentQaSealSha256": "d7ea5bd5f765930305848954dd4d383fe8f85a220fe776041ed94be8cb732018"
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/codex-bug-pipeline.yml",
+      "blob": "8c788d7dbab5f83bd6e03bed5204cd134d8ce2fe",
+      "mode": "100644",
+      "baseBlob": "3dbad7899b05dd6dd964b70b91edf1da5b7da1a8",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "blob": "5dd3688e4b48d34115b6c194be4e9fe398f2f419",
+      "mode": "100644",
+      "baseBlob": "b42cd83de4b6442451a7437926271e70b761b712",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "blob": "ea6cec8a0cace0dbb3876dce48e3efe8daf796be",
+      "mode": "100644",
+      "baseBlob": "1aecac72761dd714724623ff3386b2529e51ec46",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "blob": "c288d593820c593ea007bdaf70175be60144bc23",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/operator-authorization.mjs",
+      "blob": "f40ca1a1b58e168e7c9bb9dbb76e582367a96fbf",
+      "mode": "100644",
+      "baseBlob": "d0882853f8cb8b9e76e446a3b441b5d2ca9ab104",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/workspace.mjs",
+      "blob": "248d04d93959696bbf3d4095d6828e33c70983cc",
+      "mode": "100644",
+      "baseBlob": "0eb7cb187d1e4aa97660a8aa615ac9e1022c8031",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/failed-output-retention.test.mjs",
+      "blob": "ff539d02f357a211603ad52e4e9dda36ec9be623",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "acdaf02dad80f5caf97614c7cf6151c2fb9e5d2fa79ae6d55607a32aa6c00338",
+    "author1/implementation-report.md": "07788db550c0b74fce1564d4e6b2383ecc1f94ae647af593df805403247755cd",
+    "author1/seal.json": "47f4f0c7de69c641f301c4e52a683b1cafc1b30ca41fead2c7d0acc778f47014",
+    "author1/source-projection.json": "8e1a6db66ebf6861b1c353775c8e9358ffb163fb668910037a8c5e246b1ac8bc",
+    "author2/implementation-report.md": "3418c5b2e9e1e56dee5cd3469b177a3fefe302c18268c1e43c8c1377d03c3d7b",
+    "author2/seal.json": "3afbc445ace2fe02b404a8ffb08ee094dba41dfa6d47d8d656a116be214751ee",
+    "author2/source-projection.json": "e438836ec4cdc3a641a73e4fae85631fcefc1ce95b8e93a34ecbe7c996fa0465",
+    "implementation-plan.md": "f4b20bb58c0928c20290855cbad47d869c6109c3b2680ed01846d47a304b80ec",
+    "independent-qa1/independent-repro.log": "5abbaa0c91ff60661779466935475ecfd260525fa9f0108b6cabac5cdadd1250",
+    "independent-qa1/qa-report.md": "aff88a0359b4216a1b73051fde0ed8c37a99479f987374f31f42b766469e20cd",
+    "independent-qa1/qa-seal.json": "412a532563208fa99b82b9b3aa3b8a14d4d6216ba35e66d13849d19ec1cd155d",
+    "independent-qa2/check-projection.py": "defcd63525d31228773ca7bc7de87111f5ebaa823916476647385a87e1aacbc1",
+    "independent-qa2/independent-repro.log": "7a30ae80c0f7441fc27131d0d24d604fceb4b820187d1723997925674b00372a",
+    "independent-qa2/independent-repro.mjs": "5fa1e67cdce44908b63e39840564f94c1fbe4f18c545cc90b1bf9213bf51bfb2",
+    "independent-qa2/projection.log": "2206fe1cf90fd17441d0adeca580412119a02a6f118576c04b01fd8e94514e2c",
+    "independent-qa2/qa-report.md": "af53acc5f877a60904d6655e545cd37b8a6f0c62f5b9e3ded03c52df363185d8",
+    "independent-qa2/qa-seal.json": "d7ea5bd5f765930305848954dd4d383fe8f85a220fe776041ed94be8cb732018",
+    "independent-qa2/static-checks.log": "f826e7afe0aaf36bd10a13f83ac80b628dcc31a7f5325525a2610d06929014a2",
+    "independent-qa2/targeted-tests.log": "f7a8585da46bd99695ef6d332d6d13f7d7cf3b2d04ca41609cd3673f5fa23b8e",
+    "original-clinical-partial-proof.json": "e0bc607f20e0088fe0a981c775d46d25ebda8c322566efe968bf8487ce6a38c3",
+    "task-contract.md": "e04b212da8c797c5b2e2a199db468374e562580d398f2c82bce541b39eaeef77",
+    "validation-report.md": "e0459a037a7424c5e9c7bc2e89e1f3e73a609d0118e31b902ebb40898fcb7f8e",
+    "zero-provider-qualification-proof.json": "e5e5d9536acd32e115becc3f502966b3aa963d153e47197dc3ca6c9687d2d301"
+  }
+}

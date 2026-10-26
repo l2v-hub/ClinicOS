@@ -1,0 +1,77 @@
+{
+  "status": "BLOCKED",
+  "at": "2026-10-26T12:02:33.236448Z",
+  "sourceCode": "09be584076e3bb4f7131be94608f063d9b20a98b",
+  "parent": "13c71ce0e2cdf6e72b4c7eeeb036754fac7e4f73",
+  "sourceProjection": [
+    {
+      "path": ".github/workflows/codex-bug-pipeline.yml",
+      "gitBlobSha1": "8c788d7dbab5f83bd6e03bed5204cd134d8ce2fe",
+      "rawSha256": "9a041cf6f4ebfd505fd588983743213587840656c9ae6ca576582c8ab34ea27f",
+      "bytes": 4162
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "gitBlobSha1": "5dd3688e4b48d34115b6c194be4e9fe398f2f419",
+      "rawSha256": "a19585fd5b9ffc318d6d7810013253373e1eaaf44eef4693970ec6db1f83b8b4",
+      "bytes": 9454
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "gitBlobSha1": "ea6cec8a0cace0dbb3876dce48e3efe8daf796be",
+      "rawSha256": "086ee18c81a07353d8dbc1d835b39e2338d4b7c1bed1a38e65ab6570dceea435",
+      "bytes": 48980
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/operator-authorization.mjs",
+      "gitBlobSha1": "5a32606079e753e0d7725cde646ef06493313233",
+      "rawSha256": "f8482ea808f443d31487932927e820bbb74f0c60418b9b51c423c8090d68f661",
+      "bytes": 20136
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/workspace.mjs",
+      "gitBlobSha1": "385648960e9c4765e608b13adc8d43874da6d58f",
+      "rawSha256": "958d9eeb5939e728a828bc8b93fc853450c2138dd42d7a9d4ab50a6e60bb2cf3",
+      "bytes": 35347
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "gitBlobSha1": "0c541c2091c8ab2cb40ef83fc6cc12b62415d812",
+      "rawSha256": "f0189b0e2a7793b4b0c739f7e125b1ac57d8c70c17195ebef1547047043557ed",
+      "bytes": 9657
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/failed-output-retention.test.mjs",
+      "gitBlobSha1": "fb42e999b97da0c3183ce37bae6511efd12fc8d8",
+      "rawSha256": "53e11f491e96f2218d4a4ca193b1c386397093e84e8cac02abac10c48d56164f",
+      "bytes": 14342
+    }
+  ],
+  "sourceWorkingTreeMatches": true,
+  "findings": 3,
+  "targetedTests": {
+    "total": 68,
+    "passed": 68,
+    "failed": 0
+  },
+  "artifacts": {
+    "qa-report.md": {
+      "bytes": 4221,
+      "sha256": "aff88a0359b4216a1b73051fde0ed8c37a99479f987374f31f42b766469e20cd"
+    },
+    "independent-repro.mjs": {
+      "bytes": 5852,
+      "sha256": "4faf0321648a6f448a6b7272e9693c2f11382cd00c23017083800cd9695e04f8"
+    },
+    "independent-repro.log": {
+      "bytes": 515,
+      "sha256": "5abbaa0c91ff60661779466935475ecfd260525fa9f0108b6cabac5cdadd1250"
+    },
+    "targeted-tests.log": {
+      "bytes": 17685,
+      "sha256": "e386b176c8b592bb7c9a0d9163c66392c34efcfba78494dad1d51a2ab81b00e1"
+    }
+  },
+  "remoteClaims": false,
+  "candidateEdited": false
+}
