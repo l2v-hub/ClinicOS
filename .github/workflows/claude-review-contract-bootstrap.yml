@@ -1,0 +1,67 @@
+name: Claude review contract bootstrap
+
+on:
+  push:
+    branches: [codex/claude-review-contract-bootstrap-20261026]
+    paths:
+      - .github/workflows/claude-review-contract-bootstrap.yml
+      - agent-team/diagnostics/claude-review-contract-bootstrap/**
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  diagnose:
+    name: Hold official Claude group
+    if: >-
+      github.repository == 'l2v-hub/ClinicOS' &&
+      github.ref == 'refs/heads/codex/claude-review-contract-bootstrap-20261026' &&
+      github.event_name == 'push' && github.run_attempt == 1
+    concurrency:
+      group: clinicos-claude-cloud-review-${{ github.repository }}
+      cancel-in-progress: false
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    env:
+      TRUSTED_ROOT: ${{ github.workspace }}/trusted
+      OPERATOR_ROOT: ${{ github.workspace }}/operator
+    steps:
+      - name: Checkout exact operator push
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          path: operator
+          persist-credentials: false
+      - name: Checkout immutable trusted controller
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 995e2ff6d14a96b5d67e0d14d708f4a95c4c816f
+          path: trusted
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Install locked official CLI outside checkouts before OAuth
+        timeout-minutes: 3
+        run: |
+          set -euo pipefail
+          test "$(git -C trusted rev-parse HEAD)" = 995e2ff6d14a96b5d67e0d14d708f4a95c4c816f
+          test "$(git -C operator rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p "$RUNNER_TEMP/claude-cloud-tools"
+          cp trusted/scripts/automation/claude-cloud-tools/package.json trusted/scripts/automation/claude-cloud-tools/package-lock.json "$RUNNER_TEMP/claude-cloud-tools/"
+          npm ci --prefix "$RUNNER_TEMP/claude-cloud-tools" --no-audit --no-fund
+          node -e 'const p = require(process.env.RUNNER_TEMP + "/claude-cloud-tools/node_modules/@anthropic-ai/claude-code/package.json"); if (p.version !== "2.1.301") process.exit(1)'
+      - name: Publish started receipt while holding group; wait for exact host marker
+        timeout-minutes: 10
+        env:
+          RECEIPT_GH_TOKEN: ${{ github.token }}
+        run: node operator/agent-team/diagnostics/claude-review-contract-bootstrap/worker.mjs --start-and-wait
+      - name: Execute one native probe and at most one native corrected round five review
+        env:
+          RECEIPT_GH_TOKEN: ${{ github.token }}
+          CLAUDE_CLI_PATH: ${{ runner.temp }}/claude-cloud-tools/node_modules/.bin/claude
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          CLAUDE_REVIEW_AUTH_MODE: subscription
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+        run: node operator/agent-team/diagnostics/claude-review-contract-bootstrap/worker.mjs --execute
