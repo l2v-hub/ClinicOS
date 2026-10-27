@@ -100,6 +100,28 @@ async function fixture(
         await mkdir(reportDir, { recursive: true });
         await writeFile(path.join(reportDir, '1-execute.json'), '{"old":"report"}\n');
       }
+      if (reportFailure === 'symlink-file') {
+        const external = path.join(root, 'external-file.json');
+        await writeFile(
+          external,
+          JSON.stringify(
+            {
+              schemaVersion: 1,
+              kind: 'terminal-model-result',
+              step: 'execute',
+              round: 1,
+              status: 'blocked',
+              summary,
+              summaryDisposition: 'retained',
+              originalSummarySha256: sha256(summary),
+            },
+            null,
+            2,
+          ) + '\n',
+        );
+        await mkdir(reportDir, { recursive: true });
+        await symlink(external, path.join(reportDir, '1-execute.json'));
+      }
       if (reportFailure === 'symlink') {
         const external = path.join(root, 'external-report-target');
         await mkdir(external);
@@ -364,4 +386,11 @@ test('native unsafe QA result remains unknown/running instead of authorizing ter
     }),
     [],
   );
+});
+
+test('final report symlink is refused before reading an external synthetic file', async (t) => {
+  const f = await fixture(t, { step: 'execute', reportFailure: 'symlink-file' });
+  assert.equal(f.batch.controllerProgress.status, 'failed');
+  assert.equal(f.batch.controllerProgress.modelReportRetention?.execute, 'not-recorded');
+  await assert.rejects(exportFailedCode(f));
 });

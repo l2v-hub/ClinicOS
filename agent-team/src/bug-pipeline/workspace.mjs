@@ -245,9 +245,15 @@ export function createWorkspace({ root, repo, run, models }) {
         const info = await lstat(parent).catch((error) =>
           error.code === 'ENOENT' ? null : Promise.reject(error),
         );
-        if (info?.isSymbolicLink() || (info && !info.isDirectory())) throw new Error('unsafe report path');
+        if (info?.isSymbolicLink() || (info && !info.isDirectory()))
+          throw new Error('unsafe report path');
       }
       await mkdir(path.dirname(target), { recursive: true });
+      const targetInfo = await lstat(target).catch((error) =>
+        error.code === 'ENOENT' ? null : Promise.reject(error),
+      );
+      if (targetInfo && (targetInfo.isSymbolicLink() || !targetInfo.isFile()))
+        throw new Error('unsafe report target');
       const previous = await readFile(target, 'utf8').catch((error) => {
         if (error.code === 'ENOENT') return null;
         throw error;
