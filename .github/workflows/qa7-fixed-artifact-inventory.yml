@@ -1,0 +1,45 @@
+name: Fixed QA7 artifact inventory without raw contents
+on:
+  push:
+    branches: [codex/qa7-fixed-artifact-inventory-20261027]
+permissions:
+  actions: read
+jobs:
+  inventory:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          github-token: ${{ github.token }}
+          repository: l2v-hub/ClinicOS
+          run-id: 40461210338
+          name: codex-bug-pipeline-diagnostic-40461210338
+          path: ${{ runner.temp }}/fixed-qa7-input
+      - name: Materialize fixed reader after untrusted data download
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/fixed-qa7-inventory-reader"
+          if [ -e "$root" ] || [ -L "$root" ]; then exit 1; fi
+          install -d -m 700 "$root"
+          cat > "$root/reader.mjs" <<'FIXED_READER'
+          import assert from'node:assert/strict';import path from'node:path';import{readFile,readdir,lstat,realpath}from'node:fs/promises';import{createHash}from'node:crypto';import{fileURLToPath}from'node:url';
+          const hash=x=>createHash('sha256').update(x).digest('hex');
+          export async function inventory(root,binding){assert.equal(binding.runId,40461210338);assert.equal(binding.artifactId,12715351500);assert.equal(binding.expectedFiles,2);assert.equal(await realpath(root),path.resolve(root));assert(!(await lstat(root)).isSymbolicLink());const files=[];let total=0;
+           async function walk(rel=''){for(const name of await readdir(path.join(root,rel))){const f=rel?rel+'/'+name:name;assert(/^[A-Za-z0-9_.\/-]{1,240}$/.test(f));assert(f.split('/').every(s=>s&&s!=='.'&&s!=='..'));assert(!/(?:^|\/)(?:\.git|\.env|credentials?|secrets?|tokens?|home)(?:\/|\.|$)/i.test(f));const target=path.join(root,f),s=await lstat(target);assert(!s.isSymbolicLink());assert((await realpath(target)).startsWith(path.resolve(root)+path.sep));if(s.isDirectory())await walk(f);else{assert(s.isFile()&&s.size<=1024*1024);total+=s.size;assert(total<=1024*1024);const b=await readFile(target);files.push({file:f,bytes:b.length,sha256:hash(b)});assert(files.length<=16);}}}await walk();assert.equal(files.length,binding.expectedFiles);const d=files.find(f=>f.file==='diagnostic.json');assert(d);const diagnostic=JSON.parse(await readFile(path.join(root,'diagnostic.json'))),knownKeys=['status','blocked','batches','standaloneReviews','verificationDiagnostics','failedOutputExports','modelDiagnostics'],unknownDiagnosticFields=Object.keys(diagnostic).filter(k=>!knownKeys.includes(k)).length;const exports=diagnostic.failedOutputExports;assert(Array.isArray(exports)&&exports.length<=64);const finiteExports=exports.map(x=>{assert(/^bug-batch-[0-9]+$/.test(x.batchId));assert(['local-export-created','local-export-already-exists','flow-not-eligible','guard-refused-or-output-unavailable'].includes(x.status));return{batchId:x.batchId,status:x.status};});return{type:'qa7-fixed-artifact-inventory-v1',runId:binding.runId,artifactId:binding.artifactId,expectedArchiveSha256:binding.expectedArchiveSha256,completeFileInventory:true,files:files.sort((a,b)=>a.file.localeCompare(b.file)),qaReportFilePresent:files.some(f=>/(?:codex-independent-qa|qa-report)\.(?:md|json)$/.test(f.file)),source506ExportFileCount:files.filter(f=>f.file.startsWith('failed-code/bug-batch-506/')).length,failedOutputExports:finiteExports,unknownDiagnosticFields,modelDiagnosticKeys:Array.isArray(diagnostic.modelDiagnostics)?[...new Set(diagnostic.modelDiagnostics.flatMap(x=>Object.keys(x)))].filter(k=>/^[A-Za-z0-9_]{1,64}$/.test(k)).sort():null,modelDiagnosticsCount:Array.isArray(diagnostic.modelDiagnostics)?diagnostic.modelDiagnostics.length:null,verificationDiagnosticsCount:Array.isArray(diagnostic.verificationDiagnostics)?diagnostic.verificationDiagnostics.length:null,rawContentsRelayed:false,providerInvocations:0};}
+          if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){try{assert.equal(process.env.GITHUB_REPOSITORY,'l2v-hub/ClinicOS');assert.equal(process.env.GITHUB_REF,'refs/heads/codex/qa7-fixed-artifact-inventory-20261027');assert.equal(process.env.GITHUB_RUN_ATTEMPT,'1');console.log(JSON.stringify(await inventory(process.argv[2],JSON.parse(await readFile(process.argv[3])))));}catch{console.error('fixed-inventory-guard-refused');process.exitCode=1;}}
+          FIXED_READER
+          cat > "$root/binding.json" <<'FIXED_BINDING'
+          {
+            "runId": 40461210338,
+            "artifactId": 12715351500,
+            "artifactName": "codex-bug-pipeline-diagnostic-40461210338",
+            "expectedArchiveSha256": "4894faa85cac9c2e1682fc333d5c2539293f6d41438550a8bbb3e7904db4b98b",
+            "expectedFiles": 2
+          }
+          FIXED_BINDING
+          node "$root/reader.mjs" "$RUNNER_TEMP/fixed-qa7-input" "$root/binding.json"
