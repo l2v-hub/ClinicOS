@@ -1,12 +1,12 @@
 {
   "trustedMain": "2dc0c0050a9f18a51a7ac980b42b46057870e27e",
-  "sourceProjectionCode": "9598f3930e7520cc9faf4e1ee7dcdea03bc4e730",
+  "sourceProjectionCode": "4be36034d7cb1c93acbfb84506208253994d09d8",
   "scope": "Exact app projection of privately reviewed516 plus alreadyreviewed006baseline; runtimecontrolplane stays trusted2dc. Future006newnotices integration/publication stillrequired.",
   "candidates": [
     {
       "issue": 516,
       "parent": "2dc0c0050a9f18a51a7ac980b42b46057870e27e",
-      "sha": "9598f3930e7520cc9faf4e1ee7dcdea03bc4e730",
+      "sha": "4be36034d7cb1c93acbfb84506208253994d09d8",
       "files": [
         {
           "file": "backend/src/ai/upload/pages/__tests__/draft-linked-retention.test.ts",
@@ -94,9 +94,9 @@
         },
         {
           "file": "e2e/issue516-resume.mjs",
-          "sha256": "06845d3757d7ae2e9857d879c1e6be7920e8d62f46814f2f531f23d4a19726f8",
-          "bytes": 33948,
-          "blob": "931570eb8b6bd029bf15be5efea98609bcd6098d"
+          "sha256": "5d2230e08d024ea471f4c4bbc6c37f75b52e4a1d8a1b4315ca31a055efc10b6b",
+          "bytes": 35293,
+          "blob": "82aa4a68f55fb4dc4e6138a97a0f660473d56162"
         },
         {
           "file": "frontend/e2e/issue506-workspace.html",

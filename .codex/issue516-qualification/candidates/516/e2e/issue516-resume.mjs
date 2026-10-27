@@ -23,6 +23,7 @@ const entry = path.join(root, 'frontend/e2e/issue516-resume.tsx');
 const html = `<html lang="it"><head><meta charset="UTF-8"><title>Issue516 synthetic QA</title></head><body><div id="root"></div><script type="module" src="/@fs/${entry}"></script></body></html>`;
 const records = [];
 const expectedBlobRetirements = [];
+const draftListBoundaries = [];
 let server, browser;
 function fixture(mode) {
   const source = job(7);
@@ -117,10 +118,26 @@ try {
       });
       for (const url of decoded) retiredBlobUrls.add(url);
     }
+    async function withDraftListCompletion(boundary, trigger) {
+      // The fixture refreshes on each outer open-state change, including close.
+      // Register before the action; a cached count/networkidle is not completion.
+      const responsePromise = page.waitForResponse(
+        (response) =>
+          response.request().method() === 'GET' &&
+          new URL(response.url()).origin === origin &&
+          new URL(response.url()).pathname === '/__fixture_api/intake/drafts',
+      );
+      const [response] = await Promise.all([responsePromise, Promise.resolve().then(trigger)]);
+      assert.equal(response.status(), 200, 'The fixture draft-list refresh must succeed');
+      assert.equal(await response.finished(), null, 'Finish the draft-list body before navigation');
+      draftListBoundaries.push({ width, mode: state.mode, boundary, status: 200, finished: true });
+    }
     const close = async () => {
       await page.waitForLoadState('networkidle');
       await decodeVisibleSourceImages();
-      await page.getByRole('button', { name: 'Chiudi importazione', exact: true }).last().click();
+      await withDraftListCompletion('close-import', () =>
+        page.getByRole('button', { name: 'Chiudi importazione', exact: true }).last().click(),
+      );
     };
     page.on('pageerror', (error) => errors.push(error.message));
     page.on('console', (message) => {
@@ -419,21 +436,23 @@ try {
         await page.goto('about:blank');
         state = fixture(mode);
         const retained = structuredClone(state.draft.data);
-        await page.goto(`${origin}/__qa516`);
+        await withDraftListCompletion('mount', () => page.goto(`${origin}/__qa516`));
         await expect(page.getByLabel('Numero pratiche')).toHaveText('1');
         if (mode === 'preserve') {
           await page.evaluate(() =>
             localStorage.setItem('clinicos:import-session:operator-qa-516:MEDICO', 'job-new'),
           );
-          await page
-            .getByRole('button', { name: 'Riprendi altra importazione', exact: true })
-            .click();
+          await withDraftListCompletion('open-other', () =>
+            page.getByRole('button', { name: 'Riprendi altra importazione', exact: true }).click(),
+          );
           await expect(
             page.getByRole('article').filter({ hasText: 'uncommitted-source.png' }),
           ).toBeVisible();
           await close();
         }
-        await page.getByRole('button', { name: 'Riprendi pratica sintetica', exact: true }).click();
+        await withDraftListCompletion('open-existing', () =>
+          page.getByRole('button', { name: 'Riprendi pratica sintetica', exact: true }).click(),
+        );
         const action = page.getByRole('button', {
           name: 'Riprendi la pratica e ricarica i documenti',
           exact: true,
@@ -535,7 +554,7 @@ try {
           await expect(page.locator('[data-draft-id="draft-qa-516"]')).toHaveCount(2);
           assert.deepEqual(state.draft.data, retained);
           await decodeVisibleSourceImages();
-          await page.reload();
+          await withDraftListCompletion('reload', () => page.reload());
           await expect(page.locator('[data-draft-id="draft-qa-516"]')).toHaveCount(2);
           assert.equal(state.draft.id, 'draft-qa-516');
           assert.equal(state.source.id, 'job-one');
@@ -543,9 +562,9 @@ try {
           await close();
           await expect(page.getByLabel('Numero pratiche')).toHaveText('1');
           if (mode === 'preserve') {
-            await page
-              .getByRole('button', { name: 'Riprendi altra importazione', exact: true })
-              .click();
+            await withDraftListCompletion('open-other', () =>
+              page.getByRole('button', { name: 'Riprendi altra importazione', exact: true }).click(),
+            );
             await expect(
               page.getByRole('article').filter({ hasText: 'uncommitted-source.png' }),
             ).toBeVisible();
@@ -657,16 +676,16 @@ try {
         ];
         const retained = structuredClone(state.candidates);
         const sourceBefore = structuredClone(state.newSource);
-        await page.goto(`${origin}/__qa516`);
+        await withDraftListCompletion('mount', () => page.goto(`${origin}/__qa516`));
         await expect(page.getByLabel('Numero pratiche')).toHaveText(
           String(state.candidates.length),
         );
         await page.evaluate(() =>
           localStorage.setItem('clinicos:import-session:operator-qa-516:MEDICO', 'job-new'),
         );
-        await page
-          .getByRole('button', { name: 'Riprendi altra importazione', exact: true })
-          .click();
+        await withDraftListCompletion('open-other', () =>
+          page.getByRole('button', { name: 'Riprendi altra importazione', exact: true }).click(),
+        );
         const review = page.locator('.import-workspace--5050').first();
         await expect(review.locator('[data-demographic-field="firstName"]')).toBeVisible();
         await review.locator('[data-demographic-field="firstName"]').fill('MARIO');
@@ -800,7 +819,7 @@ try {
       });
       await writeFile(
         path.join(out, 'test-results', `failure-${width}.json`),
-        JSON.stringify({ message: String(error), errors, records }, null, 2),
+        JSON.stringify({ message: String(error), errors, records, draftListBoundaries }, null, 2),
       );
       await context.tracing.stop({
         path: path.join(out, 'trace', `issue516-${width}-failure.zip`),
@@ -815,7 +834,7 @@ try {
   await writeFile(
     path.join(out, 'test-results', 'browser.json'),
     JSON.stringify(
-      { scope: 'synthetic loopback React only', records, expectedBlobRetirements },
+      { scope: 'synthetic loopback React only', records, expectedBlobRetirements, draftListBoundaries },
       null,
       2,
     ),
