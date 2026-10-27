@@ -1,0 +1,108 @@
+name: Read exact516SQLfooter and retained browser failure
+on:
+  push:
+    branches: [codex/516-browser-diagnostic-reader-20261027]
+    paths:
+      - .github/workflows/516-browser-diagnostic-reader.yml
+permissions:
+  actions: read
+jobs:
+  read:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          github-token: ${{ github.token }}
+          repository: l2v-hub/ClinicOS
+          run-id: 40526042732
+          artifact-ids: 12745500638
+          merge-multiple: true
+          path: ${{ runner.temp }}/fixed516-browser-diagnostic-input
+      - name: Read only two fixed diagnostic JSON files
+        shell: bash
+        run: |
+          set -euo pipefail
+          reader="$RUNNER_TEMP/fixed516-browser-diagnostic-reader.mjs"
+          if [ -e "$reader" ] || [ -L "$reader" ]; then exit 1; fi
+          cat > "$reader" <<'FIXED_READER'
+          import assert from 'node:assert/strict';
+          import path from 'node:path';
+          import { lstat, realpath, readFile } from 'node:fs/promises';
+          import { createHash } from 'node:crypto';
+          import { fileURLToPath } from 'node:url';
+          const hash = value => createHash('sha256').update(value).digest('hex');
+          const EXPECTED = [{"index":2,"command":"node","args":["--import","tsx","--test","--test-concurrency=1","backend/src/intake/__tests__/draft-identity.test.ts","backend/src/intake/__tests__/draft-identity-db.test.ts","backend/src/intake/__tests__/draft-source-resume-db.test.ts","backend/src/ai/upload/pages/__tests__/draft-linked-retention.test.ts","backend/src/ai/upload/pages/__tests__/draft-source-resume.test.ts"],"ok":true,"noTestsSignal":false,"exitCode":0,"runnerError":null,"stdoutBytes":21898,"stderrBytes":798,"stdoutSha256":"3f73cf0bfca467f82f5a24176ac088495909c9a0220bcd4edb03d31fddb784bc","stderrSha256":"786902ec23eda46fec89f6d6f12284c1b14a94d55fa0e0a9d9f10d187a4dab1a"},{"index":3,"command":"node","args":["--import","tsx","e2e/issue516-resume.mjs"],"ok":false,"noTestsSignal":false,"exitCode":1,"runnerError":null,"stdoutBytes":9030,"stderrBytes":1988,"stdoutSha256":"762882464be611dd0098aed3e8144e1f36af69b008e3827196cc7802a328fe8e","stderrSha256":"c645cb4e289af10413773619fa2142254d8000bf20ea267daad9ec179e18ff18"}];
+          const KEYS = ['tests', 'suites', 'pass', 'fail', 'cancelled', 'skipped', 'todo'];
+          async function fixedReport(root, index) {
+           const relative = 'qualification-evidence/command-516-' + index + '.json';
+           let file = root;
+           for (const segment of relative.split('/')) {
+            file = path.join(file, segment);
+            assert(!(await lstat(file)).isSymbolicLink());
+           }
+           const info = await lstat(file);
+           assert(info.isFile() && info.size > 0 && info.size <= 256 * 1024);
+           assert((await realpath(file)).startsWith(root + path.sep));
+           const raw = await readFile(file);
+           assert.equal(raw.length, info.size);
+           const text = raw.toString('utf8');
+           assert(Buffer.from(text).equals(raw));
+           const record = JSON.parse(text);
+           const identity = EXPECTED.find(e => e.index === index);
+           for (const [key, value] of Object.entries(identity)) assert.deepEqual(record[key], value);
+           for (const key of ['stdoutSanitizedCaptured', 'stderrSanitizedCaptured']) assert(typeof record[key] === 'string');
+           return { record, inputJsonSha256: hash(raw), inputJsonBytes: raw.length };
+          }
+          export async function collect(root) {
+           root = path.resolve(root);
+           assert.equal(await realpath(root), root);
+           assert(!(await lstat(root)).isSymbolicLink());
+           const sql = await fixedReport(root, 2), browser = await fixedReport(root, 3);
+           const counts = {};
+           for (const match of sql.record.stdoutSanitizedCaptured.matchAll(/^# (tests|suites|pass|fail|cancelled|skipped|todo) ([0-9]+)\r?$/gm)) {
+            assert(!(match[1] in counts), 'Duplicate SQL footer count');
+            const number = Number(match[2]);
+            assert(Number.isSafeInteger(number) && number <= 1000000);
+            counts[match[1]] = number;
+           }
+           assert.deepEqual(Object.keys(counts).sort(), KEYS.slice().sort());
+           const capture = Buffer.from(browser.record.stderrSanitizedCaptured, 'utf8');
+           assert(capture.length > 0 && capture.length <= 8192);
+           const stdoutCapture = Buffer.from(sql.record.stdoutSanitizedCaptured, 'utf8');
+           return {
+            type: 'fixed516-browser-diagnostic-v1',
+            sourceRun: 40526042732, artifactId: 12745500638,
+            sourceOperatorSha: '89b8716ab75c37900d3f7c8a9567d804f7eac269',
+            sourceAppSha: '9598f3930e7520cc9faf4e1ee7dcdea03bc4e730',
+            sql: {
+             index: 2, ok: true, noTestsSignal: false, exitCode: 0, counts,
+             allTestsExecutedAndPassed: counts.tests > 0 && counts.pass === counts.tests && counts.fail === 0 && counts.cancelled === 0 && counts.skipped === 0 && counts.todo === 0,
+             inputJsonSha256: sql.inputJsonSha256, inputJsonBytes: sql.inputJsonBytes,
+             rawStdoutBytes: sql.record.stdoutBytes, rawStdoutSha256: sql.record.stdoutSha256,
+             sanitizedStdoutBytes: stdoutCapture.length, sanitizedStdoutSha256: hash(stdoutCapture),
+             rawDigestMatchesCapture: stdoutCapture.length === sql.record.stdoutBytes && hash(stdoutCapture) === sql.record.stdoutSha256,
+            },
+            browser: {
+             index: 3, ok: false, noTestsSignal: false, exitCode: 1,
+             inputJsonSha256: browser.inputJsonSha256, inputJsonBytes: browser.inputJsonBytes,
+             rawStderrBytes: browser.record.stderrBytes, rawStderrSha256: browser.record.stderrSha256,
+             sanitizedStderrBytes: capture.length, sanitizedStderrSha256: hash(capture),
+             sanitizedStderrBase64: capture.toString('base64'),
+             rawDigestMatchesCapture: capture.length === browser.record.stderrBytes && hash(capture) === browser.record.stderrSha256,
+            },
+           };
+          }
+          if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+           try {
+            assert.equal(process.env.GITHUB_REPOSITORY, 'l2v-hub/ClinicOS');
+            assert.equal(process.env.GITHUB_REF, 'refs/heads/codex/516-browser-diagnostic-reader-20261027');
+            assert.equal(process.env.GITHUB_RUN_ATTEMPT, '1');
+            process.stdout.write(JSON.stringify(await collect(process.argv[2])) + '\n');
+           } catch { console.error('fixed516-browser-diagnostic-reader-guard-refused'); process.exitCode = 1; }
+          }
+          FIXED_READER
+          node "$reader" "$RUNNER_TEMP/fixed516-browser-diagnostic-input"
