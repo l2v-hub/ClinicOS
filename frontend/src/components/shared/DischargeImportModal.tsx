@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { getCurrentOperator } from '../../lib/operatorSession';
 import { useRecencyClock } from '../../lib/useRecencyClock';
 import { ConfirmDialog } from './ConfirmDialog';
@@ -69,6 +70,7 @@ function ImportSession({
   const active = useRef(true);
   const reviewSave = useRef<(() => void) | null>(null);
   const [closeRequested, setCloseRequested] = useState(false);
+  const [closeSavePending, setCloseSavePending] = useState(false);
   const pendingNavigation = useRef<((allowed: boolean) => void) | null>(null);
   const [navigationNotice, setNavigationNotice] = useState('');
   function finishClose() {
@@ -79,6 +81,7 @@ function ImportSession({
   }
   function cancelClose() {
     setCloseRequested(false);
+    setCloseSavePending(false);
     pendingNavigation.current?.(false);
     pendingNavigation.current = null;
   }
@@ -88,12 +91,31 @@ function ImportSession({
     setReviewCanSave(!!save);
   }, []);
   function requestClose() {
+    // A direct header/footer close starts a new intent, never an old route.
+    pendingNavigation.current?.(false);
+    pendingNavigation.current = null;
+    setCloseSavePending(false);
     if (step === 'review' && !job?.review.draftId) {
       setCloseRequested(true);
       return;
     }
     onClose();
   }
+  useEffect(() => {
+    if (!closeSavePending || busy) return;
+    // Successful handoff already settled the route in finishClose. If review
+    // remains open, release the surface's navigation guard after save/validation.
+    const resolve = pendingNavigation.current;
+    pendingNavigation.current = null;
+    resolve?.(false);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- completes the external save/route handshake
+    setCloseSavePending(false);
+  }, [closeSavePending, busy]);
+  useEffect(() => {
+    if (busy || pendingUpload || !navigationNotice) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- discard the notice when its blocking operation ends
+    setNavigationNotice('');
+  }, [busy, pendingUpload, navigationNotice]);
   const busyRef = useRef(false);
   const jobRef = useRef<ImportJob | null>(null);
   const api = useMemo(
@@ -361,13 +383,17 @@ function ImportSession({
       presentation={presentation}
       beforeNavigate={async () => {
         if (busy || pendingUpload) {
-          setNavigationNotice('Caricamento in corso. Attendi il completamento prima di cambiare pagina.');
+          setNavigationNotice(
+            'Caricamento in corso. Attendi il completamento prima di cambiare pagina.',
+          );
           return false;
         }
         setNavigationNotice('');
         if (step === 'review' && !job?.review.draftId) {
           setCloseRequested(true);
-          return new Promise<boolean>(resolve => { pendingNavigation.current = resolve; });
+          return new Promise<boolean>((resolve) => {
+            pendingNavigation.current = resolve;
+          });
         }
         return true;
       }}
@@ -443,26 +469,31 @@ function ImportSession({
             ))}
         </div>
       )}
-      <ConfirmDialog
-        open={closeRequested}
-        title="Chiudere l'importazione?"
-        message={
-          reviewCanSave
-            ? 'Puoi salvare la bozza o chiudere senza salvarla. La sessione documenti resta recuperabile.'
-            : 'Decidi e salva tutti i conflitti prima di salvare una bozza. Puoi comunque chiudere: la sessione documenti resta recuperabile.'
-        }
-        tone="primary"
-        confirmLabel="Salva bozza e chiudi"
-        confirmDisabled={!reviewCanSave}
-        cancelLabel="Continua la revisione"
-        busy={busy}
-        onCancel={cancelClose}
-        alternativeAction={{ label: 'Chiudi senza salvare', onClick: finishClose }}
-        onConfirm={() => {
-          setCloseRequested(false);
-          reviewSave.current?.();
-        }}
-      />
+      {closeRequested &&
+        createPortal(
+          <ConfirmDialog
+            open={closeRequested}
+            title="Chiudere l'importazione?"
+            message={
+              reviewCanSave
+                ? 'Puoi salvare la bozza o chiudere senza salvarla. La sessione documenti resta recuperabile.'
+                : 'Decidi e salva tutti i conflitti prima di salvare una bozza. Puoi comunque chiudere: la sessione documenti resta recuperabile.'
+            }
+            tone="primary"
+            confirmLabel="Salva bozza e chiudi"
+            confirmDisabled={!reviewCanSave}
+            cancelLabel="Continua la revisione"
+            busy={busy}
+            onCancel={cancelClose}
+            alternativeAction={{ label: 'Chiudi senza salvare', onClick: finishClose }}
+            onConfirm={() => {
+              setCloseRequested(false);
+              setCloseSavePending(true);
+              reviewSave.current?.();
+            }}
+          />,
+          document.body,
+        )}
       {opening && (
         <p role="status">
           {creation === 'pending'
@@ -491,7 +522,10 @@ function ImportSession({
             onBack={() => void reopen()}
             onImported={completed}
             onWorkspace={(id) => {
-              if (pendingNavigation.current) { finishClose(); return; }
+              if (pendingNavigation.current) {
+                finishClose();
+                return;
+              }
               setDraftId(id);
               setStep('workspace');
             }}
