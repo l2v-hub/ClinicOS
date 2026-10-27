@@ -1,0 +1,303 @@
+{
+  "trustedMain": "2dc0c0050a9f18a51a7ac980b42b46057870e27e",
+  "sourceProjectionCode": "9598f3930e7520cc9faf4e1ee7dcdea03bc4e730",
+  "scope": "Exact app projection of privately reviewed516 plus alreadyreviewed006baseline; runtimecontrolplane stays trusted2dc. Future006newnotices integration/publication stillrequired.",
+  "candidates": [
+    {
+      "issue": 516,
+      "parent": "2dc0c0050a9f18a51a7ac980b42b46057870e27e",
+      "sha": "9598f3930e7520cc9faf4e1ee7dcdea03bc4e730",
+      "files": [
+        {
+          "file": "backend/src/ai/upload/pages/__tests__/draft-linked-retention.test.ts",
+          "sha256": "c7be6dffb1aab3a21260d8c7e8bb2f6aa3d56d14934f32d538f4d5abc430bc0e",
+          "bytes": 9760,
+          "blob": "9477ce2854b7a8b4d25fbb35fd8fc7bacb932a5b"
+        },
+        {
+          "file": "backend/src/ai/upload/pages/__tests__/draft-source-resume.test.ts",
+          "sha256": "433dfdf2e49f403d755d54cf680948588564517ca61fdb01de2ff19e399c1b54",
+          "bytes": 8106,
+          "blob": "a19f1b98176d1bc271124b7d2d2d51014b84ea44"
+        },
+        {
+          "file": "backend/src/ai/upload/pages/cleanup.ts",
+          "sha256": "865625c8af76f9ce20329abe0c1cb11b851289c2b064282f28017742fbd8addf",
+          "bytes": 2178,
+          "blob": "e7ae670f648a86f4ee9545516f849fa5ec3b4016"
+        },
+        {
+          "file": "backend/src/ai/upload/pages/draft-mutations.ts",
+          "sha256": "cfbf14ef70b41e9d9c6ce463d10d003a4e96c34d8c9174f118bb58b141aa69c9",
+          "bytes": 9456,
+          "blob": "1f95ceedc21f83d4064939852db85a4c4cf28f01"
+        },
+        {
+          "file": "backend/src/ai/upload/pages/lifecycle.ts",
+          "sha256": "f6db039b500a35f300918bfdeb6c21e2f70187c13c139e919c2f3deb6e1afec8",
+          "bytes": 9461,
+          "blob": "8ce6a80f7ae99abd7a7cce5a7eef9886e25d2313"
+        },
+        {
+          "file": "backend/src/ai/upload/pages/repository.ts",
+          "sha256": "9e8e9caacea42b88f1f768f8787dc6a876ad2cf580502871e9c9251ea6496536",
+          "bytes": 9510,
+          "blob": "68e5ff3f5e13780d9eb8ea52d8eee27634244088"
+        },
+        {
+          "file": "backend/src/intake/__tests__/draft-identity-db.test.ts",
+          "sha256": "45c67eebde0d4334bdc96b54b9e926e85a95f082fc6e1dfc996cbc7c1dbd5a5d",
+          "bytes": 17513,
+          "blob": "fced0f886fb7d592f79db2a7e070612184e025dd"
+        },
+        {
+          "file": "backend/src/intake/__tests__/draft-identity.test.ts",
+          "sha256": "4987068216817c3a41a211d8985782cb9ecb3e5ebe9cd6ce66f29cf7f69e4478",
+          "bytes": 3266,
+          "blob": "8a9b3bdf97dc38638741546dc0cf9da5b0fbaf41"
+        },
+        {
+          "file": "backend/src/intake/__tests__/draft-source-resume-db.test.ts",
+          "sha256": "599a3875488a6f260fe2aa021c4182ce9589ce44c6ec009a46d80636bd6942a5",
+          "bytes": 4112,
+          "blob": "9a3d64ed45271121e6c1f2675e51b596e99a71db"
+        },
+        {
+          "file": "backend/src/intake/draft-identity.ts",
+          "sha256": "4790ea854c881e0e07004d0d8ac1192679c943484e0cfe9e6e9e99e63ea85f9e",
+          "bytes": 6805,
+          "blob": "e1189a72eaa61ad191e0aa921b0ae3c41d2d32ba"
+        },
+        {
+          "file": "backend/src/intake/draft-service.ts",
+          "sha256": "a65cf832ba098df9a27c9fc4de0c63a9c2ba133deddcc17d6dd58bf3609c1152",
+          "bytes": 19347,
+          "blob": "911a336e9b67e11335e3814909992f63639ba58c"
+        },
+        {
+          "file": "backend/src/routes/import-pages.ts",
+          "sha256": "33b2f62bdb1b78578b5c92831351c8af125276629bcf27c90b7e52187fa79e9f",
+          "bytes": 7909,
+          "blob": "b8d4ed829e39728f0b61bfc1512482078826e231"
+        },
+        {
+          "file": "backend/src/routes/intake-drafts.ts",
+          "sha256": "65ea3bea79d664192b9227af844b2329ec92bc1c5842ad9b63e42a6738a445f6",
+          "bytes": 8076,
+          "blob": "c11556e872933ae2fb7033c606ffa34985292faf"
+        },
+        {
+          "file": "e2e/issue506-workspace.mjs",
+          "sha256": "cc3c26eca9f3b1a5d34fdf70741328c6efd3f5acd58b30a8170c52c4139e976a",
+          "bytes": 24581,
+          "blob": "f0266152fcd60134992a8fbdbccf925aa0039e45"
+        },
+        {
+          "file": "e2e/issue516-resume.mjs",
+          "sha256": "06845d3757d7ae2e9857d879c1e6be7920e8d62f46814f2f531f23d4a19726f8",
+          "bytes": 33948,
+          "blob": "931570eb8b6bd029bf15be5efea98609bcd6098d"
+        },
+        {
+          "file": "frontend/e2e/issue506-workspace.html",
+          "sha256": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05",
+          "bytes": 272,
+          "blob": "d7d68f51e77a498b4064fc25193021f327dede54"
+        },
+        {
+          "file": "frontend/e2e/issue506-workspace.tsx",
+          "sha256": "4fc31c5319186440b5b9db661589a444d9960b96bb431d2c69136a0fd22fc975",
+          "bytes": 2560,
+          "blob": "d469c3f2a1f6bcb13f9483cf24b2304024914d98"
+        },
+        {
+          "file": "frontend/e2e/issue516-resume.tsx",
+          "sha256": "62cbbcda570e318f82440bedf817e9ba1c8a3c23c504c3b9e79f476beabc9a71",
+          "bytes": 3016,
+          "blob": "0cd1e52fe0bc332bf21e5036f0669b8d21353a45"
+        },
+        {
+          "file": "frontend/src/components/operator/NewPatientFlow.tsx",
+          "sha256": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895",
+          "bytes": 3887,
+          "blob": "f265694f12882013acd29d203ac571973e8589c7"
+        },
+        {
+          "file": "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+          "sha256": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac",
+          "bytes": 3914,
+          "blob": "44489324f9b25fc6200b4fcec5289c8fe1c004cd"
+        },
+        {
+          "file": "frontend/src/components/shared/DialogLoading.tsx",
+          "sha256": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4",
+          "bytes": 624,
+          "blob": "35651a3c8e0f142f1979babc7c1cfbb7cd081495"
+        },
+        {
+          "file": "frontend/src/components/shared/DischargeImportModal.tsx",
+          "sha256": "36b058d8f335d3b6ecc214d9785239d360c94bba0d8149e76a9038537b05cc32",
+          "bytes": 25317,
+          "blob": "b3a8bd552f4e9798566d4db5728a99ed722fc924"
+        },
+        {
+          "file": "frontend/src/components/shared/PatientWorkspaceSurface.css",
+          "sha256": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395",
+          "bytes": 504,
+          "blob": "9709e7a2392526f01722128ee9187dbaf82e5e0c"
+        },
+        {
+          "file": "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+          "sha256": "27ff12f6020ef24cc897b03570c3fc4d95156d7584e3f0d70e618b805235084d",
+          "bytes": 4901,
+          "blob": "f2310f2a621c3cd4c6387f45ed21cc734f1c0cc8"
+        },
+        {
+          "file": "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+          "sha256": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41",
+          "bytes": 975,
+          "blob": "649163e1f774ef26e7e40c0179514c1788790651"
+        },
+        {
+          "file": "frontend/src/components/shared/import/ExistingDraftConflict.tsx",
+          "sha256": "51f0fe657d001adb0138ba8c21076a62628c14ad1ab2d4269b34a3eddca9b014",
+          "bytes": 1579,
+          "blob": "22969ac5084b7d57672edd18268e12bcffd1cec5"
+        },
+        {
+          "file": "frontend/src/components/shared/import/ImportReviewWorkspace.tsx",
+          "sha256": "4c428feeeed707d03ae0fc03feeb8dc413a20aa36d2671f090852794a9358e50",
+          "bytes": 12329,
+          "blob": "954d88dcf4ada47c10a11f0b5d0e7bc943905f73"
+        },
+        {
+          "file": "frontend/src/components/shared/import/__tests__/draftImportRecovery.test.ts",
+          "sha256": "6baba7885834cc23d8a6df1390d9abe46901b040d7cfc9c3147649cb7951caac",
+          "bytes": 4884,
+          "blob": "2f40a047373fb2bede9ba0361a21bde22fd4b450"
+        },
+        {
+          "file": "frontend/src/components/shared/import/__tests__/importHandoff.test.ts",
+          "sha256": "1e77653b696ab672075df18d55ab3a9e0c51cd466a28ea89f0084f55bb8f9954",
+          "bytes": 6977,
+          "blob": "ccfe1eef8288bd52b910c1594cc3f646fd6c6e6c"
+        },
+        {
+          "file": "frontend/src/components/shared/import/__tests__/importRecovery.test.ts",
+          "sha256": "c442c9fa9c180436dc2face017360e2278c049e52ac01d4e4e5a91517e5bffb6",
+          "bytes": 10874,
+          "blob": "34ce70b606ffefdcc1e93d29911b04eb7e3a69f0"
+        },
+        {
+          "file": "frontend/src/components/shared/import/draftImportRecovery.ts",
+          "sha256": "d1282f644a08e56e4167ef633e0636d154f9b802e4cf7a6cba94de02b43e2623",
+          "bytes": 2457,
+          "blob": "8f63b8113515204f1dff2f10470aba5e8aed7b17"
+        },
+        {
+          "file": "frontend/src/components/shared/import/importReviewHandoff.ts",
+          "sha256": "915c31764ed47cdf7724ab8020bf23bee8f816076824c4d6e4498d78772c925e",
+          "bytes": 2847,
+          "blob": "f1cf13e035e528720f99fba613de475482921a31"
+        },
+        {
+          "file": "frontend/src/components/shared/import/importSessionApi.ts",
+          "sha256": "8f44204c04da4720dae0137f2c41ef6a403fc6fb76a698472c6a51d208db659b",
+          "bytes": 7400,
+          "blob": "0f9ac7ead354ce3ac613ebeaf18c4fb1d92ad857"
+        },
+        {
+          "file": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+          "sha256": "0374af53c559e51d07ed9e61a27849f8bf3892b4c2fb3a4e226ffc3f769c55a1",
+          "bytes": 50235,
+          "blob": "f7641c5c40632a4dc9989cf154c38bc5094121b7"
+        },
+        {
+          "file": "frontend/src/components/shared/intake/StepIngresso.tsx",
+          "sha256": "5c27024cae1523fc7b218e023257fe7cd72ada3b0e17b8b8e5c1e9da47b7a14c",
+          "bytes": 6800,
+          "blob": "b5d9a058cfe4e69a542e9d2bea6fc845d1c8e172"
+        },
+        {
+          "file": "frontend/src/components/shared/intake/__tests__/intakeDraftApi.test.ts",
+          "sha256": "8dbbd6f6a23cf3afc2001897435a14d3552bbcf97382116ad4be2892f23e747d",
+          "bytes": 6840,
+          "blob": "35679aace1eab42f70f287525cfc0d94a8df3c95"
+        },
+        {
+          "file": "frontend/src/components/shared/intake/intakeDraftApi.ts",
+          "sha256": "5eb18c3dd74612720ac618fb167c683388fa0019c6df5ae3a2aaebce86ca5746",
+          "bytes": 17058,
+          "blob": "5e1ba98911da68ac7411fc4eae83edab1dd20de4"
+        },
+        {
+          "file": "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+          "sha256": "9173e85ab0e84b99c46c289847011c213fdb92e5aa30d3243ae6abe00f5d7205",
+          "bytes": 17349,
+          "blob": "617115a407fbbd6eac546f622f65721092fc5d74"
+        },
+        {
+          "file": "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+          "sha256": "67e965e44d6a5beac7eaf8c57ba9e9b2ef5b1071682063e250409c27546b641e",
+          "bytes": 22547,
+          "blob": "73831414bb02235b0252af79b50d91327eee125f"
+        },
+        {
+          "file": "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts",
+          "sha256": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde",
+          "bytes": 2903,
+          "blob": "8b7443afa1d65b92c168bb55b3cef286969f6076"
+        },
+        {
+          "file": "scripts/e2e/issue-450-ingresso.mjs",
+          "sha256": "43af14f50a80c56794da4775396f63722618cda56b8467d1377701af849a47b1",
+          "bytes": 73001,
+          "blob": "f28b0faa27610cb8fc2e6b0219e6150dc1222ec5"
+        }
+      ],
+      "changedFiles": [
+        "backend/src/ai/upload/pages/__tests__/draft-linked-retention.test.ts",
+        "backend/src/ai/upload/pages/__tests__/draft-source-resume.test.ts",
+        "backend/src/ai/upload/pages/cleanup.ts",
+        "backend/src/ai/upload/pages/draft-mutations.ts",
+        "backend/src/ai/upload/pages/lifecycle.ts",
+        "backend/src/ai/upload/pages/repository.ts",
+        "backend/src/intake/__tests__/draft-identity-db.test.ts",
+        "backend/src/intake/__tests__/draft-identity.test.ts",
+        "backend/src/intake/__tests__/draft-source-resume-db.test.ts",
+        "backend/src/intake/draft-identity.ts",
+        "backend/src/intake/draft-service.ts",
+        "backend/src/routes/import-pages.ts",
+        "backend/src/routes/intake-drafts.ts",
+        "e2e/issue506-workspace.mjs",
+        "e2e/issue516-resume.mjs",
+        "frontend/e2e/issue506-workspace.html",
+        "frontend/e2e/issue506-workspace.tsx",
+        "frontend/e2e/issue516-resume.tsx",
+        "frontend/src/components/operator/NewPatientFlow.tsx",
+        "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+        "frontend/src/components/shared/DialogLoading.tsx",
+        "frontend/src/components/shared/DischargeImportModal.tsx",
+        "frontend/src/components/shared/PatientWorkspaceSurface.css",
+        "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+        "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+        "frontend/src/components/shared/import/ExistingDraftConflict.tsx",
+        "frontend/src/components/shared/import/ImportReviewWorkspace.tsx",
+        "frontend/src/components/shared/import/__tests__/draftImportRecovery.test.ts",
+        "frontend/src/components/shared/import/__tests__/importHandoff.test.ts",
+        "frontend/src/components/shared/import/__tests__/importRecovery.test.ts",
+        "frontend/src/components/shared/import/draftImportRecovery.ts",
+        "frontend/src/components/shared/import/importReviewHandoff.ts",
+        "frontend/src/components/shared/import/importSessionApi.ts",
+        "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+        "frontend/src/components/shared/intake/StepIngresso.tsx",
+        "frontend/src/components/shared/intake/__tests__/intakeDraftApi.test.ts",
+        "frontend/src/components/shared/intake/intakeDraftApi.ts",
+        "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+        "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+        "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts",
+        "scripts/e2e/issue-450-ingresso.mjs"
+      ]
+    }
+  ]
+}

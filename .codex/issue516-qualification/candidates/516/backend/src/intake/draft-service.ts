@@ -1,0 +1,441 @@
+import { prisma } from '../lib/prisma.js';
+import type { DischargeNarrativeDraft } from '../ai/sections/narrative.js';
+import {
+  reconcileLegacyTherapyInventory,
+  therapySourceInventory,
+} from './therapy-source-inventory.js';
+import type { Operator } from '../ai/auth.js';
+import { canAccessOwnedResource } from '../ai/ownership-policy.js';
+import { AiExtractionError } from '../ai/types.js';
+import { hasClinicalPassage, importedPastHistory, splitPastHistory } from './clinical-history.js';
+import { ImportSessionError, object, renewedExpiry } from '../ai/upload/pages/model.js';
+import { assertCurrentReview, assertDraftSource } from '../ai/upload/pages/review.js';
+import { attachPageDraftSource, pageDraftNarrative } from '../ai/upload/pages/draft-source.js';
+import {
+  IMMUTABLE_DRAFT_FIELDS,
+  SERVER_DRAFT_KEYS,
+  assertDraftVersion,
+  draftLinkChanged,
+  draftPatchReceipt,
+  guardPageRows,
+} from '../ai/upload/pages/draft-mutations.js';
+import { saveReceipt } from '../ai/upload/pages/repository.js';
+import { sexFromCodiceFiscale } from '../lib/codice-fiscale.js';
+import {
+  applyReviewedIntakeIdentity,
+  guardOpenIntakeIdentity,
+  reviewedIntakeIdentity,
+} from './draft-identity.js';
+
+// ── Allergene sanitation (import seeding) ────────────────────────────────────
+// CLINICAL SAFETY: an `allergene` is a CONCISE allergen name, never a clinical narrative. Real
+// discharge letters sometimes make the allergies extraction over-capture the surrounding text
+// (anamnesi, patologie, home therapy). Seeding that blob verbatim creates one false 1000+ char
+// "allergy". These guards reject blobs and split a clean allergy text into individual allergen rows.
+
+const MAX_ALLERGEN_LEN = 120;
+// Headers that mark NON-allergy clinical sections — their presence means the text is a narrative dump.
+const NON_ALLERGY_MARKERS =
+  /(patologie|anamnesi|a\.\s*(pat|familiare|fisiologica)|tp\s+domiciliare|terapia\s+domiciliare|ospite|diagnosi|ricover|decorso|dislipidemia|ipertensione)/i;
+
+/** True only when the text plausibly IS an allergen (concise, single block), not a narrative. */
+export function isPlausibleAllergenText(text: string): boolean {
+  const t = (text ?? '').trim();
+  if (!t) return false;
+  if (t.length > 400) return false; // whole-narrative dump
+  if (/\n\s*\n/.test(t)) return false; // blank-line-separated sections
+  if (NON_ALLERGY_MARKERS.test(t)) return false;
+  return true;
+}
+
+/** Concise allergy text → one allergen per line/`;`, trimmed + length-capped. [] for a blob. */
+export function deriveAllergens(text: string): string[] {
+  if (!isPlausibleAllergenText(text)) return [];
+  return (text ?? '')
+    .split(/[\n;]+/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .filter((s) => s.length <= MAX_ALLERGEN_LEN)
+    .slice(0, 10);
+}
+
+// ── Patient Intake Draft Service (F3 EPIC #120 / Issue #125) ─────────────────
+// CRUD + autosave for PatientIntakeDraft. patchDraft shallow-merges top-level
+// keys of `patch` into the stored `data` JSON (last-write-wins per section).
+
+export interface CreateDraftOpts {
+  createdById?: string;
+  source?: 'manual' | 'import';
+  importJobId?: string;
+}
+
+export async function createDraft(opts: CreateDraftOpts = {}) {
+  if (opts.importJobId)
+    return seedDraftFromImport(opts.importJobId, { createdById: opts.createdById });
+  return prisma.patientIntakeDraft.create({
+    data: {
+      status: 'draft',
+      source: opts.source ?? 'manual',
+      createdById: opts.createdById,
+      importJobId: opts.importJobId,
+      data: {},
+    },
+  });
+}
+
+export async function getDraft(id: string) {
+  const draft = await prisma.patientIntakeDraft.findUnique({ where: { id } });
+  if (!draft || draft.status !== 'draft' || !draft.importJobId) return draft;
+  const importJob = await prisma.importJob.findUnique({
+    where: { id: draft.importJobId },
+    select: { resultData: true },
+  });
+  return importJob
+    ? { ...draft, data: reconcileLegacyTherapyInventory(object(draft.data), importJob.resultData) }
+    : draft;
+}
+
+export async function patchDraft(id: string, rawPatch: Record<string, unknown>) {
+  // AI merge bookkeeping is server-owned. The deployed frontend autosaves whole sections, so these
+  // keys are dropped silently instead of rejected.
+  const patch = Object.fromEntries(
+    Object.entries(rawPatch).filter(
+      ([key]) => !(SERVER_DRAFT_KEYS as readonly string[]).includes(key),
+    ),
+  );
+  for (const immutableKey of IMMUTABLE_DRAFT_FIELDS) {
+    if (Object.hasOwn(patch, immutableKey)) {
+      throw new AiExtractionError(
+        'config',
+        `Il campo di importazione ${immutableKey} non può essere modificato`,
+      );
+    }
+  }
+  const hint = await prisma.patientIntakeDraft.findUniqueOrThrow({
+    where: { id },
+    select: { importJobId: true },
+  });
+  return prisma.$transaction(async (tx) => {
+    if (hint.importJobId)
+      await tx.$queryRaw`SELECT "id" FROM "ImportJob" WHERE "id"=${hint.importJobId} FOR UPDATE`;
+    await tx.$queryRaw`SELECT "id" FROM "PatientIntakeDraft" WHERE "id" = ${id} FOR UPDATE`;
+    const current = await tx.patientIntakeDraft.findUniqueOrThrow({ where: { id } });
+    // Locks are always job → draft; a link or unlink since the unlocked hint means the job row
+    // was not locked first, so refuse (retryable) instead of risking a lock-order inversion.
+    if (current.importJobId !== hint.importJobId) throw draftLinkChanged();
+    if (current.status !== 'draft')
+      throw new AiExtractionError(
+        'config',
+        'La bozza è già confermata e non può essere modificata',
+      );
+    let existingData = (current.data ?? {}) as Record<string, unknown>;
+    const pageSession = !!existingData._importSource;
+    const r = await draftPatchReceipt(tx, current, patch);
+    if (r?.previous) return current;
+    // A draft linked to a page session before the final merge is versioned too: merges write
+    // into it concurrently with autosave, so a blind write could silently undo them.
+    const linkedJob =
+      !pageSession && current.importJobId
+        ? await tx.importJob.findUnique({
+            where: { id: current.importJobId },
+            select: { status: true, manifest: true, resultData: true },
+          })
+        : null;
+    const linkedPage = !!linkedJob && object(linkedJob.manifest).version === 1;
+    if (linkedJob && !linkedPage)
+      existingData = reconcileLegacyTherapyInventory(existingData, linkedJob.resultData);
+    if (linkedPage && patch.expectedDraftVersion === undefined)
+      throw new ImportSessionError(
+        409,
+        'draft_version_required',
+        'La bozza è collegata a documenti: ricarica prima di salvare.',
+        { currentVersion: current.version },
+      );
+    assertDraftVersion(current, patch.expectedDraftVersion, pageSession || linkedPage);
+    const { expectedDraftVersion: _version, requestId: _requestId, ...editable } = patch;
+    const job =
+      pageSession && current.importJobId
+        ? await tx.importJob.findUniqueOrThrow({ where: { id: current.importJobId } })
+        : null;
+    const review =
+      job?.status === 'review_ready' &&
+      object(object(job.resultData)._source).manifestRevision === job.manifestRevision
+        ? object(job.resultData)
+        : undefined;
+    guardPageRows(existingData, editable, review);
+    if (Array.isArray(existingData.terapiaImport) && patch.terapiaImport !== undefined) {
+      const previous = existingData.terapiaImport as Record<string, unknown>[];
+      if (
+        !Array.isArray(patch.terapiaImport) ||
+        patch.terapiaImport.length < previous.length ||
+        previous.some(
+          (row, index) =>
+            row.originalText !==
+            (patch.terapiaImport as Record<string, unknown>[])[index]?.originalText,
+        )
+      )
+        throw new AiExtractionError(
+          'config',
+          'Conserva le righe originali: usa Lascia in bozza per escludere una terapia',
+        );
+    }
+    const merged: Record<string, unknown> = { ...existingData, ...editable };
+    await guardOpenIntakeIdentity(tx, {
+      ownerId: current.createdById ?? null,
+      draftId: current.id,
+      previousData: existingData,
+      data: merged,
+    });
+    const updated = await tx.patientIntakeDraft.update({
+      where: { id },
+      data: {
+        data: merged as Parameters<typeof prisma.patientIntakeDraft.update>[0]['data']['data'],
+        version: { increment: 1 },
+      },
+    });
+    if (r && job) {
+      await saveReceipt(tx, job.id, r, 'draft-patch', job.manifestRevision, {
+        draftId: id,
+        version: updated.version,
+      });
+      if (!['cancelled', 'expired', 'confirmed'].includes(job.status))
+        await tx.importJob.update({ where: { id: job.id }, data: { expiresAt: renewedExpiry() } });
+    } else if (linkedPage && !['cancelled', 'expired', 'confirmed'].includes(linkedJob.status)) {
+      // A draft linked to a page session keeps its temporary documents alive while edited.
+      await tx.importJob.update({
+        where: { id: current.importJobId! },
+        data: { expiresAt: renewedExpiry() },
+      });
+    }
+    return updated;
+  });
+}
+
+export async function listDrafts(createdById?: string) {
+  return prisma.patientIntakeDraft.findMany({
+    where: {
+      status: 'draft',
+      ...(createdById ? { createdById } : {}),
+    },
+    orderBy: { updatedAt: 'desc' },
+  });
+}
+
+// ── F5 #124 — seed an intake draft from a finished AI extraction job ──────────
+
+export interface SeedDraftFromImportOpts {
+  createdById?: string;
+  actor?: Operator;
+  sourcePair?: unknown;
+  reviewedIdentity?: unknown;
+}
+
+/**
+ * Build the `data` object for an import-seeded intake draft.
+ * Shapes match what the intake workspace editors actually read:
+ *   - anagrafica: flat demographics object (IntakeWorkspace / StepAnagrafica)
+ *   - anamnesi:   supported prior history plus lossless legacy/source text
+ *   - diagnosi:   Diagnosi[] single-item array (DiagnosisEditor)
+ *   - allergie:   AllergiaItem[] single-item array (AllergiesEditor)
+ *   - _narrative: lossless copy for confirmDraft (confirm-service reads draft.data._narrative)
+ *   - _sections:  raw sections pass output (preserved for review panel)
+ *   - _importedFields: which top-level keys were seeded (for compare panel / UI hints)
+ */
+export function buildImportDraftData(
+  narrative: DischargeNarrativeDraft,
+  rawSections: unknown,
+  structuredExtraction?: unknown,
+): Record<string, unknown> {
+  const seeded: Record<string, unknown> = {};
+
+  // 1. Anagrafica — always present (even if mostly empty).
+  // Explicit source values, including a contradiction with the CF, belong to the
+  // operator's review. Only an absent sex may receive this traceable suggestion.
+  const derivedSex = narrative.sex?.trim() ? null : sexFromCodiceFiscale(narrative.fiscalCode);
+  const anagrafica: Record<string, unknown> = {
+    firstName: narrative.firstName ?? '',
+    lastName: narrative.lastName ?? '',
+    dateOfBirth: narrative.dateOfBirth ?? '',
+    ...(derivedSex ? { sex: derivedSex } : narrative.sex ? { sex: narrative.sex } : {}),
+    ...(narrative.fiscalCode ? { codiceFiscale: narrative.fiscalCode } : {}),
+    ...(narrative.phone ? { phone: narrative.phone } : {}),
+    ...(narrative.email ? { email: narrative.email } : {}),
+    ...(narrative.address ? { address: narrative.address } : {}),
+  };
+  seeded.anagrafica = anagrafica;
+  if (derivedSex) {
+    seeded._derivedFields = {
+      anagrafica: { sex: { source: 'codiceFiscale', value: derivedSex, reviewRequired: true } },
+    };
+  }
+
+  // Keep the full source for review; populate prior history only from explicit labels.
+  const pastHistory = importedPastHistory(narrative, rawSections);
+  if (narrative.anamnesisText || pastHistory) {
+    seeded.anamnesi = {
+      ...(narrative.anamnesisText ? { patologicaProssima: narrative.anamnesisText } : {}),
+      ...(pastHistory ? { patologicaRemota: pastHistory } : {}),
+    };
+  }
+
+  // 3. Diagnosi — DiagnosisEditor reads value as Diagnosi[].
+  // A past-history heading accidentally grouped under diagnosis remains accessible in
+  // both the retained history and immutable source, but is not seeded as active disease.
+  const diagnosisText = splitPastHistory(narrative.diagnosisText ?? '').remaining;
+  if (hasClinicalPassage(diagnosisText)) {
+    seeded.diagnosi = [
+      {
+        id: crypto.randomUUID(),
+        descrizione: diagnosisText,
+        tipo: 'principale',
+        stato: 'attiva',
+        dataInsorgenza: '',
+        dataRisoluzione: undefined,
+        operatore: '',
+        note: '',
+        createdAt: new Date().toISOString(),
+      },
+    ];
+  }
+
+  // 4. Allergie — AllergiesEditor reads value as AllergiaItem[].
+  //    CLINICAL SAFETY: only seed a real allergy row when the status affirmatively
+  //    indicates an allergy is present (or contradictory and needs operator review).
+  //    A "nessuna allergia nota" discharge document has allergiesText but
+  //    allergyStatus 'explicitly_absent' / 'not_documented' — seeding a row there
+  //    would create a FALSE allergy record. Status is always preserved in _narrative.
+  const ALLERGY_SEED_STATUSES: ReadonlyArray<DischargeNarrativeDraft['allergyStatus']> = [
+    'present',
+    'conflicting',
+  ];
+  //    Seed one row PER concise allergen; reject a narrative blob (deriveAllergens returns [] →
+  //    no false allergy row; the full text stays in _narrative below for operator review).
+  if (narrative.allergiesText && ALLERGY_SEED_STATUSES.includes(narrative.allergyStatus)) {
+    const allergens = deriveAllergens(narrative.allergiesText);
+    if (allergens.length > 0) {
+      seeded.allergie = allergens.map((allergene) => ({
+        id: crypto.randomUUID(),
+        allergene,
+        gravita: 'lieve' as const,
+        reazione: '',
+        documentato: '',
+        documentatoDa: '',
+      }));
+    }
+  }
+
+  // 5. Terapia rilevata (#156) — parse the discharge therapy text into STRUCTURED rows, ONE per
+  //    drug, under a DEDICATED key `terapiaImport` (the "Terapie rilevate dalla lettera" review
+  //    section). It is intentionally NOT `data.terapia`: that key belongs to the manual
+  //    TherapyFormValue editor and its confirm mapper (therapyFormToInput) — putting a
+  //    ParsedTherapyRow there would break confirm. Incomplete lines keep stato 'da_verificare'
+  //    (never dropped); the raw text is stashed under _terapiaText for lossless audit.
+  //    Prescriptions written outside the therapy section join as da_verificare rows.
+  const therapyRows = therapySourceInventory(
+    narrative as unknown as Record<string, unknown>,
+    object(object(structuredExtraction).cartella).farmaci,
+  );
+  if (therapyRows.length > 0) seeded.terapiaImport = therapyRows;
+  if (narrative.therapyText) seeded._terapiaText = narrative.therapyText;
+
+  // 6. Lossless provenance — preserved for confirmDraft + compare panel.
+  seeded._narrative = narrative;
+  seeded._sections = rawSections ?? null;
+  seeded._importedFields = (
+    ['anagrafica', 'anamnesi', 'diagnosi', 'allergie', 'terapiaImport'] as const
+  ).filter((k) => seeded[k] !== undefined);
+
+  return seeded;
+}
+
+/**
+ * Find or create a `source='import'` intake draft seeded from a finished extraction job.
+ * Idempotent: if a draft already exists for `jobId`, returns it without creating a second one.
+ */
+export async function seedDraftFromImport(jobId: string, opts: SeedDraftFromImportOpts = {}) {
+  const reviewed = reviewedIntakeIdentity(opts.reviewedIdentity);
+  return prisma.$transaction(
+    async (tx) => {
+      await tx.$queryRaw`SELECT "id" FROM "ImportJob" WHERE "id" = ${jobId} FOR UPDATE`;
+      const job = await tx.importJob.findUniqueOrThrow({ where: { id: jobId } });
+      const jobAllowed = opts.actor
+        ? canAccessOwnedResource(opts.actor, job.createdById)
+        : (job.createdById ?? null) === (opts.createdById ?? null);
+      if (!jobAllowed) throw new AiExtractionError('not_found', 'Job non trovato');
+      if (job.status === 'confirmed' || job.createdPatientId)
+        throw new AiExtractionError(
+          'config',
+          'Documento già confermato: apri la scheda del paziente per aggiornare i dati.',
+        );
+      const pageResult =
+        object(job.manifest).version === 1 ? assertCurrentReview(job, opts.sourcePair) : null;
+      // Idempotency check: return existing draft for this job.
+      const existing = await tx.patientIntakeDraft.findFirst({
+        where: { importJobId: jobId },
+      });
+      if (existing) {
+        const allowed = opts.actor
+          ? canAccessOwnedResource(opts.actor, existing.createdById)
+          : (existing.createdById ?? null) === (opts.createdById ?? null);
+        if (!allowed) throw new AiExtractionError('not_found', 'Bozza non trovata');
+        if (pageResult) assertDraftSource(object(existing.data), pageResult);
+        return existing.status === 'draft' && !pageResult
+          ? {
+              ...existing,
+              data: reconcileLegacyTherapyInventory(object(existing.data), job.resultData),
+            }
+          : existing;
+      }
+
+      const resultData = job.resultData as Record<string, unknown> | null;
+      const narrative = resultData?._narrative as DischargeNarrativeDraft | undefined;
+
+      if (!narrative) {
+        throw new Error(
+          `importJob ${jobId} has no _narrative in resultData — extraction must complete before seeding a draft`,
+        );
+      }
+
+      const seeded = applyReviewedIntakeIdentity(
+        buildImportDraftData(
+          pageResult ? pageDraftNarrative(pageResult) : narrative,
+          resultData?._sections ?? null,
+          resultData?._full ?? resultData,
+        ),
+        reviewed,
+      );
+      const data = pageResult ? attachPageDraftSource(seeded, pageResult) : seeded;
+      await guardOpenIntakeIdentity(tx, { ownerId: opts.createdById ?? null, data });
+      if (pageResult)
+        await tx.importJob.update({ where: { id: jobId }, data: { expiresAt: renewedExpiry() } });
+
+      try {
+        return await tx.patientIntakeDraft.create({
+          data: {
+            status: 'draft',
+            source: 'import',
+            importJobId: jobId,
+            createdById: opts.createdById,
+            data: data as Parameters<typeof prisma.patientIntakeDraft.create>[0]['data']['data'],
+          },
+        });
+      } catch (err) {
+        // Concurrency guard: a parallel POST /from-import for the same job may have created
+        // the draft between our findFirst and this create. The @unique on importJobId makes
+        // that a P2002 — re-read and return the existing draft instead of failing.
+        if (err && typeof err === 'object' && (err as { code?: string }).code === 'P2002') {
+          const raced = await tx.patientIntakeDraft.findFirst({ where: { importJobId: jobId } });
+          if (raced) {
+            const allowed = opts.actor
+              ? canAccessOwnedResource(opts.actor, raced.createdById)
+              : (raced.createdById ?? null) === (opts.createdById ?? null);
+            if (!allowed) throw new AiExtractionError('not_found', 'Bozza non trovata');
+            return raced;
+          }
+        }
+        throw err;
+      }
+    },
+    { maxWait: 15000, timeout: 30000 },
+  );
+}

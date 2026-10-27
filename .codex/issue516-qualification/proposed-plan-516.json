@@ -1,0 +1,94 @@
+{
+  "scope": [
+    "backend/src/ai/upload/pages/__tests__/draft-linked-retention.test.ts",
+    "backend/src/ai/upload/pages/__tests__/draft-source-resume.test.ts",
+    "backend/src/ai/upload/pages/cleanup.ts",
+    "backend/src/ai/upload/pages/draft-mutations.ts",
+    "backend/src/ai/upload/pages/lifecycle.ts",
+    "backend/src/ai/upload/pages/repository.ts",
+    "backend/src/intake/__tests__/draft-identity-db.test.ts",
+    "backend/src/intake/__tests__/draft-identity.test.ts",
+    "backend/src/intake/__tests__/draft-source-resume-db.test.ts",
+    "backend/src/intake/draft-identity.ts",
+    "backend/src/intake/draft-service.ts",
+    "backend/src/routes/import-pages.ts",
+    "backend/src/routes/intake-drafts.ts",
+    "e2e/issue506-workspace.mjs",
+    "e2e/issue516-resume.mjs",
+    "frontend/e2e/issue506-workspace.html",
+    "frontend/e2e/issue506-workspace.tsx",
+    "frontend/e2e/issue516-resume.tsx",
+    "frontend/src/components/operator/NewPatientFlow.tsx",
+    "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+    "frontend/src/components/shared/DialogLoading.tsx",
+    "frontend/src/components/shared/DischargeImportModal.tsx",
+    "frontend/src/components/shared/PatientWorkspaceSurface.css",
+    "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+    "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+    "frontend/src/components/shared/import/ExistingDraftConflict.tsx",
+    "frontend/src/components/shared/import/ImportReviewWorkspace.tsx",
+    "frontend/src/components/shared/import/__tests__/draftImportRecovery.test.ts",
+    "frontend/src/components/shared/import/__tests__/importHandoff.test.ts",
+    "frontend/src/components/shared/import/__tests__/importRecovery.test.ts",
+    "frontend/src/components/shared/import/draftImportRecovery.ts",
+    "frontend/src/components/shared/import/importReviewHandoff.ts",
+    "frontend/src/components/shared/import/importSessionApi.ts",
+    "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+    "frontend/src/components/shared/intake/StepIngresso.tsx",
+    "frontend/src/components/shared/intake/__tests__/intakeDraftApi.test.ts",
+    "frontend/src/components/shared/intake/intakeDraftApi.ts",
+    "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+    "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+    "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts",
+    "scripts/e2e/issue-450-ingresso.mjs"
+  ],
+  "verification": [
+    {
+      "command": "npm",
+      "args": [
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ]
+    },
+    {
+      "command": "npm",
+      "args": [
+        "--prefix",
+        "frontend",
+        "test"
+      ]
+    },
+    {
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "--test-concurrency=1",
+        "backend/src/intake/__tests__/draft-identity.test.ts",
+        "backend/src/intake/__tests__/draft-identity-db.test.ts",
+        "backend/src/intake/__tests__/draft-source-resume-db.test.ts",
+        "backend/src/ai/upload/pages/__tests__/draft-linked-retention.test.ts",
+        "backend/src/ai/upload/pages/__tests__/draft-source-resume.test.ts"
+      ]
+    },
+    {
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx",
+        "e2e/issue516-resume.mjs"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "issue": 516,
+      "screenshot": "artifacts/task-validation/bug-batch-516/evidence/screenshots/recovery-offered-390.png",
+      "trace": "artifacts/task-validation/bug-batch-516/evidence/trace/issue516-390.zip",
+      "video": "artifacts/task-validation/bug-batch-516/evidence/video/issue516-390.webm"
+    }
+  ]
+}

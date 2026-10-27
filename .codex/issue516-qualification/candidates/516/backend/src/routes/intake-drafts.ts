@@ -1,0 +1,214 @@
+import { Router } from 'express';
+import { requireOperator, type AuthedRequest } from '../ai/auth.js';
+import {
+  createDraft,
+  getDraft,
+  patchDraft,
+  listDrafts,
+  seedDraftFromImport,
+} from '../intake/draft-service.js';
+import { confirmDraft, type ConfirmPayload } from '../ai/upload/confirm-service.js';
+import { AiExtractionError } from '../ai/types.js';
+import { importJobIsAccessible, requireOwnedIntakeDraft } from '../ai/ownership.js';
+import { ImportSessionError } from '../ai/upload/pages/model.js';
+import { refreshImportDraft, decideImportProposal } from '../ai/upload/pages/draft-mutations.js';
+import {
+  linkImportJob,
+  unlinkImportJob,
+  mergeImportIntoDraft,
+  decideDraftFieldProposal,
+} from '../ai/upload/pages/draft-link.js';
+
+// ── Intake Drafts Router — mounted at /intake/drafts (F3 EPIC #120 / #125) ───
+// Operator-gated CRUD + autosave endpoints for PatientIntakeDraft.
+
+const intakeDraftsRouter = Router();
+
+// Phase 6 (leakage): draft patient data must never be stored by browsers or intermediaries.
+intakeDraftsRouter.use((_req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-store');
+  next();
+});
+intakeDraftsRouter.use(requireOperator);
+intakeDraftsRouter.param('id', requireOwnedIntakeDraft);
+
+function handleError(res: import('express').Response, err: unknown) {
+  if (err instanceof ImportSessionError)
+    return res.status(err.status).json({ error: err.message, code: err.code, ...err.details });
+  // Clinical-safety / validation blocks from confirmDraft (allergy conflict, section loss,
+  // invalid input) carry a specific Italian message the UI must surface — map like ai-jobs.
+  if (err instanceof AiExtractionError) {
+    const status = err.kind === 'not_found' ? 404 : err.kind === 'config' ? 400 : 503;
+    return res.status(status).json({ error: err.message, kind: err.kind });
+  }
+  // Prisma "record not found" (e.g. patchDraft on a missing/confirmed draft) → 404, not 500.
+  if (err && typeof err === 'object' && (err as { code?: string }).code === 'P2025') {
+    return res.status(404).json({ error: 'Bozza non trovata' });
+  }
+  console.error('intake-drafts error:', err instanceof Error ? err.message : err);
+  return res.status(500).json({ error: 'Errore interno bozza intake' });
+}
+
+// POST /intake/drafts/from-import — seed a draft from a completed AI extraction job.
+// Body: { importJobId: string }
+// Idempotent: if a draft already exists for the jobId, returns it (no duplicate).
+// Returns 201 { id, data } on create or idempotent return.
+intakeDraftsRouter.post('/from-import', async (req, res) => {
+  try {
+    const op = (req as AuthedRequest).operator;
+    const { importJobId } = req.body ?? {};
+    if (typeof importJobId !== 'string' || !importJobId.trim()) {
+      return res.status(400).json({ error: 'importJobId è obbligatorio' });
+    }
+    if (!(await importJobIsAccessible(importJobId.trim(), op))) {
+      return res.status(404).json({ error: 'Job non trovato' });
+    }
+    const draft = await seedDraftFromImport(importJobId.trim(), {
+      createdById: op?.id,
+      actor: op,
+      sourcePair: req.body,
+      reviewedIdentity: req.body?.reviewedIdentity,
+    });
+    return res.status(201).json(draft);
+  } catch (err) {
+    // Map "job not found" (Prisma P2025) → 404, missing _narrative → 422.
+    if (err instanceof Error && err.message.includes('_narrative')) {
+      return res.status(422).json({ error: err.message });
+    }
+    return handleError(res, err);
+  }
+});
+
+// POST /intake/drafts — create a new draft
+intakeDraftsRouter.post('/', async (req, res) => {
+  try {
+    const op = (req as AuthedRequest).operator;
+    const { source, importJobId } = req.body ?? {};
+    const normalizedImportJobId = typeof importJobId === 'string' ? importJobId.trim() : undefined;
+    if (normalizedImportJobId && !(await importJobIsAccessible(normalizedImportJobId, op))) {
+      return res.status(404).json({ error: 'Job non trovato' });
+    }
+    const draft = await createDraft({
+      createdById: op?.id,
+      source: source === 'import' ? 'import' : 'manual',
+      importJobId: normalizedImportJobId,
+    });
+    return res.status(201).json(draft);
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+
+// GET /intake/drafts — list open drafts (optionally filtered by operator)
+intakeDraftsRouter.get('/', async (req, res) => {
+  try {
+    const op = (req as AuthedRequest).operator;
+    const drafts = await listDrafts(op?.id);
+    return res.status(200).json(drafts);
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+
+// GET /intake/drafts/:id — get a single draft
+intakeDraftsRouter.get('/:id', async (req, res) => {
+  try {
+    const draft = await getDraft(String(req.params.id));
+    if (!draft) return res.status(404).json({ error: 'Bozza non trovata' });
+    return res.status(200).json(draft);
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+
+// PATCH /intake/drafts/:id — autosave: shallow-merge top-level keys into data
+intakeDraftsRouter.patch('/:id', async (req, res) => {
+  try {
+    const patch = (req.body ?? {}) as Record<string, unknown>;
+    const draft = await patchDraft(String(req.params.id), patch);
+    return res.status(200).json(draft);
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+
+intakeDraftsRouter.post('/:id/refresh-import', async (req, res) => {
+  try {
+    return res.json(await refreshImportDraft(String(req.params.id), req.body));
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+intakeDraftsRouter.post('/:id/import-proposals/:proposalId/decide', async (req, res) => {
+  try {
+    return res.json(
+      await decideImportProposal(String(req.params.id), String(req.params.proposalId), req.body),
+    );
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+
+// Documents inside an open draft (additive; see ai/upload/pages/draft-link.ts for the rules).
+// POST /intake/drafts/:id/import-job { importJobId, expectedDraftVersion, requestId }
+intakeDraftsRouter.post('/:id/import-job', async (req, res) => {
+  try {
+    const op = (req as AuthedRequest).operator!;
+    return res.json(await linkImportJob(String(req.params.id), req.body, op));
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+// DELETE /intake/drafts/:id/import-job — only before the final merge; cancels the session.
+intakeDraftsRouter.delete('/:id/import-job', async (req, res) => {
+  try {
+    const op = (req as AuthedRequest).operator!;
+    return res.json(await unlinkImportJob(String(req.params.id), req.body, op));
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+// POST /intake/drafts/:id/merge-import — per letter { groupId? } or final { manifestRevision, resultHash }
+intakeDraftsRouter.post('/:id/merge-import', async (req, res) => {
+  try {
+    return res.json(await mergeImportIntoDraft(String(req.params.id), req.body));
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+// POST /intake/drafts/:id/field-proposals/:proposalId/decide { action: 'apply'|'keep', ... }
+intakeDraftsRouter.post('/:id/field-proposals/:proposalId/decide', async (req, res) => {
+  try {
+    return res.json(
+      await decideDraftFieldProposal(
+        String(req.params.id),
+        String(req.params.proposalId),
+        req.body,
+      ),
+    );
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+
+// POST /intake/drafts/:id/confirm — transactional patient creation from draft.
+// Body: { patient, cartella?, confirmDuplicate? }
+// 201 created / 200 idempotent|updated / 409 duplicate (mirrors ai-jobs.ts confirm).
+intakeDraftsRouter.post('/:id/confirm', async (req, res) => {
+  try {
+    const payload = (req.body ?? {}) as ConfirmPayload;
+    const result = await confirmDraft(
+      String(req.params.id),
+      payload,
+      (req as AuthedRequest).operator!,
+    );
+    if (result.status === 'duplicate') {
+      return res.status(409).json(result);
+    }
+    return res.status(result.status === 'created' ? 201 : 200).json(result);
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+
+export default intakeDraftsRouter;
