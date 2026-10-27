@@ -1,12 +1,8 @@
 # Issue grouping
 
-Batch: bug-batch-506
-Baseline: 715a4b9e47ff9bd0192b7f58f24271e48da4900d
-Feature: patient-intake/routed-workspace-presentation
+Issue #506; feature patient-intake/routed-workspace-presentation; baseline 715a4b9e47ff9bd0192b7f58f24271e48da4900d.
 
 Separate newly authorized issue; different root cause and nonoverlapping source files from the other new issue, preserving independent acceptance/evidence and ongoing automation reviews.
-
-## Issue to affected files
 
 [
   {
@@ -28,8 +24,6 @@ Separate newly authorized issue; different root cause and nonoverlapping source 
   }
 ]
 
-## Separation from overlapping groups
-
 Independent root causes and no shared changed source files: #506 page surfaces/navigation versus #507 therapy date provenance. Separate worktrees and per-issue PRs avoid coupling.
 
-This is a new explicit source/evidence packet. Original unpublished C5 packet bytes were not recovered; its hash identities and FAILED journals remain canonical history. Existing published Git history remains unchanged.
+Frozen cohort remains unchanged; issue516 is separate.

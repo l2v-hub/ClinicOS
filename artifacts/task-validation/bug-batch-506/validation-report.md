@@ -1,9 +1,9 @@
 # Validation report
 
-All three exact required commands passed in real GitHub Actions40427317780 against CODE 04d92b6335775f6d975266b50ea6435ffc7fb906; accepted native no-tests/evidence predicates passed. Screenshot, trace and video were freshly generated and validated; hashes are in evidence-manifest.json. Evidence relay40428566583 matched all bytes.
+Actual native40482705275: all3 plan commands PASS, native PNG/trace/video validation PASS; all exact CODE source hashes matched. Fixed read-only40491321534 returned identical primary bytes plus one supplemental screenshot. Independent source QA PASS_SOURCE_READY_FOR_NATIVE_QUALIFICATION, zero blockers, seal 6dbbd91b09783cce20421106cbd775adaa69531aa8e60fefaed62806faf4a25d. Source code in the final published commit must be byte-identical to the qualified CODE.
 
-This is synthetic actual-component browser regression, not authenticated online acceptance. Independent source QA, final-head required CI, genuine new-head Claude peer and subsequent fresh final Codex review are pending sequential gates.
+Source independent QA and real native verification/evidence have passed on the immutable CODE. Six required checks on the final published head, new genuine Claude peer, fresh final Codex, protected merge and deployed acceptance are sequential pending gates. No issue closure or deployment acceptance is claimed.
 
 ## Final Decision
 
-PARTIAL — no merge, deployment verification or issue closure yet.
+PARTIAL — awaiting final-head CI, peer, final Codex and protected release/deployed verification.

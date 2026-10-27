@@ -1,4 +1,4 @@
-# Frozen implementation plan
+# Versioned implementation plan
 
 Branch: codex/bug-batch-506
 Baseline: 715a4b9e47ff9bd0192b7f58f24271e48da4900d
@@ -7,7 +7,7 @@ Baseline: 715a4b9e47ff9bd0192b7f58f24271e48da4900d
   "title": "Mantieni import e bozze nello spazio principale della pagina",
   "feature": "patient-intake/routed-workspace-presentation",
   "rationale": "Separate newly authorized issue; different root cause and nonoverlapping source files from the other new issue, preserving independent acceptance/evidence and ongoing automation reviews.",
-  "analysis": "Global viewport modal overlays covered the shell in document, review, lazy-loading and resumed-intake phases; explicit page presentation reuses existing navigation and preserves pending-save and modal safeguards.\nHarness-only evidence version: actual native C5 build/frontend tests passed; bundled Playwright qualified in40423083192. The same behavioral regression runs with a self-owned loopback server, sealed default environment and deterministic current evidence paths. All old plans, FAILED journals and four retained source snapshots remain preserved.",
+  "analysis": "Global viewport modal overlays covered the shell in document, review, lazy-loading and resumed-intake phases; explicit page presentation reuses existing navigation and preserves pending-save and modal safeguards.\nHarness-only evidence version: actual native C5 build/frontend tests passed; bundled Playwright qualified in40423083192. The same behavioral regression runs with a self-owned loopback server, sealed default environment and deterministic current evidence paths. All old plans, FAILED journals and four retained source snapshots remain preserved.\n\nLatest genuine-peer correction: A failed save now releases the pending route; a later route asks again, non-navigation close cannot replay a stale destination, finished uploads clear the notice, and the same mobile confirmation is portalled outside the clipped workspace. Real four-width browser cases cover save failure, second route and visible confirmation.",
   "execution": {
     "difficulty": "medium",
     "mode": "direct",
