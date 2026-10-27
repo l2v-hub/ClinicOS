@@ -190,7 +190,8 @@ export async function exportFailedCode({ batch, workspace, outputRoot }) {
     const file = `artifacts/task-validation/${batch.id}/model-results/${round}-${progress.failedStep}.json`;
     const identity = checkpoint.output[file];
     modelReport = { availability: 'not-recorded' };
-    if (identity) {
+    const retention = progress.modelReportRetention?.[progress.failedStep];
+    if (retention !== 'not-recorded' && identity) {
       try {
         const { target, info } = await regularFile(cwd, file);
         assert.ok(info.size <= 64 * 1024 && info.size === identity.bytes);

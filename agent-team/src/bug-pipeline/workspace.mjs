@@ -217,6 +217,7 @@ export function createWorkspace({ root, repo, run, models }) {
         }
       }
     }
+    const file = `model-results/${round}-${step}.json`;
     const report = {
       schemaVersion: 1,
       kind: 'terminal-model-result',
@@ -227,17 +228,46 @@ export function createWorkspace({ root, repo, run, models }) {
       summaryDisposition,
       originalSummarySha256: original === null ? null : sha256(original),
     };
-    const file = packetFile(batch, `model-results/${round}-${step}.json`);
-    await mkdir(path.dirname(file), { recursive: true });
-    const content = JSON.stringify(report, null, 2) + '\n';
-    // Never replace another outcome from the same reserved attempt.
-    const previous = await readFile(file, 'utf8').catch((e) => {
-      if (e.code === 'ENOENT') return null;
-      throw e;
-    });
-    if (previous !== null) {
-      if (previous !== content) throw new Error('Terminal model report identity changed');
-    } else await writeFile(file, content, { flag: 'wx', mode: 0o600 });
+    let content = JSON.stringify(report, null, 2) + '\n';
+    if (Buffer.byteLength(content) > 64 * 1024) {
+      report.summary = null;
+      report.summaryDisposition = 'omitted-oversized';
+      content = JSON.stringify(report, null, 2) + '\n';
+    }
+    try {
+      const { cwd, packet } = coordinates(batch);
+      const target = path.join(cwd, packet, file);
+      // Check every existing component before mkdir/read/write; retention must not
+      // follow an executor-created symlink outside the owned worktree.
+      let parent = cwd;
+      for (const segment of `${packet}/${file}`.split('/').slice(0, -1)) {
+        parent = path.join(parent, segment);
+        const info = await lstat(parent).catch((error) =>
+          error.code === 'ENOENT' ? null : Promise.reject(error),
+        );
+        if (info?.isSymbolicLink() || (info && !info.isDirectory())) throw new Error('unsafe report path');
+      }
+      await mkdir(path.dirname(target), { recursive: true });
+      const previous = await readFile(target, 'utf8').catch((error) => {
+        if (error.code === 'ENOENT') return null;
+        throw error;
+      });
+      if (previous !== null) {
+        if (previous !== content) throw new Error('report identity changed');
+      } else await writeFile(target, content, { flag: 'wx', mode: 0o600 });
+      const progress = batch.controllerProgress;
+      if (progress?.modelReportRetention) {
+        delete progress.modelReportRetention[step];
+        if (Object.keys(progress.modelReportRetention).length === 0)
+          delete progress.modelReportRetention;
+      }
+    } catch {
+      const progress = batch.controllerProgress;
+      if (progress) {
+        progress.modelReportRetention ??= {};
+        progress.modelReportRetention[step] = 'not-recorded';
+      }
+    }
   };
   const status = (cwd) => git(['status', '--porcelain', '--untracked-files=all'], cwd);
   async function assertScope(batch) {

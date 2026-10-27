@@ -4,7 +4,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdtemp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
 import { createWorkspace, runImplementationStages } from '../../src/bug-pipeline/workspace.mjs';
 import { exportFailedCode } from '../../src/bug-pipeline/failed-output-export.mjs';
 import { exportKnownFailedOutputs } from '../../src/bug-pipeline/cli.mjs';
@@ -25,6 +25,7 @@ async function fixture(
     initial = false,
     summary = 'Save failure leaves navigation blocked.',
     expectUnknown = false,
+    reportFailure = null,
   } = {},
 ) {
   const root = await mkdtemp(path.join(os.tmpdir(), 'terminal-retain-'));
@@ -94,6 +95,16 @@ async function fixture(
   const models = {
     execute: async () => {
       await writeFile(path.join(cwd, 'src/feature.mjs'), 'export const answer = 2;\n');
+      const reportDir = path.join(cwd, packet, 'model-results');
+      if (reportFailure === 'conflict') {
+        await mkdir(reportDir, { recursive: true });
+        await writeFile(path.join(reportDir, '1-execute.json'), '{"old":"report"}\n');
+      }
+      if (reportFailure === 'symlink') {
+        const external = path.join(root, 'external-report-target');
+        await mkdir(external);
+        await symlink(external, reportDir);
+      }
       return { status: step === 'execute' ? 'blocked' : 'implemented', summary };
     },
     simplify: async () => ({ status: step === 'simplify' ? 'blocked' : 'implemented', summary }),
@@ -203,6 +214,43 @@ test('missing model report is explicit partial source retention, never a fabrica
   const manifest = await exportFailedCode(f);
   assert.equal(manifest.modelReport.availability, 'not-recorded');
   assert.equal(manifest.modelReport.exportedPath, undefined);
+});
+
+for (const reportFailure of ['conflict', 'symlink'])
+  test(`optional report ${reportFailure} failure preserves BLOCKED settlement and exports not-recorded`, async (t) => {
+    const f = await fixture(t, { step: 'execute', reportFailure });
+    assert.equal(f.batch.controllerProgress.status, 'failed');
+    assert.equal(f.batch.controllerProgress.failureCode, 'implementation-blocked');
+    assert.equal(f.batch.implementation[0].status, 'failed');
+    assert.equal(f.batch.controllerProgress.modelReportRetention.execute, 'not-recorded');
+    if (reportFailure === 'conflict') {
+      const records = await exportKnownFailedOutputs({
+        state: { batches: [f.batch] },
+        workspace: f.workspace,
+        outputRoot: f.outputRoot,
+      });
+      const manifest = JSON.parse(
+        await readFile(path.join(destination(f, records[0]), 'manifest.json')),
+      );
+      assert.equal(manifest.modelReport.availability, 'not-recorded');
+      assert.equal(manifest.modelReport.exportedPath, undefined);
+      assert.equal(
+        await readFile(path.join(f.cwd, f.packet, 'model-results/1-execute.json'), 'utf8'),
+        '{"old":"report"}\n',
+      );
+    } else assert.deepEqual(await readdir(path.join(f.root, 'external-report-target')), []);
+  });
+
+test('JSON escaped summary near 32 KiB is consistently omitted at the report byte limit', async (t) => {
+  const f = await fixture(t, { step: 'execute', summary: '"\\'.repeat(16 * 1024) });
+  const manifest = await exportFailedCode(f);
+  assert.equal(manifest.modelReport.availability, 'retained');
+  assert.equal(manifest.modelReport.summaryDisposition, 'omitted-oversized');
+  const report = JSON.parse(
+    await readFile(path.join(destination(f, manifest), manifest.modelReport.exportedPath)),
+  );
+  assert.equal(report.summary, null);
+  assert.equal(report.summaryDisposition, 'omitted-oversized');
 });
 
 for (const fault of [
