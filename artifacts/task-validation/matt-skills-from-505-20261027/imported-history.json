@@ -579,5 +579,18 @@
       "baseBlob": null,
       "baseMode": null
     }
-  ]
+  ],
+  "packetFiles": {
+    "analysis.md": "8ad8b5ca0c593ba56acf362776b0b90a8c89d7020c91fc930b9e7fb1131d237f",
+    "author1/implementation-report.md": "35214352b0266a79efb16985be5945132a8a19b051c53025c3493a3d8a517f3d",
+    "author1/seal.json": "e0521b3c6df4df5461f38608128a22959968e3bfcbbd05fd900c3c54d16ce95a",
+    "author1/source-projection.json": "e119ebd418afdf6af7941fc77cea87c45de6a0599e45818c0ab4ff59d6a55ae4",
+    "author1/validation.json": "7a9e81fd2836564829229a65a9463d917f7338952618d3ac0dd026f1c3638b9d",
+    "implementation-plan.md": "11562796367c2cd35fdd664bc1948f9f7c4bf193640d42a65b869d6cb3a5532c",
+    "independent-qa1/report.md": "bba4715a45cd94c74cd1a9c34e74a27c3af59e1dc0965c44870f5d37ac7f285a",
+    "independent-qa1/result.json": "80931089149bda2290e865d473eb7f2f84448f032d60b2671fefa6adf91d7dd4",
+    "independent-qa1/seal.json": "4add19c37d4fc1d0f4174c47e4ce6aa5099d08243bbfb448b9b9d87987cca937",
+    "task-contract.md": "b6ab02ddf4a75157b2738a6df9855d791db7353e33c2dcf603dc675c649c42ed",
+    "validation-report.md": "4ed959b8359d6ead2be8e4f439d1feb9606bf15f663c34d81d176a0eaac5fda2"
+  }
 }
