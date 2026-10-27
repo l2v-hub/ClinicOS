@@ -4,6 +4,12 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import {readFile,writeFile,mkdir,symlink,copyFile,stat,rm} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
+export function enumerateChangedPaths(git, cwd) {
+ return [...new Set([
+  ...git(['diff','--name-only'],cwd).split('\n'),
+  ...git(['ls-files','--others','--exclude-standard'],cwd).split('\n'),
+ ].filter(Boolean))].sort();
+}
 const hash=x=>createHash('sha256').update(x).digest('hex');
 const root=path.dirname(fileURLToPath(import.meta.url)), manifest=JSON.parse(await readFile(path.join(root,'candidate-prepared.json')));
 const id=Number(process.env.QUALIFY_ISSUE);assert.equal(id,516);
@@ -21,7 +27,7 @@ git(['worktree','add','--detach',cwd,target.parent]);
 await symlink(path.join(source,'node_modules'),path.join(cwd,'node_modules'),'dir');
 for(const item of target.files){const input=path.join(root,'candidates',String(id),item.file),raw=await readFile(input);assert.equal(hash(raw),item.sha256);assert.equal(raw.length,item.bytes);const dest=path.join(cwd,item.file);await mkdir(path.dirname(dest),{recursive:true});await copyFile(input,dest);}
 assert.equal(git(['write-tree'],cwd),git(['rev-parse',target.parent+'^{tree}']));
-const changes=git(['diff','--name-only'],cwd).split('\n').filter(Boolean);assert.deepEqual(changes.sort(),target.changedFiles.slice().sort());
+const changes=enumerateChangedPaths(git,cwd);assert.deepEqual(changes,target.changedFiles.slice().sort());
 for(const file of changes)assert(plan.scope.includes(file));
 const {createRunner}=await import(pathToFileURL(path.join(source,'agent-team/src/bug-pipeline/process.mjs')).href);
 const {verificationArguments}=await import(pathToFileURL(path.join(source,'agent-team/src/bug-pipeline/verification.mjs')).href);
