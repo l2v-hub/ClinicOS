@@ -1,0 +1,70 @@
+name: Verify issue507 bounded trace with all behavioral assertions
+on:
+  push:
+    branches: [codex/clinical-harness-repair507-qualification-20261027]
+    paths:
+      - .github/workflows/clinical-harness-repair-qualification.yml
+      - .codex/clinical-harness-repair507/**
+permissions:
+  contents: read
+jobs:
+  qualify:
+    strategy:
+      fail-fast: false
+      matrix:
+        issue: [507]
+    runs-on: ubuntu-22.04
+    timeout-minutes: 50
+    steps:
+      - name: Checkout exact bounded qualification data and coordinator
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          path: operator
+          persist-credentials: false
+          sparse-checkout: .codex/clinical-harness-repair507
+      - name: Checkout accepted native verification kernel
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 655f028e3b0bdcc621ac15209fd0af38cee3d26b
+          path: source
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Install accepted dependencies without lifecycle hooks
+        working-directory: source
+        env:
+          HUSKY: 0
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Install same native tools and qualified bundled browser
+        working-directory: source
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/clinicos_test?schema=public
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/clinicos-verification-browsers
+        run: |
+          bash scripts/quality-gate/install-verification-tools.sh
+          node node_modules/playwright/cli.js install --with-deps chromium
+          npm run db:generate
+      - name: Install pinned official sandbox CLI outside source
+        run: >-
+          npm install --prefix "$RUNNER_TEMP/bug-pipeline-tools"
+          --no-audit --no-fund --no-save @openai/codex@0.159.2
+      - name: Run unchanged native plan commands on retained source with repaired harness
+        env:
+          QUALIFY_ISSUE: ${{ matrix.issue }}
+          CODEX_CLI_PATH: ${{ runner.temp }}/bug-pipeline-tools/node_modules/.bin/codex
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/clinicos-verification-browsers
+        run: node operator/.codex/clinical-harness-repair507/qualify.mjs
+      - name: Preserve fresh synthetic evidence and bounded command diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: clinical-harness-qualification-${{ matrix.issue }}-${{ github.run_id }}
+          path: |
+            qualification-evidence/
+            source/agent-team/.worktrees/harness-qualification-${{ matrix.issue }}/artifacts/task-validation/bug-batch-${{ matrix.issue }}/evidence/
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,0 +1,1177 @@
+// Calendario: slot compatti e popup per le somministrazioni; gli slot vuoti aprono il form
+// di prescrizione solo con therapy.create. Piano terapeutico contiene tutti i farmaci attivi.
+// • Storico: com'è andata — somministrazioni nel tempo con filtri; «sospese/concluse» è un filtro.
+// • Nuova terapia: la stessa maschera di registrazione usata dalla popup dello slot.
+// I vecchi collegamenti (attivi, programmazione, giornaliere, sospese) atterrano sulle nuove viste;
+// la vista scelta resta nell'URL (ricarica e Indietro la riaprono).
+import {
+  lazy,
+  Suspense,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useRef,
+  useId,
+} from 'react';
+import { AccessibleDialogSurface } from '../../shared/AccessibleDialogSurface';
+import { therapyFormAtCalendarSlot } from '../../../lib/therapyCalendarCreate';
+import {
+  hydrateTherapyAdmissionDates,
+  pendingTherapyAdmissionDates,
+  therapyAdmissionCalendarDate,
+  type AutomaticTherapyDates,
+} from '../../../lib/therapyAdmissionDate';
+import { createSubmissionKey } from '../../../lib/submissionKey';
+import type { Paziente, PatientTherapyAPI } from '../../../types';
+import type { TherapyTarget, TherapyView } from '../../../lib/patientTarget';
+import { API_URL } from '../../../config';
+import { IcoCheck } from '../../../icons';
+import { invalidateCachedGet } from '../../../lib/cachedFetch';
+import {
+  invalidateSessionCache,
+  readSessionCache,
+  sessionCacheEpoch,
+  writeSessionCache,
+} from '../../../lib/sessionCache';
+import {
+  sortTherapiesByState,
+  therapyListCacheKey as therapyCacheKey,
+  type TherapyListSnapshot,
+} from '../../../lib/patientTabSnapshots';
+import { readCompletePatientTherapies } from '../../../lib/patientTherapyCalendarRead';
+import { completeTherapySnapshot } from '../../../lib/therapyCompleteness';
+import { getCurrentOperator, operatorHeaders } from '../../../lib/operatorSession';
+import { readGiroAllergies } from '../../../lib/therapyAllergyRead';
+import { deriveAllergySummary } from '../../../lib/allergyStatusModel';
+import {
+  prescriptionAllergyAcknowledged,
+  prescriptionAllergyScope,
+  prescriptionAllergyWarning,
+  type PrescriptionAllergyContext,
+} from './therapyQuickSchedule';
+import { useCan } from '../../../lib/capabilities';
+import { rememberTherapyView } from '../../../lib/patientTargetHash';
+import {
+  doseTimeOf,
+  therapyLanding,
+  therapySubViewOf,
+  type HistoryStatus,
+} from '../../../lib/therapyView';
+import { ClinicalTableSection, LoadingState } from './shared';
+import { LoadErrorState } from './LoadErrorState';
+import { PatientTherapyCalendar } from './PatientTherapyCalendar';
+import { TherapyDrugList, TherapyPrescriptionDetail } from './TherapyDrugList';
+import { TherapyHistoryView } from './TherapyHistoryView';
+import { TherapyFormFields, emptyTherapyForm, type TherapyFormValue } from './TherapyFormFields';
+import { therapyToForm, formToPayload } from './therapyFormMapping';
+import {
+  therapyFormIssues,
+  therapyIssuesSummary,
+  therapySaveErrorMessage,
+} from './therapySaveFeedback';
+import { ConfirmDialog } from '../../shared/ConfirmDialog';
+import { TopNav, type TopNavItem } from '../../navigation/TopNav';
+import { useRisoluzioniFarmaco, trovaRisoluzione, etichettaDocumento } from './farmacoRiferimento';
+import type { DocumentoFarmaco, FarmacoTrovato } from './farmacoRiferimento';
+// Il visore del foglio illustrativo trascina lo stack PDF (~1,7 MB): resta fuori dal chunk del
+// tab e si scarica solo alla prima apertura di un documento.
+const VisoreDocumentoFarmaco = lazy(() =>
+  import('./VisoreDocumentoFarmaco').then((m) => ({ default: m.VisoreDocumentoFarmaco })),
+);
+import { RicercaFarmacoModal } from './RicercaFarmaco';
+import type { PrescrizioneDaAbbinare } from './farmacoCorrispondenza';
+import './TherapyRowFocus.css';
+import './TherapyViews.css';
+
+interface Props {
+  paziente: Paziente;
+  operatoreNome: string;
+  /** Diario terapia: farmaco da aprire ed evidenziare. Se non e' fra le terapie caricate, la
+   *  scheda si apre normalmente, senza errori. */
+  focusTherapyId?: string;
+  /**
+   * Accesso diretto: vista (nuova o del ciclo 1), giorno, fascia e farmaco su cui atterrare; un
+   * nuovo `requestId` riapplica lo stesso bersaglio.
+   */
+  therapyTarget?: TherapyTarget & { requestId: number };
+  /** Current chart allergy revision; invalidates acknowledgement without losing the draft. */
+  allergyRevision?: string;
+  admissionDate?: string;
+}
+
+type TherapyForm = TherapyFormValue;
+type CalendarFocus = { requestId: number; date?: string; time?: string };
+
+export async function completeAllergyReadForSave<T>(
+  read: Promise<T>,
+  isCurrent: () => boolean,
+  onSuperseded: (message: string) => void,
+  continueWithFreshContext: (value: T) => void,
+): Promise<boolean> {
+  const value = await read;
+  if (!isCurrent()) {
+    onSuperseded(
+      'La lettura delle allergie è stata aggiornata durante il salvataggio. Verifica e salva di nuovo.',
+    );
+    return false;
+  }
+  continueWithFreshContext(value);
+  return true;
+}
+
+export function TerapiaFarmacologicaTab({
+  paziente,
+  operatoreNome,
+  focusTherapyId,
+  therapyTarget,
+  allergyRevision = '',
+  admissionDate,
+}: Props) {
+  // La GUI nasconde la prescrizione se il ruolo non la consente (il backend la rifiuta comunque):
+  // l'infermiere somministra dal calendario, il medico modifica / sospende dalla prescrizione.
+  const canCreateTherapy = useCan('therapy.create');
+  const canUpdateTherapy = useCan('therapy.update');
+  const canDeleteTherapy = useCan('therapy.delete');
+  const canReadAllergies = useCan('clinical_record.get');
+  const operator = getCurrentOperator();
+  const allergyReadKey = JSON.stringify([
+    paziente.id,
+    operator?.id ?? '',
+    operator?.role ?? '',
+    allergyRevision,
+  ]);
+
+  const [view, setView] = useState<TherapyView>(
+    () => therapyLanding(therapyTarget?.subView, { canCreate: canCreateTherapy }).view,
+  );
+  const [historyStatus, setHistoryStatus] = useState<HistoryStatus>(
+    () => therapyLanding(therapyTarget?.subView).historyStatus ?? 'tutte',
+  );
+  // Prescrizione aperta (una per volta) e farmaco evidenziato da un collegamento diretto.
+  const [openDrugId, setOpenDrugId] = useState<string | null>(null);
+  const [focusDrugId, setFocusDrugId] = useState<string | null>(null);
+  const [scrollToDrug, setScrollToDrug] = useState(0);
+  // Calendario: giorno/ora di arrivo da un collegamento diretto (rimonta il calendario).
+  const [calendarFocus, setCalendarFocus] = useState<CalendarFocus | null>(null);
+  const [calendarRefresh, setCalendarRefresh] = useState(0);
+
+  // Ultimo elenco gia' mostrato per questo paziente in sessione: il tab si disegna subito con
+  // quello e lo rivalida in background invece di ripartire da "Caricamento…".
+  const initialSnapshot = completeTherapySnapshot(
+    readSessionCache<TherapyListSnapshot>(therapyCacheKey(paziente.id, {})),
+    paziente.id,
+  );
+  const [therapies, setTherapies] = useState<PatientTherapyAPI[]>(
+    () => initialSnapshot?.therapies ?? [],
+  );
+  const [inventoryPatientId, setInventoryPatientId] = useState(paziente.id);
+  const [loading, setLoading] = useState(!initialSnapshot);
+  const [therapySummary, setTherapySummary] = useState<{
+    total: number;
+    active: number;
+    inactive: number;
+  } | null>(initialSnapshot?.summary ?? null);
+  const [error, setError] = useState('');
+  const [therapyLoadError, setTherapyLoadError] = useState('');
+  const [showForm, setShowForm] = useState(false);
+  const [createSlot, setCreateSlot] = useState<{
+    patientId: string;
+    date: string;
+    time: string;
+  } | null>(null);
+  const createDialogTitle = useId();
+  const [editId, setEditId] = useState<string | null>(null);
+  const [form, setForm] = useState<TherapyForm>(() => emptyTherapyForm(admissionDate));
+  const automaticDates = useRef<{ patientId: string; fields: AutomaticTherapyDates } | null>(null);
+  useEffect(() => {
+    const pending = automaticDates.current;
+    if (!pending || pending.patientId !== paziente.id || !showForm || editId || createSlot ||
+      !therapyAdmissionCalendarDate(admissionDate)) return;
+    automaticDates.current = null;
+    setForm((current) => hydrateTherapyAdmissionDates(current, admissionDate, pending.fields));
+  }, [admissionDate, paziente.id, showForm, editId, createSlot]);
+  const [saving, setSaving] = useState(false);
+  const [allergyRead, setAllergyRead] = useState<{
+    key: string;
+    context: PrescriptionAllergyContext;
+  } | null>(null);
+  const [allergyAcknowledgement, setAllergyAcknowledgement] = useState<string | null>(null);
+  const allergySequence = useRef(0);
+  const allergySaveController = useRef<AbortController | null>(null);
+  const allergyContext: PrescriptionAllergyContext = !canReadAllergies
+    ? { phase: 'unavailable' }
+    : allergyRead?.key === allergyReadKey
+      ? allergyRead.context
+      : { phase: 'loading' };
+  const allergyScope = prescriptionAllergyScope(paziente.id, allergyReadKey, form, allergyContext);
+  // Updated at commit before browser events: older reads cannot save for a new selection.
+  const currentSelection = useRef('');
+  const selection = prescriptionAllergyScope(paziente.id, allergyReadKey, form, {
+    phase: 'loading',
+  });
+  useLayoutEffect(() => {
+    currentSelection.current = selection;
+  }, [selection]);
+  const therapyLoadSequence = useRef(0);
+  const therapyReadController = useRef<AbortController | null>(null);
+  const activePatientId = useRef(paziente.id);
+  const tabRootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    activePatientId.current = paziente.id;
+  }, [paziente.id]);
+
+  useEffect(() => {
+    if (!showForm || !canReadAllergies) return;
+    let mounted = true;
+    let controller: AbortController | undefined;
+    let timeout: number | undefined;
+    const refresh = () => {
+      if (!mounted) return;
+      controller?.abort();
+      window.clearTimeout(timeout);
+      controller = new AbortController();
+      const signal = controller.signal;
+      const sequence = ++allergySequence.current;
+      setAllergyRead({ key: allergyReadKey, context: { phase: 'loading' } });
+      // A new source read (including focus/reload) requires a fresh acknowledgement.
+      setAllergyAcknowledgement(null);
+      const readController = controller;
+      const readTimeout = window.setTimeout(() => readController.abort(), 10000);
+      timeout = readTimeout;
+      void readGiroAllergies(paziente.id, signal)
+        .then(
+          (snapshot) => {
+            if (mounted && !signal.aborted && sequence === allergySequence.current)
+              setAllergyRead({ key: allergyReadKey, context: { phase: 'ready', snapshot } });
+          },
+          () => {
+            if (mounted && sequence === allergySequence.current)
+              setAllergyRead({ key: allergyReadKey, context: { phase: 'error' } });
+          },
+        )
+        .finally(() => window.clearTimeout(readTimeout));
+    };
+    queueMicrotask(refresh);
+    window.addEventListener('focus', refresh);
+    return () => {
+      mounted = false;
+      controller?.abort();
+      allergySaveController.current?.abort();
+      window.clearTimeout(timeout);
+      window.removeEventListener('focus', refresh);
+    };
+  }, [showForm, canReadAllergies, paziente.id, allergyReadKey]);
+
+  // ── Loaders ──────────────────────────────────────────────────────────────────
+
+  // Dedup (015 T028): stessa GET condivisa con App.tsx/InvioPSModal nello stesso flusso.
+  // Le mutazioni sotto invalidano prima di ricaricare.
+  const invalidateTherapies = useCallback(() => {
+    invalidateCachedGet(`${API_URL}/patients/${paziente.id}/therapies`);
+    invalidateCachedGet(`${API_URL}/therapy-slots`);
+    invalidateSessionCache(`therapies:${paziente.id}:`);
+  }, [paziente.id]);
+
+  const loadTherapies = useCallback(async () => {
+    therapyReadController.current?.abort();
+    const controller = new AbortController();
+    therapyReadController.current = controller;
+    const sequence = ++therapyLoadSequence.current;
+    const epoch = sessionCacheEpoch();
+    const requestedPatientId = paziente.id;
+    const cacheKey = therapyCacheKey(requestedPatientId, {});
+    try {
+      // Con un elenco gia' in cache la rivalidazione avviene senza svuotare l'elenco.
+      setLoading(
+        completeTherapySnapshot(readSessionCache(cacheKey), requestedPatientId) === undefined,
+      );
+      setTherapyLoadError('');
+      const items = await readCompletePatientTherapies(requestedPatientId, controller.signal);
+      if (
+        controller.signal.aborted ||
+        epoch !== sessionCacheEpoch() ||
+        sequence !== therapyLoadSequence.current ||
+        activePatientId.current !== requestedPatientId
+      ) {
+        return;
+      }
+      const data = sortTherapiesByState(items);
+      const active = data.filter((item) => item.stato === 'attiva').length;
+      const summary = { total: data.length, active, inactive: data.length - active };
+      setTherapies(data);
+      setInventoryPatientId(requestedPatientId);
+      setTherapySummary(summary);
+      writeSessionCache<TherapyListSnapshot>(
+        cacheKey,
+        {
+          therapies: data,
+          nextCursor: null,
+          summary,
+        },
+        epoch,
+      );
+    } catch (err) {
+      if (
+        !controller.signal.aborted &&
+        epoch === sessionCacheEpoch() &&
+        sequence === therapyLoadSequence.current &&
+        activePatientId.current === requestedPatientId
+      ) {
+        setTherapies([]);
+        setInventoryPatientId(requestedPatientId);
+        setTherapySummary(null);
+        setTherapyLoadError(
+          err instanceof Error ? err.message : 'Impossibile caricare le terapie.',
+        );
+      }
+    } finally {
+      if (
+        !controller.signal.aborted &&
+        epoch === sessionCacheEpoch() &&
+        sequence === therapyLoadSequence.current &&
+        activePatientId.current === requestedPatientId
+      ) {
+        setLoading(false);
+      }
+    }
+  }, [
+    paziente.id,
+    setLoading,
+    setTherapyLoadError,
+    setTherapies,
+    setInventoryPatientId,
+    setTherapySummary,
+  ]);
+
+  useEffect(() => {
+    void (async () => {
+      await loadTherapies();
+    })();
+    return () => {
+      therapyReadController.current?.abort();
+    };
+  }, [loadTherapies]);
+
+  /** Dopo ogni modifica della prescrizione: elenco e calendario si rileggono. */
+  const reloadAfterChange = async () => {
+    invalidateTherapies();
+    setCalendarRefresh((value) => value + 1);
+    await loadTherapies();
+  };
+
+  // ── Viste ────────────────────────────────────────────────────────────────────
+
+  /** Cambio di vista dell'operatore: la vista entra nell'URL (QA F2: ricarica e Indietro). */
+  const showView = (next: TherapyView, status: HistoryStatus = historyStatus) => {
+    // L'errore appartiene alla schermata che l'ha prodotto.
+    setError('');
+    setView(next);
+    if (createSlot) closeForm();
+    if (next !== 'attivi' && editId) closeForm();
+    if (next === 'nuova' && (!showForm || editId || createSlot)) openAdd();
+    rememberTherapyView(paziente.id, therapySubViewOf(next, status));
+  };
+  const changeHistoryStatus = (status: HistoryStatus) => {
+    setHistoryStatus(status);
+    rememberTherapyView(paziente.id, therapySubViewOf('storico', status));
+  };
+  const toggleDrug = (id: string) => {
+    setFocusDrugId(null);
+    setOpenDrugId((current) => (current === id ? null : id));
+  };
+
+  // ── Form ─────────────────────────────────────────────────────────────────────
+
+  // Errori per campo: compaiono dopo il primo «Salva» e si aggiornano mentre si corregge.
+  const [saveAttempted, setSaveAttempted] = useState(false);
+  const [saveError, setSaveError] = useState('');
+  const formShellRef = useRef<HTMLDivElement>(null);
+  const editFocusPending = useRef(false);
+  useEffect(() => {
+    if (!editFocusPending.current || !showForm || !editId || view !== 'attivi' || !canUpdateTherapy)
+      return;
+    const heading = formShellRef.current?.querySelector<HTMLElement>('h2');
+    if (!heading) return;
+    editFocusPending.current = false;
+    heading.focus({ preventScroll: true });
+    heading.scrollIntoView({ block: 'center', behavior: 'instant' });
+  }, [showForm, editId, view, canUpdateTherapy]);
+  const formIssues = showForm && saveAttempted ? therapyFormIssues(form) : [];
+  const resetSaveFeedback = () => {
+    setSaveAttempted(false);
+    setSaveError('');
+    setAllergyAcknowledgement(null);
+  };
+
+  function openAdd() {
+    resetSaveFeedback();
+    setEditId(null);
+    const fields = pendingTherapyAdmissionDates(admissionDate);
+    automaticDates.current = fields ? { patientId: paziente.id, fields } : null;
+    setForm(emptyTherapyForm(admissionDate));
+    setShowForm(true);
+  }
+  function openCalendarCreate(date: string, time: string) {
+    if (!canCreateTherapy || saving) return;
+    const initialized = therapyFormAtCalendarSlot(emptyTherapyForm(admissionDate), date, time);
+    if (!initialized) return;
+    automaticDates.current = null;
+    resetSaveFeedback();
+    setEditId(null);
+    setForm(initialized);
+    setShowForm(true);
+    setCreateSlot({ patientId: paziente.id, date, time });
+  }
+  const openEdit = (t: PatientTherapyAPI, exactTimesOnly = false) => {
+    if (!canUpdateTherapy || saving || t.patientId !== paziente.id) return;
+    automaticDates.current = null;
+    resetSaveFeedback();
+    editFocusPending.current = true;
+    setCreateSlot(null);
+    setEditId(t.id);
+    setForm(therapyToForm(t, { exactTimesOnly }));
+    setShowForm(true);
+    setView('attivi');
+    rememberTherapyView(paziente.id, 'attivi');
+  };
+  function openIncompleteEdit(t: PatientTherapyAPI) {
+    openEdit(t, true);
+  }
+  function closeForm() {
+    automaticDates.current = null;
+    editFocusPending.current = false;
+    resetSaveFeedback();
+    setShowForm(false);
+    setCreateSlot(null);
+    setEditId(null);
+    setForm(emptyTherapyForm(admissionDate));
+  }
+  useEffect(() => {
+    if (showForm && (editId ? !canUpdateTherapy : !canCreateTherapy)) closeForm();
+    if (!canUpdateTherapy) setPendingSospendiId(null);
+    if (!canDeleteTherapy) setPendingDeleteId(null);
+  }, [canCreateTherapy, canUpdateTherapy, canDeleteTherapy, showForm, editId]);
+  useEffect(() => {
+    if (createSlot && createSlot.patientId !== paziente.id) closeForm();
+  }, [paziente.id, createSlot]);
+
+  const [createKey] = useState(createSubmissionKey);
+  const handleSave = async () => {
+    if (saving || (editId ? !canUpdateTherapy : !canCreateTherapy)) return;
+    if (createSlot && createSlot.patientId !== paziente.id) return;
+    // Stesso controllo per campo dell'ingresso (campi obbligatori inclusi): il primo campo da
+    // correggere riceve il fuoco invece di un pulsante disabilitato senza indicazioni sul campo.
+    const issues = therapyFormIssues(form);
+    setSaveAttempted(true);
+    if (issues.length) {
+      setSaveError('');
+      window.requestAnimationFrame(() => {
+        const first = formShellRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]');
+        first?.focus({ preventScroll: true });
+        first?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      return;
+    }
+    const payload = formToPayload(form, paziente.id, operatoreNome);
+    const editing = editId;
+    const requestedSelection = selection;
+    try {
+      setSaving(true);
+      setError('');
+      setSaveError('');
+      // Always reread immediately before writing; a chart edited elsewhere invalidates the
+      // old acknowledgement. This read carries no cached chart and changes no therapy payload.
+      let freshContext: PrescriptionAllergyContext = { phase: 'unavailable' };
+      if (canReadAllergies) {
+        const controller = new AbortController();
+        allergySaveController.current?.abort();
+        allergySaveController.current = controller;
+        const sequence = ++allergySequence.current;
+        const timeout = window.setTimeout(() => controller.abort(), 10000);
+        const freshRead = readGiroAllergies(paziente.id, controller.signal).then(
+          (snapshot): PrescriptionAllergyContext => ({ phase: 'ready', snapshot }),
+          (): PrescriptionAllergyContext => ({ phase: 'error' }),
+        );
+        try {
+          const current = await completeAllergyReadForSave(
+            freshRead,
+            () =>
+              sequence === allergySequence.current &&
+              requestedSelection === currentSelection.current,
+            setSaveError,
+            (context) => {
+              freshContext = context;
+            },
+          );
+          if (!current) return;
+        } finally {
+          window.clearTimeout(timeout);
+        }
+        if (requestedSelection !== currentSelection.current) {
+          return;
+        }
+      }
+      if (requestedSelection !== currentSelection.current) return;
+      setAllergyRead({ key: allergyReadKey, context: freshContext });
+      const freshScope = prescriptionAllergyScope(paziente.id, allergyReadKey, form, freshContext);
+      if (!prescriptionAllergyAcknowledged(freshContext, freshScope, allergyAcknowledgement)) {
+        setAllergyAcknowledgement(null);
+        setSaveError(
+          'Verifica il contesto allergie aggiornato e conferma l’avviso prima di salvare.',
+        );
+        return;
+      }
+      const url = editing
+        ? `${API_URL}/patients/${paziente.id}/therapies/${editing}`
+        : `${API_URL}/patients/${paziente.id}/therapies`;
+      // Phase 6: a retried creation (lost response, double submit) reuses the same requestId →
+      // the backend replays the first prescription instead of creating a duplicate.
+      const body = editing ? payload : { ...payload, requestId: createKey.for(payload) };
+      const res = await fetch(url, {
+        method: editing ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        setSaveError(await therapySaveErrorMessage(res));
+        return;
+      }
+      const saved = (await res.json().catch(() => null)) as { id?: unknown } | null;
+      const savedId = editing ?? (typeof saved?.id === 'string' ? saved.id : null);
+      createKey.reset();
+      closeForm();
+      await reloadAfterChange();
+      // Il farmaco salvato si vede subito nell'elenco del calendario, aperto.
+      setView('calendario');
+      rememberTherapyView(paziente.id, 'calendario');
+      if (savedId) {
+        setOpenDrugId(savedId);
+        setFocusDrugId(savedId);
+        setScrollToDrug((value) => value + 1);
+      }
+    } catch {
+      setSaveError('Terapia non salvata: errore di rete. Riprova.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // ── Azioni del prescrittore ──────────────────────────────────────────────────
+
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const confirmDelete = async () => {
+    if (!pendingDeleteId || !canDeleteTherapy || deleting) return;
+    setDeleting(true);
+    try {
+      setError('');
+      const res = await fetch(`${API_URL}/patients/${paziente.id}/therapies/${pendingDeleteId}`, {
+        method: 'DELETE',
+        headers: operatorHeaders(),
+      });
+      if (!res.ok) throw new Error(await therapySaveErrorMessage(res, 'Terapia non eliminata'));
+      setOpenDrugId(null);
+      await reloadAfterChange();
+      setPendingDeleteId(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Errore eliminazione');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  // La sospensione ferma le somministrazioni future senza dirlo a nessuno, e il suo pulsante e'
+  // accanto a Elimina: un clic sbagliato qui e' l'unico che non lascia traccia visibile.
+  const [pendingSospendiId, setPendingSospendiId] = useState<string | null>(null);
+  const [sospendendo, setSospendendo] = useState(false);
+  const confirmSospendi = async () => {
+    if (!pendingSospendiId || !canUpdateTherapy || sospendendo) return;
+    setSospendendo(true);
+    try {
+      setError('');
+      const res = await fetch(`${API_URL}/patients/${paziente.id}/therapies/${pendingSospendiId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
+        body: JSON.stringify({ stato: 'sospesa' }),
+      });
+      if (!res.ok) throw new Error(await therapySaveErrorMessage(res, 'Terapia non sospesa'));
+      setOpenDrugId(null);
+      await reloadAfterChange();
+      setPendingSospendiId(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Errore sospensione');
+    } finally {
+      setSospendendo(false);
+    }
+  };
+
+  const handleRiattiva = async (t: PatientTherapyAPI) => {
+    if (!canUpdateTherapy) return;
+    try {
+      setError('');
+      const res = await fetch(`${API_URL}/patients/${paziente.id}/therapies/${t.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
+        body: JSON.stringify({ stato: 'attiva' }),
+      });
+      if (!res.ok) throw new Error(await therapySaveErrorMessage(res, 'Terapia non riattivata'));
+      await reloadAfterChange();
+      // Riattivata: torna fra i farmaci attivi del calendario, aperta.
+      setView('calendario');
+      rememberTherapyView(paziente.id, 'calendario');
+      setOpenDrugId(t.id);
+      setFocusDrugId(t.id);
+      setScrollToDrug((value) => value + 1);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Errore riattivazione');
+    }
+  };
+
+  // ── Derived data ──────────────────────────────────────────────────────────────
+
+  const attive = therapies.filter((t) => t.patientId === paziente.id && t.stato === 'attiva');
+  const inattive = therapies.filter((t) => t.patientId === paziente.id && t.stato !== 'attiva');
+
+  // ── Accesso diretto: vista, giorno/ora e farmaco (riapplicato a ogni requestId) ──
+  const [targetViewApplied, setTargetViewApplied] = useState<number | null>(null);
+  const [handledTargetId, setHandledTargetId] = useState<number | null>(null);
+  // 1) Vista, giorno e ora valgono subito (non servono le terapie caricate).
+  if (therapyTarget && targetViewApplied !== therapyTarget.requestId) {
+    setTargetViewApplied(therapyTarget.requestId);
+    const landing = therapyLanding(therapyTarget.subView, {
+      canCreate: canCreateTherapy,
+      hasDrug: Boolean(therapyTarget.therapyId),
+    });
+    setView(landing.view);
+    if (landing.historyStatus) setHistoryStatus(landing.historyStatus);
+    if (landing.view === 'nuova' && !showForm) openAdd();
+    setCalendarFocus(
+      landing.openDose && (therapyTarget.date || therapyTarget.fascia)
+        ? {
+            requestId: therapyTarget.requestId,
+            date: therapyTarget.date,
+            time: doseTimeOf(therapyTarget.fascia),
+          }
+        : null,
+    );
+    setOpenDrugId(null);
+    setFocusDrugId(therapyTarget.therapyId ?? null);
+  }
+  // 2) Il farmaco si apre appena compare fra le terapie caricate (se non c'e', nessun errore).
+  const targetTherapy =
+    therapyTarget?.therapyId && handledTargetId !== therapyTarget.requestId
+      ? therapies.find((t) => t.id === therapyTarget.therapyId)
+      : undefined;
+  if (therapyTarget && targetTherapy) {
+    setHandledTargetId(therapyTarget.requestId);
+    const landing = therapyLanding(therapyTarget.subView, {
+      canCreate: canCreateTherapy,
+      drugState: targetTherapy.stato,
+      hasDrug: true,
+    });
+    setView(landing.view);
+    if (landing.historyStatus) setHistoryStatus(landing.historyStatus);
+    if (landing.openDrug) {
+      setOpenDrugId(targetTherapy.id);
+      setScrollToDrug((value) => value + 1);
+    }
+    // fascia del server → ora reale della prescrizione (07:00 resta 07:00, non 08:00)
+    if (landing.openDose && therapyTarget.fascia) {
+      const time = doseTimeOf(therapyTarget.fascia, targetTherapy.schedules);
+      if (time && time !== calendarFocus?.time)
+        setCalendarFocus({ requestId: therapyTarget.requestId, date: therapyTarget.date, time });
+    }
+  }
+  // Diario terapia («apri» dalla voce del diario): stesso atterraggio di un farmaco senza vista.
+  const [diaryFocusHandled, setDiaryFocusHandled] = useState(false);
+  const diaryTarget =
+    focusTherapyId && !diaryFocusHandled && !therapyTarget
+      ? therapies.find((t) => t.id === focusTherapyId)
+      : undefined;
+  if (diaryTarget) {
+    setDiaryFocusHandled(true);
+    const landing = therapyLanding(undefined, { drugState: diaryTarget.stato, hasDrug: true });
+    setView(landing.view);
+    if (landing.historyStatus) setHistoryStatus(landing.historyStatus);
+    setOpenDrugId(diaryTarget.id);
+    setFocusDrugId(diaryTarget.id);
+    setScrollToDrug((value) => value + 1);
+  }
+
+  // La prescrizione aperta da un collegamento entra in vista (anche quando i dati arrivano dopo).
+  const listReady = `${view}|${historyStatus}|${therapies.length}`;
+  useEffect(() => {
+    if (!scrollToDrug) return;
+    const frame = window.requestAnimationFrame(() => {
+      tabRootRef.current
+        ?.querySelector('.tf-drugs__item.is-open, .therapy-list-row--focus')
+        ?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [scrollToDrug, listReady]);
+
+  // Gli stessi campi che `handleSave` pretende, elencati per nome.
+  const campiMancanti =
+    [!form.farmacoNome.trim() && 'il prodotto medicinale', !form.dataInizio && 'la data di inizio']
+      .filter((v): v is string => typeof v === 'string')
+      .join(' e ') || null;
+
+  // ── Anagrafica farmaci (AIFA) ─────────────────────────────────────────────────
+
+  // Documenti ufficiali AIFA dei farmaci in terapia. L'operatore verifica la posologia sulla
+  // fonte autorevole senza uscire dall'applicazione; ClinicOS non interpreta nulla.
+  const risoluzioni = useRisoluzioniFarmaco(
+    therapies.map((t) => ({
+      farmacoNome: t.farmacoNome,
+      dosaggio: t.dosaggio,
+      viaSomministrazione: t.viaSomministrazione,
+    })),
+  );
+  // AC7: farmaci in terapia che l'anagrafica non riconosce. W5: lo stato sta sulla riga del farmaco
+  // (dove si corregge), non in un secondo avviso che ripete quello in testa alla cartella.
+  const registryState = (t: PatientTherapyAPI) => {
+    const stato = trovaRisoluzione(risoluzioni, t.farmacoNome, t.dosaggio?.trim() || null)?.stato;
+    return stato === 'non-trovato' || stato === 'senza-documento' ? stato : null;
+  };
+  const lineBadge = (t: PatientTherapyAPI) => {
+    const stato = registryState(t);
+    return stato ? (
+      <span className="ds-badge ds-badge--warning">
+        {stato === 'non-trovato' ? 'non in anagrafica' : 'senza documento'}
+      </span>
+    ) : null;
+  };
+  /** Documento aperto nel visore, con la prescrizione che serve a riconoscerne la formulazione. */
+  const [documentoAperto, setDocumentoAperto] = useState<{
+    documento: DocumentoFarmaco;
+    prescrizione: PrescrizioneDaAbbinare;
+  } | null>(null);
+  /** Nome da cui parte la ricerca quando il farmaco non e' in anagrafica. */
+  const [ricercaPer, setRicercaPer] = useState<string | null>(null);
+  const apriDocumentoDaRicerca = useCallback(
+    (documento: DocumentoFarmaco, confezione: FarmacoTrovato) => {
+      setRicercaPer(null);
+      // La confezione arriva da una scelta esplicita dell'operatore: la sua forma e' un dato.
+      setDocumentoAperto({
+        documento,
+        prescrizione: { dosaggio: confezione.descrizione, forma: confezione.forma },
+      });
+    },
+    [],
+  );
+
+  /**
+   * Nome del farmaco nella prescrizione, con accanto l'azione giusta per il suo stato in
+   * anagrafica: documento apribile, farmaco senza documento, non trovato, anagrafica che non
+   * risponde — tutti visibili.
+   */
+  const renderFarmaco = (t: PatientTherapyAPI) => {
+    const v = t.farmacoNome;
+    const dosaggio = t.dosaggio?.trim() ? t.dosaggio : null;
+    const risoluzione = trovaRisoluzione(risoluzioni, v, dosaggio);
+    return (
+      <span className="tf-farmaco">
+        <strong>{v}</strong>
+        {risoluzione?.stato === 'trovato' && risoluzione.documento && (
+          <button
+            type="button"
+            className="ds-icon-btn tf-farmaco__doc"
+            title={etichettaDocumento(risoluzione.documento)}
+            // Il nome accessibile porta la dose prescritta: due prescrizioni dello stesso farmaco a
+            // dosaggi diversi non espongono due controlli con un nome identico.
+            aria-label={`${etichettaDocumento(risoluzione.documento)} — ${
+              dosaggio ? `dose prescritta ${dosaggio}` : 'dose non specificata'
+            }`}
+            onClick={() =>
+              setDocumentoAperto({
+                documento: risoluzione.documento!,
+                prescrizione: { dosaggio, forma: risoluzione.confezione?.forma },
+              })
+            }
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <path d="M14 2v6h6" />
+              <path d="M8 13h8M8 17h5" />
+            </svg>
+          </button>
+        )}
+        {(risoluzione?.stato === 'trovato' || risoluzione?.stato === 'senza-documento') && (
+          <span className="farmaco-trovato" title="Farmaco presente nell'anagrafica AIFA">
+            <span aria-hidden="true">
+              <IcoCheck />
+            </span>
+            Trovato in AIFA
+          </span>
+        )}
+        {(risoluzione?.stato === 'non-trovato' || risoluzione?.stato === 'senza-documento') && (
+          <button
+            type="button"
+            className="ds-badge ds-badge--warning farmaco-non-trovato"
+            aria-haspopup="dialog"
+            onClick={() => setRicercaPer(v)}
+            title={
+              risoluzione.stato === 'non-trovato'
+                ? `«${v}» non risulta in anagrafica AIFA: cerca il farmaco o il principio attivo`
+                : `«${v}» è in anagrafica ma senza documento ufficiale: cerca un'altra confezione`
+            }
+          >
+            {risoluzione.stato === 'non-trovato' ? 'non in anagrafica' : 'senza documento'}
+          </button>
+        )}
+        {risoluzione?.stato === 'fonte-non-disponibile' && (
+          <span
+            className="ds-badge ds-badge--stale farmaco-non-trovato"
+            title="L'anagrafica farmaci non ha risposto: non è detto che il farmaco sia assente"
+          >
+            anagrafica non raggiungibile
+          </span>
+        )}
+      </span>
+    );
+  };
+
+  const prescriptionActions = {
+    canUpdate: canUpdateTherapy,
+    canDelete: canDeleteTherapy,
+    onEdit: openEdit,
+    onSuspend: (t: PatientTherapyAPI) => setPendingSospendiId(t.id),
+    onDelete: (t: PatientTherapyAPI) => setPendingDeleteId(t.id),
+    onReactivate: (t: PatientTherapyAPI) => void handleRiattiva(t),
+  };
+  const renderDetail = (t: PatientTherapyAPI) => (
+    <TherapyPrescriptionDetail therapy={t} name={renderFarmaco(t)} actions={prescriptionActions} />
+  );
+
+  const listState =
+    loading || inventoryPatientId !== paziente.id ? (
+      <LoadingState />
+    ) : therapyLoadError && therapies.length === 0 ? (
+      <LoadErrorState
+        message={therapyLoadError}
+        onRetry={() => void loadTherapies()}
+        retryLabel="Riprova"
+      />
+    ) : null;
+
+  // ── Sub-nav ───────────────────────────────────────────────────────────────────
+
+  const VIEWS: TopNavItem[] = [
+    { key: 'calendario', label: 'Calendario' },
+    { key: 'storico', label: 'Storico' },
+    { key: 'attivi', label: 'Piano terapeutico' },
+    ...(canCreateTherapy ? [{ key: 'nuova', label: 'Nuova terapia' }] : []),
+  ];
+  const activeView: TherapyView = view === 'nuova' && !canCreateTherapy ? 'calendario' : view;
+  const editing = showForm && editId !== null && canUpdateTherapy;
+
+  const formShell = (
+    <div className="terapia-sched-form therapy-form-shell" ref={formShellRef}>
+      <header className="therapy-form-shell__heading">
+        <h2 id={createDialogTitle} tabIndex={-1}>
+          {editId ? 'Modifica terapia' : 'Nuova terapia'}
+        </h2>
+        {createSlot && (
+          <p>
+            {createSlot.date} · ore {createSlot.time}
+          </p>
+        )}
+        <p>I campi con * sono obbligatori.</p>
+      </header>
+      <TherapyFormFields
+        value={form}
+        onDateInput={(field) => {
+          const pending = automaticDates.current;
+          if (pending?.patientId === paziente.id) pending.fields[field] = false;
+        }}
+        onChange={(next) => {
+          if (saving) return;
+          setAllergyAcknowledgement(null);
+          setForm(next);
+        }}
+        operatoreNome={operatoreNome}
+        issues={formIssues}
+        creation={editId === null}
+      />
+      <section
+        className="therapy-form__section"
+        aria-label="Verifica allergie"
+        data-testid="therapy-allergy-warning"
+        style={
+          prescriptionAllergyWarning(allergyContext)
+            ? { borderLeft: '3px solid var(--amber)' }
+            : undefined
+        }
+      >
+        <strong>
+          Allergie:{' '}
+          {allergyContext.phase === 'ready'
+            ? deriveAllergySummary(allergyContext.snapshot.items, allergyContext.snapshot.status)
+                .label
+            : allergyContext.phase === 'loading'
+              ? 'lettura in corso…'
+              : 'dato non disponibile'}
+        </strong>
+        {allergyContext.phase === 'ready' && allergyContext.snapshot.items.length > 0 && (
+          <ul>
+            {allergyContext.snapshot.items.map((item, index) => (
+              <li key={index}>
+                <strong>{item.allergene}</strong> · Gravità: {item.gravita ?? 'non documentata'}
+                {item.reazione && <> · Reazione: {item.reazione}</>}
+                {item.note && <> · Note: {item.note}</>}
+              </li>
+            ))}
+          </ul>
+        )}
+        {prescriptionAllergyWarning(allergyContext) && (
+          <>
+            <p>
+              Verifica la compatibilità del farmaco selezionato con il contesto allergie. Questo
+              avviso non attesta una specifica interazione o controindicazione.
+            </p>
+            {allergyContext.phase !== 'ready' && allergyContext.phase !== 'loading' && (
+              <p>
+                La cartella non è disponibile: verifica manualmente le allergie prima di confermare.
+              </p>
+            )}
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                minHeight: 44,
+                textTransform: 'none',
+                letterSpacing: 0,
+              }}
+            >
+              <input
+                type="checkbox"
+                style={{ width: 20, height: 20, flexShrink: 0 }}
+                data-testid="therapy-allergy-acknowledge"
+                disabled={saving || allergyContext.phase === 'loading' || !form.farmacoNome.trim()}
+                checked={allergyAcknowledgement === allergyScope}
+                onChange={(event) =>
+                  setAllergyAcknowledgement(event.target.checked ? allergyScope : null)
+                }
+              />
+              Ho verificato le allergie e la compatibilità con il farmaco selezionato.
+            </label>
+          </>
+        )}
+      </section>
+      {(formIssues.length > 0 || saveError) && (
+        <p className="therapy-form__error" role="alert" data-testid="therapy-save-error">
+          {formIssues.length ? therapyIssuesSummary(formIssues) : saveError}
+        </p>
+      )}
+      <div className="form-actions therapy-form-shell__actions">
+        {campiMancanti && <small className="form-hint">Manca: {campiMancanti}.</small>}
+        <button
+          type="button"
+          className="ds-btn ds-btn--secondary"
+          disabled={saving}
+          onClick={() => {
+            closeForm();
+            if (!editId) showView('calendario');
+          }}
+        >
+          Annulla
+        </button>
+        <button
+          type="button"
+          className="ds-btn ds-btn--primary"
+          disabled={saving}
+          onClick={handleSave}
+        >
+          {saving ? 'Salvataggio...' : editId ? 'Aggiorna' : 'Salva terapia'}
+        </button>
+      </div>
+    </div>
+  );
+
+  // ── Render ─────────────────────────────────────────────────────────────────────
+
+  return (
+    <div className="cr-tab-content" ref={tabRootRef}>
+      <ClinicalTableSection
+        title="Terapia Farmacologica"
+        count={inventoryPatientId === paziente.id ? (therapySummary?.active ?? attive.length) : 0}
+        countLabel="farmaci attivi"
+      >
+        {/* Navigazione prima di avvisi e controlli condizionali: cambiare vista non la sposta. */}
+        <div className="tf-subtabs" style={{ marginTop: 'var(--clinical-submenu-gap, 16px)' }}>
+          <TopNav
+            variant="level3"
+            items={VIEWS}
+            activeKey={activeView}
+            onChange={(next) => showView(next as TherapyView)}
+            ariaLabel="Sezioni della terapia farmacologica"
+            idPrefix="therapy-section"
+          />
+        </div>
+
+        {error && (
+          <div className="alert alert--error tf-error" role="alert">
+            {error}
+          </div>
+        )}
+
+        {activeView === 'attivi' && (
+          <div className="cts__body--padded tf-active">
+            {editing
+              ? formShell
+              : (listState ?? (
+                  <>
+                    <TherapyDrugList
+                      therapies={attive}
+                      openId={openDrugId}
+                      focusId={focusDrugId}
+                      onToggle={toggleDrug}
+                      renderDetail={renderDetail}
+                      label="Farmaci attivi"
+                      lineBadge={lineBadge}
+                      emptyText="Nessun farmaco attivo."
+                    />
+                  </>
+                ))}
+          </div>
+        )}
+        {activeView === 'calendario' && (
+          <div className="cts__body--padded tf-calendar-view">
+            <p>
+              Il calendario mostra le dosi del periodo, non l’elenco completo delle prescrizioni.{' '}
+              <button
+                type="button"
+                className="btn-secondary btn-sm"
+                onClick={() => showView('attivi')}
+              >
+                Vedi tutti i farmaci nel piano terapeutico
+              </button>
+            </p>
+            <PatientTherapyCalendar
+              key={`${paziente.id}|${calendarFocus?.requestId ?? 0}|${calendarFocus?.time ?? ''}`}
+              patientId={paziente.id}
+              initialDate={calendarFocus?.date}
+              initialOpenTime={calendarFocus?.time}
+              focusTherapyId={focusDrugId ?? undefined}
+              onCreate={canCreateTherapy ? openCalendarCreate : undefined}
+              onEditTherapy={canUpdateTherapy ? openIncompleteEdit : undefined}
+              refreshKey={calendarRefresh}
+            />
+          </div>
+        )}
+
+        {activeView === 'storico' && (
+          <div className="cts__body--padded">
+            <TherapyHistoryView
+              patientId={paziente.id}
+              status={historyStatus}
+              onStatusChange={changeHistoryStatus}
+              prescriptionNames={therapies
+                .filter((t) => t.patientId === paziente.id)
+                .map((t) => t.farmacoNome)}
+              renderPrescriptions={(drug) => {
+                const list = drug
+                  ? inattive.filter(
+                      (t) => t.farmacoNome.toLocaleLowerCase('it') === drug.toLocaleLowerCase('it'),
+                    )
+                  : inattive;
+                return (
+                  listState ?? (
+                    <>
+                      <TherapyDrugList
+                        therapies={list}
+                        openId={openDrugId}
+                        focusId={focusDrugId}
+                        onToggle={toggleDrug}
+                        renderDetail={renderDetail}
+                        label="Prescrizioni sospese o concluse"
+                        emptyText="Nessuna terapia sospesa o conclusa."
+                      />
+                    </>
+                  )
+                );
+              }}
+            />
+          </div>
+        )}
+
+        {activeView === 'nuova' && <div className="cts__body--padded">{formShell}</div>}
+      </ClinicalTableSection>
+
+      {createSlot && createSlot.patientId === paziente.id && canCreateTherapy && (
+        <AccessibleDialogSurface
+          labelledBy={createDialogTitle}
+          className="therapy-calendar-dialog"
+          dismissible={!saving}
+          closeOnOverlay={!saving}
+          onClose={closeForm}
+        >
+          <button
+            type="button"
+            className="ds-icon-btn"
+            aria-label="Chiudi nuova terapia"
+            title="Chiudi nuova terapia"
+            data-dialog-initial-focus
+            disabled={saving}
+            onClick={closeForm}
+          >
+            ×
+          </button>
+          {formShell}
+        </AccessibleDialogSurface>
+      )}
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        title="Eliminare la terapia?"
+        message="La terapia verrà rimossa dalla cartella del paziente. L'azione non è reversibile."
+        confirmLabel="Elimina terapia"
+        busy={deleting}
+        onConfirm={() => void confirmDelete()}
+        onCancel={() => setPendingDeleteId(null)}
+      />
+
+      <ConfirmDialog
+        open={pendingSospendiId !== null}
+        title="Sospendere la terapia?"
+        message="Le somministrazioni programmate non verranno più generate finché la terapia resta sospesa. La terapia resta in cartella e si può riattivare da Storico › Prescrizioni sospese/concluse."
+        confirmLabel="Sospendi terapia"
+        tone="primary"
+        busy={sospendendo}
+        onConfirm={() => void confirmSospendi()}
+        onCancel={() => setPendingSospendiId(null)}
+      />
+
+      {documentoAperto && (
+        <Suspense fallback={<LoadingState msg="Apertura del documento…" />}>
+          <VisoreDocumentoFarmaco
+            documento={documentoAperto.documento}
+            prescrizione={documentoAperto.prescrizione}
+            onChiudi={() => setDocumentoAperto(null)}
+          />
+        </Suspense>
+      )}
+
+      {ricercaPer !== null && (
+        <RicercaFarmacoModal
+          nomeIniziale={ricercaPer}
+          onChiudi={() => setRicercaPer(null)}
+          onApriDocumento={apriDocumentoDaRicerca}
+        />
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,247 @@
+// StepClinica — Step 3 of the intake wizard.
+// Iterates the intake-eligible section registry and renders each editor in mode="intake".
+// Controlled: no fetches here — parent IntakeWorkspace owns patchDraft via onUpdateSection.
+
+import { useContext, useState, type ComponentType } from 'react';
+import { IntakeAiOriginContext } from './intakeAiOrigin';
+import { AiBadge } from './IntakeAiBadge';
+import { fieldLabel, sectionOfPath } from './intakeDocuments';
+import type { SectionProps } from '../../operator/sections/types';
+import type { AllergiaItem, AllergyStatus } from '../../../types';
+import { intakeSections } from '../../operator/sections/patientSections';
+import { DischargeTherapyReview } from './DischargeTherapyReview';
+import type { DischargeTherapyRow } from './dischargeTherapy';
+import type { TherapyCorrectionTarget } from './intakeTherapyNavigation';
+import { legacyPainPresent } from '../../../lib/assessments/nrsLegacy';
+import { NrsLegacyContent } from '../../operator/assessments/NrsLegacyContent';
+
+// Maps lowercase intake section keys to the Italian uppercase keys used in sourceReferences.
+const SECTION_KEY_TO_ITALIAN: Record<string, string> = {
+  allergie: 'ALLERGIE',
+  anamnesi: 'ANAMNESI',
+  diagnosi: 'DIAGNOSI',
+  terapia: 'TERAPIA',
+};
+
+interface SourceReference {
+  sectionKey: string;
+  fileId?: string;
+  fileName?: string;
+  pageFrom?: number;
+  pageTo?: number;
+}
+
+interface NarrativeData {
+  sourceReferences?: SourceReference[];
+}
+
+interface StepClinicaProps {
+  data: Record<string, unknown>;
+  onUpdateSection: (key: string, value: unknown) => void;
+  operatoreNome?: string;
+  /** Top-level keys seeded from the import (e.g. ['anagrafica','anamnesi','diagnosi','allergie']). */
+  importedFields?: string[];
+  /** The _narrative object from the draft data (has sourceReferences). */
+  narrative?: Record<string, unknown>;
+  therapyCorrection?: TherapyCorrectionTarget | null;
+  /** Pagina unica (HMI 1): solo queste sezioni (default: tutte). */
+  only?: string[];
+  /** Blocco terapia importata (testo, revisione, conferma): default presente. */
+  therapyBlock?: boolean;
+  /** Casella di conferma terapia: nella pagina unica è l'interruttore nella testata. */
+  showTherapyAcceptance?: boolean;
+  /** Dati dolore precedenti (sola lettura). */
+  showLegacyPain?: boolean;
+  /** Titoli delle sezioni: nascosti quando la card della pagina ha già il titolo. */
+  showTitles?: boolean;
+  /** Flusso «da documenti»: ritorno alla revisione per risolvere i conflitti della terapia. */
+  onBackToDocuments?: () => void;
+}
+
+/** Inline compare panel for a single import section. */
+function SourceComparePanel({ refs }: { refs: SourceReference[] }) {
+  if (refs.length === 0) return null;
+  return (
+    <div className="step-clinica__source-panel" role="complementary" aria-label="Fonte documento">
+      {refs.map((r, i) => (
+        <p
+          key={`${r.fileId ?? r.fileName ?? 'doc'}-${r.pageFrom ?? i}`}
+          className="step-clinica__source-ref"
+        >
+          {r.fileName
+            ? `Fonte: ${r.fileName}${r.pageFrom != null ? ` — pagina ${r.pageFrom}` : ''}${r.pageTo != null && r.pageTo !== r.pageFrom ? `–${r.pageTo}` : ''}`
+            : 'Fonte: documento importato'}
+        </p>
+      ))}
+    </div>
+  );
+}
+
+export function StepClinica({
+  data,
+  onUpdateSection,
+  operatoreNome,
+  importedFields = [],
+  narrative,
+  therapyCorrection,
+  only,
+  therapyBlock = true,
+  showTherapyAcceptance = true,
+  showLegacyPain = true,
+  showTitles = true,
+  onBackToDocuments,
+}: StepClinicaProps) {
+  // Keep manual additions next to the imported drugs, before the other clinical sections.
+  const sections = intakeSections()
+    .filter((s) => !only || only.includes(s.sectionKey))
+    .sort((a, b) => Number(b.sectionKey === 'terapia') - Number(a.sectionKey === 'terapia'));
+  const [showSource, setShowSource] = useState<Record<string, boolean>>({});
+  // Campi scritti dall'AI (card Documenti): segnalati per sezione, un solo punto per tutti gli editor.
+  const aiPaths = [...useContext(IntakeAiOriginContext)];
+
+  const narrativeData = narrative as NarrativeData | undefined;
+  const sourceRefs: SourceReference[] = narrativeData?.sourceReferences ?? [];
+
+  function refsForSection(sectionKey: string): SourceReference[] {
+    const italianKey = SECTION_KEY_TO_ITALIAN[sectionKey];
+    if (!italianKey) return [];
+    return sourceRefs.filter((r) => r.sectionKey === italianKey);
+  }
+
+  const terapiaImport = Array.isArray(data.terapiaImport)
+    ? (data.terapiaImport as DischargeTherapyRow[])
+    : [];
+  const manualTerapia = Array.isArray(data.terapia) ? (data.terapia as unknown[]) : [];
+  // #235: therapy is "empty" when neither imported rows nor manual rows exist. The acceptance
+  // label adapts to distinguish "nessuna terapia" from "non ancora revisionata".
+  const therapyEmpty = terapiaImport.length === 0 && manualTerapia.length === 0;
+  const accepted = (data._accepted ?? {}) as { demographics?: boolean; therapy?: boolean };
+  const therapyAccepted = accepted.therapy === true;
+
+  return (
+    <>
+      {therapyBlock &&
+        (terapiaImport.length > 0 ||
+          (typeof data._terapiaText === 'string' && data._terapiaText.trim())) && (
+          <div className="step-clinica__section">
+            <DischargeTherapyReview
+              rows={terapiaImport}
+              onChange={(v) => onUpdateSection('terapiaImport', v)}
+              operatoreNome={operatoreNome}
+              sourceText={typeof data._terapiaText === 'string' ? data._terapiaText : undefined}
+              sourceResultHash={
+                (data._importSource as { resultHash?: string } | undefined)?.resultHash
+              }
+              onBackToDocuments={onBackToDocuments}
+            />
+          </div>
+        )}
+      {/* #235: explicit therapy acceptance — required before the patient can be created. */}
+      {therapyBlock && showTherapyAcceptance && (
+        <div className="step-clinica__section">
+          <label className="step-clinica__accept" data-testid="accept-therapy">
+            <input
+              type="checkbox"
+              checked={therapyAccepted}
+              onChange={(e) =>
+                onUpdateSection('_accepted', { ...accepted, therapy: e.target.checked })
+              }
+            />
+            <span>
+              {therapyEmpty
+                ? 'Confermo: nessuna terapia da inserire'
+                : 'Confermo di aver revisionato la terapia proposta'}
+            </span>
+          </label>
+        </div>
+      )}
+      {showLegacyPain && legacyPainPresent(data) && (
+        <NrsLegacyContent value={data.dolore} title="Dati dolore precedenti della bozza" intake />
+      )}
+      {sections.map((def) => {
+        const { sectionKey, title, component: Editor } = def;
+
+        // Cast: the registry stores ComponentType<SectionProps<never>> for type-safety at
+        // definition time; here we widen to SectionProps<unknown> for intake rendering.
+        const EditorCast = Editor as unknown as ComponentType<
+          SectionProps<unknown> & {
+            allergie?: AllergiaItem[];
+            showAllergySummary?: boolean;
+            status?: AllergyStatus;
+            onStatusChange?: (s: AllergyStatus) => void;
+            therapyCorrection?: TherapyCorrectionTarget | null;
+            admissionDate?: string;
+          }
+        >;
+
+        // AnamnesisEditor requires an extra allergie prop (read-only card inside Anamnesi).
+        // The intake has its own Allergie section: no duplicate summary pointing elsewhere.
+        // #265: AllergiesEditor needs status/onStatusChange wired to the draft, otherwise the
+        // Presenti/Assenti/Paziente nega selection is rendered but never enters allergieStatus.
+        const extraProps =
+          sectionKey === 'anamnesi'
+            ? { allergie: (data.allergie as AllergiaItem[]) ?? [], showAllergySummary: false }
+            : sectionKey === 'allergie'
+              ? {
+                  status: data.allergieStatus as AllergyStatus | undefined,
+                  onStatusChange: (s: AllergyStatus) => onUpdateSection('allergieStatus', s),
+                }
+              : {};
+
+        const isImported = importedFields.includes(sectionKey);
+        const refs = refsForSection(sectionKey);
+        const hasSource = refs.length > 0;
+        const aiFields = aiPaths.filter((path) => sectionOfPath(path) === sectionKey);
+
+        return (
+          <div
+            key={sectionKey}
+            className={`step-clinica__section${aiFields.length ? ' intake-ai-block' : ''}`}
+            data-ai-section={aiFields.length ? sectionKey : undefined}
+          >
+            {aiFields.length > 0 && (
+              <div className="intake-field__head intake-ai-section">
+                <AiBadge paths={aiFields} />
+                <span className="intake-ai-section__text">
+                  Letto dai documenti: {aiFields.map(fieldLabel).join(', ')}
+                </span>
+              </div>
+            )}
+            {isImported && (
+              <div className="step-clinica__provenance">
+                <span className="step-clinica__badge">Importato dal documento</span>
+                {hasSource && (
+                  <button
+                    type="button"
+                    className="step-clinica__compare-btn"
+                    aria-expanded={!!showSource[sectionKey]}
+                    onClick={() => setShowSource((p) => ({ ...p, [sectionKey]: !p[sectionKey] }))}
+                  >
+                    Confronta con la fonte
+                  </button>
+                )}
+              </div>
+            )}
+            {isImported && showSource[sectionKey] && hasSource && (
+              <SourceComparePanel refs={refs} />
+            )}
+            {showTitles && <div className="step-clinica__section-title">{title}</div>}
+            <EditorCast
+              mode="intake"
+              value={data[sectionKey]}
+              onChange={(v) => onUpdateSection(sectionKey, v)}
+              operatoreNome={operatoreNome}
+              {...extraProps}
+              therapyCorrection={sectionKey === 'terapia' ? therapyCorrection : undefined}
+              admissionDate={
+                sectionKey === 'terapia'
+                  ? (data.ingresso as { dataPresa?: string } | undefined)?.dataPresa
+                  : undefined
+              }
+            />
+          </div>
+        );
+      })}
+    </>
+  );
+}
