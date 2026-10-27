@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "kind": "preserved-qualified-evidence-wrapper",
+  "sourceBaseline": "41ccfd9ce93a8f99a8416349f4ea358713e579b3",
+  "correctedInImplementation": 11,
+  "originalWrapperSha256": "837b6f0011a03b872cf3f848cd564ba7bce16ebd306cffa65b9e1d535db45a19",
+  "originalWrapperRawUtf8": "{\n  \"primary\": [\n    {\n      \"issue\": 507,\n      \"files\": {\n        \"screenshot\": {\n          \"path\": \"artifacts/task-validation/bug-batch-507/evidence/screenshots/Europe-Rome-chart-admission.png\",\n          \"sha256\": \"139a032be3f9d01faf4dc658ba7aa6657c3135cb594726d0b448b15dedda7bb0\",\n          \"bytes\": 96082\n        },\n        \"trace\": {\n          \"path\": \"artifacts/task-validation/bug-batch-507/evidence/trace/issue507-Europe-Rome.zip\",\n          \"sha256\": \"926f134f4b466022b208d2304389ae18ab4b301014d7b317a03002c591f61ab4\",\n          \"bytes\": 2071577\n        },\n        \"video\": {\n          \"path\": \"artifacts/task-validation/bug-batch-507/evidence/video/issue507-Europe-Rome.webm\",\n          \"sha256\": \"facd7b2c3aac40c0a225187d8d4154dc64b92dc07e33817bc35eb9a325071517\",\n          \"bytes\": 3867343\n        }\n      }\n    }\n  ],\n  \"supplemental\": [\n    {\n      \"kind\": \"supplemental-screenshot\",\n      \"file\": \"artifacts/task-validation/bug-batch-507/evidence/screenshots/Europe-Rome-interval-duration.png\",\n      \"bytes\": 97404,\n      \"sha256\": \"8ebebedbccbc0cb8aa5df07312a32a27bd6a02c36a53ab9dae77a30ceaba4650\"\n    }\n  ],\n  \"readerRun\": 40491321534\n}\n",
+  "originalWrapper": {
+    "primary": [
+      {
+        "issue": 507,
+        "files": {
+          "screenshot": {
+            "path": "artifacts/task-validation/bug-batch-507/evidence/screenshots/Europe-Rome-chart-admission.png",
+            "sha256": "139a032be3f9d01faf4dc658ba7aa6657c3135cb594726d0b448b15dedda7bb0",
+            "bytes": 96082
+          },
+          "trace": {
+            "path": "artifacts/task-validation/bug-batch-507/evidence/trace/issue507-Europe-Rome.zip",
+            "sha256": "926f134f4b466022b208d2304389ae18ab4b301014d7b317a03002c591f61ab4",
+            "bytes": 2071577
+          },
+          "video": {
+            "path": "artifacts/task-validation/bug-batch-507/evidence/video/issue507-Europe-Rome.webm",
+            "sha256": "facd7b2c3aac40c0a225187d8d4154dc64b92dc07e33817bc35eb9a325071517",
+            "bytes": 3867343
+          }
+        }
+      }
+    ],
+    "supplemental": [
+      {
+        "kind": "supplemental-screenshot",
+        "file": "artifacts/task-validation/bug-batch-507/evidence/screenshots/Europe-Rome-interval-duration.png",
+        "bytes": 97404,
+        "sha256": "8ebebedbccbc0cb8aa5df07312a32a27bd6a02c36a53ab9dae77a30ceaba4650"
+      }
+    ],
+    "readerRun": 40491321534
+  },
+  "currentReferencedMedia": [
+    {
+      "kind": "screenshot",
+      "file": "artifacts/task-validation/bug-batch-507/evidence/screenshots/Europe-Rome-chart-admission.png",
+      "bytes": 96082,
+      "sha256": "139a032be3f9d01faf4dc658ba7aa6657c3135cb594726d0b448b15dedda7bb0",
+      "provenance": "native-qualification-40482705275-and-readonly-retrieval-40491321534"
+    },
+    {
+      "kind": "trace",
+      "file": "artifacts/task-validation/bug-batch-507/evidence/trace/issue507-Europe-Rome.zip",
+      "bytes": 2071577,
+      "sha256": "926f134f4b466022b208d2304389ae18ab4b301014d7b317a03002c591f61ab4",
+      "provenance": "native-qualification-40482705275-and-readonly-retrieval-40491321534"
+    },
+    {
+      "kind": "video",
+      "file": "artifacts/task-validation/bug-batch-507/evidence/video/issue507-Europe-Rome.webm",
+      "bytes": 3867343,
+      "sha256": "facd7b2c3aac40c0a225187d8d4154dc64b92dc07e33817bc35eb9a325071517",
+      "provenance": "native-qualification-40482705275-and-readonly-retrieval-40491321534"
+    },
+    {
+      "kind": "supplemental-screenshot",
+      "file": "artifacts/task-validation/bug-batch-507/evidence/screenshots/Europe-Rome-interval-duration.png",
+      "bytes": 97404,
+      "sha256": "8ebebedbccbc0cb8aa5df07312a32a27bd6a02c36a53ab9dae77a30ceaba4650",
+      "provenance": "same-immutable-synthetic-artifact-readonly-retrieval-40491321534"
+    }
+  ],
+  "qualification": {
+    "runId": 40482705275,
+    "readerRunId": 40491321534,
+    "qualifiedCode": "6572bd52617630d1dc79765bcbc1b97538974146",
+    "sourceFilesUnchanged": true,
+    "scope": "Synthetic actual React browser regression; not authenticated backend or deployment acceptance"
+  },
+  "preservedHistoricalFiles": [
+    {
+      "file": "artifacts/task-validation/bug-batch-507/evidence/playwright-report/index.html",
+      "bytes": 8501,
+      "sha256": "f5954daa3f147f213b4ff8979130d0646e177f0ef2d3d89a9274656c094feef3",
+      "changed": false
+    },
+    {
+      "file": "artifacts/task-validation/bug-batch-507/evidence/test-results/historical/results-before-contract-clarification.json",
+      "bytes": 3681,
+      "sha256": "07d2206d342f973622aaa83908c6a869567979790bc458450e5f81614895fc34",
+      "changed": false
+    }
+  ],
+  "round10MediaAdopted": false,
+  "note": "Original immutable qualified synthetic media retained at their original paths. No round10 replacement media is claimed available; no metadata hash is reused for different bytes. Current-head CI/Claude5/final Codex/release/online acceptance are pending."
+}
