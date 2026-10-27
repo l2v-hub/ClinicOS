@@ -9,6 +9,7 @@ import {
   pendingTherapyAdmissionDates,
   hydrateTherapyAdmissionDates,
 } from '../../../../lib/therapyAdmissionDate';
+import { facilityLocalDate } from '../../../../lib/facilityTime';
 import { resolvePresaInCarico } from '../../../../lib/presaInCarico';
 import {
   dischargeRowToTherapyForm,
@@ -26,14 +27,15 @@ test('chart admission source uses saved presa in carico and retained legacy inta
   }
 });
 
-test('new prescriptions use the admission day for every therapy type and its payload', () => {
+test('new prescriptions start at admission while one-off doses default to the current round', (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: new Date('2026-10-25T12:00:00Z') });
   for (const tipo of ['periodica', 'al_bisogno', 'una_tantum'] as const) {
     const form = applyTherapyFormChange(emptyTherapyForm('2026-09-15'), { tipo });
     assert.equal(form.dataInizio, '2026-09-15');
-    assert.equal(form.dataSomministrazione, '2026-09-15');
+    assert.equal(form.dataSomministrazione, '2026-10-25');
     const payload = formToPayload(form, 'synthetic-patient', 'Synthetic Operator');
     assert.equal(payload.dataInizio, '2026-09-15');
-    assert.equal(payload.dataSomministrazione, tipo === 'una_tantum' ? '2026-09-15' : null);
+    assert.equal(payload.dataSomministrazione, tipo === 'una_tantum' ? '2026-10-25' : null);
   }
 });
 
@@ -102,13 +104,13 @@ test('imported explicit dates and reviewed therapy dates retain their original v
   assert.equal(restored.dataSomministrazione, '2026-08-31');
 });
 
-test('late valid admission hydrates both automatic fallback dates without changing prescription data', () => {
+test('late valid admission hydrates automatic dates without backdating a dose or changing prescription data', () => {
   const form = { ...emptyTherapyForm(), note: 'Synthetic operator note' };
   const pending = pendingTherapyAdmissionDates(undefined);
   assert.equal(hydrateTherapyAdmissionDates(form, 'invalid', pending), form);
   const hydrated = hydrateTherapyAdmissionDates(form, '2026-09-15', pending);
   assert.equal(hydrated.dataInizio, '2026-09-15');
-  assert.equal(hydrated.dataSomministrazione, '2026-09-15');
+  assert.equal(hydrated.dataSomministrazione, facilityLocalDate());
   assert.equal(hydrated.note, form.note);
   assert.equal(hydrated.schedules, form.schedules);
   assert.equal(pendingTherapyAdmissionDates('2026-09-15'), null);
@@ -120,7 +122,7 @@ test('start-only input protects that field while the hidden once date can hydrat
     dataInizio: false, dataSomministrazione: true,
   });
   assert.equal(hydrated.dataInizio, '2026-10-01');
-  assert.equal(hydrated.dataSomministrazione, '2026-09-15');
+  assert.equal(hydrated.dataSomministrazione, facilityLocalDate());
 });
 
 test('once-only input protects that field while start date can hydrate', () => {
@@ -139,7 +141,7 @@ test('explicit fallback-day selection and deliberate empty input remain operator
       dataInizio: false, dataSomministrazione: true,
     });
     assert.equal(hydrated.dataInizio, dataInizio);
-    assert.equal(hydrated.dataSomministrazione, '2026-09-15');
+    assert.equal(hydrated.dataSomministrazione, facilityLocalDate());
   }
 });
 
@@ -150,4 +152,51 @@ test('saved/imported/calendar forms without automatic lineage never hydrate', ()
   for (const form of [defaults, calendar]) {
     assert.equal(hydrateTherapyAdmissionDates(form, '2026-09-15', null), form);
   }
+});
+
+
+test('today and future admissions keep both automatic dates on the admission day', (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: new Date('2026-10-25T12:00:00Z') });
+  for (const day of ['2026-10-25', '2026-10-28']) {
+    const form = emptyTherapyForm(day);
+    assert.equal(form.dataInizio, day);
+    assert.equal(form.dataSomministrazione, day);
+  }
+});
+
+test('intake automatic fields follow repeated admission corrections independently', (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: new Date('2026-10-25T12:00:00Z') });
+  const automatic = { dataInizio: true, dataSomministrazione: true };
+  let form = emptyTherapyForm('2026-10-25');
+  for (const day of ['2026-10-20', '2026-10-21', '2026-10-28']) {
+    form = hydrateTherapyAdmissionDates(form, day, automatic);
+    assert.equal(form.dataInizio, day);
+    assert.equal(form.dataSomministrazione, day > '2026-10-25' ? day : '2026-10-25');
+  }
+  automatic.dataInizio = false;
+  form = { ...form, dataInizio: '2026-10-19' };
+  form = hydrateTherapyAdmissionDates(form, '2026-10-29', automatic);
+  assert.equal(form.dataInizio, '2026-10-19');
+  assert.equal(form.dataSomministrazione, '2026-10-29');
+});
+
+test('intake explicit once date stays protected across repeated admission corrections', (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: new Date('2026-10-25T12:00:00Z') });
+  // Explicitly selecting the automatic value must still transfer ownership to the operator.
+  const automatic = { dataInizio: true, dataSomministrazione: false };
+  let form = emptyTherapyForm('2026-10-25');
+  for (const day of ['2026-10-28', '2026-10-29']) {
+    form = hydrateTherapyAdmissionDates(form, day, automatic);
+    assert.equal(form.dataInizio, day);
+    assert.equal(form.dataSomministrazione, '2026-10-25');
+  }
+});
+
+test('undated imports retain their current-day default without manual admission lineage', (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: new Date('2026-10-25T12:00:00Z') });
+  const imported = dischargeRowToTherapyForm({
+    farmacoNome: 'Synthetic medicine', quantita: '1 cpr', orari: ['08:00'],
+  } as DischargeTherapyRow);
+  assert.equal(imported.dataInizio, '2026-10-25');
+  assert.equal(hydrateTherapyAdmissionDates(imported, '2026-10-20', null), imported);
 });

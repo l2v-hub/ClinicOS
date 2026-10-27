@@ -1,7 +1,8 @@
 // Synthetic component smoke: actual chart/intake components, intercepted localhost HTTP.
 // This does not prove authenticated backend/database E2E or independent QA.
 import assert from 'node:assert/strict';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile, mkdtemp, rm, rename } from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
@@ -9,23 +10,29 @@ import { createServer } from 'vite';
 import react from '@vitejs/plugin-react';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const output = process.env.QA_OUTPUT_DIR;
-assert.ok(output && path.isAbsolute(output), 'Set QA_OUTPUT_DIR to a private absolute evidence directory');
-await mkdir(output, { recursive: true });
+const nativeOutput = path.join(root, 'artifacts/task-validation/bug-batch-507/evidence');
+const output = process.env.QA_OUTPUT_DIR ? path.resolve(process.env.QA_OUTPUT_DIR) : nativeOutput;
+assert(output === nativeOutput || output.startsWith(nativeOutput + path.sep), 'Evidence must remain in the owned native packet directory');
+const screenshots = path.join(output, 'screenshots'), trace = path.join(output, 'trace'), videoDir = path.join(output, 'video');
+for (const directory of [screenshots, trace, videoDir, path.join(output, 'test-results')]) await mkdir(directory, { recursive: true });
+const cache = await mkdtemp(path.join(os.tmpdir(), 'clinicos-e2e-507-'));
 process.env.VITE_API_URL = 'http://127.0.0.1:3999';
 const entry = path.join(root, 'e2e/issue507/entry.tsx');
 const html = `<html lang="it"><head><meta charset="UTF-8"><title>Issue 507 synthetic QA</title></head><body><div id="root"></div><script type="module" src="/@fs/${entry}"></script></body></html>`;
-const server = await createServer({
+const serverOptions = {
   configFile: false, envDir: false, root: path.join(root, 'frontend'),
+  cacheDir: cache,
+  define: { 'import.meta.env.VITE_API_URL': JSON.stringify('http://127.0.0.1:3999') },
+  resolve: { alias: { '@': path.join(root, 'frontend/src') } },
   plugins: [react(), { name: 'issue507-private-entry', configureServer(vite) {
     vite.middlewares.use('/__qa507', async (_req, res, next) => {
       try { res.setHeader('Content-Type', 'text/html'); res.end(await vite.transformIndexHtml('/__qa507', html)); }
       catch (error) { next(error); }
     });
   } }],
-  server: { host: '127.0.0.1', port: 5178, strictPort: true, fs: { allow: [root] } },
-});
-let browser;
+  server: { host: '127.0.0.1', port: 5178, strictPort: true, fs: { allow: [root, cache] } },
+};
+let server, browser;
 const errors = [], unexpected = [], results = [];
 const saved = { id: 'synthetic-therapy', patientId: 'synthetic-patient',
   farmacoNome: 'Synthetic saved medicine', dosaggio: '20 mg', viaSomministrazione: 'orale',
@@ -42,11 +49,12 @@ async function value(locator, expected) {
   assert.equal(await locator.inputValue(), expected);
 }
 try {
+  server = await createServer(serverOptions);
   await server.listen();
-  browser = await chromium.launch({ executablePath: '/usr/bin/chromium', headless: true,
+  browser = await chromium.launch({ headless: true,
     args: ['--no-sandbox'] });
   for (const timezoneId of ['Europe/Rome', 'America/Los_Angeles']) {
-    const context = await browser.newContext({ timezoneId, viewport: { width: 1280, height: 960 } });
+    const context = await browser.newContext({ timezoneId, viewport: { width: 1280, height: 960 }, recordVideo: { dir: videoDir, size: { width: 1280, height: 960 } } });
     await context.tracing.start({ screenshots: true, snapshots: true });
     await context.route('**/*', async (route) => {
       const request = route.request(), url = new URL(request.url());
@@ -78,6 +86,7 @@ try {
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) });
     });
     const page = await context.newPage();
+    await page.clock.install({ time: new Date('2026-10-25T12:00:00Z') });
     page.on('response', (response) => {
       if (response.status() >= 400) errors.push(`HTTP ${response.status()} ${new URL(response.url()).pathname}`);
     });
@@ -87,8 +96,8 @@ try {
     const chart = page.getByRole('region', { name: 'Chart therapy', exact: true });
     await value(chart.getByLabel('Data inizio *', { exact: true }), '2026-09-15');
     await chart.getByRole('radio', { name: /Una tantum/ }).check();
-    await value(chart.getByLabel('Data somministrazione', { exact: true }), '2026-09-15');
-    await chart.screenshot({ path: path.join(output, `${timezoneId.replace('/', '-')}-chart-admission.png`) });
+    await value(chart.getByLabel('Data somministrazione', { exact: true }), '2026-10-25');
+    await chart.screenshot({ path: path.join(screenshots, `${timezoneId.replace('/', '-')}-chart-admission.png`) });
     await chart.getByLabel('Data inizio *', { exact: true }).fill('2026-10-01');
     await chart.getByLabel('Data somministrazione', { exact: true }).fill('2026-10-02');
     await page.getByLabel('Chart admission context', { exact: true }).fill('2026-09-20');
@@ -115,12 +124,12 @@ try {
     await intake.getByRole('button', { name: '+ Aggiungi un altro farmaco', exact: true }).click();
     await value(intake.getByLabel('Data inizio *', { exact: true }), '2026-09-22');
     await intake.getByRole('radio', { name: /Una tantum/ }).check();
-    await value(intake.getByLabel('Data somministrazione', { exact: true }), '2026-09-22');
-    await intake.screenshot({ path: path.join(output, `${timezoneId.replace('/', '-')}-intake-admission.png`) });
+    await value(intake.getByLabel('Data somministrazione', { exact: true }), '2026-10-25');
+    await intake.screenshot({ path: path.join(screenshots, `${timezoneId.replace('/', '-')}-intake-admission.png`) });
     await intake.getByTestId('manual-therapy-row').first().getByRole('button', { name: 'Modifica', exact: true }).click();
     await value(intake.getByLabel('Data inizio *', { exact: true }), '2026-09-13');
     results.push(`${timezoneId}: real StepClinica intake new rows, context changes, once date and retained earlier row PASS`);
-    await page.screenshot({ path: path.join(output, `${timezoneId.replace('/', '-')}.png`), fullPage: true });
+    await page.screenshot({ path: path.join(screenshots, `${timezoneId.replace('/', '-')}.png`), fullPage: true });
     for (const edit of ['untouched', 'start', 'once', 'same-fallback', 'empty-start']) {
       await page.goto('http://127.0.0.1:5178/__qa507?cold=1');
       const coldChart = page.getByRole('region', { name: 'Chart therapy', exact: true });
@@ -142,8 +151,8 @@ try {
         : edit === 'same-fallback' ? fallback : edit === 'empty-start' ? '' : '2026-09-15');
       await coldChart.getByRole('radio', { name: /Una tantum/ }).check();
       await value(coldChart.getByLabel('Data somministrazione', { exact: true }),
-        edit === 'once' ? '2026-10-02' : '2026-09-15');
-      await coldChart.screenshot({ path: path.join(output, `${timezoneId.replace('/', '-')}-cold-${edit}.png`) });
+        edit === 'once' ? '2026-10-02' : '2026-10-25');
+      await coldChart.screenshot({ path: path.join(screenshots, `${timezoneId.replace('/', '-')}-cold-${edit}.png`) });
       results.push(`${timezoneId}: actual PatientDetail late admission, ${edit} dates PASS`);
     }
     await page.getByRole('button', { name: 'Switch synthetic patient', exact: true }).click();
@@ -178,17 +187,38 @@ try {
       await value(start, edit === 'start' ? '2026-10-01' : edit === 'same-fallback' ? fallback : '2026-09-12');
       await coldIntake.getByRole('radio', { name: /Una tantum/ }).check();
       await value(coldIntake.getByLabel('Data somministrazione', { exact: true }),
-        edit === 'once' ? '2026-10-02' : '2026-09-12');
+        edit === 'once' ? '2026-10-02' : '2026-10-25');
       results.push(`${timezoneId}: actual intake late admission, ${edit} dates PASS`);
     }
-    await context.tracing.stop({ path: path.join(output, `${timezoneId.replace('/', '-')}.zip`) });
+    await page.goto('http://127.0.0.1:5178/__qa507');
+    const correctedIntake = page.getByRole('region', { name: 'Intake therapy', exact: true });
+    const admissionInput = page.getByLabel('Intake admission context', { exact: true });
+    await admissionInput.fill('2026-10-25');
+    await correctedIntake.getByRole('button', { name: '+ Aggiungi farmaco', exact: true }).click();
+    for (const day of ['2026-10-20', '2026-10-21']) {
+      await admissionInput.fill(day);
+      await value(correctedIntake.getByLabel('Data inizio *', { exact: true }), day);
+    }
+    await correctedIntake.getByLabel('Data inizio *', { exact: true }).fill('2026-10-19');
+    await admissionInput.fill('2026-10-22');
+    await value(correctedIntake.getByLabel('Data inizio *', { exact: true }), '2026-10-19');
+    await correctedIntake.getByRole('button', { name: 'Rimuovi farmaco 1', exact: true }).click();
+    await correctedIntake.getByRole('button', { name: '+ Aggiungi farmaco', exact: true }).click();
+    await admissionInput.fill('2026-10-23');
+    await value(correctedIntake.getByLabel('Data inizio *', { exact: true }), '2026-10-23');
+    results.push(`${timezoneId}: repeated intake admission corrections, explicit edit and remove/re-add PASS`);
+    await context.tracing.stop({ path: path.join(trace, `issue507-${timezoneId.replace('/', '-')}.zip`) });
+    const video = page.video();
     await context.close();
+    assert(video, 'A fresh native evidence video is required');
+    await rename(await video.path(), path.join(videoDir, `issue507-${timezoneId.replace('/', '-')}.webm`));
   }
   assert.deepEqual(unexpected, [], 'No unexpected or remote requests');
   assert.deepEqual(errors, [], 'No browser/console errors');
-  await writeFile(path.join(output, 'results.json'), JSON.stringify({ results, errors, unexpected }, null, 2));
+  await writeFile(path.join(output, 'test-results/browser.json'), JSON.stringify({ results, errors, unexpected }, null, 2));
   console.log(results.join('\n'));
 } finally {
   await browser?.close();
-  await server.close();
+  await server?.close();
+  await rm(cache, { recursive: true, force: true });
 }

@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   hydrateTherapyAdmissionDates,
-  pendingTherapyAdmissionDates,
-  therapyAdmissionCalendarDate,
   type AutomaticTherapyDates,
 } from '../../../lib/therapyAdmissionDate';
 import {
@@ -35,13 +33,19 @@ export function TherapyIntakeEditor({
 }) {
   const items = value ?? [];
   // Existing/imported rows never enter this map; lineage is local to newly added drafts.
+  // Keep it after hydration: intake admission can be corrected more than once.
   const automaticDates = useRef(new Map<TherapyFormValue, AutomaticTherapyDates>());
   useEffect(() => {
-    if (!therapyAdmissionCalendarDate(admissionDate) || !automaticDates.current.size) return;
-    const next = items.map((item) => hydrateTherapyAdmissionDates(
-      item, admissionDate, automaticDates.current.get(item) ?? null,
-    ));
-    automaticDates.current.clear();
+    const retained = new Map<TherapyFormValue, AutomaticTherapyDates>();
+    const next = items.map((item) => {
+      const fields = automaticDates.current.get(item);
+      if (!fields) return item;
+      const hydrated = hydrateTherapyAdmissionDates(item, admissionDate, fields);
+      retained.set(hydrated, fields);
+      return hydrated;
+    });
+    // Transfer lineage to replacement objects and discard rows removed outside this editor.
+    automaticDates.current = retained;
     if (next.some((item, index) => item !== items[index])) onChange(next);
   }, [admissionDate, items, onChange]);
   const [editingIndex, setEditingIndex] = useState<number | null>(
@@ -70,8 +74,7 @@ export function TherapyIntakeEditor({
 
   function addDrug() {
     const item = emptyTherapyForm(admissionDate);
-    const fields = pendingTherapyAdmissionDates(admissionDate);
-    if (fields) automaticDates.current.set(item, fields);
+    automaticDates.current.set(item, { dataInizio: true, dataSomministrazione: true });
     onChange([...items, item]);
     setEditingIndex(items.length);
   }

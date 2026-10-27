@@ -22,6 +22,13 @@ export function therapyAdmissionDate(value: unknown): string {
   return therapyAdmissionCalendarDate(value) ?? facilityLocalDate();
 }
 
+/** A new one-off dose must not default to a day before the current round. */
+export function therapyAdministrationDate(admission: unknown): string {
+  const today = facilityLocalDate();
+  const day = therapyAdmissionCalendarDate(admission);
+  return day && day > today ? day : today;
+}
+
 /** Only a new manual draft without admission owns automatic fallback dates. */
 export function pendingTherapyAdmissionDates(value: unknown): AutomaticTherapyDates | null {
   return therapyAdmissionCalendarDate(value)
@@ -38,7 +45,7 @@ export function hydrateTherapyAdmissionDates(
   const day = therapyAdmissionCalendarDate(admission);
   if (!day || !automatic) return form;
   const dataInizio = automatic.dataInizio ? day : form.dataInizio;
-  const dataSomministrazione = automatic.dataSomministrazione ? day : form.dataSomministrazione;
+  const dataSomministrazione = automatic.dataSomministrazione ? therapyAdministrationDate(admission) : form.dataSomministrazione;
   return dataInizio === form.dataInizio && dataSomministrazione === form.dataSomministrazione
     ? form
     : { ...form, dataInizio, dataSomministrazione };

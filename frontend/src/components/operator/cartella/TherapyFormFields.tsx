@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { therapyAdmissionDate, type TherapyDateField } from '../../../lib/therapyAdmissionDate';
+import { therapyAdmissionDate, therapyAdministrationDate, type TherapyDateField } from '../../../lib/therapyAdmissionDate';
 import { CampoFarmaco } from './CampoFarmaco';
 import { needsCommercialStrengthReview } from './drugPackageSelection';
 import {
@@ -105,7 +105,7 @@ export function emptyTherapyForm(admissionDate?: string): TherapyFormValue {
     giorniSettimana: [],
     prescrittore: '',
     note: '',
-    dataSomministrazione: startDate,
+    dataSomministrazione: therapyAdministrationDate(admissionDate),
     orarioSomministrazione: '',
     doseMode: 'fixed',
     glucoseScale: [],
