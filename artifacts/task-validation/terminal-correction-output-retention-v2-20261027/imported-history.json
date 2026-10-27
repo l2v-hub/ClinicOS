@@ -1,0 +1,221 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "subjectSha": "0fa1d7266e148e78dc0cffcaa95edbd7e539153d",
+      "evidence": "independent-qa1/report.md",
+      "nonce": "125dd7c5-2bc2-4f52-b839-7c5c9d57f14e",
+      "reason": "Existing real parent host authored bounded source; genuine native regressions and fresh independent exact-byte QA VERIFIED0.",
+      "independentQaSealSha256": "6e69cea1693c74a18c2eeb2df79bb13000e84e5a54440b5d8a2635c3c8120807"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "subjectSha": "2de1fb80eb9245027b356c7bfcf6798d269b9fdf",
+      "evidence": "independent-qa2/report.md",
+      "nonce": "402656e7-a60b-4e4a-a835-48da6377dcd4",
+      "directorAmendmentNonce": "e9a1777f-c915-447a-b80e-5340e591097c",
+      "independentQaNonce": "812f2b88-0d67-432c-ac2d-fc7f3f578f22",
+      "independentQaSealSha256": "b393e5393a67174e79cb6c82d0dfbb9289d75c771165a43a6657db4f0c28ac60",
+      "reason": "Genuine peer1 optional failure-classification and encoded-byte findings corrected; actual original RED plus final-symlink RED/GREEN, final exact37required and fresh independent QA passed. All original source/report/history preserved."
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "1337dfc62066ec9378e824529658c61337ae912f"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "changes-requested",
+        "subject_sha": "1337dfc62066ec9378e824529658c61337ae912f",
+        "review_sha256": "2cf1e7f9246779c61fea6072ddd0e834a0b965dc0a2aae8e63c4a9bf2bcc7736"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"1337dfc62066ec9378e824529658c61337ae912f\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"I reviewed the four changed files at the frozen head without running anything. The shared `knownTerminalFailure` predicate is applied the same way in the CLI and the exporter, and it is strict. It refuses running, interrupted, publishing and pending-publish states, scope-invalid and evidence-invalid failures, the recovery step, and drift in plan, feedback, round or source. The exporter keeps its checkpoint, path, mode, hash, secret and size guards, and it never overwrites an earlier export.\\n\\nThe change also alters controller behavior in one way, which conflicts with AC4 and the rule that retention is only observational. The new report writer for blocked model results runs before the blocked result reaches the controller. If that write fails, a definite BLOCKED result becomes an unsettled running tombstone. There is also a smaller mismatch between the size limits used when writing and when exporting the report.\\n\\nThe test-pass claims (49 focused tests; 1735 pass, 3 skip, 0 fail on the 37-file suite) and the six CI check IDs come only from the PR's own evidence files and comments. The raw logs were not provided, so I could not verify them independently.\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/workspace.mjs\",\n      \"line\": 240,\n      \"problem\": \"`retainBlockedResult` is awaited inside `workspace.execute`, `simplify` and `qa` before the result is returned. It can throw: on any mkdir, readFile or writeFile failure, or with 'Terminal model report identity changed' when a different report already exists for the same round and step (for example, legacy correction flows without an implementation round, where the round value can repeat). When it throws, `runImplementationStages` never sees `result.status === 'blocked'`, so `definiteModelFailure` is never set. The catch block then treats the error as unknown: the attempt stays 'running' and progress is never marked failed. An optional retention side effect now decides whether a genuine BLOCKED outcome is settled, and it can force explicit recovery. This contradicts AC4 (controller policy unchanged) and the comment that retention is observational and never authorization.\",\n      \"requested_change\": \"Make retention best-effort and keep it out of failure classification. Either catch and record retention errors inside `retainBlockedResult` so the blocked result is always returned (and let the export report the missing report as not-recorded), or move report writing into `runImplementationStages` after `definiteModelFailure` is established, so a write failure cannot stop the attempt from being marked failed.\",\n      \"test_expectation\": \"Add a fixture where the model returns BLOCKED and report writing fails (for example, a conflicting existing report file for the same round and step, or a read-only model-results directory). Assert that the controller progress status is still 'failed' with the correct failure code, that the implementation attempt is 'failed', and that the export reports modelReport availability as not-recorded instead of leaving a running tombstone.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"agent-team/src/bug-pipeline/failed-output-export.mjs\",\n      \"line\": 196,\n      \"problem\": \"The workspace accepts summaries up to 32 KiB of raw text, measured before JSON encoding. The exporter rejects any report file over 64 KiB. JSON escaping of quotes and backslashes can roughly double the encoded size, so a report the workspace wrote as retained or sanitized can exceed 64 KiB and be exported as 'invalid-or-unsafe'. The available safe evidence is then dropped and misclassified.\",\n      \"requested_change\": \"Make the two limits consistent. Either bound the serialized report size in `retainBlockedResult` (and mark it omitted-oversized when the encoded JSON would exceed the export limit), or set the exporter's file limit from the worst-case encoded size of a 32 KiB summary.\",\n      \"test_expectation\": \"Add a test with a summary just under 32 KiB made mostly of characters that need JSON escaping. Assert that the workspace disposition and the export availability agree: either both mark it omitted-oversized, or the report is retained and exported.\"\n    }\n  ]\n}\n"
+  },
+  "sourceManifest": [
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "blob": "1b70d185805929ecd26564b20aeb9d57d8ccc660",
+      "mode": "100644",
+      "baseBlob": "d239c6db29627683ae3999f5612a7280a17bb6ac",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "blob": "7e6c6f3d144dc99963e3062178559a1f5cb3965b",
+      "mode": "100644",
+      "baseBlob": "ef9ad03732c9102dc2e03b465fc78e1e00f32b2a",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/workspace.mjs",
+      "blob": "30fb23bd77af07edd2136e55d1c76c8715441e24",
+      "mode": "100644",
+      "baseBlob": "248d04d93959696bbf3d4095d6828e33c70983cc",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/terminal-output-retention.test.mjs",
+      "blob": "92de2d8737527e0f5495a3c299f5d3c8aa06b6a6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/analysis.md",
+      "blob": "ff7fc7814fe0ad7c04e89af34fcca626e7dbfac8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/author1/broader-baseline-static-assertion-identities.json",
+      "blob": "aab27f8bdb96d02605dd9b85536492e4aef3f833",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/author1/expanded-process-integration-observation.json",
+      "blob": "124f7f9d74d8873869d517e28e7f5c1110bc8f9c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/author1/full-suite-exit.json",
+      "blob": "c2b8299f9f201ad5682095d45a4a6313ef968c88",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/author1/implementation-report.md",
+      "blob": "f7dd699c115dfc2a39652ecb90b0dd0067344255",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/author1/required-suite-exit.json",
+      "blob": "08357619b412d152678ebd25ed6861309aa3df09",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/author1/required-suite-invocation.json",
+      "blob": "4b0ef826265685e160df31baa9c90a685ca53cbf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/author1/seal.json",
+      "blob": "378bf724af56b0bf6585e5446b64557e6b8bddad",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/author1/source-projection.json",
+      "blob": "9616ac843963f9d2af87105d12539e21d8149883",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/implementation-plan.md",
+      "blob": "5f1b0baa063e557a2fbc6c2c255244f1f5639997",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/imported-history.json",
+      "blob": "f4e085b6609ec8f91745ac7c339fa310eb6a9b68",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/independent-qa1/report.md",
+      "blob": "a758451edc4513631f9382c06a65262aa14ba1bb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/independent-qa1/result.json",
+      "blob": "0b3d7981dc0bff3d8846359ee660281497c120d6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/independent-qa1/seal.json",
+      "blob": "b4613089af294133cd2a5cc6b6202c66ba4e6234",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/task-contract.md",
+      "blob": "e4551772dad070ff0239a76a947d15e047138ab6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/terminal-correction-output-retention-20261027/validation-report.md",
+      "blob": "f5000018c4666b4ba59a70b6e191c01d9745252d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "6122b8445751fad2f1352eee549e6b283bedc18af14ea2ebcd48d484185d9242",
+    "author1/broader-baseline-static-assertion-identities.json": "35eec82f646cbcf3258fba134d15d154d518a978d315e08581e02a1d0b844f9d",
+    "author1/expanded-process-integration-observation.json": "552013bf92ce0955e05ad2fa1852a14e7a88e10662cf80819dced33bcd62cccb",
+    "author1/full-suite-exit.json": "9b255a24d652a224ade41ac947d9f33f0eb4694225c6efd66d5440b2997be067",
+    "author1/implementation-report.md": "a4bb4f3b027a24df861797b2c22e9bc0f7577af07242aea7b802bf606fdffd63",
+    "author1/required-suite-exit.json": "0580824a9d35941a6d36c963b9bb9eb26ea17340fb55c78e5a48461d9c12019e",
+    "author1/required-suite-invocation.json": "3be9edc3635b68e50fcc40f65f00cefc835e357b5367b8a6cb6c9623f44859b5",
+    "author1/seal.json": "fc3231862e4dec050ccae449b77602d17a944f1acde1dcfc5da24994a4d4117f",
+    "author1/source-projection.json": "fcda630714593598bcb4715e77eb78288c59274396d7f67bdcda10632647f209",
+    "author2-integration/green-final-file-symlink.log": "8ac8eb5fea173c37f9f7ffe30bed1d2cbe6da7826b997b059acbf044cc83102b",
+    "author2-integration/implementation-report.md": "b984c2ab025a74a50f0125c8190065ee1fd662fadd66dd3550bfe0296ff619dd",
+    "author2-integration/red-final-file-symlink.log": "732dc9eb715ea46bc938f9aa2a9cf85e5fc0d3bff02da3c56a4a731257a36bfd",
+    "author2-integration/red-original-peer-cases.log": "c33ff9dea3846e477eb7d1bcdac88665bbc3cf5862993ecf9bc32a3abc25324e",
+    "author2-integration/required-exact-exit.json": "11945691646645ecce2b7e86e208713b7a1ba4d4a8b185ae14990dd781fc5514",
+    "author2-integration/required-exact-invocation.json": "e556530eb6abfc748d67bafbabb32127c7e0e673d00bdb8c1f92eaf6632020ac",
+    "author2-integration/seal.json": "65a37fc43816bcd39d65d45d3735e4570e34eaed862a38eab2ad3d1e594af5ec",
+    "author2-integration/source-projection.json": "9a4e0657f4594e3ec6bd09a2cc4ebeb316c3ecaa8c059feaff3d8f1f586f63d7",
+    "author2-luna/implementation-report.md": "b38912f6cd42e52f609cb7c6197cfe7bd6b58649cd44e83838e8fcd2bff38859",
+    "author2-luna/seal.json": "44af3ca50fda82d4809f1e8dd3b133daab18d2d5e727ed7faec264e4e7a33298",
+    "author2-luna/source-projection.json": "eeef78882c91a29edd329876de27a6b90c8b76fd5d95315afb1a9e8745ff98b9",
+    "claude-review-1.json": "2cf1e7f9246779c61fea6072ddd0e834a0b965dc0a2aae8e63c4a9bf2bcc7736",
+    "implementation-plan.md": "d3367d502f9eda8b1ed8354a50b807aac32dccf123b419500d9b4c5bb069c56a",
+    "independent-qa1/report.md": "41120fd1fbbb8d78db63c810d2650457a596cdf71519dd6769e4702f209cb541",
+    "independent-qa1/result.json": "fd8ccdd779b9210a0185b7c7f580529288af2bdb9f53a8c9e61efdb9a6588d60",
+    "independent-qa1/seal.json": "6e69cea1693c74a18c2eeb2df79bb13000e84e5a54440b5d8a2635c3c8120807",
+    "independent-qa2/report.md": "3f10bce577a937e2e8eecaa77a33b205ee370b0809fadcf54c99e5808e2b4ce9",
+    "independent-qa2/result.json": "f4840cdee4df80d54039cf08cb8c97b021f9a405e7ab646125fc22aa884b4520",
+    "independent-qa2/seal.json": "b393e5393a67174e79cb6c82d0dfbb9289d75c771165a43a6657db4f0c28ac60",
+    "required-test-results.txt": "43b0fe66136cf11d5e55a59152bd8d01ba2d53263bb0bc6fe83e9e2b7e902685",
+    "task-contract.md": "af03612baae3503153b7a8c0402a3a2397532858da41a2767bee4584364b7429",
+    "validation-report.md": "f835d75dda1cceb6e8380ba794b3e3ef5f1718e37f413b5dbce4fa9481a85bbd"
+  }
+}

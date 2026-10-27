@@ -1,0 +1,25 @@
+Actual final Node22/concurrency1 exact37file workflow output tail. Full raw log remains preserved privately. SHA256 00ef26298f993363fe28455d91e8cff32d6d80ff20a6194985f3a628bc566e63; bytes 351701
+
+  type: 'test'
+  ...
+# Subtest: an explicitly audited effective allowance permits round5 and preserves historical max_rounds4 and reports
+ok 858 - an explicitly audited effective allowance permits round5 and preserves historical max_rounds4 and reports
+  ---
+  duration_ms: 673.815174
+  type: 'test'
+  ...
+# Subtest: local review uses the same trusted generation contract with frozen SHA and read-only rules
+ok 859 - local review uses the same trusted generation contract with frozen SHA and read-only rules
+  ---
+  duration_ms: 144.031608
+  type: 'test'
+  ...
+1..859
+# tests 1742
+# suites 0
+# pass 1739
+# fail 0
+# cancelled 0
+# skipped 3
+# todo 0
+# duration_ms 171557.398386
