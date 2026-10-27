@@ -1,0 +1,214 @@
+name: Read fixed qualified 506 root10 evidence
+on:
+  push:
+    branches: [codex/506-root10-media-reader-20261027]
+permissions:
+  actions: read
+jobs:
+  read:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          github-token: ${{ github.token }}
+          repository: l2v-hub/ClinicOS
+          run-id: 40535859044
+          artifact-ids: 12749930437
+          merge-multiple: true
+          path: ${{ runner.temp }}/fixed-peer-input-506
+      - name: Materialize trusted fixed reader after untrusted data download
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/clinical-peer-fixed-reader"
+          if [ -e "$root" ] || [ -L "$root" ]; then exit 1; fi
+          install -d -m 700 "$root"
+          cat > "$root/reader.mjs" <<'FIXED_READER'
+          import assert from'node:assert/strict';import path from'node:path';import{lstat,realpath,readFile}from'node:fs/promises';import{createHash}from'node:crypto';import{gzipSync}from'node:zlib';import{fileURLToPath}from'node:url';import{validatePng,validateTrace}from'./evidence.mjs';
+          const h=x=>createHash('sha256').update(x).digest('hex');
+          export async function collect(root,binding,issue){assert.equal(binding.repository,'l2v-hub/ClinicOS');assert.equal(binding.runId,40535859044);assert.equal(binding.sourceOperatorSha,'3fa97e68e74a4d900c84c902003d59bb6c786226');assert.equal(issue,506);assert.equal(await realpath(root),path.resolve(root));assert.equal(binding.targets.length,1);const t=binding.targets.find(t=>t.issue===issue);assert(t);assert.equal(t.artifactId,12749930437);assert.equal(binding.sourceSha,'7736adffea3394c8a70b76f71967309f1aa32b7a');assert.equal(t.artifactName,`clinical-harness-qualification-${issue}-40535859044`);assert.equal(t.expectedArchiveSha256,'d99970c9c0cfe95fd0b9a7d68b7c06551198ba3698c9f5f328a8654421921594');assert.deepEqual(t.primary.map(f=>f.kind).sort(),['screenshot','trace','video']);assert.deepEqual(t.primary.map(f=>f.file),["artifacts/task-validation/bug-batch-506/evidence/screenshots/import-1440.png","artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip","artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm"]);assert.deepEqual(t.supplementalScreenshots,["artifacts/task-validation/bug-batch-506/evidence/screenshots/save-failure-recovered-390.png","artifacts/task-validation/bug-batch-506/evidence/screenshots/upload-notice-cleared-390.png"]);let total=0;const files=[];
+          for(const wanted of[...t.primary,...t.supplementalScreenshots.map(file=>({kind:'supplemental-screenshot',file}))]){assert(wanted.file.startsWith(`artifacts/task-validation/bug-batch-${issue}/evidence/`));const relative=`source/agent-team/.worktrees/harness-qualification-${issue}/${wanted.file}`;assert(!relative.includes('\\'));assert(relative.split('/').every(s=>s&&s!=='.'&&s!=='..'));let target=root;for(const part of relative.split('/')){target=path.join(target,part);assert(!(await lstat(target)).isSymbolicLink());}const info=await lstat(target);assert(info.isFile());assert((await realpath(target)).startsWith(path.resolve(root)+path.sep));assert(info.size>=16&&info.size<=32*1024*1024);if(wanted.kind==='supplemental-screenshot')assert(info.size<=256*1024);total+=info.size;assert(total<=11609243);const bytes=await readFile(target);assert.equal(bytes.length,info.size);if(wanted.kind!=='supplemental-screenshot'){assert.equal(bytes.length,wanted.bytes);assert.equal(h(bytes),wanted.sha256);}if(wanted.kind==='screenshot'||wanted.kind==='supplemental-screenshot')validatePng(bytes);else if(wanted.kind==='trace')validateTrace(bytes);else assert(bytes.subarray(0,4).equals(Buffer.from([26,69,223,163]))||bytes.subarray(4,8).toString()==='ftyp');files.push({kind:wanted.kind,file:wanted.file,bytes:bytes.length,sha256:h(bytes),base64:bytes.toString('base64')});}
+          const raw=Buffer.from(JSON.stringify({type:'clinical-peer-media-payload-v1',runId:binding.runId,sourceOperatorSha:binding.sourceOperatorSha,sourceSha:binding.sourceSha,issue,artifactId:t.artifactId,expectedArchiveSha256:t.expectedArchiveSha256,files}));assert(raw.length<=16*1024*1024);return raw;}
+          export function stream(raw,issue){assert.equal(issue,506);assert(raw.length<=16*1024*1024);const zip=gzipSync(raw,{mtime:0});assert(zip.length<=16*1024*1024);const chunks=[];for(let i=0;i<zip.length;i+=6144)chunks.push(zip.subarray(i,i+6144).toString('base64'));return[JSON.stringify({type:'clinical-peer-media-stream-v1',runId:40535859044,issue,payloadBytes:raw.length,payloadSha256:h(raw),gzipBytes:zip.length,gzipSha256:h(zip),chunkCount:chunks.length}),...chunks.map((data,index)=>JSON.stringify({type:'clinical-peer-media-chunk-v1',issue,index,data}))].join('\n')+'\n';}
+          if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){try{const b=JSON.parse(await readFile(process.argv[3])),issue=Number(process.argv[4]);assert.equal(process.env.GITHUB_REPOSITORY,b.repository);assert.equal(process.env.GITHUB_REF,'refs/heads/'+b.readerBranch);assert.equal(process.env.GITHUB_RUN_ATTEMPT,'1');process.stdout.write(stream(await collect(process.argv[2],b,issue),issue));}catch{console.error('fixed-peer-media-reader-guard-refused');process.exitCode=1;}}
+          FIXED_READER
+          cat > "$root/evidence.mjs" <<'FIXED_EVIDENCE'
+          import { inflateSync, inflateRawSync } from 'node:zlib';
+          
+          export function crc32(bytes) {
+            let crc = 0xffffffff;
+            for (const byte of bytes) {
+              crc ^= byte;
+              for (let i = 0; i < 8; i++) crc = (crc >>> 1) ^ (crc & 1 ? 0xedb88320 : 0);
+            }
+            return (crc ^ 0xffffffff) >>> 0;
+          }
+          export function validatePng(bytes) {
+            if (!bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])))
+              throw new Error('invalid PNG evidence');
+            let offset = 8,
+              width,
+              height,
+              channels,
+              ended = false;
+            const compressed = [];
+            while (offset + 12 <= bytes.length) {
+              const length = bytes.readUInt32BE(offset),
+                end = offset + 12 + length;
+              if (end > bytes.length) throw new Error('truncated PNG evidence');
+              const type = bytes.subarray(offset + 4, offset + 8).toString('ascii');
+              const data = bytes.subarray(offset + 8, offset + 8 + length);
+              if (
+                crc32(bytes.subarray(offset + 4, offset + 8 + length)) !==
+                bytes.readUInt32BE(offset + 8 + length)
+              )
+                throw new Error('PNG checksum mismatch');
+              if (offset === 8 && type !== 'IHDR') throw new Error('missing PNG header');
+              if (type === 'IHDR') {
+                if (width !== undefined || length !== 13) throw new Error('invalid PNG header');
+                width = data.readUInt32BE(0);
+                height = data.readUInt32BE(4);
+                channels = data[9] === 6 ? 4 : data[9] === 2 ? 3 : 0;
+                if (
+                  width < 16 ||
+                  height < 16 ||
+                  width > 10000 ||
+                  height > 10000 ||
+                  !channels ||
+                  data[8] !== 8 ||
+                  data[10] !== 0 ||
+                  data[11] !== 0 ||
+                  data[12] !== 0
+                )
+                  throw new Error('unsupported screenshot geometry or format');
+              }
+              if (type === 'IDAT') compressed.push(data);
+              offset = end;
+              if (type === 'IEND') {
+                ended = length === 0 && offset === bytes.length;
+                break;
+              }
+            }
+            if (!ended || !compressed.length || !width) throw new Error('incomplete PNG evidence');
+            const expected = (1 + width * channels) * height;
+            if (expected > 100 * 1024 * 1024) throw new Error('screenshot decompression limit');
+            const pixels = inflateSync(Buffer.concat(compressed), { maxOutputLength: expected });
+            if (pixels.length !== expected) throw new Error('invalid PNG pixel data');
+            for (let row = 0; row < height; row++)
+              if (pixels[row * (1 + width * channels)] > 4) throw new Error('invalid PNG filter');
+          }
+          export function validateTrace(bytes) {
+            let eocd = -1;
+            for (let i = bytes.length - 22; i >= Math.max(0, bytes.length - 65557); i--)
+              if (
+                bytes.readUInt32LE(i) === 0x06054b50 &&
+                i + 22 + bytes.readUInt16LE(i + 20) === bytes.length
+              ) {
+                eocd = i;
+                break;
+              }
+            if (eocd < 0 || bytes.readUInt16LE(eocd + 4) !== 0 || bytes.readUInt16LE(eocd + 6) !== 0)
+              throw new Error('invalid ZIP trace directory');
+            const entries = bytes.readUInt16LE(eocd + 10);
+            if (!entries || entries > 10000 || bytes.readUInt16LE(eocd + 8) !== entries)
+              throw new Error('invalid ZIP trace entries');
+            let cursor = bytes.readUInt32LE(eocd + 16),
+              found = false;
+            for (let n = 0; n < entries; n++) {
+              if (cursor + 46 > eocd || bytes.readUInt32LE(cursor) !== 0x02014b50)
+                throw new Error('invalid ZIP trace entry');
+              const flags = bytes.readUInt16LE(cursor + 8),
+                method = bytes.readUInt16LE(cursor + 10),
+                crc = bytes.readUInt32LE(cursor + 16),
+                size = bytes.readUInt32LE(cursor + 20),
+                unpacked = bytes.readUInt32LE(cursor + 24),
+                nameLength = bytes.readUInt16LE(cursor + 28),
+                extra = bytes.readUInt16LE(cursor + 30),
+                comment = bytes.readUInt16LE(cursor + 32),
+                local = bytes.readUInt32LE(cursor + 42);
+              const name = bytes.subarray(cursor + 46, cursor + 46 + nameLength).toString();
+              cursor += 46 + nameLength + extra + comment;
+              if (cursor > eocd || name.includes('..') || name.startsWith('/'))
+                throw new Error('invalid ZIP trace path');
+              if (!name.endsWith('.trace')) continue;
+              if (
+                flags & 1 ||
+                ![0, 8].includes(method) ||
+                unpacked > 20 * 1024 * 1024 ||
+                local + 30 > bytes.length ||
+                bytes.readUInt32LE(local) !== 0x04034b50
+              )
+                throw new Error('unsupported trace compression');
+              const start = local + 30 + bytes.readUInt16LE(local + 26) + bytes.readUInt16LE(local + 28);
+              if (start + size > eocd) throw new Error('truncated trace payload');
+              const payload =
+                method === 8
+                  ? inflateRawSync(bytes.subarray(start, start + size), { maxOutputLength: 20 * 1024 * 1024 })
+                  : bytes.subarray(start, start + size);
+              if (payload.length !== unpacked || crc32(payload) !== crc)
+                throw new Error('trace checksum mismatch');
+              const records = payload
+                .toString('utf8')
+                .trim()
+                .split('\n')
+                .map((line) => JSON.parse(line));
+              if (
+                records.some(
+                  (r) =>
+                    r.type === 'before' &&
+                    (typeof r.apiName === 'string' ||
+                      (typeof r.class === 'string' && typeof r.method === 'string')),
+                ) &&
+                records.some((r) => r.type === 'after')
+              )
+                found = true;
+            }
+            if (!found) throw new Error('trace has no recorded Playwright actions');
+          }
+          FIXED_EVIDENCE
+          cat > "$root/binding.json" <<'FIXED_BINDING'
+          {
+            "runId": 40535859044,
+            "sourceOperatorSha": "3fa97e68e74a4d900c84c902003d59bb6c786226",
+            "sourceSha": "7736adffea3394c8a70b76f71967309f1aa32b7a",
+            "readerBranch": "codex/506-root10-media-reader-20261027",
+            "repository": "l2v-hub/ClinicOS",
+            "targets": [
+              {
+                "issue": 506,
+                "artifactId": 12749930437,
+                "artifactName": "clinical-harness-qualification-506-40535859044",
+                "expectedArchiveSha256": "d99970c9c0cfe95fd0b9a7d68b7c06551198ba3698c9f5f328a8654421921594",
+                "primary": [
+                  {
+                    "kind": "screenshot",
+                    "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/import-1440.png",
+                    "bytes": 68523,
+                    "sha256": "20ac8a5ebb384164b10d9fa5096504bd12db4143200263185479fb09e5114679"
+                  },
+                  {
+                    "kind": "trace",
+                    "file": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
+                    "bytes": 9199409,
+                    "sha256": "e00b065560be1f892e2c54c84aca249850eb8a1966ee948feaa7664821867205"
+                  },
+                  {
+                    "kind": "video",
+                    "file": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm",
+                    "bytes": 1817023,
+                    "sha256": "b3c0fc75fa66cec5c16c23e3e97dc3bb44a7ab4d9756897a7524e10be86a2fd2"
+                  }
+                ],
+                "supplementalScreenshots": [
+                  "artifacts/task-validation/bug-batch-506/evidence/screenshots/save-failure-recovered-390.png",
+                  "artifacts/task-validation/bug-batch-506/evidence/screenshots/upload-notice-cleared-390.png"
+                ]
+              }
+            ]
+          }
+          FIXED_BINDING
+          node "$root/reader.mjs" "$RUNNER_TEMP/fixed-peer-input-506" "$root/binding.json" "506"
