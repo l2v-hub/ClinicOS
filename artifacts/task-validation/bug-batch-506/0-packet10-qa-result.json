@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "reservationNonce": "0f301b9b-eb3e-4425-a185-88703feef176",
+  "stateCommit": "18134a7dbda4e1261cb0b6f12255850269a22a53",
+  "packetAuthorSealSha256": "163f31d35a82c5f6bc664c57515be5fc05aee9ed5667e89f2804f13be85b70f4",
+  "verdict": "PASS",
+  "readyForPublication": true,
+  "findings": [],
+  "checks": {
+    "reservedPacketFiles": 35,
+    "packetFileHashAndSizeMismatches": 0,
+    "currentMetadataFiles": 8,
+    "evidenceManifestExactlyEqualsActualQualificationNativeEvidence": true,
+    "qualifiedSourceFilesRawBlobAndModesMatched": 12,
+    "actualNativeCommandsPassed": 3,
+    "actualSourceQaVerdict": "VERIFIED",
+    "readerRun": 40543644056,
+    "selectedMediaFiles": 5,
+    "selectedMediaBytes": 11227476,
+    "oldPublicationMetadataCopiesMatched": 6,
+    "oldPrimaryMediaCopiesMatched": 4,
+    "unchangedNativeBaselineReferencesMatched": 2,
+    "authoritySnapshotMatched": true,
+    "implementationRound10SnapshotStatus": "running",
+    "futureGatesExplicitlyUnclaimed": 7
+  }
+}
