@@ -1,70 +1,212 @@
 {
-  "component-smoke": {
-    "results": [
-      "Europe/Rome: chart creation, type switch, explicit edits, context refresh, reopen and saved edit PASS",
-      "Europe/Rome: real StepClinica intake new rows, context changes, once date and retained earlier row PASS",
-      "Europe/Rome: actual PatientDetail late admission, untouched dates PASS",
-      "Europe/Rome: actual PatientDetail late admission, start dates PASS",
-      "Europe/Rome: actual PatientDetail late admission, once dates PASS",
-      "Europe/Rome: actual PatientDetail late admission, same-fallback dates PASS",
-      "Europe/Rome: actual PatientDetail late admission, empty-start dates PASS",
-      "Europe/Rome: actual patient-key remount does not reuse prior patient's draft PASS",
-      "Europe/Rome: delayed admission leaves saved editor dates unchanged PASS",
-      "Europe/Rome: actual intake late admission, untouched dates PASS",
-      "Europe/Rome: actual intake late admission, start dates PASS",
-      "Europe/Rome: actual intake late admission, once dates PASS",
-      "Europe/Rome: actual intake late admission, same-fallback dates PASS",
-      "America/Los_Angeles: chart creation, type switch, explicit edits, context refresh, reopen and saved edit PASS",
-      "America/Los_Angeles: real StepClinica intake new rows, context changes, once date and retained earlier row PASS",
-      "America/Los_Angeles: actual PatientDetail late admission, untouched dates PASS",
-      "America/Los_Angeles: actual PatientDetail late admission, start dates PASS",
-      "America/Los_Angeles: actual PatientDetail late admission, once dates PASS",
-      "America/Los_Angeles: actual PatientDetail late admission, same-fallback dates PASS",
-      "America/Los_Angeles: actual PatientDetail late admission, empty-start dates PASS",
-      "America/Los_Angeles: actual patient-key remount does not reuse prior patient's draft PASS",
-      "America/Los_Angeles: delayed admission leaves saved editor dates unchanged PASS",
-      "America/Los_Angeles: actual intake late admission, untouched dates PASS",
-      "America/Los_Angeles: actual intake late admission, start dates PASS",
-      "America/Los_Angeles: actual intake late admission, once dates PASS",
-      "America/Los_Angeles: actual intake late admission, same-fallback dates PASS"
-    ],
-    "errors": [],
-    "unexpected": []
-  },
-  "original-cold-probe": {
-    "results": [
+  "kind": "current-native-qualification-results",
+  "origin": "Actual run40429879923 finite native proof; no new run or invented assertion rows",
+  "sourceSha": "db2a891fe982dac8c42f8fb5a3e91a49404f30fa",
+  "sourceFiles": [
+    {
+      "file": "e2e/issue507-smoke.mjs",
+      "sha256": "dc8b202cf958eefa1c678211418beff3c3681cc3cde76de300fdad7204105544",
+      "gitBlobSha1": "39eabb7359ac86be54e6350d50ae4094c416ab14"
+    },
+    {
+      "file": "e2e/issue507/entry.tsx",
+      "sha256": "696b0e60fa0d4283cb8ff6a298af8e31861c967532bed6a22248e8f3595dfeb2",
+      "gitBlobSha1": "4636699ea5a9f0e9e0a347481380c1d50c875bd1"
+    },
+    {
+      "file": "frontend/src/components/operator/PatientDetail.tsx",
+      "sha256": "fb73b4e253f767d6344e57d61c38b8b64222a47a5f2215d4c8a9f1251c8e0dbb",
+      "gitBlobSha1": "c6570832a771cc6c78261df14b2c1299507051e7"
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "sha256": "2b271ce8b317449ebec4990599800a1dd24c3f1b6fc9cea4a7155f29efa5a8da",
+      "gitBlobSha1": "6d770b3d95828d6427de687415a576c34b86660f"
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+      "sha256": "9a0fd94088795f18a87da49720130fbf348a57625c8a667c6b604cb24732cd34",
+      "gitBlobSha1": "943bcf42ad6c3d367c126ff507ab1b20e067033c"
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts",
+      "sha256": "640574fb2a46e04d8414984d0a48810a9571c3d26c927bd8431128075b4c3ef1",
+      "gitBlobSha1": "93f992e6dad4eaced5956563b098b18098778537"
+    },
+    {
+      "file": "frontend/src/components/operator/sections/TherapyEditor.tsx",
+      "sha256": "541279cfc05dace84f7a74c1671b9287689ee6cdbeb94dfc1830d06f0f025ed8",
+      "gitBlobSha1": "2fdaedf82124af522427b7425a32b1c0ca329d0b"
+    },
+    {
+      "file": "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx",
+      "sha256": "0b34a7ec2fde96368daab9dc519102117d980274bbae1f349acd012061fa56b4",
+      "gitBlobSha1": "7e3d142d412cd80f0380bca5564a08d3ccb28e90"
+    },
+    {
+      "file": "frontend/src/components/shared/intake/StepClinica.tsx",
+      "sha256": "ef2ec3c049afbc40bd257f387394ebcff423ffd18a0afab9588e2f1369dc6caa",
+      "gitBlobSha1": "ef20d725dc244ed67e560df4f39162e8c6cc0676"
+    },
+    {
+      "file": "frontend/src/lib/therapyAdmissionDate.ts",
+      "sha256": "d24e633ff1d8760e5554f56d54180e5212c9f0b5855e4929dafe078dc8154c5f",
+      "gitBlobSha1": "1a7c9f594838870e0ea40f497eac98434ae9f297"
+    }
+  ],
+  "qualification": {
+    "type": "clinical-harness-qualification-v1",
+    "issue": 507,
+    "runId": "40429879923",
+    "acceptedMain": "655f028e3b0bdcc621ac15209fd0af38cee3d26b",
+    "sourceParent": "fc42859d7c73f9c90d9d49d8cdafe2d752893de7",
+    "privateCandidate": "db2a891fe982dac8c42f8fb5a3e91a49404f30fa",
+    "sourceFiles": [
       {
-        "timezoneId": "Europe/Rome",
-        "initial": "2026-10-25",
-        "hydrated": "2026-09-15",
-        "once": "2026-09-15",
-        "expected": "2026-09-15",
-        "pass": true
+        "file": "e2e/issue507-smoke.mjs",
+        "sha256": "dc8b202cf958eefa1c678211418beff3c3681cc3cde76de300fdad7204105544"
       },
       {
-        "timezoneId": "America/Los_Angeles",
-        "initial": "2026-10-25",
-        "hydrated": "2026-09-15",
-        "once": "2026-09-15",
-        "expected": "2026-09-15",
-        "pass": true
+        "file": "e2e/issue507/entry.tsx",
+        "sha256": "696b0e60fa0d4283cb8ff6a298af8e31861c967532bed6a22248e8f3595dfeb2"
+      },
+      {
+        "file": "frontend/src/components/operator/PatientDetail.tsx",
+        "sha256": "fb73b4e253f767d6344e57d61c38b8b64222a47a5f2215d4c8a9f1251c8e0dbb"
+      },
+      {
+        "file": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+        "sha256": "2b271ce8b317449ebec4990599800a1dd24c3f1b6fc9cea4a7155f29efa5a8da"
+      },
+      {
+        "file": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+        "sha256": "9a0fd94088795f18a87da49720130fbf348a57625c8a667c6b604cb24732cd34"
+      },
+      {
+        "file": "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts",
+        "sha256": "640574fb2a46e04d8414984d0a48810a9571c3d26c927bd8431128075b4c3ef1"
+      },
+      {
+        "file": "frontend/src/components/operator/sections/TherapyEditor.tsx",
+        "sha256": "541279cfc05dace84f7a74c1671b9287689ee6cdbeb94dfc1830d06f0f025ed8"
+      },
+      {
+        "file": "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx",
+        "sha256": "0b34a7ec2fde96368daab9dc519102117d980274bbae1f349acd012061fa56b4"
+      },
+      {
+        "file": "frontend/src/components/shared/intake/StepClinica.tsx",
+        "sha256": "ef2ec3c049afbc40bd257f387394ebcff423ffd18a0afab9588e2f1369dc6caa"
+      },
+      {
+        "file": "frontend/src/lib/therapyAdmissionDate.ts",
+        "sha256": "d24e633ff1d8760e5554f56d54180e5212c9f0b5855e4929dafe078dc8154c5f"
       }
     ],
-    "errors": [],
-    "unexpected": []
-  },
-  "adversarial": {
+    "actualNativeVerification": true,
+    "providerInvocations": 0,
     "results": [
-      "Europe/Rome: capability loss closes draft and clears lineage PASS",
-      "Europe/Rome: intake nondate edits retain automatic lineage; hydration consumes lineage PASS",
-      "Europe/Rome: deliberately blank intake start protected independently PASS",
-      "Europe/Rome: persisted/external row replacement has no automatic lineage PASS",
-      "America/Los_Angeles: capability loss closes draft and clears lineage PASS",
-      "America/Los_Angeles: intake nondate edits retain automatic lineage; hydration consumes lineage PASS",
-      "America/Los_Angeles: deliberately blank intake start protected independently PASS",
-      "America/Los_Angeles: persisted/external row replacement has no automatic lineage PASS"
+      {
+        "index": 0,
+        "command": "npm",
+        "args": [
+          "--prefix",
+          "frontend",
+          "run",
+          "build"
+        ],
+        "ok": true,
+        "noTestsSignal": false,
+        "exitCode": 0,
+        "runnerError": null,
+        "stdoutBytes": 25103,
+        "stderrBytes": 1915,
+        "stdoutSha256": "d6cd2d4709d9b06af5d36b8dd5ff9f8f93bf2052415360e1828d88b1bcc40e58",
+        "stderrSha256": "9fb90e672f4ea43806378ce94c750de8dd97192a74211fc19b98560318bf5ec8"
+      },
+      {
+        "index": 1,
+        "command": "npm",
+        "args": [
+          "--prefix",
+          "frontend",
+          "test"
+        ],
+        "ok": true,
+        "noTestsSignal": false,
+        "exitCode": 0,
+        "runnerError": null,
+        "stdoutBytes": 513338,
+        "stderrBytes": 1150,
+        "stdoutSha256": "8a864027de303ceb0c3edaf2ac10ce3875524631d918e94a6ee233e712aeece3",
+        "stderrSha256": "a046c29f1028e6b5e8df8deafa324dd6663f307c2408c387a9361394b2911bd0"
+      },
+      {
+        "index": 2,
+        "command": "node",
+        "args": [
+          "--import",
+          "tsx",
+          "e2e/issue507-smoke.mjs"
+        ],
+        "ok": true,
+        "noTestsSignal": false,
+        "exitCode": 0,
+        "runnerError": null,
+        "stdoutBytes": 11246,
+        "stderrBytes": 798,
+        "stdoutSha256": "971dedd8b3578c322ae0f114a3a1a1c6a99d0466c4ed66c6b072522efbba3a8e",
+        "stderrSha256": "b1a79cdad8f089aa6897f6e4cbc04db7cfb3403d5ae289aedd1a33727cc701f1"
+      }
     ],
-    "errors": [],
-    "unexpected": []
+    "artifacts": [
+      {
+        "kind": "screenshot",
+        "file": "artifacts/task-validation/bug-batch-507/evidence/screenshots/Europe-Rome-chart-admission.png",
+        "bytes": 96082,
+        "sha256": "139a032be3f9d01faf4dc658ba7aa6657c3135cb594726d0b448b15dedda7bb0"
+      },
+      {
+        "kind": "trace",
+        "file": "artifacts/task-validation/bug-batch-507/evidence/trace/issue507-Europe-Rome.zip",
+        "bytes": 1551262,
+        "sha256": "4a2a622ebcc4e9475c1548ff2a50e0b4fec215e42d1d1c54608d017a6c05f91c"
+      },
+      {
+        "kind": "video",
+        "file": "artifacts/task-validation/bug-batch-507/evidence/video/issue507-Europe-Rome.webm",
+        "bytes": 2083541,
+        "sha256": "3a2336ccc927061d20dac588e980af096b2f28264903db45c393138f8bc27d9f"
+      }
+    ],
+    "nativeEvidence": [
+      {
+        "issue": 507,
+        "files": {
+          "screenshot": {
+            "path": "artifacts/task-validation/bug-batch-507/evidence/screenshots/Europe-Rome-chart-admission.png",
+            "sha256": "139a032be3f9d01faf4dc658ba7aa6657c3135cb594726d0b448b15dedda7bb0",
+            "bytes": 96082
+          },
+          "trace": {
+            "path": "artifacts/task-validation/bug-batch-507/evidence/trace/issue507-Europe-Rome.zip",
+            "sha256": "4a2a622ebcc4e9475c1548ff2a50e0b4fec215e42d1d1c54608d017a6c05f91c",
+            "bytes": 1551262
+          },
+          "video": {
+            "path": "artifacts/task-validation/bug-batch-507/evidence/video/issue507-Europe-Rome.webm",
+            "sha256": "3a2336ccc927061d20dac588e980af096b2f28264903db45c393138f8bc27d9f",
+            "bytes": 2083541
+          }
+        }
+      }
+    ],
+    "ok": true,
+    "scope": "Synthetic actual React browser regression; not authenticated backend or deployment acceptance"
+  },
+  "historicalResults": {
+    "path": "evidence/test-results/historical/results-before-contract-clarification.json",
+    "sha256": "07d2206d342f973622aaa83908c6a869567979790bc458450e5f81614895fc34",
+    "originalHead": "f4e68a022bbe24359a37c6e5e27e9dd4c35261c5"
   }
 }

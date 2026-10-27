@@ -1,9 +1,5 @@
-# Validation report
+# Validation — pre-publication historical snapshot
 
-All three exact required commands passed in real GitHub Actions40429879923 against CODE db2a891fe982dac8c42f8fb5a3e91a49404f30fa; accepted native no-tests/evidence predicates passed. Screenshot, trace and video were freshly generated and validated; hashes are in evidence-manifest.json. Evidence relay40431285828 matched all bytes.
+No clinical source or test assertion changed. Exact tested CODE db2a891fe982dac8c42f8fb5a3e91a49404f30fa maps byte-for-byte to all10source files. Real native40429879923 three commands PASS and native evidence validation PASS; same media hashes verified again locally. Independent prior source QA was VERIFIED_FOR_NORMAL_SOURCE_PUBLICATION, genuine Claude2 approved0, but newer final Codex requested changes. That final is preserved and remains historical negative, never silently reset.
 
-This is synthetic actual-component browser regression, not authenticated online acceptance. Independent source QA, final-head required CI, genuine new-head Claude peer and subsequent fresh final Codex review are pending sequential gates.
-
-## Final Decision
-
-PARTIAL — no merge, deployment verification or issue closure yet.
+This new version corrects generated AC/evidence metadata. Its independent QA, current-head CI, genuine peer3, NEW final and protected merge are PENDING. No deployment or clinical closure is claimed.

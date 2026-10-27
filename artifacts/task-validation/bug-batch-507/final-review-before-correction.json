@@ -1,0 +1,9 @@
+{
+  "subjectSha": "f4e68a022bbe24359a37c6e5e27e9dd4c35261c5",
+  "claudeRound": 2,
+  "feedbackFingerprint": "bd5529c6cab0465dd703862d879f2e4b32e39e3a10d8fa5379713b34c3fea5b8",
+  "status": "changes-requested",
+  "reservedAt": "2026-10-27T07:39:28.766Z",
+  "nonce": "8ee9cbb8-e19a-449a-90a5-eb22418e8a38",
+  "summary": "AC1 violated at frontend/src/lib/therapyAdmissionDate.ts:26–29: past admissions default the once date to today rather than admission, including hydration at line 48. e2e/issue507-smoke.mjs:99 asserts this contradictory behavior. Restore admission-day defaults and align unit/browser assertions with the frozen contract. Evidence also needs reconciliation: artifacts/task-validation/bug-batch-507/evidence/test-results/results.json:40 records once=2026-09-15, inconsistent with current code; regenerate independent evidence for the corrected source while preserving historical reports. No files edited or tests executed by this QA session; controller verification records were inspected."
+}

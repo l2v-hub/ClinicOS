@@ -1,13 +1,10 @@
-# Frozen implementation plan
-
-Branch: codex/bug-batch-507
-Baseline: 715a4b9e47ff9bd0192b7f58f24271e48da4900d
+# Frozen implementation plan — revision8
 
 {
   "title": "Proponi la data di ingresso per le nuove terapie",
   "feature": "patient-therapy/admission-date-defaults",
   "rationale": "Separate newly authorized issue; different root cause and nonoverlapping source files from the other new issue, preserving independent acceptance/evidence and ongoing automation reviews.",
-  "analysis": "Creation factory previously used facility today; actual chart admission is resolved from presaInCarico, intake uses ingresso.dataPresa. Late asynchronous context and explicit date edits require per-field default provenance.\nHarness-only evidence version: actual native C5 build/frontend tests passed; bundled Playwright qualified in40423083192. The same behavioral regression runs with a self-owned loopback server, sealed default environment and deterministic current evidence paths. All old plans, FAILED journals and four retained source snapshots remain preserved.",
+  "analysis": "Creation factory previously used facility today; actual chart admission is resolved from presaInCarico, intake uses ingresso.dataPresa. Late asynchronous context and explicit date edits require per-field default provenance.\nHarness-only evidence version: actual native C5 build/frontend tests passed; bundled Playwright qualified in40423083192. The same behavioral regression runs with a self-owned loopback server, sealed default environment and deterministic current evidence paths. All old plans, FAILED journals and four retained source snapshots remain preserved.\nVersioned contract clarification after genuine negative final review40468144880: original issue requests Programmazione dataInizio, not backdating of one-off dataSomministrazione. Preserve start=admission while once=max(admission,today), matching baseline administration safety and unchanged backend daily-round equality. Prior generated start/once AC1 and all prior reviews remain historical. No clinical source or assertion changed.",
   "execution": {
     "difficulty": "medium",
     "mode": "delegate",
@@ -50,7 +47,8 @@ Baseline: 715a4b9e47ff9bd0192b7f58f24271e48da4900d
     {
       "issue": 507,
       "criteria": [
-        "New manual therapy start/once default dates use the actual resolved admission day, including delayed cartella hydration.",
+        "New manual therapy dataInizio defaults to the actual resolved admission day, including delayed cartella hydration and repeated intake admission corrections.",
+        "New once administration dataSomministrazione remains at the facility current day or later admission day, so a past admission does not silently backdate a new one-off dose. Explicit operator dates keep precedence.",
         "Operator edits, saved/imported dates and explicit calendar dates retain precedence; no timezone shift of calendar dates.",
         "Independent actual-host and intake browser evidence, meaningful unit regressions, build, frontend tests and privacy checks pass with synthetic fixtures."
       ]
@@ -72,7 +70,8 @@ Baseline: 715a4b9e47ff9bd0192b7f58f24271e48da4900d
         "frontend/src/lib/therapyAdmissionDate.ts"
       ],
       "steps": [
-        "New manual therapy start/once default dates use the actual resolved admission day, including delayed cartella hydration.",
+        "New manual therapy dataInizio defaults to the actual resolved admission day, including delayed cartella hydration and repeated intake admission corrections.",
+        "New once administration dataSomministrazione remains at the facility current day or later admission day, so a past admission does not silently backdate a new one-off dose. Explicit operator dates keep precedence.",
         "Operator edits, saved/imported dates and explicit calendar dates retain precedence; no timezone shift of calendar dates.",
         "Independent actual-host and intake browser evidence, meaningful unit regressions, build, frontend tests and privacy checks pass with synthetic fixtures."
       ]
