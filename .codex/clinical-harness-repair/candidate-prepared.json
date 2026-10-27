@@ -1,0 +1,227 @@
+{
+  "at": "2026-10-27T00:29:29.803Z",
+  "actor": "l2v-hub",
+  "planValidation": "native-PASS",
+  "clinicalAssertionsPreserved": true,
+  "unchangedClinicalSourceFiles": 20,
+  "harnessFilesEdited": 2,
+  "candidates": [
+    {
+      "issue": 506,
+      "pr": 508,
+      "parent": "5737fc3ae01dc5b8b5b01124daeac1e805fc288f",
+      "sha": "04d92b6335775f6d975266b50ea6435ffc7fb906",
+      "tree": "6a4d1b1c58fedf356ebcc64f56bdc180be840a80",
+      "files": [
+        {
+          "file": "e2e/issue506-workspace.mjs",
+          "bytes": 10468,
+          "sha256": "d57f5f5d4c90cdb48cbf2c4e8c2cae3df55cdebf99281c79cfb90ef8ed4d0963",
+          "blob": "935486192ef84cc7a61342f38d2037b731c943df",
+          "retainedSha256": "94c2a4ad53d955224bc7c14b17bc9421ba797d81ee89a695685bb5ff23415366",
+          "harnessEdited": true
+        },
+        {
+          "file": "frontend/e2e/issue506-workspace.html",
+          "bytes": 272,
+          "sha256": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05",
+          "blob": "d7d68f51e77a498b4064fc25193021f327dede54",
+          "retainedSha256": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/e2e/issue506-workspace.tsx",
+          "bytes": 2560,
+          "sha256": "4fc31c5319186440b5b9db661589a444d9960b96bb431d2c69136a0fd22fc975",
+          "blob": "d469c3f2a1f6bcb13f9483cf24b2304024914d98",
+          "retainedSha256": "4fc31c5319186440b5b9db661589a444d9960b96bb431d2c69136a0fd22fc975",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/operator/NewPatientFlow.tsx",
+          "bytes": 3887,
+          "sha256": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895",
+          "blob": "f265694f12882013acd29d203ac571973e8589c7",
+          "retainedSha256": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+          "bytes": 3914,
+          "sha256": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac",
+          "blob": "44489324f9b25fc6200b4fcec5289c8fe1c004cd",
+          "retainedSha256": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/shared/DialogLoading.tsx",
+          "bytes": 624,
+          "sha256": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4",
+          "blob": "35651a3c8e0f142f1979babc7c1cfbb7cd081495",
+          "retainedSha256": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/shared/DischargeImportModal.tsx",
+          "bytes": 18089,
+          "sha256": "4afce9b3d1c0d3f86346c1812b82b52cda2d1c2987de7625d0f48a682d5edbb1",
+          "blob": "0c611c6b71f9a6eeab989759b0f9edac98291e51",
+          "retainedSha256": "4afce9b3d1c0d3f86346c1812b82b52cda2d1c2987de7625d0f48a682d5edbb1",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/shared/PatientWorkspaceSurface.css",
+          "bytes": 504,
+          "sha256": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395",
+          "blob": "9709e7a2392526f01722128ee9187dbaf82e5e0c",
+          "retainedSha256": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+          "bytes": 4901,
+          "sha256": "27ff12f6020ef24cc897b03570c3fc4d95156d7584e3f0d70e618b805235084d",
+          "blob": "f2310f2a621c3cd4c6387f45ed21cc734f1c0cc8",
+          "retainedSha256": "27ff12f6020ef24cc897b03570c3fc4d95156d7584e3f0d70e618b805235084d",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+          "bytes": 975,
+          "sha256": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41",
+          "blob": "649163e1f774ef26e7e40c0179514c1788790651",
+          "retainedSha256": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+          "bytes": 49811,
+          "sha256": "61c45c249842c4cf4795bd34d251ff83e8d13895d75a3757e7b61bf5a5cf31e0",
+          "blob": "42c06510e273cf62fa131147d9ba95a82446c87d",
+          "retainedSha256": "61c45c249842c4cf4795bd34d251ff83e8d13895d75a3757e7b61bf5a5cf31e0",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts",
+          "bytes": 2903,
+          "sha256": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde",
+          "blob": "8b7443afa1d65b92c168bb55b3cef286969f6076",
+          "retainedSha256": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde",
+          "harnessEdited": false
+        }
+      ],
+      "changedFiles": [
+        "e2e/issue506-workspace.mjs",
+        "frontend/e2e/issue506-workspace.tsx",
+        "frontend/src/components/shared/DischargeImportModal.tsx",
+        "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+        "frontend/src/components/shared/intake/IntakeWorkspace.tsx"
+      ],
+      "planSha256": "a63f6fd348dd54f209934f931e9531a3d6595e67966749cfb7b129ac9872f863",
+      "pushed": false,
+      "originalWorktreeRecovered": false,
+      "partialRetainedSourceOnly": true
+    },
+    {
+      "issue": 507,
+      "pr": 509,
+      "parent": "fc42859d7c73f9c90d9d49d8cdafe2d752893de7",
+      "sha": "15f9baa852e6c63145e761908da2cc7874382cdc",
+      "tree": "baea2db5a261b069ed495d83f6a27342e22faa38",
+      "files": [
+        {
+          "file": "e2e/issue507-smoke.mjs",
+          "bytes": 15543,
+          "sha256": "97119fd83e49c1d95f2fbe9eeeeb6a886fb62567ef15ef4fa6a46ef474565bf6",
+          "blob": "18eb33eef5783de711dfa05d4c0b68d3b4bcbd08",
+          "retainedSha256": "f5e5d2eb2a4c3fddd2dd0fc7f24cf1725e7f4a95172c5a43b3f785e067ca3a92",
+          "harnessEdited": true
+        },
+        {
+          "file": "e2e/issue507/entry.tsx",
+          "bytes": 3874,
+          "sha256": "696b0e60fa0d4283cb8ff6a298af8e31861c967532bed6a22248e8f3595dfeb2",
+          "blob": "4636699ea5a9f0e9e0a347481380c1d50c875bd1",
+          "retainedSha256": "696b0e60fa0d4283cb8ff6a298af8e31861c967532bed6a22248e8f3595dfeb2",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/operator/PatientDetail.tsx",
+          "bytes": 121197,
+          "sha256": "fb73b4e253f767d6344e57d61c38b8b64222a47a5f2215d4c8a9f1251c8e0dbb",
+          "blob": "c6570832a771cc6c78261df14b2c1299507051e7",
+          "retainedSha256": "fb73b4e253f767d6344e57d61c38b8b64222a47a5f2215d4c8a9f1251c8e0dbb",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+          "bytes": 47928,
+          "sha256": "2b271ce8b317449ebec4990599800a1dd24c3f1b6fc9cea4a7155f29efa5a8da",
+          "blob": "6d770b3d95828d6427de687415a576c34b86660f",
+          "retainedSha256": "2b271ce8b317449ebec4990599800a1dd24c3f1b6fc9cea4a7155f29efa5a8da",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+          "bytes": 24487,
+          "sha256": "9a0fd94088795f18a87da49720130fbf348a57625c8a667c6b604cb24732cd34",
+          "blob": "943bcf42ad6c3d367c126ff507ab1b20e067033c",
+          "retainedSha256": "9a0fd94088795f18a87da49720130fbf348a57625c8a667c6b604cb24732cd34",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts",
+          "bytes": 9852,
+          "sha256": "640574fb2a46e04d8414984d0a48810a9571c3d26c927bd8431128075b4c3ef1",
+          "blob": "93f992e6dad4eaced5956563b098b18098778537",
+          "retainedSha256": "640574fb2a46e04d8414984d0a48810a9571c3d26c927bd8431128075b4c3ef1",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/operator/sections/TherapyEditor.tsx",
+          "bytes": 2303,
+          "sha256": "541279cfc05dace84f7a74c1671b9287689ee6cdbeb94dfc1830d06f0f025ed8",
+          "blob": "2fdaedf82124af522427b7425a32b1c0ca329d0b",
+          "retainedSha256": "541279cfc05dace84f7a74c1671b9287689ee6cdbeb94dfc1830d06f0f025ed8",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx",
+          "bytes": 7432,
+          "sha256": "0b34a7ec2fde96368daab9dc519102117d980274bbae1f349acd012061fa56b4",
+          "blob": "7e3d142d412cd80f0380bca5564a08d3ccb28e90",
+          "retainedSha256": "0b34a7ec2fde96368daab9dc519102117d980274bbae1f349acd012061fa56b4",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/components/shared/intake/StepClinica.tsx",
+          "bytes": 10445,
+          "sha256": "ef2ec3c049afbc40bd257f387394ebcff423ffd18a0afab9588e2f1369dc6caa",
+          "blob": "ef20d725dc244ed67e560df4f39162e8c6cc0676",
+          "retainedSha256": "ef2ec3c049afbc40bd257f387394ebcff423ffd18a0afab9588e2f1369dc6caa",
+          "harnessEdited": false
+        },
+        {
+          "file": "frontend/src/lib/therapyAdmissionDate.ts",
+          "bytes": 2288,
+          "sha256": "d24e633ff1d8760e5554f56d54180e5212c9f0b5855e4929dafe078dc8154c5f",
+          "blob": "1a7c9f594838870e0ea40f497eac98434ae9f297",
+          "retainedSha256": "d24e633ff1d8760e5554f56d54180e5212c9f0b5855e4929dafe078dc8154c5f",
+          "harnessEdited": false
+        }
+      ],
+      "changedFiles": [
+        "e2e/issue507-smoke.mjs",
+        "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+        "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts",
+        "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx",
+        "frontend/src/lib/therapyAdmissionDate.ts"
+      ],
+      "planSha256": "6245049642d3c1d884cf1e4ee7a3680bce4e53285d7e8dce625c1f96c6fd8b24",
+      "pushed": false,
+      "originalWorktreeRecovered": false,
+      "partialRetainedSourceOnly": true
+    }
+  ],
+  "providerInvocations": 0
+}
