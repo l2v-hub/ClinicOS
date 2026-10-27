@@ -1,0 +1,583 @@
+{
+  "originPr": 505,
+  "originSourceSha": "10153ed09e4b16d36f68e49bd6e503b0255c7dc2",
+  "capacitySplitNotAttemptReset": true,
+  "remainingRuntimeFiles": 23,
+  "original505Untouched": true,
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "subjectSha": "1123d8bb33d5dec4bcb09e5c6bc7851797db5ee7",
+      "evidence": "independent-qa1/report.md",
+      "nonce": "35f9f839-d232-47d9-9940-cda41827b5f2",
+      "reason": "Existing host mechanical source author; original505 histories preserved; fresh independent exact-byte vendor QA PASS.",
+      "independentQaSealSha256": "4add19c37d4fc1d0f4174c47e4ce6aa5099d08243bbfb448b9b9d87987cca937"
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [
+    {
+      "path": ".agents/skills/ask-matt/agents/openai.yaml",
+      "blob": "5c60d51b5b1248d7210bff8c6b42a5a06524b8a4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/ask-matt/PHASE-BOUNDARIES.md",
+      "blob": "fb58ef9febcfd558cdb4517e370f19034869ba26",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/ask-matt/SKILL.md",
+      "blob": "4bfeeb61dae548b8b7754c4fba7bd40ab3926099",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/code-review/agents/openai.yaml",
+      "blob": "9076774ba327f49068db9273feceda03bfe940fa",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/code-review/SKILL.md",
+      "blob": "373a4f26e6cfa3617778397945bb069d9cb184bc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/codebase-design/agents/openai.yaml",
+      "blob": "3180715edb37f6e96bec42f92f00169faa8886ef",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/codebase-design/DEEPENING.md",
+      "blob": "cd94075cfd754d147555c5d747a16431ed4c7dd8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/codebase-design/DESIGN-IT-TWICE.md",
+      "blob": "d0990138c35c800bd821289a73115e52680c1620",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/codebase-design/SKILL.md",
+      "blob": "3f63c8146dd2604b419c929e9876b90c30d410e9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/diagnosing-bugs/agents/openai.yaml",
+      "blob": "a13a755a77634ce61a649a3a0d905a66d3865b35",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/diagnosing-bugs/scripts/hitl-loop.template.sh",
+      "blob": "243198464a8401a7ba1d63b3708fa43c3d067665",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/diagnosing-bugs/SKILL.md",
+      "blob": "d039541ddd1c46e6ddbd662fe99d49b686fc5e12",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/domain-modeling/ADR-FORMAT.md",
+      "blob": "d7e61f30a9fd8ca70d9ee68f019c2a9ebf2d13f7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/domain-modeling/agents/openai.yaml",
+      "blob": "7f1522d2f11506ee205275ab7c282aa52366ecf6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/domain-modeling/GLOSSARY-FORMAT.md",
+      "blob": "9c0b4c7a2e8507c23cbb5e0baa66d81699321cc6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/domain-modeling/SKILL.md",
+      "blob": "a4438c6879c517d1a08e2b5fbca049b632688dfe",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/grill-me/agents/openai.yaml",
+      "blob": "4d6fb0c746c5d21364dce5d0cf8c51eab9712e7b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/grill-me/SKILL.md",
+      "blob": "3947ff9c4ad980d14fc07fccbf659d47c114e81d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/grill-with-docs/agents/openai.yaml",
+      "blob": "5dbe2780a51be3e9b118bd7758a73e54a9384e11",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/grill-with-docs/SKILL.md",
+      "blob": "62b9efb6f991d1b229adee7506962f13ced0c499",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/grilling/agents/openai.yaml",
+      "blob": "ddbdb96139c0c1dfe6bca698f39d0465674b8a39",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/grilling/SKILL.md",
+      "blob": "df69d9936880cd3314c28858c6c52f48db23b856",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/handoff/agents/openai.yaml",
+      "blob": "6e1d8da121beceddc2f9ec7fa8714c1d914dd11a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/handoff/SKILL.md",
+      "blob": "a224edc643a20ddb989f9bca1547440169159810",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/implement-spec/agents/openai.yaml",
+      "blob": "f5e91af21e38eb1a167ea5aa93dfc7da3c4637b4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/implement-spec/SKILL.md",
+      "blob": "183923797ab58f1b3ef09e03bc1f1f203c309f37",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/implement/agents/openai.yaml",
+      "blob": "f8794dc153b409052a9167baf10858cf01b36175",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/implement/SKILL.md",
+      "blob": "bd49e472984c7b99aac40286fdae749bb955a842",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/improve-codebase-architecture/agents/openai.yaml",
+      "blob": "706fdca096da5937fe57875a9154017d50668c42",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/improve-codebase-architecture/HTML-REPORT.md",
+      "blob": "e39e8255b8797cf8257d014fb6658fb533f3a399",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/improve-codebase-architecture/SKILL.md",
+      "blob": "44cc7d3136c44534d68ac523fa6cd37e759d2846",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/pr/agents/openai.yaml",
+      "blob": "48286f48f53b937cc19c0e39899b5f956271a98d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/pr/CREDITS.md",
+      "blob": "5314bda2fa6005e264c9b5c1de7c425e719dc91f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/pr/SKILL.md",
+      "blob": "84dd4fb2f068e9f6282690235d20dd505b418119",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/prototype/agents/openai.yaml",
+      "blob": "1618b147965bc729b7bf3e8da5f130132067aadc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/prototype/LOGIC.md",
+      "blob": "32be86a0a5d9928db84b3988e55f9debe476ab40",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/prototype/SKILL.md",
+      "blob": "a0044501fe0d385b4d8575b610188ede9b236ccf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/prototype/UI.md",
+      "blob": "3977951663490882c2632b40695d9f59a2fe2408",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/research/agents/openai.yaml",
+      "blob": "e18b96ca0ccc1003889d5d6991386207c2454bc2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/research/SKILL.md",
+      "blob": "fecee97e9457ba039678d2fcf1b1bc9fca78307d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/retro/agents/openai.yaml",
+      "blob": "a2f0bac3f9cebf29beee2e79960cb876e0adc65d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/retro/SKILL.md",
+      "blob": "12149acf2dd23b4514dec57b04a6293eaa1352fa",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/setup-matt-pocock-skills/agents/openai.yaml",
+      "blob": "65a0da8128c98051183235e490767a8065310868",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/setup-matt-pocock-skills/domain.md",
+      "blob": "4032de016c1e91119d33d477633e2b8f265f4195",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/setup-matt-pocock-skills/issue-tracker-github.md",
+      "blob": "a63510f74038300d8da354553f9d31d1bd954d94",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/setup-matt-pocock-skills/issue-tracker-gitlab.md",
+      "blob": "81499dca459e8097d560b641f8ba7c2e1c7c9da4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/setup-matt-pocock-skills/issue-tracker-local.md",
+      "blob": "0209a19af92c9c485cf3acc3d9e253171517ea17",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/setup-matt-pocock-skills/SKILL.md",
+      "blob": "293c25b75590119794af03b037ba4288054a32b3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/setup-matt-pocock-skills/triage-labels.md",
+      "blob": "5276464244857a3cc29890ff4a978a197b21f3fc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/tdd/agents/openai.yaml",
+      "blob": "651b838a7663e027b1b8884491e867f26bb9a021",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/tdd/mocking.md",
+      "blob": "71cbfee674d93244ce81d1830b930ca9a69200bd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/tdd/SKILL.md",
+      "blob": "01eadaa34e7c9a63a67d6dc3cce1cc81b0e49985",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/tdd/tests.md",
+      "blob": "7ab86479f925a1f9e8ba680af33cb3b12e015381",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/teach/agents/openai.yaml",
+      "blob": "3452a850e3b0c1f0a3d41b2bfd45164d2d38d7f6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/teach/GLOSSARY-FORMAT.md",
+      "blob": "fdd7e366ad9760588b28981e42b3d3b561e56aca",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/teach/LEARNING-RECORD-FORMAT.md",
+      "blob": "953c61422776b47612c3c945920358ad7b5daee7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/teach/MISSION-FORMAT.md",
+      "blob": "45250bb1bad70988bf381625931df64645e10246",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/teach/RESOURCES-FORMAT.md",
+      "blob": "18b588c8b6f96a50ae2352f264928c643d2782e4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/teach/SKILL.md",
+      "blob": "493fa3bae0dada971c4dfb965790e56920b1dced",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/to-questionnaire/agents/openai.yaml",
+      "blob": "a58d14765beb4acb4c9708b516310558e1308a22",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/to-questionnaire/SKILL.md",
+      "blob": "dadd0c00d6a350acaa15bb9ca1b96b20ead684ca",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/to-spec/agents/openai.yaml",
+      "blob": "549e6f76f020a1b9ba65f52ccda336566ee6222a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/to-spec/SKILL.md",
+      "blob": "3f52599ae2a4347aee5a07432c2707518e691a7f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/to-tickets/agents/openai.yaml",
+      "blob": "24605a5db64e4fc750b999aa94aea126bee814ee",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/to-tickets/SKILL.md",
+      "blob": "9b77a01db9460c99c22d03c910c349f890f12c0e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/triage/AGENT-BRIEF.md",
+      "blob": "1462fcd9e8cc21921158c296149dc05d9be39d20",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/triage/agents/openai.yaml",
+      "blob": "acb366cf0f2527e8925ff1223b77610ac0b1be4c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/triage/OUT-OF-SCOPE.md",
+      "blob": "c9fba2f77ee0619975ec8488c0d4861a0c7e3151",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/triage/SKILL.md",
+      "blob": "3fd5617e906cf9b71a6b17424791adb905fc248b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/wait-what/agents/openai.yaml",
+      "blob": "6f7a9c33f99ec4ba70d986d6fc0de06c8b811bc3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/wait-what/SKILL.md",
+      "blob": "9b15cd1a7dda0854ca093e29e3e0de57e241b2ac",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/wayfinder/agents/openai.yaml",
+      "blob": "b37544751e0570f9df8de6c02aef238de8c3e1e0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/wayfinder/SKILL.md",
+      "blob": "e28cf3018906d6d60fc5b25390b4eeea035dd290",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/wizard/agents/openai.yaml",
+      "blob": "b601bdf3a321e7d32d5714681540b811287d3988",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/wizard/SKILL.md",
+      "blob": "c4294ad8298b9b95fc727496b1b802b1f7363fba",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/wizard/template.sh",
+      "blob": "081ed3da860729c5e6fb1e7126c86b07b0ed56f0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/writing-for-agents/agents/openai.yaml",
+      "blob": "079c933b75743dec18b5d0c01006def20b6aad26",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/writing-for-agents/SKILL-MECHANICS.md",
+      "blob": "9cdbdb22aadc438755392216e75ad9a14cc9832e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".agents/skills/writing-for-agents/SKILL.md",
+      "blob": "a37608daf6e835e767deecfb498facecaaba82ba",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "docs/agents/matt-pocock-LICENSE.txt",
+      "blob": "f1dd2c09108dde1a5f56097cee8461b3ea834499",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ]
+}
