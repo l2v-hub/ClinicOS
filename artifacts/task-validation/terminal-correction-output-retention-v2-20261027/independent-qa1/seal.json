@@ -1,0 +1,12 @@
+{
+  "sourceSha": "0fa1d7266e148e78dc0cffcaa95edbd7e539153d",
+  "reservationNonce": "2855a1b5-4b96-4622-999d-95c6a7c2fc41",
+  "reportSha256": "41120fd1fbbb8d78db63c810d2650457a596cdf71519dd6769e4702f209cb541",
+  "resultSha256": "fd8ccdd779b9210a0185b7c7f580529288af2bdb9f53a8c9e61efdb9a6588d60",
+  "manifest": {
+    "reservation.json": "2eb54725efa4b9d73a4f0b50eb1da6e60c712bb5ac5dcfe8bc68f4c937642b75",
+    "qa.log": "71054bf0c8f8e2f9de3fe2d0daa78ce6e3e47947ee67a4e57b58533b3b26c584",
+    "report.md": "41120fd1fbbb8d78db63c810d2650457a596cdf71519dd6769e4702f209cb541",
+    "result.json": "fd8ccdd779b9210a0185b7c7f580529288af2bdb9f53a8c9e61efdb9a6588d60"
+  }
+}

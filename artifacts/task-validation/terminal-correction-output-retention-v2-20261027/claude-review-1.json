@@ -1,0 +1,23 @@
+{
+  "subject_sha": "1337dfc62066ec9378e824529658c61337ae912f",
+  "verdict": "changes-requested",
+  "summary": "I reviewed the four changed files at the frozen head without running anything. The shared `knownTerminalFailure` predicate is applied the same way in the CLI and the exporter, and it is strict. It refuses running, interrupted, publishing and pending-publish states, scope-invalid and evidence-invalid failures, the recovery step, and drift in plan, feedback, round or source. The exporter keeps its checkpoint, path, mode, hash, secret and size guards, and it never overwrites an earlier export.\n\nThe change also alters controller behavior in one way, which conflicts with AC4 and the rule that retention is only observational. The new report writer for blocked model results runs before the blocked result reaches the controller. If that write fails, a definite BLOCKED result becomes an unsettled running tombstone. There is also a smaller mismatch between the size limits used when writing and when exporting the report.\n\nThe test-pass claims (49 focused tests; 1735 pass, 3 skip, 0 fail on the 37-file suite) and the six CI check IDs come only from the PR's own evidence files and comments. The raw logs were not provided, so I could not verify them independently.",
+  "findings": [
+    {
+      "severity": "medium",
+      "file": "agent-team/src/bug-pipeline/workspace.mjs",
+      "line": 240,
+      "problem": "`retainBlockedResult` is awaited inside `workspace.execute`, `simplify` and `qa` before the result is returned. It can throw: on any mkdir, readFile or writeFile failure, or with 'Terminal model report identity changed' when a different report already exists for the same round and step (for example, legacy correction flows without an implementation round, where the round value can repeat). When it throws, `runImplementationStages` never sees `result.status === 'blocked'`, so `definiteModelFailure` is never set. The catch block then treats the error as unknown: the attempt stays 'running' and progress is never marked failed. An optional retention side effect now decides whether a genuine BLOCKED outcome is settled, and it can force explicit recovery. This contradicts AC4 (controller policy unchanged) and the comment that retention is observational and never authorization.",
+      "requested_change": "Make retention best-effort and keep it out of failure classification. Either catch and record retention errors inside `retainBlockedResult` so the blocked result is always returned (and let the export report the missing report as not-recorded), or move report writing into `runImplementationStages` after `definiteModelFailure` is established, so a write failure cannot stop the attempt from being marked failed.",
+      "test_expectation": "Add a fixture where the model returns BLOCKED and report writing fails (for example, a conflicting existing report file for the same round and step, or a read-only model-results directory). Assert that the controller progress status is still 'failed' with the correct failure code, that the implementation attempt is 'failed', and that the export reports modelReport availability as not-recorded instead of leaving a running tombstone."
+    },
+    {
+      "severity": "low",
+      "file": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "line": 196,
+      "problem": "The workspace accepts summaries up to 32 KiB of raw text, measured before JSON encoding. The exporter rejects any report file over 64 KiB. JSON escaping of quotes and backslashes can roughly double the encoded size, so a report the workspace wrote as retained or sanitized can exceed 64 KiB and be exported as 'invalid-or-unsafe'. The available safe evidence is then dropped and misclassified.",
+      "requested_change": "Make the two limits consistent. Either bound the serialized report size in `retainBlockedResult` (and mark it omitted-oversized when the encoded JSON would exceed the export limit), or set the exporter's file limit from the worst-case encoded size of a 32 KiB summary.",
+      "test_expectation": "Add a test with a summary just under 32 KiB made mostly of characters that need JSON escaping. Assert that the workspace disposition and the export availability agree: either both mark it omitted-oversized, or the report is retained and exported."
+    }
+  ]
+}

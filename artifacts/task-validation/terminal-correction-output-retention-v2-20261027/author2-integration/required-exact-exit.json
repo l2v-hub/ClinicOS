@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-27T09:13:48.681Z",
+  "exitCode": 0,
+  "sourceUnchangedDuringRun": true,
+  "files": 37,
+  "pass": 1739,
+  "fail": 0,
+  "skip": 3,
+  "rawLogSha256": "00ef26298f993363fe28455d91e8cff32d6d80ff20a6194985f3a628bc566e63",
+  "before": {
+    "agent-team/src/bug-pipeline/workspace.mjs": "da2f4c3566026e4c612af2c874b29a09cc6e9084064255091606627ba63095f8",
+    "agent-team/src/bug-pipeline/failed-output-export.mjs": "1d0b4831e65d99fcc71750fec10ffa90927ebf56aa95e8a9e87d94934eaf344b",
+    "agent-team/tests/bug-pipeline/terminal-output-retention.test.mjs": "07e7c2e0500ef20921769ebc53fe96fc802d2e78fd6e79bba0faa385ca9ab342"
+  },
+  "after": {
+    "agent-team/src/bug-pipeline/workspace.mjs": "da2f4c3566026e4c612af2c874b29a09cc6e9084064255091606627ba63095f8",
+    "agent-team/src/bug-pipeline/failed-output-export.mjs": "1d0b4831e65d99fcc71750fec10ffa90927ebf56aa95e8a9e87d94934eaf344b",
+    "agent-team/tests/bug-pipeline/terminal-output-retention.test.mjs": "07e7c2e0500ef20921769ebc53fe96fc802d2e78fd6e79bba0faa385ca9ab342"
+  }
+}

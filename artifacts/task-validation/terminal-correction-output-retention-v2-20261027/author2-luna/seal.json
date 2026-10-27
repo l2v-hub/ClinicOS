@@ -1,0 +1,51 @@
+{
+  "nonce": "402656e7-a60b-4e4a-a835-48da6377dcd4",
+  "baseSha": "1337dfc62066ec9378e824529658c61337ae912f",
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/workspace.mjs",
+      "rawSha256": "b98003822c2fd8e44e2ff91af19e62940fcbac6a8fc37872a0c3dc02375ec115",
+      "gitBlobSha1": "cbacf1d3e059a05f9f4c8acd48b17cd953edd7c6",
+      "baselineSha256": "307c2053c4a6b08fc9c5e2398f3bf20493d63e4f88d278b9ba00df89a1ca6e03"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "rawSha256": "1d0b4831e65d99fcc71750fec10ffa90927ebf56aa95e8a9e87d94934eaf344b",
+      "gitBlobSha1": "7e6c6f3d144dc99963e3062178559a1f5cb3965b",
+      "baselineSha256": "237bdaf5fb30bf9c461af9df51d21ec750a09ea4e9cfb9744ec6767b81a11a53"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/terminal-output-retention.test.mjs",
+      "rawSha256": "9f3f8e596e83f26d04d40e21f7b35eddee8cf32882a7ced31d64e1b372b56752",
+      "gitBlobSha1": "f20b15b350b274fc2d402145c0267c2a5fdccea6",
+      "baselineSha256": "3b3c5fa79cd60b775a021b78c38b8eab8c3774c474018fcea3dc987b74ba9702"
+    }
+  ],
+  "workflowCommand": "/tmp/clinicos-node22-native12/node_modules/node/bin/node --test --test-concurrency=1 agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs scripts/automation/protect-demo-secret.test.mjs",
+  "workflow": {
+    "exitCode": 0,
+    "files": 37,
+    "tests": 1741,
+    "pass": 1738,
+    "skipped": 3,
+    "fail": 0,
+    "node": "/tmp/clinicos-node22-native12/node_modules/node/bin/node",
+    "concurrency": 1
+  },
+  "focused": {
+    "command": "/tmp/clinicos-node22-native12/node_modules/node/bin/node --test agent-team/tests/bug-pipeline/failed-output-retention.test.mjs agent-team/tests/bug-pipeline/terminal-output-retention.test.mjs",
+    "tests": 52,
+    "pass": 52,
+    "fail": 0
+  },
+  "limits": {
+    "rawSummaryBytes": 32768,
+    "serializedReportBytes": 65536
+  },
+  "logSha256": {
+    "focused-final.log": "ad009cd44a7b65c100d4a67bb74c7bcbc6378d9f9118a8d487844f17256626ad",
+    "workflow-required-exact.log": "adb0f6c47b4c1f937d1ba38b5a27af53070ed848b7052db1de92b98772a3f462",
+    "workflow-required-exact-invocation.json": "9e2e6a6514a3e516ff94ac857078dac1f86c35184cdc71bdafdc4ebb16f7a037",
+    "workflow-required-exact-exit.json": "2be8f0da2efe4be8be777c3cd9ea742d323d30a99134a65a8ebcd868d2602ca6"
+  }
+}

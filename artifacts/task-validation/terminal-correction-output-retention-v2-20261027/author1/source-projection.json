@@ -1,0 +1,51 @@
+{
+  "baseSha": "655f028e3b0bdcc621ac15209fd0af38cee3d26b",
+  "reservationNonce": "125dd7c5-2bc2-4f52-b839-7c5c9d57f14e",
+  "author": "/root",
+  "frozen": true,
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "bytes": 10774,
+      "mode": "100644",
+      "rawSha256": "8b631bc276749d238e095c45b9964bdbb3c9f5e916986d224bc28c95325e9898",
+      "gitBlobSha1": "1b70d185805929ecd26564b20aeb9d57d8ccc660",
+      "baselineRawSha256": "0ff7954ade6fa9ec95c9043865b3ba08b780acc8bd415d15936c8e976495b72d"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "bytes": 13995,
+      "mode": "100644",
+      "rawSha256": "237bdaf5fb30bf9c461af9df51d21ec750a09ea4e9cfb9744ec6767b81a11a53",
+      "gitBlobSha1": "7db3088515a1cc6a26e20d569635566756a8dfd6",
+      "baselineRawSha256": "e93056bae7fb1367b7fb6adb0e8a58bf847c1dd9c5e0a72258f4f24bf9b69f15"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/workspace.mjs",
+      "bytes": 39543,
+      "mode": "100644",
+      "rawSha256": "307c2053c4a6b08fc9c5e2398f3bf20493d63e4f88d278b9ba00df89a1ca6e03",
+      "gitBlobSha1": "6c87559085a55e169694a74e4ec613d46e6de9ce",
+      "baselineRawSha256": "42ab2d9fce6dadd30749acc15d11903343fdb6eccf7b474712ba46307a8499f3"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/terminal-output-retention.test.mjs",
+      "bytes": 13533,
+      "mode": "100644",
+      "rawSha256": "3b3c5fa79cd60b775a021b78c38b8eab8c3774c474018fcea3dc987b74ba9702",
+      "gitBlobSha1": "0a5af6b4b4a1852ae9702b9542d71d8f46f949f2",
+      "baselineRawSha256": null
+    }
+  ],
+  "requiredCiEquivalent": {
+    "files": 37,
+    "total": 1738,
+    "passed": 1735,
+    "skipped": 3,
+    "failed": 0,
+    "runs": [
+      "full-bug-pipeline-suite.log",
+      "required-ci-additional-two.log"
+    ]
+  }
+}

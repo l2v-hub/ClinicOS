@@ -1,0 +1,33 @@
+TAP version 13
+# Subtest: final report symlink is refused before reading an external synthetic file
+not ok 1 - final report symlink is refused before reading an external synthetic file
+  ---
+  duration_ms: 105.06251
+  type: 'test'
+  location: '/workspace/.clinicos-cloud/terminal-output-retention-author2-worktree-20261027/agent-team/tests/bug-pipeline/terminal-output-retention.test.mjs:375:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + undefined
+    - 'not-recorded'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'not-recorded'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/.clinicos-cloud/terminal-output-retention-author2-worktree-20261027/agent-team/tests/bug-pipeline/terminal-output-retention.test.mjs:378:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 220.370426
