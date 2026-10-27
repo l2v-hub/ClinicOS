@@ -1,0 +1,158 @@
+{
+  "type": "clinical-harness-qualification-v1",
+  "issue": 506,
+  "runId": "40427317780",
+  "acceptedMain": "655f028e3b0bdcc621ac15209fd0af38cee3d26b",
+  "sourceParent": "5737fc3ae01dc5b8b5b01124daeac1e805fc288f",
+  "privateCandidate": "04d92b6335775f6d975266b50ea6435ffc7fb906",
+  "sourceFiles": [
+    {
+      "file": "e2e/issue506-workspace.mjs",
+      "sha256": "d57f5f5d4c90cdb48cbf2c4e8c2cae3df55cdebf99281c79cfb90ef8ed4d0963"
+    },
+    {
+      "file": "frontend/e2e/issue506-workspace.html",
+      "sha256": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05"
+    },
+    {
+      "file": "frontend/e2e/issue506-workspace.tsx",
+      "sha256": "4fc31c5319186440b5b9db661589a444d9960b96bb431d2c69136a0fd22fc975"
+    },
+    {
+      "file": "frontend/src/components/operator/NewPatientFlow.tsx",
+      "sha256": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895"
+    },
+    {
+      "file": "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+      "sha256": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac"
+    },
+    {
+      "file": "frontend/src/components/shared/DialogLoading.tsx",
+      "sha256": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4"
+    },
+    {
+      "file": "frontend/src/components/shared/DischargeImportModal.tsx",
+      "sha256": "4afce9b3d1c0d3f86346c1812b82b52cda2d1c2987de7625d0f48a682d5edbb1"
+    },
+    {
+      "file": "frontend/src/components/shared/PatientWorkspaceSurface.css",
+      "sha256": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395"
+    },
+    {
+      "file": "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+      "sha256": "27ff12f6020ef24cc897b03570c3fc4d95156d7584e3f0d70e618b805235084d"
+    },
+    {
+      "file": "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+      "sha256": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41"
+    },
+    {
+      "file": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+      "sha256": "61c45c249842c4cf4795bd34d251ff83e8d13895d75a3757e7b61bf5a5cf31e0"
+    },
+    {
+      "file": "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts",
+      "sha256": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde"
+    }
+  ],
+  "actualNativeVerification": true,
+  "providerInvocations": 0,
+  "results": [
+    {
+      "index": 0,
+      "command": "npm",
+      "args": [
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ],
+      "ok": true,
+      "noTestsSignal": false,
+      "exitCode": 0,
+      "runnerError": null,
+      "stdoutBytes": 25103,
+      "stderrBytes": 1915,
+      "stdoutSha256": "d5d995c04e9f4dc137d9da6e977dd423cfa5b57d61a469f28ae2a835dd6f3961",
+      "stderrSha256": "85e8f6c6d8e7711b3a6fb42551916e2677cc8fd519f2b84f5d831ed531bec1e0"
+    },
+    {
+      "index": 1,
+      "command": "npm",
+      "args": [
+        "--prefix",
+        "frontend",
+        "test"
+      ],
+      "ok": true,
+      "noTestsSignal": false,
+      "exitCode": 0,
+      "runnerError": null,
+      "stdoutBytes": 509662,
+      "stderrBytes": 1150,
+      "stdoutSha256": "576fc0daf07c2eed455eeda3ef4bfc0af2db910cadebcf0a6833f3173600b3ea",
+      "stderrSha256": "a046c29f1028e6b5e8df8deafa324dd6663f307c2408c387a9361394b2911bd0"
+    },
+    {
+      "index": 2,
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx",
+        "e2e/issue506-workspace.mjs"
+      ],
+      "ok": true,
+      "noTestsSignal": false,
+      "exitCode": 0,
+      "runnerError": null,
+      "stdoutBytes": 9100,
+      "stderrBytes": 798,
+      "stdoutSha256": "8ffa804a5d7cacf139e22fed9aea61374cca843f075df30d4150658f9ecc51be",
+      "stderrSha256": "694e0c696867304631c039c4fa294ca8477acbd9619bc09d20da2805722e914a"
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "screenshot",
+      "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/import-1440.png",
+      "bytes": 68523,
+      "sha256": "20ac8a5ebb384164b10d9fa5096504bd12db4143200263185479fb09e5114679"
+    },
+    {
+      "kind": "trace",
+      "file": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
+      "bytes": 3953301,
+      "sha256": "4f7a36a225ebedfd0df1e197bdc364322a2340c4b3872802e5fec47902599646"
+    },
+    {
+      "kind": "video",
+      "file": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm",
+      "bytes": 706546,
+      "sha256": "3e14756efcabcdc180771bbb592ede44d70765321523fd4708a03f180c5dfc14"
+    }
+  ],
+  "nativeEvidence": [
+    {
+      "issue": 506,
+      "files": {
+        "screenshot": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/screenshots/import-1440.png",
+          "sha256": "20ac8a5ebb384164b10d9fa5096504bd12db4143200263185479fb09e5114679",
+          "bytes": 68523
+        },
+        "trace": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
+          "sha256": "4f7a36a225ebedfd0df1e197bdc364322a2340c4b3872802e5fec47902599646",
+          "bytes": 3953301
+        },
+        "video": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm",
+          "sha256": "3e14756efcabcdc180771bbb592ede44d70765321523fd4708a03f180c5dfc14",
+          "bytes": 706546
+        }
+      }
+    }
+  ],
+  "ok": true,
+  "scope": "Synthetic actual React browser regression; not authenticated backend or deployment acceptance"
+}

@@ -1,6 +1,122 @@
-1. Preserve modal path; add explicitly selected page surface using current main/topbar geometry.
-2. Propagate presentation through NewPatientFlow loading/error, document/review and resumed intake phases.
-3. Keep workspace panel scrolling and original save/close behavior; preserve nested modal semantics.
-4. Unit/SSR regression tests for default modal vs page semantics. Browser actual React flow with localhost-only synthetic fixtures: desktop/tablet/mobile bounds, sidebar/topbar click/focus, resumed draft and field editing/save/reload, nested confirmation, close/escape.
-5. Independent reserved QA session reruns build/tests/browser and records identity-bound screenshot/trace/video/security outcomes. Freeze source and publish each issue's proof.
-6. Only after actual gates create PR and valid exact-head Claude request, without spending or resetting old subjects' budgets. No issue closure before protected merge and verified publication.
+# Frozen implementation plan
+
+Branch: codex/bug-batch-506
+Baseline: 715a4b9e47ff9bd0192b7f58f24271e48da4900d
+
+{
+  "title": "Mantieni import e bozze nello spazio principale della pagina",
+  "feature": "patient-intake/routed-workspace-presentation",
+  "rationale": "Separate newly authorized issue; different root cause and nonoverlapping source files from the other new issue, preserving independent acceptance/evidence and ongoing automation reviews.",
+  "analysis": "Global viewport modal overlays covered the shell in document, review, lazy-loading and resumed-intake phases; explicit page presentation reuses existing navigation and preserves pending-save and modal safeguards.\nHarness-only evidence version: actual native C5 build/frontend tests passed; bundled Playwright qualified in40423083192. The same behavioral regression runs with a self-owned loopback server, sealed default environment and deterministic current evidence paths. All old plans, FAILED journals and four retained source snapshots remain preserved.",
+  "execution": {
+    "difficulty": "medium",
+    "mode": "direct",
+    "reason": "Existing React lifecycle, page geometry, keyboard and draft-save interaction require coordinated senior changes."
+  },
+  "issues": [
+    506
+  ],
+  "scope": [
+    "e2e/issue506-workspace.mjs",
+    "frontend/e2e/issue506-workspace.html",
+    "frontend/e2e/issue506-workspace.tsx",
+    "frontend/src/components/operator/NewPatientFlow.tsx",
+    "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+    "frontend/src/components/shared/DialogLoading.tsx",
+    "frontend/src/components/shared/DischargeImportModal.tsx",
+    "frontend/src/components/shared/PatientWorkspaceSurface.css",
+    "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+    "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+    "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+    "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts"
+  ],
+  "fileMap": [
+    {
+      "issue": 506,
+      "files": [
+        "e2e/issue506-workspace.mjs",
+        "frontend/e2e/issue506-workspace.html",
+        "frontend/e2e/issue506-workspace.tsx",
+        "frontend/src/components/operator/NewPatientFlow.tsx",
+        "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+        "frontend/src/components/shared/DialogLoading.tsx",
+        "frontend/src/components/shared/DischargeImportModal.tsx",
+        "frontend/src/components/shared/PatientWorkspaceSurface.css",
+        "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+        "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+        "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+        "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts"
+      ]
+    }
+  ],
+  "separationReason": "Independent root causes and no shared changed source files: #506 page surfaces/navigation versus #507 therapy date provenance. Separate worktrees and per-issue PRs avoid coupling.",
+  "acceptance": [
+    {
+      "issue": 506,
+      "criteria": [
+        "Import, review and resumed draft fill the existing main pane without obscuring shell navigation at desktop/tablet/mobile widths.",
+        "Page presentation is nonmodal; existing true dialogs preserve focus/Escape; leaving with a pending draft flushes the save, and failed save retains the draft.",
+        "Independent actual React browser evidence, source integrity, build, frontend tests and privacy checks pass with explicit synthetic localhost fixtures."
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "title": "Implement scoped cause and preserve existing invariants",
+      "files": [
+        "e2e/issue506-workspace.mjs",
+        "frontend/e2e/issue506-workspace.html",
+        "frontend/e2e/issue506-workspace.tsx",
+        "frontend/src/components/operator/NewPatientFlow.tsx",
+        "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+        "frontend/src/components/shared/DialogLoading.tsx",
+        "frontend/src/components/shared/DischargeImportModal.tsx",
+        "frontend/src/components/shared/PatientWorkspaceSurface.css",
+        "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+        "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+        "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+        "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts"
+      ],
+      "steps": [
+        "Import, review and resumed draft fill the existing main pane without obscuring shell navigation at desktop/tablet/mobile widths.",
+        "Page presentation is nonmodal; existing true dialogs preserve focus/Escape; leaving with a pending draft flushes the save, and failed save retains the draft.",
+        "Independent actual React browser evidence, source integrity, build, frontend tests and privacy checks pass with explicit synthetic localhost fixtures."
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "command": "npm",
+      "args": [
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ]
+    },
+    {
+      "command": "npm",
+      "args": [
+        "--prefix",
+        "frontend",
+        "test"
+      ]
+    },
+    {
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx",
+        "e2e/issue506-workspace.mjs"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "issue": 506,
+      "screenshot": "artifacts/task-validation/bug-batch-506/evidence/screenshots/import-1440.png",
+      "trace": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
+      "video": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm"
+    }
+  ]
+}
