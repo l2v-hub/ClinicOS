@@ -32,7 +32,7 @@ const serverOptions = {
   } }],
   server: { host: '127.0.0.1', port: 5178, strictPort: true, fs: { allow: [root, cache] } },
 };
-let server, browser;
+let server, browser, activeContext, activePage, activeTimezone;
 const errors = [], unexpected = [], results = [];
 const saved = { id: 'synthetic-therapy', patientId: 'synthetic-patient',
   farmacoNome: 'Synthetic saved medicine', dosaggio: '20 mg', viaSomministrazione: 'orale',
@@ -52,9 +52,12 @@ try {
   server = await createServer(serverOptions);
   await server.listen();
   browser = await chromium.launch({ headless: true,
+    ...(process.env.QA_CHROMIUM_EXECUTABLE ? { executablePath: process.env.QA_CHROMIUM_EXECUTABLE } : {}),
     args: ['--no-sandbox'] });
   for (const timezoneId of ['Europe/Rome', 'America/Los_Angeles']) {
     const context = await browser.newContext({ timezoneId, viewport: { width: 1280, height: 960 }, recordVideo: { dir: videoDir, size: { width: 1280, height: 960 } } });
+    activeContext = context;
+    activeTimezone = timezoneId.replace('/', '-');
     await context.tracing.start({ screenshots: false, snapshots: true });
     await context.route('**/*', async (route) => {
       const request = route.request(), url = new URL(request.url());
@@ -86,6 +89,7 @@ try {
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) });
     });
     const page = await context.newPage();
+    activePage = page;
     await page.clock.install({ time: new Date('2026-10-25T12:00:00Z') });
     page.on('response', (response) => {
       if (response.status() >= 400) errors.push(`HTTP ${response.status()} ${new URL(response.url()).pathname}`);
@@ -130,12 +134,16 @@ try {
     await value(intake.getByLabel('Data inizio *', { exact: true }), '2026-09-13');
     results.push(`${timezoneId}: real StepClinica intake new rows, context changes, once date and retained earlier row PASS`);
     await page.screenshot({ path: path.join(screenshots, `${timezoneId.replace('/', '-')}.png`), fullPage: true });
-    for (const edit of ['untouched', 'start', 'once', 'same-fallback', 'empty-start']) {
+    for (const edit of ['untouched', 'start', 'once', 'same-fallback', 'empty-start', 'duration', 'end-date', 'no-end']) {
       await page.goto('http://127.0.0.1:5178/__qa507?cold=1');
       const coldChart = page.getByRole('region', { name: 'Chart therapy', exact: true });
       const start = coldChart.getByLabel('Data inizio *', { exact: true });
       await start.waitFor({ state: 'visible' });
       const fallback = await start.inputValue();
+      const end = coldChart.getByLabel('Data fine (facoltativa)', { exact: true });
+      if (edit === 'duration') await coldChart.getByRole('button', { name: '7 giorni', exact: true }).click();
+      if (edit === 'end-date') await end.fill('2026-11-01');
+      if (edit === 'no-end') await coldChart.getByRole('button', { name: 'Senza fine', exact: true }).click();
       if (edit === 'start') await start.fill('2026-10-01');
       if (edit === 'empty-start') await start.fill('');
       if (edit === 'same-fallback') {
@@ -148,7 +156,14 @@ try {
       }
       await page.getByLabel('Chart admission context', { exact: true }).fill('2026-09-15');
       await value(start, edit === 'start' ? '2026-10-01'
-        : edit === 'same-fallback' ? fallback : edit === 'empty-start' ? '' : '2026-09-15');
+        : ['same-fallback', 'duration', 'end-date'].includes(edit) ? fallback : edit === 'empty-start' ? '' : '2026-09-15');
+      if (edit === 'duration' || edit === 'end-date') {
+        await value(end, edit === 'duration' ? '2026-10-31' : '2026-11-01');
+        if (edit === 'duration') assert.equal(
+          (Date.parse(await end.inputValue()) - Date.parse(await start.inputValue())) / 86400000 + 1,
+          7, 'A chosen inclusive seven-day duration survives late admission');
+        await coldChart.screenshot({ path: path.join(screenshots, `${timezoneId.replace('/', '-')}-interval-${edit}.png`) });
+      } else if (edit !== 'once') await value(end, '');
       await coldChart.getByRole('radio', { name: /Una tantum/ }).check();
       await value(coldChart.getByLabel('Data somministrazione', { exact: true }),
         edit === 'once' ? '2026-10-02' : '2026-10-25');
@@ -170,12 +185,13 @@ try {
     await value(savedChart.getByLabel('Data inizio *', { exact: true }), '2026-08-30');
     results.push(`${timezoneId}: delayed admission leaves saved editor dates unchanged PASS`);
 
-    for (const edit of ['untouched', 'start', 'once', 'same-fallback']) {
+    for (const edit of ['untouched', 'start', 'once', 'same-fallback', 'end-date']) {
       await page.goto('http://127.0.0.1:5178/__qa507?cold=1');
       const coldIntake = page.getByRole('region', { name: 'Intake therapy', exact: true });
       await coldIntake.getByRole('button', { name: '+ Aggiungi farmaco', exact: true }).click();
       const start = coldIntake.getByLabel('Data inizio *', { exact: true });
       const fallback = await start.inputValue();
+      if (edit === 'end-date') await coldIntake.getByLabel('Data fine (facoltativa)', { exact: true }).fill('2026-11-01');
       if (edit === 'start') await start.fill('2026-10-01');
       if (edit === 'same-fallback') await start.evaluate((element) =>
         element.dispatchEvent(new Event('input', { bubbles: true })));
@@ -184,10 +200,17 @@ try {
         await coldIntake.getByLabel('Data somministrazione', { exact: true }).fill('2026-10-02');
       }
       await page.getByLabel('Intake admission context', { exact: true }).fill('2026-09-12');
-      await value(start, edit === 'start' ? '2026-10-01' : edit === 'same-fallback' ? fallback : '2026-09-12');
+      await value(start, edit === 'start' ? '2026-10-01' : ['same-fallback', 'end-date'].includes(edit) ? fallback : '2026-09-12');
+      if (edit === 'end-date') {
+        await value(coldIntake.getByLabel('Data fine (facoltativa)', { exact: true }), '2026-11-01');
+        await page.getByLabel('Intake admission context', { exact: true }).fill('2026-11-10');
+        await value(start, fallback);
+        await value(coldIntake.getByLabel('Data fine (facoltativa)', { exact: true }), '2026-11-01');
+        await coldIntake.screenshot({ path: path.join(screenshots, `${timezoneId.replace('/', '-')}-intake-end-date.png`) });
+      }
       await coldIntake.getByRole('radio', { name: /Una tantum/ }).check();
       await value(coldIntake.getByLabel('Data somministrazione', { exact: true }),
-        edit === 'once' ? '2026-10-02' : '2026-10-25');
+        edit === 'once' ? '2026-10-02' : edit === 'end-date' ? '2026-11-10' : '2026-10-25');
       results.push(`${timezoneId}: actual intake late admission, ${edit} dates PASS`);
     }
     await page.goto('http://127.0.0.1:5178/__qa507');
@@ -212,11 +235,26 @@ try {
     await context.close();
     assert(video, 'A fresh native evidence video is required');
     await rename(await video.path(), path.join(videoDir, `issue507-${timezoneId.replace('/', '-')}.webm`));
+    activeContext = null;
+    activePage = null;
   }
   assert.deepEqual(unexpected, [], 'No unexpected or remote requests');
   assert.deepEqual(errors, [], 'No browser/console errors');
   await writeFile(path.join(output, 'test-results/browser.json'), JSON.stringify({ results, errors, unexpected }, null, 2));
   console.log(results.join('\n'));
+} catch (error) {
+  await writeFile(path.join(output, 'test-results/failure.json'), JSON.stringify({
+    message: error instanceof Error ? error.message : String(error), results, errors, unexpected,
+  }, null, 2));
+  if (activeContext && activePage) {
+    await activePage.screenshot({ path: path.join(screenshots, `${activeTimezone}-failure.png`), fullPage: true });
+    await activeContext.tracing.stop({ path: path.join(trace, `issue507-${activeTimezone}-failure.zip`) });
+    const video = activePage.video();
+    await activeContext.close();
+    if (video) await rename(await video.path(), path.join(videoDir, `issue507-${activeTimezone}-failure.webm`));
+    activeContext = null;
+  }
+  throw error;
 } finally {
   await browser?.close();
   await server?.close();

@@ -10,6 +10,7 @@ import {
   hydrateTherapyAdmissionDates,
 } from '../../../../lib/therapyAdmissionDate';
 import { facilityLocalDate } from '../../../../lib/facilityTime';
+import { durationEnd } from '../therapyQuickSchedule';
 import { resolvePresaInCarico } from '../../../../lib/presaInCarico';
 import {
   dischargeRowToTherapyForm,
@@ -199,4 +200,27 @@ test('undated imports retain their current-day default without manual admission 
   } as DischargeTherapyRow);
   assert.equal(imported.dataInizio, '2026-10-25');
   assert.equal(hydrateTherapyAdmissionDates(imported, '2026-10-20', null), imported);
+});
+
+test('an operator-owned duration keeps its start, end and span when admission arrives', (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: new Date('2026-10-25T12:00:00Z') });
+  const form = emptyTherapyForm();
+  const interval = { ...form, dataFine: durationEnd(form.dataInizio, 7) };
+  const hydrated = hydrateTherapyAdmissionDates(interval, '2026-09-15', {
+    dataInizio: false, dataSomministrazione: true,
+  });
+  assert.equal(hydrated.dataInizio, '2026-10-25');
+  assert.equal(hydrated.dataFine, '2026-10-31');
+  assert.equal(hydrated.dataFine, durationEnd(hydrated.dataInizio, 7));
+  assert.equal(hydrated.dataSomministrazione, '2026-10-25');
+});
+
+test('an empty end stays empty while an automatic start follows admission', (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: new Date('2026-10-25T12:00:00Z') });
+  const form = emptyTherapyForm();
+  const hydrated = hydrateTherapyAdmissionDates(form, '2026-09-15', {
+    dataInizio: true, dataSomministrazione: true,
+  });
+  assert.equal(hydrated.dataInizio, '2026-09-15');
+  assert.equal(hydrated.dataFine, '');
 });

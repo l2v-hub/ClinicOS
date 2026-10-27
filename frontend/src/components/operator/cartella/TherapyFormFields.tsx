@@ -330,7 +330,12 @@ export function TherapyFormFields({
               type="button"
               className="ds-btn ds-btn--secondary"
               aria-pressed={value.dataFine === durationEnd(value.dataInizio, 7)}
-              onClick={() => update({ dataFine: durationEnd(value.dataInizio, 7) })}
+              onClick={() => {
+                const dataFine = durationEnd(value.dataInizio, 7);
+                // Choosing a duration owns the current start as well as its end.
+                if (dataFine) onDateInput?.('dataInizio');
+                update({ dataFine });
+              }}
             >
               7 giorni
             </button>
@@ -369,6 +374,9 @@ export function TherapyFormFields({
                 className="form-input"
                 type="date"
                 value={value.dataFine}
+                onInput={(e) => {
+                  if (e.currentTarget.value) onDateInput?.('dataInizio');
+                }}
                 onChange={(e) => update({ dataFine: e.target.value })}
               />
               {feedback.error('dataFine')}
