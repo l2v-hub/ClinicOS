@@ -1,0 +1,56 @@
+{
+  "qualifiedCode": "6572bd52617630d1dc79765bcbc1b97538974146",
+  "files": [
+    {
+      "file": "e2e/issue507-smoke.mjs",
+      "sha256": "d211cc798b1f08c8f2c71d0caf20b00daa0cf1093ea2e5c6a179afb5217e0f50",
+      "gitBlobSha1": "61557c662f8eb39fc68406f69a68bed5ce30e8be"
+    },
+    {
+      "file": "e2e/issue507/entry.tsx",
+      "sha256": "696b0e60fa0d4283cb8ff6a298af8e31861c967532bed6a22248e8f3595dfeb2",
+      "gitBlobSha1": "4636699ea5a9f0e9e0a347481380c1d50c875bd1"
+    },
+    {
+      "file": "frontend/src/components/operator/PatientDetail.tsx",
+      "sha256": "fb73b4e253f767d6344e57d61c38b8b64222a47a5f2215d4c8a9f1251c8e0dbb",
+      "gitBlobSha1": "c6570832a771cc6c78261df14b2c1299507051e7"
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "sha256": "2b271ce8b317449ebec4990599800a1dd24c3f1b6fc9cea4a7155f29efa5a8da",
+      "gitBlobSha1": "6d770b3d95828d6427de687415a576c34b86660f"
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+      "sha256": "6ebba927508f1d6e244c052e696683ab52eee29a1772352c9126083698745fc7",
+      "gitBlobSha1": "f4f2bc22bcfc9115fc201a1ff4fd5f8cc549830c"
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts",
+      "sha256": "7526c5ad6c79591235d78a30145b1d48e250540ac540e46c34632ec27ac705f6",
+      "gitBlobSha1": "ad14593cfaec7fb60265c5a74a6af75789d39306"
+    },
+    {
+      "file": "frontend/src/components/operator/sections/TherapyEditor.tsx",
+      "sha256": "541279cfc05dace84f7a74c1671b9287689ee6cdbeb94dfc1830d06f0f025ed8",
+      "gitBlobSha1": "2fdaedf82124af522427b7425a32b1c0ca329d0b"
+    },
+    {
+      "file": "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx",
+      "sha256": "0b34a7ec2fde96368daab9dc519102117d980274bbae1f349acd012061fa56b4",
+      "gitBlobSha1": "7e3d142d412cd80f0380bca5564a08d3ccb28e90"
+    },
+    {
+      "file": "frontend/src/components/shared/intake/StepClinica.tsx",
+      "sha256": "ef2ec3c049afbc40bd257f387394ebcff423ffd18a0afab9588e2f1369dc6caa",
+      "gitBlobSha1": "ef20d725dc244ed67e560df4f39162e8c6cc0676"
+    },
+    {
+      "file": "frontend/src/lib/therapyAdmissionDate.ts",
+      "sha256": "d24e633ff1d8760e5554f56d54180e5212c9f0b5855e4929dafe078dc8154c5f",
+      "gitBlobSha1": "1a7c9f594838870e0ea40f497eac98434ae9f297"
+    }
+  ],
+  "independentQaSealSha256": "e5435cd23eeae8cab0c3c5517a53ee62e4ce9b82d8a4bd74bea7a811944831f0"
+}

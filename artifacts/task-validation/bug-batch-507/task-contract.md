@@ -1,19 +1,30 @@
-# Task Contract — versioned clarification8
+# Task Contract
+
+## Impact Classification
+
+Issue #507, accepted scope only.
 
 ## Current Behaviour
 
-Original issue507 explicitly asks therapy scheduling start dates to default to admission. Current code already keeps dataInizio at admission for periodica, al_bisogno and una_tantum; dataSomministrazione is a separate field with current-day-or-future default. The old generated AC incorrectly combined both fields. The genuine negative final review is preserved, not reclassified as approved.
+Genuine peer on 9e0a8dec7fb8bbf5edcaf00694be63f6fda577ff requested a correction.
 
 ## Expected Behaviour
 
-Proponi la data di ingresso per le nuove terapie
+Choosing a nonempty end date or the existing inclusive seven-day chip takes operator ownership of the start date before updating the end. Later admission edits preserve this interval. Empty end/Senza fine retain automatic lineage. Once-administration policy is unchanged; start-date default and administration date remain distinct.
 
 ## Acceptance Criteria
 
-- AC1: New manual therapy dataInizio defaults to the actual resolved admission day, including delayed cartella hydration and repeated intake admission corrections.
-- AC2: New once administration dataSomministrazione remains at the facility current day or later admission day, so a past admission does not silently backdate a new one-off dose. Explicit operator dates keep precedence.
-- AC3: Operator edits, saved/imported dates and explicit calendar dates retain precedence; no timezone shift of calendar dates.
-- AC4: Independent actual-host and intake browser evidence, meaningful unit regressions, build, frontend tests and privacy checks pass with synthetic fixtures.
+[
+  {
+    "issue": 507,
+    "criteria": [
+      "New manual therapy dataInizio defaults to the actual resolved admission day, including delayed cartella hydration and repeated intake admission corrections.",
+      "New once administration dataSomministrazione remains at the facility current day or later admission day, so a past admission does not silently backdate a new one-off dose. Explicit operator dates keep precedence.",
+      "Operator edits, saved/imported dates and explicit calendar dates retain precedence; no timezone shift of calendar dates.",
+      "Independent actual-host and intake browser evidence, meaningful unit regressions, build, frontend tests and privacy checks pass with synthetic fixtures."
+    ]
+  }
+]
 
 ## Test Plan
 
@@ -47,8 +58,8 @@ Proponi la data di ingresso per le nuove terapie
 
 ## Evidence Plan
 
-Actual native run40429879923 on CODE db2a891fe982dac8c42f8fb5a3e91a49404f30fa, all3commands PASS and native-validated fresh PNG/trace/video. Application and harness source remain byte-identical. Old original-cold-probe JSON is explicitly historical; current-results JSON is the actual native finite proof, without invented per-assert output. No new browser run is claimed for this metadata-only revision.
+Actual React browser with synthetic patient data only; native-validated PNG, trace and video at plan paths.
 
 ## Gate Status
 
-PARTIAL — new independent contract/evidence QA, exact new-head six CI, genuine peer3, fresh final Codex, protected merge and deployment remain pending.
+Source independent QA and real native verification/evidence have passed on the immutable CODE. Six required checks on the final published head, new genuine Claude peer, fresh final Codex, protected merge and deployed acceptance are sequential pending gates. No issue closure or deployment acceptance is claimed.

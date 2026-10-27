@@ -1,14 +1,14 @@
 {
   "type": "clinical-harness-qualification-v1",
   "issue": 507,
-  "runId": "40429879923",
+  "runId": "40482705275",
   "acceptedMain": "655f028e3b0bdcc621ac15209fd0af38cee3d26b",
-  "sourceParent": "fc42859d7c73f9c90d9d49d8cdafe2d752893de7",
-  "privateCandidate": "db2a891fe982dac8c42f8fb5a3e91a49404f30fa",
+  "sourceParent": "9e0a8dec7fb8bbf5edcaf00694be63f6fda577ff",
+  "privateCandidate": "6572bd52617630d1dc79765bcbc1b97538974146",
   "sourceFiles": [
     {
       "file": "e2e/issue507-smoke.mjs",
-      "sha256": "dc8b202cf958eefa1c678211418beff3c3681cc3cde76de300fdad7204105544"
+      "sha256": "d211cc798b1f08c8f2c71d0caf20b00daa0cf1093ea2e5c6a179afb5217e0f50"
     },
     {
       "file": "e2e/issue507/entry.tsx",
@@ -24,11 +24,11 @@
     },
     {
       "file": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
-      "sha256": "9a0fd94088795f18a87da49720130fbf348a57625c8a667c6b604cb24732cd34"
+      "sha256": "6ebba927508f1d6e244c052e696683ab52eee29a1772352c9126083698745fc7"
     },
     {
       "file": "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts",
-      "sha256": "640574fb2a46e04d8414984d0a48810a9571c3d26c927bd8431128075b4c3ef1"
+      "sha256": "7526c5ad6c79591235d78a30145b1d48e250540ac540e46c34632ec27ac705f6"
     },
     {
       "file": "frontend/src/components/operator/sections/TherapyEditor.tsx",
@@ -65,8 +65,8 @@
       "runnerError": null,
       "stdoutBytes": 25103,
       "stderrBytes": 1915,
-      "stdoutSha256": "d6cd2d4709d9b06af5d36b8dd5ff9f8f93bf2052415360e1828d88b1bcc40e58",
-      "stderrSha256": "9fb90e672f4ea43806378ce94c750de8dd97192a74211fc19b98560318bf5ec8"
+      "stdoutSha256": "ad16da8c64f7e144c0c9271fb4f038e5d24d9057f43188d5a337203fa8e8cca7",
+      "stderrSha256": "de3eeba7319b6e72694d4ea0a0317756020732b560eaca53521e26735ba63854"
     },
     {
       "index": 1,
@@ -80,9 +80,9 @@
       "noTestsSignal": false,
       "exitCode": 0,
       "runnerError": null,
-      "stdoutBytes": 513338,
+      "stdoutBytes": 513904,
       "stderrBytes": 1150,
-      "stdoutSha256": "8a864027de303ceb0c3edaf2ac10ce3875524631d918e94a6ee233e712aeece3",
+      "stdoutSha256": "40f45f0de669359950d82f24091db3e982e0157716bc08a80af8fa3cd6a533f5",
       "stderrSha256": "a046c29f1028e6b5e8df8deafa324dd6663f307c2408c387a9361394b2911bd0"
     },
     {
@@ -97,9 +97,9 @@
       "noTestsSignal": false,
       "exitCode": 0,
       "runnerError": null,
-      "stdoutBytes": 11246,
+      "stdoutBytes": 11820,
       "stderrBytes": 798,
-      "stdoutSha256": "971dedd8b3578c322ae0f114a3a1a1c6a99d0466c4ed66c6b072522efbba3a8e",
+      "stdoutSha256": "f17e31725866d36e75a5402f5248abbba0247bee40dfc318fbdb8dda7b8279e9",
       "stderrSha256": "b1a79cdad8f089aa6897f6e4cbc04db7cfb3403d5ae289aedd1a33727cc701f1"
     }
   ],
@@ -113,14 +113,14 @@
     {
       "kind": "trace",
       "file": "artifacts/task-validation/bug-batch-507/evidence/trace/issue507-Europe-Rome.zip",
-      "bytes": 1551262,
-      "sha256": "4a2a622ebcc4e9475c1548ff2a50e0b4fec215e42d1d1c54608d017a6c05f91c"
+      "bytes": 2071577,
+      "sha256": "926f134f4b466022b208d2304389ae18ab4b301014d7b317a03002c591f61ab4"
     },
     {
       "kind": "video",
       "file": "artifacts/task-validation/bug-batch-507/evidence/video/issue507-Europe-Rome.webm",
-      "bytes": 2083541,
-      "sha256": "3a2336ccc927061d20dac588e980af096b2f28264903db45c393138f8bc27d9f"
+      "bytes": 3867343,
+      "sha256": "facd7b2c3aac40c0a225187d8d4154dc64b92dc07e33817bc35eb9a325071517"
     }
   ],
   "nativeEvidence": [
@@ -134,13 +134,13 @@
         },
         "trace": {
           "path": "artifacts/task-validation/bug-batch-507/evidence/trace/issue507-Europe-Rome.zip",
-          "sha256": "4a2a622ebcc4e9475c1548ff2a50e0b4fec215e42d1d1c54608d017a6c05f91c",
-          "bytes": 1551262
+          "sha256": "926f134f4b466022b208d2304389ae18ab4b301014d7b317a03002c591f61ab4",
+          "bytes": 2071577
         },
         "video": {
           "path": "artifacts/task-validation/bug-batch-507/evidence/video/issue507-Europe-Rome.webm",
-          "sha256": "3a2336ccc927061d20dac588e980af096b2f28264903db45c393138f8bc27d9f",
-          "bytes": 2083541
+          "sha256": "facd7b2c3aac40c0a225187d8d4154dc64b92dc07e33817bc35eb9a325071517",
+          "bytes": 3867343
         }
       }
     }

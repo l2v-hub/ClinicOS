@@ -1,5 +1,9 @@
-# Validation — pre-publication historical snapshot
+# Validation report
 
-No clinical source or test assertion changed. Exact tested CODE db2a891fe982dac8c42f8fb5a3e91a49404f30fa maps byte-for-byte to all10source files. Real native40429879923 three commands PASS and native evidence validation PASS; same media hashes verified again locally. Independent prior source QA was VERIFIED_FOR_NORMAL_SOURCE_PUBLICATION, genuine Claude2 approved0, but newer final Codex requested changes. That final is preserved and remains historical negative, never silently reset.
+Actual native40482705275: all3 plan commands PASS, native PNG/trace/video validation PASS; all exact CODE source hashes matched. Fixed read-only40491321534 returned identical primary bytes plus one supplemental screenshot. Independent source QA PASS_SOURCE_QA_READY_FOR_NATIVE_QUALIFICATION, zero blockers, seal e5435cd23eeae8cab0c3c5517a53ee62e4ce9b82d8a4bd74bea7a811944831f0. Source code in the final published commit must be byte-identical to the qualified CODE.
 
-This new version corrects generated AC/evidence metadata. Its independent QA, current-head CI, genuine peer3, NEW final and protected merge are PENDING. No deployment or clinical closure is claimed.
+Source independent QA and real native verification/evidence have passed on the immutable CODE. Six required checks on the final published head, new genuine Claude peer, fresh final Codex, protected merge and deployed acceptance are sequential pending gates. No issue closure or deployment acceptance is claimed.
+
+## Final Decision
+
+PARTIAL — awaiting final-head CI, peer, final Codex and protected release/deployed verification.
