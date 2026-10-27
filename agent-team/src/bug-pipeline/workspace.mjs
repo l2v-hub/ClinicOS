@@ -10,15 +10,24 @@ import { validatePng, validateTrace } from './evidence.mjs';
 import { verificationArguments } from './verification.mjs';
 import { sanitizeText } from '../core/sanitize.mjs';
 
-const SENSITIVE_VERIFICATION_LINE = /\b(?:patient(?:id|_id)?|resident(?:id|_id)?|provider|nome|cognome|birth|dob|email|phone|authorization|cookie|token|secret|password|api[_-]?key|database_url|OPENAI_API_KEY|ANTHROPIC_API_KEY|CLAUDE_CODE_OAUTH_TOKEN|CODEX_ACCESS_TOKEN|DATABASE_URL|GITHUB_TOKEN|GH_TOKEN)\b|\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b/i;
+const SENSITIVE_VERIFICATION_LINE =
+  /\b(?:patient(?:id|_id)?|resident(?:id|_id)?|provider|nome|cognome|birth|dob|email|phone|authorization|cookie|token|secret|password|api[_-]?key|database_url|OPENAI_API_KEY|ANTHROPIC_API_KEY|CLAUDE_CODE_OAUTH_TOKEN|CODEX_ACCESS_TOKEN|DATABASE_URL|GITHUB_TOKEN|GH_TOKEN)\b|\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b/i;
 export function safeVerificationText(value) {
-  return sanitizeText(value).split(/\r?\n/).map((line) =>
-    SENSITIVE_VERIFICATION_LINE.test(line) ? '[REDACTED_SENSITIVE_LINE]' : line).join('\n');
+  return sanitizeText(value)
+    .split(/\r?\n/)
+    .map((line) => (SENSITIVE_VERIFICATION_LINE.test(line) ? '[REDACTED_SENSITIVE_LINE]' : line))
+    .join('\n');
 }
 function excerpt(value) {
-  const useful = value.split('\n').filter((line) =>
-    /\b(?:error|failed?|not ok|assertion|syntaxerror|typeerror|referenceerror|enoent|etimedout|econnrefused|cannot find|no test files)\b|^\s*(?:at |# (?:tests|pass|fail)|npm ERR!|Test Files)/i.test(line) ||
-    line === '[REDACTED_SENSITIVE_LINE]').join('\n');
+  const useful = value
+    .split('\n')
+    .filter(
+      (line) =>
+        /\b(?:error|failed?|not ok|assertion|syntaxerror|typeerror|referenceerror|enoent|etimedout|econnrefused|cannot find|no test files)\b|^\s*(?:at |# (?:tests|pass|fail)|npm ERR!|Test Files)/i.test(
+          line,
+        ) || line === '[REDACTED_SENSITIVE_LINE]',
+    )
+    .join('\n');
   return Buffer.from(useful).subarray(-8192).toString('utf8');
 }
 
@@ -105,6 +114,52 @@ export function knownFailedCorrection(batch) {
   );
 }
 
+// Retention is observational, never authorization to resume or replay work.
+// Share this exact predicate with both entry points so a new terminal model
+// result cannot silently fall outside the permanent artifact path.
+export function knownTerminalFailure(batch) {
+  const p = batch?.controllerProgress;
+  const codes = {
+    execute: 'implementation-blocked',
+    simplify: 'implementation-blocked',
+    qa: 'independent-qa-blocked',
+    'verify-before': 'workspace-verification-failed',
+    'verify-after': 'workspace-verification-failed',
+    revision: 'implementation-revision-unchanged',
+  };
+  if (
+    p?.status !== 'failed' ||
+    !Object.hasOwn(codes, p.failedStep) ||
+    p.failureCode !== codes[p.failedStep] ||
+    ['publishing', 'merging'].includes(batch.phase) ||
+    (p.pending !== undefined && p.pending !== p.failedStep) ||
+    batch.release ||
+    !Number.isSafeInteger(p.round) ||
+    p.round < 1
+  )
+    return false;
+  try {
+    if (knownFailedCorrection(batch)) return true;
+    const attempt = implementationAttempts(batch).at(-1);
+    return (
+      p.flow === 'implementation' &&
+      p.failedStep !== 'revision' &&
+      p.sourceSha === null &&
+      batch.sha === null &&
+      batch.pr == null &&
+      p.planSha256 === sha256(JSON.stringify(batch.plan)) &&
+      p.feedbackSha256 === sha256(JSON.stringify(p.feedback ?? null)) &&
+      attempt?.status === 'failed' &&
+      attempt.round === (p.implementationRound ?? p.round) &&
+      (p.implementationRound === undefined || p.implementationRound === p.round) &&
+      !activeImplementation(batch) &&
+      !batch.reviews?.some((r) => r.status === 'running')
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function createWorkspace({ root, repo, run, models }) {
   const verificationDiagnostics = [];
   const recordVerificationDiagnostic = (entry) => {
@@ -139,6 +194,50 @@ export function createWorkspace({ root, repo, run, models }) {
       packetFile(batch, 'execution-history.json'),
       JSON.stringify(batch.executionHistory, null, 2) + '\n',
     );
+  };
+  const retainBlockedResult = async (batch, step, result) => {
+    if (result?.status !== 'blocked') return;
+    const round = batch.controllerProgress?.implementationRound ?? batch.controllerProgress?.round;
+    // Direct unreserved callers do not establish a native failure identity.
+    if (!Number.isSafeInteger(round) || round < 1) return;
+    let summary = null,
+      summaryDisposition = 'omitted-invalid';
+    const original = typeof result.summary === 'string' ? result.summary : null;
+    if (original !== null) {
+      const safe = safeVerificationText(original);
+      if (Buffer.byteLength(safe) > 32 * 1024) summaryDisposition = 'omitted-oversized';
+      else if (/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(safe)) summaryDisposition = 'omitted-unsafe';
+      else {
+        try {
+          safeText(safe);
+          summary = safe;
+          summaryDisposition = safe === original ? 'retained' : 'sanitized';
+        } catch {
+          summaryDisposition = 'omitted-unsafe';
+        }
+      }
+    }
+    const report = {
+      schemaVersion: 1,
+      kind: 'terminal-model-result',
+      step,
+      round,
+      status: result.status,
+      summary,
+      summaryDisposition,
+      originalSummarySha256: original === null ? null : sha256(original),
+    };
+    const file = packetFile(batch, `model-results/${round}-${step}.json`);
+    await mkdir(path.dirname(file), { recursive: true });
+    const content = JSON.stringify(report, null, 2) + '\n';
+    // Never replace another outcome from the same reserved attempt.
+    const previous = await readFile(file, 'utf8').catch((e) => {
+      if (e.code === 'ENOENT') return null;
+      throw e;
+    });
+    if (previous !== null) {
+      if (previous !== content) throw new Error('Terminal model report identity changed');
+    } else await writeFile(file, content, { flag: 'wx', mode: 0o600 });
   };
   const status = (cwd) => git(['status', '--porcelain', '--untracked-files=all'], cwd);
   async function assertScope(batch) {
@@ -217,24 +316,47 @@ export function createWorkspace({ root, repo, run, models }) {
           maxOutputBytes: 1024 * 1024,
         });
       } catch (error) {
-        recordVerificationDiagnostic({ batchId: batch.id, index, command: entry.command,
-          argsSha256: sha256(JSON.stringify(entry.args)), exitCode: null,
-          runnerError: 'runner-threw', stdoutSanitizedCapturedBytes: 0, stderrSanitizedCapturedBytes: 0,
-          stdoutSanitizedSha256: sha256(''), stderrSanitizedSha256: sha256('') });
+        recordVerificationDiagnostic({
+          batchId: batch.id,
+          index,
+          command: entry.command,
+          argsSha256: sha256(JSON.stringify(entry.args)),
+          exitCode: null,
+          runnerError: 'runner-threw',
+          stdoutSanitizedCapturedBytes: 0,
+          stderrSanitizedCapturedBytes: 0,
+          stdoutSanitizedSha256: sha256(''),
+          stderrSanitizedSha256: sha256(''),
+        });
         throw error;
       }
       const stdout = safeVerificationText(typeof result.stdout === 'string' ? result.stdout : '');
       const stderr = safeVerificationText(typeof result.stderr === 'string' ? result.stderr : '');
-      const noTestsSignal = /(?:# tests 0\b|0 tests? passed|No test files found)/i.test(result.stdout + result.stderr);
-      recordVerificationDiagnostic({ batchId: batch.id, index, command: entry.command,
-        argsSha256: sha256(JSON.stringify(entry.args)), exitCode: result.code ?? null,
-        ok: result.ok === true, noTestsSignal,
-        runnerError: ['timeout', 'output-limit', 'stderr-limit', 'spawn-failed'].includes(result.error)
-          ? result.error : result.error ? 'other-runner-error' : null,
+      const noTestsSignal = /(?:# tests 0\b|0 tests? passed|No test files found)/i.test(
+        result.stdout + result.stderr,
+      );
+      recordVerificationDiagnostic({
+        batchId: batch.id,
+        index,
+        command: entry.command,
+        argsSha256: sha256(JSON.stringify(entry.args)),
+        exitCode: result.code ?? null,
+        ok: result.ok === true,
+        noTestsSignal,
+        runnerError: ['timeout', 'output-limit', 'stderr-limit', 'spawn-failed'].includes(
+          result.error,
+        )
+          ? result.error
+          : result.error
+            ? 'other-runner-error'
+            : null,
         stdoutSanitizedCapturedBytes: Buffer.byteLength(stdout),
         stderrSanitizedCapturedBytes: Buffer.byteLength(stderr),
-        stdoutSanitizedSha256: sha256(stdout), stderrSanitizedSha256: sha256(stderr),
-        stdoutSanitizedExcerpt: excerpt(stdout), stderrSanitizedExcerpt: excerpt(stderr) });
+        stdoutSanitizedSha256: sha256(stdout),
+        stderrSanitizedSha256: sha256(stderr),
+        stdoutSanitizedExcerpt: excerpt(stdout),
+        stderrSanitizedExcerpt: excerpt(stderr),
+      });
       results.push({
         command: entry.command,
         args: entry.args,
@@ -248,9 +370,7 @@ export function createWorkspace({ root, repo, run, models }) {
         path.join(cwd, packet, 'test-results', 'controller-verification.json'),
         JSON.stringify(results, null, 2) + '\n',
       );
-      if (
-        !result.ok || noTestsSignal
-      )
+      if (!result.ok || noTestsSignal)
         throw new Error('required verification failed or executed no tests');
     }
     batch.evidence = await validateEvidence(cwd, batch.plan);
@@ -451,14 +571,22 @@ export function createWorkspace({ root, repo, run, models }) {
         await writeFile(packetFile(batch, 'review-feedback.json'), content);
       }
       try {
-        return await models.execute({ ...coordinates(batch), plan: batch.plan, ...options });
+        const result = await models.execute({
+          ...coordinates(batch),
+          plan: batch.plan,
+          ...options,
+        });
+        await retainBlockedResult(batch, 'execute', result);
+        return result;
       } finally {
         await recordExecution(batch, options.phase, options.round);
       }
     },
     async simplify(batch) {
       try {
-        return await models.simplify({ ...coordinates(batch), plan: batch.plan });
+        const result = await models.simplify({ ...coordinates(batch), plan: batch.plan });
+        await retainBlockedResult(batch, 'simplify', result);
+        return result;
       } finally {
         await recordExecution(batch, 'simplify');
       }
@@ -470,6 +598,7 @@ export function createWorkspace({ root, repo, run, models }) {
         packetFile(batch, 'codex-independent-qa.md'),
         `# Independent Codex QA\n\n${result.status}\n\n${result.summary}\n`,
       );
+      await retainBlockedResult(batch, 'qa', result);
       return result;
     },
     async finalQa(batch) {
