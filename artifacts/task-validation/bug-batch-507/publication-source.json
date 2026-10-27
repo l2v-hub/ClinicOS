@@ -1,0 +1,23 @@
+{
+  "issue": 507,
+  "baseline": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+  "qaNonce": "cfb97ef5-c891-41d0-b096-2bcd649419bb",
+  "qaSourceManifestSha256": "41a40741b5e848a4b73a55c3fda1f8b1f67b69514484985f0d2253e12b6f21ef",
+  "sourceManifest": {
+    "e2e/issue507-smoke.mjs": "cebd95656f127a443c87b34f293a4151fbf9a45479843dd98c69a83dd6a49ecb",
+    "e2e/issue507/entry.tsx": "696b0e60fa0d4283cb8ff6a298af8e31861c967532bed6a22248e8f3595dfeb2",
+    "frontend/src/components/operator/PatientDetail.tsx": "fb73b4e253f767d6344e57d61c38b8b64222a47a5f2215d4c8a9f1251c8e0dbb",
+    "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx": "2b271ce8b317449ebec4990599800a1dd24c3f1b6fc9cea4a7155f29efa5a8da",
+    "frontend/src/components/operator/cartella/TherapyFormFields.tsx": "d15e7750a82984de4f5b6c34cd60cc26fadac223a662951a9607ec6100dde96f",
+    "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts": "5dd5e713e95dbd033def461387f1b0a94e86766a4e49e57bba8ee58800b0827c",
+    "frontend/src/components/operator/sections/TherapyEditor.tsx": "541279cfc05dace84f7a74c1671b9287689ee6cdbeb94dfc1830d06f0f025ed8",
+    "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx": "14ba2188e209481bf21d0a48ba815bbbd172d95298e9d51fae2af6d0703df1bb",
+    "frontend/src/components/shared/intake/StepClinica.tsx": "ef2ec3c049afbc40bd257f387394ebcff423ffd18a0afab9588e2f1369dc6caa",
+    "frontend/src/lib/therapyAdmissionDate.ts": "8937e8bcce866e9710a27312fcf368f97279fa4c1936b0f19b417f3e71532f9a"
+  },
+  "sourceTestedUncommitted": true,
+  "sourceBytesCheckedBeforeCommit": true,
+  "independentResultSha256": "eda8832c89fc7cc36e421ddeca89e38d083133bd7b8fce6e0e9bc011653fc47c",
+  "independentReportSha256": "fe44f688a5e39a5c2689ee45723c1d70592d0c8490219844e02c4616e5dfdb80",
+  "oldFailureHistoryPreserved": true
+}

@@ -1,0 +1,150 @@
+{
+  "type": "clinical-harness-qualification-v1",
+  "issue": 507,
+  "runId": "40482705275",
+  "acceptedMain": "655f028e3b0bdcc621ac15209fd0af38cee3d26b",
+  "sourceParent": "9e0a8dec7fb8bbf5edcaf00694be63f6fda577ff",
+  "privateCandidate": "6572bd52617630d1dc79765bcbc1b97538974146",
+  "sourceFiles": [
+    {
+      "file": "e2e/issue507-smoke.mjs",
+      "sha256": "d211cc798b1f08c8f2c71d0caf20b00daa0cf1093ea2e5c6a179afb5217e0f50"
+    },
+    {
+      "file": "e2e/issue507/entry.tsx",
+      "sha256": "696b0e60fa0d4283cb8ff6a298af8e31861c967532bed6a22248e8f3595dfeb2"
+    },
+    {
+      "file": "frontend/src/components/operator/PatientDetail.tsx",
+      "sha256": "fb73b4e253f767d6344e57d61c38b8b64222a47a5f2215d4c8a9f1251c8e0dbb"
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "sha256": "2b271ce8b317449ebec4990599800a1dd24c3f1b6fc9cea4a7155f29efa5a8da"
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+      "sha256": "6ebba927508f1d6e244c052e696683ab52eee29a1772352c9126083698745fc7"
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts",
+      "sha256": "7526c5ad6c79591235d78a30145b1d48e250540ac540e46c34632ec27ac705f6"
+    },
+    {
+      "file": "frontend/src/components/operator/sections/TherapyEditor.tsx",
+      "sha256": "541279cfc05dace84f7a74c1671b9287689ee6cdbeb94dfc1830d06f0f025ed8"
+    },
+    {
+      "file": "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx",
+      "sha256": "0b34a7ec2fde96368daab9dc519102117d980274bbae1f349acd012061fa56b4"
+    },
+    {
+      "file": "frontend/src/components/shared/intake/StepClinica.tsx",
+      "sha256": "ef2ec3c049afbc40bd257f387394ebcff423ffd18a0afab9588e2f1369dc6caa"
+    },
+    {
+      "file": "frontend/src/lib/therapyAdmissionDate.ts",
+      "sha256": "d24e633ff1d8760e5554f56d54180e5212c9f0b5855e4929dafe078dc8154c5f"
+    }
+  ],
+  "actualNativeVerification": true,
+  "providerInvocations": 0,
+  "results": [
+    {
+      "index": 0,
+      "command": "npm",
+      "args": [
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ],
+      "ok": true,
+      "noTestsSignal": false,
+      "exitCode": 0,
+      "runnerError": null,
+      "stdoutBytes": 25103,
+      "stderrBytes": 1915,
+      "stdoutSha256": "ad16da8c64f7e144c0c9271fb4f038e5d24d9057f43188d5a337203fa8e8cca7",
+      "stderrSha256": "de3eeba7319b6e72694d4ea0a0317756020732b560eaca53521e26735ba63854"
+    },
+    {
+      "index": 1,
+      "command": "npm",
+      "args": [
+        "--prefix",
+        "frontend",
+        "test"
+      ],
+      "ok": true,
+      "noTestsSignal": false,
+      "exitCode": 0,
+      "runnerError": null,
+      "stdoutBytes": 513904,
+      "stderrBytes": 1150,
+      "stdoutSha256": "40f45f0de669359950d82f24091db3e982e0157716bc08a80af8fa3cd6a533f5",
+      "stderrSha256": "a046c29f1028e6b5e8df8deafa324dd6663f307c2408c387a9361394b2911bd0"
+    },
+    {
+      "index": 2,
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx",
+        "e2e/issue507-smoke.mjs"
+      ],
+      "ok": true,
+      "noTestsSignal": false,
+      "exitCode": 0,
+      "runnerError": null,
+      "stdoutBytes": 11820,
+      "stderrBytes": 798,
+      "stdoutSha256": "f17e31725866d36e75a5402f5248abbba0247bee40dfc318fbdb8dda7b8279e9",
+      "stderrSha256": "b1a79cdad8f089aa6897f6e4cbc04db7cfb3403d5ae289aedd1a33727cc701f1"
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "screenshot",
+      "file": "artifacts/task-validation/bug-batch-507/evidence/screenshots/Europe-Rome-chart-admission.png",
+      "bytes": 96082,
+      "sha256": "139a032be3f9d01faf4dc658ba7aa6657c3135cb594726d0b448b15dedda7bb0"
+    },
+    {
+      "kind": "trace",
+      "file": "artifacts/task-validation/bug-batch-507/evidence/trace/issue507-Europe-Rome.zip",
+      "bytes": 2071577,
+      "sha256": "926f134f4b466022b208d2304389ae18ab4b301014d7b317a03002c591f61ab4"
+    },
+    {
+      "kind": "video",
+      "file": "artifacts/task-validation/bug-batch-507/evidence/video/issue507-Europe-Rome.webm",
+      "bytes": 3867343,
+      "sha256": "facd7b2c3aac40c0a225187d8d4154dc64b92dc07e33817bc35eb9a325071517"
+    }
+  ],
+  "nativeEvidence": [
+    {
+      "issue": 507,
+      "files": {
+        "screenshot": {
+          "path": "artifacts/task-validation/bug-batch-507/evidence/screenshots/Europe-Rome-chart-admission.png",
+          "sha256": "139a032be3f9d01faf4dc658ba7aa6657c3135cb594726d0b448b15dedda7bb0",
+          "bytes": 96082
+        },
+        "trace": {
+          "path": "artifacts/task-validation/bug-batch-507/evidence/trace/issue507-Europe-Rome.zip",
+          "sha256": "926f134f4b466022b208d2304389ae18ab4b301014d7b317a03002c591f61ab4",
+          "bytes": 2071577
+        },
+        "video": {
+          "path": "artifacts/task-validation/bug-batch-507/evidence/video/issue507-Europe-Rome.webm",
+          "sha256": "facd7b2c3aac40c0a225187d8d4154dc64b92dc07e33817bc35eb9a325071517",
+          "bytes": 3867343
+        }
+      }
+    }
+  ],
+  "ok": true,
+  "scope": "Synthetic actual React browser regression; not authenticated backend or deployment acceptance"
+}

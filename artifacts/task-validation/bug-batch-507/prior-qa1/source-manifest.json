@@ -1,0 +1,12 @@
+{
+  "e2e/issue507-smoke.mjs": "a4db56c768d423dc8386c473cc772bfd3e01cff7ffa9ac0c409cbfc7c857c52f",
+  "e2e/issue507/entry.tsx": "7dd02702c6036f37a64ca76a98eb50264b1eb0e2acbede25acd081218c24af0a",
+  "frontend/src/components/operator/PatientDetail.tsx": "fb73b4e253f767d6344e57d61c38b8b64222a47a5f2215d4c8a9f1251c8e0dbb",
+  "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx": "5ae6bafc3ff8fd3619a2e2fb7cbd15e76c7e3a8db207e4e7ddad3a773bbc31a7",
+  "frontend/src/components/operator/cartella/TherapyFormFields.tsx": "7d0c17f5be3beeeeea1c79bb512255114d9a37c7c4797d4bacc12cdd677624e9",
+  "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts": "d298d88e551d0facb9ba236e413f13d29b97e758473120257507edde6e41f80a",
+  "frontend/src/components/operator/sections/TherapyEditor.tsx": "541279cfc05dace84f7a74c1671b9287689ee6cdbeb94dfc1830d06f0f025ed8",
+  "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx": "140a6ab21b87a4e65235830251556c7cd57c0d324f6c912a865cd0c1caf1dabd",
+  "frontend/src/components/shared/intake/StepClinica.tsx": "ef2ec3c049afbc40bd257f387394ebcff423ffd18a0afab9588e2f1369dc6caa",
+  "frontend/src/lib/therapyAdmissionDate.ts": "f28909e2452bb2c84b721c54ee44041cb1b5223d558be5534b72f9379f4577e3"
+}

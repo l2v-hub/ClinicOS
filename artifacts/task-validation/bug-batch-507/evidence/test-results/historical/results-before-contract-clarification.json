@@ -1,0 +1,70 @@
+{
+  "component-smoke": {
+    "results": [
+      "Europe/Rome: chart creation, type switch, explicit edits, context refresh, reopen and saved edit PASS",
+      "Europe/Rome: real StepClinica intake new rows, context changes, once date and retained earlier row PASS",
+      "Europe/Rome: actual PatientDetail late admission, untouched dates PASS",
+      "Europe/Rome: actual PatientDetail late admission, start dates PASS",
+      "Europe/Rome: actual PatientDetail late admission, once dates PASS",
+      "Europe/Rome: actual PatientDetail late admission, same-fallback dates PASS",
+      "Europe/Rome: actual PatientDetail late admission, empty-start dates PASS",
+      "Europe/Rome: actual patient-key remount does not reuse prior patient's draft PASS",
+      "Europe/Rome: delayed admission leaves saved editor dates unchanged PASS",
+      "Europe/Rome: actual intake late admission, untouched dates PASS",
+      "Europe/Rome: actual intake late admission, start dates PASS",
+      "Europe/Rome: actual intake late admission, once dates PASS",
+      "Europe/Rome: actual intake late admission, same-fallback dates PASS",
+      "America/Los_Angeles: chart creation, type switch, explicit edits, context refresh, reopen and saved edit PASS",
+      "America/Los_Angeles: real StepClinica intake new rows, context changes, once date and retained earlier row PASS",
+      "America/Los_Angeles: actual PatientDetail late admission, untouched dates PASS",
+      "America/Los_Angeles: actual PatientDetail late admission, start dates PASS",
+      "America/Los_Angeles: actual PatientDetail late admission, once dates PASS",
+      "America/Los_Angeles: actual PatientDetail late admission, same-fallback dates PASS",
+      "America/Los_Angeles: actual PatientDetail late admission, empty-start dates PASS",
+      "America/Los_Angeles: actual patient-key remount does not reuse prior patient's draft PASS",
+      "America/Los_Angeles: delayed admission leaves saved editor dates unchanged PASS",
+      "America/Los_Angeles: actual intake late admission, untouched dates PASS",
+      "America/Los_Angeles: actual intake late admission, start dates PASS",
+      "America/Los_Angeles: actual intake late admission, once dates PASS",
+      "America/Los_Angeles: actual intake late admission, same-fallback dates PASS"
+    ],
+    "errors": [],
+    "unexpected": []
+  },
+  "original-cold-probe": {
+    "results": [
+      {
+        "timezoneId": "Europe/Rome",
+        "initial": "2026-10-25",
+        "hydrated": "2026-09-15",
+        "once": "2026-09-15",
+        "expected": "2026-09-15",
+        "pass": true
+      },
+      {
+        "timezoneId": "America/Los_Angeles",
+        "initial": "2026-10-25",
+        "hydrated": "2026-09-15",
+        "once": "2026-09-15",
+        "expected": "2026-09-15",
+        "pass": true
+      }
+    ],
+    "errors": [],
+    "unexpected": []
+  },
+  "adversarial": {
+    "results": [
+      "Europe/Rome: capability loss closes draft and clears lineage PASS",
+      "Europe/Rome: intake nondate edits retain automatic lineage; hydration consumes lineage PASS",
+      "Europe/Rome: deliberately blank intake start protected independently PASS",
+      "Europe/Rome: persisted/external row replacement has no automatic lineage PASS",
+      "America/Los_Angeles: capability loss closes draft and clears lineage PASS",
+      "America/Los_Angeles: intake nondate edits retain automatic lineage; hydration consumes lineage PASS",
+      "America/Los_Angeles: deliberately blank intake start protected independently PASS",
+      "America/Los_Angeles: persisted/external row replacement has no automatic lineage PASS"
+    ],
+    "errors": [],
+    "unexpected": []
+  }
+}

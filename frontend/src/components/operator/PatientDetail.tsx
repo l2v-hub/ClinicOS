@@ -1,4 +1,5 @@
 import { intakeDemographicErrors } from '../../lib/intakeDemographics';
+import { resolvePresaInCarico } from '../../lib/presaInCarico';
 import type { TemporaryPsExitCommand } from '../../lib/temporaryPsExit';
 import {
   birthDateValue,
@@ -2671,6 +2672,10 @@ export function PatientDetail({
             }
             therapyTarget={therapyTarget ?? undefined}
             allergyRevision={JSON.stringify([cartella.allergieStatus, cartella.allergie ?? []])}
+            admissionDate={
+              resolvePresaInCarico(cartella as CartellaPaziente & Record<string, unknown>)
+                ?.dataIngresso
+            }
           />
         )}
         {current === 'note' && renderNote()}

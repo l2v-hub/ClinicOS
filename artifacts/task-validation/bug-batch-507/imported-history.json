@@ -1,0 +1,17 @@
+{
+  "kind": "new-host-authored-source-correction-after-genuine-peer",
+  "priorPublishedSha": "9e0a8dec7fb8bbf5edcaf00694be63f6fda577ff",
+  "priorBaseSha": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+  "priorPlanSha256": "6c43266e4b3f69ba62deda07703d069ca583cba1d838d12bb47e7ee4360179eb",
+  "priorImplementationCount": 8,
+  "priorImplementationHistorySha256": "7a59fa35953c6712d8892bf4cf112d2d8af60aa64a03c18853d91b97c8f85aae",
+  "priorReviewsSha256": "094b9c380e8a786aabdb3db2824fe7ac9f25de0a745f54d047657a12f565dfc0",
+  "priorProgressSha256": null,
+  "priorCheckpointSha256": null,
+  "completeOldWorktreeRecovered": false,
+  "priorFailedOutputAvailability": "No current failed worktree claimed; prior FAILED and negative final remain historical.",
+  "sourceCandidate": "6572bd52617630d1dc79765bcbc1b97538974146",
+  "qualificationRun": 40482705275,
+  "mediaReaderRun": 40491321534,
+  "clinicalProviderInvocationsForThisSource": 0
+}

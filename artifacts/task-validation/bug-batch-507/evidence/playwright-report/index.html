@@ -1,0 +1,66 @@
+<html lang="en"><meta charset="utf-8"><title>Issue 507 QA2 browser evidence</title><h1>Issue 507 — independent QA2</h1><p>Direct Playwright library probes; custom report, not Playwright Test HTML reporter.</p><h2>component-smoke</h2><pre>{
+  &quot;results&quot;: [
+    &quot;Europe/Rome: chart creation, type switch, explicit edits, context refresh, reopen and saved edit PASS&quot;,
+    &quot;Europe/Rome: real StepClinica intake new rows, context changes, once date and retained earlier row PASS&quot;,
+    &quot;Europe/Rome: actual PatientDetail late admission, untouched dates PASS&quot;,
+    &quot;Europe/Rome: actual PatientDetail late admission, start dates PASS&quot;,
+    &quot;Europe/Rome: actual PatientDetail late admission, once dates PASS&quot;,
+    &quot;Europe/Rome: actual PatientDetail late admission, same-fallback dates PASS&quot;,
+    &quot;Europe/Rome: actual PatientDetail late admission, empty-start dates PASS&quot;,
+    &quot;Europe/Rome: actual patient-key remount does not reuse prior patient&#x27;s draft PASS&quot;,
+    &quot;Europe/Rome: delayed admission leaves saved editor dates unchanged PASS&quot;,
+    &quot;Europe/Rome: actual intake late admission, untouched dates PASS&quot;,
+    &quot;Europe/Rome: actual intake late admission, start dates PASS&quot;,
+    &quot;Europe/Rome: actual intake late admission, once dates PASS&quot;,
+    &quot;Europe/Rome: actual intake late admission, same-fallback dates PASS&quot;,
+    &quot;America/Los_Angeles: chart creation, type switch, explicit edits, context refresh, reopen and saved edit PASS&quot;,
+    &quot;America/Los_Angeles: real StepClinica intake new rows, context changes, once date and retained earlier row PASS&quot;,
+    &quot;America/Los_Angeles: actual PatientDetail late admission, untouched dates PASS&quot;,
+    &quot;America/Los_Angeles: actual PatientDetail late admission, start dates PASS&quot;,
+    &quot;America/Los_Angeles: actual PatientDetail late admission, once dates PASS&quot;,
+    &quot;America/Los_Angeles: actual PatientDetail late admission, same-fallback dates PASS&quot;,
+    &quot;America/Los_Angeles: actual PatientDetail late admission, empty-start dates PASS&quot;,
+    &quot;America/Los_Angeles: actual patient-key remount does not reuse prior patient&#x27;s draft PASS&quot;,
+    &quot;America/Los_Angeles: delayed admission leaves saved editor dates unchanged PASS&quot;,
+    &quot;America/Los_Angeles: actual intake late admission, untouched dates PASS&quot;,
+    &quot;America/Los_Angeles: actual intake late admission, start dates PASS&quot;,
+    &quot;America/Los_Angeles: actual intake late admission, once dates PASS&quot;,
+    &quot;America/Los_Angeles: actual intake late admission, same-fallback dates PASS&quot;
+  ],
+  &quot;errors&quot;: [],
+  &quot;unexpected&quot;: []
+}</pre><h2>original-cold-probe</h2><pre>{
+  &quot;results&quot;: [
+    {
+      &quot;timezoneId&quot;: &quot;Europe/Rome&quot;,
+      &quot;initial&quot;: &quot;2026-10-25&quot;,
+      &quot;hydrated&quot;: &quot;2026-09-15&quot;,
+      &quot;once&quot;: &quot;2026-09-15&quot;,
+      &quot;expected&quot;: &quot;2026-09-15&quot;,
+      &quot;pass&quot;: true
+    },
+    {
+      &quot;timezoneId&quot;: &quot;America/Los_Angeles&quot;,
+      &quot;initial&quot;: &quot;2026-10-25&quot;,
+      &quot;hydrated&quot;: &quot;2026-09-15&quot;,
+      &quot;once&quot;: &quot;2026-09-15&quot;,
+      &quot;expected&quot;: &quot;2026-09-15&quot;,
+      &quot;pass&quot;: true
+    }
+  ],
+  &quot;errors&quot;: [],
+  &quot;unexpected&quot;: []
+}</pre><h2>adversarial</h2><pre>{
+  &quot;results&quot;: [
+    &quot;Europe/Rome: capability loss closes draft and clears lineage PASS&quot;,
+    &quot;Europe/Rome: intake nondate edits retain automatic lineage; hydration consumes lineage PASS&quot;,
+    &quot;Europe/Rome: deliberately blank intake start protected independently PASS&quot;,
+    &quot;Europe/Rome: persisted/external row replacement has no automatic lineage PASS&quot;,
+    &quot;America/Los_Angeles: capability loss closes draft and clears lineage PASS&quot;,
+    &quot;America/Los_Angeles: intake nondate edits retain automatic lineage; hydration consumes lineage PASS&quot;,
+    &quot;America/Los_Angeles: deliberately blank intake start protected independently PASS&quot;,
+    &quot;America/Los_Angeles: persisted/external row replacement has no automatic lineage PASS&quot;
+  ],
+  &quot;errors&quot;: [],
+  &quot;unexpected&quot;: []
+}</pre><h2>Media</h2><h3>screenshots</h3><ul><li><a href="../screenshots/adversarial-America-Los_Angeles-intake-late-fields.png">adversarial-America-Los_Angeles-intake-late-fields.png</a></li><li><a href="../screenshots/adversarial-Europe-Rome-intake-late-fields.png">adversarial-Europe-Rome-intake-late-fields.png</a></li><li><a href="../screenshots/component-smoke-America-Los_Angeles-chart-admission.png">component-smoke-America-Los_Angeles-chart-admission.png</a></li><li><a href="../screenshots/component-smoke-America-Los_Angeles-cold-empty-start.png">component-smoke-America-Los_Angeles-cold-empty-start.png</a></li><li><a href="../screenshots/component-smoke-America-Los_Angeles-cold-once.png">component-smoke-America-Los_Angeles-cold-once.png</a></li><li><a href="../screenshots/component-smoke-America-Los_Angeles-cold-same-fallback.png">component-smoke-America-Los_Angeles-cold-same-fallback.png</a></li><li><a href="../screenshots/component-smoke-America-Los_Angeles-cold-start.png">component-smoke-America-Los_Angeles-cold-start.png</a></li><li><a href="../screenshots/component-smoke-America-Los_Angeles-cold-untouched.png">component-smoke-America-Los_Angeles-cold-untouched.png</a></li><li><a href="../screenshots/component-smoke-America-Los_Angeles-intake-admission.png">component-smoke-America-Los_Angeles-intake-admission.png</a></li><li><a href="../screenshots/component-smoke-America-Los_Angeles.png">component-smoke-America-Los_Angeles.png</a></li><li><a href="../screenshots/component-smoke-Europe-Rome-chart-admission.png">component-smoke-Europe-Rome-chart-admission.png</a></li><li><a href="../screenshots/component-smoke-Europe-Rome-cold-empty-start.png">component-smoke-Europe-Rome-cold-empty-start.png</a></li><li><a href="../screenshots/component-smoke-Europe-Rome-cold-once.png">component-smoke-Europe-Rome-cold-once.png</a></li><li><a href="../screenshots/component-smoke-Europe-Rome-cold-same-fallback.png">component-smoke-Europe-Rome-cold-same-fallback.png</a></li><li><a href="../screenshots/component-smoke-Europe-Rome-cold-start.png">component-smoke-Europe-Rome-cold-start.png</a></li><li><a href="../screenshots/component-smoke-Europe-Rome-cold-untouched.png">component-smoke-Europe-Rome-cold-untouched.png</a></li><li><a href="../screenshots/component-smoke-Europe-Rome-intake-admission.png">component-smoke-Europe-Rome-intake-admission.png</a></li><li><a href="../screenshots/component-smoke-Europe-Rome.png">component-smoke-Europe-Rome.png</a></li><li><a href="../screenshots/original-cold-probe-America-Los_Angeles-cold-admission.png">original-cold-probe-America-Los_Angeles-cold-admission.png</a></li><li><a href="../screenshots/original-cold-probe-Europe-Rome-cold-admission.png">original-cold-probe-Europe-Rome-cold-admission.png</a></li></ul><h3>trace</h3><ul><li><a href="../trace/adversarial-America-Los_Angeles.zip">adversarial-America-Los_Angeles.zip</a></li><li><a href="../trace/adversarial-Europe-Rome.zip">adversarial-Europe-Rome.zip</a></li><li><a href="../trace/component-smoke-America-Los_Angeles.zip">component-smoke-America-Los_Angeles.zip</a></li><li><a href="../trace/component-smoke-Europe-Rome.zip">component-smoke-Europe-Rome.zip</a></li><li><a href="../trace/original-cold-probe-America-Los_Angeles.zip">original-cold-probe-America-Los_Angeles.zip</a></li><li><a href="../trace/original-cold-probe-Europe-Rome.zip">original-cold-probe-Europe-Rome.zip</a></li></ul><h3>video</h3><ul><li><a href="../video/adversarial-page@8b303f435434dcf88c1b360594422747.webm">adversarial-page@8b303f435434dcf88c1b360594422747.webm</a></li><li><a href="../video/adversarial-page@f85f717cd8520e2b64a9cdce393d619c.webm">adversarial-page@f85f717cd8520e2b64a9cdce393d619c.webm</a></li><li><a href="../video/original-cold-probe-page@0118743e2aabd50d54783da2511cae74.webm">original-cold-probe-page@0118743e2aabd50d54783da2511cae74.webm</a></li><li><a href="../video/original-cold-probe-page@3926991dc14a2dc3f5b5e253d5e1ccfd.webm">original-cold-probe-page@3926991dc14a2dc3f5b5e253d5e1ccfd.webm</a></li></ul></html>

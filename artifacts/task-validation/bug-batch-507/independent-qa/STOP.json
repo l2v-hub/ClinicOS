@@ -1,0 +1,13 @@
+{
+  "issue": 507,
+  "nonce": "cfb97ef5-c891-41d0-b096-2bcd649419bb",
+  "status": "STOP",
+  "verdict": "READY FOR CODEX QA",
+  "stoppedAt": "2026-10-24T22:26:37.203588+00:00",
+  "sourceManifestSha256": "41a40741b5e848a4b73a55c3fda1f8b1f67b69514484985f0d2253e12b6f21ef",
+  "resultSha256": "eda8832c89fc7cc36e421ddeca89e38d083133bd7b8fce6e0e9bc011653fc47c",
+  "reportSha256": "fe44f688a5e39a5c2689ee45723c1d70592d0c8490219844e02c4616e5dfdb80",
+  "evidenceManifestSha256": "ca7646204a0d1ac7046b50c274f71697f65dd0722dc63d48a7a9db8777c5969a",
+  "sourceUnchanged": true,
+  "originalQa1Preserved": true
+}

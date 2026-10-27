@@ -170,6 +170,7 @@ export function StepClinica({
             status?: AllergyStatus;
             onStatusChange?: (s: AllergyStatus) => void;
             therapyCorrection?: TherapyCorrectionTarget | null;
+            admissionDate?: string;
           }
         >;
 
@@ -232,6 +233,11 @@ export function StepClinica({
               operatoreNome={operatoreNome}
               {...extraProps}
               therapyCorrection={sectionKey === 'terapia' ? therapyCorrection : undefined}
+              admissionDate={
+                sectionKey === 'terapia'
+                  ? (data.ingresso as { dataPresa?: string } | undefined)?.dataPresa
+                  : undefined
+              }
             />
           </div>
         );
