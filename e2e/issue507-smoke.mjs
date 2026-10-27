@@ -55,7 +55,7 @@ try {
     args: ['--no-sandbox'] });
   for (const timezoneId of ['Europe/Rome', 'America/Los_Angeles']) {
     const context = await browser.newContext({ timezoneId, viewport: { width: 1280, height: 960 }, recordVideo: { dir: videoDir, size: { width: 1280, height: 960 } } });
-    await context.tracing.start({ screenshots: true, snapshots: true });
+    await context.tracing.start({ screenshots: false, snapshots: true });
     await context.route('**/*', async (route) => {
       const request = route.request(), url = new URL(request.url());
       if (url.hostname === '127.0.0.1' && url.port === '5178') return route.continue();
