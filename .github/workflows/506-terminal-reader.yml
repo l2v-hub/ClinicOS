@@ -1,0 +1,53 @@
+name: Read exact retained terminal506attempt9
+on:
+  push:
+    branches: [codex/506-terminal-reader-20261027]
+    paths:
+      - .github/workflows/506-terminal-reader.yml
+permissions:
+  actions: read
+jobs:
+  read:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          github-token: ${{ github.token }}
+          repository: l2v-hub/ClinicOS
+          run-id: 40512823458
+          artifact-ids: 12739301229
+          merge-multiple: true
+          path: ${{ runner.temp }}/fixed506-terminal-input
+      - name: Read only fixed retained export without executing artifact content
+        shell: bash
+        run: |
+          set -euo pipefail
+          reader="$RUNNER_TEMP/fixed506-terminal-reader.mjs"
+          if [ -e "$reader" ] || [ -L "$reader" ]; then exit 1; fi
+          cat > "$reader" <<'FIXED_READER'
+          import assert from 'node:assert/strict';
+          import path from 'node:path';
+          import {lstat,readdir,readFile,realpath} from 'node:fs/promises';
+          import {createHash} from 'node:crypto';
+          import {gzipSync} from 'node:zlib';
+          import {fileURLToPath} from 'node:url';
+          const hash=b=>createHash('sha256').update(b).digest('hex');
+          const CP='0f20b8b3c8a8ae2bd76725ada8759554c431dad7654d53effb430088f7ccd29e';
+          const SHA='ff91e103827612337346520f2939694c6ae6bb92';
+          const EXPECTED=[{"index":0,"command":"npm","argsSha256":"743e88ee66769a2e8d20901a36f8d1876f08526ff3b613a2c0609db98a09744c","exitCode":0,"ok":true,"stdoutSanitizedCapturedBytes":25103,"stderrSanitizedCapturedBytes":1916,"stdoutSanitizedSha256":"6ae5b525d7b4e7626c04eb08182591cb5025d24dd3aab1c3a59a9d184d2db272","stderrSanitizedSha256":"21ff0baa09106c44eca4cf57ade55e953a2370833c3bef14e2960d8de602f836"},{"index":1,"command":"npm","argsSha256":"b675aa91b541cc24a882f280b46036a5a154da79ebe000f12507b7338cd6fd02","exitCode":0,"ok":true,"stdoutSanitizedCapturedBytes":485896,"stderrSanitizedCapturedBytes":1151,"stdoutSanitizedSha256":"832f9da2bb325fa985bae37ff8c376cc0a6ae6a88025ba5caf764f4599b035d5","stderrSanitizedSha256":"6fa831bc0bbb582d6639e7555f641434dd22dcbdece8ec075d9a460e5b997ff6"},{"index":2,"command":"node","argsSha256":"cd514c563033a95ff6a4ff79de1814219ae8b6bf66bb9aed38c11c5d6df6a88b","exitCode":1,"ok":false,"stdoutSanitizedCapturedBytes":9030,"stderrSanitizedCapturedBytes":2729,"stdoutSanitizedSha256":"1094ac454f2fbcca01f82bef3448e5d340ce80f2863d8988287e79dbdc301e2d","stderrSanitizedSha256":"a13c42a1c8514af4545dcf5aca05f8de029e839ff504563e560123c1ca783269"}];
+          export async function collect(root){
+           assert.equal(await realpath(root),path.resolve(root));let entries=0;const manifests=[],verificationCandidates=[];
+           async function walk(dir){for(const name of await readdir(dir)){assert(++entries<=256);assert(name!=='.'&&name!=='..'&&!name.includes('\\'));const f=path.join(dir,name),s=await lstat(f);assert(!s.isSymbolicLink(),'Artifact symlink refused');if(s.isDirectory())await walk(f);else{assert(s.isFile()&&s.size<=4*1024*1024);if(name==='manifest.json')manifests.push(f);if(path.basename(path.dirname(f))==='verification'&&/^[a-f0-9-]{36}\.json$/.test(name))verificationCandidates.push(f);}}}await walk(root);assert.equal(manifests.length,1);const manifestPath=manifests[0],base=path.dirname(manifestPath);assert.equal(path.basename(base),'round-9-verify-before-'+CP);assert.equal(path.basename(path.dirname(base)),'bug-batch-506');const raw=await readFile(manifestPath);assert(raw.length<=64*1024);const m=JSON.parse(raw);assert.equal(m.schemaVersion,1);assert.equal(m.kind,'partial-failed-code-retention');assert.equal(m.completeness,'allowed-source-and-sanitized-failure-evidence-only');assert.equal(m.batchId,'bug-batch-506');assert.equal(m.round,9);assert.equal(m.failedStep,'verify-before');assert.equal(m.failureCode,'workspace-verification-failed');assert.equal(m.sourceSha,SHA);assert.equal(m.checkpointSha256,CP);assert(Array.isArray(m.files)&&m.files.length===12);const files=[],seen=new Set();let total=raw.length;
+           async function add(relative,expected,scope=base,exported=relative){assert(typeof relative==='string'&&!relative.includes('\\')&&!relative.startsWith('/'));assert(relative.split('/').every(s=>s&&s!=='.'&&s!=='..'));assert(!seen.has(exported));seen.add(exported);let f=scope;for(const part of relative.split('/')){f=path.join(f,part);assert(!(await lstat(f)).isSymbolicLink());}const s=await lstat(f);assert(s.isFile()&&s.size<=2*1024*1024);assert((await realpath(f)).startsWith(scope+path.sep));const b=await readFile(f);assert.equal(b.length,s.size);total+=b.length;assert(total<=4*1024*1024);if(expected){assert.equal(hash(b),expected.sha256);assert.equal(b.length,expected.bytes);}files.push({file:exported,bytes:b.length,sha256:hash(b),base64:b.toString('base64')});return b;}
+           for(const f of m.files){assert(typeof f.file==='string'&&/^(frontend\/|e2e\/|artifacts\/task-validation\/bug-batch-506\/)/.test(f.file));assert(!/(^|\/)\.git(\/|$)|(^|\/)\.env(?:\.|$)|(^|\/)node_modules\//.test(f.file));assert.match(f.sha256,/^[a-f0-9]{64}$/);assert(Number.isSafeInteger(f.bytes)&&f.bytes>=0&&f.bytes<=256*1024);await add('files/'+f.file,f);}
+           await add('source.patch');assert.equal(m.modelReport,null);assert.deepEqual(m.verification,EXPECTED);
+           assert.equal(verificationCandidates.length,1);const vf=verificationCandidates[0],rel=path.relative(root,vf);const vb=await add(rel,null,root,'verification/retained-verification.json');assert(vb.length<=128*1024);const vr=JSON.parse(vb);assert.equal(vr.schemaVersion,1);assert.equal(vr.kind,'bounded-sanitized-verification-failure');assert(Array.isArray(vr.entries)&&vr.entries.length===3);for(let i=0;i<vr.entries.length;i++){const e=vr.entries[i];assert.equal(e.batchId,'bug-batch-506');assert.equal(e.noTestsSignal,false);assert.equal(e.runnerError,null);for(const [k,value]of Object.entries(EXPECTED[i]))assert.deepEqual(e[k],value);for(const k of ['stdoutSanitizedExcerpt','stderrSanitizedExcerpt'])assert(typeof e[k]==='string'&&Buffer.byteLength(e[k])<=8192);}files.push({file:'manifest.json',bytes:raw.length,sha256:hash(raw),base64:raw.toString('base64')});const payload=Buffer.from(JSON.stringify({type:'fixed506-terminal-payload-v1',runId:40512823458,artifactId:12739301229,sourceSha:SHA,checkpointSha256:CP,files}));assert(payload.length<=6*1024*1024);return payload;
+          }
+          export function stream(raw){const zip=gzipSync(raw,{mtime:0});assert(zip.length<=6*1024*1024);const chunks=[];for(let i=0;i<zip.length;i+=6144)chunks.push(zip.subarray(i,i+6144).toString('base64'));return[JSON.stringify({type:'fixed506-terminal-stream-v1',payloadBytes:raw.length,payloadSha256:hash(raw),gzipBytes:zip.length,gzipSha256:hash(zip),chunkCount:chunks.length}),...chunks.map((data,index)=>JSON.stringify({type:'fixed506-terminal-chunk-v1',index,data}))].join('\n')+'\n';}
+          if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){try{assert.equal(process.env.GITHUB_REPOSITORY,'l2v-hub/ClinicOS');assert.equal(process.env.GITHUB_REF,'refs/heads/codex/506-terminal-reader-20261027');assert.equal(process.env.GITHUB_RUN_ATTEMPT,'1');process.stdout.write(stream(await collect(process.argv[2])));}catch{console.error('fixed506-terminal-reader-guard-refused');process.exitCode=1;}}
+          FIXED_READER
+          node "$reader" "$RUNNER_TEMP/fixed506-terminal-input"
