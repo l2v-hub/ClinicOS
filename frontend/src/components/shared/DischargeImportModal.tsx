@@ -69,6 +69,19 @@ function ImportSession({
   const active = useRef(true);
   const reviewSave = useRef<(() => void) | null>(null);
   const [closeRequested, setCloseRequested] = useState(false);
+  const pendingNavigation = useRef<((allowed: boolean) => void) | null>(null);
+  const [navigationNotice, setNavigationNotice] = useState('');
+  function finishClose() {
+    const resolve = pendingNavigation.current;
+    pendingNavigation.current = null;
+    onClose();
+    resolve?.(true);
+  }
+  function cancelClose() {
+    setCloseRequested(false);
+    pendingNavigation.current?.(false);
+    pendingNavigation.current = null;
+  }
   const [reviewCanSave, setReviewCanSave] = useState(false);
   const registerSave = useCallback((save: (() => void) | null) => {
     reviewSave.current = save;
@@ -136,6 +149,8 @@ function ImportSession({
     active.current = true;
     return () => {
       active.current = false;
+      pendingNavigation.current?.(false);
+      pendingNavigation.current = null;
     };
   }, []);
   useEffect(() => {
@@ -345,10 +360,14 @@ function ImportSession({
     <AccessibleDialogSurface
       presentation={presentation}
       beforeNavigate={async () => {
-        if (busy || pendingUpload) return false;
-        if (step === 'review' && !job?.review.draftId) {
-          requestClose();
+        if (busy || pendingUpload) {
+          setNavigationNotice('Caricamento in corso. Attendi il completamento prima di cambiare pagina.');
           return false;
+        }
+        setNavigationNotice('');
+        if (step === 'review' && !job?.review.draftId) {
+          setCloseRequested(true);
+          return new Promise<boolean>(resolve => { pendingNavigation.current = resolve; });
         }
         return true;
       }}
@@ -381,6 +400,7 @@ function ImportSession({
           ×
         </button>
       </header>
+      {navigationNotice && <p role="alert">{navigationNotice}</p>}
       {error && (
         <div className="import-modal__error" role="alert">
           <p>{error}</p>
@@ -436,8 +456,8 @@ function ImportSession({
         confirmDisabled={!reviewCanSave}
         cancelLabel="Continua la revisione"
         busy={busy}
-        onCancel={() => setCloseRequested(false)}
-        alternativeAction={{ label: 'Chiudi senza salvare', onClick: onClose }}
+        onCancel={cancelClose}
+        alternativeAction={{ label: 'Chiudi senza salvare', onClick: finishClose }}
         onConfirm={() => {
           setCloseRequested(false);
           reviewSave.current?.();
@@ -458,7 +478,7 @@ function ImportSession({
         !opening &&
         (step === 'review' && result ? (
           <ImportReviewWorkspace
-            onClose={onClose}
+            onClose={finishClose}
             registerSave={registerSave}
             job={job}
             result={result}
@@ -471,6 +491,7 @@ function ImportSession({
             onBack={() => void reopen()}
             onImported={completed}
             onWorkspace={(id) => {
+              if (pendingNavigation.current) { finishClose(); return; }
               setDraftId(id);
               setStep('workspace');
             }}

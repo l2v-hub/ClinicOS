@@ -1,15 +1,27 @@
 import assert from 'node:assert/strict';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile, mkdtemp, rm, rename } from 'node:fs/promises';
+import path from 'node:path';
+import os from 'node:os';
+import { fileURLToPath } from 'node:url';
+import { createServer } from 'vite';
+import react from '@vitejs/plugin-react';
 import { chromium, expect } from 'playwright/test';
 import { job, result } from '../frontend/src/components/shared/import/__tests__/fixtures.ts';
 
 const origin = process.env.QA_ORIGIN ?? 'http://127.0.0.1:5196';
 assert(/^http:\/\/127\.0\.0\.1:\d+$/.test(origin), 'Only an isolated localhost QA server is allowed');
-const out = process.env.QA_EVIDENCE_DIR ?? 'artifacts/task-validation/bug-batch-506-507-import-layout-e-data-inizio-terapia';
+const root = fileURLToPath(new URL('../', import.meta.url));
+const nativeOutput = path.join(root, 'artifacts/task-validation/bug-batch-506/evidence');
+const out = process.env.QA_EVIDENCE_DIR ? path.resolve(process.env.QA_EVIDENCE_DIR) : nativeOutput;
+assert(out === nativeOutput || out.startsWith(nativeOutput + path.sep), 'Evidence must remain in the owned native packet directory');
 for (const d of ['screenshots', 'trace', 'video', 'test-results']) await mkdir(`${out}/${d}`, { recursive: true });
-const browser = await chromium.launch({ executablePath: '/usr/bin/chromium', headless: true, args: ['--no-sandbox'] });
+const cache = await mkdtemp(path.join(os.tmpdir(), 'clinicos-e2e-506-'));
+let server, browser;
 const results = [];
 try {
+  server = await createServer({ configFile: false, envDir: false, root: path.join(root, 'frontend'), cacheDir: cache, plugins: [react()], define: { 'import.meta.env.VITE_API_URL': JSON.stringify('/__fixture_api') }, resolve: { alias: { '@': path.join(root, 'frontend/src') } }, server: { host: '127.0.0.1', port: Number(new URL(origin).port), strictPort: true, fs: { allow: [root, cache] } } });
+  await server.listen();
+  browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
   for (const width of [1440, 1024, 768, 390]) {
     const context = await browser.newContext({ viewport: { width, height: 1000 }, recordVideo: { dir: `${out}/video`, size: { width: Math.min(width, 1280), height: 900 } } });
     await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
@@ -75,14 +87,24 @@ try {
       await page.getByRole('button', { name: 'Riprendi bozza', exact: true }).click();
       await expect(first).toHaveValue('Ada QA aggiornata');
       await page.screenshot({ path: `${out}/screenshots/resumed-draft-${width}.png`, fullPage: true });
+      await first.fill('Ada QA history');
+      await page.goBack();
+      await expect(region).toHaveCount(0);
+      await expect.poll(() => draft.data.anagrafica.firstName).toBe('Ada QA history');
+      await page.getByRole('button', { name: 'Riprendi bozza', exact: true }).click();
+      await expect(first).toHaveValue('Ada QA history');
       await page.reload();
       await page.getByRole('button', { name: 'Riprendi bozza', exact: true }).click();
-      await expect(page.locator('[data-demographic-field="firstName"]')).toHaveValue('Ada QA aggiornata');
+      await expect(page.locator('[data-demographic-field="firstName"]')).toHaveValue('Ada QA history');
       await assertBounds();
       await page.reload(); resumed = false; reviewMode = true;
       await page.getByRole('button', { name: 'Importa dimissione', exact: true }).click();
       await expect(region.getByRole('heading', { name: 'Revisione delle lettere' })).toBeVisible();
       await assertBounds();
+      if (width < 1024) {
+        await page.getByRole('button', { name: 'Apri navigazione' }).click();
+        await expect(page.getByRole('alertdialog')).toHaveCount(0);
+      }
       await page.getByRole('button', { name: 'Profilo QA', exact: true }).click();
       const confirmation = page.getByRole('alertdialog', { name: "Chiudere l'importazione?" });
       await expect(confirmation).toBeVisible(); assert.equal(await confirmation.getAttribute('aria-modal'), 'true');
@@ -90,13 +112,25 @@ try {
       await expect(region.getByRole('heading', { name: 'Revisione delle lettere' })).toBeVisible();
       await assertBounds();
       await page.screenshot({ path: `${out}/screenshots/review-${width}.png`, fullPage: true });
+      await page.getByRole('button', { name: 'Cambia pagina QA', exact: true }).click();
+      await expect(confirmation).toBeVisible();
+      await confirmation.getByRole('button', { name: 'Chiudi senza salvare', exact: true }).click();
+      await expect(region).toHaveCount(0);
+      await expect(page.getByLabel('Navigazioni')).toHaveText('1');
       assert.deepEqual(errors, []);
-      results.push({ width, bounds, resumedDraft: true, reviewPhase: true, nestedConfirmationEscapePreserved: true, navigationClicks: 3, immediateNavigationFlushedPendingSave: true, patches, reloadPersistence: 'synthetic fixture server state', errors, requests, status: 'PASS' });
+      results.push({ width, bounds, resumedDraft: true, reviewPhase: true, nestedConfirmationEscapePreserved: true, navigationClicks: 4, immediateNavigationFlushedPendingSave: true, browserBackFlushedPendingSave: true, confirmedNavigationReplayed: true, patches, reloadPersistence: 'synthetic fixture server state', errors, requests, status: 'PASS' });
     } finally {
       await context.tracing.stop({ path: `${out}/trace/issue506-${width}.zip` });
+      const video = page.video();
       await context.close();
+      assert(video, 'A fresh native evidence video is required');
+      await rename(await video.path(), `${out}/video/issue506-${width}.webm`);
     }
   }
   await writeFile(`${out}/test-results/browser.json`, JSON.stringify({ results, status: 'PASS', scope: 'Actual routed NewPatientFlow/DischargeImportModal/IntakeWorkspace, real production CSS and isolated synthetic HTTP fixtures; not real backend/OCR/provider validation' }, null, 2));
   console.log(JSON.stringify({ status: 'PASS', viewports: results.map(r => r.width), persistedDrafts: results.length }));
-} finally { await browser.close(); }
+} finally {
+  await browser?.close();
+  await server?.close();
+  await rm(cache, { recursive: true, force: true });
+}

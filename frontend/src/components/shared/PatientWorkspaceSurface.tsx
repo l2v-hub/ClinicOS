@@ -69,10 +69,13 @@ export function PatientWorkspaceSurface({
     };
     let replaying = false;
     let navigating = false;
+    // Shell toggles (drawer, search, avatar and assistant) do not leave the page.
+    const routeControl = '.teams-sidebar__item:not(.teams-sidebar__item--ai), ' +
+      '.teams-sidebar a[href], .compact-topbar a[href], .topbar-back, .topbar-user-menu__logout';
     const navigate = (event: MouseEvent) => {
       const target = event.target instanceof Element
         ? event.target.closest<HTMLElement>('button, a[href], [role="button"]') : null;
-      if (replaying || !target?.closest('.teams-sidebar, .compact-topbar') ||
+      if (replaying || !target?.matches(routeControl) ||
           !close.current.beforeNavigate || event.defaultPrevented) return;
       event.preventDefault();
       event.stopImmediatePropagation();

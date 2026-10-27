@@ -201,7 +201,17 @@ export function IntakeWorkspace({
   }, [focusField]);
   useEffect(
     () => () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = null;
+        // Route/history changes can unmount before the debounce fires. Capture both
+        // the queue and payload now; a later workspace must not replace either.
+        const queue = saveQueueRef.current;
+        const latest = dataRef.current;
+        if (queue) void queue.save(latest).catch(() => {
+          // Unmounted UI cannot display an error; leave the existing draft intact.
+        });
+      }
     },
     [],
   );
@@ -214,7 +224,10 @@ export function IntakeWorkspace({
   useEffect(() => {
     if (!open) {
       initialManualFocusRef.current = false;
-      if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = null;
+      }
       setActive('anagrafica');
       setSavedAt(null);
       setDraftId(null);
@@ -447,9 +460,15 @@ export function IntakeWorkspace({
 
   function scheduleAutosave() {
     if (!saveQueueRef.current) return;
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = null;
+    }
     setSaveState('saving');
-    debounceRef.current = setTimeout(() => void autosave(), 500);
+    debounceRef.current = setTimeout(() => {
+      debounceRef.current = null;
+      void autosave();
+    }, 500);
   }
 
   // La bozza si legge al momento dell'invio: un'unione arrivata nel frattempo non viene sovrascritta.
@@ -549,7 +568,10 @@ export function IntakeWorkspace({
     submittingRef.current = true;
     setSubmitting(true);
     setSubmitError(null);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = null;
+    }
     try {
       if (!existing) {
         await persistDraft(data);
@@ -675,7 +697,10 @@ export function IntakeWorkspace({
     };
 
     try {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = null;
+      }
       commitLocal(confirmData);
       const res = await confirmPersistedDraft(
         draftId,
@@ -787,7 +812,10 @@ export function IntakeWorkspace({
     submittingRef.current = true;
     setSubmitting(true);
     try {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = null;
+      }
       await persistDraft(data);
       setSaveState('saved');
       close();

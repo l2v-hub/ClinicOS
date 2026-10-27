@@ -1,5 +1,5 @@
 // Test-only entry, excluded from the production Vite entry. No real clinical data.
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 // Preload the dev-only lazy graph before exercising UI; production remains lazy.
 import '../src/components/shared/DischargeImportModal';
@@ -14,14 +14,19 @@ function Fixture() {
   const [resume, setResume] = useState<string>();
   const [navigation, setNavigation] = useState(0);
   const [navOpen, setNavOpen] = useState(false);
+  useEffect(() => {
+    const leave = () => setPath(null);
+    window.addEventListener('popstate', leave);
+    return () => window.removeEventListener('popstate', leave);
+  }, []);
   return <div className={`app-shell${navOpen ? ' app-shell--nav-open' : ''}`}>
-    <aside className="teams-sidebar"><button onClick={() => { setNavigation(n => n + 1); setNavOpen(false); }}>Pazienti QA</button></aside>
+    <aside className="teams-sidebar"><button className="teams-sidebar__item" onClick={() => { setNavigation(n => n + 1); setNavOpen(false); }}>Pazienti QA</button></aside>
     <div className="main-area-clean">
-      <header className="compact-topbar"><button aria-label="Apri navigazione" onClick={() => setNavOpen(x => !x)}>Menu</button><span>ClinicOS · QA sintetica #506</span><button onClick={() => setNavigation(n => n + 1)}>Profilo QA</button><button onClick={() => { setNavigation(n => n + 1); setPath(null); }}>Cambia pagina QA</button></header>
+      <header className="compact-topbar"><button aria-label="Apri navigazione" onClick={() => setNavOpen(x => !x)}>Menu</button><span>ClinicOS · QA sintetica #506</span><button className="topbar-back" onClick={() => setNavigation(n => n + 1)}>Profilo QA</button><button className="topbar-back" onClick={() => { setNavigation(n => n + 1); setPath(null); }}>Cambia pagina QA</button></header>
       <main className="page-content content-panel"><div>
         <h1>Nuovo ingresso · dati sintetici</h1><output aria-label="Navigazioni">{navigation}</output>
         <button onClick={() => { setResume(undefined); setPath('documenti'); }}>Importa dimissione</button>
-        <button onClick={() => { setResume('draft-qa-506'); setPath('documenti'); }}>Riprendi bozza</button>
+        <button onClick={() => { history.pushState({}, '', '#draft'); setResume('draft-qa-506'); setPath('documenti'); }}>Riprendi bozza</button>
         {path && <NewPatientFlow initialPath={path} resumeDraftId={resume} operatorId="operator-qa-506" operatorRole="MEDICO" onClose={() => setPath(null)} onDone={() => { throw new Error('Patient confirmation is outside this QA'); }} />}
       </div></main>
     </div>
