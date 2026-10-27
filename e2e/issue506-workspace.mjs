@@ -512,8 +512,10 @@ try {
       await expect(region.getByText('Caricamento in corso. Attendi il completamento prima di cambiare pagina.', { exact: true })).toHaveCount(0);
       await expect(page.getByLabel('Navigazioni')).toHaveText('0');
       releaseDraftCreation();
-      await expect(region.getByRole('heading', { name: /Nuovo ingresso/ })).toBeVisible();
+      await expect(region).toHaveCount(0);
       await expect(operationNotice).toHaveCount(0);
+      await expect(page.getByLabel('Navigazioni')).toHaveText('0');
+      assert.equal(draftCreations, 1, 'A completed save-and-close must create exactly one draft');
       draftCreationStarted = false;
       draftCreations = 0;
 
