@@ -1,9 +1,12 @@
 ---
 name: wizard
-description: Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself.
+disable-model-invocation: true
+description: Invoke only when the user explicitly requests a wizard. Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself.
 ---
 
 # Wizard
+
+**Explicit invocation only:** use this skill only when the user specifically requests `/wizard` or asks for an interactive wizard. Do not invoke it automatically because setup fails, a secret is missing, or an external dashboard needs attention. General authorization to complete a task does not activate this skill.
 
 A **wizard** is a bash script that walks a human, step by step, through a manual procedure that's tedious to do by hand and tedious to re-explain to an AI every time. It opens each URL, says exactly what to click and copy, captures the values, writes them where they belong (`.env`, GitHub secrets), confirms at every stage, and shows how many stages are left. It might configure third-party services, run a one-off migration, or move the project from one state to another.
 
@@ -17,7 +20,7 @@ A wizard is ephemeral by default: built for one run, saved to a scratch or `scri
 
 Work out every manual step the human must take and every value that gets captured along the way. Read the repo first, don't ask cold:
 
-- For setup: `.env`, `.env.example`, `.env.*`, `README`, `docker-compose*`, framework config, and `.github/workflows/*` (every `secrets.*` / `vars.*` reference is a value the wizard must produce).
+- For setup: use only explicitly named example/template files (such as `.env.example`, `.env.template`, `.env.*.example`, and `.env.*.template`) to identify **key names**, ignoring their values. From `README`, `docker-compose*`, framework config, and `.github/workflows/*`, inspect only variable names and `secrets.*` / `vars.*` references. Never read live `.env` files, `.env.local`, `.env.production`, other live `.env.*` files, credential files, process-environment values, or existing secrets in hosting/CI settings. Do not copy secret values into prompts, defaults, logs, generated source, or reports. A missing key is a requirement to describe, not a reason to inspect a stored secret.
 - For a migration or transition: the current state, the target state, and the irreversible actions between them.
 
 Then show the user the ordered list of stages and the values each produces, and confirm: they may add, drop, or reorder.

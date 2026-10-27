@@ -1,0 +1,97 @@
+--- a/.agents/skills/wizard/agents/openai.yaml
++++ b/.agents/skills/wizard/agents/openai.yaml
+@@ -1,3 +1,6 @@
+ interface:
+   display_name: "Wizard"
+   short_description: "Generate an interactive setup wizard"
++
++policy:
++  allow_implicit_invocation: false
+--- a/.agents/skills/wizard/SKILL.md
++++ b/.agents/skills/wizard/SKILL.md
+@@ -1,9 +1,12 @@
+ ---
+ name: wizard
+-description: Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself.
++disable-model-invocation: true
++description: Invoke only when the user explicitly requests a wizard. Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself.
+ ---
+ 
+ # Wizard
++
++**Explicit invocation only:** use this skill only when the user specifically requests `/wizard` or asks for an interactive wizard. Do not invoke it automatically because setup fails, a secret is missing, or an external dashboard needs attention. General authorization to complete a task does not activate this skill.
+ 
+ A **wizard** is a bash script that walks a human, step by step, through a manual procedure that's tedious to do by hand and tedious to re-explain to an AI every time. It opens each URL, says exactly what to click and copy, captures the values, writes them where they belong (`.env`, GitHub secrets), confirms at every stage, and shows how many stages are left. It might configure third-party services, run a one-off migration, or move the project from one state to another.
+ 
+@@ -17,7 +20,7 @@
+ 
+ Work out every manual step the human must take and every value that gets captured along the way. Read the repo first, don't ask cold:
+ 
+-- For setup: `.env`, `.env.example`, `.env.*`, `README`, `docker-compose*`, framework config, and `.github/workflows/*` (every `secrets.*` / `vars.*` reference is a value the wizard must produce).
++- For setup: use only explicitly named example/template files (such as `.env.example`, `.env.template`, `.env.*.example`, and `.env.*.template`) to identify **key names**, ignoring their values. From `README`, `docker-compose*`, framework config, and `.github/workflows/*`, inspect only variable names and `secrets.*` / `vars.*` references. Never read live `.env` files, `.env.local`, `.env.production`, other live `.env.*` files, credential files, process-environment values, or existing secrets in hosting/CI settings. Do not copy secret values into prompts, defaults, logs, generated source, or reports. A missing key is a requirement to describe, not a reason to inspect a stored secret.
+ - For a migration or transition: the current state, the target state, and the irreversible actions between them.
+ 
+ Then show the user the ordered list of stages and the values each produces, and confirm: they may add, drop, or reorder.
+--- a/.agents/skills/ask-matt/SKILL.md
++++ b/.agents/skills/ask-matt/SKILL.md
+@@ -87,7 +87,7 @@
+ - **`/prototype`** is a small, throwaway program that answers one design question: does this state model feel right, or what should this UI look like. Throwaway is a constraint on how the code is written, not a promise to destroy it: the answer folds into the real code, and the prototype itself is kept as a **primary source** on a `prototype/<name>` branch out of main, pointed at from the implementation issue. It's the detour in step 2 of the main flow, but reach for it any time a design question is hard to settle on paper.
+ - **`/research`**: delegate reading legwork to a **background agent**: it investigates a question against **primary sources**, then leaves a cited Markdown file in the repo. Keep working while it reads. The file it produces is something to take *into* the main flow at `/grill-with-docs`, since research feeds the thinking rather than replacing it.
+ - **`/to-questionnaire`** comes in when the thing blocking you isn't in your head or the codebase but in **someone else's**, and it writes them a questionnaire to fill in. It's the inverse of `/grill-me`: instead of interviewing you about the subject, it interviews you about the **send** (who it's going to, what you need back) and aims the questions at the gap. What comes back is material for `/grill-with-docs` or `/to-spec`.
+-- **`/wizard`** is for the steps only a **human** can take: provisioning infrastructure, setting up credentials or CI secrets, clicking through an unfamiliar third-party dashboard, running a one-off migration or cutover. It generates an interactive bash script that opens each URL, captures each value, and writes it into `.env` and GitHub secrets, so the procedure stops being something you re-explain to an agent every time. Model-invoked, so the agent reaches for it the moment it hits a wall only you can pass. If the agent could just do it itself, it should; this is for where a human is genuinely in the loop.
++- **`/wizard`** is for the steps only a **human** can take: provisioning infrastructure, setting up credentials or CI secrets, clicking through an unfamiliar third-party dashboard, running a one-off migration or cutover. It generates an interactive bash script that opens each URL, captures each value, and writes it into `.env` and GitHub secrets, so the procedure stops being something you re-explain to an agent every time. Explicitly invoked only: suggest it as an option, but use it only when the user specifically requests `/wizard` or an interactive wizard; a setup failure or missing credential does not activate it. During preparation, inspect example/template key names and configuration references only, never live environment or secret values. If the agent could just do it itself, it should; this is for where a human is genuinely in the loop.
+ - **`/wait-what`** is the corrective for a message that didn't land. Use it mid-conversation, inside any other skill, and the agent re-pitches what it just said with the context you were missing, in plain English, using the `GLOSSARY.md` vocabulary. It works after the fact; `/grill-with-docs` is the upfront cure, because a shared language agreed early is what stops the jargon arriving at all.
+ - **`/teach`**: learn a concept over multiple sessions, using the current directory as a stateful workspace.
+ - **`/writing-for-agents`** is the reference for writing documents agents consume: skills, AGENTS.md, pointed-at docs.
+--- a/.agents/skills/pr/CREDITS.md
++++ b/.agents/skills/pr/CREDITS.md
+@@ -1,3 +1,33 @@
+ # Credits
+ 
+-The **Summary** section's menu of visuals (pseudocode, call trees, component trees, file trees, Mermaid, diffs) and its placement guidance come from [Dex Horthy](https://github.com/dexhorthy)'s [`show-me`](https://github.com/humanlayer/humanlayer) skill, reproduced almost word for word and aimed at a diff instead of a live conversation. `pr` does not depend on `show-me` as a skill (it isn't part of this repo, and a hard dependency would break standalone installs), so the content is copied in rather than pointed at; this file is the attribution a dependency would otherwise have carried.
++The **Summary** guidance in this `pr` skill was adapted through Matt Pocock's skill collection from HumanLayer's [`show-me`](https://github.com/humanlayer/skills/blob/653b6411c1f70c275a18e37673b042ff99f67ceb/plugins/show-me/skills/show-me/SKILL.md) skill. The imported attribution names [Dex Horthy](https://github.com/dexhorthy). It is included locally so `pr` remains usable without a separate `show-me` installation. The inherited Summary content is retained; this local revision corrects the source link and includes its required copyright and permission notice.
++
++Verified upstream revision: `653b6411c1f70c275a18e37673b042ff99f67ceb`. Canonical source: https://github.com/humanlayer/skills/blob/653b6411c1f70c275a18e37673b042ff99f67ceb/plugins/show-me/skills/show-me/SKILL.md. License source at that same revision: https://github.com/humanlayer/skills/blob/653b6411c1f70c275a18e37673b042ff99f67ceb/LICENSE. The original import and attribution remain in Git history. ClinicOS retains the surrounding PR template, Evidence and Merge Danger sections.
++
++## HumanLayer show-me license notice
++
++The following notice applies to the portions adapted from HumanLayer's `show-me` skill:
++
++```text
++MIT License
++
++Copyright (c) 2026 HumanLayer
++
++Permission is hereby granted, free of charge, to any person obtaining a copy
++of this software and associated documentation files (the "Software"), to deal
++in the Software without restriction, including without limitation the rights
++to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++copies of the Software, and to permit persons to whom the Software is
++furnished to do so, subject to the following conditions:
++
++The above copyright notice and this permission notice shall be included in all
++copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++SOFTWARE.
++```
+--- a/.agents/skills/pr/SKILL.md
++++ b/.agents/skills/pr/SKILL.md
+@@ -5,8 +5,10 @@
+   credits:
+     skill: show-me
+     author: Dex Horthy
+-    organisation: Humanlayer
+-    url: "https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md"
++    organisation: HumanLayer
++    license: MIT
++    notice: CREDITS.md
++    url: "https://github.com/humanlayer/skills/blob/653b6411c1f70c275a18e37673b042ff99f67ceb/plugins/show-me/skills/show-me/SKILL.md"
+ ---
+ 
+ Use this template for writing the PR body:

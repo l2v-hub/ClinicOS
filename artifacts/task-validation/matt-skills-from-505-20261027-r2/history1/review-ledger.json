@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "max_rounds": 4,
+  "rounds": [
+    {
+      "round": 1,
+      "verdict": "changes-requested",
+      "subject_sha": "cf45ad47f4146f929bf5a19acd12d35336258953",
+      "review_sha256": "7efa93f695f054eaab3b33d76ad265416dfe763629392df88e2d656c7f921624"
+    }
+  ]
+}

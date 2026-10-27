@@ -5,8 +5,10 @@ metadata:
   credits:
     skill: show-me
     author: Dex Horthy
-    organisation: Humanlayer
-    url: "https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md"
+    organisation: HumanLayer
+    license: MIT
+    notice: CREDITS.md
+    url: "https://github.com/humanlayer/skills/blob/653b6411c1f70c275a18e37673b042ff99f67ceb/plugins/show-me/skills/show-me/SKILL.md"
 ---
 
 Use this template for writing the PR body:

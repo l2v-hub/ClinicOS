@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "reservationNonce": "92aa0766-efbe-44ff-beec-4c343162cec9",
+  "sourceFiles": {
+    ".agents/skills/wizard/agents/openai.yaml": {
+      "bytes": 140,
+      "sha256": "7098d2c3ae10814d07d0fa90668e00b7842ec8308d0f4470e8fd358aebabe166",
+      "gitBlobSha1": "0288de139b4579abf0b5ad75017ce14c6bd95cb8"
+    },
+    ".agents/skills/wizard/SKILL.md": {
+      "bytes": 5023,
+      "sha256": "2e9216f718e1474d5c478201ddcb25b9be3ef2beea61a4acddf9fbd5463306a9",
+      "gitBlobSha1": "555115b8aa3ddcfebfc05e4a1442e807735c08c0"
+    },
+    ".agents/skills/ask-matt/SKILL.md": {
+      "bytes": 12835,
+      "sha256": "dde4fade4af601bf6076e22bb0c3877d02fdba71cee34b730722fb3a78c9c866",
+      "gitBlobSha1": "ab1eae19728d7215f747671d4ee3114ce0308f68"
+    },
+    ".agents/skills/pr/CREDITS.md": {
+      "bytes": 2271,
+      "sha256": "d6cf581964e53b84f9c67ec94957c6bc5896fb618825baff95cb2d4a62ba6076",
+      "gitBlobSha1": "db9015c25b449cabd3bc1e29833f3d8d158d358a"
+    },
+    ".agents/skills/pr/SKILL.md": {
+      "bytes": 4245,
+      "sha256": "5217775d1ab4f418851f77609a4b8472ab68d75e85a975e8b023f1d60f59cf52",
+      "gitBlobSha1": "e5212d1d6008de308161f1fb0943839a1ed8374c"
+    }
+  },
+  "files": {
+    "reservation.json": "ced39ed41dba77bbd1f5ec1ffcb5bb03cbd4c365bce6b54508ca39cfee46835e",
+    "task-contract.json": "447b055aecc5fb4f8b0ed8fdac2244341b915931fc80b6634c0ab0c534883739",
+    "source.diff": "57314ec7ac0393e9fdb1d36292b6c9253b3e281693ef134dfcfa58c9bedfc8a0",
+    "baseline-source-hashes.json": "1e872687582112155ac46627351afab333050400b51a48e9f8c8c5eae163027e",
+    "validate-static.py": "a8e5a14e84d739e45ac9c5699c1620334a3c6dcf39b4a3efc272af59f11f612d",
+    "validation-probe1.json": "6aae4ff50ca5358a6258aca95a550b88d37fb9c53451f589f5689c582b23c71c",
+    "validation-result.json": "c3148c2481dd1e51dab61a674fb144c48e71de05c2acaddfe50611aeca26708d",
+    "all-27-frontmatter-validation.json": "0cd5ea7cf3fcad96636c395988a3515d2da9f2db2144742a0e3ea1c05cff299e",
+    "frozen-source-manifest.json": "ce817e499d019238dc268ed5bf94c90cd00d75e807327f653f410ae1276edf9f",
+    "author-report.md": "dd263502921a1d01db546bed2b3c97ac1a59c0bd99a9dde91707e35bbd0476cd",
+    "author-result.json": "fe7f0adc330c4a5a2cd6f070450a5d6610a176c0d04c66b337b875fc21c63799",
+    "public-provenance/humanlayer-skills-LICENSE-pinned.txt": "5f13c18ea00ea5c1384f41745feeca774079164f7f59a92e4ac0899ad217b26f",
+    "public-provenance/humanlayer-skills-LICENSE.txt": "5f13c18ea00ea5c1384f41745feeca774079164f7f59a92e4ac0899ad217b26f",
+    "public-provenance/pinned-source.json": "5f100f73af2eb35941794bd99740fb62e0a7a1c7174e826ca87e17c11d5919dc",
+    "public-provenance/reads.json": "4f4adef88b2ef0b854a73f40fd6a4a3091de068fab148f13dcf1968a94cdd283",
+    "public-provenance/show-me-SKILL-pinned.md": "434a2346cc95e313b0d367d477dda2e23ba642dd2181757415a09500664af100",
+    "public-provenance/show-me-SKILL.md": "434a2346cc95e313b0d367d477dda2e23ba642dd2181757415a09500664af100",
+    "public-provenance/upstream-main-ref.json": "5e5334198c544263a452aedb7175d1f009f9c0a4767b3b13a6a8095672ac006e"
+  }
+}

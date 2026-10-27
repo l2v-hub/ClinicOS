@@ -1,0 +1,44 @@
+{
+  "verdict": "PASS",
+  "nonce": "cb9117eb-d1f6-4ce5-be33-8dabcb737897",
+  "sourceSha": "1123d8bb33d5dec4bcb09e5c6bc7851797db5ee7",
+  "sourcePublicationReady": true,
+  "at": "2026-10-27 11:15:40 UTC",
+  "findings": [
+    {
+      "severity": "info",
+      "code": "SCOPE_PARTIAL",
+      "message": "Exact 80-file source is 79 files for 27 Codex project skills plus the MIT license; the separate 23-file runtime/routing work and all CI/peer/final/merge gates remain pending."
+    },
+    {
+      "severity": "info",
+      "code": "FUTURE_SIDE_EFFECTS",
+      "message": "Static content describes future wizard flows that can write .env and GitHub secrets/variables and skills that can publish approved issue-tracker items. No such action was performed; review and authorize per invocation."
+    },
+    {
+      "severity": "info",
+      "code": "ILLUSTRATIVE_REFERENCES",
+      "message": "Three src/ordering, src/billing, and src/fulfillment links are example project paths in a fenced format example, not missing vendor dependencies."
+    }
+  ],
+  "checks": {
+    "manifestFiles": 80,
+    "skillFiles": 79,
+    "skillCount": 27,
+    "bytes": 219349,
+    "rawBlobModeMatchesAgainstPreserved505": 80,
+    "sourceChangedPathsExact": true,
+    "existingBaseSkillOverwrites": 0,
+    "frontmatterNameDescriptionParsed": 27,
+    "agentsYamlParsed": 27,
+    "relativeMarkdownLinksChecked": 40,
+    "missingRequiredReferences": 0,
+    "mitAttributionAndTermsPreserved": true,
+    "vendoredCommandsExecuted": false,
+    "freshUpstreamFetchClaimed": false
+  },
+  "limitations": [
+    "No app tests or full suite run; this is a byte-preserving vendor change.",
+    "No exact-head CI, genuine Claude review, independent final review, protected merge, runtime integration, or remote PR-state verification is claimed."
+  ]
+}

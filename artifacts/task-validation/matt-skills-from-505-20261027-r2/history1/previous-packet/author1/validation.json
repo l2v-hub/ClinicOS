@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-27T11:13:03.455308+00:00",
+  "all80Original505RawBlobModeHashesMatch": true,
+  "sourceFiles": 80,
+  "skillCount": 27,
+  "agentsYamlParsed": 27,
+  "yamlParser": "PyYAML6.0.3",
+  "MITCopyrightLicensePreserved": true,
+  "sourceBytes": 219349,
+  "existingMainSkillOverwrites": 0,
+  "noVendoredCommandsExecuted": true,
+  "sourceChangePathsExact": true,
+  "sourceCommit": "1123d8bb33d5dec4bcb09e5c6bc7851797db5ee7",
+  "original505Unchanged": true,
+  "validationScope": "Mechanical structural validation only; independentQA/CI/peer/final/merge pending"
+}

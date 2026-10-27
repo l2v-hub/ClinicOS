@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "reservationNonce": "92aa0766-efbe-44ff-beec-4c343162cec9",
+  "verdict": "READY_FOR_INDEPENDENT_QA",
+  "checks": {
+    "importedFrontmatterValid": 27,
+    "agentYamlValid": 27,
+    "wizardExplicitOnlyBothHarnesses": true,
+    "wizardKeysOnlyNoLiveEnvResearch": true,
+    "originalPrBodyUnchanged": true,
+    "exactHumanLayerMitNoticeIncluded": true,
+    "canonicalPinnedUrlConsistent": true,
+    "mattPocockLicenseUnchanged": true,
+    "sourceFileCeiling": 80,
+    "addedSourceFiles": 0,
+    "changedSourceFiles": 5,
+    "worktreeUntouchedAndBaselineExact": true,
+    "provenancePublicReads": 5,
+    "allPublicReadsHttp200": true
+  },
+  "sourceProjection": {
+    ".agents/skills/wizard/agents/openai.yaml": {
+      "bytes": 140,
+      "sha256": "7098d2c3ae10814d07d0fa90668e00b7842ec8308d0f4470e8fd358aebabe166",
+      "gitBlobSha1": "0288de139b4579abf0b5ad75017ce14c6bd95cb8"
+    },
+    ".agents/skills/wizard/SKILL.md": {
+      "bytes": 5023,
+      "sha256": "2e9216f718e1474d5c478201ddcb25b9be3ef2beea61a4acddf9fbd5463306a9",
+      "gitBlobSha1": "555115b8aa3ddcfebfc05e4a1442e807735c08c0"
+    },
+    ".agents/skills/ask-matt/SKILL.md": {
+      "bytes": 12835,
+      "sha256": "dde4fade4af601bf6076e22bb0c3877d02fdba71cee34b730722fb3a78c9c866",
+      "gitBlobSha1": "ab1eae19728d7215f747671d4ee3114ce0308f68"
+    },
+    ".agents/skills/pr/CREDITS.md": {
+      "bytes": 2271,
+      "sha256": "d6cf581964e53b84f9c67ec94957c6bc5896fb618825baff95cb2d4a62ba6076",
+      "gitBlobSha1": "db9015c25b449cabd3bc1e29833f3d8d158d358a"
+    },
+    ".agents/skills/pr/SKILL.md": {
+      "bytes": 4245,
+      "sha256": "5217775d1ab4f418851f77609a4b8472ab68d75e85a975e8b023f1d60f59cf52",
+      "gitBlobSha1": "e5212d1d6008de308161f1fb0943839a1ed8374c"
+    }
+  },
+  "providerInvocations": 0,
+  "vendoredScriptsExecuted": 0,
+  "realEnvOrSecretFilesRead": 0,
+  "gitApiCanonicalWrites": 0,
+  "finalDecision": "PARTIAL pending independent QA/newheadCI/genuinepeer/final/protectedmerge",
+  "actor": "/root",
+  "mode": "existing-parent-host-author-zero-additional-provider",
+  "authoredAt": "2026-10-27T14:26:11.013901+00:00",
+  "actualAuthoringPath": "private source-files projection; reserved worktree untouched",
+  "publicProvenanceCommit": "653b6411c1f70c275a18e37673b042ff99f67ceb",
+  "failedVerifierProbePreserved": "validation-probe1.json"
+}
