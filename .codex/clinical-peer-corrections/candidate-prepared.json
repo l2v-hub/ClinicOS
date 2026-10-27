@@ -1,0 +1,149 @@
+{
+  "candidates": [
+    {
+      "issue": 506,
+      "sha": "fc9e503e31e8f22210999fdf6a5153ecd5e80389",
+      "parent": "5105becde8bb222652ab2df7e72b0d32f05a7262",
+      "tree": "99a317f35b49d076e6e257fb35d604591477dea9",
+      "files": [
+        {
+          "file": "e2e/issue506-workspace.mjs",
+          "sha256": "cc3c26eca9f3b1a5d34fdf70741328c6efd3f5acd58b30a8170c52c4139e976a",
+          "bytes": 24581
+        },
+        {
+          "file": "frontend/e2e/issue506-workspace.html",
+          "sha256": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05",
+          "bytes": 272
+        },
+        {
+          "file": "frontend/e2e/issue506-workspace.tsx",
+          "sha256": "4fc31c5319186440b5b9db661589a444d9960b96bb431d2c69136a0fd22fc975",
+          "bytes": 2560
+        },
+        {
+          "file": "frontend/src/components/operator/NewPatientFlow.tsx",
+          "sha256": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895",
+          "bytes": 3887
+        },
+        {
+          "file": "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+          "sha256": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac",
+          "bytes": 3914
+        },
+        {
+          "file": "frontend/src/components/shared/DialogLoading.tsx",
+          "sha256": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4",
+          "bytes": 624
+        },
+        {
+          "file": "frontend/src/components/shared/DischargeImportModal.tsx",
+          "sha256": "6b8c2284526b8dc0cfc2944c2f4cb6381fa079c57a85c0b485c9ad65629c70e7",
+          "bytes": 19498
+        },
+        {
+          "file": "frontend/src/components/shared/PatientWorkspaceSurface.css",
+          "sha256": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395",
+          "bytes": 504
+        },
+        {
+          "file": "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+          "sha256": "27ff12f6020ef24cc897b03570c3fc4d95156d7584e3f0d70e618b805235084d",
+          "bytes": 4901
+        },
+        {
+          "file": "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+          "sha256": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41",
+          "bytes": 975
+        },
+        {
+          "file": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+          "sha256": "61c45c249842c4cf4795bd34d251ff83e8d13895d75a3757e7b61bf5a5cf31e0",
+          "bytes": 49811
+        },
+        {
+          "file": "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts",
+          "sha256": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde",
+          "bytes": 2903
+        }
+      ],
+      "changedFiles": [
+        "e2e/issue506-workspace.mjs",
+        "frontend/src/components/shared/DischargeImportModal.tsx"
+      ],
+      "rootAuthorNonce": "91b42ecb-4a63-4c10-9506-d7844a704f9e",
+      "authorProjectionSha256": "c87c0d9cbd388491ac470070632133befd1ea31e5b0632205257b77c653d7868",
+      "authorSealSha256": "1a748df52ad6f3ff7d1465a058289966caa740b67c1092766a0abdfe95cf3958",
+      "sourceOutput": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/issue506-peer2-root-author1/",
+      "providerInvocations": 0
+    },
+    {
+      "issue": 507,
+      "sha": "6572bd52617630d1dc79765bcbc1b97538974146",
+      "parent": "9e0a8dec7fb8bbf5edcaf00694be63f6fda577ff",
+      "tree": "fab3eb8190e0feb25cb994078f324a16a8372797",
+      "files": [
+        {
+          "file": "e2e/issue507-smoke.mjs",
+          "sha256": "d211cc798b1f08c8f2c71d0caf20b00daa0cf1093ea2e5c6a179afb5217e0f50",
+          "bytes": 18223
+        },
+        {
+          "file": "e2e/issue507/entry.tsx",
+          "sha256": "696b0e60fa0d4283cb8ff6a298af8e31861c967532bed6a22248e8f3595dfeb2",
+          "bytes": 3874
+        },
+        {
+          "file": "frontend/src/components/operator/PatientDetail.tsx",
+          "sha256": "fb73b4e253f767d6344e57d61c38b8b64222a47a5f2215d4c8a9f1251c8e0dbb",
+          "bytes": 121197
+        },
+        {
+          "file": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+          "sha256": "2b271ce8b317449ebec4990599800a1dd24c3f1b6fc9cea4a7155f29efa5a8da",
+          "bytes": 47928
+        },
+        {
+          "file": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+          "sha256": "6ebba927508f1d6e244c052e696683ab52eee29a1772352c9126083698745fc7",
+          "bytes": 24823
+        },
+        {
+          "file": "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts",
+          "sha256": "7526c5ad6c79591235d78a30145b1d48e250540ac540e46c34632ec27ac705f6",
+          "bytes": 10990
+        },
+        {
+          "file": "frontend/src/components/operator/sections/TherapyEditor.tsx",
+          "sha256": "541279cfc05dace84f7a74c1671b9287689ee6cdbeb94dfc1830d06f0f025ed8",
+          "bytes": 2303
+        },
+        {
+          "file": "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx",
+          "sha256": "0b34a7ec2fde96368daab9dc519102117d980274bbae1f349acd012061fa56b4",
+          "bytes": 7432
+        },
+        {
+          "file": "frontend/src/components/shared/intake/StepClinica.tsx",
+          "sha256": "ef2ec3c049afbc40bd257f387394ebcff423ffd18a0afab9588e2f1369dc6caa",
+          "bytes": 10445
+        },
+        {
+          "file": "frontend/src/lib/therapyAdmissionDate.ts",
+          "sha256": "d24e633ff1d8760e5554f56d54180e5212c9f0b5855e4929dafe078dc8154c5f",
+          "bytes": 2288
+        }
+      ],
+      "changedFiles": [
+        "e2e/issue507-smoke.mjs",
+        "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+        "frontend/src/components/operator/cartella/__tests__/therapyAdmissionDefaults.test.ts"
+      ],
+      "rootAuthorNonce": "c42f756a-3a0c-43e7-bd27-9c776ebef3a4",
+      "authorProjectionSha256": "1a680c00fa1ace54d53a8f7e8aeaa3648da9012e5a5d139e1170d4fe5f73ac8b",
+      "authorSealSha256": "5101f85d2451045b688dc9506da04e35dd0713d94d2b186fa36fdb0fbd3bcb3e",
+      "sourceOutput": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/issue507-peer3-root-author1/",
+      "providerInvocations": 0
+    }
+  ]
+}
