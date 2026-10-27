@@ -1,0 +1,31 @@
+{
+  "baseSha": "655f028e3b0bdcc621ac15209fd0af38cee3d26b",
+  "files": [
+    {
+      "file": "agent-team/tests/unit/ci-browser-e2e-config.test.mjs",
+      "baselineByteIdentical": true,
+      "sha256": "0f1a7963770f8ebb34b4d2d6baa7b0f27841b409d888549e11afdf54e83ab6cb"
+    },
+    {
+      "file": "agent-team/tests/unit/e2e-import-journey.test.mjs",
+      "baselineByteIdentical": true,
+      "sha256": "47daffeedb2b9a29938f08e83cf4fe52f61da69ecf2ca98419a961dd82a72441"
+    },
+    {
+      "file": "frontend/src/config.ts",
+      "baselineByteIdentical": true,
+      "sha256": "cda0d2bdfc5f75e70038741bc3b23a9ee8fe0f725e60ac7813213fe563f6d8f0"
+    },
+    {
+      "file": "frontend/src/components/shared/intake/StepClinica.tsx",
+      "baselineByteIdentical": true,
+      "sha256": "4f997a28c75fc2c67ca5ad2c20dd16fbf66b1e47483179bdcbbe16edd35ec99d"
+    },
+    {
+      "file": "e2e/import-happy-path.mjs",
+      "baselineByteIdentical": true,
+      "sha256": "f728aa6066a3b4d4c984e3023eb405981cb0b7a3cf42c8d87a9de118881292b5"
+    }
+  ],
+  "results": "Separate stale-regex/static-source assertion failures on exact unchanged baseline inputs; no product regression claim. Required full35bugpipeline passed."
+}

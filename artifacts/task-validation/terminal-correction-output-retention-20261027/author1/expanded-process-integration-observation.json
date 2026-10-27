@@ -1,0 +1,21 @@
+{
+  "pid": 3514213,
+  "processState": "Z",
+  "files": [
+    {
+      "file": "agent-team/tests/integration/process-exit-ownership.test.mjs",
+      "baselineByteIdentical": true,
+      "sha256": "2ef15e39af72366f84192b8011d00aa39167d36faf1735ef7a3e5c123c241f6f"
+    },
+    {
+      "file": "agent-team/tests/fixtures/exit-orphan-host.mjs",
+      "baselineByteIdentical": true,
+      "sha256": "b08476898574d03c30578fcd9c7330601d463f5f1e0821163c574f47b4c729ae"
+    },
+    {
+      "file": "agent-team/src/adapters/process-runner.mjs",
+      "baselineByteIdentical": true,
+      "sha256": "8bade29dd5161b5d8daf0038165a4138eabd34a4bf7e771f7f04d98177e541ae"
+    }
+  ]
+}

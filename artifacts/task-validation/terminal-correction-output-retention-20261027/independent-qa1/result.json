@@ -1,0 +1,26 @@
+{
+  "verdict": "VERIFIED_CORE_TERMINAL_RETENTION_SOURCE",
+  "sourceSha": "0fa1d7266e148e78dc0cffcaa95edbd7e539153d",
+  "baseSha": "655f028e3b0bdcc621ac15209fd0af38cee3d26b",
+  "reservationNonce": "2855a1b5-4b96-4622-999d-95c6a7c2fc41",
+  "blockers": [],
+  "independentFocused": {
+    "passed": 49,
+    "failed": 0,
+    "skipped": 0,
+    "log": "qa.log"
+  },
+  "authorRequiredCiEquivalent": {
+    "files": 37,
+    "passed": 1735,
+    "failed": 0,
+    "skipped": 3
+  },
+  "sourcePublicationReady": true,
+  "protectedMergeApproved": false,
+  "limitations": [
+    "optional 62-file run had 34 failures and is not claimed green",
+    "remote CI, peer review, final Codex QA and protected merge pending",
+    "real provider and clinical recovery not exercised or claimed"
+  ]
+}
