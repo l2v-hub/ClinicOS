@@ -1,0 +1,22 @@
+[
+  {
+    "issue": 507,
+    "files": {
+      "screenshot": {
+        "path": "artifacts/task-validation/bug-batch-507/evidence/screenshots/Europe-Rome-chart-admission.png",
+        "sha256": "139a032be3f9d01faf4dc658ba7aa6657c3135cb594726d0b448b15dedda7bb0",
+        "bytes": 96082
+      },
+      "trace": {
+        "path": "artifacts/task-validation/bug-batch-507/evidence/trace/issue507-Europe-Rome.zip",
+        "sha256": "4a2a622ebcc4e9475c1548ff2a50e0b4fec215e42d1d1c54608d017a6c05f91c",
+        "bytes": 1551262
+      },
+      "video": {
+        "path": "artifacts/task-validation/bug-batch-507/evidence/video/issue507-Europe-Rome.webm",
+        "sha256": "3a2336ccc927061d20dac588e980af096b2f28264903db45c393138f8bc27d9f",
+        "bytes": 2083541
+      }
+    }
+  }
+]
