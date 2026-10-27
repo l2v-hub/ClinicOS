@@ -1,0 +1,25 @@
+{
+  "issue": 506,
+  "baseline": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+  "qaNonce": "64b40274-d129-449e-9c54-60307616eb30",
+  "qaSourceManifestSha256": "abbfefa3a79ebe8aade35abae537c9533e2f236ad54c40e2dcdaebb9e1e441ca",
+  "sourceManifest": {
+    "e2e/issue506-workspace.mjs": "fd39418dbc76bd9852beaa4010bc74980bd4dda026a6ce8899e64c9e90f1906e",
+    "frontend/e2e/issue506-workspace.html": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05",
+    "frontend/e2e/issue506-workspace.tsx": "3622904e7ea87e56abd7c21ca7b10dca77f8e5d6699f3760485d251c8d837652",
+    "frontend/src/components/operator/NewPatientFlow.tsx": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895",
+    "frontend/src/components/shared/AccessibleDialogSurface.tsx": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac",
+    "frontend/src/components/shared/DialogLoading.tsx": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4",
+    "frontend/src/components/shared/DischargeImportModal.tsx": "e4dd7a8240ee00796a5f5c98cf7c0aae2d937945134eaeee65c56183e39936a2",
+    "frontend/src/components/shared/PatientWorkspaceSurface.css": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395",
+    "frontend/src/components/shared/PatientWorkspaceSurface.tsx": "be6da3a0f0699eff73ce29004074f9a8fc1a26e86321dd0ec9e3e97e7570a74d",
+    "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41",
+    "frontend/src/components/shared/intake/IntakeWorkspace.tsx": "e284d280ba63cdfe0fe25950dd1b3e45a6888806891c38e04c56c38ee6fb191b",
+    "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde"
+  },
+  "sourceTestedUncommitted": true,
+  "sourceBytesCheckedBeforeCommit": true,
+  "independentResultSha256": "9bebfa104045795e0f0ee4ee1f5395986f9184c48e7822de78ee5c22e50bb584",
+  "independentReportSha256": "0c018c4f0e3bab9142fc701d115dab158c23fc609d7fcd244c34e9b314de79f9",
+  "oldFailureHistoryPreserved": true
+}

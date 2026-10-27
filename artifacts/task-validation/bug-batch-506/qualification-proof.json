@@ -1,14 +1,14 @@
 {
   "type": "clinical-harness-qualification-v1",
   "issue": 506,
-  "runId": "40482705275",
-  "acceptedMain": "655f028e3b0bdcc621ac15209fd0af38cee3d26b",
-  "sourceParent": "5105becde8bb222652ab2df7e72b0d32f05a7262",
-  "privateCandidate": "fc9e503e31e8f22210999fdf6a5153ecd5e80389",
+  "runId": "40535859044",
+  "acceptedMain": "2dc0c0050a9f18a51a7ac980b42b46057870e27e",
+  "sourceParent": "2dc0c0050a9f18a51a7ac980b42b46057870e27e",
+  "privateCandidate": "7736adffea3394c8a70b76f71967309f1aa32b7a",
   "sourceFiles": [
     {
       "file": "e2e/issue506-workspace.mjs",
-      "sha256": "cc3c26eca9f3b1a5d34fdf70741328c6efd3f5acd58b30a8170c52c4139e976a"
+      "sha256": "340026b02700fda168a95fa0d36f0a294f24f9441adbc6487c89eca47d29f370"
     },
     {
       "file": "frontend/e2e/issue506-workspace.html",
@@ -32,7 +32,7 @@
     },
     {
       "file": "frontend/src/components/shared/DischargeImportModal.tsx",
-      "sha256": "6b8c2284526b8dc0cfc2944c2f4cb6381fa079c57a85c0b485c9ad65629c70e7"
+      "sha256": "0c77209bfb755c6bc5d99037c1fe1526ea78ed2d512e903d550e358e9ba8aee7"
     },
     {
       "file": "frontend/src/components/shared/PatientWorkspaceSurface.css",
@@ -48,7 +48,7 @@
     },
     {
       "file": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
-      "sha256": "61c45c249842c4cf4795bd34d251ff83e8d13895d75a3757e7b61bf5a5cf31e0"
+      "sha256": "e7053e3aa70ea6909bb84b6f190abe80d719ff3046378a2af89e716ba907f296"
     },
     {
       "file": "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts",
@@ -73,8 +73,8 @@
       "runnerError": null,
       "stdoutBytes": 25103,
       "stderrBytes": 1915,
-      "stdoutSha256": "0894239ef3b6cdcff29a16d26505c51a9e0ab26ed107589f341fa1604293a91d",
-      "stderrSha256": "8e1dbb6a46a1da912b2328de3c3543645c57983f41bc57d0a3b0bc22eea2fc6a"
+      "stdoutSha256": "c2d9b10d30134f519d30ca1a5e54b99752bf76ab6673027166659c6d7214a74b",
+      "stderrSha256": "1d62dd0ea94785d800bcfb319a314ed0e979bb5d65c62dd55709d726808d2122"
     },
     {
       "index": 1,
@@ -88,10 +88,10 @@
       "noTestsSignal": false,
       "exitCode": 0,
       "runnerError": null,
-      "stdoutBytes": 509655,
+      "stdoutBytes": 509636,
       "stderrBytes": 1150,
-      "stdoutSha256": "4c51d7b53c61f73036b01a4808768e73332397142336a1540cd0b12fc32bdb4e",
-      "stderrSha256": "94e4d5585c941fcb1c9165d93f455c258c5ab37caba151367f45aa5e087f3c1a"
+      "stdoutSha256": "0f880d1ede620de339d408db7fb6dfca4c29aec98836ad87ce4cc5512d639305",
+      "stderrSha256": "a046c29f1028e6b5e8df8deafa324dd6663f307c2408c387a9361394b2911bd0"
     },
     {
       "index": 2,
@@ -107,7 +107,7 @@
       "runnerError": null,
       "stdoutBytes": 9100,
       "stderrBytes": 798,
-      "stdoutSha256": "88ae08a23ce732264899dd00ea85d1da1f4940671e8b40aa9e69f16831a2bdef",
+      "stdoutSha256": "0ffcd5fb838589c1d7dd95878091911da3445dee41adab222aea4ed261ca5750",
       "stderrSha256": "b1a79cdad8f089aa6897f6e4cbc04db7cfb3403d5ae289aedd1a33727cc701f1"
     }
   ],
@@ -121,14 +121,14 @@
     {
       "kind": "trace",
       "file": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
-      "bytes": 6593867,
-      "sha256": "c6aeaf7b6c86bdf6616b8adcf038adf1e349c22fadb6d9c33c12ceec5971ba91"
+      "bytes": 9199409,
+      "sha256": "e00b065560be1f892e2c54c84aca249850eb8a1966ee948feaa7664821867205"
     },
     {
       "kind": "video",
       "file": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm",
-      "bytes": 1375055,
-      "sha256": "f5746e3b676eb704e1cdb641b59d47a1aa0896d84a2d665dcd7cc0767a7df920"
+      "bytes": 1817023,
+      "sha256": "b3c0fc75fa66cec5c16c23e3e97dc3bb44a7ab4d9756897a7524e10be86a2fd2"
     }
   ],
   "nativeEvidence": [
@@ -142,17 +142,17 @@
         },
         "trace": {
           "path": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
-          "sha256": "c6aeaf7b6c86bdf6616b8adcf038adf1e349c22fadb6d9c33c12ceec5971ba91",
-          "bytes": 6593867
+          "sha256": "e00b065560be1f892e2c54c84aca249850eb8a1966ee948feaa7664821867205",
+          "bytes": 9199409
         },
         "video": {
           "path": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm",
-          "sha256": "f5746e3b676eb704e1cdb641b59d47a1aa0896d84a2d665dcd7cc0767a7df920",
-          "bytes": 1375055
+          "sha256": "b3c0fc75fa66cec5c16c23e3e97dc3bb44a7ab4d9756897a7524e10be86a2fd2",
+          "bytes": 1817023
         }
       }
     }
   ],
   "ok": true,
-  "scope": "Synthetic actual React browser regression; not authenticated backend or deployment acceptance"
+  "scope": "Private506Root10 app projection: actual three native commands and four-width React browser with synthetic loopback HTTP. Includes both preserved notice fixes. Not authenticated backend/OCR/provider or deployment acceptance."
 }

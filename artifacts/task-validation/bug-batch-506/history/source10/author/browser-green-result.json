@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-27T15:01:21.321238+00:00",
+  "stage": "green",
+  "knownCode": "a918212c55b2b13707a6e2551317bac780fec45d",
+  "loopbackPort": 34953,
+  "scratch": "/tmp/clinicos-root50610-green-mht6qto1",
+  "evidence": "/workspace/.clinicos-cloud/issue506-known-root-author-worktree-20261027/artifacts/task-validation/bug-batch-506/evidence/known-root10-green",
+  "environmentKeys": [
+    "LANG",
+    "NODE_ENV",
+    "PATH",
+    "PLAYWRIGHT_BROWSERS_PATH",
+    "QA_CHROMIUM_EXECUTABLE",
+    "QA_EVIDENCE_DIR",
+    "QA_ORIGIN",
+    "TMPDIR",
+    "TSX_DISABLE_CACHE",
+    "TZ"
+  ],
+  "sourceHashes": {
+    "e2e/issue506-workspace.mjs": "340026b02700fda168a95fa0d36f0a294f24f9441adbc6487c89eca47d29f370",
+    "frontend/e2e/issue506-workspace.html": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05",
+    "frontend/e2e/issue506-workspace.tsx": "4fc31c5319186440b5b9db661589a444d9960b96bb431d2c69136a0fd22fc975",
+    "frontend/src/components/operator/NewPatientFlow.tsx": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895",
+    "frontend/src/components/shared/AccessibleDialogSurface.tsx": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac",
+    "frontend/src/components/shared/DialogLoading.tsx": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4",
+    "frontend/src/components/shared/DischargeImportModal.tsx": "0c77209bfb755c6bc5d99037c1fe1526ea78ed2d512e903d550e358e9ba8aee7",
+    "frontend/src/components/shared/PatientWorkspaceSurface.css": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395",
+    "frontend/src/components/shared/PatientWorkspaceSurface.tsx": "27ff12f6020ef24cc897b03570c3fc4d95156d7584e3f0d70e618b805235084d",
+    "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41",
+    "frontend/src/components/shared/intake/IntakeWorkspace.tsx": "e7053e3aa70ea6909bb84b6f190abe80d719ff3046378a2af89e716ba907f296",
+    "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde"
+  },
+  "scope": "Actual React UI and controlled synthetic loopback HTTP; local Chromium154 and existing FFmpeg; no real backend/OCR/provider/online clinical operation.",
+  "exitCode": 0,
+  "finishedAt": "2026-10-27T15:04:22.357885+00:00",
+  "logSha256": "4c8b5a0ca07eb1bc7458ee3dc354ecd6f3b47c66fed08adb51c63a12a7df14e9",
+  "emptyOwnedScratchRemoved": false
+}

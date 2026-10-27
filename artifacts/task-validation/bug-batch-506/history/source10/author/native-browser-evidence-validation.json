@@ -1,0 +1,86 @@
+{
+  "status": "PASS",
+  "scope": "Actual local Chromium154 synthetic UI evidence; not native bundled149 qualification or authenticated backend/deployment acceptance",
+  "records": [
+    {
+      "issue": 506,
+      "files": {
+        "screenshot": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/screenshots/save-failure-recovered-1440.png",
+          "sha256": "36fb8c084a8bbc4048d59c89e6883c1030783f7b306a9f39c3ef220f17a07cd3",
+          "bytes": 138462
+        },
+        "trace": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/trace/issue506-1440.zip",
+          "sha256": "3048a8e344047aec03809dd800c820f0c22f9accefdae53e7eaeb1aa39bf16f1",
+          "bytes": 9272968
+        },
+        "video": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/video/issue506-1440.webm",
+          "sha256": "ccc4f7d5b4d9f65d882a1e87d86297289f28403d56f677fac40aee3f78a5c237",
+          "bytes": 2811862
+        }
+      }
+    },
+    {
+      "issue": 506,
+      "files": {
+        "screenshot": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/screenshots/save-failure-recovered-1024.png",
+          "sha256": "d2e61564a9a759dfd22b553978a77e8473f0e6c78fe5f6b96cd945bf80b9409b",
+          "bytes": 130502
+        },
+        "trace": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/trace/issue506-1024.zip",
+          "sha256": "2e996194c09311574742a0d3114dddcece8bb357e16741fcabdc1b31eb66113d",
+          "bytes": 10618421
+        },
+        "video": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/video/issue506-1024.webm",
+          "sha256": "2a50a54c778ca801a64404179e33d199c8d9ad5734e2b847e7d9b0ed8da2b3aa",
+          "bytes": 2702435
+        }
+      }
+    },
+    {
+      "issue": 506,
+      "files": {
+        "screenshot": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/screenshots/save-failure-recovered-768.png",
+          "sha256": "9ea8e4dc32f15745057149e6f5664334cc6d26adc325e7d31ff6d7e5b9cc9516",
+          "bytes": 110556
+        },
+        "trace": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/trace/issue506-768.zip",
+          "sha256": "462a82d594fff816a1eae2ae1732afc65b11048968c6e56368d1f743bb47042e",
+          "bytes": 10704535
+        },
+        "video": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/video/issue506-768.webm",
+          "sha256": "614a37c5e16593a19303c93ef664b941a1a65289a21066254c7a7b21b23c318e",
+          "bytes": 1880112
+        }
+      }
+    },
+    {
+      "issue": 506,
+      "files": {
+        "screenshot": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/screenshots/save-failure-recovered-390.png",
+          "sha256": "1cfdcf7b127870d83c4921fda1eea2c58e4127599c2c0f835f3d6793e8ed57fd",
+          "bytes": 80535
+        },
+        "trace": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/trace/issue506-390.zip",
+          "sha256": "cf534027b357fb14f76a9c88277243981a0f76693a1fdf7f7325e272f0b1f7ca",
+          "bytes": 7777989
+        },
+        "video": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/video/issue506-390.webm",
+          "sha256": "94fd46b4ed6e595d7b41a49aee6983fcac3edd7b86bad83c282771bd82cb86e7",
+          "bytes": 1405833
+        }
+      }
+    }
+  ]
+}
