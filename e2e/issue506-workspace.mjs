@@ -105,6 +105,8 @@ try {
     let expectedConsoleBudget = 0,
       expectedConsoleFailures = 0;
     const expectedSaveFailures = new Set();
+    let holdDraftPatch = false, releaseDraftPatch, draftPatchStarted = false;
+    let holdDraftCreation = false, releaseDraftCreation, draftCreationStarted = false;
     let releaseUpload,
       uploadStarted = false,
       uploadCompleted = false,
@@ -194,6 +196,11 @@ try {
             },
           });
         }
+        if (holdDraftCreation) {
+          draftCreationStarted = true;
+          await new Promise((resolve) => { releaseDraftCreation = resolve; });
+          holdDraftCreation = false;
+        }
         draftCreations++;
         resumed = true;
         draft = { ...draft, version: 0, data: {} };
@@ -259,6 +266,11 @@ try {
         return route.fulfill({ contentType: 'image/png', body: FIXTURES.png });
       else if (path === '/intake/drafts/draft-qa-506') {
         if (method === 'PATCH') {
+          if (holdDraftPatch) {
+            draftPatchStarted = true;
+            await new Promise((resolve) => { releaseDraftPatch = resolve; });
+            holdDraftPatch = false;
+          }
           const { expectedDraftVersion, ...patch } = route.request().postDataJSON();
           assert.equal(expectedDraftVersion, draft.version);
           draft = { ...draft, version: draft.version + 1, data: { ...draft.data, ...patch } };
@@ -334,6 +346,27 @@ try {
         path: `${out}/screenshots/resumed-draft-${width}.png`,
         fullPage: true,
       });
+      // A save already in flight must explain why a shell route is refused.
+      holdDraftPatch = true;
+      await region.getByRole('button', { name: 'Annulla ingresso e salva la bozza', exact: true }).click();
+      await expect.poll(() => draftPatchStarted).toBe(true);
+      const navigationBeforeSave = await page.getByLabel('Navigazioni').textContent();
+      await page.getByRole('button', { name: 'Cambia pagina QA', exact: true }).click();
+      const operationNotice = region.getByRole('alert').filter({
+        hasText: 'Operazione in corso. Attendi il completamento prima di cambiare pagina.',
+      });
+      await expect(operationNotice).toBeVisible();
+      assert.equal(await operationNotice.evaluate((e) => !!e.closest('[inert]')), false);
+      await expect(page.getByLabel('Navigazioni')).toHaveText(navigationBeforeSave);
+      releaseDraftPatch();
+      await expect(region).toHaveCount(0);
+      await expect(operationNotice).toHaveCount(0);
+      await page.getByRole('button', { name: 'Riprendi bozza', exact: true }).click();
+      await expect(first).toHaveValue('Ada QA aggiornata');
+      await page.getByRole('button', { name: 'Cambia pagina QA', exact: true }).click();
+      await expect(region).toHaveCount(0);
+      await page.getByRole('button', { name: 'Riprendi bozza', exact: true }).click();
+      await expect(first).toHaveValue('Ada QA aggiornata');
       await first.fill('Ada QA history');
       await page.goBack();
       await expect(region).toHaveCount(0);
@@ -463,6 +496,26 @@ try {
       await confirmation.getByRole('button', { name: 'Chiudi senza salvare', exact: true }).click();
       await expect(region).toHaveCount(0);
       await expect(page.getByLabel('Navigazioni')).toHaveText('0');
+
+      // Hold a review draft save with no route guard already pending.
+      await page.reload();
+      resumed = false;
+      await page.getByRole('button', { name: 'Importa dimissione', exact: true }).click();
+      await expect(region.getByRole('heading', { name: 'Revisione delle lettere' })).toBeVisible();
+      holdDraftCreation = true;
+      await region.locator('.import-modal__head button.icon-btn').click();
+      await assertConfirmationFits();
+      await confirmation.getByRole('button', { name: 'Salva bozza e chiudi', exact: true }).click();
+      await expect.poll(() => draftCreationStarted).toBe(true);
+      await page.getByRole('button', { name: 'Cambia pagina QA', exact: true }).click();
+      await expect(operationNotice).toBeVisible();
+      await expect(region.getByText('Caricamento in corso. Attendi il completamento prima di cambiare pagina.', { exact: true })).toHaveCount(0);
+      await expect(page.getByLabel('Navigazioni')).toHaveText('0');
+      releaseDraftCreation();
+      await expect(region.getByRole('heading', { name: /Nuovo ingresso/ })).toBeVisible();
+      await expect(operationNotice).toHaveCount(0);
+      draftCreationStarted = false;
+      draftCreations = 0;
 
       // A successful confirmed save must still navigate exactly once.
       await page.reload();

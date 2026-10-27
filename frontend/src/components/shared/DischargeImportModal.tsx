@@ -384,7 +384,9 @@ function ImportSession({
       beforeNavigate={async () => {
         if (busy || pendingUpload) {
           setNavigationNotice(
-            'Caricamento in corso. Attendi il completamento prima di cambiare pagina.',
+            pendingUpload
+              ? 'Caricamento in corso. Attendi il completamento prima di cambiare pagina.'
+              : 'Operazione in corso. Attendi il completamento prima di cambiare pagina.',
           );
           return false;
         }

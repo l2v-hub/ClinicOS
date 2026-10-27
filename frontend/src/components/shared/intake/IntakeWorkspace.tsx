@@ -161,6 +161,11 @@ export function IntakeWorkspace({
 
   // Confirm / submit state
   const [submitting, setSubmitting] = useState(false);
+  const [navigationNotice, setNavigationNotice] = useState('');
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!submitting) setNavigationNotice('');
+  }, [submitting]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [duplicateWarn, setDuplicateWarn] = useState(false);
   // Set when confirm is blocked by a contradictory allergy reading (REQ-026).
@@ -875,7 +880,13 @@ export function IntakeWorkspace({
     <AccessibleDialogSurface
       presentation={presentation}
       beforeNavigate={async () => {
-        if (saveState !== 'saving' && saveState !== 'error') return !submittingRef.current;
+        if (submittingRef.current) {
+          setNavigationNotice(
+            'Operazione in corso. Attendi il completamento prima di cambiare pagina.',
+          );
+          return false;
+        }
+        if (saveState !== 'saving' && saveState !== 'error') return true;
         return saveAndClose(() => {});
       }}
       labelledBy="patient-intake-dialog-title"
@@ -929,6 +940,8 @@ export function IntakeWorkspace({
           <IcoX />
         </button>
       </header>
+
+      {navigationNotice && <p role="alert">{navigationNotice}</p>}
 
       <div className={`intake-page__grid${docPanel && docsJob ? ' intake-page__grid--doc' : ''}`}>
         <IntakeIndex
