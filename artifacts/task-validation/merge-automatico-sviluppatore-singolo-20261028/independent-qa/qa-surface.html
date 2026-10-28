@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Independent QA evidence — local synthetic surface</title>
+<style>
+:root{font:16px/1.5 system-ui,sans-serif;color:#183153;background:#f2f6fb}body{margin:0;padding:3rem 1rem}.card{max-width:760px;margin:auto;background:#fff;border:1px solid #cbd8e8;border-radius:14px;padding:2rem;box-shadow:0 8px 24px #18315312}h1{margin-top:0;color:#194a7a}.badge{display:inline-block;border-radius:999px;padding:.25rem .7rem;background:#e3f4eb;color:#17633b;font-weight:700}.warning{margin-top:1.5rem;padding:1rem;background:#fff6df;border-left:4px solid #d59c18}.grid{display:grid;grid-template-columns:1fr auto;gap:.5rem 1.5rem;margin-top:1.5rem}.value{font-weight:700;font-variant-numeric:tabular-nums}code{font-size:.9em}footer{margin-top:1.5rem;color:#52677f;font-size:.9rem}</style>
+</head>
+<body><main class="card">
+<h1>Infrastructure merge policy — QA result</h1>
+<p><span class="badge" id="suite">77 passed · 0 failed · 0 skipped · 77 total</span></p>
+<div class="grid">
+<span>Same-account independent review sessions</span><span class="value" id="same-account">accepted with exact-SHA proof</span>
+<span>Native required checks and merge guard</span><span class="value" id="native">required</span>
+<span>Durable merge reservation</span><span class="value" id="reservation">required</span>
+<span>Application, provider, runtime and unknown paths</span><span class="value" id="boundary">rejected</span>
+<span>Native refusal and interruption recovery</span><span class="value" id="recovery">tested; no blind replay</span>
+</div>
+<div class="warning" id="limits">Synthetic local test evidence only. GitHub merge, native CI, workflow activation and deployment were not verified.</div>
+<footer>Baseline <code id="baseline">d0c5fd82e358de60b4e31879e02f04929c7b0954</code></footer>
+</main></body></html>
