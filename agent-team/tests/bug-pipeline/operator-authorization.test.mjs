@@ -1,24 +1,48 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { authorizationBinding, consumeOperatorAuthorization } from '../../src/bug-pipeline/operator-authorization.mjs';
+import {
+  authorizationBinding,
+  consumeOperatorAuthorization,
+} from '../../src/bug-pipeline/operator-authorization.mjs';
 import { attemptLimit, historyDigest } from '../../src/bug-pipeline/attempt-budget.mjs';
 
 function fixture() {
-  const subject = { id: 'manual-81', pr: { number: 81 }, sha: 'a'.repeat(40),
-    implementation: [1, 2, 3, 4].map((round) => ({ round, status: 'failed' })), reviews: [] };
+  const subject = {
+    id: 'manual-81',
+    pr: { number: 81 },
+    sha: 'a'.repeat(40),
+    implementation: [1, 2, 3, 4].map((round) => ({ round, status: 'failed' })),
+    reviews: [],
+  };
   const state = { repository: 'l2v-hub/ClinicOS', manualBatches: [subject] };
-  const binding = authorizationBinding({ state, subject, actor: 'same-account',
-    action: 'extend-budget', budget: { kind: 'implementation', previousLimit: 4, limit: 5 } });
-  const result = { provenance: 'user-session', grantId: 'external-session',
-    consumptionNonce: 'consumption-1', sourceRef: 'session:instruction-1', binding };
+  const binding = authorizationBinding({
+    state,
+    subject,
+    actor: 'same-account',
+    action: 'extend-budget',
+    budget: { kind: 'implementation', previousLimit: 4, limit: 5 },
+  });
+  const result = {
+    provenance: 'user-session',
+    grantId: 'external-session',
+    consumptionNonce: 'consumption-1',
+    sourceRef: 'session:instruction-1',
+    binding,
+  };
   return { subject, state, binding, result };
 }
 
 test('free text and mutable receipt JSON cannot substitute for trusted external verifier', async () => {
   const f = fixture();
   for (const verifier of [undefined, f.result, JSON.stringify(f.result)])
-    await assert.rejects(consumeOperatorAuthorization({ ...f, verifier, reference: 'user said yes' }),
-      /verifier unavailable/);
+    await assert.rejects(
+      consumeOperatorAuthorization({
+        ...f,
+        verifier,
+        reference: 'user said yes',
+      }),
+      /verifier unavailable/,
+    );
   assert.equal(attemptLimit(f.subject, 'implementation'), 4);
 });
 
@@ -33,42 +57,227 @@ test('verified external user session permits same-account round5 with one-use ex
     return f.result;
   };
   const before = JSON.stringify(f.subject.implementation);
-  const authorization = await consumeOperatorAuthorization({ ...f, verifier, reference: 'session:1' });
-  f.subject.budgetExtensions = [{ entityId: f.subject.id, pr: 81, kind: 'implementation',
-    previousLimit: 4, limit: 5, actor: 'same-account', at: '2026-10-18T00:00:00Z',
-    reason: 'Observed session instruction', authorizationRef: 'session:1', nonce: 'extension-5',
-    historyLength: 4, historyDigest: historyDigest(f.subject.implementation), authorization }];
+  const authorization = await consumeOperatorAuthorization({
+    ...f,
+    verifier,
+    reference: 'session:1',
+  });
+  f.subject.budgetExtensions = [
+    {
+      entityId: f.subject.id,
+      pr: 81,
+      kind: 'implementation',
+      previousLimit: 4,
+      limit: 5,
+      actor: 'same-account',
+      at: '2026-10-18T00:00:00Z',
+      reason: 'Observed session instruction',
+      authorizationRef: 'session:1',
+      nonce: 'extension-5',
+      historyLength: 4,
+      historyDigest: historyDigest(f.subject.implementation),
+      authorization,
+    },
+  ];
   assert.equal(attemptLimit(f.subject, 'implementation'), 5);
   assert.equal(JSON.stringify(f.subject.implementation), before);
-  await assert.rejects(consumeOperatorAuthorization({ ...f, verifier: async () => f.result,
-    reference: 'session:1' }), /replay/);
+  await assert.rejects(
+    consumeOperatorAuthorization({
+      ...f,
+      verifier: async () => f.result,
+      reference: 'session:1',
+    }),
+    /replay/,
+  );
 });
 
 test('wrong owner, history, action, head, budget and reservation are rejected at verifier boundary', async () => {
   const f = fixture();
-  for (const [field, value] of Object.entries({ entityId: 'other-owner', historyDigest: 'f'.repeat(64),
-    subjectSha: 'b'.repeat(40), action: 'force-live-recovery', budget: { limit: 32 },
-    reservation: { token: 'other' } })) {
-    await assert.rejects(consumeOperatorAuthorization({ ...f, reference: 'session:1',
-      verifier: async () => ({ ...f.result, binding: { ...f.binding, [field]: value } }) }),
-    /binding mismatch/);
+  for (const [field, value] of Object.entries({
+    entityId: 'other-owner',
+    historyDigest: 'f'.repeat(64),
+    subjectSha: 'b'.repeat(40),
+    action: 'force-live-recovery',
+    budget: { limit: 32 },
+    reservation: { token: 'other' },
+  })) {
+    await assert.rejects(
+      consumeOperatorAuthorization({
+        ...f,
+        reference: 'session:1',
+        verifier: async () => ({
+          ...f.result,
+          binding: { ...f.binding, [field]: value },
+        }),
+      }),
+      /binding mismatch/,
+    );
   }
-  await assert.rejects(consumeOperatorAuthorization({ ...f, reference: 'session:1',
-    verifier: async () => ({ ...f.result, provenance: 'self-authored-json' }) }), /provenance/);
+  await assert.rejects(
+    consumeOperatorAuthorization({
+      ...f,
+      reference: 'session:1',
+      verifier: async () => ({ ...f.result, provenance: 'self-authored-json' }),
+    }),
+    /provenance/,
+  );
+});
+
+function withChildGraph(f) {
+  f.subject.workItems = {
+    schemaVersion: 1,
+    spec: { nodes: [{ id: 'child-a', scope: ['agent-team/src/a.mjs'] }] },
+    specSha256: 'a'.repeat(64),
+    bindingSha256: 'b'.repeat(64),
+    policy: {
+      maxNodes: 8,
+      maxParallel: 2,
+      sessionLimit: 1,
+      allowGraphRounds: [1],
+    },
+    runs: [
+      {
+        round: 1,
+        status: 'running',
+        nodes: [
+          {
+            id: 'child-a',
+            status: 'reserved',
+            reservation: { nonce: 'child-nonce-1', status: 'reserved' },
+            result: null,
+          },
+        ],
+      },
+    ],
+  };
+  return f;
+}
+
+test('operator authorization changes with child reservations, results and graph policy', () => {
+  const f = withChildGraph(fixture());
+  const base = authorizationBinding({
+    state: f.state,
+    subject: f.subject,
+    actor: 'same-account',
+    action: 'extend-budget',
+    budget: { kind: 'implementation', previousLimit: 4, limit: 5 },
+  });
+  const parentSha = f.subject.sha;
+  const variations = [
+    (graph) => {
+      graph.runs[0].nodes[0].reservation.nonce = 'child-nonce-2';
+    },
+    (graph) => {
+      graph.runs[0].nodes[0].status = 'completed';
+    },
+    (graph) => {
+      graph.runs[0].nodes[0].result = {
+        status: 'failed',
+        outputSha256: 'c'.repeat(64),
+      };
+    },
+    (graph) => {
+      graph.policy.maxParallel = 1;
+    },
+  ];
+  for (const change of variations) {
+    const changed = structuredClone(f.subject);
+    change(changed.workItems);
+    assert.equal(changed.sha, parentSha, 'parent head stays fixed');
+    const state = { ...f.state, manualBatches: [changed] };
+    const binding = authorizationBinding({
+      state,
+      subject: changed,
+      actor: 'same-account',
+      action: 'extend-budget',
+      budget: { kind: 'implementation', previousLimit: 4, limit: 5 },
+    });
+    assert.notDeepEqual(binding, base);
+  }
+});
+
+test('a receipt verified for an earlier child ledger cannot authorize after that ledger changes', async () => {
+  const f = withChildGraph(fixture());
+  const args = {
+    state: f.state,
+    subject: f.subject,
+    actor: 'same-account',
+    action: 'extend-budget',
+    budget: { kind: 'implementation', previousLimit: 4, limit: 5 },
+  };
+  const oldBinding = authorizationBinding(args);
+  const oldReceipt = { ...f.result, binding: oldBinding };
+  f.subject.workItems.runs[0].nodes[0].reservation.nonce = 'replacement-child-nonce';
+  const liveBinding = authorizationBinding(args);
+  assert.notDeepEqual(liveBinding, oldBinding);
+  await assert.rejects(
+    consumeOperatorAuthorization({
+      state: f.state,
+      binding: liveBinding,
+      reference: 'session:1',
+      verifier: async () => oldReceipt,
+    }),
+    /binding mismatch/,
+  );
+});
+
+test('legacy subjects without a child graph keep their authorization binding and attempt history', () => {
+  const f = fixture();
+  const before = JSON.stringify(f.subject.implementation);
+  const binding = authorizationBinding({
+    state: f.state,
+    subject: f.subject,
+    actor: 'same-account',
+    action: 'extend-budget',
+    budget: { kind: 'implementation', previousLimit: 4, limit: 5 },
+  });
+  const again = authorizationBinding({
+    state: f.state,
+    subject: f.subject,
+    actor: 'same-account',
+    action: 'extend-budget',
+    budget: { kind: 'implementation', previousLimit: 4, limit: 5 },
+  });
+  assert.deepEqual(binding, again);
+  assert.equal(
+    historyDigest(binding),
+    '5abf76fc2d0bb932d76101153187a3cc3f3ac9764f8b305bb1ce98b5477762bc',
+  );
+  assert.equal(JSON.stringify(f.subject.implementation), before);
 });
 
 test('only canonical manual issue owner can receive absent-PR authorization', () => {
   const f = fixture();
   f.subject.pr = null;
-  assert.throws(() => authorizationBinding({ ...f, actor: 'operator', action: 'extend-budget' }), /issue coordinate/);
+  assert.throws(
+    () =>
+      authorizationBinding({
+        ...f,
+        actor: 'operator',
+        action: 'extend-budget',
+      }),
+    /issue coordinate/,
+  );
   f.subject.reviewIssue = 470;
   f.subject.issues = [470];
-  const binding = authorizationBinding({ ...f, actor: 'operator', action: 'extend-budget' });
+  const binding = authorizationBinding({
+    ...f,
+    actor: 'operator',
+    action: 'extend-budget',
+  });
   assert.equal(binding.pr, null);
   assert.equal(binding.reviewIssue, 470);
   f.state.standaloneReviews = f.state.manualBatches;
   delete f.state.manualBatches;
-  assert.throws(() => authorizationBinding({ ...f, actor: 'operator', action: 'extend-budget' }), /manual owner/);
+  assert.throws(
+    () =>
+      authorizationBinding({
+        ...f,
+        actor: 'operator',
+        action: 'extend-budget',
+      }),
+    /manual owner/,
+  );
 });
 
 function settlementFixture() {
@@ -101,8 +310,9 @@ function settlementFixture() {
 }
 
 test('Claude504 exact authorized settlement fails the running journal and attempt once without a new allowance', async () => {
-  const { settleImplementationAttempt } =
-    await import('../../src/bug-pipeline/operator-authorization.mjs');
+  const { settleImplementationAttempt } = await import(
+    '../../src/bug-pipeline/operator-authorization.mjs'
+  );
   const f = settlementFixture();
   const previous = structuredClone(f.subject);
   let calls = 0;
@@ -139,8 +349,9 @@ test('Claude504 exact authorized settlement fails the running journal and attemp
 });
 
 test('Claude504 settlement refuses absent auth, changed digest/round/history, wrong binding and replay', async () => {
-  const { settleImplementationAttempt } =
-    await import('../../src/bug-pipeline/operator-authorization.mjs');
+  const { settleImplementationAttempt } = await import(
+    '../../src/bug-pipeline/operator-authorization.mjs'
+  );
   for (const invalid of ['no-auth', 'progress', 'round', 'binding', 'history', 'replay']) {
     const f = settlementFixture();
     if (invalid === 'progress') f.subject.controllerProgress.completed[0].detail = 'changed';

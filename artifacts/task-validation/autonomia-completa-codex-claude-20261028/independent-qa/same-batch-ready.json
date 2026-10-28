@@ -1,0 +1,467 @@
+{
+  "schemaVersion": 1,
+  "repository": "l2v-hub/ClinicOS",
+  "batches": [
+    {
+      "id": "bug-batch-17",
+      "branch": "codex/bug-batch-17",
+      "issues": [
+        17
+      ],
+      "plan": {
+        "title": "Stabilize the patient list filter",
+        "feature": "Patient list",
+        "rationale": "The related reports share the same filter behavior.",
+        "execution": {
+          "difficulty": "low",
+          "mode": "delegate",
+          "reason": "Bounded, independently testable change."
+        },
+        "analysis": "Both issues describe the same feature regression with separate reproduction details.",
+        "issues": [
+          17
+        ],
+        "scope": [
+          "frontend/src/features/patients/filter.ts"
+        ],
+        "acceptance": [
+          {
+            "issue": 17,
+            "criteria": [
+              "Issue #17 reproduces and is fixed"
+            ]
+          }
+        ],
+        "tasks": [
+          {
+            "title": "Fix and cover filter behavior",
+            "files": [
+              "frontend/src/features/patients/filter.ts"
+            ],
+            "steps": [
+              "Correct filter state handling",
+              "Add regression coverage"
+            ]
+          },
+          {
+            "title": "Second ordered criterion",
+            "files": [
+              "frontend/src/features/patients/filter.ts"
+            ],
+            "steps": [
+              "Complete second bounded edit"
+            ]
+          }
+        ],
+        "verification": [
+          {
+            "command": "node",
+            "args": [
+              "--test",
+              "frontend/src/features/patients/filter.test.mjs"
+            ]
+          },
+          {
+            "command": "npm",
+            "args": [
+              "--prefix",
+              "frontend",
+              "run",
+              "build"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "issue": 17,
+            "screenshot": "artifacts/task-validation/bug-batch-17/evidence/issue-17.png",
+            "trace": "artifacts/task-validation/bug-batch-17/evidence/issue-17-trace.zip",
+            "video": ""
+          }
+        ]
+      },
+      "grouping": {
+        "fileMap": [
+          {
+            "issue": 17,
+            "files": [
+              "frontend/src/features/patients/filter.ts"
+            ]
+          }
+        ],
+        "separationReason": ""
+      },
+      "workItems": {
+        "schemaVersion": 1,
+        "spec": {
+          "issues": [
+            17
+          ],
+          "nodes": [
+            {
+              "id": "first",
+              "title": "first",
+              "issues": [
+                17
+              ],
+              "taskIndexes": [
+                0
+              ],
+              "criteriaRefs": [
+                {
+                  "issue": 17,
+                  "index": 0
+                }
+              ],
+              "dependsOn": [],
+              "scope": [
+                "frontend/src/features/patients/filter.ts"
+              ],
+              "readFiles": [],
+              "difficulty": "low",
+              "risk": {
+                "level": "low",
+                "reason": "Synthetic controlled fixture"
+              },
+              "coupling": {
+                "level": "ordered",
+                "reason": "Shared file ordered"
+              },
+              "conflictKeys": [],
+              "routePreference": "senior",
+              "verificationIndexes": [
+                0,
+                1
+              ],
+              "summary": "Synthetic first"
+            },
+            {
+              "id": "second",
+              "title": "second",
+              "issues": [
+                17
+              ],
+              "taskIndexes": [
+                1
+              ],
+              "criteriaRefs": [
+                {
+                  "issue": 17,
+                  "index": 0
+                }
+              ],
+              "dependsOn": [
+                "first"
+              ],
+              "scope": [
+                "frontend/src/features/patients/filter.ts"
+              ],
+              "readFiles": [],
+              "difficulty": "low",
+              "risk": {
+                "level": "low",
+                "reason": "Synthetic controlled fixture"
+              },
+              "coupling": {
+                "level": "ordered",
+                "reason": "Shared file ordered"
+              },
+              "conflictKeys": [],
+              "routePreference": "senior",
+              "verificationIndexes": [
+                0,
+                1
+              ],
+              "summary": "Synthetic second"
+            }
+          ]
+        },
+        "specSha256": "227670f9968d3896e372dcde718902223703d421743a9fb0a36b0900291dc4b9",
+        "planSha256": "bf5aa910938879067f06232a2ee0fea9da3eba9d3100291fd493d014566d671c",
+        "sourceIssues": [
+          {
+            "number": 17,
+            "bodyAndCommentsSha256": "c20371cbb29d61a8dd13060a9df4bb17135a9b0fbf3b099bea75923bf4a3fa04"
+          }
+        ],
+        "policy": {
+          "maxNodes": 8,
+          "maxParallel": 2,
+          "sessionLimit": 2,
+          "allowGraphRounds": [
+            1
+          ]
+        },
+        "runs": [
+          {
+            "parentImplementationRound": 1,
+            "flow": "implementation",
+            "sourceSha": null,
+            "integrationStartSha": "1111111111111111111111111111111111111111",
+            "integrationHeadSha": "3333333333333333333333333333333333333333",
+            "planSha256": "bf5aa910938879067f06232a2ee0fea9da3eba9d3100291fd493d014566d671c",
+            "specSha256": "227670f9968d3896e372dcde718902223703d421743a9fb0a36b0900291dc4b9",
+            "feedbackSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "poolSnapshot": [
+              {
+                "id": "qa-senior",
+                "provider": "codex",
+                "model": "synthetic-model",
+                "tier": "senior",
+                "ready": true,
+                "limit": 1,
+                "availability": "cli-preflight-not-inference-verified"
+              }
+            ],
+            "status": "completed",
+            "nodes": [
+              {
+                "id": "first",
+                "nonce": "e60a8423-b4df-4a77-8d0c-c8b914ba42d2",
+                "profileId": "qa-senior",
+                "provider": "codex",
+                "model": "synthetic-model",
+                "routeReason": "explicit-senior-default",
+                "localActive": 0,
+                "startedAt": "2026-10-28T08:03:22.589Z",
+                "sourceIntegrationSha": "1111111111111111111111111111111111111111",
+                "cwd": "/synthetic/first-e60a8423-b4df-4a77-8d0c-c8b914ba42d2",
+                "branch": "codex/first-e60a8423-b4df-4a77-8d0c-c8b914ba42d2",
+                "packet": "artifacts/task-validation/bug-batch-17",
+                "status": "implemented",
+                "checkpoint": {
+                  "packetHashes": {}
+                },
+                "packetSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "result": {
+                  "status": "implemented",
+                  "summary": "Synthetic bounded output"
+                },
+                "resultSummary": "Synthetic bounded output",
+                "outputCheckpoint": {
+                  "head": "1111111111111111111111111111111111111111",
+                  "output": {}
+                },
+                "commit": {
+                  "nonce": "7b9110de-ab18-4bbc-b572-3f61eb26e823",
+                  "status": "committed",
+                  "beforeSha": "1111111111111111111111111111111111111111",
+                  "afterSha": "2222222222222222222222222222222222222222"
+                },
+                "childSha": "2222222222222222222222222222222222222222",
+                "outputManifest": {
+                  "synthetic": "first"
+                },
+                "integration": {
+                  "nonce": "b12d474c-8c37-4544-bd83-1643ba1284c9",
+                  "status": "integrated",
+                  "beforeSha": "1111111111111111111111111111111111111111",
+                  "childSha": "2222222222222222222222222222222222222222",
+                  "afterSha": "2222222222222222222222222222222222222222"
+                }
+              },
+              {
+                "id": "second",
+                "nonce": "22ffe263-3327-4bc4-9bf2-5cd3b4145c16",
+                "profileId": "qa-senior",
+                "provider": "codex",
+                "model": "synthetic-model",
+                "routeReason": "explicit-senior-default",
+                "localActive": 0,
+                "startedAt": "2026-10-28T08:03:22.596Z",
+                "sourceIntegrationSha": "2222222222222222222222222222222222222222",
+                "cwd": "/synthetic/second-22ffe263-3327-4bc4-9bf2-5cd3b4145c16",
+                "branch": "codex/second-22ffe263-3327-4bc4-9bf2-5cd3b4145c16",
+                "packet": "artifacts/task-validation/bug-batch-17",
+                "status": "implemented",
+                "checkpoint": {
+                  "packetHashes": {}
+                },
+                "packetSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+                "result": {
+                  "status": "implemented",
+                  "summary": "Synthetic bounded output"
+                },
+                "resultSummary": "Synthetic bounded output",
+                "outputCheckpoint": {
+                  "head": "2222222222222222222222222222222222222222",
+                  "output": {}
+                },
+                "commit": {
+                  "nonce": "58cae8d8-5454-4caa-8834-47f7633340c3",
+                  "status": "committed",
+                  "beforeSha": "2222222222222222222222222222222222222222",
+                  "afterSha": "3333333333333333333333333333333333333333"
+                },
+                "childSha": "3333333333333333333333333333333333333333",
+                "outputManifest": {
+                  "synthetic": "second"
+                },
+                "integration": {
+                  "nonce": "29ebd5dc-69ad-4ea8-ad7f-7496b1f8685f",
+                  "status": "integrated",
+                  "beforeSha": "2222222222222222222222222222222222222222",
+                  "childSha": "3333333333333333333333333333333333333333",
+                  "afterSha": "3333333333333333333333333333333333333333"
+                }
+              }
+            ]
+          }
+        ],
+        "bindingSha256": "8f4f64b09d00408c5917653ca98933ddf2e251ce5c38687c4c0750bfec485141"
+      },
+      "phase": "ready",
+      "implementation": [
+        {
+          "round": 1,
+          "status": "passed"
+        },
+        {
+          "round": 2,
+          "status": "passed"
+        }
+      ],
+      "reviews": [
+        {
+          "round": 1,
+          "status": "changes-requested",
+          "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "round": 2,
+          "status": "approved",
+          "subjectSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      ],
+      "sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "pr": {
+        "number": 81,
+        "url": "https://github.com/l2v-hub/ClinicOS/pull/81"
+      },
+      "baseSha": "0000000000000000000000000000000000000000",
+      "controllerProgress": {
+        "schemaVersion": 1,
+        "flow": "external-review-correction",
+        "round": 2,
+        "implementationRound": 2,
+        "sourceSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "planSha256": "bf5aa910938879067f06232a2ee0fea9da3eba9d3100291fd493d014566d671c",
+        "workItemsSha256": "227670f9968d3896e372dcde718902223703d421743a9fb0a36b0900291dc4b9",
+        "workItemsBindingSha256": "8f4f64b09d00408c5917653ca98933ddf2e251ce5c38687c4c0750bfec485141",
+        "feedbackSha256": "71452e7bf6f6da44d8d249986db04604dd928eb2586cda4358723947b542c9c7",
+        "feedback": {
+          "claude": {
+            "subject_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "verdict": "changes-requested",
+            "summary": "Synthetic exact-SHA worker report",
+            "findings": [
+              {
+                "severity": "medium",
+                "file": "frontend/src/features/patients/filter.ts",
+                "line": 1,
+                "problem": "Synthetic accepted criterion missing",
+                "requested_change": "Complete accepted behavior",
+                "test_expectation": "Both checks pass"
+              }
+            ]
+          },
+          "github": {
+            "state": "OPEN",
+            "isDraft": false,
+            "headRef": "codex/bug-batch-17",
+            "baseRef": "main",
+            "headIsFork": false,
+            "headRepo": "l2v-hub/ClinicOS",
+            "head": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "comments": [],
+            "unresolved": false,
+            "changesRequested": false,
+            "number": 81,
+            "url": "https://github.com/l2v-hub/ClinicOS/pull/81",
+            "mergeCommitSha": null
+          }
+        },
+        "status": "completed",
+        "next": 7,
+        "completed": [
+          {
+            "step": "execute"
+          },
+          {
+            "step": "verify-before"
+          },
+          {
+            "step": "simplify"
+          },
+          {
+            "step": "verify-after"
+          },
+          {
+            "step": "qa"
+          },
+          {
+            "step": "checkpoint",
+            "sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          {
+            "step": "publish"
+          }
+        ]
+      },
+      "externalReview": {
+        "status": "published",
+        "subjectSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "feedbackFingerprint": "31f26216a249ad4ccdc6952b6e9d2703a15f951f3f9ce4371ce671e7e4bbd034",
+        "feedbackChanged": false,
+        "completedAt": "2026-10-28T08:03:22.632Z"
+      },
+      "issueFeedbackSince": "2026-10-28T08:03:22.609Z",
+      "reviewLedger": {
+        "schema_version": 1,
+        "max_rounds": 4,
+        "rounds": [
+          {
+            "round": 1,
+            "subject_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "verdict": "changes-requested",
+            "review_sha256": "3777825f8da6e77166c2fb08a8622b0f2241ce716d8c81e74509313b866328b3"
+          },
+          {
+            "round": 2,
+            "subject_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verdict": "approved",
+            "review_sha256": "70d5874c143cd280a6617ed26c00142a2f59d639638f08751df29873d26b62ed"
+          }
+        ]
+      },
+      "reviewReports": {
+        "claude-review-1.json": "{\n  \"subject_sha\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"Synthetic exact-SHA worker report\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"frontend/src/features/patients/filter.ts\",\n      \"line\": 1,\n      \"problem\": \"Synthetic accepted criterion missing\",\n      \"requested_change\": \"Complete accepted behavior\",\n      \"test_expectation\": \"Both checks pass\"\n    }\n  ]\n}\n",
+        "claude-review-2.json": "{\n  \"subject_sha\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\n  \"verdict\": \"approved\",\n  \"summary\": \"Synthetic exact-SHA worker report\",\n  \"findings\": []\n}\n"
+      },
+      "approvedSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "codexFinalReview": {
+        "subjectSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "claudeRound": 2,
+        "feedbackFingerprint": "31f26216a249ad4ccdc6952b6e9d2703a15f951f3f9ce4371ce671e7e4bbd034",
+        "status": "verified",
+        "reservedAt": "2026-10-28T08:03:22.632Z",
+        "nonce": "13399b8c-c840-4954-aad8-e8d68d98a676",
+        "summary": "Synthetic independent final result"
+      },
+      "codexFinalQaInfrastructure": {
+        "attempts": [
+          {
+            "nonce": "13399b8c-c840-4954-aad8-e8d68d98a676",
+            "subjectSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "claudeRound": 2,
+            "feedbackFingerprint": "31f26216a249ad4ccdc6952b6e9d2703a15f951f3f9ce4371ce671e7e4bbd034",
+            "reservedAt": "2026-10-28T08:03:22.632Z",
+            "status": "verified"
+          }
+        ]
+      },
+      "feedbackFingerprint": "31f26216a249ad4ccdc6952b6e9d2703a15f951f3f9ce4371ce671e7e4bbd034"
+    }
+  ],
+  "updatedAt": "2026-10-28T08:03:22.632Z"
+}

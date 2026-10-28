@@ -1,0 +1,480 @@
+TAP version 13
+# Subtest: trusted infrastructure classification accepts only canonical paths in fixed scopes
+ok 1 - trusted infrastructure classification accepts only canonical paths in fixed scopes
+  ---
+  duration_ms: 0.941912
+  type: 'test'
+  ...
+# Subtest: merge policy requires nonempty files and an explicit exact or directory allowlist
+ok 2 - merge policy requires nonempty files and an explicit exact or directory allowlist
+  ---
+  duration_ms: 0.267185
+  type: 'test'
+  ...
+# Subtest: standalone adoption binds true PR identity, source/config projection, packet and all three imported attempts
+ok 3 - standalone adoption binds true PR identity, source/config projection, packet and all three imported attempts
+  ---
+  duration_ms: 11.510651
+  type: 'test'
+  ...
+# Subtest: adoption rejects fork, base drift, missing native checks, malformed source or packet, and historical source mismatch
+ok 4 - adoption rejects fork, base drift, missing native checks, malformed source or packet, and historical source mismatch
+  ---
+  duration_ms: 7.277324
+  type: 'test'
+  ...
+# Subtest: CAS claim reserves before analysis, retains imported history, and exclusive PR labels follow request/running/published
+ok 5 - CAS claim reserves before analysis, retains imported history, and exclusive PR labels follow request/running/published
+  ---
+  duration_ms: 19.89328
+  type: 'test'
+  ...
+# Subtest: cloud provider failure settles only its native standalone claim and projects blocked without refunding history
+ok 6 - cloud provider failure settles only its native standalone claim and projects blocked without refunding history
+  ---
+  duration_ms: 9.393371
+  type: 'test'
+  ...
+# Subtest: cloud standalone stale result preserves old failed round and replacement native reservation without a report
+ok 7 - cloud standalone stale result preserves old failed round and replacement native reservation without a report
+  ---
+  duration_ms: 16.040516
+  type: 'test'
+  ...
+# Subtest: standalone submit forwards full expected claim and permits the unchanged native reservation
+ok 8 - standalone submit forwards full expected claim and permits the unchanged native reservation
+  ---
+  duration_ms: 8.634671
+  type: 'test'
+  ...
+# Subtest: standalone cloud preclaim spec or feedback drift preserves its pending request without inference
+ok 9 - standalone cloud preclaim spec or feedback drift preserves its pending request without inference
+  ---
+  duration_ms: 8.770551
+  type: 'test'
+  ...
+# Subtest: standalone optional claim snapshot is copied before gated asynchronous verification
+ok 10 - standalone optional claim snapshot is copied before gated asynchronous verification
+  ---
+  duration_ms: 3.551789
+  type: 'test'
+  ...
+# Subtest: standalone simultaneous claims use one durable reservation and no fifth review is inferred
+ok 11 - standalone simultaneous claims use one durable reservation and no fifth review is inferred
+  ---
+  duration_ms: 4.897679
+  type: 'test'
+  ...
+# Subtest: owner, nonce, SHA and full tracked tree protect standalone comment import
+ok 12 - owner, nonce, SHA and full tracked tree protect standalone comment import
+  ---
+  duration_ms: 9.504596
+  type: 'test'
+  ...
+# Subtest: pipeline independent QA reserves ownership, keeps release hold, and exposes genuine two-review readiness only
+ok 13 - pipeline independent QA reserves ownership, keeps release hold, and exposes genuine two-review readiness only
+  ---
+  duration_ms: 9.834454
+  type: 'test'
+  ...
+# Subtest: QA findings and changed feedback block, while an existing running owner remains pending
+ok 14 - QA findings and changed feedback block, while an existing running owner remains pending
+  ---
+  duration_ms: 20.013777
+  type: 'test'
+  ...
+# Subtest: infrastructure merge boundary reuses exact-SHA protected merge and rejects application/deployment scope
+ok 15 - infrastructure merge boundary reuses exact-SHA protected merge and rejects application/deployment scope
+  ---
+  duration_ms: 14.670801
+  type: 'test'
+  ...
+# Subtest: revision appends new packet and preserves every old proof byte on the current head
+ok 16 - revision appends new packet and preserves every old proof byte on the current head
+  ---
+  duration_ms: 3.229913
+  type: 'test'
+  ...
+# Subtest: revision rejects rewritten old-attempt copy and rewritten or removed historical packet bytes on NEW head
+ok 17 - revision rejects rewritten old-attempt copy and rewritten or removed historical packet bytes on NEW head
+  ---
+  duration_ms: 8.393796
+  type: 'test'
+  ...
+# Subtest: trusted runtime supplies the fixed infrastructure scopes and merges after genuine two-model proof
+ok 18 - trusted runtime supplies the fixed infrastructure scopes and merges after genuine two-model proof
+  ---
+  duration_ms: 22.72951
+  type: 'test'
+  ...
+# Subtest: runtime refuses held, unknown, application and failed-proof subjects
+ok 19 - runtime refuses held, unknown, application and failed-proof subjects
+  ---
+  duration_ms: 91.119269
+  type: 'test'
+  ...
+# Subtest: runtime recovers an actual exact-SHA merge after interruption without merging or reviewing again
+ok 20 - runtime recovers an actual exact-SHA merge after interruption without merging or reviewing again
+  ---
+  duration_ms: 11.084912
+  type: 'test'
+  ...
+# Subtest: authenticated frozen merge-base survives a real main advance and rejects changed review ancestry/head/base
+ok 21 - authenticated frozen merge-base survives a real main advance and rejects changed review ancestry/head/base
+  ---
+  duration_ms: 81.155584
+  type: 'test'
+  ...
+# Subtest: finalize authentication accepts only an explicit synthetic directory without API-key conflict
+ok 22 - finalize authentication accepts only an explicit synthetic directory without API-key conflict
+  ---
+  duration_ms: 5.121118
+  type: 'test'
+  ...
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-28T17:53:40.309Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-28T17:53:40.310Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-28T17:53:40.314Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"docs/standalone-pr-review.md","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reservedAt":"2026-10-28T17:53:40.316Z","nonce":"c90e7ec2-7ac3-422a-9549-1d3fe61c4b95","summary":"Independent synthetic QA callback; no actual model invoked."},"release":{"status":"merged","reviewedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","prNumber":81,"nonce":"ad365dac-12f3-41e6-b1a1-22a87ad429a1","reservedAt":"2026-10-28T17:53:40.320Z","reviewProof":{"schemaVersion":1,"repository":"l2v-hub/ClinicOS","collection":"standaloneReviews","id":"standalone-pr-81","prNumber":81,"reviewedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","finalCodexReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reservedAt":"2026-10-28T17:53:40.316Z","nonce":"c90e7ec2-7ac3-422a-9549-1d3fe61c4b95","summary":"Independent synthetic QA callback; no actual model invoked."},"claudeReviewSha256":"4664419e81349033afb1f52a5d3922705afd88c2fcd4978116de6c9e800c5d1e","reviewIdentitySha256":"0c21bb3cf1abf9a7b17652123c2d51896a83f0f4d0e54779af3f41a3ad5ae653"},"mergeSha":"7777777777777777777777777777777777777777"},"recoveryTokens":{"implementation":null,"qa":"c90e7ec2-7ac3-422a-9549-1d3fe61c4b95","merge":"ad365dac-12f3-41e6-b1a1-22a87ad429a1","resume":"2d5a49758bb5845adca8962c40a5661df42c602b9b330e85f1339c10293a5fe9"},"authMode":"existing-codex-auth"}
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-28T17:53:40.309Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-28T17:53:40.310Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-28T17:53:40.314Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"docs/standalone-pr-review.md","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reservedAt":"2026-10-28T17:53:40.316Z","nonce":"c90e7ec2-7ac3-422a-9549-1d3fe61c4b95","summary":"Independent synthetic QA callback; no actual model invoked."},"release":{"status":"merged","reviewedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","prNumber":81,"nonce":"ad365dac-12f3-41e6-b1a1-22a87ad429a1","reservedAt":"2026-10-28T17:53:40.320Z","reviewProof":{"schemaVersion":1,"repository":"l2v-hub/ClinicOS","collection":"standaloneReviews","id":"standalone-pr-81","prNumber":81,"reviewedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","finalCodexReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reservedAt":"2026-10-28T17:53:40.316Z","nonce":"c90e7ec2-7ac3-422a-9549-1d3fe61c4b95","summary":"Independent synthetic QA callback; no actual model invoked."},"claudeReviewSha256":"4664419e81349033afb1f52a5d3922705afd88c2fcd4978116de6c9e800c5d1e","reviewIdentitySha256":"0c21bb3cf1abf9a7b17652123c2d51896a83f0f4d0e54779af3f41a3ad5ae653"},"mergeSha":"7777777777777777777777777777777777777777"},"recoveryTokens":{"implementation":null,"qa":"c90e7ec2-7ac3-422a-9549-1d3fe61c4b95","merge":"ad365dac-12f3-41e6-b1a1-22a87ad429a1","resume":"2d5a49758bb5845adca8962c40a5661df42c602b9b330e85f1339c10293a5fe9"},"authMode":"existing-codex-auth"}
+# Subtest: production finalize CLI dispatches separate Codex QA and merges once without repeating QA
+ok 23 - production finalize CLI dispatches separate Codex QA and merges once without repeating QA
+  ---
+  duration_ms: 19.587377
+  type: 'test'
+  ...
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"blocked","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-28T17:53:40.329Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-28T17:53:40.330Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-28T17:53:40.333Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"docs/synthetic-review-regression.md","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"failed","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reservedAt":"2026-10-28T17:53:40.335Z","nonce":"70f97603-661b-4735-aca8-ffa133492a97","failureCode":"controller-execution-failed"},"recoveryTokens":{"implementation":null,"qa":"70f97603-661b-4735-aca8-ffa133492a97","merge":null,"resume":"83685f4e957bf4b7ee3cad3eebe40bc3daeeb7507bf385384097c0b6d8fbe388"},"failureCode":"controller-execution-failed","authMode":"existing-codex-auth"}
+# Subtest: finalize CLI cannot process normal/unadopted PR and preserves failed Codex execution as blocked
+ok 24 - finalize CLI cannot process normal/unadopted PR and preserves failed Codex execution as blocked
+  ---
+  duration_ms: 11.001678
+  type: 'test'
+  ...
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"waiting-review","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-28T17:53:40.339Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-28T17:53:40.340Z","feedbackFingerprint":"5fa4c0577da063fd59e6dad5d8bc1aba7a330d9cfe84888b82f349822c9f7e40","reportComment":2,"reportBodySha256":"84dfbd63ffafd193b5ec398ebcc09156c0c29f6c8a1f1c7a936c318b394bdc34","completedAt":"2026-10-28T17:53:40.350Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/tests/example.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":"Await genuine reviews and infrastructure authorization","recoveryTokens":{"implementation":null,"qa":null,"merge":null,"resume":"d75024ecaf69c43393dff223b660dccf817dbef38f38aa5ba671044799e88d17"}}
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"waiting-review","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-28T17:53:40.357Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-28T17:53:40.359Z","feedbackFingerprint":"82c1ced056690ea6e831886181e247a18ee14c43303a158365aa8c42f4168a88","reportComment":2,"reportBodySha256":"11fc20d1b0f47a6cff813146f51f0ede2ef937be8d8dd7ea910093f343032366","completedAt":"2026-10-28T17:53:40.367Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/tests/example.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":"Await genuine reviews and infrastructure authorization","recoveryTokens":{"implementation":null,"qa":null,"merge":null,"resume":"d75024ecaf69c43393dff223b660dccf817dbef38f38aa5ba671044799e88d17"}}
+# Subtest: standalone production CLI imports legitimate UTF8 CJK and surrogate-pair reports from real temp files
+ok 25 - standalone production CLI imports legitimate UTF8 CJK and surrogate-pair reports from real temp files
+  ---
+  duration_ms: 35.897872
+  type: 'test'
+  ...
+# Subtest: Unicode CLI pre-read allowance never expands canonical comment limit or normal60kB input guard
+ok 26 - Unicode CLI pre-read allowance never expands canonical comment limit or normal60kB input guard
+  ---
+  duration_ms: 7.489739
+  type: 'test'
+  ...
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"waiting-review","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-28T17:53:40.383Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-28T17:53:40.384Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-28T17:53:40.388Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"docs/synthetic-review-regression.md","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"running","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reservedAt":"2026-10-28T17:53:40.389Z","nonce":"321a9fbb-0fa7-41cc-a394-42adce483fdf"},"recoveryTokens":{"implementation":null,"qa":"321a9fbb-0fa7-41cc-a394-42adce483fdf","merge":null,"resume":"d75024ecaf69c43393dff223b660dccf817dbef38f38aa5ba671044799e88d17"},"authMode":"existing-codex-auth"}
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-28T17:53:40.383Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-28T17:53:40.384Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-28T17:53:40.388Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"docs/synthetic-review-regression.md","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reservedAt":"2026-10-28T17:53:40.389Z","nonce":"321a9fbb-0fa7-41cc-a394-42adce483fdf","summary":"Independent owner completed its bounded QA."},"release":{"status":"merged","reviewedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","prNumber":81,"nonce":"a292d742-4b30-4330-a565-33094bbdc305","reservedAt":"2026-10-28T17:53:40.394Z","reviewProof":{"schemaVersion":1,"repository":"l2v-hub/ClinicOS","collection":"standaloneReviews","id":"standalone-pr-81","prNumber":81,"reviewedSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","finalCodexReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reservedAt":"2026-10-28T17:53:40.389Z","nonce":"321a9fbb-0fa7-41cc-a394-42adce483fdf","summary":"Independent owner completed its bounded QA."},"claudeReviewSha256":"4664419e81349033afb1f52a5d3922705afd88c2fcd4978116de6c9e800c5d1e","reviewIdentitySha256":"3ea1ed862cd484fbd296f89361230cbeefe88877ba97250edc9e3a381a164c45"},"mergeSha":"6666666666666666666666666666666666666666"},"recoveryTokens":{"implementation":null,"qa":"321a9fbb-0fa7-41cc-a394-42adce483fdf","merge":"a292d742-4b30-4330-a565-33094bbdc305","resume":"2d5a49758bb5845adca8962c40a5661df42c602b9b330e85f1339c10293a5fe9"},"authMode":"existing-codex-auth"}
+# Subtest: concurrent production finalize and pipeline observe active Codex QA without mutation or duplicate inference
+ok 27 - concurrent production finalize and pipeline observe active Codex QA without mutation or duplicate inference
+  ---
+  duration_ms: 16.271806
+  type: 'test'
+  ...
+# Subtest: an existing open merge reservation remains pending instead of racing its active owner
+ok 28 - an existing open merge reservation remains pending instead of racing its active owner
+  ---
+  duration_ms: 9.685484
+  type: 'test'
+  ...
+# Subtest: organic24subject92report near-capacity history refuses claim before durable round or report, and QA before inference
+ok 29 - organic24subject92report near-capacity history refuses claim before durable round or report, and QA before inference
+  ---
+  duration_ms: 2798.170638
+  type: 'test'
+  ...
+# Subtest: actual store disjoint request+claim while QA waits preserves both entities and the owner result, merges once
+ok 30 - actual store disjoint request+claim while QA waits preserves both entities and the owner result, merges once
+  ---
+  duration_ms: 40.767227
+  type: 'test'
+  ...
+# Subtest: actual store same-subject modification during QA remains a conflict without overwriting peer hold or duplicating inference
+ok 31 - actual store same-subject modification during QA remains a conflict without overwriting peer hold or duplicating inference
+  ---
+  duration_ms: 10.277428
+  type: 'test'
+  ...
+# Subtest: F1 reviewed trust-root and workflow changes merge after exact proof and durable reservation
+ok 32 - F1 reviewed trust-root and workflow changes merge after exact proof and durable reservation
+  ---
+  duration_ms: 91.941123
+  type: 'test'
+  ...
+# Subtest: F2 existing manual PR, branch or issue ownership blocks adoption without shortening history
+ok 33 - F2 existing manual PR, branch or issue ownership blocks adoption without shortening history
+  ---
+  duration_ms: 2.30737
+  type: 'test'
+  ...
+# Subtest: F3 same-account Claude report can merge after separate Codex proof and durable reservation
+ok 34 - F3 same-account Claude report can merge after separate Codex proof and durable reservation
+  ---
+  duration_ms: 8.642763
+  type: 'test'
+  ...
+# Subtest: F4 head-drift claim recovery preserves the consumed round and enables adoption of the new SHA
+ok 35 - F4 head-drift claim recovery preserves the consumed round and enables adoption of the new SHA
+  ---
+  duration_ms: 14.718862
+  type: 'test'
+  ...
+# Subtest: F4 audited QA release is one-use, maintainer-only, preserves old reservation and reserves a fresh nonce
+ok 36 - F4 audited QA release is one-use, maintainer-only, preserves old reservation and reserves a fresh nonce
+  ---
+  duration_ms: 11.822211
+  type: 'test'
+  ...
+# Subtest: F4 merge release requires native open/unmerged identity and archives the exact reservation
+ok 37 - F4 merge release requires native open/unmerged identity and archives the exact reservation
+  ---
+  duration_ms: 10.022381
+  type: 'test'
+  ...
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"waiting-review","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-28T17:53:43.397Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-28T17:53:43.398Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-28T17:53:43.410Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/tests/example.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":"Await genuine reviews and infrastructure authorization","recoveryTokens":{"implementation":null,"qa":null,"merge":null,"resume":"d75024ecaf69c43393dff223b660dccf817dbef38f38aa5ba671044799e88d17"}}
+# Subtest: F5 persisted submit reports failed projection and reconcile alone converges without another round/comment
+ok 38 - F5 persisted submit reports failed projection and reconcile alone converges without another round/comment
+  ---
+  duration_ms: 95.759809
+  type: 'test'
+  ...
+# Subtest: F7 immutable packet reads occur once through submit/reconcile/projection, while native identity remains live
+ok 39 - F7 immutable packet reads occur once through submit/reconcile/projection, while native identity remains live
+  ---
+  duration_ms: 7.160882
+  type: 'test'
+  ...
+# Subtest: F8 only optional exact-name Vercel failures are tolerated; required checks remain mandatory
+ok 40 - F8 only optional exact-name Vercel failures are tolerated; required checks remain mandatory
+  ---
+  duration_ms: 0.448402
+  type: 'test'
+  ...
+# Subtest: native check observations reconcile on the same head without repeating final QA or losing proofs
+ok 41 - native check observations reconcile on the same head without repeating final QA or losing proofs
+  ---
+  duration_ms: 164.601013
+  type: 'test'
+  ...
+# Subtest: malformed, unavailable or contradictory native check observations cannot become a check wait or success
+ok 42 - malformed, unavailable or contradictory native check observations cannot become a check wait or success
+  ---
+  duration_ms: 59.765173
+  type: 'test'
+  ...
+# Subtest: F9 independent QA reservation uses injected time
+ok 43 - F9 independent QA reservation uses injected time
+  ---
+  duration_ms: 7.648534
+  type: 'test'
+  ...
+# Subtest: F7 unusable persistence halts all later mutations and cannot leak an unsaved QA reservation
+ok 44 - F7 unusable persistence halts all later mutations and cannot leak an unsaved QA reservation
+  ---
+  duration_ms: 8.475235
+  type: 'test'
+  ...
+# Subtest: F4 a transient waiting-subject read failure leaves phase and consumed history unchanged
+ok 45 - F4 a transient waiting-subject read failure leaves phase and consumed history unchanged
+  ---
+  duration_ms: 5.34519
+  type: 'test'
+  ...
+# Subtest: audited completed operator continuation remains the latest tested source across revision adoption without legacy folding
+ok 46 - audited completed operator continuation remains the latest tested source across revision adoption without legacy folding
+  ---
+  duration_ms: 5.339621
+  type: 'test'
+  ...
+# Subtest: transient fairness uses elapsed backoff, keeps three rapid ticks pending, and exhausts only after the window
+ok 47 - transient fairness uses elapsed backoff, keeps three rapid ticks pending, and exhausts only after the window
+  ---
+  duration_ms: 18.428193
+  type: 'test'
+  ...
+# Subtest: permanent read failure blocks once while the next standalone subject progresses in the same tick
+ok 48 - permanent read failure blocks once while the next standalone subject progresses in the same tick
+  ---
+  duration_ms: 4.676381
+  type: 'test'
+  ...
+# Subtest: transient counters reset on successful work and changed SHA without resetting consumed attempts
+ok 49 - transient counters reset on successful work and changed SHA without resetting consumed attempts
+  ---
+  duration_ms: 10.89407
+  type: 'test'
+  ...
+# Subtest: standalone merge policy accepts bounded infrastructure and refuses clinical or malformed paths
+ok 50 - standalone merge policy accepts bounded infrastructure and refuses clinical or malformed paths
+  ---
+  duration_ms: 0.299392
+  type: 'test'
+  ...
+# Subtest: post-save request notice failure is repaired by the actual suggested CLI command, idempotently without spending a round
+ok 51 - post-save request notice failure is repaired by the actual suggested CLI command, idempotently without spending a round
+  ---
+  duration_ms: 6.129198
+  type: 'test'
+  ...
+# Subtest: uncertain request comment that committed is reconciled without a second notice; changed actor cannot repair it
+ok 52 - uncertain request comment that committed is reconciled without a second notice; changed actor cannot repair it
+  ---
+  duration_ms: 4.761938
+  type: 'test'
+  ...
+# Subtest: merge lease covers bounded preparation plus command; recovery at 31 seconds still needs verified force
+ok 53 - merge lease covers bounded preparation plus command; recovery at 31 seconds still needs verified force
+  ---
+  duration_ms: 11.278918
+  type: 'test'
+  ...
+# Subtest: force-live flag alone cannot replace trusted external capability verification
+ok 54 - force-live flag alone cannot replace trusted external capability verification
+  ---
+  duration_ms: 11.84155
+  type: 'test'
+  ...
+# Subtest: explicit verified force is audited and cannot reset consumed implementation or review history
+ok 55 - explicit verified force is audited and cannot reset consumed implementation or review history
+  ---
+  duration_ms: 9.632906
+  type: 'test'
+  ...
+# Subtest: merge completed before release converges to exact-head receipt rather than waiting review
+ok 56 - merge completed before release converges to exact-head receipt rather than waiting review
+  ---
+  duration_ms: 10.495782
+  type: 'test'
+  ...
+# Subtest: merge during actual save guard refuses stale recovery and reconciles the retained reservation
+ok 57 - merge during actual save guard refuses stale recovery and reconciles the retained reservation
+  ---
+  duration_ms: 10.998594
+  type: 'test'
+  ...
+# Subtest: merge after recovery CAS is reconciled through tombstone without a second merge
+ok 58 - merge after recovery CAS is reconciled through tombstone without a second merge
+  ---
+  duration_ms: 13.967812
+  type: 'test'
+  ...
+# Subtest: failed QA reservation is terminal and needs no invented lease, but each release requires a fresh external consumption
+ok 59 - failed QA reservation is terminal and needs no invented lease, but each release requires a fresh external consumption
+  ---
+  duration_ms: 7.88977
+  type: 'test'
+  ...
+# Subtest: definite protected merge rejection archives the full reservation for explicit resume without retrying
+ok 60 - definite protected merge rejection archives the full reservation for explicit resume without retrying
+  ---
+  duration_ms: 16.946524
+  type: 'test'
+  ...
+# Subtest: completed gh mergePullRequest GraphQL refusal archives after a fresh exact-open check and resumes without retrying
+ok 61 - completed gh mergePullRequest GraphQL refusal archives after a fresh exact-open check and resumes without retrying
+  ---
+  duration_ms: 18.852752
+  type: 'test'
+  ...
+# Subtest: unknown-outcome merge that committed reconciles receipt and preserves reservation nonce without a second write
+ok 62 - unknown-outcome merge that committed reconciles receipt and preserves reservation nonce without a second write
+  ---
+  duration_ms: 15.924734
+  type: 'test'
+  ...
+# Subtest: projection 502 retries block with operation metadata and resume only after exact evidence verification
+ok 63 - projection 502 retries block with operation metadata and resume only after exact evidence verification
+  ---
+  duration_ms: 81.61196
+  type: 'test'
+  ...
+# Subtest: uncertain or rejected non-projection mutations remain fail closed for resume
+ok 64 - uncertain or rejected non-projection mutations remain fail closed for resume
+  ---
+  duration_ms: 3.164617
+  type: 'test'
+  ...
+# Subtest: revision adoption preserves a full merging tombstone only at a verified OPEN different head
+ok 65 - revision adoption preserves a full merging tombstone only at a verified OPEN different head
+  ---
+  duration_ms: 8.402496
+  type: 'test'
+  ...
+# Subtest: new adoption cannot supply a legacy budget authorization exemption; both validators reject unauthorized appended PR extensions
+ok 66 - new adoption cannot supply a legacy budget authorization exemption; both validators reject unauthorized appended PR extensions
+  ---
+  duration_ms: 3.386645
+  type: 'test'
+  ...
+# Subtest: background standalone waiting notice neither reads the notice nor blocks when actor differs or notice reads fail
+ok 67 - background standalone waiting notice neither reads the notice nor blocks when actor differs or notice reads fail
+  ---
+  duration_ms: 4.463226
+  type: 'test'
+  ...
+# Subtest: slow merge readiness keeps 31-second reservation live and prevents commands after preparation deadline
+ok 68 - slow merge readiness keeps 31-second reservation live and prevents commands after preparation deadline
+  ---
+  duration_ms: 29.389634
+  type: 'test'
+  ...
+# Subtest: definite merge rejection cannot archive a reservation after native head/state becomes uncertain
+ok 69 - definite merge rejection cannot archive a reservation after native head/state becomes uncertain
+  ---
+  duration_ms: 39.689404
+  type: 'test'
+  ...
+# Subtest: standalone publisher explicitly rejects source cohorts without projecting labels
+ok 70 - standalone publisher explicitly rejects source cohorts without projecting labels
+  ---
+  duration_ms: 2.772297
+  type: 'test'
+  ...
+# Subtest: automatic pipeline with prebuilt native controller observes takeover without projection or owned diagnostics
+ok 71 - automatic pipeline with prebuilt native controller observes takeover without projection or owned diagnostics
+  ---
+  duration_ms: 3.483067
+  type: 'test'
+  ...
+# Subtest: prebuilt native controller isolates automatic context across concurrent explicit calls and exceptions
+ok 72 - prebuilt native controller isolates automatic context across concurrent explicit calls and exceptions
+  ---
+  duration_ms: 4.293014
+  type: 'test'
+  ...
+# Subtest: automatic standalone last publication guard observes ownership acquired during authorization
+ok 73 - automatic standalone last publication guard observes ownership acquired during authorization
+  ---
+  duration_ms: 7.477941
+  type: 'test'
+  ...
+# Subtest: automatic ownership loss after a genuine QA reservation retains its running tombstone without inference or block
+ok 74 - automatic ownership loss after a genuine QA reservation retains its running tombstone without inference or block
+  ---
+  duration_ms: 8.62012
+  type: 'test'
+  ...
+# Subtest: explicit authorized exact-SHA Max request and claim remain allowed during operator takeover
+ok 75 - explicit authorized exact-SHA Max request and claim remain allowed during operator takeover
+  ---
+  duration_ms: 4.030266
+  type: 'test'
+  ...
+# Subtest: F2 standalone modern QA binds live feedback and freezes the exact proof before native merge
+ok 76 - F2 standalone modern QA binds live feedback and freezes the exact proof before native merge
+  ---
+  duration_ms: 14.515271
+  type: 'test'
+  ...
+# Subtest: F2 standalone rejects stale final-QA feedback and missing frozen reservation proof at actual merge boundary
+ok 77 - F2 standalone rejects stale final-QA feedback and missing frozen reservation proof at actual merge boundary
+  ---
+  duration_ms: 20.129397
+  type: 'test'
+  ...
+1..77
+# tests 77
+# suites 0
+# pass 77
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4324.557799

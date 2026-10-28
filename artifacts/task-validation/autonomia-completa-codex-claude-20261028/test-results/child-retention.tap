@@ -1,0 +1,208 @@
+TAP version 13
+# Subtest: partial exit zero still schedules diagnostic and failed code artifact upload
+ok 1 - partial exit zero still schedules diagnostic and failed code artifact upload
+  ---
+  duration_ms: 7.593223
+  type: 'test'
+  ...
+# Subtest: actual verification failure records command and sanitized captured stream identities without changing failure
+ok 2 - actual verification failure records command and sanitized captured stream identities without changing failure
+  ---
+  duration_ms: 11.157075
+  type: 'test'
+  ...
+# Subtest: actual verification excerpt redacts spaced known credential assignments
+ok 3 - actual verification excerpt redacts spaced known credential assignments
+  ---
+  duration_ms: 5.129555
+  type: 'test'
+  ...
+# Subtest: verification sanitization covers every core known credential key with spacing, quotes and case
+ok 4 - verification sanitization covers every core known credential key with spacing, quotes and case
+  ---
+  duration_ms: 0.759491
+  type: 'test'
+  ...
+# Subtest: verification boundary observes real stripped-environment child exit and redacted capture
+ok 5 - verification boundary observes real stripped-environment child exit and redacted capture
+  ---
+  duration_ms: 37.459075
+  type: 'test'
+  ...
+# Subtest: guarded failed code export retains only exact allowed source, bounded patch and metadata
+ok 6 - guarded failed code export retains only exact allowed source, bounded patch and metadata
+  ---
+  duration_ms: 39.40676
+  type: 'test'
+  ...
+# Subtest: first implementation verification failure retains the exact checkpoint and rejects duplicate export distinctly
+ok 7 - first implementation verification failure retains the exact checkpoint and rejects duplicate export distinctly
+  ---
+  duration_ms: 25.972593
+  type: 'test'
+  ...
+# Subtest: controller throw path exports observed failed state and returns explicit observe failure markers
+ok 8 - controller throw path exports observed failed state and returns explicit observe failure markers
+  ---
+  duration_ms: 0.429585
+  type: 'test'
+  ...
+# Subtest: export refuses changed checkpoint, hash, size, symlink, secret, traversal and outside-plan files
+ok 9 - export refuses changed checkpoint, hash, size, symlink, secret, traversal and outside-plan files
+  ---
+  duration_ms: 135.276443
+  type: 'test'
+  ...
+# Subtest: export rejects spaced GH_TOKEN source before creating patch or copied source
+ok 10 - export rejects spaced GH_TOKEN source before creating patch or copied source
+  ---
+  duration_ms: 140.700107
+  type: 'test'
+  ...
+# Subtest: native archive consumes exact external observation and authorization while preserving FAILED history and counts
+ok 11 - native archive consumes exact external observation and authorization while preserving FAILED history and counts
+  ---
+  duration_ms: 2.15291
+  type: 'test'
+  ...
+# Subtest: native archive rejects unknown/running/stale and malformed checkpoint proof before consuming authorization
+ok 12 - native archive rejects unknown/running/stale and malformed checkpoint proof before consuming authorization
+  ---
+  duration_ms: 0.864527
+  type: 'test'
+  ...
+# Subtest: persisted failed verification followed by pipeline throw writes the actual blocked diagnostic and guarded code
+ok 13 - persisted failed verification followed by pipeline throw writes the actual blocked diagnostic and guarded code
+  ---
+  duration_ms: 20.046948
+  type: 'test'
+  ...
+# Subtest: missing or throwing observation writes an explicit marker in actual diagnostic JSON
+ok 14 - missing or throwing observation writes an explicit marker in actual diagnostic JSON
+  ---
+  duration_ms: 15.906828
+  type: 'test'
+  ...
+# Subtest: real Git DAG integrates bounded child commits with A->C frontier while B is running
+ok 15 - real Git DAG integrates bounded child commits with A->C frontier while B is running
+  ---
+  duration_ms: 912.931072
+  type: 'test'
+  ...
+# Subtest: node scope, ignored untracked files, symlinks and immutable packet edits cannot integrate
+ok 16 - node scope, ignored untracked files, symlinks and immutable packet edits cannot integrate
+  ---
+  duration_ms: 378.576075
+  type: 'test'
+  ...
+# Subtest: foreign occupied child path is preserved and missing retained child blocks inspection
+ok 17 - foreign occupied child path is preserved and missing retained child blocks inspection
+  ---
+  duration_ms: 22.284126
+  type: 'test'
+  ...
+# Subtest: ownership loss after file edits leaves exact running reservation without controller commit
+ok 18 - ownership loss after file edits leaves exact running reservation without controller commit
+  ---
+  duration_ms: 64.267822
+  type: 'test'
+  ...
+# Subtest: uncertain save before inference poisons further work and a second pass cannot replay
+ok 19 - uncertain save before inference poisons further work and a second pass cannot replay
+  ---
+  duration_ms: 61.640633
+  type: 'test'
+  ...
+# Subtest: real cherry-pick conflict retains exact owned state without reset, cleanup or inferred retry
+ok 20 - real cherry-pick conflict retains exact owned state without reset, cleanup or inferred retry
+  ---
+  duration_ms: 153.925607
+  type: 'test'
+  ...
+# Subtest: real blocked child output is retained separately while settled sibling/history stay unchanged
+ok 21 - real blocked child output is retained separately while settled sibling/history stay unchanged
+  ---
+  duration_ms: 216.65703
+  type: 'test'
+  ...
+# Subtest: failed child export rejects unknown graph outcomes, changed code and secret material
+ok 22 - failed child export rejects unknown graph outcomes, changed code and secret material
+  ---
+  duration_ms: 109.331206
+  type: 'test'
+  ...
+# Subtest: separate adaptive planning schema preserves closed legacy schema and validates real packet production
+ok 23 - separate adaptive planning schema preserves closed legacy schema and validates real packet production
+  ---
+  duration_ms: 5.378973
+  type: 'test'
+  ...
+# Subtest: explicit source issue blockers cannot disappear or become unauthorized completed work
+ok 24 - explicit source issue blockers cannot disappear or become unauthorized completed work
+  ---
+  duration_ms: 1.113624
+  type: 'test'
+  ...
+# Subtest: packet validation rejects cycles, missing coverage, scope widening, unsafe context and altered frozen state
+ok 25 - packet validation rejects cycles, missing coverage, scope widening, unsafe context and altered frozen state
+  ---
+  duration_ms: 4.660792
+  type: 'test'
+  ...
+# Subtest: shared writes need ordering and resource conflicts remove a frontier candidate
+ok 26 - shared writes need ordering and resource conflicts remove a frontier candidate
+  ---
+  duration_ms: 1.842
+  type: 'test'
+  ...
+# Subtest: actual incremental frontier starts C after A integrates while independent B still runs
+ok 27 - actual incremental frontier starts C after A integrates while independent B still runs
+  ---
+  duration_ms: 12.334564
+  type: 'test'
+  ...
+# Subtest: declared resource conflict serializes independent packets
+ok 28 - declared resource conflict serializes independent packets
+  ---
+  duration_ms: 3.919759
+  type: 'test'
+  ...
+# Subtest: definite blocked result closes graph without hidden retry or parent counter reset
+ok 29 - definite blocked result closes graph without hidden retry or parent counter reset
+  ---
+  duration_ms: 1.707692
+  type: 'test'
+  ...
+# Subtest: unknown inference, invalid output and save uncertainty preserve tombstones and never replay
+ok 30 - unknown inference, invalid output and save uncertainty preserve tombstones and never replay
+  ---
+  duration_ms: 3.20303
+  type: 'test'
+  ...
+# Subtest: takeover after model return prevents child commit and integration
+ok 31 - takeover after model return prevents child commit and integration
+  ---
+  duration_ms: 1.611409
+  type: 'test'
+  ...
+# Subtest: risk cannot be routed to a delegate, and graph cannot enter a correction or second round
+ok 32 - risk cannot be routed to a delegate, and graph cannot enter a correction or second round
+  ---
+  duration_ms: 1.086104
+  type: 'test'
+  ...
+# Subtest: trusted retained continuation skips durable integrated nodes and rejects untrusted continuation
+ok 33 - trusted retained continuation skips durable integrated nodes and rejects untrusted continuation
+  ---
+  duration_ms: 4.256396
+  type: 'test'
+  ...
+1..33
+# tests 33
+# suites 0
+# pass 33
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1980.434803

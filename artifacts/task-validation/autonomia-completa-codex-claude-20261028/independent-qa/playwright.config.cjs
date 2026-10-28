@@ -1,0 +1,2 @@
+const {defineConfig}=require('/tmp/clinicos-qa-tools/node_modules/@playwright/test');
+module.exports=defineConfig({testDir:__dirname,testMatch:'qa-surface.spec.cjs',workers:1,retries:0,outputDir:__dirname+'/test-results',reporter:[['html',{outputFolder:__dirname+'/playwright-report',open:'never'}],['json',{outputFile:__dirname+'/browser-results.json'}]],use:{browserName:'chromium',launchOptions:{executablePath:'/usr/bin/chromium',args:['--no-sandbox']},viewport:{width:1280,height:1200},trace:'on'}});

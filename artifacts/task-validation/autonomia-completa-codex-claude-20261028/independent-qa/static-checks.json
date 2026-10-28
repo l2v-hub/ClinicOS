@@ -1,0 +1,178 @@
+{
+  "syntax": [
+    {
+      "path": "agent-team/src/bug-pipeline/claude-executor.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/intake-continuation.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/models.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/operator-authorization.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/pipeline.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/process.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/routing.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/work-item-workspace.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/work-items.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/workspace.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/adaptive-pipeline.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/claude-executor.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/intake-continuation.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/operator-authorization.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/work-item-models.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/work-item-workspace.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/work-items.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/workflow-intake.test.mjs",
+      "exitCode": 0
+    }
+  ],
+  "workflows": [
+    {
+      "path": ".github/workflows/codex-bug-pipeline.yml",
+      "actionType": "workflow",
+      "errors": []
+    },
+    {
+      "path": ".github/workflows/claude-cloud-review.yml",
+      "actionType": "workflow",
+      "errors": []
+    },
+    {
+      "path": ".github/workflows/bug-pipeline-tests.yml",
+      "actionType": "workflow",
+      "errors": []
+    }
+  ],
+  "secretPatternAddedLineCounts": {
+    "github": 0,
+    "githubFineGrained": 0,
+    "aws": 0,
+    "privateKey": 0
+  },
+  "protectionAndClinicalSourceDiff": [
+    {
+      "path": "agent-team/src/bug-pipeline/release.mjs",
+      "changed": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/review-policy.mjs",
+      "changed": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/operator-ownership.mjs",
+      "changed": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/final-qa-budget.mjs",
+      "changed": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/state-store.mjs",
+      "changed": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/external-review.mjs",
+      "changed": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/claude-review-cron.mjs",
+      "changed": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "changed": false
+    },
+    {
+      "path": "package.json",
+      "changed": false
+    },
+    {
+      "path": "package-lock.json",
+      "changed": false
+    },
+    {
+      "path": "frontend",
+      "changed": false
+    },
+    {
+      "path": "backend",
+      "changed": false
+    },
+    {
+      "path": "prisma",
+      "changed": false
+    }
+  ],
+  "sourceWhitespace": {
+    "exitCode": 0,
+    "diagnostic": ""
+  },
+  "scope": "Complete frozen manifest diff; inherited historical artifact logs excluded from secret pattern and whitespace checks. Pattern scan is heuristic; manual security review also performed."
+}

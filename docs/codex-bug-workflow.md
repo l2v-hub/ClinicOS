@@ -6,7 +6,7 @@ Apri una issue e scrivi **`/codex fix`**, oppure applica **`codex-run`**. Il com
 
 `codex-run` è sufficiente anche sulle issue che non hanno ancora `bug`: il controller recupera le autorizzazioni dalla cronologia GitHub e aggiunge le label di classificazione mancanti. Questo recupero funziona anche se un evento iniziale viene cancellato nella coda Actions. Un account GitHub di tipo `User` con i permessi necessari resta umano anche se è lo stesso account di `CLINICOS_BOT_TOKEN`; l'identità del token non viene usata per dedurre che una label sia stata aggiunta da un bot. Gli attori `Bot` richiedono invece il comando recente di un umano autorizzato; metadati incompleti non autorizzano avvii. La dashboard legge la coda senza cambiare label e mostra anche le issue ancora prive di classificazione. Le issue già assegnate ad altri flussi o `ready-for-qa` conservano la propria gestione.
 
-GitHub Actions avvia il controller, serializzato per repository. Le sessioni e i terminali sono processi CLI nuovi nel runner, con risultati nei log Actions e nelle issue. Codex gira nel runner Actions; Claude usa il cron sul terminale personale già autenticato, come scelto dall’utente. La riconciliazione periodica ogni 15 minuti recupera la coda e i commenti PR se un evento viene accorpato dalla concorrenza di Actions.
+GitHub Actions avvia il controller, serializzato per repository. Le sessioni e i terminali sono processi CLI nuovi nel runner, con risultati nei log Actions e nelle issue. Codex gira nel runner Actions; Claude può usare il worker cloud già configurato con OAuth dell’abbonamento, oppure il cron personale opzionale sul medesimo protocollo durevole. La riconciliazione periodica ogni 15 minuti recupera la coda e i commenti PR se un evento viene accorpato dalla concorrenza di Actions.
 
 Una presa in carico operatore di un batch attivo ne sospende l'automazione. La ripresa richiede
 un handback esplicito supportato, limitato a lavoro nuovo e non assegnato. Si conservano history,
@@ -27,7 +27,7 @@ flowchart TD
   S --> QI[Sessione Codex indipendente: QA su diff e prove]
   QI --> D[Branch pubblicato e PR in bozza]
   D --> RC[Controlli verdi: PR Ready for review]
-  RC --> C[Cron Claude Code: review in sola lettura]
+  RC --> C[Worker cloud Claude Code: review in sola lettura]
   C -->|Rilievi/commenti: quattro review predefinite, poi solo allowance verificata e prenotata| F[Esecutore: correzioni, test e semplificazione]
   F --> C
   C -->|SHA approvato e controlli richiesti verdi| Q[Gate di rilascio]
@@ -42,7 +42,7 @@ La PR richiede un branch remoto per ricevere la review. Per questo la pubblicazi
 
 La skill `.agents/skills/codex-bug-triage/SKILL.md` assegna a Codex l'analisi, il raggruppamento motivato, il worktree e il piano. Un gruppo contiene ogni issue selezionata una sola volta, criteri di accettazione distinti, file esatti da modificare, passi implementativi, test di regressione e prove browser. Le issue senza informazioni essenziali restano bloccate. I gruppi già presenti nel registro e le issue in lavorazione nel vecchio Agent Team vengono esclusi.
 
-Il controller raccoglie le issue autorizzate prima di congelare i gruppi: attende almeno due minuti senza variazioni della coda e riprende alla successiva invocazione (cron ogni 15 minuti). Le variazioni riaprono la finestra, con un massimo di dieci minuti dalla prima osservazione; non si tratta di uno `sleep` nel runner. La dashboard mostra **Raccolta issue per accorpamento** e le issue restano **In coda** fino alla prenotazione durevole. Per lavorare insieme su più segnalazioni, applicare `codex-run` alle issue interessate nello stesso intervallo.
+Il controller raccoglie le issue autorizzate prima di congelare i gruppi: attende almeno due minuti senza variazioni della coda. Lo stesso controller serializzato continua automaticamente dopo la finestra durevole, senza modelli durante l’attesa e con nuova verifica di ownership; il cron ogni 15 minuti recupera invocazioni perse. Le variazioni riaprono la finestra, con un massimo di dieci minuti dalla prima osservazione. La dashboard mostra **Raccolta issue per accorpamento** e le issue restano **In coda** fino alla prenotazione durevole. Per lavorare insieme su più segnalazioni, applicare `codex-run` alle issue interessate nello stesso intervallo.
 
 Il piano deve mappare ogni issue ai file coinvolti (`fileMap`). Codex privilegia un unico gruppo, worktree e PR per problemi sullo stesso file, componente o percorso di persistenza, quando l'analisi del codice conferma il legame. Ogni issue conserva criteri di accettazione, regressioni ed evidenze propri. Se due gruppi toccano lo stesso file, entrambi devono motivare la separazione (`separationReason`); il controller rifiuta separazioni prive di motivazione. Il pacchetto congelato include `triage-index.md`. Una nuova issue che invade i file di un batch già attivo viene bloccata per coordinamento: il piano esistente e il budget non vengono modificati automaticamente. Le issue prive di autorizzazione restano fuori dall'implementazione.
 
@@ -163,8 +163,9 @@ Una label o metadato non dimostra un'inferenza; un'inferenza non dimostra una re
 e una review non dimostra che i workflow siano abilitati. Prima di dichiarare l'attivazione,
 ispezionare e provare il codice corrente; poi distinguere l'abilitazione effettiva dei workflow
 da deploy e chiusura, che richiedono verifiche successive. Test con adapter simulati non provano
-una chiamata reale. Claude Max deve essere eseguito sull'host autenticato supportato: Actions non
-ospita quella sessione. Non usare Anthropic API per Max e non eseguire Max dentro Actions.
+una chiamata reale. Claude Max usa un host autenticato supportato: il worker GitHub-hosted fidato può usare
+`CLAUDE_CODE_OAUTH_TOKEN`, come descritto in `docs/cloud-claude-review.md`; il cron personale
+resta opzionale. Non usare Anthropic API come fallback e non copiare credenziali nei packet.
 
 ```bash
 node agent-team/src/bug-pipeline/cli.mjs --doctor
@@ -199,10 +200,12 @@ o il testo di autorizzazione da soli non lo verificano. Il recupero consuma una 
 e non estende il budget; dopo un finding non si ripete sullo stesso SHA. L'estensione tipizzata è
 separata, esternamente verificata e prenotata come descritto sopra. Non è un reset o retry automatico.
 Il CLI non esegue modelli, non mergea e non distribuisce; il controller di rilascio è l'unico
-proprietario di merge/deploy/chiusura. Per il trust root (`.agents/`, `.claude/`, `.github/`,
-controller e quality gate) la policy richiede una review nativa sullo SHA corrente da una persona
-autorizzata indipendente e un merge manuale normale protetto; report automatici e grant non
-sostituiscono questa approvazione (dettagli nel playbook ClinicOS). Snapshot tra risorse GitHub e CAS del ledger non sono
+proprietario di merge/deploy/chiusura. Il flusso autorizzato per sviluppatore singolo consente il
+merge automatico degli scope infrastrutturali fidati (`.agents/`, `.claude/`, `.github/`,
+controller, quality gate, documentazione e test) dopo review Claude autentica e QA Codex finale
+separata sullo SHA corrente. Non impone una seconda persona o un secondo account GitHub;
+restano vincolanti le protezioni native e i check, senza approvazioni inventate o bypass
+amministrativi (dettagli nel playbook ClinicOS). Snapshot tra risorse GitHub e CAS del ledger non sono
 una transazione atomica con la PR; le verifiche ripetute riducono finestre di concorrenza senza
 promettere atomicità del provider.
 
@@ -289,3 +292,28 @@ Una prenotazione batch `merging` viene archiviata interamente in `mergeHistory` 
 Il journal delle implementazioni distingue un risultato effettivamente fallito da un esito ignoto. Risultati `blocked` di executor/simplifier/QA e fallimenti definitivi della verifica producono `status: failed`, `failedStep` e un codice finito. Le nuove correzioni interne prenotano un tentativo di implementazione prima dell'inferenza, mantenendo separato il numero della review; una nuova correzione conserva il journal fallito completo in `controllerProgressHistory`. Dopo allowance autenticata e resume, la correzione interna usa il feedback conservato prima della review successiva. Errori del modello senza risultato certo, persistenza, checkpoint, guardie e crash conservano il tentativo `running`: nessuna nuova inferenza automatica. Il recupero osservazionale dei vecchi journal senza prenotazione interna conserva i passi completati e non inventa tentativi storici; i nuovi journal richiedono la loro prenotazione esatta.
 
 Il riuso del worktree dopo un fallimento certo richiede il checkpoint esatto acquisito prima di marcare il tentativo `failed`: branch registrato, HEAD, base, output, piano e packet congelato devono coincidere. Modifiche estranee, file mancanti o un worktree perso su un runner hosted bloccano il recupero senza pulizia, ricostruzione o nuova inferenza. Un errore durante la cattura conserva `running`.
+
+## Avanzamento automatico e riprese
+
+`codex-review-ready` sulle issue e PR, i nuovi commit sulle PR del repository e il completamento
+dei workflow CI o Claude risvegliano il controller fidato su main. Gli eventi estranei vengono
+filtrati prima della concurrency; nessun head di una PR viene eseguito come codice di controllo.
+La raccolta di due minuti continua nello stesso runner con attese brevi, senza inferenze, dopo
+un’osservazione fresca dello stato. Variazioni della coda rispettano il limite originario di dieci
+minuti. Un takeover o una prenotazione triage già running impediscono un secondo avvio.
+
+Check nativi validi ma non ancora verdi, anche opzionali annullati, mantengono la PR in
+`waiting-checks`: nessun esito viene interpretato come successo. Le prove e i contatori già
+completati restano intatti e una successiva osservazione dello stesso SHA può proseguire senza
+un’altra inferenza. Inventari malformati, protezioni assenti, errori di autenticazione o identità
+modificate continuano a fallire chiusi. Check obbligatori falliti o annullati non permettono merge.
+
+La delega per work item riguarda solo nuovi piani compatibili e il primo tentativo iniziale.
+Le correzioni successive possono usare il senior, preservando il grafo e tutti i tentativi.
+L’autorizzazione di recupero comprende anche le prenotazioni e i risultati dei figli. Output
+definitivamente bloccati e figli completati ma non integrati sono archiviati separatamente
+quando identità, scope e contenuto sono verificabili; chiamate ignote non diventano retry.
+
+Queste proprietà vanno provate con test di controllo e poi con eventi nativi reali sulla
+revisione effettivamente attivata. Test locali o merge del codice non dimostrano da soli
+abilitazione Actions, credenziali funzionanti, review effettiva o deploy verificato.

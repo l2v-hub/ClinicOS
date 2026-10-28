@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-23T18:56:53.699033+00:00",
+  "sourceBase": "26a4137814f47c78d590f1b4dfe928d480e92909",
+  "attempts": [
+    {
+      "status": "corrected-before-source-freeze",
+      "finding": "Identical-byte hardlink replacement was invisible to Git content diff; validate every assigned existing file metadata, not only changed files."
+    },
+    {
+      "status": "resolved-environment-fixture",
+      "finding": "Sparse checkout omitted existing automation imports and legacy trace fixture; checked out those tracked existing paths unchanged."
+    },
+    {
+      "status": "verified",
+      "tests": 1564,
+      "passed": 1561,
+      "failed": 0,
+      "skipped": 3,
+      "runtime": "Node 22.23.4",
+      "syntaxChecksPassed": 16
+    }
+  ],
+  "actualModelInference": false,
+  "actualClaudeAccountAuthInspected": false,
+  "canonicalSubjectsChanged": false,
+  "clinicalAppChanged": false,
+  "liveWorkflowEnabled": false
+}

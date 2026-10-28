@@ -1,0 +1,65 @@
+{
+  "at": "2026-10-23T18:20:20.685811+00:00",
+  "status": "accepted",
+  "sourceBase": "26a4137814f47c78d590f1b4dfe928d480e92909",
+  "planSha256": "ebe0cf6b1a2619539c886e2e5ca981077295ac8b6dfeebfc5cebe8fb2f9bbdb1",
+  "analysisSha256": "df986fa2c2c8a69c27143aaf22c9bae7d2e43e0defe5cda5d59b23e927a799e6",
+  "acceptedBy": "codex-cloud-root",
+  "userAuthorization": "Current explicit user request for adaptive ticket execution, optional Claude smaller models, preserving existing peer review",
+  "scope": {
+    "new": [
+      "agent-team/src/bug-pipeline/work-items.mjs",
+      "agent-team/src/bug-pipeline/work-item-workspace.mjs",
+      "agent-team/src/bug-pipeline/claude-executor.mjs"
+    ],
+    "modify": [
+      "agent-team/src/bug-pipeline/contracts.mjs",
+      "agent-team/src/bug-pipeline/routing.mjs",
+      "agent-team/src/bug-pipeline/models.mjs",
+      "agent-team/src/bug-pipeline/cli.mjs",
+      "agent-team/src/bug-pipeline/process.mjs",
+      "agent-team/src/bug-pipeline/workspace.mjs",
+      "agent-team/src/bug-pipeline/pipeline.mjs",
+      "agent-team/src/bug-pipeline/operator-authorization.mjs"
+    ],
+    "newTests": [
+      "agent-team/tests/bug-pipeline/work-items.test.mjs",
+      "agent-team/tests/bug-pipeline/work-item-workspace.test.mjs",
+      "agent-team/tests/bug-pipeline/claude-executor.test.mjs",
+      "agent-team/tests/bug-pipeline/adaptive-pipeline.test.mjs"
+    ],
+    "existingTests": [
+      "agent-team/tests/bug-pipeline/contracts.test.mjs",
+      "agent-team/tests/bug-pipeline/routing.test.mjs",
+      "agent-team/tests/bug-pipeline/models.test.mjs",
+      "agent-team/tests/bug-pipeline/workspace.test.mjs",
+      "agent-team/tests/bug-pipeline/pipeline.test.mjs",
+      "agent-team/tests/bug-pipeline/operator-authorization.test.mjs",
+      "agent-team/tests/bug-pipeline/subscription-auth.test.mjs"
+    ],
+    "docs": [
+      "docs/adaptive-work-items.md"
+    ],
+    "excluded": [
+      "attempt-budget semantics",
+      "release gates",
+      "review-policy allowlists",
+      "standalone infrastructure allowlists",
+      "deployment workflows",
+      "review provider/auth",
+      "old23 and PR504 canonical subjects",
+      "source9 evidence",
+      "root user worktree"
+    ]
+  },
+  "refinements": [
+    "Actual Claude executable is Linux ELF despite .exe filename; root capability correction is authoritative.",
+    "Claude adapter executes only file tools with --restricted, empty strict MCP, disabled slash commands, no nested agents/Bash/remote tools; controller independently runs all tests.",
+    "No existing canonical subjects or PR504 request are edited; no new paid runtime probes, external billing or clinical release.",
+    "Provider/model availability must distinguish configured identifiers and read-only preflight from actual successful inference.",
+    "New feature branch is based on PR504 candidate9 and must not bypass its pending review.",
+    "Root owns task graph/state/caller wiring, process credential boundary, shared installation/docs; Luna owns only new Claude adapter and its new tests.",
+    "A real production-caller pipeline/workspace integration test and real Git DAG test are mandatory, with private/sanitized event evidence.",
+    "Native parent per-stage/budget semantics and exact-SHA review protections remain unchanged; uncertain outcomes never replay."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "evidenceKind": "synthetic-local-qa-surface",
+  "feature": "single-developer infrastructure merge policy",
+  "baseline": "d0c5fd82e358de60b4e31879e02f04929c7b0954",
+  "targetedSuite": { "tests": 77, "passed": 77, "failed": 0, "skipped": 0 },
+  "reviewAssertions": {
+    "sameAccountIndependentSessionsAccepted": true,
+    "nativeApprovalFabricated": false,
+    "adminBypassUsed": false,
+    "currentNativeChecksRequired": true,
+    "exactShaProofRequired": true,
+    "durableReservationRequired": true,
+    "applicationProviderRuntimePathsRejected": true,
+    "unknownAndMalformedPathsRejected": true,
+    "nativeMergeRefusalRecoveryTested": true
+  },
+  "liveClaims": {
+    "githubMergeVerified": false,
+    "nativeCiVerified": false,
+    "workflowActivationVerified": false,
+    "deploymentVerified": false
+  }
+}

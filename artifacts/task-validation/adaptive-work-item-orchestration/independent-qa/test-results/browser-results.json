@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "assertions": 48,
+  "consoleErrors": [],
+  "httpErrors": [],
+  "externalRequests": [],
+  "reloadChecked": true,
+  "sourceEventsSha256": "88975a052e55123a1c1204385a029bbcc144fe024931b6f6925a6d07a3b1dbd6",
+  "actualFeature": "bounded real Git DAG production stage caller",
+  "syntheticBoundaries": [
+    "model provider outputs",
+    "codex verification sandbox dispatch replaced with actual native Node fixture verification"
+  ]
+}

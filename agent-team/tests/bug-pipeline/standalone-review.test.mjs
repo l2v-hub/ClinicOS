@@ -31,7 +31,7 @@ import { mkdtemp, rm, mkdir, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import nodePath from 'node:path';
 const clone = (value) => structuredClone(value);
-// Core merge fixtures inject a harmless scope; production CLI policy remains empty.
+// Core merge fixtures inject one harmless file; production uses the fixed trusted scopes.
 const FIXTURE_INFRASTRUCTURE_FILES = Object.freeze(['docs/synthetic-review-regression.md']);
 const sha = 'a'.repeat(40),
   baseSha = 'b'.repeat(40),
@@ -49,6 +49,7 @@ function fixture({ authorizationVerifier = true, now } = {}) {
     login = 'maintainer',
     authorized = true,
     allChecks = true,
+    nativeChecks,
     mutateTree,
     checksHook,
     mergeBase = baseSha;
@@ -63,7 +64,11 @@ function fixture({ authorizationVerifier = true, now } = {}) {
     state: 'open',
     merged: false,
     draft: false,
-    head: { sha, ref: 'feature/review', repo: { full_name: repo, fork: false } },
+    head: {
+      sha,
+      ref: 'feature/review',
+      repo: { full_name: repo, fork: false },
+    },
     base: { sha: baseSha, ref: 'main', repo: { full_name: repo } },
   };
   const feedback = {
@@ -127,7 +132,10 @@ function fixture({ authorizationVerifier = true, now } = {}) {
     issues: [],
     packet: {
       path,
-      files: { ...files, 'imported-history.json': sha256(content['imported-history.json']) },
+      files: {
+        ...files,
+        'imported-history.json': sha256(content['imported-history.json']),
+      },
     },
     sourceManifest: sources,
     implementation,
@@ -184,11 +192,19 @@ function fixture({ authorizationVerifier = true, now } = {}) {
       ...clone(feedback),
       comments: [
         ...clone(feedback.comments),
-        ...clone(comments).map((c) => ({ id: c.id, body: c.body, author: c.user.login })),
+        ...clone(comments).map((c) => ({
+          id: c.id,
+          body: c.body,
+          author: c.user.login,
+        })),
       ],
     }),
     commentPR: async (number, body) =>
-      comments.push({ id: comments.length + 1, body, user: { login, type: 'User' } }),
+      comments.push({
+        id: comments.length + 1,
+        body,
+        user: { login, type: 'User' },
+      }),
     publishExternalReview: async (number, head, review, round) => {
       published.push({ number, head, review, round });
       feedback.comments.push({
@@ -203,16 +219,18 @@ function fixture({ authorizationVerifier = true, now } = {}) {
     const args = call.args,
       endpoint = args[1];
     if (args[0] === 'pr' && args[1] === 'checks')
-      return {
-        ok: allChecks,
-        stdout: JSON.stringify([
-          {
-            name: 'AI Runtime Tests',
-            state: allChecks ? 'SUCCESS' : 'FAILURE',
-            bucket: allChecks ? 'pass' : 'fail',
-          },
-        ]),
-      };
+      return nativeChecks
+        ? clone(nativeChecks)
+        : {
+            ok: allChecks,
+            stdout: JSON.stringify([
+              {
+                name: 'AI Runtime Tests',
+                state: allChecks ? 'SUCCESS' : 'FAILURE',
+                bucket: allChecks ? 'pass' : 'fail',
+              },
+            ]),
+          };
     if (endpoint === 'user') return { ok: true, stdout: JSON.stringify({ login }) };
     if (endpoint === `repos/${repo}/pulls/81`) return { ok: true, stdout: JSON.stringify(pr) };
     if (endpoint.startsWith(`repos/${repo}/compare/`))
@@ -228,7 +246,10 @@ function fixture({ authorizationVerifier = true, now } = {}) {
       if (treeOverrides.has(revision))
         return {
           ok: true,
-          stdout: JSON.stringify({ truncated: false, tree: clone(treeOverrides.get(revision)) }),
+          stdout: JSON.stringify({
+            truncated: false,
+            tree: clone(treeOverrides.get(revision)),
+          }),
         };
       const tree = [
         {
@@ -293,6 +314,7 @@ function fixture({ authorizationVerifier = true, now } = {}) {
     setActor: (v) => (login = v),
     revoke: () => (authorized = false),
     failChecks: () => (allChecks = false),
+    setNativeChecks: (value) => (nativeChecks = value),
     mutateTree: (fn) => (mutateTree = fn),
     checksHook: (fn) => (checksHook = fn),
     setMergeBase: (value) => (mergeBase = value),
@@ -396,16 +418,41 @@ test('cloud standalone stale result preserves old failed round and replacement n
   await f.controller.request(81);
   let original, replacement;
   const result = await processCloudReview({
-    github: f.github, handoff: {}, standalone: f.controller, cwd: '/trusted', env: {},
-    retrieve: async () => ({ packet: { subject_sha: f.manifest.sha, feedback: await f.github.reviewFeedback(81) }, tracked: new Set([f.manifest.sourceManifest[0].path]) }),
-    probe: async () => ({ profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } }), communication: { publishState: async () => assert.fail('No stale projection') },
+    github: f.github,
+    handoff: {},
+    standalone: f.controller,
+    cwd: '/trusted',
+    env: {},
+    retrieve: async () => ({
+      packet: {
+        subject_sha: f.manifest.sha,
+        feedback: await f.github.reviewFeedback(81),
+      },
+      tracked: new Set([f.manifest.sourceManifest[0].path]),
+    }),
+    probe: async () => ({
+      profile: {
+        model: 'claude-opus-4-7',
+        contextWindow: 1000000,
+        maxOutputTokens: 64000,
+      },
+    }),
+    communication: {
+      publishState: async () => assert.fail('No stale projection'),
+    },
     wake: async () => assert.fail('No stale wake'),
     run: async () => {
       original = structuredClone(f.remote().standaloneReviews[0]);
       await f.controller.failOwnedClaim(81, original, 'claude-timeout');
-      await f.controller.request(81, { recoverFailed: true, authorizationRef: 'test:session' });
+      await f.controller.request(81, {
+        recoverFailed: true,
+        authorizationRef: 'test:session',
+      });
       replacement = await f.controller.claim(81);
-      return { ok: true, stdout: JSON.stringify({ structured_output: report() }) };
+      return {
+        ok: true,
+        stdout: JSON.stringify({ structured_output: report() }),
+      };
     },
   });
   assert.equal(result.status, 'ownership-changed');
@@ -413,14 +460,21 @@ test('cloud standalone stale result preserves old failed round and replacement n
   assert.equal(result.reportSha256, sha256(JSON.stringify(report())));
   assert.notEqual(original.externalReview.claimId, replacement.externalReview.claimId);
   assert.deepEqual(f.remote().standaloneReviews[0], replacement);
-  assert.deepEqual(replacement.reviews.map((item) => item.status), ['failed', 'running']);
-  assert.deepEqual(replacement.reviewLedger.rounds.map((item) => item.verdict), ['failed', 'running']);
+  assert.deepEqual(
+    replacement.reviews.map((item) => item.status),
+    ['failed', 'running'],
+  );
+  assert.deepEqual(
+    replacement.reviewLedger.rounds.map((item) => item.verdict),
+    ['failed', 'running'],
+  );
   assert.equal(f.comments.filter((item) => item.body.includes('"kind": "report"')).length, 0);
   assert.equal(f.published.length, 0);
 });
 
 test('standalone submit forwards full expected claim and permits the unchanged native reservation', async () => {
-  const f = fixture(), expected = await claimed(f);
+  const f = fixture(),
+    expected = await claimed(f);
   f.remote().standaloneReviews[0].checkObservation = { passed: true };
   await f.controller.submit(81, report(), { expectedClaim: expected });
   const published = await f.controller.reconcilePR(81);
@@ -435,21 +489,52 @@ test('standalone cloud preclaim spec or feedback drift preserves its pending req
     const f = fixture();
     await f.controller.adopt(f.manifest);
     await f.controller.request(81);
-    f.remote().standaloneReviews[0].plan = { acceptance: ['Original frozen specification.'] };
+    f.remote().standaloneReviews[0].plan = {
+      acceptance: ['Original frozen specification.'],
+    };
     const request = f.remote().standaloneReviews[0].externalReview.requestId;
     let modelCalls = 0;
     const result = await processCloudReview({
-      github: f.github, handoff: {}, standalone: f.controller, cwd: '/trusted', env: {},
-      retrieve: async (subject) => ({ packet: { subject_sha: subject.sha, plan: subject.plan,
-        feedback: await f.github.reviewFeedback(81) }, tracked: new Set([f.manifest.sourceManifest[0].path]) }),
+      github: f.github,
+      handoff: {},
+      standalone: f.controller,
+      cwd: '/trusted',
+      env: {},
+      retrieve: async (subject) => ({
+        packet: {
+          subject_sha: subject.sha,
+          plan: subject.plan,
+          feedback: await f.github.reviewFeedback(81),
+        },
+        tracked: new Set([f.manifest.sourceManifest[0].path]),
+      }),
       probe: async () => {
-        if (mutation === 'plan') f.remote().standaloneReviews[0].plan.acceptance[0] = 'New independent authorization acceptance.';
-        else f.feedback.comments.push({ id: 999, author: 'human', body: 'New feedback before claim.' });
-        return { profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } };
+        if (mutation === 'plan')
+          f.remote().standaloneReviews[0].plan.acceptance[0] =
+            'New independent authorization acceptance.';
+        else
+          f.feedback.comments.push({
+            id: 999,
+            author: 'human',
+            body: 'New feedback before claim.',
+          });
+        return {
+          profile: {
+            model: 'claude-opus-4-7',
+            contextWindow: 1000000,
+            maxOutputTokens: 64000,
+          },
+        };
       },
       communication: { publishState: async () => assert.fail('No projection') },
       wake: async () => assert.fail('No other-owner recovery'),
-      run: async () => { modelCalls++; return { ok: true, stdout: JSON.stringify({ structured_output: report() }) }; },
+      run: async () => {
+        modelCalls++;
+        return {
+          ok: true,
+          stdout: JSON.stringify({ structured_output: report() }),
+        };
+      },
     });
     assert.equal(result.status, 'preclaim-source-changed');
     assert.equal(result.claimed, false);
@@ -469,10 +554,15 @@ test('standalone optional claim snapshot is copied before gated asynchronous ver
   expected.plan = { acceptance: ['Original specification.'] };
   let changed = false;
   f.checksHook(async () => {
-    if (!changed) { changed = true; expected.plan.acceptance[0] = 'Aliased specification changed during checks.'; }
+    if (!changed) {
+      changed = true;
+      expected.plan.acceptance[0] = 'Aliased specification changed during checks.';
+    }
   });
-  await assert.rejects(f.controller.claim(81, { expectedSubject: expected }),
-    (error) => error.code === 'preclaim-source-changed');
+  await assert.rejects(
+    f.controller.claim(81, { expectedSubject: expected }),
+    (error) => error.code === 'preclaim-source-changed',
+  );
   assert.equal(f.remote().standaloneReviews[0].reviews.length, 0);
   assert.equal(f.remote().standaloneReviews[0].externalReview.status, 'comment-requested');
 });
@@ -557,7 +647,10 @@ test('pipeline independent QA reserves ownership, keeps release hold, and expose
     calls++;
     assert.equal(f.remote().standaloneReviews[0].codexFinalReview.status, 'running');
     assert.equal(s.sha, sha);
-    return { status: 'verified', summary: 'Read-only acceptance/evidence checked.' };
+    return {
+      status: 'verified',
+      summary: 'Read-only acceptance/evidence checked.',
+    };
   });
   await standaloneReviewStep(options);
   assert.equal(calls, 1);
@@ -583,9 +676,17 @@ test('QA findings and changed feedback block, while an existing running owner re
     const subject = await published(f);
     let calls = 0;
     if (kind === 'interrupted')
-      subject.codexFinalReview = { status: 'running', subjectSha: sha, claudeRound: 1 };
+      subject.codexFinalReview = {
+        status: 'running',
+        subjectSha: sha,
+        claudeRound: 1,
+      };
     if (kind === 'feedback')
-      f.feedback.comments.push({ id: 500, author: 'human', body: 'Check regression' });
+      f.feedback.comments.push({
+        id: 500,
+        author: 'human',
+        body: 'Check regression',
+      });
     await standaloneReviewStep(
       stepOptions(f, subject, async () => {
         calls++;
@@ -607,7 +708,10 @@ test('infrastructure merge boundary reuses exact-SHA protected merge and rejects
   f.manifest.releaseHold = false;
   const subject = await published(f);
   await standaloneReviewStep(
-    stepOptions(f, subject, async () => ({ status: 'verified', summary: 'No findings' })),
+    stepOptions(f, subject, async () => ({
+      status: 'verified',
+      summary: 'No findings',
+    })),
   );
   let called = 0;
   f.github.mergePullRequest = async (pr, head, { guard }) => {
@@ -790,6 +894,7 @@ async function runRuntime(
       summary: 'Read-only source and evidence inspection passed.',
     }),
   },
+  infrastructureFiles = STANDALONE_INFRASTRUCTURE_FILES,
 ) {
   f.github.intake = async () => {};
   f.github.discoverQueue = async () => [];
@@ -801,7 +906,7 @@ async function runRuntime(
     workspace,
     store: f.github.createStateStore(),
     standaloneController: f.controller,
-    standaloneInfrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+    standaloneInfrastructureFiles: infrastructureFiles,
   });
 }
 function makeAllowlisted(f, file = FIXTURE_INFRASTRUCTURE_FILES[0]) {
@@ -812,30 +917,57 @@ function makeAllowlisted(f, file = FIXTURE_INFRASTRUCTURE_FILES[0]) {
   f.manifest.packet.files['imported-history.json'] = sha256(f.content['imported-history.json']);
 }
 
-test('trusted runtime fixed policy protects all original infrastructure paths and leaves protected merge manual', async () => {
-  assert.deepEqual(STANDALONE_INFRASTRUCTURE_FILES, []);
+test('trusted runtime supplies the fixed infrastructure scopes and merges after genuine two-model proof', async () => {
+  assert.deepEqual(
+    STANDALONE_INFRASTRUCTURE_FILES,
+    (await import('../../src/bug-pipeline/review-policy.mjs')).STANDALONE_INFRASTRUCTURE_SCOPES,
+  );
   assert.equal(Object.isFrozen(STANDALONE_INFRASTRUCTURE_FILES), true);
   const f = fixture();
   makeAllowlisted(f, 'docs/standalone-pr-review.md');
   f.manifest.releaseHold = false;
   await published(f);
-  f.github.mergePullRequest = async () => assert.fail('Runbook is human protected');
+  let merges = 0;
+  f.github.mergePullRequest = async (pr, head, { guard }) => {
+    await guard();
+    merges++;
+    f.pr.state = 'closed';
+    f.pr.merged = true;
+    f.pr.merge_commit_sha = '8'.repeat(40);
+    return { number: pr, reviewedSha: head, mergeSha: '8'.repeat(40) };
+  };
   const state = await runRuntime(f);
-  assert.equal(state.standaloneReviews[0].phase, 'ready');
+  assert.equal(state.standaloneReviews[0].release.status, 'merged');
   assert.equal(state.standaloneReviews[0].codexFinalReview.status, 'verified');
-  assert.equal(state.standaloneReviews[0].release, undefined);
-  await runRuntime(f, { finalQaStandalone: async () => assert.fail('Verified QA is idempotent') });
+  assert.equal(merges, 1);
+  await runRuntime(f, {
+    finalQaStandalone: async () => assert.fail('Verified QA is idempotent'),
+  });
 });
 
-test('runtime never merges held, unknown, application, unreviewed or failed independent QA subjects', async () => {
-  for (const kind of ['hold', 'unknown', 'application', 'no-claude', 'codex-finding']) {
+test('runtime refuses held, unknown, application and failed-proof subjects', async () => {
+  for (const kind of [
+    'hold',
+    'unknown',
+    'application',
+    'backend',
+    'database',
+    'provider',
+    'no-claude',
+    'codex-finding',
+  ]) {
     const f = fixture();
     makeAllowlisted(
       f,
-      kind === 'application'
-        ? 'frontend/src/actual.ts'
+      ['application', 'backend', 'database', 'provider'].includes(kind)
+        ? {
+            application: 'frontend/src/actual.ts',
+            backend: 'backend/api/routes.mjs',
+            database: 'prisma/schema.prisma',
+            provider: 'agent-team/providers/cloud.mjs',
+          }[kind]
         : kind === 'unknown'
-          ? 'agent-team/src/unreviewed-policy.mjs'
+          ? 'misc/unreviewed-policy.mjs'
           : undefined,
     );
     f.manifest.releaseHold = kind === 'hold' ? 'Existing release hold' : false;
@@ -1012,19 +1144,24 @@ test('finalize authentication accepts only an explicit synthetic directory witho
       env: { HOME: emptyHome },
       dependencies: {
         run: async () => dependencyCalls++,
-        github: { createStateStore: () => (dependencyCalls++, { load: async () => null }) },
+        github: {
+          createStateStore: () => (dependencyCalls++, { load: async () => null }),
+        },
       },
     }),
     (error) => error.code === 'codex-auth-unavailable',
   );
   assert.equal(dependencyCalls, 0, 'Authentication gate runs before mocked dependencies');
   await assert.rejects(
-    finalizeEnvironment({ ...environment, CODEX_API_KEY: 'synthetic-test-only-key' }),
+    finalizeEnvironment({
+      ...environment,
+      CODEX_API_KEY: 'synthetic-test-only-key',
+    }),
     (error) => error.code === 'codex-auth-conflict',
   );
 });
 
-test('production finalize CLI dispatch runs separate Codex QA and leaves protected merge manual without repeating QA', async (t) => {
+test('production finalize CLI dispatches separate Codex QA and merges once without repeating QA', async (t) => {
   const env = await isolatedFinalizeEnvironment(t);
   const f = fixture();
   makeAllowlisted(f, 'docs/standalone-pr-review.md');
@@ -1057,12 +1194,11 @@ test('production finalize CLI dispatch runs separate Codex QA and leaves protect
   };
   assert.equal(await handoffMain({ args: ['finalize', '--pr', '81'], env, dependencies }), 0);
   assert.equal(qa, 1);
-  assert.equal(merges, 0);
-  assert.equal(f.remote().standaloneReviews[0].phase, 'ready');
-  assert.equal(f.remote().standaloneReviews[0].release, undefined);
+  assert.equal(merges, 1);
+  assert.equal(f.remote().standaloneReviews[0].release.status, 'merged');
   assert.equal(await handoffMain({ args: ['finalize', '--pr', '81'], env, dependencies }), 0);
   assert.equal(qa, 1);
-  assert.equal(merges, 0);
+  assert.equal(merges, 1);
 });
 
 test('finalize CLI cannot process normal/unadopted PR and preserves failed Codex execution as blocked', async (t) => {
@@ -1161,7 +1297,7 @@ test('Unicode CLI pre-read allowance never expands canonical comment limit or no
   assert.equal(normal.comments.length, 0);
 });
 
-test('concurrent production finalize and pipeline observe active Codex QA without mutation, duplicate inference or merge', async (t) => {
+test('concurrent production finalize and pipeline observe active Codex QA without mutation or duplicate inference', async (t) => {
   const env = await isolatedFinalizeEnvironment(t);
   const f = fixture();
   makeAllowlisted(f);
@@ -1191,7 +1327,10 @@ test('concurrent production finalize and pipeline observe active Codex QA withou
           qa++;
           announce();
           await gate;
-          return { status: 'verified', summary: 'Independent owner completed its bounded QA.' };
+          return {
+            status: 'verified',
+            summary: 'Independent owner completed its bounded QA.',
+          };
         },
       },
     },
@@ -1223,9 +1362,8 @@ test('concurrent production finalize and pipeline observe active Codex QA withou
   assert.equal(merges, 0);
   finish();
   assert.equal(await first, 0);
-  assert.equal(merges, 0);
-  assert.equal(f.remote().standaloneReviews[0].phase, 'ready');
-  assert.equal(f.remote().standaloneReviews[0].release, undefined);
+  assert.equal(merges, 1);
+  assert.equal(f.remote().standaloneReviews[0].release.status, 'merged');
   assert.equal(f.remote().standaloneReviews[0].codexFinalReview.status, 'verified');
 });
 
@@ -1255,7 +1393,9 @@ test('an existing open merge reservation remains pending instead of racing its a
   const before = JSON.stringify(f.remote()),
     writes = f.writes.length;
   f.github.mergePullRequest = async () => assert.fail('Do not race a current merge owner');
-  await runRuntime(f, { finalQaStandalone: async () => assert.fail('Do not repeat QA') });
+  await runRuntime(f, {
+    finalQaStandalone: async () => assert.fail('Do not repeat QA'),
+  });
   assert.equal(JSON.stringify(f.remote()), before);
   assert.equal(f.writes.length, writes);
 });
@@ -1464,7 +1604,9 @@ test('actual store disjoint request+claim while QA waits preserves both entities
   assert.equal(merges, 1);
   await owner.controller.finalize(81, {
     infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
-    workspace: { finalQaStandalone: async () => assert.fail('Do not repeat model') },
+    workspace: {
+      finalQaStandalone: async () => assert.fail('Do not repeat model'),
+    },
   });
   assert.equal(models, 1);
   assert.equal(merges, 1);
@@ -1489,7 +1631,10 @@ test('actual store same-subject modification during QA remains a conflict withou
         models++;
         enter();
         await barrier;
-        return { status: 'verified', summary: 'Owner result cannot replace a changed subject' };
+        return {
+          status: 'verified',
+          summary: 'Owner result cannot replace a changed subject',
+        };
       },
     },
   });
@@ -1505,7 +1650,7 @@ test('actual store same-subject modification during QA remains a conflict withou
   assert.equal(models, 1);
 });
 
-test('F1 trust-root and workflow changes never merge even through a caller-supplied allowlist', async () => {
+test('F1 reviewed trust-root and workflow changes merge after exact proof and durable reservation', async () => {
   for (const file of [
     'agent-team/src/bug-pipeline/cli.mjs',
     'agent-team/src/bug-pipeline/review-policy.mjs',
@@ -1523,10 +1668,31 @@ test('F1 trust-root and workflow changes never merge even through a caller-suppl
     f.manifest.releaseHold = false;
     const subject = await published(f);
     await standaloneReviewStep(
-      stepOptions(f, subject, async () => ({ status: 'verified', summary: 'Synthetic QA' })),
+      stepOptions(f, subject, async () => ({
+        status: 'verified',
+        summary: 'Synthetic QA',
+      })),
     );
-    f.github.mergePullRequest = async () =>
-      assert.fail('Human-protected trust root cannot auto-merge');
+    f.setActor(subject.externalReview.owner);
+    assert.equal(subject.externalReview.owner, 'maintainer');
+    subject.release = {
+      reviewProof: captureReleaseReviewProof(subject, {
+        repository: repo,
+        collection: 'standaloneReviews',
+      }),
+      status: 'merging',
+      reviewedSha: sha,
+      prNumber: 81,
+      nonce: `reservation-${file}`,
+      reservedAt: new Date().toISOString(),
+    };
+    await stepOptions(f, subject, async () => assert.fail()).save();
+    let merges = 0;
+    f.github.mergePullRequest = async (_pr, _sha, { guard }) => {
+      await guard();
+      merges++;
+      return { mergeSha: '8'.repeat(40) };
+    };
     const result = await mergeStandaloneReview({
       subject,
       controller: f.controller,
@@ -1534,17 +1700,9 @@ test('F1 trust-root and workflow changes never merge even through a caller-suppl
       infrastructureFiles: [file],
       execute: true,
     });
-    assert.equal(result.status, 'ready-to-merge');
-    assert.equal(result.reason, 'human-protected-trust-root');
+    assert.equal(result.mergeSha, '8'.repeat(40));
+    assert.equal(merges, 1);
   }
-  assert.ok(
-    STANDALONE_INFRASTRUCTURE_FILES.every(
-      (file) =>
-        !file.startsWith('.github/') &&
-        !file.startsWith('agent-team/src/') &&
-        !file.includes('inspect-demo-source-topology'),
-    ),
-  );
 });
 
 test('F2 existing manual PR, branch or issue ownership blocks adoption without shortening history', async () => {
@@ -1573,18 +1731,20 @@ test('F2 existing manual PR, branch or issue ownership blocks adoption without s
   }
 });
 
-test('F3 same-account report cannot authorize merge; distinct reviewer or protected native human approval can', async () => {
+test('F3 same-account Claude report can merge after separate Codex proof and durable reservation', async () => {
   const f = fixture();
   f.manifest.releaseHold = false;
   const subject = await published(f);
   await standaloneReviewStep(
-    stepOptions(f, subject, async () => ({ status: 'verified', summary: 'Synthetic QA' })),
+    stepOptions(f, subject, async () => ({
+      status: 'verified',
+      summary: 'Synthetic QA',
+    })),
   );
-  f.github.nativeReviewAuthorization = async () => ({
-    author: 'maintainer',
-    humanApproved: false,
-    protectedReviews: true,
-  });
+  f.setActor(subject.externalReview.owner);
+  assert.equal(subject.externalReview.owner, 'maintainer');
+  f.github.nativeReviewAuthorization = async () =>
+    assert.fail('Model independence is established by the review proof, not account comparison');
   subject.release = {
     reviewProof: captureReleaseReviewProof(subject, {
       repository: repo,
@@ -1611,24 +1771,9 @@ test('F3 same-account report cannot authorize merge; distinct reviewer or protec
       infrastructureFiles: [subject.sourceManifest[0].path],
       execute: true,
     });
-  assert.equal((await merge()).reason, 'independent-reviewer-required');
-  assert.equal(merges, 0);
-  f.github.nativeReviewAuthorization = async () => ({
-    author: 'different-author',
-    humanApproved: false,
-    protectedReviews: true,
-  });
-  f.setActor('distinct-finalizer');
-  await merge();
+  const receipt = await merge();
+  assert.equal(receipt.mergeSha, '8'.repeat(40));
   assert.equal(merges, 1);
-  f.setActor('maintainer');
-  f.github.nativeReviewAuthorization = async () => ({
-    author: 'maintainer',
-    humanApproved: true,
-    protectedReviews: true,
-  });
-  await merge();
-  assert.equal(merges, 2);
 });
 
 test('F4 head-drift claim recovery preserves the consumed round and enables adoption of the new SHA', async () => {
@@ -1723,7 +1868,10 @@ test('F4 audited QA release is one-use, maintainer-only, preserves old reservati
     }),
   );
   await standaloneReviewStep(
-    stepOptions(f, recovered, async () => ({ status: 'verified', summary: 'Fresh synthetic QA' })),
+    stepOptions(f, recovered, async () => ({
+      status: 'verified',
+      summary: 'Fresh synthetic QA',
+    })),
   );
   assert.equal(recovered.codexFinalReview.status, 'verified');
   assert.notEqual(recovered.codexFinalReview.nonce, 'old-qa');
@@ -1808,7 +1956,11 @@ test('F5 persisted submit reports failed projection and reconcile alone converge
   assert.equal(failures, 3, 'Only idempotent label mutations retry');
   const failure = JSON.parse(errors.at(-1));
   assert.deepEqual(
-    { persisted: failure.persisted, projection: failure.projection, next: failure.next },
+    {
+      persisted: failure.persisted,
+      projection: failure.projection,
+      next: failure.next,
+    },
     {
       persisted: true,
       projection: 'failed',
@@ -1881,25 +2033,213 @@ test('F8 only optional exact-name Vercel failures are tolerated; required checks
     cwd: '/trusted',
   });
   assert.equal((await controller.checks(81)).ok, true);
-  f.github.requiredChecks = async () => ({ ok: false, details: ['Vercel required: FAILURE'] });
+  f.github.requiredChecks = async () => ({
+    ok: false,
+    details: ['Vercel required: FAILURE'],
+  });
   await assert.rejects(controller.checks(81), /required checks/);
-  f.github.requiredChecks = async () => ({ ok: true, details: ['required: SUCCESS'] });
+  f.github.requiredChecks = async () => ({
+    ok: true,
+    details: ['required: SUCCESS'],
+  });
   const unknown = createStandaloneReview({
     github: f.github,
     cwd: '/trusted',
     run: (call) =>
       call.args[0] === 'pr'
-        ? { ok: false, stdout: JSON.stringify([{ name: 'UnreviewedOptional', bucket: 'fail' }]) }
+        ? {
+            ok: false,
+            code: 1,
+            stdout: JSON.stringify([{ name: 'UnreviewedOptional', bucket: 'fail' }]),
+          }
         : f.run(call),
   });
   await assert.rejects(unknown.checks(81), /failed or pending/);
+});
+
+test('native check observations reconcile on the same head without repeating final QA or losing proofs', async () => {
+  const requiredNames = [
+    'bug-pipeline-tests',
+    'secret-scan',
+    'frontend-tests',
+    'archive-tests',
+    'gate',
+    'browser-e2e',
+  ];
+  const green = requiredNames.map((name) => ({
+    name,
+    state: 'SUCCESS',
+    bucket: 'pass',
+  }));
+  for (const entrypoint of ['finalize', 'runtime']) {
+    for (const observation of ['cancel', 'fail', 'pending', 'required-cancel']) {
+      const f = fixture();
+      f.manifest.releaseHold = false;
+      await published(f);
+      let qaCalls = 0;
+      const workspace = {
+        finalQaStandalone: async () => {
+          qaCalls++;
+          return {
+            status: 'verified',
+            summary: 'Synthetic independent final QA',
+          };
+        },
+      };
+      const reconcile = async () =>
+        entrypoint === 'runtime'
+          ? (await runRuntime(f, workspace, [])).standaloneReviews[0]
+          : f.controller.finalize(81, { workspace, infrastructureFiles: [] });
+      const ready = await reconcile();
+      assert.equal(ready.phase, 'ready');
+      const evidence = (subject) => {
+        const { phase, reason, ...proofs } = clone(subject);
+        return proofs;
+      };
+      const before = evidence(ready);
+      const requiredCancelled = observation === 'required-cancel';
+      f.github.requiredChecks = async () =>
+        requiredCancelled
+          ? {
+              ok: false,
+              details: ['browser-e2e: CANCELLED', 'gh pr checks exited 1'],
+            }
+          : {
+              ok: true,
+              details: requiredNames.map((name) => `${name}: SUCCESS`),
+            };
+      f.setNativeChecks({
+        ok: false,
+        code: observation === 'pending' ? 8 : 1,
+        stdout: JSON.stringify(
+          requiredCancelled
+            ? green.map((check) =>
+                check.name === 'browser-e2e'
+                  ? { ...check, state: 'CANCELLED', bucket: 'cancel' }
+                  : check,
+              )
+            : [
+                ...green,
+                {
+                  name: 'Optional integration',
+                  state:
+                    observation === 'cancel'
+                      ? 'CANCELLED'
+                      : observation === 'fail'
+                        ? 'FAILURE'
+                        : 'IN_PROGRESS',
+                  bucket: observation,
+                },
+              ],
+        ),
+      });
+      f.github.mergePullRequest = async () => assert.fail('Unsuccessful checks cannot merge');
+      await assert.rejects(
+        mergeStandaloneReview({
+          subject: ready,
+          controller: f.controller,
+          github: f.github,
+          infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
+        }),
+        /required checks|failed or pending/,
+      );
+      for (let index = 0; index < 2; index++) {
+        const waiting = await reconcile();
+        assert.equal(waiting.phase, 'waiting-checks', `${entrypoint}: ${observation}`);
+        assert.deepEqual(
+          evidence(waiting),
+          before,
+          'Model proofs, histories, approved SHA and reservations remain identical',
+        );
+        assert.equal(qaCalls, 1, 'Waiting consumes no new model session');
+        await assert.rejects(
+          mergeStandaloneReview({
+            subject: waiting,
+            controller: f.controller,
+            github: f.github,
+            infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
+          }),
+          /ready/,
+        );
+      }
+      f.github.requiredChecks = async () => ({
+        ok: true,
+        details: requiredNames.map((name) => `${name}: SUCCESS`),
+      });
+      f.setNativeChecks({
+        ok: true,
+        stdout: JSON.stringify([
+          ...green,
+          { name: 'Optional integration', state: 'SUCCESS', bucket: 'pass' },
+        ]),
+      });
+      const resumed = await reconcile();
+      assert.equal(resumed.phase, 'ready');
+      assert.equal(resumed.reason, ready.reason);
+      assert.deepEqual(evidence(resumed), before);
+      assert.equal(qaCalls, 1);
+    }
+  }
+});
+
+test('malformed, unavailable or contradictory native check observations cannot become a check wait or success', async () => {
+  for (const observation of [
+    { ok: true, stdout: 'not-json' },
+    {
+      ok: true,
+      stdout: JSON.stringify([{ name: 'optional', bucket: 'unrecognized' }]),
+    },
+    {
+      ok: false,
+      code: 1,
+      stdout: JSON.stringify([{ name: 'required', bucket: 'pass' }]),
+    },
+    {
+      ok: false,
+      code: 8,
+      stdout: JSON.stringify([{ name: 'required', bucket: 'pass' }]),
+    },
+    null,
+  ]) {
+    const f = fixture();
+    await published(f);
+    const ready = await f.controller.finalize(81, {
+      workspace: {
+        finalQaStandalone: async () => ({
+          status: 'verified',
+          summary: 'Synthetic QA',
+        }),
+      },
+      infrastructureFiles: [],
+    });
+    if (observation) f.setNativeChecks(observation);
+    else
+      f.github.requiredChecks = async () => ({
+        ok: false,
+        details: ['No required checks were reported; verify branch protection before release.'],
+      });
+    const blocked = await f.controller.finalize(81, {
+      workspace: {
+        finalQaStandalone: async () => assert.fail('Do not repeat completed QA'),
+      },
+      infrastructureFiles: [],
+    });
+    assert.equal(blocked.phase, 'blocked');
+    assert.equal(blocked.approvedSha, undefined);
+    assert.deepEqual(blocked.codexFinalReview, ready.codexFinalReview);
+    assert.deepEqual(blocked.implementation, ready.implementation);
+    assert.deepEqual(blocked.reviews, ready.reviews);
+  }
 });
 
 test('F9 independent QA reservation uses injected time', async () => {
   const f = fixture(),
     subject = await published(f);
   await standaloneReviewStep({
-    ...stepOptions(f, subject, async () => ({ status: 'verified', summary: 'Synthetic QA' })),
+    ...stepOptions(f, subject, async () => ({
+      status: 'verified',
+      summary: 'Synthetic QA',
+    })),
     now: () => new Date('2025-01-02T03:04:05.000Z'),
   });
   assert.equal(subject.codexFinalReview.reservedAt, '2025-01-02T03:04:05.000Z');
@@ -1982,7 +2322,9 @@ test('F4 a transient waiting-subject read failure leaves phase and consumed hist
     standaloneController: {
       ...f.controller,
       publishState: async () => {
-        throw Object.assign(new Error('Synthetic HTTP 503'), { code: 'github-read-transient' });
+        throw Object.assign(new Error('Synthetic HTTP 503'), {
+          code: 'github-read-transient',
+        });
       },
     },
   });
@@ -2061,7 +2403,12 @@ test('audited completed operator continuation remains the latest tested source a
   ]);
   // Legacy tested source now differs. Only the actual completed continuation matches the new source.
   f.treeOverrides.set(testedSha, [
-    { path: next.sourceManifest[0].path, sha: '3'.repeat(40), type: 'blob', mode: '100644' },
+    {
+      path: next.sourceManifest[0].path,
+      sha: '3'.repeat(40),
+      type: 'blob',
+      mode: '100644',
+    },
   ]);
   const adopted = await f.controller.adopt(next);
   assert.deepEqual(adopted.implementation, original);
@@ -2070,7 +2417,12 @@ test('audited completed operator continuation remains the latest tested source a
   assert.deepEqual(f.remote().operatorTakeover, state.operatorTakeover);
   await f.controller.verify(adopted);
   f.treeOverrides.set(testedContinuation, [
-    { path: next.sourceManifest[0].path, sha: '4'.repeat(40), type: 'blob', mode: '100644' },
+    {
+      path: next.sourceManifest[0].path,
+      sha: '4'.repeat(40),
+      type: 'blob',
+      mode: '100644',
+    },
   ]);
   await assert.rejects(f.controller.verify(adopted), /Frozen standalone subject/);
 });
@@ -2105,7 +2457,9 @@ async function fairSubjects() {
     publishState: async () => {},
     reconcile: async (subject, save) => {
       if (subject.pr.number === 81 && failureCode)
-        throw Object.assign(new Error('Synthetic read failure'), { code: failureCode });
+        throw Object.assign(new Error('Synthetic read failure'), {
+          code: failureCode,
+        });
       subject.projectionTicks = (subject.projectionTicks ?? 0) + 1;
       await save();
       return false;
@@ -2199,9 +2553,8 @@ test('transient counters reset on successful work and changed SHA without resett
   );
 });
 
-test('human-protected prompt and policy tests reject automatic merge even with a supplied allowlist and native override', async () => {
-  const { requiresHumanReview, standaloneMergePolicy } =
-    await import('../../src/bug-pipeline/review-policy.mjs');
+test('standalone merge policy accepts bounded infrastructure and refuses clinical or malformed paths', async () => {
+  const { standaloneMergePolicy } = await import('../../src/bug-pipeline/review-policy.mjs');
   const paths = [
     'docs/claude-local-review-prompt.md',
     'agent-team/tests/bug-pipeline/github.test.mjs',
@@ -2213,21 +2566,22 @@ test('human-protected prompt and policy tests reject automatic merge even with a
     'agent-team/tests/bug-pipeline/models.test.mjs',
     'agent-team/tests/bug-pipeline/workspace.test.mjs',
   ];
-  for (const path of paths) {
-    assert.equal(requiresHumanReview(path), true);
-    assert.equal(STANDALONE_INFRASTRUCTURE_FILES.includes(path), false);
-    for (const files of [[path], ['docs/standalone-pr-review.md', path]])
-      assert.equal(
-        standaloneMergePolicy({
-          files,
-          reviewer: 'reviewer',
-          actor: 'actor',
-          native: { humanApproved: true, author: 'author', protectedReviews: true },
-        }),
-        'human-protected-trust-root',
-      );
-  }
-  assert.equal(requiresHumanReview('docs/standalone-pr-review.md'), true);
+  for (const path of paths)
+    assert.equal(standaloneMergePolicy({ files: [path], infrastructureFiles: [path] }), null, path);
+  for (const path of [
+    'frontend/src/app.ts',
+    'backend/api/routes.mjs',
+    'prisma/schema.prisma',
+    'agent-team/providers/runtime.mjs',
+    'misc/unknown.mjs',
+    '../docs/standalone-pr-review.md',
+    'docs//standalone-pr-review.md',
+  ])
+    assert.equal(
+      standaloneMergePolicy({ files: [path], infrastructureFiles: [path, '../'] }),
+      'unsupported-infrastructure-scope',
+      path,
+    );
 });
 
 test('post-save request notice failure is repaired by the actual suggested CLI command, idempotently without spending a round', async () => {
@@ -2267,11 +2621,19 @@ test('post-save request notice failure is repaired by the actual suggested CLI c
   console.log = () => {};
   try {
     assert.equal(
-      await handoffMain({ args, env: {}, dependencies: { github: f.github, run: f.run } }),
+      await handoffMain({
+        args,
+        env: {},
+        dependencies: { github: f.github, run: f.run },
+      }),
       0,
     );
     assert.equal(
-      await handoffMain({ args, env: {}, dependencies: { github: f.github, run: f.run } }),
+      await handoffMain({
+        args,
+        env: {},
+        dependencies: { github: f.github, run: f.run },
+      }),
       0,
     );
   } finally {
@@ -2358,7 +2720,10 @@ test('merge lease covers bounded preparation plus command; recovery at 31 second
 });
 
 test('force-live flag alone cannot replace trusted external capability verification', async () => {
-  const f = fixture({ authorizationVerifier: false, now: () => new Date('2026-10-18T00:00:00Z') });
+  const f = fixture({
+    authorizationVerifier: false,
+    now: () => new Date('2026-10-18T00:00:00Z'),
+  });
   await reservedMerge(f);
   const before = clone(f.remote());
   await assert.rejects(
@@ -2403,7 +2768,10 @@ test('merge during actual save guard refuses stale recovery and reconciles the r
   assert.equal(f.remote().standaloneReviews[0].release.nonce, 'unique-merge-reservation');
   f.github.mergePullRequest = async () =>
     assert.fail('Receipt recovery must not issue another merge');
-  const recovered = await f.controller.finalize(81, { workspace: {}, infrastructureFiles: [] });
+  const recovered = await f.controller.finalize(81, {
+    workspace: {},
+    infrastructureFiles: [],
+  });
   assert.equal(recovered.release.status, 'merged');
   assert.equal(recovered.release.mergeSha, f.pr.merge_commit_sha);
 });
@@ -2415,7 +2783,10 @@ test('merge after recovery CAS is reconciled through tombstone without a second 
   assert.ok(tombstone.release.recoveryReleasedAt);
   markMerged(f);
   f.github.mergePullRequest = async () => assert.fail('No blind retry of uncertain remote outcome');
-  const recovered = await f.controller.finalize(81, { workspace: {}, infrastructureFiles: [] });
+  const recovered = await f.controller.finalize(81, {
+    workspace: {},
+    infrastructureFiles: [],
+  });
   assert.equal(recovered.release.status, 'merged');
   assert.equal(recovered.mergeHistory[0].nonce, 'unique-merge-reservation');
 });
@@ -2454,7 +2825,12 @@ test('definite protected merge rejection archives the full reservation for expli
     throw githubOperationError({ stderr: 'gh: protection refused (HTTP 405)' }, 'merge');
   };
   const subject = await f.controller.finalize(81, {
-    workspace: { finalQaStandalone: async () => ({ status: 'verified', summary: 'Synthetic QA' }) },
+    workspace: {
+      finalQaStandalone: async () => ({
+        status: 'verified',
+        summary: 'Synthetic QA',
+      }),
+    },
     infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
   });
   assert.equal(subject.phase, 'blocked');
@@ -2471,7 +2847,12 @@ test('definite protected merge rejection archives the full reservation for expli
   const resumed = await f.controller.recover(81, {
     action: 'resume',
     expectedSha: sha,
-    token: sha256(JSON.stringify({ phase: subject.phase, failureCode: subject.failureCode })),
+    token: sha256(
+      JSON.stringify({
+        phase: subject.phase,
+        failureCode: subject.failureCode,
+      }),
+    ),
     reason: 'Definite rejection diagnosed',
   });
   assert.equal(resumed.phase, 'waiting-review');
@@ -2500,7 +2881,12 @@ test('completed gh mergePullRequest GraphQL refusal archives after a fresh exact
   });
   f.github.mergePullRequest = (...args) => realGitHub.mergePullRequest(...args);
   const subject = await f.controller.finalize(81, {
-    workspace: { finalQaStandalone: async () => ({ status: 'verified', summary: 'Synthetic QA' }) },
+    workspace: {
+      finalQaStandalone: async () => ({
+        status: 'verified',
+        summary: 'Synthetic QA',
+      }),
+    },
     infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
   });
   assert.equal(subject.phase, 'blocked');
@@ -2517,7 +2903,12 @@ test('completed gh mergePullRequest GraphQL refusal archives after a fresh exact
   const resumed = await f.controller.recover(81, {
     action: 'resume',
     expectedSha: sha,
-    token: sha256(JSON.stringify({ phase: subject.phase, failureCode: subject.failureCode })),
+    token: sha256(
+      JSON.stringify({
+        phase: subject.phase,
+        failureCode: subject.failureCode,
+      }),
+    ),
     reason: 'Completed GraphQL refusal diagnosed',
   });
   assert.equal(resumed.phase, 'waiting-review');
@@ -2538,12 +2929,20 @@ test('unknown-outcome merge that committed reconciles receipt and preserves rese
     throw githubOperationError({ error: 'timeout' }, 'merge');
   };
   const uncertain = await f.controller.finalize(81, {
-    workspace: { finalQaStandalone: async () => ({ status: 'verified', summary: 'Synthetic QA' }) },
+    workspace: {
+      finalQaStandalone: async () => ({
+        status: 'verified',
+        summary: 'Synthetic QA',
+      }),
+    },
     infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
   });
   assert.equal(uncertain.failureCode, 'github-write-uncertain');
   assert.equal(uncertain.release.status, 'merging');
-  const recovered = await f.controller.finalize(81, { workspace: {}, infrastructureFiles: [] });
+  const recovered = await f.controller.finalize(81, {
+    workspace: {},
+    infrastructureFiles: [],
+  });
   assert.equal(recovered.release.status, 'merged');
   assert.equal(recovered.release.nonce, uncertain.release.nonce);
   assert.equal(recovered.release.mergeSha, f.pr.merge_commit_sha);
@@ -2566,18 +2965,31 @@ test('projection 502 retries block with operation metadata and resume only after
     },
   });
   await controller.adopt(f.manifest);
-  const blocked = await controller.finalize(81, { workspace: {}, infrastructureFiles: [] });
+  const blocked = await controller.finalize(81, {
+    workspace: {},
+    infrastructureFiles: [],
+  });
   assert.equal(writes, 3);
   assert.equal(blocked.failureCode, 'github-write-uncertain');
   assert.equal(blocked.failureOperation, 'projection');
   const options = {
     action: 'resume',
     expectedSha: sha,
-    token: sha256(JSON.stringify({ phase: blocked.phase, failureCode: blocked.failureCode })),
+    token: sha256(
+      JSON.stringify({
+        phase: blocked.phase,
+        failureCode: blocked.failureCode,
+      }),
+    ),
     reason: 'Idempotent projection repaired after native verification',
   };
   f.treeOverrides.set(testedSha, [
-    { path: f.manifest.sourceManifest[0].path, type: 'blob', mode: '100644', sha: '7'.repeat(40) },
+    {
+      path: f.manifest.sourceManifest[0].path,
+      type: 'blob',
+      mode: '100644',
+      sha: '7'.repeat(40),
+    },
   ]);
   await assert.rejects(controller.recover(81, options), /Frozen standalone subject/);
   f.treeOverrides.delete(testedSha);
@@ -2691,7 +3103,9 @@ test('background standalone waiting notice neither reads the notice nor blocks w
   const previous = clone(f.remote().standaloneReviews[0]),
     notices = f.comments.length;
   f.github.viewIssue = async () => {
-    throw Object.assign(new Error('Synthetic notice read 503'), { code: 'github-read-transient' });
+    throw Object.assign(new Error('Synthetic notice read 503'), {
+      code: 'github-read-transient',
+    });
   };
   const result = (await runRuntime(f, {})).standaloneReviews[0];
   // The label read has its own backoff; the notice path performs no API operation.
@@ -2722,7 +3136,10 @@ test('slow merge readiness keeps 31-second reservation live and prevents command
         if (elapsed === 31000) {
           const release = f.remote().standaloneReviews[0].release;
           await assert.rejects(
-            f.controller.recover(81, { ...mergeRecovery(), token: release.nonce }),
+            f.controller.recover(81, {
+              ...mergeRecovery(),
+              token: release.nonce,
+            }),
             /authorized force/,
           );
         }
@@ -2736,7 +3153,10 @@ test('slow merge readiness keeps 31-second reservation live and prevents command
     };
     const result = await f.controller.finalize(81, {
       workspace: {
-        finalQaStandalone: async () => ({ status: 'verified', summary: 'Synthetic QA' }),
+        finalQaStandalone: async () => ({
+          status: 'verified',
+          summary: 'Synthetic QA',
+        }),
       },
       infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
     });
@@ -2768,7 +3188,10 @@ test('definite merge rejection cannot archive a reservation after native head/st
     const blocked = await f.controller.finalize(81, {
       infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
       workspace: {
-        finalQaStandalone: async () => ({ status: 'verified', summary: 'Synthetic QA' }),
+        finalQaStandalone: async () => ({
+          status: 'verified',
+          summary: 'Synthetic QA',
+        }),
       },
     });
     assert.equal(merges, 1);
@@ -2915,7 +3338,10 @@ test('F2 standalone modern QA binds live feedback and freezes the exact proof be
     assert.equal(reserved.release.status, 'merging');
     assert.deepEqual(
       reserved.release.reviewProof,
-      captureReleaseReviewProof(reserved, { repository: repo, collection: 'standaloneReviews' }),
+      captureReleaseReviewProof(reserved, {
+        repository: repo,
+        collection: 'standaloneReviews',
+      }),
     );
     assert.equal(
       reserved.codexFinalReview.feedbackFingerprint,
@@ -2927,7 +3353,10 @@ test('F2 standalone modern QA binds live feedback and freezes the exact proof be
   };
   const result = await f.controller.finalize(81, {
     workspace: {
-      finalQaStandalone: async () => ({ status: 'verified', summary: 'Verified modern feedback' }),
+      finalQaStandalone: async () => ({
+        status: 'verified',
+        summary: 'Verified modern feedback',
+      }),
     },
     infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
   });
@@ -2939,7 +3368,9 @@ test('F2 standalone modern QA binds live feedback and freezes the exact proof be
   await store.save(state);
   const frozen = JSON.stringify(f.remote().standaloneReviews[0]);
   await f.controller.finalize(81, {
-    workspace: { finalQaStandalone: async () => assert.fail('terminal merged subject') },
+    workspace: {
+      finalQaStandalone: async () => assert.fail('terminal merged subject'),
+    },
     infrastructureFiles: FIXTURE_INFRASTRUCTURE_FILES,
   });
   assert.equal(JSON.stringify(f.remote().standaloneReviews[0]), frozen);

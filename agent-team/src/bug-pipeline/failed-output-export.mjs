@@ -7,6 +7,7 @@ import { lstat, mkdir, readFile, realpath, rename, rm, writeFile } from 'node:fs
 import { editableFile, relativeFile, sha256, safeText as safeTextSummary } from './contracts.mjs';
 import { regularFile, knownTerminalFailure, safeVerificationText } from './workspace.mjs';
 import { sanitizeText } from '../core/sanitize.mjs';
+import { validateWorkItems } from './work-items.mjs';
 
 const exec = promisify(execFile);
 const MAX_FILES = 20;
@@ -95,6 +96,64 @@ async function baseline(root, sha, file) {
     return null;
   }
 }
+async function writeRetainedExport({
+  batchId,
+  outputRoot,
+  destinationName,
+  copies,
+  patch,
+  manifest,
+  reportCopy = null,
+}) {
+  assert.match(destinationName, /^[A-Za-z0-9-]{1,240}$/, 'Invalid export destination');
+  const name = relativeFile(batchId);
+  assert.match(name, /^bug-batch-[1-9]\d*$/, 'Invalid batch export identity');
+  const batchRoot = path.join(outputRoot, name);
+  const destination = path.join(batchRoot, destinationName);
+  const stage = path.join(batchRoot, `.partial-${randomUUID()}`);
+  await mkdir(outputRoot, { recursive: true, mode: 0o700 });
+  assert.equal(await realpath(outputRoot), path.resolve(outputRoot), 'Export root is redirected');
+  await mkdir(batchRoot, { recursive: true, mode: 0o700 });
+  assert.equal(
+    await realpath(batchRoot),
+    path.resolve(batchRoot),
+    'Export batch root is redirected',
+  );
+  assert.equal(
+    await lstat(destination).then(
+      () => true,
+      (error) => {
+        if (error.code === 'ENOENT') return false;
+        throw error;
+      },
+    ),
+    false,
+    'Exact failed output export already exists',
+  );
+  try {
+    await mkdir(stage, { mode: 0o700 });
+    for (const item of copies) {
+      const target = path.join(stage, 'files', item.file);
+      await mkdir(path.dirname(target), { recursive: true, mode: 0o700 });
+      await writeFile(target, item.bytes, { mode: 0o600 });
+    }
+    if (reportCopy) {
+      const file = path.join(stage, reportCopy.exportedPath);
+      await mkdir(path.dirname(file), { recursive: true, mode: 0o700 });
+      await writeFile(file, reportCopy.bytes, { mode: 0o600 });
+    }
+    await writeFile(path.join(stage, 'source.patch'), patch, { mode: 0o600 });
+    await writeFile(path.join(stage, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n', {
+      mode: 0o600,
+    });
+    await rename(stage, destination);
+  } catch (error) {
+    await rm(stage, { recursive: true, force: true });
+    throw error;
+  }
+  return manifest;
+}
+
 export async function exportFailedCode({ batch, workspace, outputRoot }) {
   const progress = batch.controllerProgress;
   assert.ok(knownTerminalFailure(batch), 'Exact known terminal failure required');
@@ -145,7 +204,12 @@ export async function exportFailedCode({ batch, workspace, outputRoot }) {
       assert.equal(Boolean(info.mode & 0o111), identity.executable, 'Retained source mode changed');
       current = safeSource(bytes);
       sourceBytes += bytes.length;
-      copies.push({ file, bytes, sha256: identity.sha256, mode: info.mode & 0o777 });
+      copies.push({
+        file,
+        bytes,
+        sha256: identity.sha256,
+        mode: info.mode & 0o777,
+      });
     }
     patch += patchFor(file, previous, current);
     assert.ok(
@@ -287,53 +351,129 @@ export async function exportFailedCode({ batch, workspace, outputRoot }) {
     verification,
     modelReport,
   };
-  const name = relativeFile(batch.id);
-  assert.match(name, /^bug-batch-[1-9]\d*$/, 'Invalid batch export identity');
-  const batchRoot = path.join(outputRoot, name);
-  const destination = path.join(
-    batchRoot,
-    `round-${batch.controllerProgress.round}-${batch.controllerProgress.failedStep}-${manifest.checkpointSha256}`,
-  );
-  const stage = path.join(batchRoot, `.partial-${randomUUID()}`);
-  await mkdir(outputRoot, { recursive: true, mode: 0o700 });
-  assert.equal(await realpath(outputRoot), path.resolve(outputRoot), 'Export root is redirected');
-  await mkdir(batchRoot, { recursive: true, mode: 0o700 });
-  assert.equal(
-    await realpath(batchRoot),
-    path.resolve(batchRoot),
-    'Export batch root is redirected',
-  );
-  assert.equal(
-    await lstat(destination).then(
-      () => true,
-      (error) => {
-        if (error.code === 'ENOENT') return false;
-        throw error;
-      },
-    ),
-    false,
-    'Exact failed output export already exists',
-  );
-  try {
-    await mkdir(stage, { mode: 0o700 });
-    for (const item of copies) {
-      const target = path.join(stage, 'files', item.file);
-      await mkdir(path.dirname(target), { recursive: true, mode: 0o700 });
-      await writeFile(target, item.bytes, { mode: 0o600 });
-    }
-    if (reportCopy) {
-      const file = path.join(stage, reportCopy.exportedPath);
-      await mkdir(path.dirname(file), { recursive: true, mode: 0o700 });
-      await writeFile(file, reportCopy.bytes, { mode: 0o600 });
-    }
-    await writeFile(path.join(stage, 'source.patch'), patch, { mode: 0o600 });
-    await writeFile(path.join(stage, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n', {
-      mode: 0o600,
-    });
-    await rename(stage, destination);
-  } catch (error) {
-    await rm(stage, { recursive: true, force: true });
-    throw error;
-  }
+  await writeRetainedExport({
+    batchId: batch.id,
+    outputRoot,
+    destinationName: `round-${batch.controllerProgress.round}-${batch.controllerProgress.failedStep}-${manifest.checkpointSha256}`,
+    copies,
+    patch,
+    manifest,
+    reportCopy,
+  });
   return manifest;
+}
+
+// A definitely blocked child is retained separately from parent integration. Its
+// immutable reservation and current owned output must both match; unknown calls
+// and dirty/foreign scopes are never made replayable by this observational export.
+export async function exportFailedWorkItemCode({ batch, run, node, workspace, outputRoot }) {
+  validateWorkItems(batch);
+  assert.ok(
+    batch.workItems.runs.includes(run) && run.nodes.includes(node),
+    'Canonical child record required',
+  );
+  assert.equal(run.status, 'failed', 'Unknown graph outcome is not exportable');
+  const blocked = node.status === 'blocked' && !node.integration;
+  const unintegrated =
+    node.status === 'implemented' &&
+    (!node.integration || node.integration.status === 'conflict') &&
+    node.commit?.status === 'committed' &&
+    node.commit.afterSha === node.childSha;
+  assert.ok(blocked || unintegrated, 'Definite settled child output required');
+  const item = batch.workItems.spec.nodes.find((entry) => entry.id === node.id);
+  const checkpoint = blocked ? node.failedOutputCheckpoint : node.outputManifest;
+  assert.ok(
+    item && checkpoint && typeof workspace.captureFailedWorkItemCheckpoint === 'function',
+    'Exact failed child checkpoint unavailable',
+  );
+  assert.equal(checkpoint.cwd, node.cwd);
+  assert.equal(checkpoint.branch, node.branch);
+  assert.equal(checkpoint.head, blocked ? node.sourceIntegrationSha : node.childSha);
+  assert.equal(checkpoint.baseSha, node.sourceIntegrationSha);
+  assert.deepEqual(checkpoint.packetHashes, node.checkpoint.packetHashes);
+  assert.deepEqual(
+    await workspace.captureFailedWorkItemCheckpoint({
+      batch,
+      item,
+      reservation: node,
+    }),
+    checkpoint,
+    'Failed child output changed',
+  );
+  const files = Object.keys(checkpoint.output);
+  assert(files.length <= MAX_FILES, 'Retained child file count exceeded');
+  const copies = [];
+  let total = 0,
+    patch = '';
+  for (const file of files) {
+    safeFileName(file);
+    assert(
+      item.scope.includes(file) && batch.plan.scope.includes(file),
+      'Retained child source outside accepted scope',
+    );
+    const identity = checkpoint.output[file],
+      previous = await baseline(checkpoint.cwd, checkpoint.baseSha, file);
+    let current = null;
+    if (identity) {
+      const { target, info } = await regularFile(checkpoint.cwd, file);
+      assert(
+        info.size <= MAX_FILE_BYTES && info.size === identity.bytes,
+        'Retained child size changed',
+      );
+      const bytes = await readFile(target);
+      assert.equal(sha256(bytes), identity.sha256, 'Retained child hash changed');
+      assert.equal(Boolean(info.mode & 0o111), identity.executable, 'Retained child mode changed');
+      current = safeSource(bytes);
+      total += bytes.length;
+      copies.push({
+        file,
+        bytes,
+        sha256: identity.sha256,
+        mode: info.mode & 0o777,
+      });
+    }
+    patch += patchFor(file, previous, current);
+    assert(
+      total + Buffer.byteLength(patch) <= MAX_TOTAL_BYTES,
+      'Retained child total size exceeded',
+    );
+  }
+  assert.deepEqual(
+    await workspace.captureFailedWorkItemCheckpoint({
+      batch,
+      item,
+      reservation: node,
+    }),
+    checkpoint,
+    'Failed child output changed during collection',
+  );
+  const manifest = {
+    schemaVersion: 1,
+    kind: 'partial-settled-work-item-code',
+    outcome: blocked ? 'blocked' : 'implemented-unintegrated',
+    completeness: 'allowed-source-only',
+    batchId: batch.id,
+    itemId: node.id,
+    nonce: node.nonce,
+    parentImplementationRound: run.parentImplementationRound,
+    sourceSha: node.sourceIntegrationSha,
+    specSha256: batch.workItems.specSha256,
+    bindingSha256: batch.workItems.bindingSha256,
+    checkpointSha256: sha256(JSON.stringify(checkpoint)),
+    files: copies.map(({ file, bytes, sha256, mode }) => ({
+      file,
+      bytes: bytes.length,
+      sha256,
+      mode,
+    })),
+    deletedFiles: files.filter((file) => checkpoint.output[file] === null),
+  };
+  return writeRetainedExport({
+    batchId: batch.id,
+    outputRoot,
+    destinationName: `child-${node.id}-${node.nonce}-${manifest.checkpointSha256}`,
+    copies,
+    patch,
+    manifest,
+  });
 }
