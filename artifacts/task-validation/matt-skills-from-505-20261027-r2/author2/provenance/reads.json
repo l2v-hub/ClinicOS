@@ -1,0 +1,37 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/humanlayer/skills/main/LICENSE",
+    "file": "humanlayer-skills-LICENSE.txt",
+    "status": 200,
+    "bytes": 1067,
+    "sha256": "5f13c18ea00ea5c1384f41745feeca774079164f7f59a92e4ac0899ad217b26f"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/humanlayer/skills/main/plugins/show-me/skills/show-me/SKILL.md",
+    "file": "show-me-SKILL.md",
+    "status": 200,
+    "bytes": 3328,
+    "sha256": "434a2346cc95e313b0d367d477dda2e23ba642dd2181757415a09500664af100"
+  },
+  {
+    "url": "https://api.github.com/repos/humanlayer/skills/git/ref/heads/main",
+    "status": 200,
+    "file": "upstream-main-ref.json",
+    "sha256": "5e5334198c544263a452aedb7175d1f009f9c0a4767b3b13a6a8095672ac006e",
+    "bytes": 332
+  },
+  {
+    "url": "https://raw.githubusercontent.com/humanlayer/skills/653b6411c1f70c275a18e37673b042ff99f67ceb/LICENSE",
+    "status": 200,
+    "file": "humanlayer-skills-LICENSE-pinned.txt",
+    "sha256": "5f13c18ea00ea5c1384f41745feeca774079164f7f59a92e4ac0899ad217b26f",
+    "bytes": 1067
+  },
+  {
+    "url": "https://raw.githubusercontent.com/humanlayer/skills/653b6411c1f70c275a18e37673b042ff99f67ceb/plugins/show-me/skills/show-me/SKILL.md",
+    "status": 200,
+    "file": "show-me-SKILL-pinned.md",
+    "sha256": "434a2346cc95e313b0d367d477dda2e23ba642dd2181757415a09500664af100",
+    "bytes": 3328
+  }
+]

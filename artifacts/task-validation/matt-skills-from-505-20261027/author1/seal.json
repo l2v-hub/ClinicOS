@@ -1,0 +1,13 @@
+{
+  "reservationNonce": "35f9f839-d232-47d9-9940-cda41827b5f2",
+  "sourceSha": "1123d8bb33d5dec4bcb09e5c6bc7851797db5ee7",
+  "at": "2026-10-27T11:13:03.455308+00:00",
+  "files": {
+    "source-projection.json": "e119ebd418afdf6af7941fc77cea87c45de6a0599e45818c0ab4ff59d6a55ae4",
+    "validation.json": "7a9e81fd2836564829229a65a9463d917f7338952618d3ac0dd026f1c3638b9d",
+    "implementation-report.md": "35214352b0266a79efb16985be5945132a8a19b051c53025c3493a3d8a517f3d",
+    "reservation.json": "1a8614d6cace7c820cdc109bc2a79a80dd98ec555b3320e2f130c24577aec5a8",
+    "task-contract-validation.log": "f9fe38351cbe53a517c18cf3173a4bc028ddb6ae5b37e3cf71683b8cc1a034a1"
+  },
+  "status": "PARTIAL_READY_FOR_INDEPENDENT_QA"
+}

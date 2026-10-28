@@ -1,0 +1,31 @@
+{
+  "subject_sha": "cf45ad47f4146f929bf5a19acd12d35336258953",
+  "verdict": "changes-requested",
+  "summary": "I reviewed the 80-file vendor-only change against the supplied contract, plan, analysis, validation report, independent QA report and seal, and the author's exact-head CI comment. I did not run anything. The checked blob SHAs in the change list match the analysis table. The 27 SKILL.md frontmatters look like valid YAML, and each name matches its directory. Every cross-skill reference in ask-matt points to a skill that is vendored here. The MIT notice is included, so AC1 to AC3 look supported as stated. A static read of the two shell templates found no correctness bug that blocks merge. Three issues remain that the AC checks do not cover. First, the wizard skill can be triggered by the model on its own, without the user asking. Second, its scoping step tells the agent to read the repo's real env files, which in this clinical repo would put credentials into the agent's context. That conflicts with the PR's own analysis, which says vendored workflows do not grant authority over credentials. Third, the pr skill copies near-verbatim content from a different upstream without that source's license notice, and the two source links it gives do not agree. AC5's later gates (independent final Codex review and protected merge) are still pending by design, and I am not claiming they are done.",
+  "findings": [
+    {
+      "severity": "medium",
+      "file": ".agents/skills/wizard/agents/openai.yaml",
+      "line": 3,
+      "problem": "The wizard skill is the only vendored skill whose job is handling credentials, GitHub Actions secrets and variables, and irreversible cutovers. It is left model-invocable: the policy block that disables implicit invocation is missing, and its description and ask-matt both say the agent should reach for it on its own. In a clinical repository, the PR's own analysis says generic community workflows do not create authority to change credentials, but this config lets the agent start that workflow without the user asking.",
+      "requested_change": "Add the same policy block the user-invoked skills use, which disables implicit invocation, to the wizard's agents config. Also mark the wizard SKILL.md frontmatter as not model-invocable, and update the ask-matt router text that calls it model-invoked. If keeping it model-invocable is a deliberate choice, record that decision and the authorization boundary in the analysis.",
+      "test_expectation": "A structural check over every agents openai.yaml confirms the wizard has implicit invocation disabled, matching the other skills with side effects such as handoff, triage, to-spec and implement. The ask-matt text agrees with the config."
+    },
+    {
+      "severity": "medium",
+      "file": ".agents/skills/wizard/SKILL.md",
+      "line": 20,
+      "problem": "Step 1 of the wizard tells the agent to read the repo's real env file and its variants before asking the user anything. In this clinical repository those files can hold live credentials and connection settings. Following this step loads secret values into the agent's context and transcript. Nothing in the step limits the read to key names, and nothing says to redact values.",
+      "requested_change": "Change the scoping step so the agent reads only the example or template env file and the CI workflows, which hold key names. If it touches a real env file at all, it should extract key names only and never values. Alternatively, add an explicit redaction rule like the one in diagnosing-bugs. Document the change as a local modification to the vendored upstream.",
+      "test_expectation": "A reviewer reading the wizard Process section finds no instruction that loads secret-bearing env values into context, and finds an explicit keys-only or redaction rule."
+    },
+    {
+      "severity": "low",
+      "file": ".agents/skills/pr/CREDITS.md",
+      "line": 3,
+      "problem": "CREDITS.md says the Summary section of the pr skill is reproduced almost word for word from a third-party show-me skill. That content comes from a different upstream than the MIT-licensed source vendored here. The PR adds only the MIT license file for the main upstream; no license or notice for this second source is included. The two source links also disagree: the pr SKILL.md frontmatter points to one repository, and CREDITS.md links another. Provenance for this content is therefore unclear, and AC2 only checks the main MIT license.",
+      "requested_change": "Find the license for the show-me source. Vendor its required notice next to the existing MIT license file, or link it from CREDITS.md. Make the frontmatter URL and the CREDITS link point to the same canonical source. If the license does not allow redistribution, remove the reproduced section.",
+      "test_expectation": "The license check confirms a notice for each upstream whose content is reproduced. The pr skill's frontmatter URL and CREDITS link resolve to the same source."
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "status": "failed-verifier-probe",
+  "reason": "Initial verifier counted all29 repository skills instead of the27 imported skills; two existing ClinicOS skills must be excluded from imported-package count. No projected source changed.",
+  "allRepositorySkills": 29,
+  "importedPackageSkills": 27,
+  "existingSkills": [
+    "clinicos",
+    "codex-bug-triage"
+  ]
+}

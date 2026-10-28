@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "kind": "TaskContract",
+  "createdAt": "2026-10-27T14:19:38.231047+00:00",
+  "actor": "/root",
+  "reservationNonce": "92aa0766-efbe-44ff-beec-4c343162cec9",
+  "sourceBaseline": "cf45ad47f4146f929bf5a19acd12d35336258953",
+  "files": [
+    ".agents/skills/wizard/agents/openai.yaml",
+    ".agents/skills/wizard/SKILL.md",
+    ".agents/skills/ask-matt/SKILL.md",
+    ".agents/skills/pr/CREDITS.md",
+    ".agents/skills/pr/SKILL.md"
+  ],
+  "goal": "Address exactly three genuine Claude1 findings: wizard explicit-only, setup template/key-name-only, and truthful third-party PR guidance provenance/license.",
+  "maximumProviderCalls": 0,
+  "maximumPublicProvenanceReads": 8,
+  "noRealEnvReads": true,
+  "sourceCeiling": 80,
+  "licenseNoticeWithinExistingCredits": true,
+  "validation": [
+    "static agent YAML",
+    "all27frontmatter",
+    "exact five-file scope",
+    "80 sourcefile ceiling",
+    "provenance consistency and required license notice",
+    "history retained"
+  ],
+  "finalDecision": "PARTIAL pending independentQA/newCI/newClaude/final/protectedmerge"
+}

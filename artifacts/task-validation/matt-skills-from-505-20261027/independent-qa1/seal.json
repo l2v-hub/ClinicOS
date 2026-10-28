@@ -1,0 +1,9 @@
+{
+  "nonce": "cb9117eb-d1f6-4ce5-be33-8dabcb737897",
+  "sourceSha": "1123d8bb33d5dec4bcb09e5c6bc7851797db5ee7",
+  "at": "2026-10-27 11:15:40 UTC",
+  "reportSha256": "bba4715a45cd94c74cd1a9c34e74a27c3af59e1dc0965c44870f5d37ac7f285a",
+  "resultSha256": "80931089149bda2290e865d473eb7f2f84448f032d60b2671fefa6adf91d7dd4",
+  "verdict": "PASS",
+  "sourcePublicationReady": true
+}

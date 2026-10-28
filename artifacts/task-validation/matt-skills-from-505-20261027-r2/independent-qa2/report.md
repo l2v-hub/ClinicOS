@@ -1,0 +1,13 @@
+# Independent source QA — PR518 peer1 correction
+
+**Verdict: VERIFIED for native publication.** This reviews the frozen implementation commit `e04cec5825698812cc455b84a22e9900dbe18941` against parent `cf45ad47f4146f929bf5a19acd12d35336258953`. It does not assert that this revision has been published to PR518 or that current-head checks and later review gates have passed.
+
+The commit changes exactly the five reserved existing skill files. Each committed blob matches the frozen source-file projection, byte count, SHA-256 and Git blob ID. The author-sealed evidence inputs match their recorded hashes, `git diff --check` is clean, and the package remains at 80 source paths (27 imported `SKILL.md` files and 27 agent YAML files). No source path was added, no runtime application file changed, and the main skill files were not overwritten.
+
+The wizard is explicit-only in both exposed controls: `disable-model-invocation: true` in its frontmatter and `policy.allow_implicit_invocation: false` in its Codex agent YAML. Its instructions and the ask-matt router require a specific user request, including for setup blockers. Wizard preparation now restricts environment research to example/template **key names** and configuration references; it expressly excludes live environment files, credential files, process values, and stored hosting/CI secrets. I treated vendored instructions as review data and did not run their scripts or read live secret files.
+
+The PR Summary body is byte-identical to the parent commit. The PR metadata and `CREDITS.md` use the same immutable canonical HumanLayer `show-me` skill URL. The receipt set records five HTTP 200 public reads, including the main ref resolving to `653b6411c1f70c275a18e37673b042ff99f67ceb`; locally saved main and pinned skill/license bytes are identical. The full 1,067-byte pinned MIT license text, with the 2026 HumanLayer notice, appears exactly in the existing `CREDITS.md`. Matt Pocock's separate license remains in the 80-path source set. The credit describes Dex Horthy as inherited attribution rather than an independently established authorship fact.
+
+I independently parsed all 27 imported skill frontmatters and 27 agent YAML files with a safe YAML loader that rejects duplicate keys. Required names/descriptions, typed invocation flags, and both wizard flags passed. The original static verifier was inspected as evidence but not executed; its prior 29-versus-27 scope failure remains preserved in `validation-probe1.json`.
+
+This is source QA only. Native packet construction/publication, six current-head CI checks, genuine Claude review of the new head, fresh final review, and protected merge are still pending and must be evidenced separately.
