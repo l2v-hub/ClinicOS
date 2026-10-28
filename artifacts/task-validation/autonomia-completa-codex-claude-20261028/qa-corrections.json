@@ -1,0 +1,8 @@
+[
+  {
+    "source": "independent QA",
+    "finding": "Caller filtered settled child retention by current failed parent progress, losing graph output after successful senior correction or retained integration conflict.",
+    "fix": "Traverse failed graphs across all batches before preserving original parent-export condition.",
+    "validation": "22 retention tests pass; independent corrected caller probe covers completed/running parents."
+  }
+]

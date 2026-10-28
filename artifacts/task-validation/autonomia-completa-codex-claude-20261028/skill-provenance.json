@@ -1,0 +1,22 @@
+[
+  {
+    "path": ".agents/skills/ask-matt/SKILL.md",
+    "matchesReviewed518": true
+  },
+  {
+    "path": ".agents/skills/pr/CREDITS.md",
+    "matchesReviewed518": true
+  },
+  {
+    "path": ".agents/skills/pr/SKILL.md",
+    "matchesReviewed518": true
+  },
+  {
+    "path": ".agents/skills/wizard/SKILL.md",
+    "matchesReviewed518": true
+  },
+  {
+    "path": ".agents/skills/wizard/agents/openai.yaml",
+    "matchesReviewed518": true
+  }
+]

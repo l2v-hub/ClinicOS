@@ -8,8 +8,9 @@ import { createRunner } from './process.mjs';
 import { createGitHub, controllerFailureCode } from './github.mjs';
 import { createModels } from './models.mjs';
 import { createWorkspace, knownTerminalFailure } from './workspace.mjs';
-import { exportFailedCode } from './failed-output-export.mjs';
+import { exportFailedCode, exportFailedWorkItemCode } from './failed-output-export.mjs';
 import { runPipeline } from './pipeline.mjs';
+import { runWithIntakeContinuation, INTAKE_QUIET_MS } from './intake-continuation.mjs';
 import { requiresHumanReview } from './review-policy.mjs';
 import { createStandaloneReview } from './standalone-review.mjs';
 
@@ -28,9 +29,44 @@ export const STANDALONE_INFRASTRUCTURE_FILES = Object.freeze(
 
 export async function exportKnownFailedOutputs({ state, workspace, outputRoot }) {
   const exports = [];
-  for (const batch of (state?.batches ?? []).filter(
-    (b) => b.controllerProgress?.status === 'failed',
-  )) {
+  for (const batch of state?.batches ?? []) {
+    for (const graph of batch.workItems?.runs ?? []) {
+      if (graph.status !== 'failed') continue;
+      for (const node of graph.nodes.filter(
+        (entry) =>
+          entry.status === 'blocked' ||
+          (entry.status === 'implemented' &&
+            (!entry.integration || entry.integration.status === 'conflict')),
+      )) {
+        try {
+          const manifest = await exportFailedWorkItemCode({
+            batch,
+            run: graph,
+            node,
+            workspace,
+            outputRoot,
+          });
+          exports.push({
+            batchId: batch.id,
+            itemId: node.id,
+            status: 'local-child-export-created',
+            checkpointSha256: manifest.checkpointSha256,
+            files: manifest.files.length,
+          });
+        } catch (error) {
+          exports.push({
+            batchId: batch.id,
+            itemId: node.id,
+            status: /already exists/.test(error.message)
+              ? 'local-child-export-already-exists'
+              : 'child-output-unavailable-or-guard-refused',
+          });
+        }
+      }
+    }
+    // A settled child graph survives a later senior success or a retained
+    // integration conflict. Parent export eligibility remains unchanged.
+    if (batch.controllerProgress?.status !== 'failed') continue;
     if (!knownTerminalFailure(batch)) {
       exports.push({ batchId: batch.id, status: 'flow-not-eligible' });
       continue;
@@ -62,7 +98,10 @@ export async function retainFailedOutputsAfterControllerError({ observe, exportF
   } catch (error) {
     return {
       failedOutputExports: [
-        { status: 'retention-failed', failureCode: controllerFailureCode(error) },
+        {
+          status: 'retention-failed',
+          failureCode: controllerFailureCode(error),
+        },
       ],
     };
   }
@@ -96,15 +135,47 @@ export async function writeBlockedControllerDiagnostic({
   return diagnostic;
 }
 
+export function workItemConfiguration(env, args = []) {
+  const mode = args.includes('--adaptive-work-items')
+    ? 'adaptive'
+    : env.CLINICOS_WORK_ITEM_DELEGATION || 'off';
+  if (!['off', 'adaptive'].includes(mode)) throw new Error('Invalid work-item delegation mode');
+  const maxParallel = Number(env.CLINICOS_WORK_ITEM_PARALLEL || 2);
+  if (!Number.isSafeInteger(maxParallel) || maxParallel < 1 || maxParallel > 2)
+    throw new Error('Work-item parallel limit must be one or two');
+  return {
+    enabled: mode === 'adaptive',
+    maxParallel,
+    claudeExecution: {
+      enabled: mode === 'adaptive' && env.CLINICOS_CLAUDE_EXECUTOR_ENABLED === 'true',
+      hostedActions: env.GITHUB_ACTIONS === 'true',
+      executable: env.CLAUDE_CLI_PATH || '',
+      configDir: env.CLINICOS_CLAUDE_EXECUTOR_CONFIG_DIR || env.CLINICOS_CLAUDE_CONFIG_DIR || '',
+      model: env.CLINICOS_CLAUDE_EXECUTOR_MODEL || 'haiku',
+      timeoutMs: Number(env.CLINICOS_CLAUDE_EXECUTOR_TIMEOUT_MS || 600_000),
+    },
+  };
+}
+
 export async function doctor({ run, models, env = process.env, cwd }) {
   const codex = await models.preflight();
   const login = env.CODEX_API_KEY
     ? { ok: true }
-    : await run({ command: 'codex', args: ['login', 'status'], cwd, envMode: 'model' });
+    : await run({
+        command: 'codex',
+        args: ['login', 'status'],
+        cwd,
+        envMode: 'model',
+      });
   const external = env.BUG_PIPELINE_REVIEW_MODE === 'external';
   const claude = external
     ? null
-    : await run({ command: 'claude', args: ['auth', 'status'], cwd, envMode: 'review' });
+    : await run({
+        command: 'claude',
+        args: ['auth', 'status'],
+        cwd,
+        envMode: 'review',
+      });
   let claudeAuth = false;
   try {
     claudeAuth = external || (claude.ok && JSON.parse(claude.stdout).loggedIn === true);
@@ -148,6 +219,8 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
       env.CODEX_SMALL_EXECUTOR_MODEL || env.CLINICOS_SMALL_EXECUTOR_MODEL || 'gpt-6-luna',
     BUG_PIPELINE_REVIEW_MODE: env.BUG_PIPELINE_REVIEW_MODE || 'external',
   };
+  const workItems = workItemConfiguration(env, args);
+  env.CLINICOS_CLAUDE_EXECUTOR_CONFIG_DIR = workItems.claudeExecution.configDir;
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
   const diagnosticRoot = path.join(root, 'agent-team', '.runtime', 'bug-pipeline');
   const failedOutputRoot = path.join(diagnosticRoot, 'failed-code');
@@ -168,6 +241,7 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
       modelDiagnostics.push(diagnostic);
       console.log(JSON.stringify({ type: 'model-diagnostic', ...diagnostic }));
     },
+    claudeExecution: workItems.claudeExecution,
   });
   const report = await doctor({ run, models, env, cwd: root });
   if (args.includes('--doctor')) {
@@ -206,7 +280,11 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
     await writeFile(
       path.join(directory, `${randomUUID()}.json`),
       JSON.stringify(
-        { schemaVersion: 1, kind: 'bounded-sanitized-verification-failure', entries },
+        {
+          schemaVersion: 1,
+          kind: 'bounded-sanitized-verification-failure',
+          entries,
+        },
         null,
         2,
       ) + '\n',
@@ -214,16 +292,31 @@ export async function main({ env = process.env, args = process.argv.slice(2) } =
     );
   };
   try {
-    const state = await runPipeline({
+    const state = await runWithIntakeContinuation({
       repo,
-      event,
-      gh,
-      models,
-      workspace,
-      store,
-      reviewMode: env.BUG_PIPELINE_REVIEW_MODE,
-      standaloneController: createStandaloneReview({ github: gh, run, cwd: root }),
-      standaloneInfrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+      observe: () => store.observe(),
+      onWait: (entry) => console.log(JSON.stringify({ type: 'intake-wait', ...entry })),
+      runOnce: () =>
+        runPipeline({
+          repo,
+          event,
+          gh,
+          models,
+          workspace,
+          store,
+          reviewMode: env.BUG_PIPELINE_REVIEW_MODE,
+          adaptiveWorkItems: {
+            enabled: workItems.enabled,
+            maxParallel: workItems.maxParallel,
+          },
+          triageWindowMs: INTAKE_QUIET_MS,
+          standaloneController: createStandaloneReview({
+            github: gh,
+            run,
+            cwd: root,
+          }),
+          standaloneInfrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+        }),
     });
     const blocked = state.batches.filter((b) => b.phase === 'blocked').length;
     const failedOutputExports = await exportKnownFailures(state);

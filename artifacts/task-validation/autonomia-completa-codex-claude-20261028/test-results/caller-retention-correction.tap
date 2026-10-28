@@ -1,0 +1,142 @@
+TAP version 13
+# Subtest: partial exit zero still schedules diagnostic and failed code artifact upload
+ok 1 - partial exit zero still schedules diagnostic and failed code artifact upload
+  ---
+  duration_ms: 6.923268
+  type: 'test'
+  ...
+# Subtest: actual verification failure records command and sanitized captured stream identities without changing failure
+ok 2 - actual verification failure records command and sanitized captured stream identities without changing failure
+  ---
+  duration_ms: 15.325951
+  type: 'test'
+  ...
+# Subtest: actual verification excerpt redacts spaced known credential assignments
+ok 3 - actual verification excerpt redacts spaced known credential assignments
+  ---
+  duration_ms: 8.700494
+  type: 'test'
+  ...
+# Subtest: verification sanitization covers every core known credential key with spacing, quotes and case
+ok 4 - verification sanitization covers every core known credential key with spacing, quotes and case
+  ---
+  duration_ms: 0.773092
+  type: 'test'
+  ...
+# Subtest: verification boundary observes real stripped-environment child exit and redacted capture
+ok 5 - verification boundary observes real stripped-environment child exit and redacted capture
+  ---
+  duration_ms: 39.838306
+  type: 'test'
+  ...
+# Subtest: guarded failed code export retains only exact allowed source, bounded patch and metadata
+ok 6 - guarded failed code export retains only exact allowed source, bounded patch and metadata
+  ---
+  duration_ms: 46.675126
+  type: 'test'
+  ...
+# Subtest: first implementation verification failure retains the exact checkpoint and rejects duplicate export distinctly
+ok 7 - first implementation verification failure retains the exact checkpoint and rejects duplicate export distinctly
+  ---
+  duration_ms: 27.563507
+  type: 'test'
+  ...
+# Subtest: controller throw path exports observed failed state and returns explicit observe failure markers
+ok 8 - controller throw path exports observed failed state and returns explicit observe failure markers
+  ---
+  duration_ms: 0.417346
+  type: 'test'
+  ...
+# Subtest: export refuses changed checkpoint, hash, size, symlink, secret, traversal and outside-plan files
+ok 9 - export refuses changed checkpoint, hash, size, symlink, secret, traversal and outside-plan files
+  ---
+  duration_ms: 133.178003
+  type: 'test'
+  ...
+# Subtest: export rejects spaced GH_TOKEN source before creating patch or copied source
+ok 10 - export rejects spaced GH_TOKEN source before creating patch or copied source
+  ---
+  duration_ms: 173.686204
+  type: 'test'
+  ...
+# Subtest: native archive consumes exact external observation and authorization while preserving FAILED history and counts
+ok 11 - native archive consumes exact external observation and authorization while preserving FAILED history and counts
+  ---
+  duration_ms: 2.364734
+  type: 'test'
+  ...
+# Subtest: native archive rejects unknown/running/stale and malformed checkpoint proof before consuming authorization
+ok 12 - native archive rejects unknown/running/stale and malformed checkpoint proof before consuming authorization
+  ---
+  duration_ms: 1.084753
+  type: 'test'
+  ...
+# Subtest: persisted failed verification followed by pipeline throw writes the actual blocked diagnostic and guarded code
+ok 13 - persisted failed verification followed by pipeline throw writes the actual blocked diagnostic and guarded code
+  ---
+  duration_ms: 19.371799
+  type: 'test'
+  ...
+# Subtest: missing or throwing observation writes an explicit marker in actual diagnostic JSON
+ok 14 - missing or throwing observation writes an explicit marker in actual diagnostic JSON
+  ---
+  duration_ms: 12.196598
+  type: 'test'
+  ...
+# Subtest: real Git DAG integrates bounded child commits with A->C frontier while B is running
+ok 15 - real Git DAG integrates bounded child commits with A->C frontier while B is running
+  ---
+  duration_ms: 844.230004
+  type: 'test'
+  ...
+# Subtest: node scope, ignored untracked files, symlinks and immutable packet edits cannot integrate
+ok 16 - node scope, ignored untracked files, symlinks and immutable packet edits cannot integrate
+  ---
+  duration_ms: 368.224439
+  type: 'test'
+  ...
+# Subtest: foreign occupied child path is preserved and missing retained child blocks inspection
+ok 17 - foreign occupied child path is preserved and missing retained child blocks inspection
+  ---
+  duration_ms: 20.53639
+  type: 'test'
+  ...
+# Subtest: ownership loss after file edits leaves exact running reservation without controller commit
+ok 18 - ownership loss after file edits leaves exact running reservation without controller commit
+  ---
+  duration_ms: 53.733755
+  type: 'test'
+  ...
+# Subtest: uncertain save before inference poisons further work and a second pass cannot replay
+ok 19 - uncertain save before inference poisons further work and a second pass cannot replay
+  ---
+  duration_ms: 53.360472
+  type: 'test'
+  ...
+# Subtest: real cherry-pick conflict retains exact owned state without reset, cleanup or inferred retry
+ok 20 - real cherry-pick conflict retains exact owned state without reset, cleanup or inferred retry
+  ---
+  duration_ms: 139.441617
+  type: 'test'
+  ...
+# Subtest: real blocked child output is retained separately while settled sibling/history stay unchanged
+ok 21 - real blocked child output is retained separately while settled sibling/history stay unchanged
+  ---
+  duration_ms: 318.392594
+  type: 'test'
+  ...
+# Subtest: failed child export rejects unknown graph outcomes, changed code and secret material
+ok 22 - failed child export rejects unknown graph outcomes, changed code and secret material
+  ---
+  duration_ms: 109.416599
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1984.933006

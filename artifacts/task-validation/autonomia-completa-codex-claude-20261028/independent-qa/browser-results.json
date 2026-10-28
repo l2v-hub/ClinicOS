@@ -1,0 +1,130 @@
+{
+  "config": {
+    "argv": [
+      "/tmp/clinicos-autonomy-node22/node_modules/node/bin/node",
+      "/tmp/clinicos-qa-tools/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "artifacts/task-validation/autonomia-completa-codex-claude-20261028/independent-qa/playwright.config.cjs"
+    ],
+    "configFile": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/autonomia-completa-codex-claude-20261028/independent-qa/playwright.config.cjs",
+    "rootDir": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/autonomia-completa-codex-claude-20261028/independent-qa",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/autonomia-completa-codex-claude-20261028/independent-qa/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/autonomia-completa-codex-claude-20261028/independent-qa",
+        "testIgnore": [],
+        "testMatch": [
+          "qa-surface.spec.cjs"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/autonomia-completa-codex-claude-20261028/independent-qa/playwright-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/autonomia-completa-codex-claude-20261028/independent-qa/browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "qa-surface.spec.cjs",
+      "file": "qa-surface.spec.cjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "objective synthetic controller results, exact values and reload",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 497,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:01:31.042Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/autonomia-completa-codex-claude-20261028/independent-qa/test-results/qa-surface-objective-synth-8b2ab-lts-exact-values-and-reload/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "837eafabe15274ecd366-ab5c46831ce449f52536",
+          "file": "qa-surface.spec.cjs",
+          "line": 7,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T08:01:30.665Z",
+    "duration": 1216.089,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

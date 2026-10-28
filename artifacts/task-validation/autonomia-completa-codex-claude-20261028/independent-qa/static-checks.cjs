@@ -1,0 +1,16 @@
+const fs=require('node:fs'),cp=require('node:child_process'),crypto=require('node:crypto');
+const packet='artifacts/task-validation/autonomia-completa-codex-claude-20261028/independent-qa/';
+const manifest=JSON.parse(fs.readFileSync(packet+'../source-manifest.json','utf8'));
+const syntax=manifest.files.filter(x=>x.path.endsWith('.mjs')).map(x=>{const r=cp.spawnSync('node',['--check',x.path],{encoding:'utf8'});return {path:x.path,exitCode:r.status};});
+const validate=require('/tmp/clinicos-autonomy-tools/node_modules/@action-validator/core').validateWorkflow;
+const workflows=['.github/workflows/codex-bug-pipeline.yml','.github/workflows/claude-cloud-review.yml','.github/workflows/bug-pipeline-tests.yml'].filter(f=>fs.existsSync(f)).map(path=>({path,...validate(fs.readFileSync(path,'utf8'))}));
+const changedSource=manifest.files.map(x=>x.path);
+const diff=cp.execFileSync('git',['diff','HEAD','--',...changedSource],{encoding:'utf8',maxBuffer:12*1024*1024});
+const added=diff.split('\n').filter(l=>l.startsWith('+')&&!l.startsWith('+++')).join('\n');
+const secretPatterns={github:/\bgh[pousr]_[A-Za-z0-9]{30,}\b/g,githubFineGrained:/\bgithub_pat_[A-Za-z0-9_]{50,}\b/g,aws:/\bAKIA[0-9A-Z]{16}\b/g,privateKey:/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/g};
+const secrets=Object.fromEntries(Object.entries(secretPatterns).map(([k,v])=>[k,(added.match(v)||[]).length]));
+const protections=['agent-team/src/bug-pipeline/release.mjs','agent-team/src/bug-pipeline/review-policy.mjs','agent-team/src/bug-pipeline/operator-ownership.mjs','agent-team/src/bug-pipeline/final-qa-budget.mjs','agent-team/src/bug-pipeline/state-store.mjs','agent-team/src/bug-pipeline/external-review.mjs','agent-team/src/bug-pipeline/claude-review-cron.mjs','agent-team/src/bug-pipeline/cloud-review-worker.mjs','package.json','package-lock.json','frontend','backend','prisma'].map(path=>({path,changed:cp.execFileSync('git',['diff','HEAD','--',path],{encoding:'utf8'}).length!==0}));
+const hygiene=cp.spawnSync('git',['diff','--check','HEAD','--',...changedSource],{encoding:'utf8'});
+const results={syntax,workflows,secretPatternAddedLineCounts:secrets,protectionAndClinicalSourceDiff:protections,sourceWhitespace:{exitCode:hygiene.status,diagnostic:hygiene.stdout+hygiene.stderr},scope:'Complete frozen manifest diff; inherited historical artifact logs excluded from secret pattern and whitespace checks. Pattern scan is heuristic; manual security review also performed.'};
+fs.writeFileSync(packet+'static-checks.json',JSON.stringify(results,null,2)+'\n');console.log(JSON.stringify({syntaxFiles:syntax.length,syntaxFailed:syntax.filter(x=>x.exitCode!==0).length,workflows:workflows.map(x=>({path:x.path,errors:x.errors.length})),secrets,protectionsChanged:protections.filter(x=>x.changed).map(x=>x.path),whitespaceExit:hygiene.status}));
+if(syntax.some(x=>x.exitCode!==0)||workflows.some(x=>x.errors.length)||Object.values(secrets).some(Boolean)||hygiene.status)process.exitCode=1;

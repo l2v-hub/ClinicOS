@@ -1,0 +1,24 @@
+const {test,expect}=require('/tmp/clinicos-qa-tools/node_modules/@playwright/test');
+const {createServer}=require('node:http');
+const {readFileSync}=require('node:fs');
+let server,url;
+test.beforeAll(async()=>{server=createServer((req,res)=>{if(req.url==='/results'){res.setHeader('Content-Type','application/json');res.end(readFileSync(__dirname+'/results.json'));}else{res.setHeader('Content-Type','text/html');res.end(readFileSync(__dirname+'/qa-result.html'));}});await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));url='http://127.0.0.1:'+server.address().port;});
+test.afterAll(async()=>new Promise(resolve=>server.close(resolve)));
+test('objective synthetic controller results, exact values and reload',async({page})=>{
+ const consoleErrors=[],httpErrors=[],pageErrors=[];
+ page.on('console',msg=>{if(msg.type()==='error')consoleErrors.push(msg.text());});
+ page.on('pageerror',e=>pageErrors.push(e.message));
+ page.on('response',r=>{if(r.status()>=400)httpErrors.push({url:r.url(),status:r.status()});});
+ await page.goto(url);
+ await expect(page.locator('#suite')).toBeVisible();
+ await expect(page.locator('#suite')).toHaveText('1746 passed · 0 failed · 3 skipped · 1749 total');
+ await expect(page.locator('#composition')).toHaveText('2 controller passes · 120000 ms quiet window · 2 child sessions · 2 review rounds');
+ await expect(page.locator('#restart')).toHaveText('Restart replayed model sessions: 0');
+ await expect(page.locator('#manifest')).toHaveText('112 source files · 0 hash mismatches');
+ const results=await page.request.get(url+'/results');expect(results.ok()).toBe(true);
+ const data=await results.json();expect(data.suite.fail).toBe(0);expect(data.composed.authorizationBoundToChildHistory).toBe(true);expect(data.composed.syntheticIssueClosed).toBe(true);expect(data.composed.syntheticDeploymentRecorded).toBe(true);expect(data.composed.finalCodexQaSessions).toBe(1);expect(data.composed.negativeReleaseGuards).toBe(3);
+ await page.reload();await expect(page.locator('#restart')).toHaveText('Restart replayed model sessions: 0');
+ await expect(page.locator('#limit')).toContainText('No live model, CI, deployment or issue closure verified.');
+ expect(consoleErrors).toEqual([]);expect(httpErrors).toEqual([]);expect(pageErrors).toEqual([]);
+ await page.screenshot({path:__dirname+'/result.png',fullPage:true});
+});

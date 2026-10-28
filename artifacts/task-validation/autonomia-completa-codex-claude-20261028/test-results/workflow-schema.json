@@ -1,0 +1,20 @@
+{
+  "tool": "@action-validator/core@0.6.0",
+  "results": [
+    {
+      "path": ".github/workflows/codex-bug-pipeline.yml",
+      "actionType": "workflow",
+      "errors": []
+    },
+    {
+      "path": ".github/workflows/codex-bug-release.yml",
+      "actionType": "workflow",
+      "errors": []
+    },
+    {
+      "path": ".github/workflows/claude-cloud-review.yml",
+      "actionType": "workflow",
+      "errors": []
+    }
+  ]
+}

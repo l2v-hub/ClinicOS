@@ -1,0 +1,49 @@
+{
+  "baseline": "d8e85d77536a4770d79f197ca75b3f7299895d40",
+  "existingPR": 505,
+  "originalSourceBranch": "codex/adaptive-work-items-20261023",
+  "originalSourceSha": "10153ed09e4b16d36f68e49bd6e503b0255c7dc2",
+  "integration": "Normal merge preserves PR505 ancestry and current-main changes; no wholesale old-file replacement.",
+  "steps": [
+    {
+      "step": "intake",
+      "change": "Keep durable two-minute collection alive in serialized caller; recover CI/head events through trusted default-branch job."
+    },
+    {
+      "step": "work-items",
+      "change": "Bounded eight-node graph; at most two disjoint children; host-configured Codex or optional local file-only Claude profiles; senior correction retains graph history."
+    },
+    {
+      "step": "authorization",
+      "change": "Bind every canonical child reservation and result into authorization history; byte-compatible no-graph legacy digests."
+    },
+    {
+      "step": "retention",
+      "change": "Capture definitely blocked child checkpoints and export exact bounded source for failed graphs even after later senior completion; unknown attempts never replay."
+    },
+    {
+      "step": "checks",
+      "change": "Typed unsuccessful native check observations retain valid review proofs and enter waiting-checks; fresh exact-SHA success can resume."
+    },
+    {
+      "step": "shared-instructions",
+      "change": "Keep reviewed PR518 skill fixes byte-identical; document cloud reviewer separate from optional local executor."
+    },
+    {
+      "step": "verification",
+      "change": "Independent Node22 suite, composed controller probe and safe browser evidence; native activation requires reviewed merge and live receipts."
+    }
+  ],
+  "preservedPolicies": [
+    "No canonical state mutation during source development",
+    "No reset or unknown paid retry",
+    "No model credentials in child verification processes",
+    "Native required checks and human trust-root review remain required",
+    "Ordinary protected merge and deployment identity gate before issue closure"
+  ],
+  "knownLimitations": [
+    "REST route in this environment currently refused despite saved hostname allowlist",
+    "Local CLI/version readiness does not establish model entitlement, global capacity or savings",
+    "No live cloud review/deploy/closure is claimed from synthetic tests"
+  ]
+}
