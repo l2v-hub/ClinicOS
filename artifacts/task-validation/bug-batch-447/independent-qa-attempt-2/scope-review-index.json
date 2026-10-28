@@ -1,0 +1,798 @@
+[
+  {
+    "path": "e2e/qa-bug-batch-447-browser.mjs",
+    "lines": 2625,
+    "sha256": "8ee7076d1040d62a267ce650c8c9e26ce68cc90de6e124458ab170376b77aba0",
+    "testNames": [
+      "/",
+      "\\n",
+      "QA penicillina"
+    ]
+  },
+  {
+    "path": "e2e/qa-bug-batch-447.mjs",
+    "lines": 340,
+    "sha256": "bba3b19b620148d57ebbf9d450a9d354a156929b4eb85f0585a59e9f591fed96",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/admin/AdminAttentionList.css",
+    "lines": 106,
+    "sha256": "2d9d89b3016be1a09b9f9b5665ae0713ec4f7207d9f8cce612e1bdbbd3dd6487",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/admin/AdminAttentionList.tsx",
+    "lines": 83,
+    "sha256": "33f2efcd9f025f173a18b5da49ea820bde97f6c003737730be822ce7ee53f5a3",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/admin/AdminDashboard.tsx",
+    "lines": 388,
+    "sha256": "79e1b2afa3ad1c052cb7a14ed32f11bc23193d3491b72ad3b6b914c174421e41",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/admin/__tests__/adminAttention456.test.ts",
+    "lines": 350,
+    "sha256": "af6ff22359d2f21c9bb3680d047f622b746630fa4d5261c2655b247bfa4a28f5",
+    "testNames": [
+      "456 unified queue includes diary and handover, excludes own and already acknowledged urgencies",
+      "456 attention orders severity then oldest source time without mutating source queue",
+      "456 tomorrow doses are absent even when mixed into every summary partition; today target is exact",
+      "456 clinical overview uses truthful filtered-list actions and never invents patients or observation times",
+      "456 every anomalous drug remains visible with its exact prescription target",
+      "456 configured day shifts use Rome civil time and exclude inactive/unscheduled accounts",
+      "456 overnight shifts include previous day tail and preserve DST repeated-hour attendance",
+      "456 malformed schedule responses fail closed instead of claiming on-duty staff",
+      "456 attention renders actual source timestamp, source identity, single actionable count and escaped content",
+      "456 incomplete queue and unavailable queue never render definitive zero or false reassurance",
+      "456 dashboard first screen omits passive KPI/alarm tiles, preserves clinical/room recovery and role-negative status"
+    ]
+  },
+  {
+    "path": "frontend/src/components/admin/adminAttentionModel.ts",
+    "lines": 197,
+    "sha256": "43e427622c80e8c888e022573114ffda7b148a737fcccc4184f5d419b7fd32d2",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/ConsegnePatientRoster.tsx",
+    "lines": 114,
+    "sha256": "49ee74df24f1c1b082e1bce4fb32fa13b19c3b12abb6cfd12ca9050c86707e3b",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/InvioPSModal.tsx",
+    "lines": 800,
+    "sha256": "2c901fed69fb40b6fd6227f04116650620729b804c48563081d378321a483a1b",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/MultiPatientParametri.tsx",
+    "lines": 426,
+    "sha256": "035184fec0f6959f2e0f688d097353eb4cc9e0c8a96bda310ff1398f6e4ef540",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/OperatorAgenda.tsx",
+    "lines": 831,
+    "sha256": "b2b444974dec8b322725134821bd71404eb605fad745d98da9a08f58b4e9537c",
+    "testNames": [
+      ",",
+      ",",
+      ",",
+      ","
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/ParameterEntryPanel.tsx",
+    "lines": 87,
+    "sha256": "1872c7f40bc3225afacdd17f2bb0b41e5f6cdc05c524ad20a98d4fe2ad765070",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/ParameterPatientPick.tsx",
+    "lines": 66,
+    "sha256": "69a3cab70ce3e58c60c3bab23b4e4b783101abde415af060bdc5c6f0952de289",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/ParameterReadingForm.css",
+    "lines": 88,
+    "sha256": "3367036500d2be273d11f0c93df6c26626d6f74360e1bf721196c008c3d11998",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/ParameterReadingForm.tsx",
+    "lines": 342,
+    "sha256": "d23110881a3bfeb12ad33899ac322216496af268c7a149ad03f2d4537d40ed81",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/PatientDetail.tsx",
+    "lines": 3070,
+    "sha256": "ae6791834908b516c2d37745ba5043b403b80da1bbc1d159a33c851f26bed4a7",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/PatientList.css",
+    "lines": 715,
+    "sha256": "bfafb8eaab9022a800c349257cdb8bdbeda602691de2fbc524cbbe4000784bf4",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/PatientList.tsx",
+    "lines": 647,
+    "sha256": "b94744683b6b7d3b6954b18402ff59753b7d280108ed588958c801e23bd8ad2b",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/PatientOverview.css",
+    "lines": 195,
+    "sha256": "b475a9ce93f096b5729fae9a00a2bd3c7a433ec2140b959dfe19305bc89e3a64",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/PatientParameters.css",
+    "lines": 311,
+    "sha256": "1cacea51f3cd42a1539c2a420bf1cddb0117d16baea00393ae1ab5c15e781019",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/PatientRecordData.css",
+    "lines": 740,
+    "sha256": "6316c7ccc8b654ce90bd7e27fe9f240a6d58e649b6d58c21c59b50c57fc8ff7b",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/PatientRegimeControls.tsx",
+    "lines": 35,
+    "sha256": "d9945dbe607753f53c68308513563c9479c7d16247dabe6e3316febf4b606fca",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/PatientRoster.tsx",
+    "lines": 680,
+    "sha256": "482eb628428d522e24e44ea5302a4d02a3eaa4a1bd66775f0c847eee2bdfca10",
+    "testNames": [
+      ","
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/PatientToday.tsx",
+    "lines": 281,
+    "sha256": "bfc360f4f5d47426bd5d756ea4ec481b4bc510a976fc58004171908ca309a4c6",
+    "testNames": [
+      "-"
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/TherapyGiroRows.tsx",
+    "lines": 451,
+    "sha256": "52375e1aacd27b5f78fdf0ce0d6e011672bcd6e7b619be605a486e1cfdc9e254",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/TherapyPatientAllergies.tsx",
+    "lines": 102,
+    "sha256": "c1a837f0c87307a0587b5ee473a4df538194ad56627b18dbcde4d2d5d5459471",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/TherapyRoundsPage.css",
+    "lines": 419,
+    "sha256": "222ab8faf100df9d3c72d13bd11d50290ac7356315f65759b8add15fdc4433f5",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/TherapyRoundsPage.tsx",
+    "lines": 451,
+    "sha256": "b5fba7f8609d4a2e964fa2ed9f2804115818ee4d0f642fd04514fdabeea286d5",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/__tests__/invioPS.test.ts",
+    "lines": 713,
+    "sha256": "9c97b71c798cd1397392c777c671b8815097d751e5d24b8c555d47ee13ae51ce",
+    "testNames": [
+      "(a) populated dimissione + therapies \u2192 model has correct patient name/MRN and non-null dimissione",
+      "(a) patient name and MRN come from input paziente (scoping check)",
+      "(b) cartella.dimissione undefined \u2192 dimissione is null, no crash",
+      "(c) only active therapies appear in terapie",
+      "(c) empty therapies array \u2192 terapie is empty",
+      "(c) fasce labels built correctly for active therapy",
+      "(c) orarioSpecifico takes priority over fasce labels",
+      "(d) allergie mapped with testo and grave flag",
+      "(d) no allergie \u2192 empty array with separately explicit verification status",
+      "(d) only attive/monitoraggio diagnosi appear",
+      "(d) condizioni croniche from boolean flags",
+      "(d) no camera field on model anymore",
+      "PS separates current/discharge diagnoses, explicit comorbidities and saved prior history",
+      "PS exact deduplication preserves distinct admission findings and negations",
+      "457 unknown allergy status never becomes a verified negative finding",
+      "457 reason uses actual recent urgent diary and critical reading, remains separate from source data",
+      "457 stale, future, wrong-patient and nonurgent notes never prefill a reason",
+      "457 24-hour boundary follows actual Rome instants including the spring DST transition",
+      "457 latest available value retains its own observation timestamp and missing fields stay unknown",
+      "457 only actual given doses appear; prescribed time is never used as administration time",
+      "457 sources, clinical chart and prescriptions remain scoped to exactly one patient",
+      "457 full medication keyset pagination includes later-page actual given doses and authentic patient ID",
+      "457 repeated cursor, duplicate records, mixed patient and aborted late page cannot produce printable sources",
+      "457 known contact and risk are preserved verbatim without inventing negatives or changing the chart",
+      "457 legacy observations retain their recorded date precision and never invent a midnight or urgent time",
+      "PS uncertain retry keeps the exact intent and patient/operator isolation; receipt must prove the decision",
+      "PS-only exit history displays decision and actual next-day return without inventing legal completion or delete control"
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/__tests__/operationalLists452.test.ts",
+    "lines": 238,
+    "sha256": "77db75fb05797e4e2c2008b72d68f47d60da35d848de845cb8d0ebdd34fb393c",
+    "testNames": [
+      "compact identity hides repeated missing prose but preserves accessible disambiguation",
+      "patient roster leads with bed, hides globally empty optional columns and aggregates incomplete identity once",
+      "roster keeps the NEWS2 column and a single loading status until absence has been verified",
+      "agenda without appointments retains morning and evening pending therapy doses while omitting empty half-hour slots",
+      "slot modal retains pause, explicit absence, glucose protocol, completed history and other patients"
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/__tests__/patientToday447.test.ts",
+    "lines": 84,
+    "sha256": "13e1d11f71706952fcdab097c641b457d458167cf91e774ba0aeb6cb51e70b9c",
+    "testNames": [
+      "Today vitals use facility civil date and exclude adjacent day and unrelated old readings",
+      "Today surface never offers denied therapy/clinical read or record action",
+      "Today counts the complete daily history and selects latest after paginated duplicates",
+      "Today rejects foreign patients, wrong civil days, repeated cursors and failed subsequent pages"
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/AvvisoAnomalieFarmaci.tsx",
+    "lines": 84,
+    "sha256": "f2e9f969db4c5285d87853d120dfa17258662175d4d566eb5c14e9033574a690",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx",
+    "lines": 272,
+    "sha256": "0c4246d3730292d70cab2ce2d24ce10c8c8a5da7a157dcb770527cfc865d7388",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+    "lines": 451,
+    "sha256": "d6f2dd8b44b11a89368f631904d9239a7a1a5e034539e0e57c2df04e99a2835d",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+    "lines": 1125,
+    "sha256": "52599d46b5094dc4c7e4f9f6cfecfce64d303c5092783c5d93e22e8adfee2320",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/TherapyFormFields.css",
+    "lines": 413,
+    "sha256": "60852a155b8c4e5e642345b70a77dc5db32ed06169f0553109e37613b92e5937",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+    "lines": 639,
+    "sha256": "3e350f66579dec365a2aa2b41a0d213384c1abf0d299b93a39ae3070c23c2132",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/TherapyFormPreview.tsx",
+    "lines": 92,
+    "sha256": "2a659ec0fa76a0bb12c91c656198ba5692afaf074c085f46ede8049347915994",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/__tests__/therapyQuickSchedule453.test.ts",
+    "lines": 252,
+    "sha256": "33682a12afdfb4871e9674ed49d68977a265e52f3545a55cc855f0fadf6a39b7",
+    "testNames": [
+      "quick schedules preserve explicit fractional dose and equal manual payload",
+      "inclusive civil duration handles DST, leap/month/year boundaries and invalid dates",
+      "sentence renders the actual payload schedule dose unit route and dates",
+      "structured single ingredient strength is prefilled, ambiguous packages stay unconfirmed",
+      "next occurrence uses actual facility date, weekday and end bounds and never predicts suspended/import-unconfirmed doses",
+      "an existing different evening dose is preserved when a preset retains its time",
+      "only an actual documented negative avoids acknowledgement; missing/error/loading never assert absence",
+      "actual allergy warning may be confirmed without inventing a drug match and never changes prescription payload",
+      "acknowledgement cannot cross patient, operator, drug/package, strength, form or actual chart context",
+      "unavailable context requires its own manual acknowledgement, which cannot authorize recovered clinical data"
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/__tests__/uxW4Misc.test.ts",
+    "lines": 257,
+    "sha256": "9ce0c5f0f0b150fd89a592c7f6d3ef7c66dfa9b878e2ff74e331afe67c66d235",
+    "testNames": [
+      "UX2 W8 needsMyAck / countToSee: only ACTIVE urgencies that this reader (not the author) can take",
+      "UX2 W8 trace: \u00abUrgenza presa in carico da X (ruolo) alle hh:mm\u00bb, older days carry the date",
+      "UX2 W8 diary card: \u00abHo capito\u00bb only for a non-author on an active urgency; then only the trace",
+      "F8: Modifica / Elimina appear only with the capability the backend enforces",
+      "NEWS2: compact label carries time and \u00abda aggiornare\u00bb; tile offers \u00abRileva ora\u00bb and wraps",
+      "const compactLabel =",
+      "const title =",
+      "agenda: note inline, status in words, operator name, month without \u00ab+N\u00bb",
+      "topbar subtitle wraps; the single actionable allergy band retains full names",
+      ".topbar-title .page-header__subtitle {",
+      "}",
+      "#449 one gesture per entry: unread urgency \u2192 only \u00abHo capito\u00bb; a read already confirmed stays as a trace",
+      "#449 the embedded filtered view has no second writing form: the page writes from the top"
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/drugPackageSelection.ts",
+    "lines": 68,
+    "sha256": "e1cfad992bf9e4711e2d40c4e2e440d33c2ff225f43b72cb6b5ee3c4f7544a7e",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/therapyQuickSchedule.ts",
+    "lines": 133,
+    "sha256": "7b5233783208af8c0fcf89d94d0555ff9e7ffc5bd44ab3581355cbab4de8bedf",
+    "testNames": [
+      ","
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/invioPSModel.ts",
+    "lines": 395,
+    "sha256": "41d95438a8c58bf80509fe477f0e449091c7a28b8a4b23fc72007ee1ff675862",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/tabGroups.ts",
+    "lines": 207,
+    "sha256": "f0e97bd0a8b0812d7ace12680c63ffd190cb320e0268853ba68333f66b876c54",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/shared/DemographicsStatus.tsx",
+    "lines": 72,
+    "sha256": "1d53c09e236a456ab2755f3320ca5dade244af98baa83f34269124a6742e5b7d",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/shared/PatientIdentity.tsx",
+    "lines": 72,
+    "sha256": "4303a8e175b3bc1d64b3a8e009784b4b7f3d9f65166225fd5115b95db393cfca",
+    "testNames": [
+      "-"
+    ]
+  },
+  {
+    "path": "frontend/src/components/shared/TherapyCalendarGrid.tsx",
+    "lines": 203,
+    "sha256": "c9d74babaae2a4d27eed926ede32988c156cd1f7a768ad0356a559746a756cbe",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/lib/__tests__/invioPSPrintLayout.test.ts",
+    "lines": 178,
+    "sha256": "2ea2c4d7923b03a27ec0ec9f4ddfa4947d621f0b1ffeea0d7ecddfcb50dddea6",
+    "testNames": [
+      "Invio PS uses a large A4-proportioned screen preview",
+      "Invio PS prints on a named portrait A4 page without screen framing",
+      "landscape clinical forms keep their own named A4 page",
+      "457 print preview renders actual required sections, editable reason and disabled print before clinical sources load",
+      "457 mismatched chart does not render another patient clinical context or an enabled print action",
+      "457 source collection uses authenticated reads only, including both civil days of the 24-hour PRN window",
+      "457 PRN capped or malformed source blocks printable context instead of reporting an empty complete history"
+    ]
+  },
+  {
+    "path": "frontend/src/lib/__tests__/parameterRound451.test.ts",
+    "lines": 108,
+    "sha256": "917ad656bea5f10e3040ddf1699939809794bb3715d7b98f45c269a1d815855b",
+    "testNames": [
+      "advance skips recorded and unknown/stale patients and wraps without selecting current patient",
+      "previous placeholders only contain actual observation and never missing prose",
+      "advance reaches the unfinished patient after an entirely completed intermediate page",
+      "advance stops on cursor loops, unavailable pages and changed day or selection"
+    ]
+  },
+  {
+    "path": "frontend/src/lib/__tests__/therapyEntry454.test.ts",
+    "lines": 33,
+    "sha256": "c79c14f310f3b20ce24544e96940474bb459f462ea0cb2437af9e99684fb4de2",
+    "testNames": [
+      "nurse entry selects pending current hour then first pending rather than completed slot",
+      "current clinical band wins over an older pending night dose and preserves exact hour"
+    ]
+  },
+  {
+    "path": "frontend/src/lib/emergencyTransferContext.ts",
+    "lines": 189,
+    "sha256": "7610836dc4900de795db0792b960bd19b05cb4fa745ff24b1c346a5c842213bd",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/lib/parameterPad.ts",
+    "lines": 166,
+    "sha256": "13835229f5557976d0accada16ae2cf4e40177e065683d55b289d78bb9a261f9",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/lib/parameterRound.ts",
+    "lines": 48,
+    "sha256": "6c5d808be09813aafcf20c36d84bdc2de62b363d19d0bdfcca488e8595e97c94",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/lib/therapyGiro.ts",
+    "lines": 173,
+    "sha256": "c753dc09743e526d9ba8ab63a90615bfc34d9390cf50921332582958f88369a2",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+    "lines": 93,
+    "sha256": "05f881cf5d0618d3cab4ce0f73e5c541d20abd66a50949f3c445af50ca108c3d",
+    "testNames": [
+      "admin first view prioritizes the actionable unified attention queue",
+      "room failures remain explicit and independently recoverable without stale occupancy claims",
+      "management and clinical values use one native shared KPI primitive",
+      "shared KPI layout has equal card geometry and responsive no-overflow grids",
+      "on-duty roster uses configured schedules and preserves the independent operator heading primitive"
+    ]
+  },
+  {
+    "path": "frontend/src/lib/__tests__/consegneReadModelGuard.test.ts",
+    "lines": 59,
+    "sha256": "5af93705e3d339476b7ab52d357f2dc4bcb7cfbcdaff9ce19f643ebe63797997",
+    "testNames": [
+      "login loads only handover overview while the bounded feed is navigation-scoped",
+      "dashboards use authoritative read models rather than deriving counts from a handover feed page",
+      "patient list badges come from visible-id clinical summaries, not a handover roster prop",
+      "patient detail distinguishes an exact total from the loaded page and exposes recovery"
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/__tests__/operator-dashboard-anomaly-layout.test.ts",
+    "lines": 102,
+    "sha256": "bd89eaba3ca46a89a5a38d186d9a0af90c3a4c9d15d4b1fbe8a2813e1567574d",
+    "testNames": [
+      "dashboard anomaly worklist is bounded by patients and lists every drug of a row",
+      "operator keeps bounded notification details and supervisor preserves every drug in its actionable list",
+      "patient, drug chips and compact count have explicit visual hierarchy",
+      "anomaly row exposes an intentional accessible name and keyboard focus",
+      "notification bar keeps all severity labels visible and responsive"
+    ]
+  },
+  {
+    "path": "frontend/src/lib/__tests__/clinicalOverviewResilience.test.ts",
+    "lines": 85,
+    "sha256": "190f4314ae541833e48279024269dcb74f960edc27b8c26ed7d7ba234d93b7e9",
+    "testNames": [
+      "clinical overview owns an abortable retry without reloading unrelated dashboard feeds",
+      "operator dashboard never presents unavailable clinical metrics as verified zeroes",
+      "admin dashboard shares the same explicit unavailable-data and recovery contract"
+    ]
+  },
+  {
+    "path": "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
+    "lines": 94,
+    "sha256": "33eff566e105a4436daa55c7c86e5cac554632797f412a239e17a7e786839bfe",
+    "testNames": [
+      "camera synchronization requests only the bounded active room-assignment scope",
+      "async function syncCameraAssignment",
+      "async function updatePaziente",
+      "room editor mirrors server bounds and never persists derived occupancy",
+      "facility loading is abortable and exposes retry instead of a false zero snapshot",
+      "App does not download facility rooms during ordinary login bootstrap",
+      "// \u2500\u2500 Fetch constant-size session data",
+      "// Facility occupancy contains patient identity",
+      "navigation-scoped room reads reject stale responses and expose a retryable state",
+      "room consumers never present a failed load as zero occupancy or an empty assignment list",
+      "patient assignment editor uses dependent labelled selects and an exact bed id"
+    ]
+  },
+  {
+    "path": "frontend/src/lib/__tests__/patientChartNavigation.test.ts",
+    "lines": 144,
+    "sha256": "23909de1ff7f918010b82644aa2bac97d8b9c7695b9552f4f49a6797b69c1138",
+    "testNames": [
+      "chart groups organize intake and clinical work while legacy links keep their destination",
+      "discharge opens directly beside Documents and legacy links keep the same module",
+      "Agnos opens the separate therapy page for both roles without confusing the agenda",
+      "demographic write preview opens the page that displays the field being changed",
+      "HMI 1: 8 chart sections as in the prototype; every legacy tab opens the section that holds it",
+      "Prompt 10 AT-13: le sezioni negate dalla policy non sono offerte al ruolo"
+    ]
+  },
+  {
+    "path": "frontend/src/lib/__tests__/patientDetailWorkspace.test.ts",
+    "lines": 149,
+    "sha256": "42f2d3b81f3947c806fb4eb76f82ab55af9ae333217877f4d2ad797a00ffd2ff",
+    "testNames": [
+      "patient record exposes ONE labelled section rail and a controlled tab panel",
+      "top navigation follows the keyboard tab pattern with one focusable active tab",
+      "therapy sections reuse the canonical contextual navigation",
+      "447 Today uses actual dose actions, shared diary acknowledgement and real daily readings, retaining diary and module state",
+      "overview is three columns on wide screens, two on tablet and one on phone",
+      "patient record applies one screen-only contract to cards, key-value rows and tables",
+      "patient record data contract keeps tablet overflow local and stacks key-value rows on phones"
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts",
+    "lines": 88,
+    "sha256": "ebc98c131bfff56ad1ccf56125b65b6cd6479e49a208b00cc9059fa126bf034d",
+    "testNames": [
+      "417 both workspaces use exactly the shared field order, full ACVPU options and no prior prefill",
+      "417 numeric raw text is never maxlength-truncated and desktop has no software keypad",
+      "417 uncertain saves lock fields but retain enabled explicit retry and error/history guidance"
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+    "lines": 193,
+    "sha256": "7c0e8bd2c675aaa554cfbe5a3ef1ddc9350f29863936c5c2cc305e7dd5b0d554",
+    "testNames": [
+      "pending and unverified server order stay visibly temporary, without claiming a saved preference",
+      "personal and department authority are independent and missing profiles expose no false save affordance",
+      "remounted parameter rows retain the correct patient values, open note, and exact uncertain request",
+      "legacy columns retain usable controls and explicitly limit temporary ordering to loaded patients",
+      "therapy modal preserves a deliberately non-alphabetical server order and the original action identifiers"
+    ]
+  },
+  {
+    "path": "frontend/src/lib/__tests__/clinicalHistory.test.ts",
+    "lines": 124,
+    "sha256": "ecf7122f08d25b70cfb9b2195392693ebbdaf86bc2d4026c9be6b916f82b8007",
+    "testNames": [
+      "legacy history proposal selects an explicit remote block, preserves negations and never overrides text",
+      "removed editing cards stay absent in chart/intake; retained fields, allergies and previous source remain readable",
+      "history/source survive confirmation without inferred replacements or dropping hidden legacy values",
+      "confirmation summary uses retained past history and notes, never relabels generic history",
+      "printed PS document shows each current diagnosis once and keeps documented prior history separate",
+      "Trauma recente sintetico"
+    ]
+  },
+  {
+    "path": "frontend/src/lib/__tests__/therapyPages.test.ts",
+    "lines": 264,
+    "sha256": "bb28571bba6b39d8e5c2ec8fe8d45a24acbc58c2a14b216f9262be4193e83058",
+    "testNames": [
+      "therapy page loader returns the complete patient-scoped clinical list",
+      "therapy page loader rejects a repeating cursor instead of looping forever",
+      "therapy page loader carries every server filter on the first page",
+      "therapy plan and emergency print require every page, never a manual partial plan",
+      "therapy failures are announced and never rendered as empty clinical results",
+      "medication administration history follows the bounded opaque cursor feed",
+      "failed printable inventory can retry and never returns a partial page",
+      "printable inventory rejects changed page totals and empty nonterminal pages",
+      "a rejected short printable snapshot is evicted so retry reads repaired server data"
+    ]
+  },
+  {
+    "path": "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
+    "lines": 163,
+    "sha256": "93feab5b4ab908123307e916738275e0fcc99b95410c297927b5fc3812d30985",
+    "testNames": [
+      "patient list exposes the canonical fiscal identity and never shows MRN",
+      "452 roster leads with bed and preserves native accessible actions while optional empty columns disappear",
+      "tablet and mobile use a compact two-to-one-column card grid",
+      "new-patient wizard auto-fills CF without assuming a sex or overwriting provenance",
+      "new-patient wizard keeps required identity visible and progressively discloses optional data",
+      "patient intake uses a compact responsive layout without reducing touch targets"
+    ]
+  },
+  {
+    "path": "backend/src/patients/temporary-ps-exits.ts",
+    "lines": 278,
+    "sha256": "53afc3bd2439f0642389070713e8cfac131e0c9d13e1e71ceee441fb66bb174c",
+    "testNames": []
+  },
+  {
+    "path": "backend/src/patients/cartella-update.ts",
+    "lines": 105,
+    "sha256": "4b45d4047d08d2f007a06b1032ffe595c71c1bb33fb858ff71a528ec1f7fff97",
+    "testNames": []
+  },
+  {
+    "path": "backend/src/routes/patients.ts",
+    "lines": 1273,
+    "sha256": "57b7707783af44c7ca2c039b29f07de33a50481c72ee40724820809bcc16a5f6",
+    "testNames": []
+  },
+  {
+    "path": "backend/src/therapies/administration-record.ts",
+    "lines": 321,
+    "sha256": "b1324cd7e34bee9a5846cca153f3b69a4fe3a8e9b4f3e4980785f57718db0009",
+    "testNames": []
+  },
+  {
+    "path": "backend/src/therapies/prn-administration.ts",
+    "lines": 272,
+    "sha256": "29548b80084eee43199535467c7b06f97612fac48a1c9ff88d847a0cd084ea29",
+    "testNames": []
+  },
+  {
+    "path": "backend/src/therapies/therapy-slots.ts",
+    "lines": 565,
+    "sha256": "0c42553a1df781b3e22de5bb33a5557e5c48d60dc8c53ab354cc7488b2a75f36",
+    "testNames": []
+  },
+  {
+    "path": "backend/src/therapies/due-therapy-query.ts",
+    "lines": 261,
+    "sha256": "fbc5f33ffa494bad4ccd779c80f06f1524cc32b56ec86952e90f25b97a8c37aa",
+    "testNames": []
+  },
+  {
+    "path": "backend/src/routes/therapy.ts",
+    "lines": 324,
+    "sha256": "3afd94a7554bcdd947c101205e9e607fa46e5ab53cf00fdd9ba73f0445b91750",
+    "testNames": []
+  },
+  {
+    "path": "backend/src/patients/__tests__/temporary-ps-exits.test.ts",
+    "lines": 112,
+    "sha256": "d3d361e0db179f0ed7d54fc4cabf3d2860fbde6eee1b3dd06a9adce35be0f1a5",
+    "testNames": [
+      "raw PostgreSQL serialization conflicts retry narrowly while unrelated query errors remain errors",
+      "exit decisions are explicit, confirmed and never accept client actor/time or mixed commands",
+      "managed hold requires matching immutable history; unknown/corrupt context is never permission to dose",
+      "ordinary writes retain managed history and active hold; explicit forge/erase/change is rejected"
+    ]
+  },
+  {
+    "path": "backend/src/patients/__tests__/temporary-ps-exits-db.test.ts",
+    "lines": 223,
+    "sha256": "c5d2ef502569ca0e01f9290f020aab6e8b17145a726c35d709db994e773fd0aa",
+    "testNames": [
+      "pause/continue and return persist; retries preserve exact history and valid dose receipts",
+      "real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts"
+    ]
+  },
+  {
+    "path": "frontend/src/types.ts",
+    "lines": 1243,
+    "sha256": "6debb75fc14011d391ef95567bb2799f1fb42cac132d3189a206bfa38c076ae2",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/lib/temporaryPsExit.ts",
+    "lines": 96,
+    "sha256": "2229a53f60ab25dbc544b47c805703c0e659ca90901a0c65099f432717f8fcd3",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/lib/therapySlotPage.ts",
+    "lines": 187,
+    "sha256": "6efdeebde1aace499d1eb3a44c6ce62a05b7b6b7200bd291fabe9277a300c5e6",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/lib/__tests__/therapySlotPage.test.ts",
+    "lines": 102,
+    "sha256": "3378a24b1d104815e935b76b1500a3d5a560bfe406607426cfdadec1e441a575",
+    "testNames": [
+      "authoritative PS hold is retained and malformed or foreign metadata never becomes no pause",
+      "therapy slot URL is bounded and carries an opaque cursor",
+      "therapy pages merge patients and therapies while replacing exact summaries",
+      "therapy page parser rejects partial responses without a continuation cursor"
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/TherapyDrugDosePanel.tsx",
+    "lines": 472,
+    "sha256": "8795bd398ec9e864b00e9654cac2b13f4ce2adbd56d3bb3e3bc4fd5396e4ce2c",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/DimissioneTab.tsx",
+    "lines": 1746,
+    "sha256": "e9de9a9a81ad6d4a882a623fcc10965d2e6c35dee6b0d03810df0941f7c1f1ad",
+    "testNames": [
+      "-",
+      "-",
+      "-",
+      "-",
+      "-",
+      "-",
+      "-",
+      "-"
+    ]
+  },
+  {
+    "path": "frontend/src/App.tsx",
+    "lines": 4046,
+    "sha256": "0b2a6f28334955ef1a14fb70c8359701ad554c809eb3ab6a54155f0d10fc59cb",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/lib/cartellaWriteQueue.ts",
+    "lines": 93,
+    "sha256": "7953a245fb181250d32f7edaa01eceab01a783b66d4641a24ac83ab457ab54e8",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/lib/__tests__/cartellaWriteQueue.test.ts",
+    "lines": 174,
+    "sha256": "d0246812f3a00d68907ab473dffd66e77d9b5ede772703d5696931eeadb171c9",
+    "testNames": [
+      "verified server command serializes with ordinary saves and preserves its authoritative state",
+      "failed command never contaminates queued snapshots or another session",
+      "a later ordinary server receipt recovers an exit committed during an uncertain command",
+      "serializes full snapshots, retaining earlier successful edits regardless of section order",
+      "failed edits are not carried into later saves; independent patients do not block",
+      "record deltas retain additions made while a document form was reopened",
+      "rejected requests release queue and a new session uses its own baseline"
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/News2Chip.tsx",
+    "lines": 471,
+    "sha256": "0588ccf7b1fd9a733b4243aa17bfc578d537ace86f635d868cd24dd5aed341e2",
+    "testNames": [
+      " \u00b7 "
+    ]
+  },
+  {
+    "path": "frontend/src/lib/news2History.ts",
+    "lines": 170,
+    "sha256": "dad28f3756284819f6e1bcc74f40fa664b1f0d7732dd59f57d5b1e7f7d374c85",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/lib/__tests__/news2History.test.ts",
+    "lines": 264,
+    "sha256": "a05c24fc83926401b1ff4baf7c07cd567b38f4c13986a85fe27bf8076cf62aa8",
+    "testNames": [
+      "the chip uses the latest COMPLETE reading, not a newer partial one",
+      "no complete reading means no score",
+      "a reassuring score is stale when newer incomplete readings exist or it is older than 12 h",
+      "staleness follows the RCP monitoring frequency of each risk level",
+      "NEWS2 searches past fifty newer partial readings and retains their staleness and history cursor",
+      "absence of complete NEWS2 is verified at the actual end, including an empty history",
+      "one unavailable patient does not erase another verified score or become an empty source",
+      "a failed second page is unknown, never a verified absence",
+      "malformed, foreign, duplicate, unordered rows and inconsistent cursors fail closed",
+      "cursor loops across pages and across history continuations are rejected",
+      "abort before a request or between pages prevents partial results and further requests"
+    ]
+  },
+  {
+    "path": "frontend/src/components/operator/sections/TherapyEditor.tsx",
+    "lines": 69,
+    "sha256": "80f89f47a24842749a040c000b9a1f0d37c381cbba72047f6acaa2c05df31d50",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/components/operator/TherapySlotModal.tsx",
+    "lines": 369,
+    "sha256": "f314098a6f1328bf32400492fc4fadceb4bab3ca33bdb2c1514d4ccfc36ee24c",
+    "testNames": []
+  },
+  {
+    "path": "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts",
+    "lines": 58,
+    "sha256": "8b973af3f17e39046d77a86c7471b02cbd39533ebffade3a7a69ba0d95014262",
+    "testNames": [
+      "weekly and monthly views never repeat one-day therapy data across calendar cells",
+      "opening a calendar day loads that exact therapy date and carries it into mutations",
+      "changing the agenda date or view closes any therapy modal before its date can change"
+    ]
+  },
+  {
+    "path": "scripts/e2e/issue-450-ingresso.mjs",
+    "lines": 1386,
+    "sha256": "96f123658b49a37aa4a09f944034d627ff6d29b5abef7d5e841cda85188a811f",
+    "testNames": [
+      "/",
+      "/",
+      "\\n",
+      ","
+    ]
+  }
+]

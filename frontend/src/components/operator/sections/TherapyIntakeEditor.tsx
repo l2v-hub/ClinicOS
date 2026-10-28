@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import {
+  hydrateTherapyAdmissionDates,
+  type AutomaticTherapyDates,
+} from '../../../lib/therapyAdmissionDate';
+import {
   TherapyFormFields,
   emptyTherapyForm,
   type TherapyFormValue,
@@ -19,13 +23,31 @@ export function TherapyIntakeEditor({
   onChange,
   operatoreNome,
   therapyCorrection,
+  admissionDate,
 }: {
   value: TherapyFormValue[] | undefined;
   onChange: (next: TherapyFormValue[]) => void;
   operatoreNome?: string;
   therapyCorrection?: TherapyCorrectionTarget | null;
+  admissionDate?: string;
 }) {
   const items = value ?? [];
+  // Existing/imported rows never enter this map; lineage is local to newly added drafts.
+  // Keep it after hydration: intake admission can be corrected more than once.
+  const automaticDates = useRef(new Map<TherapyFormValue, AutomaticTherapyDates>());
+  useEffect(() => {
+    const retained = new Map<TherapyFormValue, AutomaticTherapyDates>();
+    const next = items.map((item) => {
+      const fields = automaticDates.current.get(item);
+      if (!fields) return item;
+      const hydrated = hydrateTherapyAdmissionDates(item, admissionDate, fields);
+      retained.set(hydrated, fields);
+      return hydrated;
+    });
+    // Transfer lineage to replacement objects and discard rows removed outside this editor.
+    automaticDates.current = retained;
+    if (next.some((item, index) => item !== items[index])) onChange(next);
+  }, [admissionDate, items, onChange]);
   const [editingIndex, setEditingIndex] = useState<number | null>(
     therapyCorrection?.type === 'manual' ? therapyCorrection.index : null,
   );
@@ -51,11 +73,14 @@ export function TherapyIntakeEditor({
   const review = buildIntakeTherapyReview({ terapia: items });
 
   function addDrug() {
-    onChange([...items, emptyTherapyForm()]);
+    const item = emptyTherapyForm(admissionDate);
+    automaticDates.current.set(item, { dataInizio: true, dataSomministrazione: true });
+    onChange([...items, item]);
     setEditingIndex(items.length);
   }
 
   function removeDrug(index: number) {
+    automaticDates.current.delete(items[index]);
     onChange(items.filter((_, i) => i !== index));
     setEditingIndex((current) =>
       current === index ? null : current !== null && current > index ? current - 1 : current,
@@ -129,9 +154,18 @@ export function TherapyIntakeEditor({
             <div className="ec-modal-add-form">
               <TherapyFormFields
                 value={item}
-                onChange={(next) =>
-                  onChange(items.map((existing, i) => (i === index ? next : existing)))
-                }
+                onDateInput={(field) => {
+                  const pending = automaticDates.current.get(item);
+                  if (pending) pending[field] = false;
+                }}
+                onChange={(next) => {
+                  const pending = automaticDates.current.get(item);
+                  if (pending) {
+                    automaticDates.current.delete(item);
+                    automaticDates.current.set(next, pending);
+                  }
+                  onChange(items.map((existing, i) => (i === index ? next : existing)));
+                }}
                 operatoreNome={operatoreNome}
                 issues={review[index].diagnostics}
                 prescriberSuggestions={INTAKE_PRESCRIBER_SUGGESTIONS}

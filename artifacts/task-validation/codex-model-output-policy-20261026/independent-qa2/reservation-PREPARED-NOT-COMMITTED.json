@@ -1,0 +1,20 @@
+{
+  "nonce": "e26aaa1a-0d6a-4cea-a582-ab66a5a9cdda",
+  "status": "reserved-before-independent-qa",
+  "at": "2026-10-26T01:27:10.999Z",
+  "model": "gpt-6.1-sol",
+  "maximumSessions": 1,
+  "used": 0,
+  "code": "3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b",
+  "base": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "sourceHashes": {
+    "agent-team/src/bug-pipeline/cli.mjs": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed",
+    "agent-team/src/bug-pipeline/models.mjs": "1cd2bf6c650264a976c938caf36c498fe67eae2812dcf06adbfc61b36afac122",
+    "agent-team/src/bug-pipeline/process.mjs": "71d02a1482ae0665df66d4c73b4b66c6c04c1bff2994869b8a8b408059f210e5",
+    "agent-team/tests/bug-pipeline/models.test.mjs": "71159e884f0b688afb06854163a041289a9b0ae8a408e13b381b43d303a40996",
+    "agent-team/tests/bug-pipeline/process-output.test.mjs": "de04a700d080ae2341bbd7d6061b98ce59590e646c821b1395986d558395725b",
+    "agent-team/tests/bug-pipeline/routing.test.mjs": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd"
+  },
+  "output": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-qa2",
+  "scope": "NEW independent5phase QA of corrected source: backing buffer budget and all caps/default/error/cooldown/result guards, full relevant suite and safe visualreport; no provider/network/Git writes or clinical replay. Prior author1/QA1fail and author2failed-run are preserved."
+}

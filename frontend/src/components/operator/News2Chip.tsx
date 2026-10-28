@@ -4,20 +4,17 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { API_URL } from '../../config';
 import { operatorHeaders } from '../../lib/operatorSession';
-import {
-  fetchParameterReadings,
-  formatParameterValue,
-  readingTime,
-  type PatientParameterReading,
-} from '../../lib/patientParameterReadings';
+import { formatParameterValue, readingTime } from '../../lib/patientParameterReadings';
 import { NEWS2_LABELS, NEWS2_PARAMETERS } from '../../lib/news2';
 import {
   PARAMETER_READING_SAVED_EVENT,
+  loadNews2History,
   latestCompleteNews2,
   news2Points,
   news2Staleness,
   news2Tone,
   type News2Point,
+  type News2HistorySnapshot,
 } from '../../lib/news2History';
 import { createPortal } from 'react-dom';
 import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
@@ -46,8 +43,12 @@ const BADGE_TONE: Record<string, string> = {
 const badgeClass = (tone: string) => `ds-badge ds-badge--${BADGE_TONE[tone] ?? 'stale'}`;
 
 export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNow }: Props) {
-  const [readings, setReadings] = useState<PatientParameterReading[]>([]);
-  const [cursor, setCursor] = useState<string | null>(null);
+  const [snapshot, setSnapshot] = useState<News2HistorySnapshot>({
+    readings: [],
+    nextCursor: null,
+    visitedCursors: [],
+  });
+  const { readings, nextCursor: cursor } = snapshot;
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
   const [open, setOpen] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -61,16 +62,14 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
     requestRef.current = controller;
     // Annulla anche un "carica precedenti" in corso: il suo pulsante non deve restare bloccato.
     setLoadingMore(false);
+    setState('loading');
     try {
-      const page = await fetchParameterReadings(
-        API_URL,
-        patientId,
-        {},
-        { headers: operatorHeaders(), signal: controller.signal },
-      );
+      const history = await loadNews2History(API_URL, patientId, {
+        headers: operatorHeaders(),
+        signal: controller.signal,
+      });
       if (controller.signal.aborted) return;
-      setReadings(page.readings);
-      setCursor(page.hasMore ? page.nextCursor : null);
+      setSnapshot(history);
       setLoadMoreError(false);
       setState('ready');
     } catch {
@@ -80,6 +79,7 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
 
   useEffect(() => {
     setState('loading');
+    setSnapshot({ readings: [], nextCursor: null, visitedCursors: [] });
     void load();
     // Una nuova rilevazione salvata per questo paziente aggiorna subito il chip.
     const onSaved = (event: Event) => {
@@ -100,18 +100,14 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
     setLoadingMore(true);
     setLoadMoreError(false);
     try {
-      const page = await fetchParameterReadings(
+      const history = await loadNews2History(
         API_URL,
         patientId,
-        { cursor },
         { headers: operatorHeaders(), signal: controller.signal },
+        snapshot,
       );
       if (controller.signal.aborted) return;
-      setReadings((prev) => [
-        ...prev,
-        ...page.readings.filter((r) => !prev.some((p) => p.id === r.id)),
-      ]);
-      setCursor(page.hasMore ? page.nextCursor : null);
+      setSnapshot(history);
     } catch {
       if (!controller.signal.aborted) setLoadMoreError(true);
     } finally {
@@ -133,7 +129,7 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
         ? 'NEWS2 non caricato'
         : latest
           ? `NEWS2 ${latest.result.total} · ${news2When(latest.reading.measuredAt)}${staleness.stale ? ' · da aggiornare' : ''}`
-          : 'NEWS2 non calcolabile';
+          : snapshot.verificationIncomplete ? 'NEWS2 da verificare' : 'NEWS2 non calcolabile';
   const compactLabel =
     state === 'loading'
       ? 'NEWS2 …'
@@ -141,14 +137,16 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
         ? 'NEWS2 ?'
         : latest
           ? `NEWS2 ${latest.result.total} · ${news2When(latest.reading.measuredAt)}${staleness.stale ? ' · da aggiornare' : ''}`
-          : 'NEWS2 non calcolabile';
+          : snapshot.verificationIncomplete ? 'NEWS2 da verificare' : 'NEWS2 non calcolabile';
   const title =
     state === 'error'
       ? 'Non è stato possibile caricare le rilevazioni. Tocca per riprovare.'
       : latest
         ? `${staleness.stale ? 'Da aggiornare. ' : ''}${latest.result.response}. Rilevazione del ${readingTime(latest.reading.measuredAt)}.${staleness.newerIncomplete ? ` Dopo questa ${incompleteText(staleness.newerIncomplete)}.` : ''} Tocca per lo storico.`
         : state === 'ready'
-          ? 'Nessuna rilevazione con tutti i sette parametri (FR, SpO₂, O₂, PA, FC, coscienza, TC). Tocca per lo storico.'
+          ? snapshot.verificationIncomplete
+            ? 'Verifica NEWS2 incompleta. Apri lo storico e carica le rilevazioni precedenti.'
+            : 'Nessuna rilevazione con tutti i sette parametri (FR, SpO₂, O₂, PA, FC, coscienza, TC). Tocca per lo storico.'
           : undefined;
 
   function retry() {
@@ -165,6 +163,7 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
         patientName={patientName}
         state={state}
         points={points}
+        verificationIncomplete={Boolean(snapshot.verificationIncomplete)}
         staleness={staleness}
         canLoadMore={!!cursor}
         loadingMore={loadingMore}
@@ -182,6 +181,7 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
         <VitalsOverview
           state={state}
           readings={readings}
+          verificationIncomplete={Boolean(snapshot.verificationIncomplete)}
           stale={staleness.stale}
           onRetry={retry}
           onOpenHistory={() => setOpen(true)}
@@ -212,7 +212,6 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
   );
 }
 
-
 const incompleteText = (n: number) =>
   n === 1 ? "c'è 1 rilevazione incompleta" : `ci sono ${n} rilevazioni incomplete`;
 
@@ -226,6 +225,7 @@ function News2History({
   patientName,
   state,
   points,
+  verificationIncomplete,
   staleness,
   canLoadMore,
   loadingMore,
@@ -237,6 +237,7 @@ function News2History({
   patientName: string;
   state: 'loading' | 'ready' | 'error';
   points: News2Point[];
+  verificationIncomplete: boolean;
   staleness: ReturnType<typeof news2Staleness>;
   canLoadMore: boolean;
   loadingMore: boolean;
@@ -314,7 +315,9 @@ function News2History({
         </p>
       ) : (
         <p className="news2-dialog__now news2-dialog__now--none">
-          Nessuna rilevazione con tutti i sette parametri: il NEWS2 non è calcolabile.
+          {verificationIncomplete
+            ? 'Verifica NEWS2 incompleta: carica le rilevazioni precedenti per verificare il punteggio.'
+            : 'Nessuna rilevazione con tutti i sette parametri: il NEWS2 non è calcolabile.'}
         </p>
       )}
       <News2Chart points={points} />

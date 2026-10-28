@@ -1,0 +1,422 @@
+{
+  "createdBeforeCandidateAssembly": true,
+  "packet9": [
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/README.md",
+      "bytes": 1056,
+      "sha256": "fb5edc3f8a57fb52cf271d01962f69c5d104e4414bd42d6d52f863957f963751",
+      "inode": 1119520,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/contract.md",
+      "bytes": 4263,
+      "sha256": "c2bfa9e1cfc58d95a44bdc2472753aae01a39274482235e82ad769ded1584cce",
+      "inode": 1119518,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/admin-agenda-route-reload.png",
+      "bytes": 172221,
+      "sha256": "2934679c20c397d71e2f7fcda195f6bba31a88cc741eef13bace4be7bd9881fb",
+      "inode": 1119513,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/milo-explicit-route-preview.png",
+      "bytes": 89903,
+      "sha256": "c0f4ee92e78136683f2c9f1d96c3a865fc63b121d29b7790e0ee47afd17dba49",
+      "inode": 1119510,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/milo-missing-route-blocked.png",
+      "bytes": 98508,
+      "sha256": "0ccc476d065bf26544b7119fe1c321785ee13d84f51f66248f0d3cb0b152224a",
+      "inode": 1119511,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/milo-route-flow.webm",
+      "bytes": 1339977,
+      "sha256": "3d1a60ccdaa377cd93228a9970b8ca434ba48193aa82a324f90413f2b37e8cf4",
+      "inode": 1119517,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/operator-agenda-route-reload.png",
+      "bytes": 157806,
+      "sha256": "00fe0935aa63b61f32c219300a6ce9ea0eb30aca89c519ef3f4bdb93c6abb34f",
+      "inode": 1119512,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/operator-lifecycle-flow.webm",
+      "bytes": 1070145,
+      "sha256": "1a5e9e15271ecf60ac36e3f403c628b2361854250db0573054ef66b832006e87",
+      "inode": 1119516,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/operator-old-session-response-blocked.png",
+      "bytes": 157845,
+      "sha256": "8e9d2598dff2a24488339bb62e838ca4b2fb1e369a17208ab1174e81366a93b3",
+      "inode": 1119514,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/qa4-canonical-issue-447.png",
+      "bytes": 115649,
+      "sha256": "7bcf997bb0af3d010b25215188828544d565f5653c6262952bf266ae752c69c2",
+      "inode": 1119523,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/qa4-canonical-issue-451.png",
+      "bytes": 150661,
+      "sha256": "4b76b6adb2cbf22b36e14df93060bbc5e5271b853f64ddf1848a940930729afc",
+      "inode": 1119524,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/qa4-canonical-issue-452.png",
+      "bytes": 128760,
+      "sha256": "1cc37c6874c90b6061202933d1f42b13fb7e2f5654928cb96bd05e493b18971a",
+      "inode": 1119525,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/qa4-canonical-issue-453.png",
+      "bytes": 107967,
+      "sha256": "0aee9c68c433d8e9429074ce9fbd190abc430529524b9396c980783aca52a557",
+      "inode": 1119526,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/qa4-canonical-issue-454.png",
+      "bytes": 108231,
+      "sha256": "c5f66b3acd21a22f2d62868e8c951269d4fac18a0bff3dc9bf1cb6c36d004609",
+      "inode": 1119527,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/qa4-canonical-issue-456.png",
+      "bytes": 157594,
+      "sha256": "22d1ddd5d4dcbee91933a7d3d1f9172be8e03bce59540f6a7ad900eca676f5e3",
+      "inode": 1119528,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/qa4-canonical-issue-457.png",
+      "bytes": 206296,
+      "sha256": "b597c41dcc969f08e4322d2d0a858560accc9115edadaa613f37d34651c624f2",
+      "inode": 1119529,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence/media/ward-week-real-pagination.png",
+      "bytes": 61498,
+      "sha256": "95b84df627a82b63bbfb881a3dc0f6f2349d214d8c25f4bbc71d6a51a065cc47",
+      "inode": 1119515,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/evidence-index.json",
+      "bytes": 17516,
+      "sha256": "099c630d807c33992be906ee027d66ee128c7673ca3d4579e8447e5d1adb3e1a",
+      "inode": 1119519,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/media-index.json",
+      "bytes": 5511,
+      "sha256": "e8880661a89ec3de6570f3433479f1ac4338d1737de0c8ff90395fce90c296be",
+      "inode": 1119521,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/provenance/qa4-STOP.json",
+      "bytes": 1302,
+      "sha256": "bec50b2a516ddd620040cfb79a50a9cc16551b2d3253e74a4688ebd39501a750",
+      "inode": 1119505,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/provenance/qa4-canonical-seven-receipt-summary.json",
+      "bytes": 5159,
+      "sha256": "d35b90202914acd2a1019f81605212e61253e801683dc3298f668f5cdee24672",
+      "inode": 1119530,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/provenance/qa4-final-review-report.json",
+      "bytes": 6790,
+      "sha256": "8264196c688d077a5cf885c4944d55ea08b9a6f709e9c8cda3cd678b756dc130",
+      "inode": 1119504,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/provenance/qa4-root-cause-correction-addendum.json",
+      "bytes": 1478,
+      "sha256": "fe991e9c0670f03ca93076353338da24853076d0bd5fc6495086d277f4191d90",
+      "inode": 1119506,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/provenance/qa5-evidence-checksums.json",
+      "bytes": 30524,
+      "sha256": "fb3cab236758f0d9621a819d995fb279f5cb32818c4b79f35a7b3d824b064f9d",
+      "inode": 1119509,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/provenance/qa5-final-STOP.json",
+      "bytes": 668,
+      "sha256": "91c1406115f709e0d8ff9bbfcb60793c1e310298a663da259067cb87035dddc0",
+      "inode": 1119508,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/provenance/qa5-final-report.json",
+      "bytes": 6349,
+      "sha256": "741c8574063d97cb720adf80b07fec68c58ea259f3fd515afec11adf89bdf4e4",
+      "inode": 1119507,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-publication9-20261021/artifacts/task-validation/bug-batch-447/review-packet-9/report.json",
+      "bytes": 4320,
+      "sha256": "3bcab56656afa100b30aad86a9c2b72bb2d50cf21240f5652a423a899a0f649d",
+      "inode": 1119531,
+      "device": 27
+    }
+  ],
+  "qa10SealedFinalProof": [
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/FOLLOWUP10-REPORT.md",
+      "bytes": 1478,
+      "sha256": "156503be8bdd7db6900050083f9bc2d1017a366a90a8acdc20208085c6cc4b73",
+      "inode": 1374384,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/FOLLOWUP10-REPORT.json",
+      "bytes": 8740,
+      "sha256": "f5ca7c8032c4d6bece552a555f3acfee494bc6ec9f8972d0605d7df148eb6cd9",
+      "inode": 1374386,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/FOLLOWUP10-STOP.json",
+      "bytes": 2410,
+      "sha256": "7c325d42435cb798df6e7ad47c7de5e989b55298edc023a22b4075a2925c90ae",
+      "inode": 1374383,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/frozen-inputs.json",
+      "bytes": 2218,
+      "sha256": "af2d8c1891318368945c4bfbbb074faf6370dc012aa1f69fb9e6454d057edc88",
+      "inode": 1368259,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/private-qa10.mjs",
+      "bytes": 15020,
+      "sha256": "781d71e7e1be5e28fc1870bad1c487720d8bd53ed5b9bb989fa1d02029cc039f",
+      "inode": 1368243,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/frozen-manifests.json",
+      "bytes": 852217,
+      "sha256": "c3cfe0764a89f79678276a5a6d34e0ef84cf17d516ec5ae9412ce0a71201e873",
+      "inode": 1368244,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/qa-summary.json",
+      "bytes": 547523,
+      "sha256": "c3d6ad1b5b87153a22715af96a4dcb015fe14cac88b50094e454d355fa637856",
+      "inode": 1368074,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/runtime-cleanup.json",
+      "bytes": 231,
+      "sha256": "d7fa2b68ec3619cc50c9e0b7cc1b8abde1ff62a97678fa6136b5ca0e76eaea6f",
+      "inode": 1368073,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/preservation-after.json",
+      "bytes": 519855,
+      "sha256": "7c2c48c882b2c8bc430adf0a5077ae6f1255babe5dadc9f79bdca0c53bc63cc8",
+      "inode": 1368072,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/test-results/runner-receipts.json",
+      "bytes": 1303,
+      "sha256": "2ed4913f1306c479925610be782070639ccedbf62da72c8699af4b72eca7d618",
+      "inode": 1383161,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/test-results/import-happy-path.stdout.txt",
+      "bytes": 611,
+      "sha256": "b02c6a09867708ba447da34e2bbb5cd3e36764b211d90db7ac12a59079bcd13f",
+      "inode": 1377298,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/test-results/import-happy-path.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "inode": 1377314,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-desktop-1-upload.png",
+      "bytes": 63079,
+      "sha256": "bd5cdf1bff8c07405d2ffa3fae1e3d3a6bbc108ddab8de6ddca700cc1ca17469",
+      "inode": 1383182,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-desktop-2-review.png",
+      "bytes": 78292,
+      "sha256": "3609251ff59077d05c2ed3d0ab890484c866285ba202c75e6146ac98f4c7270f",
+      "inode": 1383185,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-desktop-3-prefilled.png",
+      "bytes": 87524,
+      "sha256": "4806c4d1c37b213b87215973bafc3548586692221466146a7c8de7122a532aed",
+      "inode": 1383186,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-desktop-4-step3-clinica.png",
+      "bytes": 92624,
+      "sha256": "2e8c07eb4f762bd299c612792c4d8fc09c1b44311b34cc499183013e7f745fe7",
+      "inode": 1383187,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-desktop-5-riepilogo.png",
+      "bytes": 92624,
+      "sha256": "2e8c07eb4f762bd299c612792c4d8fc09c1b44311b34cc499183013e7f745fe7",
+      "inode": 1383188,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-desktop-7-created.png",
+      "bytes": 69471,
+      "sha256": "ac7661dabfbdb4fc756598a1e3cbf737639b4d4c6d2a98d966e33159e67c3d70",
+      "inode": 1383189,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-desktop-8-reload-detail.png",
+      "bytes": 80366,
+      "sha256": "cf99096830d416caa082ea50b580ab43305b8261f0816626da9cac891f2a2647",
+      "inode": 1383190,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-desktop-9-reload-allergies-dialog.png",
+      "bytes": 116512,
+      "sha256": "5287530a6083f60b1ed6417a9bc1f0b1b205d342731c05ebbc19dc2bc4aba469",
+      "inode": 1383191,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-desktop-trace.zip",
+      "bytes": 5078308,
+      "sha256": "94b16dd3eb30a544e6a0adfeda3bada70074a0864f8ede9541c13969801a9631",
+      "inode": 1383192,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-tablet-1-upload.png",
+      "bytes": 61086,
+      "sha256": "24c3a3f41cfd5f2400ac06f818e2abb6d541ce589938cdd7d58a03e30f3b64d6",
+      "inode": 1376369,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-tablet-2-review.png",
+      "bytes": 75766,
+      "sha256": "b82d50287784a5dd7c3c926105d16ad05dbc2e8ba61cf726bf82e6a3593f3206",
+      "inode": 1376385,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-tablet-3-prefilled.png",
+      "bytes": 84059,
+      "sha256": "89d3d7fc7c7abb863e91c927cc5908fc0a76b5490b2ad662899a33af56a1211e",
+      "inode": 1376401,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-tablet-4-step3-clinica.png",
+      "bytes": 92984,
+      "sha256": "fd3594733848b0ad1f508e10bacff7750fc25eae2bb9c06713f697ecee9ada9f",
+      "inode": 1376417,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-tablet-5-riepilogo.png",
+      "bytes": 92984,
+      "sha256": "fd3594733848b0ad1f508e10bacff7750fc25eae2bb9c06713f697ecee9ada9f",
+      "inode": 1376433,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-tablet-7-created.png",
+      "bytes": 64677,
+      "sha256": "84d4eb81413a96613ad42fcc907572c189b44d8f4556b859f45a66de425200ec",
+      "inode": 1376449,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-tablet-8-reload-detail.png",
+      "bytes": 75739,
+      "sha256": "75002f5e3b3b02d2a8887570e017cdaf44e7486c868f3925f136f3312b6f8a27",
+      "inode": 1377250,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-tablet-9-reload-allergies-dialog.png",
+      "bytes": 103816,
+      "sha256": "6d3a0f7fadab07462a9828915833c0c8c4ee8456c3045bfc1cc28c27a3b3c5d9",
+      "inode": 1377266,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/attempt-006/output/evidence/req020-tablet-trace.zip",
+      "bytes": 7155859,
+      "sha256": "c95202efd929f0554c0e91589cfa4d1000b5cea00f755445ac2d651283c8e907",
+      "inode": 1377282,
+      "device": 27
+    }
+  ],
+  "qa10FailedAttemptRootRecords": [
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/STOP.json",
+      "bytes": 2141,
+      "sha256": "7e844586bbafab413b411ce625b98be88f5a6de520347b1580e4c034c0b4e0d3",
+      "inode": 1368353,
+      "device": 27
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/seal.json",
+      "bytes": 2376,
+      "sha256": "1c5a27b2e28fb37cbb8941e54c466dd40f7098f1b2e54efd78bb58ea8ae64c42",
+      "inode": 1368369,
+      "device": 27
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "args": [
+    "/workspace/.clinicos-cloud/497-Claude2-followup-20261022/ui16-independent-qa1/measured-contrast.mjs"
+  ],
+  "ok": true,
+  "code": 0,
+  "error": null,
+  "stdout": "[\n  {\n    \"selector\": \".patient-record-view .cr-alert-strip--allergie\",\n    \"foregroundToken\": \"text\",\n    \"foreground\": \"#16202e\",\n    \"backgroundToken\": \"amber-bg\",\n    \"background\": \"#fdf3e2\",\n    \"ratio\": 14.915950828955753\n  },\n  {\n    \"selector\": \".patient-record-view .cr-alert-strip--allergie.cr-alert-strip--severe\",\n    \"foregroundToken\": \"text\",\n    \"foreground\": \"#16202e\",\n    \"backgroundToken\": \"red-bg\",\n    \"background\": \"#fdecee\",\n    \"ratio\": 14.3803630256408\n  },\n  {\n    \"selector\": \".patient-record-view .patient-allergy-strip\",\n    \"foregroundToken\": \"text\",\n    \"foreground\": \"#16202e\",\n    \"backgroundToken\": \"amber-bg\",\n    \"background\": \"#fdf3e2\",\n    \"ratio\": 14.915950828955753\n  },\n  {\n    \"selector\": \".patient-topbar-title .cr-alert-strip\",\n    \"foregroundToken\": \"text\",\n    \"foreground\": \"#16202e\",\n    \"backgroundToken\": \"amber-bg\",\n    \"background\": \"#fdf3e2\",\n    \"ratio\": 14.915950828955753\n  },\n  {\n    \"selector\": \".patient-topbar-title .cr-alert-strip--severe\",\n    \"foregroundToken\": \"text\",\n    \"foreground\": \"#16202e\",\n    \"backgroundToken\": \"red-bg\",\n    \"background\": \"#fdecee\",\n    \"ratio\": 14.3803630256408\n  }\n]\n",
+  "stderr": ""
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "nonce": "39759edd-9ecc-4354-83fc-fecf1f3f8964",
+  "sealedAt": "2026-10-25T15:50:03.279067+00:00",
+  "verdict": "READY FOR CODEX QA",
+  "sourceManifestSha256": "b95aa4c7a9c716bd69e2a4edbcbb62de0142664fc659b772bdc5c4a665461da3",
+  "sourceMatchesReservation": true,
+  "files": {
+    "contract.log": "188f6966285df33aa55ee68da1beed673a6a70ef2ebe316af4c5570b71f530bc",
+    "diff-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fixture-verification.json": "3540091b0a5ad6811b9561697bfc241dae789ddcb9e246ebcc70f9e2b70fb428",
+    "focused-node22.log": "fb60ff9eb54ee5dd160b38acf0a0724d8678a5a69352164ff7d546d74dd61176",
+    "full-bug-pipeline-node22.log": "cbb53d1be3db14ac4ee7380aa849e162017b801b8f736dd25e0e8d23417ce1ea",
+    "independent-probe.log": "bc4945fdae5366ea61fd617180e240b1b2bce780b11561b349ffb16307bd7388",
+    "independent-probe.mjs": "bbade53cb4b2843af5979e01c43247456f47cc55a93377cb09fd0f782d0b9b9c",
+    "native-fixture.mjs": "2789fd33f78f9eea3b5942b80ec756c7566d5ee14986664776a414279cb31fc7",
+    "report.md": "3c0b5eb16fa01faa589b277441981ef7eca7ca5a2168805c656a5a292063ac11",
+    "reservation.json": "37826ca556130ecbbfc5e22ad3ede9a83e2bc70ca7b02ec72eb3244a76ab0840",
+    "result.json": "4401e5069f9ced2cea821a01f24ed2a05412c4a85072b5575898195fa971969b",
+    "source-after.json": "585e819a454ff4ab22ca2c17796a2143656b834b2f57df104734a37e7eff4092",
+    "source-before.json": "585e819a454ff4ab22ca2c17796a2143656b834b2f57df104734a37e7eff4092",
+    "standalone-fixture.mjs": "3d2324f1f2a96ade1bf82e35af8a4804051210a602812cc1c900d4a93848bf14",
+    "STOP.json": "6a1ee721b2d8db8ec6d1d9863f3b140a5f856623c2940b156f0fd5dd6c4225bb"
+  }
+}

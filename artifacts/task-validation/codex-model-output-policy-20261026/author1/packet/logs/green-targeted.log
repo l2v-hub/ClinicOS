@@ -1,0 +1,106 @@
+TAP version 13
+# Subtest: independent Codex QA uses a fresh read-only analyst session and cannot return implementation status
+ok 1 - independent Codex QA uses a fresh read-only analyst session and cannot return implementation status
+  ---
+  duration_ms: 28.808889
+  type: 'test'
+  ...
+# Subtest: plan, implementation and simplification use distinct bounded Codex sessions and models
+ok 2 - plan, implementation and simplification use distinct bounded Codex sessions and models
+  ---
+  duration_ms: 27.732509
+  type: 'test'
+  ...
+# Subtest: missing model IDs fail explicitly before starting Codex
+ok 3 - missing model IDs fail explicitly before starting Codex
+  ---
+  duration_ms: 3.747308
+  type: 'test'
+  ...
+# Subtest: missing, invalid and symlink output fail closed
+ok 4 - missing, invalid and symlink output fail closed
+  ---
+  duration_ms: 14.422446
+  type: 'test'
+  ...
+# Subtest: Codex failure is surfaced and does not parse stale output
+ok 5 - Codex failure is surfaced and does not parse stale output
+  ---
+  duration_ms: 7.031593
+  type: 'test'
+  ...
+# Subtest: model worktree cannot contain the runtime output directory
+ok 6 - model worktree cannot contain the runtime output directory
+  ---
+  duration_ms: 8.509194
+  type: 'test'
+  ...
+# Subtest: preflight probes CLI support without invoking a model or reading credentials
+ok 7 - preflight probes CLI support without invoking a model or reading credentials
+  ---
+  duration_ms: 2.432147
+  type: 'test'
+  ...
+# Subtest: standalone independent QA treats repository instructions as data and forbids PR code execution
+ok 8 - standalone independent QA treats repository instructions as data and forbids PR code execution
+  ---
+  duration_ms: 4.427148
+  type: 'test'
+  ...
+# Subtest: large JSON progress does not prevent reading a separate valid structured result
+ok 9 - large JSON progress does not prevent reading a separate valid structured result
+  ---
+  duration_ms: 76.390947
+  type: 'test'
+  ...
+# Subtest: model failure diagnostics use finite enums and omit raw output
+ok 10 - model failure diagnostics use finite enums and omit raw output
+  ---
+  duration_ms: 14.98552
+  type: 'test'
+  ...
+# Subtest: failure classifier checks retained stdout and stderr without copying their text
+ok 11 - failure classifier checks retained stdout and stderr without copying their text
+  ---
+  duration_ms: 16.050236
+  type: 'test'
+  ...
+# Subtest: synthetic model child permits separate progress and structured-result channels above 64 KiB
+ok 12 - synthetic model child permits separate progress and structured-result channels above 64 KiB
+  ---
+  duration_ms: 86.46277
+  type: 'test'
+  ...
+# Subtest: synthetic runner fails on independent total and stderr limits
+ok 13 - synthetic runner fails on independent total and stderr limits
+  ---
+  duration_ms: 174.44657
+  type: 'test'
+  ...
+# Subtest: runner option validation rejects unbounded or invalid limits
+ok 14 - runner option validation rejects unbounded or invalid limits
+  ---
+  duration_ms: 3.620757
+  type: 'test'
+  ...
+# Subtest: timed out process groups terminate surviving descendants
+ok 15 - timed out process groups terminate surviving descendants
+  ---
+  duration_ms: 2477.605506
+  type: 'test'
+  ...
+# Subtest: runner defaults retain the existing combined ceiling and prefix capture
+ok 16 - runner defaults retain the existing combined ceiling and prefix capture
+  ---
+  duration_ms: 72.868833
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2910.384941

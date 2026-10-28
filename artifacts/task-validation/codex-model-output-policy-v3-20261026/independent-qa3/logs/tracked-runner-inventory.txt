@@ -1,0 +1,72 @@
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/config/config.schema.json:20:    "maxOutputBytes",
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/config/config.schema.json:43:    "maxOutputBytes": { "type": "integer", "minimum": 1024 },
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/config/default.json:16:  "maxOutputBytes": 1048576,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/adapters/git.mjs:22:      maxOutputBytes: config.maxOutputBytes,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/adapters/git.mjs:162:        maxOutputBytes: config.maxOutputBytes,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/adapters/github.mjs:8:      maxOutputBytes: config.maxOutputBytes,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/adapters/process-runner.mjs:69:  maxOutputBytes = 1048576,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/adapters/process-runner.mjs:124:      sanitize ? sanitizeText(value.slice(0, maxOutputBytes)) : value.slice(0, maxOutputBytes);
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/claude-review-cron.mjs:8:import { createRunner } from './process.mjs';
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/claude-review-cron.mjs:246:  const baseRun = createRunner({ env: localEnv, runtimeRoot: path.join(runtime, 'runtime') });
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/cli.mjs:6:import { createRunner } from './process.mjs';
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/cli.mjs:85:  const run = createRunner({ env, runtimeRoot });
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/cloud-review-worker.mjs:9:import { createRunner } from './process.mjs';
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/cloud-review-worker.mjs:63:      maxOutputBytes: 16 * 1024 * 1024,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/cloud-review-worker.mjs:347:    maxOutputBytes: 32000,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/cloud-review-worker.mjs:533:      maxOutputBytes: 256 * 1024,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/cloud-review-worker.mjs:683:  const run = createRunner({ env: isolatedEnv, runtimeRoot: runtime });
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/comment-review-handoff.mjs:144:      maxOutputBytes: 16 * 1024 * 1024,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/dashboard-server.mjs:6:import { createRunner } from './process.mjs';
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/dashboard-server.mjs:85:  const run = createRunner({
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/exact-demo-dispatch.mjs:134:      maxOutputBytes: 64 * 1024,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/external-review.mjs:16:import { createRunner } from './process.mjs';
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/external-review.mjs:88:      run: createRunner({
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/github.mjs:404:      maxOutputBytes = 2 * 1024 * 1024,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/github.mjs:415:      maxOutputBytes,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/github.mjs:432:    { method, body, allowFailure = false, maxOutputBytes, guard, timeoutMs } = {},
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/github.mjs:442:      ...(maxOutputBytes === undefined ? {} : { maxOutputBytes }),
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/github.mjs:624:        maxOutputBytes: STATE_OUTPUT_BYTES,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/github.mjs:669:          maxOutputBytes: STATE_OUTPUT_BYTES,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/github.mjs:827:          maxOutputBytes: STATE_OUTPUT_BYTES,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/github.mjs:1081:        { allowFailure: true, maxOutputBytes: STATE_OUTPUT_BYTES },
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/github.mjs:1200:      { allowFailure: true, maxOutputBytes: STATE_OUTPUT_BYTES },
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/github.mjs:1494:      maxOutputBytes: MAX_EVIDENCE_TRANSPORT_BYTES,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/issue-review-communication.mjs:7:import { createRunner } from './process.mjs';
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/issue-review-communication.mjs:239:  run = createRunner({ runtimeRoot: path.join(os.tmpdir(), 'clinicos-issue-review-transport') }),
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/issue-review-communication.mjs:257:      maxOutputBytes: 2 * 1024 * 1024,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/issue-review-sync.mjs:6:import { createRunner } from './process.mjs';
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/issue-review-sync.mjs:81:  const run = createRunner({
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/models.mjs:364:        maxOutputBytes: STDERR_LIMIT_BYTES,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/models.mjs:457:          maxOutputBytes: 32768,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/process.mjs:119:export function createRunner({ env = process.env, runtimeRoot }) {
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/process.mjs:126:    maxOutputBytes = 2 * 1024 * 1024,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/process.mjs:133:    validateLimit(maxOutputBytes, 'maxOutputBytes');
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/process.mjs:139:    maxCapturedBytesPerStream ??= maxOutputBytes;
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/process.mjs:219:        if (limitedBytes > maxOutputBytes && legacyCapture) {
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/process.mjs:228:        if (limitedBytes > maxOutputBytes) fail('output-limit');
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/release.mjs:9:import { createRunner } from './process.mjs';
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/release.mjs:1616:  const run = createRunner({ env, runtimeRoot });
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/release.mjs:1626:        run: createRunner({
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/review-handoff-cli.mjs:8:import { createRunner } from './process.mjs';
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/review-handoff-cli.mjs:80:    createRunner({
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/standalone-review.mjs:298:      maxOutputBytes: 16 * 1024 * 1024,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/standalone-review.mjs:385:      maxOutputBytes: 1024 * 1024,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/workspace.mjs:107:      maxOutputBytes: 2 * 1024 * 1024,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/bug-pipeline/workspace.mjs:197:        maxOutputBytes: 1024 * 1024,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/commands/doctor.mjs:69:    run({ command, args, cwd: process.cwd(), timeoutMs: 15000, maxOutputBytes: 65536 });
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/core/config.mjs:20:  'maxOutputBytes',
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/workers/claude-development-worker.mjs:54:      maxOutputBytes: config.maxOutputBytes,
+31b11f09331249a93468bf00d8cc3d1313004a72:agent-team/src/workers/codex-qa-worker.mjs:46:    maxOutputBytes: config.maxOutputBytes,
+31b11f09331249a93468bf00d8cc3d1313004a72:scripts/automation/inspect-demo-bearer-readiness.mjs:109:export function createRunner({ railwayToken, githubToken, fetchImpl = fetch } = {}) {
+31b11f09331249a93468bf00d8cc3d1313004a72:scripts/automation/inspect-demo-bearer-readiness.mjs:169:  const result = await createRunner({ railwayToken: process.env.RAILWAY_TOKEN, githubToken: process.env.GITHUB_TOKEN })(process.env);
+31b11f09331249a93468bf00d8cc3d1313004a72:scripts/automation/protect-demo-secret.mjs:1:import { createRunner } from '../../agent-team/src/bug-pipeline/process.mjs';
+31b11f09331249a93468bf00d8cc3d1313004a72:scripts/automation/protect-demo-secret.mjs:323:export async function writeEnvironmentSecretWithGh({ secretValue, env = process.env, runnerFactory = createRunner }) {
+31b11f09331249a93468bf00d8cc3d1313004a72:scripts/automation/protect-demo-secret.mjs:338:      maxOutputBytes: 16_384,
+31b11f09331249a93468bf00d8cc3d1313004a72:scripts/automation/protect-demo-secret.mjs:356:      maxOutputBytes: 16_384,
+31b11f09331249a93468bf00d8cc3d1313004a72:scripts/quality-gate/claude-bug-review.mjs:107:      maxOutputBytes: 2 * 1024 * 1024,
+31b11f09331249a93468bf00d8cc3d1313004a72:scripts/quality-gate/review-bug-setup.mjs:6:import { createRunner } from '../../agent-team/src/bug-pipeline/process.mjs';
+31b11f09331249a93468bf00d8cc3d1313004a72:scripts/quality-gate/review-bug-setup.mjs:23:  run ??= createRunner({ env, runtimeRoot });
+31b11f09331249a93468bf00d8cc3d1313004a72:scripts/quality-gate/verify-isolated-services.mjs:10:import { createRunner } from '../../agent-team/src/bug-pipeline/process.mjs';
+31b11f09331249a93468bf00d8cc3d1313004a72:scripts/quality-gate/verify-isolated-services.mjs:167:    const run = createRunner({
+31b11f09331249a93468bf00d8cc3d1313004a72:scripts/quality-gate/verify-isolated-services.mjs:177:      maxOutputBytes: 2 * 1024 * 1024,
+31b11f09331249a93468bf00d8cc3d1313004a72:scripts/quality-gate/verify-isolated-services.mjs:190:      maxOutputBytes: 2 * 1024 * 1024,

@@ -2,6 +2,7 @@
 // module only TRANSLATES them, so routes and tools agree on status semantics without either
 // owning the other's logic.
 
+import { isConcurrentWriteConflict } from '../therapies/administration-record.js';
 import type { ToolErrorCode, ToolErrorShape } from './types.js';
 
 const CODE_BY_STATUS: Record<number, ToolErrorCode> = {
@@ -107,7 +108,7 @@ export function toToolErrorShape(error: unknown): ToolErrorShape {
     typeof e.status === 'number' ? e.status : typeof e.statusCode === 'number' ? e.statusCode : 0;
 
   if (domainCode === 'P2025') return toolError('not_found', 'Risorsa non trovata', { domainCode });
-  if (domainCode === 'P2002' || domainCode === 'P2034') {
+  if (domainCode === 'P2002' || isConcurrentWriteConflict(error)) {
     return toolError('conflict', 'Conflitto con lo stato corrente', { domainCode });
   }
   if (status >= 400 && status < 600) {

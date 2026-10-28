@@ -1,7 +1,8 @@
-import type { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import type { Operator } from '../ai/auth.js';
 import { prisma } from '../lib/prisma.js';
-import { patientScopeWhere } from './patient-scope.js';
+import { hasFacilityPatientScope } from './patient-scope.js';
+import { preserveTemporaryPsExits } from './temporary-ps-exits.js';
 
 export class PatientParametersInputError extends Error {
   constructor(message: string) {
@@ -126,13 +127,14 @@ export async function savePatientParameterMonth(
   };
   let savedMonth: ParameterMonth = month;
   await prisma.$transaction(async (tx) => {
-    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`patient-parameters:${patientId}`}))`;
-    const patient = await tx.patient.findFirst({
-      where: { id: patientId, ...patientScopeWhere(actor) },
-      select: { id: true },
-    });
-    if (!patient) throw new PatientParametersNotFoundError();
-    const existing = await tx.cartella.findUnique({ where: { patientId }, select: { data: true } });
+    const patients = await tx.$queryRaw<Array<{ id: string }>>(Prisma.sql`
+      SELECT p.id FROM "Patient" p WHERE p.id = ${patientId}
+      ${hasFacilityPatientScope(actor.role) ? Prisma.empty : Prisma.sql`AND p."registeredById" = ${actor.id}`}
+      FOR UPDATE OF p`);
+    if (!patients.length) throw new PatientParametersNotFoundError();
+    const rows = await tx.$queryRaw<Array<{ data: Prisma.JsonValue }>>`
+      SELECT data FROM "Cartella" WHERE "patientId" = ${patientId} FOR UPDATE`;
+    const existing = rows[0];
     const data = record(existing?.data) ?? {};
     const currentMonths = Array.isArray(data.parametriMensili) ? data.parametriMensili : [];
     const currentMonth = currentMonths.find((value) => {
@@ -155,10 +157,10 @@ export async function savePatientParameterMonth(
       const candidate = record(value);
       return candidate?.mese !== month.mese || candidate?.anno !== month.anno;
     });
-    const updated = {
+    const updated = preserveTemporaryPsExits(existing?.data, {
       ...data,
       parametriMensili: [...otherMonths, savedMonth],
-    } as Prisma.InputJsonObject;
+    }) as Prisma.InputJsonObject;
     await tx.cartella.upsert({
       where: { patientId },
       create: { patientId, data: updated },

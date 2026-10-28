@@ -25,7 +25,16 @@ test('weekly and monthly views never repeat one-day therapy data across calendar
 test('opening a calendar day loads that exact therapy date and carries it into mutations', () => {
   for (const agenda of [operatorAgenda, adminAgenda]) {
     assert.match(agenda, /function openDay\(date: Date\)/);
-    assert.match(agenda, /onLoadTherapySlots\?\.\(isoDate\(date\)\)/);
+    if (agenda === operatorAgenda) {
+      assert.match(
+        agenda,
+        /if \(canReadTherapies && view === 'giornaliero'\) onLoadTherapySlots\?\.\(isoDate\(refDate\)\)/,
+      );
+      assert.match(agenda, /\[canReadTherapies, onLoadTherapySlots, refDate, view\]/);
+      assert.match(agenda, /function openDay\(date: Date\)[\s\S]*?setRefDate\(date\)/);
+    } else {
+      assert.match(agenda, /onLoadTherapySlots\?\.\(isoDate\(date\)\)/);
+    }
     assert.match(agenda, /date=\{isoDate\(refDate\)\}/);
   }
   assert.match(modal, /date,\s*fascia: slot\.fascia/);

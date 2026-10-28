@@ -246,6 +246,7 @@ test('own patient access works and client authorship is ignored', async () => {
     body: JSON.stringify({
       farmacoNome: 'Terapia A',
       dosaggio: '5 mg',
+      viaSomministrazione: 'orale',
       dataInizio: '2026-08-29',
       operatoreInseritore: 'Autore contraffatto',
       schedules: [{ time: '8:00', administrationUnit: 'compressa' }],
@@ -255,9 +256,11 @@ test('own patient access works and client authorship is ignored', async () => {
   const createdTherapy = (await create.json()) as {
     id: string;
     operatoreInseritore: string;
+    viaSomministrazione: string;
     schedules: Array<{ time: string }>;
   };
   assert.equal(createdTherapy.operatoreInseritore, operatorAId);
+  assert.equal(createdTherapy.viaSomministrazione, 'orale');
   assert.equal(createdTherapy.schedules[0]?.time, '08:00');
 
   const invalidScheduleUpdate = await fetch(
@@ -302,6 +305,7 @@ test('own patient access works and client authorship is ignored', async () => {
     body: JSON.stringify({
       farmacoNome: 'Terapia senza orari',
       dataInizio: '2026-08-29',
+      viaSomministrazione: 'orale',
       schedules: [],
     }),
   });

@@ -1,0 +1,326 @@
+TAP version 13
+# Subtest: context binds manual dispatch to exact reviewed main SHA and triggering actor
+ok 1 - context binds manual dispatch to exact reviewed main SHA and triggering actor
+  ---
+  duration_ms: 2.122365
+  type: 'test'
+  ...
+# Subtest: ensure writes the existing bound value once when only the repository copy exists
+ok 2 - ensure writes the existing bound value once when only the repository copy exists
+  ---
+  duration_ms: 2.231617
+  type: 'test'
+  ...
+# Subtest: an existing environment copy is never overwritten and is idempotent
+ok 3 - an existing environment copy is never overwritten and is idempotent
+  ---
+  duration_ms: 0.298331
+  type: 'test'
+  ...
+# Subtest: environment copy appearing during awaited authority checks is never overwritten
+ok 4 - environment copy appearing during awaited authority checks is never overwritten
+  ---
+  duration_ms: 0.310429
+  type: 'test'
+  ...
+# Subtest: environment copy disappearing during authority checks stops before repository deletion
+ok 5 - environment copy disappearing during authority checks stops before repository deletion
+  ---
+  duration_ms: 0.949993
+  type: 'test'
+  ...
+# Subtest: both copies absent or a missing environment binding fail before any write
+ok 6 - both copies absent or a missing environment binding fail before any write
+  ---
+  duration_ms: 0.973228
+  type: 'test'
+  ...
+# Subtest: wrong fresh main, non-admin actor, environment identity, and branch policy fail before write
+    # Subtest: main SHA drift
+    ok 1 - main SHA drift
+      ---
+      duration_ms: 0.319291
+      type: 'test'
+      ...
+    # Subtest: non-admin
+    ok 2 - non-admin
+      ---
+      duration_ms: 0.247145
+      type: 'test'
+      ...
+    # Subtest: wrong environment id
+    ok 3 - wrong environment id
+      ---
+      duration_ms: 0.524585
+      type: 'test'
+      ...
+    # Subtest: extra branch policy
+    ok 4 - extra branch policy
+      ---
+      duration_ms: 0.286373
+      type: 'test'
+      ...
+    # Subtest: tag policy
+    ok 5 - tag policy
+      ---
+      duration_ms: 0.29743
+      type: 'test'
+      ...
+    # Subtest: incomplete policy list
+    ok 6 - incomplete policy list
+      ---
+      duration_ms: 0.170712
+      type: 'test'
+      ...
+    # Subtest: wrong admin identity
+    ok 7 - wrong admin identity
+      ---
+      duration_ms: 0.228087
+      type: 'test'
+      ...
+    # Subtest: protected branches enabled
+    ok 8 - protected branches enabled
+      ---
+      duration_ms: 0.143713
+      type: 'test'
+      ...
+    1..8
+ok 7 - wrong fresh main, non-admin actor, environment identity, and branch policy fail before write
+  ---
+  duration_ms: 3.043066
+  type: 'test'
+  ...
+# Subtest: unreadable, incomplete, truncated, and drifting inventories fail closed
+    # Subtest: forbidden inventory
+    ok 1 - forbidden inventory
+      ---
+      duration_ms: 0.224982
+      type: 'test'
+      ...
+    # Subtest: incomplete count
+    ok 2 - incomplete count
+      ---
+      duration_ms: 0.122882
+      type: 'test'
+      ...
+    # Subtest: truncated body
+    ok 3 - truncated body
+      ---
+      duration_ms: 0.099156
+      type: 'test'
+      ...
+    # Subtest: changing count
+    ok 4 - changing count
+      ---
+      duration_ms: 0.228748
+      type: 'test'
+      ...
+    1..4
+ok 8 - unreadable, incomplete, truncated, and drifting inventories fail closed
+  ---
+  duration_ms: 1.107957
+  type: 'test'
+  ...
+# Subtest: uncertain environment write is one attempt and a later explicit run rechecks state
+ok 9 - uncertain environment write is one attempt and a later explicit run rechecks state
+  ---
+  duration_ms: 0.360452
+  type: 'test'
+  ...
+# Subtest: second fresh environment job requires the bound value and environment copy before deletion
+    # Subtest: environment copy absent
+    ok 1 - environment copy absent
+      ---
+      duration_ms: 0.856326
+      type: 'test'
+      ...
+    # Subtest: binding absent
+    ok 2 - binding absent
+      ---
+      duration_ms: 0.100008
+      type: 'test'
+      ...
+    1..2
+ok 10 - second fresh environment job requires the bound value and environment copy before deletion
+  ---
+  duration_ms: 1.150059
+  type: 'test'
+  ...
+# Subtest: repository secret is deleted at most once after fresh checks and absence readback
+ok 11 - repository secret is deleted at most once after fresh checks and absence readback
+  ---
+  duration_ms: 0.406601
+  type: 'test'
+  ...
+# Subtest: post-delete readback fails if the environment copy disappeared during deletion
+ok 12 - post-delete readback fails if the environment copy disappeared during deletion
+  ---
+  duration_ms: 0.257551
+  type: 'test'
+  ...
+# Subtest: repository absence is a zero-write idempotent result
+ok 13 - repository absence is a zero-write idempotent result
+  ---
+  duration_ms: 0.145074
+  type: 'test'
+  ...
+# Subtest: uncertain delete and recreated secret fail without a second delete attempt
+    # Subtest: uncertain transport
+    ok 1 - uncertain transport
+      ---
+      duration_ms: 0.210331
+      type: 'test'
+      ...
+    # Subtest: recreated before readback
+    ok 2 - recreated before readback
+      ---
+      duration_ms: 0.232163
+      type: 'test'
+      ...
+    1..2
+ok 14 - uncertain delete and recreated secret fail without a second delete attempt
+  ---
+  duration_ms: 0.607197
+  type: 'test'
+  ...
+# Subtest: pinned gh version parsing accepts only the expected exact release
+ok 15 - pinned gh version parsing accepts only the expected exact release
+  ---
+  duration_ms: 0.160316
+  type: 'test'
+  ...
+# Subtest: writer requires the workflow-provided absolute pinned binary path
+ok 16 - writer requires the workflow-provided absolute pinned binary path
+  ---
+  duration_ms: 0.22342
+  type: 'test'
+  ...
+# Subtest: actual gh writer verifies version without a token, then sends value only on stdin
+ok 17 - actual gh writer verifies version without a token, then sends value only on stdin
+  ---
+  duration_ms: 71.997466
+  type: 'test'
+  ...
+# Subtest: gh version mismatch fails before the write process receives secret stdin
+ok 18 - gh version mismatch fails before the write process receives secret stdin
+  ---
+  duration_ms: 32.639121
+  type: 'test'
+  ...
+# Subtest: failed gh version check stops before the write process receives secret stdin
+ok 19 - failed gh version check stops before the write process receives secret stdin
+  ---
+  duration_ms: 28.880263
+  type: 'test'
+  ...
+# Subtest: main validates workflow context before creating an API client from credentials
+ok 20 - main validates workflow context before creating an API client from credentials
+  ---
+  duration_ms: 0.308236
+  type: 'test'
+  ...
+# Subtest: actual credential-free workflow node -e context import succeeds
+ok 21 - actual credential-free workflow node -e context import succeeds
+  ---
+  duration_ms: 29.604404
+  type: 'test'
+  ...
+# Subtest: workflow is manual-only, pinned, and sequences two fresh protected-environment jobs
+ok 22 - workflow is manual-only, pinned, and sequences two fresh protected-environment jobs
+  ---
+  duration_ms: 2.937811
+  type: 'test'
+  ...
+# Subtest: four rejected rounds remain blocked and a fifth model call is impossible
+ok 23 - four rejected rounds remain blocked and a fifth model call is impossible
+  ---
+  duration_ms: 169.197181
+  type: 'test'
+  ...
+# Subtest: the same rejected commit cannot spend a second round
+ok 24 - the same rejected commit cannot spend a second round
+  ---
+  duration_ms: 49.019361
+  type: 'test'
+  ...
+# Subtest: approval is reusable only at the same SHA and code changes require another review
+ok 25 - approval is reusable only at the same SHA and code changes require another review
+  ---
+  duration_ms: 67.642862
+  type: 'test'
+  ...
+# Subtest: missing authentication consumes no review round
+ok 26 - missing authentication consumes no review round
+  ---
+  duration_ms: 24.1568
+  type: 'test'
+  ...
+# Subtest: reviewer has only read tools and no project settings, MCP or bypass
+ok 27 - reviewer has only read tools and no project settings, MCP or bypass
+  ---
+  duration_ms: 35.422353
+  type: 'test'
+  ...
+# Subtest: dirty implementation and packets outside the worktree are rejected before model invocation
+ok 28 - dirty implementation and packets outside the worktree are rejected before model invocation
+  ---
+  duration_ms: 28.100276
+  type: 'test'
+  ...
+# Subtest: corrupted approved evidence is rejected
+ok 29 - corrupted approved evidence is rejected
+  ---
+  duration_ms: 39.337987
+  type: 'test'
+  ...
+# Subtest: a malformed provider response is a failed attempt rather than approval
+ok 30 - a malformed provider response is a failed attempt rather than approval
+  ---
+  duration_ms: 27.846191
+  type: 'test'
+  ...
+# Subtest: files changed during review invalidate the result
+ok 31 - files changed during review invalidate the result
+  ---
+  duration_ms: 34.747567
+  type: 'test'
+  ...
+# Subtest: concurrent callers cannot invoke two reviewers for the same packet
+ok 32 - concurrent callers cannot invoke two reviewers for the same packet
+  ---
+  duration_ms: 33.275262
+  type: 'test'
+  ...
+# Subtest: review validation rejects stale SHA, invented paths and contradictory approval
+ok 33 - review validation rejects stale SHA, invented paths and contradictory approval
+  ---
+  duration_ms: 0.327714
+  type: 'test'
+  ...
+# Subtest: a tracked prerequisite symlink cannot read an external implementation plan
+ok 34 - a tracked prerequisite symlink cannot read an external implementation plan
+  ---
+  duration_ms: 23.568581
+  type: 'test'
+  ...
+# Subtest: an explicitly audited effective allowance permits round5 and preserves historical max_rounds4 and reports
+ok 35 - an explicitly audited effective allowance permits round5 and preserves historical max_rounds4 and reports
+  ---
+  duration_ms: 119.041283
+  type: 'test'
+  ...
+# Subtest: local review uses the same trusted generation contract with frozen SHA and read-only rules
+ok 36 - local review uses the same trusted generation contract with frozen SHA and read-only rules
+  ---
+  duration_ms: 33.246729
+  type: 'test'
+  ...
+1..36
+# tests 52
+# suites 0
+# pass 52
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 738.081165

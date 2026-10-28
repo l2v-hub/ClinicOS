@@ -1,0 +1,30 @@
+{
+  "command": [
+    "node",
+    "e2e/qa-bug-batch-432.mjs",
+    "--test"
+  ],
+  "environmentKeys": [
+    "HOME",
+    "HTTPS_PROXY",
+    "HTTP_PROXY",
+    "LANG",
+    "LC_ALL",
+    "NODE_EXTRA_CA_CERTS",
+    "NO_PROXY",
+    "PATH",
+    "PLAYWRIGHT_BROWSERS_PATH",
+    "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH",
+    "QA_PYTHON",
+    "SSL_CERT_FILE",
+    "http_proxy",
+    "https_proxy",
+    "no_proxy"
+  ],
+  "python": "/workspace/.venvs/clinicos-ai/bin/python3",
+  "browserCache": "/workspace/.cache/clinicos-batch432-playwright",
+  "browserExecutable": "/usr/bin/chromium",
+  "startedUtc": "2026-10-17T09:57:06Z",
+  "credentialEnvironmentForwarded": false,
+  "lock": "Canonical internal flock entire lifecycle"
+}

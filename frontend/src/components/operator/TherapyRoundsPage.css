@@ -9,9 +9,19 @@
   overflow-wrap: anywhere;
   font: 400 14px/20px var(--font-ui);
 }
-.giro-allergies__status { margin: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; }
-.giro-allergies__source { color: var(--text-muted); }
-.giro-allergies__list { margin: 8px 0; padding-left: 20px; }
+.giro-allergies__status {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+.giro-allergies__source {
+  color: var(--text-muted);
+}
+.giro-allergies__list {
+  margin: 8px 0;
+  padding-left: 20px;
+}
 .giro-allergies__details summary {
   cursor: pointer;
   min-height: 44px;
@@ -19,9 +29,17 @@
   color: var(--text);
   font-weight: 600;
 }
-.giro-allergies__details summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-.giro-allergies__details p { margin: 4px 0; }
-.giro-allergies__documentation { padding: 8px 0; border-top: 1px solid var(--border); }
+.giro-allergies__details summary:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+.giro-allergies__details p {
+  margin: 4px 0;
+}
+.giro-allergies__documentation {
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+}
 
 .giro-view {
   display: flex;
@@ -335,6 +353,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
   .giro-drug > .giro-row__act {
+    flex-wrap: wrap;
     justify-content: stretch;
   }
   .giro-drug > .giro-row__act > .giro-badge {
@@ -365,4 +384,40 @@
   outline: 3px solid var(--blue);
   outline-offset: 2px;
   border-radius: 12px;
+}
+
+/* One primary toolbar; secondary navigation remains keyboard-accessible in its menu. */
+.giro-primary-controls {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.giro-primary-controls .giro-slots {
+  flex: 1 1 auto;
+}
+.giro-primary-controls .giro-filters {
+  display: flex;
+  gap: 4px;
+}
+.giro-secondary-controls {
+  position: static;
+}
+.giro-secondary-controls summary {
+  cursor: pointer;
+  padding: 10px;
+}
+.giro-secondary-controls[open] .giro-tools {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 8;
+  width: min(680px, 100%);
+  box-sizing: border-box;
+  background: var(--surface, white);
+  padding: 12px;
+  border: 1px solid var(--divider);
+  box-shadow: 0 8px 24px #172b4d22;
 }

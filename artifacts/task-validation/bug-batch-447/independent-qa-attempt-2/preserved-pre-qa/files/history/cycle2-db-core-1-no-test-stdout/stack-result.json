@@ -1,0 +1,7 @@
+{
+  "status": "failed",
+  "browser": "not-run",
+  "databaseTests": "failed",
+  "syntheticOnly": true,
+  "databaseMode": "native-postgresql16"
+}

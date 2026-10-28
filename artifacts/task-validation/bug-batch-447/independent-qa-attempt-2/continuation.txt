@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/clinicos447-qa2-continue.py", line 24, in <module>
+    (q/'browser-command.json').write_text(json.dumps({'exit':run.returncode,'sourceStable92':True,'contractsStable22':True},indent=2));assert run.returncode==0,'Browser acceptance failed; inspect own evidence'
+                                                                                                                                              ^^^^^^^^^^^^^^^^^
+AssertionError: Browser acceptance failed; inspect own evidence

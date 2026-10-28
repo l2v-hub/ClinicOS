@@ -1,0 +1,12 @@
+agent-team/src/bug-pipeline/failed-output-export.mjs:14:const MAX_FILE_BYTES = 256 * 1024;
+agent-team/src/bug-pipeline/failed-output-export.mjs:15:const MAX_TOTAL_BYTES = 2 * 1024 * 1024;
+agent-team/src/bug-pipeline/failed-output-export.mjs:16:const MAX_PACKET_BYTES = 1024 * 1024 + 16 * 1024;
+agent-team/src/bug-pipeline/failed-output-export.mjs:20:  assert.ok(bytes.length <= MAX_FILE_BYTES, 'Retained source exceeds per-file limit');
+agent-team/src/bug-pipeline/failed-output-export.mjs:53:      cwd: root, encoding: 'buffer', maxBuffer: MAX_FILE_BYTES + 1,
+agent-team/src/bug-pipeline/failed-output-export.mjs:110:      assert.ok(info.size <= MAX_FILE_BYTES && info.size === identity.bytes, 'Retained source size changed');
+agent-team/src/bug-pipeline/failed-output-export.mjs:119:    assert.ok(sourceBytes + Buffer.byteLength(patch) <= MAX_TOTAL_BYTES,
+agent-team/src/bug-pipeline/failed-output-export.mjs:122:  assert.ok(Buffer.byteLength(patch) <= MAX_TOTAL_BYTES, 'Retained patch size exceeded');
+agent-team/src/bug-pipeline/failed-output-export.mjs:127:    assert.ok(info.size <= MAX_PACKET_BYTES, 'Verification record exceeds export limit');
+agent-team/src/bug-pipeline/cli.mjs:67:    verificationDiagnostics: verificationDiagnostics.slice(-64),
+agent-team/src/bug-pipeline/cli.mjs:198:      verificationDiagnostics: workspace.verificationDiagnostics().slice(-64),
+agent-team/src/bug-pipeline/workspace.mjs:217:          maxOutputBytes: 1024 * 1024,

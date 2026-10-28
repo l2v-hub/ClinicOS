@@ -1,0 +1,27 @@
+{
+  "verdict": "BLOCKED",
+  "sourceCode": "c3711b74a71b60923e5ac75cc57d80fa3d2958e8",
+  "sourceParent": "752a053e3a94d785e577236923e1dbbf6f27365e",
+  "trustedMain": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "authorNonce": "497769ef-a2b3-4253-895d-f5a0266b6220",
+  "qaNonce": "96e741f1-d6f7-4d30-b5cb-1c90b636f762",
+  "qaSessionsUsed": 1,
+  "changedFiles": [
+    "agent-team/tests/bug-pipeline/standalone-review-semantic-history.test.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs"
+  ],
+  "checks": {
+    "twoChangedPathsOnly": true,
+    "restoredLargeFileMatchesTrusted": true,
+    "movedTestsAreExactParentSuffix": true,
+    "productionProjectionUnchanged": true,
+    "all15ProjectionObjectsMatchDeclaredHashes": false,
+    "allProjectionSnapshotFilesMatchGitObjects": true,
+    "focusedTestsPass": true
+  },
+  "blockers": [
+    "Candidate projection metadata is stale for agent-team/tests/bug-pipeline/standalone-review-semantic-history.test.mjs: declares blob a3df7a28502c20d63c26dd1bd0e1a359eb3e576e / raw SHA-256 a70c4f325c1f2f0d43e514b591768c6b3161f8e131e4791d7cc513e0cef566dd, actual candidate blob is 7971cafe61f3d02fc4d1da4abc5e30c1c5d732c8 / raw SHA-256 b60a158014bfb7ce273ff30eeea3b1b81fa22d3c7598126e1700e071869902e2."
+  ],
+  "readerProofBoundary": "Author-supplied offline native reader fixture is synthetic, uses immutable Git blobs and makes no live GitHub proof claim; not independently rerun in this focused mechanical QA.",
+  "authorSealSha256": "a3e34e6984da97e4c26c4897a9c539b49f41c015839b7b91f092321a43657a79"
+}

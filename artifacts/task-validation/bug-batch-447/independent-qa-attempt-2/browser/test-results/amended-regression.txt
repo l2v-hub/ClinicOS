@@ -1,0 +1,27 @@
+✔ 417 both workspaces use exactly the shared field order, full ACVPU options and no prior prefill (36.539802ms)
+✔ 417 numeric raw text is never maxlength-truncated and desktop has no software keypad (7.352583ms)
+✔ 417 uncertain saves lock fields but retain enabled explicit retry and error/history guidance (7.024091ms)
+✔ pending and unverified server order stay visibly temporary, without claiming a saved preference (48.680406ms)
+✔ personal and department authority are independent and missing profiles expose no false save affordance (3.179575ms)
+✔ remounted parameter rows retain the correct patient values, open note, and exact uncertain request (18.59257ms)
+✔ legacy columns retain usable controls and explicitly limit temporary ordering to loaded patients (31.506533ms)
+✔ therapy modal preserves a deliberately non-alphabetical server order and the original action identifiers (8.222829ms)
+✔ legacy history proposal selects an explicit remote block, preserves negations and never overrides text (3.523911ms)
+✔ removed editing cards stay absent in chart/intake; retained fields, allergies and previous source remain readable (34.590996ms)
+✔ history/source survive confirmation without inferred replacements or dropping hidden legacy values (0.672468ms)
+✔ confirmation summary uses retained past history and notes, never relabels generic history (10.146045ms)
+✔ printed PS document shows each current diagnosis once and keeps documented prior history separate (14.130888ms)
+✔ patient list exposes the canonical fiscal identity and never shows MRN (1.365073ms)
+✔ 452 roster leads with bed and preserves native accessible actions while optional empty columns disappear (16.303863ms)
+✔ tablet and mobile use a compact two-to-one-column card grid (0.257418ms)
+✔ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance (2.662136ms)
+✔ new-patient wizard keeps required identity visible and progressively discloses optional data (0.310268ms)
+✔ patient intake uses a compact responsive layout without reducing touch targets (0.89478ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2249.811072

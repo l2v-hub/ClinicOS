@@ -1,0 +1,38 @@
+{
+  "baseSha": "4308210cc166440e546239c247ffdd26f51737ce",
+  "status": "IMPLEMENTED — NOT INDEPENDENTLY VERIFIED",
+  "source": {
+    "path": "backend/src/routes/__tests__/therapy-slot-scope-contract.test.ts",
+    "beforeSha256": "d33fe51096a6efd7202a16e101d7d3b9957b060bcf008454db394f0bb4b4f9f5",
+    "afterSha256": "1c6e3941760683008baac7a2146ce61d363b5b90af4e82bfac2d8301fbf04d4e",
+    "beforeInode": { "inode": 551307, "links": 4, "size": 5018 },
+    "privateSnapshotInode": { "inode": 1054761, "links": 1, "size": 5018 },
+    "isolatedWorkingCopyAfterPrivatization": { "inode": 594521, "links": 1, "size": 5018 },
+    "workingCopyAfterEdit": { "inode": 594521, "links": 1, "size": 5031 }
+  },
+  "diff": {
+    "filesChanged": 1,
+    "insertions": 1,
+    "deletions": 1,
+    "gitDiffCheck": "PASS",
+    "assertion": "Update positive candidate CTE regex to require \"patientId\" in the existing four-column signature."
+  },
+  "targetedTest": {
+    "command": "node --import tsx --test src/routes/__tests__/therapy-slot-scope-contract.test.ts",
+    "runner": "trusted createRunner, credential-stripped verification mode",
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0
+  },
+  "priorIndependentQa7": {
+    "sourceSha": "4308210cc166440e546239c247ffdd26f51737ce",
+    "status": "FAILED VALIDATION",
+    "fullBackend": { "passed": 1933, "failed": 1, "skipped": 5 },
+    "frontend": { "passed": 1405, "failed": 0, "skipped": 0 },
+    "reason": "One stale positive SQL-shape regex expected the old three-column candidate CTE."
+  },
+  "authorFailedAttempts": 0,
+  "authorStop": true,
+  "notRunByAuthor": ["full backend suite", "frontend suite", "database", "API", "browser", "provider"]
+}

@@ -1,0 +1,36 @@
+--- a/.claude/skills/clinicos/references/bug-delivery.md
++++ b/.claude/skills/clinicos/references/bug-delivery.md
+@@ -181,7 +181,9 @@
+ configurato, tramite il worker GitHub-hosted fidato su `main` con `CLAUDE_CODE_OAUTH_TOKEN`
+ (autenticazione OAuth dell’abbonamento). Per il worker hosted, `CLAUDE_CLOUD_REVIEW_ENABLED`
+ assente/vuota o `true` abilita le review in coda; `false` o un valore non valido le disabilita,
+-mentre il dispatch `probe` resta disponibile. Non è necessario creare la variabile: il merge su
++mentre il dispatch `probe` resta disponibile. I confronti GitHub Actions ignorano maiuscole e
++minuscole: `TRUE`/`True` abilitano e `FALSE`/`False` disabilitano. Non è necessario
++creare la variabile: il merge su
+ `main` del workflow revisionato può attivare le review per impostazione predefinita. Esegui il
+ dispatch `probe` su `main` e verifica ricevuta reale `probe-passed`, profilo modello supportato
+ e un evento di review riuscito prima di dichiarare operativa l’attivazione. La probe qualifica
+@@ -228,16 +230,12 @@
+ review di un modello e dall'abilitazione dei workflow. Verificare, revisionare e testare il codice corrente prima di attivare i workflow; poi
+ provare un evento reale prima di dichiarare l’avvio automatico verificato. Deploy e chiusura delle issue
+ sono passaggi successivi e distinti. Una configurazione o un test con adapter simulato non prova
+-una chiamata reale. Il runner Actions non eredita una sessione Claude Max interattiva locale: il percorso hosted usa il worker
+-fidato descritto in `docs/cloud-claude-review.md`, con OAuth dell’abbonamento tramite
+-`CLAUDE_CODE_OAUTH_TOKEN`. `CLAUDE_CLOUD_REVIEW_ENABLED` assente/vuota o `true` abilita le
+-review in coda; `false` o un valore non valido le disabilita, mentre il dispatch `probe` resta
+-disponibile. Non è necessario creare la variabile: il merge su `main` del workflow revisionato
+-può attivare le review per impostazione predefinita. Esegui il dispatch `probe` su `main` e
+-verifica la ricevuta reale `probe-passed`, il profilo modello supportato e un evento di review
+-riuscito prima di dichiarare operativa l’attivazione. Se non si usa quel percorso, la review può
+-avvenire su un host supportato con sessione Max autenticata e profilo verificato. Nessuno dei
+-due percorsi usa Anthropic API a pagamento o richiede una chiave API aggiuntiva.
++una chiamata reale. Per il percorso hosted, il runner Actions usa il worker fidato descritto in
++`docs/cloud-claude-review.md` e l’OAuth dell’abbonamento tramite `CLAUDE_CODE_OAUTH_TOKEN`;
++attivazione, probe e verifica operativa sono descritti nella sezione 7 e in quella guida. Se non
++si usa il percorso hosted, la review può avvenire su un host supportato con sessione Max
++autenticata e profilo verificato. Nessuno dei due percorsi usa Anthropic API a pagamento o
++richiede una chiave API aggiuntiva.
+ 
+ Dopo la presa in carico durevole imposta `In progress`; per impedimenti reali usa `Bloccato`
+ con causa verificata e condizione di sblocco. Il controller mantiene stato e contatori;

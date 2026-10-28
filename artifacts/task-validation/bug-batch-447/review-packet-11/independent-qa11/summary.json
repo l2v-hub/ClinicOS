@@ -1,0 +1,209 @@
+{
+  "scopeVerdict": "PASS \u2014 independent combined backend integration checks",
+  "finalDecision": "PARTIAL \u2014 publication/native and actual review gates remain with root",
+  "agent": "/root/qa497_integration11",
+  "sourceSha": "f394e3a77925e96a2b54e63485fb45ad44678f54",
+  "mergeParents": [
+    "74b260cdbcf36b1f7395477f4e35d07aba7fcf90",
+    "4983de2bdb6ea571053f03a508c919d27ff1771b"
+  ],
+  "qaNonce": "e9e6115d-9f5b-4a0f-82fa-a5e0858d31c3",
+  "clinicalGrantNonce": "1e13ebab-a3a9-4b07-b91e-71735b43f938",
+  "at": "2026-10-21T19:18:25.226516+00:00",
+  "checks": {
+    "pure": {
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "counts": {
+        "tests": 30,
+        "suites": 0,
+        "pass": 30,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "9f2bb1943b3e259a85e1cc050ed7886202e35cce3e341c9a0ff07614b736cbf6",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T19:13:20.676Z"
+    },
+    "types": {
+      "ok": true,
+      "code": 0,
+      "error": null,
+      "counts": {},
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T19:13:35.953Z"
+    },
+    "httpPostgres": {
+      "label": "http-pg",
+      "code": 0,
+      "counts": {
+        "tests": 19,
+        "suites": 0,
+        "pass": 19,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "1ca82995fccc9082fbedd3d2976c5ac997101f99c065ef94d7f54c8540254ff7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T19:15:36.177Z"
+    },
+    "temporaryPsDatabase": {
+      "label": "temporary-ps-db",
+      "code": 0,
+      "counts": {
+        "tests": 2,
+        "suites": 0,
+        "pass": 2,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stdoutSha256": "25ed5de541585a63cd844faa44c4a174def45acbb35579bb4db47d2779139129",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "endedAt": "2026-10-21T19:15:48.033Z"
+    },
+    "totalTests": 51,
+    "fail": 0,
+    "skipped": 0,
+    "fourActualLockInterleavingsPassed": true
+  },
+  "static": {
+    "checks": {
+      "bothImportsRetained": true,
+      "bothWritersSerialize": true,
+      "onlyConfirmationChecksAdmission": true,
+      "legacyLookupExactParent": true,
+      "conflictsExactChild": true,
+      "keyedReplayExactChild": true,
+      "original15TestBodiesExact": true,
+      "sqlFixtureExactChild": true,
+      "candidatePatientIdJoinPreserved": true,
+      "only3AuthorizedFilesChanged": true,
+      "uiPrismaDependenciesUnchanged": true
+    },
+    "sourcePathsChangedFromChild": [
+      "backend/src/routes/__tests__/therapy-authoritative-write.test.ts",
+      "backend/src/therapies/__tests__/legacy-administration-record.test.ts",
+      "backend/src/therapies/administration-record.ts"
+    ],
+    "securityReview": {
+      "syntheticFixturesOnly": true,
+      "noNewDependenciesOrConfig": true,
+      "noNewLogging": true,
+      "noNewEndpointOrAuthBypass": true,
+      "parameterizedScopedPatientLockPreserved": true,
+      "recordedOutcomeUsesExactPatientDateDrugAndNonNullTherapyIdentity": true,
+      "givenPriorityAndOmittedExpectedRefusalGuardRetained": true
+    },
+    "sourceSha": "f394e3a77925e96a2b54e63485fb45ad44678f54"
+  },
+  "preservation": {
+    "sourceSha": "f394e3a77925e96a2b54e63485fb45ad44678f54",
+    "sourceFileCount": 16858,
+    "priorProofCount": 12782,
+    "snapshotFileCount": 1706,
+    "sourceBytesInodesAndLinksUnchanged": true,
+    "priorProofBytesInodesAndLinksUnchanged": true,
+    "snapshotExactExceptRecordedPrivateLoopbackBind": true,
+    "gitIndexUnchanged": true,
+    "gitStatusClean": true,
+    "mismatches": []
+  },
+  "runtime": {
+    "handback": {
+      "qaNonce": "e9e6115d-9f5b-4a0f-82fa-a5e0858d31c3",
+      "clinicalGrantNonce": "1e13ebab-a3a9-4b07-b91e-71735b43f938",
+      "sourceSha": "f394e3a77925e96a2b54e63485fb45ad44678f54",
+      "portsFree": {
+        "3447": true,
+        "5447": true,
+        "8432": true,
+        "55432": true
+      },
+      "flockFree": true,
+      "ownedContainerRemoved": true,
+      "ownedNetworkRemoved": true,
+      "remainingOwnedProcesses": [],
+      "baseline": {
+        "id": "9000f70d4ee95b9e3bde723796daa050081db4274d20c97888413479232949ad",
+        "image": "sha256:81bd698b4594e751a3269e4dcd3e03a4a0ec0daf7b72e7aa1abd43cce9887542",
+        "startedAt": "2026-10-18T03:32:34.629052269Z",
+        "running": true,
+        "health": "healthy",
+        "ports": {
+          "5432/tcp": [
+            {
+              "HostIp": "0.0.0.0",
+              "HostPort": "5432"
+            },
+            {
+              "HostIp": "::",
+              "HostPort": "5432"
+            }
+          ]
+        }
+      },
+      "baselineUnchanged": true,
+      "freeBytes": 2959335424,
+      "at": "2026-10-21T19:16:43.050Z"
+    },
+    "privateFixtureException": "Only the copied HTTP test server bind was narrowed to 127.0.0.1. Original bodies/assertions and repository source unchanged. Exact diff and hashes retained.",
+    "baseline5432NeverQueriedOrMutated": true,
+    "ownedDatabaseRemoved": true,
+    "ownedNetworkRemoved": true,
+    "flockHeldThroughOwnedResourceCleanup": true,
+    "dependenciesReusedReadOnly": true,
+    "downloads": 0,
+    "providerActions": 0,
+    "sourceEdits": 0,
+    "gitOrIndexWrites": 0,
+    "externalWrites": 0
+  },
+  "failedQaHarnessAttempts": [
+    {
+      "attempt": "static-attempt1",
+      "result": "private substring assertion false; actual quoted SQL scope correct",
+      "diagnosis": "Actual unchanged child SQL contract tests PASS; corrected private diagnostic inspects quoted production projection and join. Original script/results/traceback retained.",
+      "appFailure": false
+    }
+  ],
+  "retainedProvenance": {
+    "original8IssueMatrix": {
+      "status": "retained historical evidence only, no rerun/no reassignment to merged source",
+      "location": "source artifacts/task-validation/bug-batch-447 historical packets and followups, all existing bytes/inodes in source-before.json preserved"
+    },
+    "browserQA10": {
+      "status": "retained attempt006 desktop/tablet PASS at child source; attempts001-005 and original failed STOP retained",
+      "sourceSha": "74b260cdbcf36b1f7395477f4e35d07aba7fcf90",
+      "report": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/FOLLOWUP10-REPORT.json",
+      "reportSha256": "f5ca7c8032c4d6bece552a555f3acfee494bc6ec9f8972d0605d7df148eb6cd9",
+      "stop": "/workspace/.clinicos-cloud/497-browser-independent-qa10-20261021/FOLLOWUP10-STOP.json",
+      "stopSha256": "7c325d42435cb798df6e7ad47c7de5e989b55298edc023a22b4075a2925c90ae"
+    },
+    "parentQA9": {
+      "sourceProvenance": "parent legacy guard original independent HTTP19/selected browser evidence retained at original source",
+      "report": "/workspace/.clinicos-cloud/483-independent-qa9-20261021/validation-report.md",
+      "reportSha256": "70748864480505e1afeec5b01c6dce6628827cb29cf943008769b0edfadc662c"
+    },
+    "authorAttempts": {
+      "path": "/workspace/.clinicos-cloud/497-parent-integration11-20261021/author",
+      "baselineMissingQueryRawAndTwoWrongAssumptionFailures": "all original output retained; not used as independent certification"
+    }
+  },
+  "unrun": [
+    "Full backend and frontend build/suites",
+    "New browser UI/media execution or unchanged eight-feature rerun",
+    "Native6 exact publication checks",
+    "Parent actual Claude5 and child first actual Claude review",
+    "Deployment, labels, issue closure, merge or provider actions"
+  ],
+  "pending": "Root must complete actual publication and review gates; this report supplies only scoped independent QA evidence.",
+  "environmentConfigDraft": "No new setup configuration required or saved."
+}

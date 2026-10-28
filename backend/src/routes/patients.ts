@@ -26,7 +26,17 @@ import {
 } from '../patients/parameters-update.js';
 import { requirePatientScope } from '../patients/access.js';
 import { loadScopedPatientClinicalSummaries } from '../patients/clinical-summary-service.js';
-import { CartellaUpdateError, saveCartella } from '../patients/cartella-update.js';
+import {
+  preserveTinettiHistory,
+  preserveNrsHistory,
+  CartellaUpdateError,
+  saveCartella,
+} from '../patients/cartella-update.js';
+import {
+  preserveTemporaryPsExits,
+  executeTemporaryPsExit,
+  TemporaryPsExitError,
+} from '../patients/temporary-ps-exits.js';
 import { hasFacilityPatientScope } from '../patients/patient-scope.js';
 
 const router = Router();
@@ -900,10 +910,22 @@ router.post('/demo-setup', requireRole('admin', 'manager'), async (_req, res) =>
     };
 
     // Upsert cartella
-    await prisma.cartella.upsert({
-      where: { patientId: patient.id },
-      create: { patientId: patient.id, data: cartella as object },
-      update: { data: cartella as object },
+    await prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM "Patient" WHERE id = ${patient.id} FOR UPDATE`;
+      const rows = await tx.$queryRaw<Array<{ data: Prisma.JsonValue }>>`
+        SELECT data FROM "Cartella" WHERE "patientId" = ${patient.id} FOR UPDATE`;
+      const current = rows[0]?.data;
+      // Demo initialization obeys the same managed-state and legacy-history protection.
+      const incoming = cartella;
+      const protectedData = preserveTemporaryPsExits(
+        current,
+        preserveNrsHistory(current, preserveTinettiHistory(current, incoming)),
+      );
+      await tx.cartella.upsert({
+        where: { patientId: patient.id },
+        create: { patientId: patient.id, data: protectedData as Prisma.InputJsonObject },
+        update: { data: protectedData as Prisma.InputJsonObject },
+      });
     });
 
     console.log(
@@ -1223,6 +1245,32 @@ router.put('/:id/cartella', requirePatientScope, async (req, res) => {
   const id = Array.isArray(req.params.id) ? (req.params.id[0] ?? '') : req.params.id;
   const { data } = req.body as { data?: unknown };
 
+  if (req.body && Object.hasOwn(req.body, 'temporaryPsExit')) {
+    if (Object.keys(req.body).length !== 1) {
+      res.status(400).json({ error: 'Invia soltanto il comando temporaryPsExit.' });
+      return;
+    }
+    try {
+      res
+        .status(200)
+        .json(
+          await executeTemporaryPsExit(
+            id,
+            req.body.temporaryPsExit,
+            (req as AuthedRequest).operator!,
+          ),
+        );
+    } catch (error) {
+      if (error instanceof TemporaryPsExitError)
+        res.status(error.status).json({ error: error.message, code: error.code });
+      else
+        res
+          .status(500)
+          .json({ error: 'Registrazione uscita PS non verificata. Riprova la stessa richiesta.' });
+    }
+    return;
+  }
+
   if (!data || typeof data !== 'object') {
     res.status(400).json({ error: 'Campo "data" obbligatorio (oggetto JSON)' });
     return;
@@ -1235,7 +1283,7 @@ router.put('/:id/cartella', requirePatientScope, async (req, res) => {
     res.status(200).json({ patientId: id, data: cartella.data });
   } catch (error) {
     console.error('PUT /patients/:id/cartella error:', error);
-    if (error instanceof CartellaUpdateError) {
+    if (error instanceof CartellaUpdateError || error instanceof TemporaryPsExitError) {
       res.status(error.status).json({ error: error.message, code: error.code });
       return;
     }

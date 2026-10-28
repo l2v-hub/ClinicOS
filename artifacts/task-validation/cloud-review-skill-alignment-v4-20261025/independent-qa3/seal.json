@@ -1,0 +1,27 @@
+{
+  "algorithm": "sha256",
+  "nonce": "b9aa0d18-a257-445c-9e7f-46dc0e52d66c",
+  "authorNonce": "02733f1f-b304-4cc0-a33d-b917223816db",
+  "sealedFiles": [
+    {
+      "path": "reservation.json",
+      "sha256": "2f2a6bda40c25f4df725d558d9d017ddbb3f3ab9d0525e61391284957437c710",
+      "bytes": 798
+    },
+    {
+      "path": "result.json",
+      "sha256": "e8da03863dab1fa5f5f164327c8b5dee4efd21bbb3ccb1893aaab598bc15f2ba",
+      "bytes": 236
+    },
+    {
+      "path": "report.md",
+      "sha256": "d52d42efafa8915aa4dffe9cf8423be2b0834f9fcc935e69b34c8d7d61a0631d",
+      "bytes": 3583
+    },
+    {
+      "path": "STOP.json",
+      "sha256": "9dd6b9d0c438a90211e049a8f478902dc99b9fde62f4ed48fc3b68b83c0d15b2",
+      "bytes": 360
+    }
+  ]
+}

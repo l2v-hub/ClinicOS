@@ -1,0 +1,36 @@
+✔ giro medication heads visibly distinguish same-name patients without CF or bed and format DOB (21.097169ms)
+✔ compact roster identity shows a visible formatted DOB or stable record identifier (1.158384ms)
+✔ paused administration action has an accessible pause label matching visible text (1.605518ms)
+✔ malformed PS-exit metadata is isolated to its patient and never enables their scheduled actions (3.925059ms)
+✔ PS-exit verification marker must be boolean and cannot carry an asserted exit decision (0.733857ms)
+✔ allergy documentation rows name each allergen once (1.030926ms)
+✔ allergy refresh during pre-save read returns a visible supersession message and blocks POST (0.868021ms)
+✔ all changed design rules use existing tokens instead of invalid vars or new hex colors (6.131799ms)
+✔ an open refusal preserves its reason and note but a stale confirmation cannot write after PS verification changes (7.373656ms)
+✔ an open supervisor confirmation is disabled after patient removal and its stale handler stays guarded (3.317174ms)
+✔ a filtered pending confirmation only says unavailable when current PS state blocks it (57.534538ms)
+✔ a supervisor confirmation cannot cross into a different date context (6.172098ms)
+✔ unverified patient is blocked while a verified peer remains actionable (0.914912ms)
+✔ verified PS pause keeps the existing explicit Non somm. acknowledgement available (12.978038ms)
+✔ handover workspace defaults to unread queue and explicit filtered feed preserves its target (33.895481ms)
+✔ composer retains patient-specific draft and identity after remount; permitted assignment is visible (17.030012ms)
+✔ roster always opens the patient diary instead of duplicating summaries (1.946673ms)
+✔ uncertain save keeps fields locked and exposes exact retry, deleted outcome never offers advance (3.615745ms)
+✔ both PatientDetail entry points share receipt-backed quick-add and keep the same draft (5.109804ms)
+✔ done counts administered and not administered from exact server totals (1.861529ms)
+✔ initial slot is the first by time with pending work, else the first of the day (2.104929ms)
+✔ reason labels map known codes and keep free text; time is facility time (1.21239ms)
+✔ rows name patient, identifier and drug on every action; never the stale room fields (28.353259ms)
+✔ read-only rows offer no signing; done rows show time, operator and reason (103.540809ms)
+✔ page shows the round by real time: only hours with administrations, counts from them (37.608931ms)
+✔ calendar is the main view; directed dose requests retain loading and retry feedback (20.042811ms)
+✔ the round is by real prescription time and by patient, whatever the server band (0.471911ms)
+✔ one group per patient with all its drugs of that hour; the action sends the server band (8.656097ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2364.709646

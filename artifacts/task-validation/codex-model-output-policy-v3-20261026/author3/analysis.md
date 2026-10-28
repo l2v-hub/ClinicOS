@@ -1,0 +1,9 @@
+# Analysis
+
+The genuine first peer review identified two source defects and one policy issue. A single 2 MiB combined byte ceiling can terminate a 30-minute Codex session while its stdout consists of streamed progress, before the separate bounded typed-result file is read. Retaining a 32 KiB tail already bounds retained stdout memory; the ceiling was therefore suppressing valid work without providing a memory bound. The runner also classified incidental bare numbers such as `401` and `503` in arbitrary retained stderr as provider status codes.
+
+Root approved a narrow policy change after that peer report: add a trusted boolean `limitStdout` defaulting to `true`; only model calls set it to `false`. Raw stdout bytes continue to be counted and the owned tail remains capped at 32 KiB. Model stderr remains fatal at 64 KiB. The 30-minute timeout, process-group TERM then KILL, 256 KiB typed-result size, schema, regular-file, runtime-path, and symlink checks remain in place. Combined limits and prefix capture remain unchanged for controller, review, verification, and default callers.
+
+Numeric failure categories now recognize HTTP/status-prefixed codes. Known explicit provider markers remain recognized, and incidental source-validation lines with 401 or 503 classify as `other`. Capacity cooldown and later model selection remain covered by existing routing tests. Diagnostics still expose only fixed categories, numeric counters, exit code, and operation.
+
+The exact baseline test uses the same 3 MiB synthetic Codex child that emits JSON progress and writes a valid typed result. With process/models source from Git baseline `b868e72ceb2d2e29fdaf077b3d7144c34481e176`, it fails with `model-execution-failed` because the child hits the 2 MiB combined output limit. The candidate passes that test and reads the valid result. This establishes the regression and correction locally. It does not establish current-head native CI or independent final approval.

@@ -1,0 +1,15 @@
+{
+  "subject_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "verdict": "changes-requested",
+  "summary": "Synthetic exact-SHA worker report",
+  "findings": [
+    {
+      "severity": "medium",
+      "file": "frontend/src/features/patients/filter.ts",
+      "line": 1,
+      "problem": "Synthetic accepted criterion missing",
+      "requested_change": "Complete accepted behavior",
+      "test_expectation": "Both checks pass"
+    }
+  ]
+}

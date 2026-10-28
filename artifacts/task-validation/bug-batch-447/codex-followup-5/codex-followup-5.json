@@ -1,0 +1,70 @@
+{
+  "round": 9,
+  "nonce": "ead73da9-b30d-4620-88b6-0b2901029822",
+  "contractSha256": "6b4ec154d99bb3f6e409914d1f62fad00ed8e6618650fcb196c52d97717df82f",
+  "baseSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+  "headSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+  "sourceAfterSha256": {
+    "backend/src/skills/engine.ts": "3b7aae916e2b7c143e49b7d12e280a22e9edc97caa83aaf60aa18283f4c2f339",
+    "backend/src/skills/__tests__/skills-unit.test.ts": "29ca250e4c5e6eda31e76d790709ec2a14fb2e09ad627b5db3cf8af2db033f02",
+    "backend/src/skills/__tests__/assistant-e2e.test.ts": "711acac709245ab447ad85372637af89b333545f20a4bdbfdd483f76dfb2e480"
+  },
+  "rootCause": {
+    "actualPayloadHas": "doseMode",
+    "actualDoseMode": "fixed",
+    "priorFailure": "BINDABLE_THERAPY_KEYS omitted doseMode, so bindableTherapy returned null before therapyMatchesDraft",
+    "previewShape": "therapyDraft.preview.row is directly present; no extra preview wrapper",
+    "fix": "Allow doseMode only when it is an own property whose value is exactly fixed; omitted mode remains accepted."
+  },
+  "changes": [
+    "Added doseMode to the bindable mapper-key allowlist with strict literal-fixed validation.",
+    "Added a captured mapper-shaped unit regression and explicit unsupported-mode cases.",
+    "Added doseMode fixed to the existing assistant HTTP positive fixture; all existing negative assertions remain."
+  ],
+  "verificationAttempts": [
+    {
+      "attempt": 1,
+      "skillsUnit": {
+        "ok": true,
+        "tests": 9,
+        "pass": 9,
+        "fail": 0
+      },
+      "backendTypes": {
+        "ok": true
+      }
+    },
+    {
+      "attempt": 2,
+      "skillsUnit": {
+        "ok": true,
+        "tests": 9,
+        "pass": 9,
+        "fail": 0
+      },
+      "backendTypes": {
+        "ok": true
+      }
+    }
+  ],
+  "preservation": {
+    "sourceBeforeManifest": "/workspace/.clinicos-cloud/ux447-milo-author9-20261019/preservation-before.json",
+    "sourceAfterManifest": "/workspace/.clinicos-cloud/ux447-milo-author9-20261019/preservation-after.json",
+    "priorQa4EvidenceUnchanged": true,
+    "snapshotsAreIndependentCopies": true,
+    "qa4SealedReportAndStopChanged": false
+  },
+  "notRun": [
+    "assistant HTTP end-to-end test",
+    "API or database startup",
+    "browser/UI flow",
+    "SQL or reload verification",
+    "remaining recorded regression matrix"
+  ],
+  "nextIndependentGates": [
+    "Actual Milo explicit-route preview, confirmation, SQL and reload; missing-route attempt must produce no confirmation and no write.",
+    "Run affected assistant HTTP file on the independently owned database.",
+    "Complete the remaining recorded matrix and required Claude, native6, final Codex, and exact deploy proof."
+  ],
+  "gitMutationByAuthor": false
+}

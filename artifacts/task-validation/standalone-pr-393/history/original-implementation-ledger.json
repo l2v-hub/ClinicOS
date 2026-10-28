@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "subject": "PR393 reconciliation",
+  "baseline": "299ba8ff8d048631cdb969f26656d02de981da83",
+  "implementationLimit": 4,
+  "reviewLimit": 4,
+  "implementationAttempts": [
+    {
+      "attempt": 1,
+      "status": "failed-independent-qa",
+      "reservedAt": "2026-10-17T15:01:12.916396+00:00",
+      "owner": "voice_393_reconciliation",
+      "reason": "integrate legacy optional realtime into current provider-neutral architecture",
+      "authorBrowserAssertions": 33,
+      "fixtureExecutionArchives": 5,
+      "note": "One dispatched initial implementation session. Fixture executions are retained separately; no independent QA/review round, remote counter reset or second model cycle.",
+      "qaReportSha256": "d807ccae6aa2830d72607923b36b304ce649b1303356856597dbff9de247eb2f"
+    },
+    {
+      "attempt": 2,
+      "status": "native-ci-failed-missing-test-only-httpx",
+      "reservedAt": "2026-10-17T15:44:27.324884+00:00",
+      "owner": "voice_393_reconciliation",
+      "reason": "Independent QA1 P2 early empty-buffer error strands LISTENING/PARTIAL after tracks close",
+      "authorizedBy": "root explicit bounded cycle2/4 authorization",
+      "scope": [
+        "frontend/src/components/assistant/voice/useVoiceChannel.ts",
+        "e2e/qa-voice-pr-393-browser.mjs"
+      ],
+      "priorSourceManifestSha256": "eeeebb5fa6ddc80940ec50baba8b3aad4383311845b3dda4a72034db577877c6",
+      "completedAt": "2026-10-17T15:48:44.638396+00:00",
+      "authorBrowserAssertions": 48,
+      "backendTests": 12,
+      "frontendVoiceTests": 29,
+      "sourcePathsChanged": 2,
+      "qaReportSha256": "a7dd7eefcbea20aa596a8f09f71e1366796c356c8e92c034939032643c27d6d2"
+    },
+    {
+      "attempt": 3,
+      "status": "author-passed-awaiting-independent-qa",
+      "reservedAt": "2026-10-17T16:06:22.901277+00:00",
+      "owner": "root coordinated bounded Luna test harness correction",
+      "reason": "Actual native AI Runtime Tests39047709835 failed240-test run with ModuleNotFoundError httpx; dependency-free core CI must exercise same actual ASGI contracts",
+      "scope": [
+        "clinicos-ai-runtime/tests/test_voice_realtime.py"
+      ],
+      "priorCandidateSha": "49e65822c168682f2f262d186357ce3c7f94ec9c"
+    }
+  ],
+  "reviewAttempts": []
+}

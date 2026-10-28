@@ -1,0 +1,157 @@
+{
+  "changedFiles": [
+    "agent-team/tests/bug-pipeline/standalone-review-semantic-history.test.mjs",
+    "agent-team/tests/bug-pipeline/standalone-review.test.mjs"
+  ],
+  "exactExpectedTwoChangedFiles": true,
+  "allProductionBlobsSameAsParent": true,
+  "oldLargeRestoredExactTrusted": true,
+  "oldLargeRestoredSha256": "279f60503ef3fc60aaf647b37ecc9e77fbb9ae14091b02a621858d344bd81605",
+  "oldLargeBytes": 111379,
+  "parentSource4OldFileBytes": 117478,
+  "parentSuffixBytes": 6099,
+  "newMovedFileBytes": 17198,
+  "movedFileContainsExactParentSuffix": true,
+  "newMovedFileSha256": "b60a158014bfb7ce273ff30eeea3b1b81fa22d3c7598126e1700e071869902e2",
+  "projectionCount": 15,
+  "projectionRows": [
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "actualGitBlobSha1": "b42cd83de4b6442451a7437926271e70b761b712",
+      "declaredGitBlobSha1": "b42cd83de4b6442451a7437926271e70b761b712",
+      "actualRawSha256": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed",
+      "declaredRawSha256": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "actualGitBlobSha1": "3ab67169e44fa898f1b2f3fe8269907bb62bd8ae",
+      "declaredGitBlobSha1": "3ab67169e44fa898f1b2f3fe8269907bb62bd8ae",
+      "actualRawSha256": "b9bb543eb127e35c7e123af83e0ffda2c934bfc9c2cefafe82f9edd0a145f22b",
+      "declaredRawSha256": "b9bb543eb127e35c7e123af83e0ffda2c934bfc9c2cefafe82f9edd0a145f22b",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/models.mjs",
+      "actualGitBlobSha1": "9fbf4ef5003599e27bebeb1ff2a54dd55febaab9",
+      "declaredGitBlobSha1": "9fbf4ef5003599e27bebeb1ff2a54dd55febaab9",
+      "actualRawSha256": "57af56be98574342f296f773d7ebf1b3155de1bf3557d37e606974ffe46fcd38",
+      "declaredRawSha256": "57af56be98574342f296f773d7ebf1b3155de1bf3557d37e606974ffe46fcd38",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/process.mjs",
+      "actualGitBlobSha1": "9e11b3a620e3b1fb7c9cf2ee2783e865e93c5f51",
+      "declaredGitBlobSha1": "9e11b3a620e3b1fb7c9cf2ee2783e865e93c5f51",
+      "actualRawSha256": "078765e34f5941de29f801e68b5d8ab438a05d86c6d7331177bbea105d956f6d",
+      "declaredRawSha256": "078765e34f5941de29f801e68b5d8ab438a05d86c6d7331177bbea105d956f6d",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/review-validation-diagnostic.mjs",
+      "actualGitBlobSha1": "47fd29e6cd7bd58c0db879b0911f1240c8672ac3",
+      "declaredGitBlobSha1": "47fd29e6cd7bd58c0db879b0911f1240c8672ac3",
+      "actualRawSha256": "c4a3d6cd6d1a0b0ef67a22cfc6941fa2c9b9cdaa964357860d103271e9a7e58b",
+      "declaredRawSha256": "c4a3d6cd6d1a0b0ef67a22cfc6941fa2c9b9cdaa964357860d103271e9a7e58b",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "actualGitBlobSha1": "3fed5fd8a434f035c5c4f97770e924798d5b9704",
+      "declaredGitBlobSha1": "3fed5fd8a434f035c5c4f97770e924798d5b9704",
+      "actualRawSha256": "ceef3f9e4bfce8ffe545688e9af7ed1d15e90bc681a6b1290486c456e173917d",
+      "declaredRawSha256": "ceef3f9e4bfce8ffe545688e9af7ed1d15e90bc681a6b1290486c456e173917d",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "actualGitBlobSha1": "9d48a4d3e9ff6dc80fab9efe9793f73bd6c70148",
+      "declaredGitBlobSha1": "9d48a4d3e9ff6dc80fab9efe9793f73bd6c70148",
+      "actualRawSha256": "1ff13bd96f218a219be8d86fe1015c8e9418f0ec9b55fec81cd313197cd8001c",
+      "declaredRawSha256": "1ff13bd96f218a219be8d86fe1015c8e9418f0ec9b55fec81cd313197cd8001c",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/models.test.mjs",
+      "actualGitBlobSha1": "cc23e403463bca3f606f66d33f89698f8daa2384",
+      "declaredGitBlobSha1": "cc23e403463bca3f606f66d33f89698f8daa2384",
+      "actualRawSha256": "7214b96a5e82420fa9e7e412a84cb4f3f17adbb33c03820a0f266bca10a18ce8",
+      "declaredRawSha256": "7214b96a5e82420fa9e7e412a84cb4f3f17adbb33c03820a0f266bca10a18ce8",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/process-output.test.mjs",
+      "actualGitBlobSha1": "e62e33a0b21f015bd362930f1503349a110bd637",
+      "declaredGitBlobSha1": "e62e33a0b21f015bd362930f1503349a110bd637",
+      "actualRawSha256": "96bc65bc79dc398fc6d021c0ca95573790a3085d23970212037d47f409ea5553",
+      "declaredRawSha256": "96bc65bc79dc398fc6d021c0ca95573790a3085d23970212037d47f409ea5553",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/review-validation-diagnostic.test.mjs",
+      "actualGitBlobSha1": "3753bfdb97132f53e84feaa9f5262aa6da6c6e6c",
+      "declaredGitBlobSha1": "3753bfdb97132f53e84feaa9f5262aa6da6c6e6c",
+      "actualRawSha256": "01e77e175d77d42554d15aaaf95b42ff45bd293735dc8f3ab4200058584209cf",
+      "declaredRawSha256": "01e77e175d77d42554d15aaaf95b42ff45bd293735dc8f3ab4200058584209cf",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/routing.test.mjs",
+      "actualGitBlobSha1": "d2d1290e1fb70498a109490acec362497218f0c7",
+      "declaredGitBlobSha1": "d2d1290e1fb70498a109490acec362497218f0c7",
+      "actualRawSha256": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd",
+      "declaredRawSha256": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review-semantic-history.test.mjs",
+      "actualGitBlobSha1": "7971cafe61f3d02fc4d1da4abc5e30c1c5d732c8",
+      "declaredGitBlobSha1": "a3df7a28502c20d63c26dd1bd0e1a359eb3e576e",
+      "actualRawSha256": "b60a158014bfb7ce273ff30eeea3b1b81fa22d3c7598126e1700e071869902e2",
+      "declaredRawSha256": "a70c4f325c1f2f0d43e514b591768c6b3161f8e131e4791d7cc513e0cef566dd",
+      "snapshotMatches": true,
+      "matchesDeclared": false
+    },
+    {
+      "path": "docs/cloud-claude-review.md",
+      "actualGitBlobSha1": "01a1db5803063d738625ddf1fea9413230a10a94",
+      "declaredGitBlobSha1": "01a1db5803063d738625ddf1fea9413230a10a94",
+      "actualRawSha256": "649717fddf093153e54f95e8cc4a27cb91fa8afb563f68741baf30a4cf22de1b",
+      "declaredRawSha256": "649717fddf093153e54f95e8cc4a27cb91fa8afb563f68741baf30a4cf22de1b",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.mjs",
+      "actualGitBlobSha1": "e10296976b8c29c59291a96c985995b24e7d7627",
+      "declaredGitBlobSha1": "e10296976b8c29c59291a96c985995b24e7d7627",
+      "actualRawSha256": "0050f0e980ad9901852b5e2f12138d5738969e025131343e11f0a8a8485a3b0a",
+      "declaredRawSha256": "0050f0e980ad9901852b5e2f12138d5738969e025131343e11f0a8a8485a3b0a",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.test.mjs",
+      "actualGitBlobSha1": "bba489a21e74fb75c2107d3e8513f5284e59adcd",
+      "declaredGitBlobSha1": "bba489a21e74fb75c2107d3e8513f5284e59adcd",
+      "actualRawSha256": "9590c0681563897222bd88c8861c0a66b3458c4256571e2d772f67108fd2c83f",
+      "declaredRawSha256": "9590c0681563897222bd88c8861c0a66b3458c4256571e2d772f67108fd2c83f",
+      "snapshotMatches": true,
+      "matchesDeclared": true
+    }
+  ],
+  "allDeclaredProjectionHashesMatch": false,
+  "allProjectionSnapshotFilesMatch": true,
+  "focusedTestsExitCode": 0
+}

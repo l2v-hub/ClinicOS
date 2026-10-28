@@ -1,0 +1,50 @@
+{
+  "results": [
+    {
+      "name": "fresh blank; package description/form never infer; blocked save; explicit route preserved across package/form",
+      "status": "PASS"
+    },
+    {
+      "name": "real authenticated HTTP rejects missing blank/regimen route with zero writes; explicit SC persists unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "shared actual transaction rejects missing route before persistence",
+      "status": "PASS"
+    },
+    {
+      "name": "actual diary atomic rejection, explicit IM and complete exact persisted legacy replay route matrix",
+      "status": "PASS"
+    },
+    {
+      "name": "actual intake confirm manual and imported draft missing route atomic; explicit route SQL and retry once",
+      "status": "PASS"
+    },
+    {
+      "name": "actual tool registry missing malformed regimen routes invalid_input no therapy persistence; auth denied; explicit unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "actual imported discharge review known codes, absent/unknown blank; package never infers; explicit operator routes confirm/reload exact SQL",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Milo UI explicit per-os parse attachment preview confirm SQL/reload; missing route cannot confirm and writes nothing",
+      "status": "PASS"
+    },
+    {
+      "name": "periodic PRN oneoff explicit route matrix and restricted foreign-owner tool scope",
+      "status": "PASS"
+    },
+    {
+      "name": "no unexpected page/console/HTTP errors in actual UI flows",
+      "status": "PASS"
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "httpErrors": [],
+  "unexercised": [
+    "actual external OCR/provider extraction (intentionally disabled; clearly classified synthetic extraction fixture)"
+  ]
+}

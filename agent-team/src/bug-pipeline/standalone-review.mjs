@@ -39,6 +39,46 @@ const keys = (value, required) => {
   assert.ok(value && typeof value === 'object' && !Array.isArray(value));
   equal(Object.keys(value).sort(), [...required].sort());
 };
+// A check conclusion is an observation to reconcile, not a failed model session.
+// Keep this type local so unrelated assertions and transport errors cannot opt in.
+class StandaloneChecksWaiting extends Error {}
+const WAITING_CHECKS_REASON =
+  'Native PR checks are not passing; waiting for a fresh check observation';
+const nativeCheckStates = new Set([
+  'SUCCESS',
+  'FAILURE',
+  'ERROR',
+  'EXPECTED',
+  'PENDING',
+  'QUEUED',
+  'IN_PROGRESS',
+  'WAITING',
+  'REQUESTED',
+  'CANCELLED',
+  'TIMED_OUT',
+  'ACTION_REQUIRED',
+  'STALE',
+  'SKIPPED',
+  'NEUTRAL',
+  'STARTUP_FAILURE',
+  'PASS',
+  'FAIL',
+  'CANCEL',
+  'SKIPPING',
+]);
+function observedRequiredChecksWaiting(required) {
+  if (required?.ok !== false || !Array.isArray(required.details) || !required.details.length)
+    return false;
+  let unsuccessful = false;
+  for (const detail of required.details) {
+    if (typeof detail !== 'string') return false;
+    if (/^gh pr checks exited (?:1|8)$/.test(detail)) continue;
+    const state = /: ([A-Z_]+)$/i.exec(detail)?.[1].toUpperCase();
+    if (!nativeCheckStates.has(state)) return false;
+    if (!['SUCCESS', 'PASS'].includes(state)) unsuccessful = true;
+  }
+  return unsuccessful;
+}
 function attempts(items, review = false, limit = 4) {
   assert.ok(Array.isArray(items) && items.length <= limit, 'Invalid standalone budget');
   for (const [i, item] of items.entries()) {
@@ -250,7 +290,12 @@ export function validateStandaloneState(state) {
   validateOperatorContinuations(state);
   const subjects = state.standaloneReviews ?? [];
   assert.ok(Array.isArray(subjects) && subjects.length <= 1000);
-  const ownership = { pr: new Set(), branch: new Set(), issue: new Set(), id: new Set() };
+  const ownership = {
+    pr: new Set(),
+    branch: new Set(),
+    issue: new Set(),
+    id: new Set(),
+  };
   for (const key of ENTITY_COLLECTIONS)
     for (const entity of state[key] ?? []) {
       for (const [kind, values] of [
@@ -376,6 +421,8 @@ export function createStandaloneReview({
   }
   async function checks(pr) {
     const required = await github.requiredChecks(pr);
+    if (observedRequiredChecksWaiting(required))
+      throw new StandaloneChecksWaiting('Native required checks are not passing');
     assert.ok(required.ok && required.details?.length, 'Native required checks are not passing');
     const result = await run({
       command: 'gh',
@@ -393,21 +440,22 @@ export function createStandaloneReview({
         all.length > 0 &&
         all.every(
           (check) =>
-            check.name === 'Vercel' ||
-            ['pass', 'skipping'].includes(String(check.bucket).toLowerCase()),
+            typeof check?.name === 'string' &&
+            check.name.trim() &&
+            ['pass', 'fail', 'pending', 'skipping', 'cancel'].includes(check.bucket),
         ),
-      'A native PR check is failed or pending',
+      'Native check inventory is malformed',
     );
     assert.ok(
       result.ok ||
-        ([1, 8].includes(result.code) &&
-          all.some(
-            (check) =>
-              check.name === 'Vercel' &&
-              !['pass', 'skipping'].includes(String(check.bucket).toLowerCase()),
-          )),
+        (result.code === 1 && all.some((check) => ['fail', 'cancel'].includes(check.bucket))) ||
+        (result.code === 8 && all.some((check) => check.bucket === 'pending')),
       'Native check inventory transport failed',
     );
+    if (
+      all.some((check) => check.name !== 'Vercel' && !['pass', 'skipping'].includes(check.bucket))
+    )
+      throw new StandaloneChecksWaiting('A native PR check is failed or pending');
     return { ok: true, details: all };
   }
   async function verify(subject) {
@@ -432,7 +480,12 @@ export function createStandaloneReview({
     const sourceProjection = (tree) =>
       [...tree.values()]
         .filter((item) => !item.path.startsWith('artifacts/task-validation/'))
-        .map((item) => ({ path: item.path, sha: item.sha, mode: item.mode, type: item.type }))
+        .map((item) => ({
+          path: item.path,
+          sha: item.sha,
+          mode: item.mode,
+          type: item.type,
+        }))
         .sort((a, b) => a.path.localeCompare(b.path));
     equal(sourceProjection(tested), sourceProjection(head));
     const prefix = subject.packet.path + '/';
@@ -551,7 +604,11 @@ export function createStandaloneReview({
     ]);
     const actor = await handoff.actor();
     const state = validateStandaloneState(
-      (await store.load()) ?? { schemaVersion: 1, repository: STANDALONE_REPO, batches: [] },
+      (await store.load()) ?? {
+        schemaVersion: 1,
+        repository: STANDALONE_REPO,
+        batches: [],
+      },
     );
     const previous = state.standaloneReviews?.find((s) => s.pr.number === manifest.pr.number);
     const subject = {
@@ -612,6 +669,7 @@ export function createStandaloneReview({
         'operatorContinuations',
         'operatorCoordination',
         'recoveryHistory',
+        'reviewHandoffHistory',
         'qaHistory',
         'codexFinalReviewHistory',
         'codexFinalQaInfrastructure',
@@ -676,7 +734,10 @@ export function createStandaloneReview({
     equal(
       batch.release.reviewProof,
       captureReleaseReviewProof(
-        { ...batch, codexFinalReview: batch.release.reviewProof?.finalCodexReview },
+        {
+          ...batch,
+          codexFinalReview: batch.release.reviewProof?.finalCodexReview,
+        },
         { repository: STANDALONE_REPO, collection: 'standaloneReviews' },
       ),
     );
@@ -697,7 +758,11 @@ export function createStandaloneReview({
       pr.state === 'closed' && pr.merged && SHA.test(pr.merge_commit_sha),
       'No exact-SHA confirmed merge receipt',
     );
-    return { number: expected.pr.number, reviewedSha: expected.sha, mergeSha: pr.merge_commit_sha };
+    return {
+      number: expected.pr.number,
+      reviewedSha: expected.sha,
+      mergeSha: pr.merge_commit_sha,
+    };
   }
   async function guardSubject(subject, login) {
     assert.equal(await handoff.actor(), login, 'Persistence actor changed');
@@ -705,7 +770,10 @@ export function createStandaloneReview({
       equal(
         subject.release.reviewProof,
         captureReleaseReviewProof(
-          { ...subject, codexFinalReview: subject.release.reviewProof?.finalCodexReview },
+          {
+            ...subject,
+            codexFinalReview: subject.release.reviewProof?.finalCodexReview,
+          },
           { repository: STANDALONE_REPO, collection: 'standaloneReviews' },
         ),
       );
@@ -742,7 +810,10 @@ export function createStandaloneReview({
       validateStandaloneState(state);
       state.updatedAt = now().toISOString();
       try {
-        await store.save(state, { ...options, rebaseIndependentSubjects: validateStandaloneState });
+        await store.save(state, {
+          ...options,
+          rebaseIndependentSubjects: validateStandaloneState,
+        });
       } catch (error) {
         persistenceFailed = true;
         throw error;
@@ -804,7 +875,10 @@ export function createStandaloneReview({
     const projection = reviewProjection(expected, externalReport);
     if (projection.skip) return projection;
     if (expected.issues.length)
-      return { status: 'unsupported', outcome: 'unsupported-standalone-issues' };
+      return {
+        status: 'unsupported',
+        outcome: 'unsupported-standalone-issues',
+      };
     const actor = await handoff.actor();
     async function write(endpoint, method, body) {
       const started = performance.now();
@@ -858,8 +932,9 @@ export function createStandaloneReview({
   return {
     ...handoff,
     request: (...args) => gated('request', ...args),
-    claim: (...args) => gated('claim', ...args),
+    claim: (pr, options) => gated('claim', pr, options === undefined ? undefined : clone(options)),
     submit: (...args) => gated('submit', ...args),
+    failOwnedClaim: (...args) => operation(() => handoff.failOwnedClaim(...args)),
     reconcilePR: (...args) => gated('reconcilePR', ...args),
     recover: (...args) => operation(() => handoff.recover(...args)),
     extendBudget: (...args) => operation(() => handoff.extendBudget(...args)),
@@ -934,8 +1009,7 @@ async function finalizeStandaloneSubjectBody({
   if (
     subject.phase === 'ready' &&
     !subject.releaseHold &&
-    files.length &&
-    files.every((file) => infrastructureFiles.includes(file))
+    standaloneMergePolicy({ files, infrastructureFiles }) === null
   ) {
     const readiness = await mergeStandaloneReview({
       subject,
@@ -1082,6 +1156,7 @@ export async function standaloneReviewStep({
   subject.approvedSha = subject.sha;
   subject.feedbackFingerprint = fingerprint;
   subject.phase = checks.ok && checks.details?.length ? 'ready' : 'waiting-checks';
+  if (subject.phase === 'ready' && subject.reason === WAITING_CHECKS_REASON) delete subject.reason;
   await save();
 }
 
@@ -1154,27 +1229,9 @@ export async function mergeStandaloneReview({
     const files = expected.sourceManifest
       .map((file) => file.path)
       .filter((file) => !file.startsWith('artifacts/task-validation/'));
-    const native = await github.nativeReviewAuthorization(expected.pr.number, expected.sha, {
-      excludedLogins: [actor, expected.externalReview?.owner],
-    });
-    const policy = standaloneMergePolicy({
-      files,
-      reviewer: expected.externalReview?.owner,
-      actor,
-      native,
-    });
-    if (policy === 'human-protected-trust-root') return policy;
-    if (policy && !(native.humanApproved && native.protectedReviews)) return policy;
-    assert.ok(
-      Array.isArray(infrastructureFiles) && infrastructureFiles.length > 0,
-      'Explicit trusted infrastructure allowlist required',
-    );
-    assert.ok(
-      files.length > 0 &&
-        files.every(
-          (file) =>
-            infrastructureFiles.includes(file) && /^(?:agent-team\/tests\/|docs\/)/.test(file),
-        ),
+    assert.equal(
+      standaloneMergePolicy({ files, infrastructureFiles }),
+      null,
       'Application or deployment changes require the verified deployment release controller',
     );
     await controller.current(expected);
@@ -1184,26 +1241,18 @@ export async function mergeStandaloneReview({
       equal(expected.release.reviewProof, proof);
     }
   };
-  const reason = await guard();
-  if (reason)
+  await guard();
+  if (!execute)
     return {
       status: 'ready-to-merge',
       pr: expected.pr.number,
       reviewedSha: expected.sha,
-      reason,
-      humanReviewRequired: true,
     };
-  if (!execute)
-    return { status: 'ready-to-merge', pr: expected.pr.number, reviewedSha: expected.sha };
   // The existing adapter preserves actual branch protections and --match-head-commit.
   // The result is a merge receipt, never a deployment or source issue completion.
   return github.mergePullRequest(expected.pr.number, expected.sha, {
     guard: async () => {
-      assert.equal(
-        await guard(),
-        undefined,
-        'Native human review or independent reviewer required',
-      );
+      await guard();
     },
   });
 }
@@ -1212,7 +1261,28 @@ export async function mergeStandaloneReview({
 export async function finalizeStandaloneSubject(options) {
   const { automatic = false, controller } = options;
   assert.equal(typeof automatic, 'boolean');
-  if (!automatic) return finalizeStandaloneSubjectBody(options);
+  const reconcile = async () => {
+    try {
+      return await finalizeStandaloneSubjectBody(options);
+    } catch (error) {
+      if (!(error instanceof StandaloneChecksWaiting)) throw error;
+      const { subject, save } = options;
+      // A changed head, owner, packet or durable reservation is not a CI wait.
+      await controller.current(subject);
+      const actor = await controller.actor();
+      await controller.ownership?.(subject);
+      subject.phase = 'waiting-checks';
+      subject.reason = WAITING_CHECKS_REASON;
+      const expected = JSON.stringify(subject);
+      await save({
+        guard: async () => {
+          await controller.guardSubject(subject, actor);
+          equal(JSON.stringify(subject), expected);
+        },
+      });
+    }
+  };
+  if (!automatic) return reconcile();
   assert.equal(
     typeof controller.automatic,
     'function',
@@ -1223,5 +1293,5 @@ export async function finalizeStandaloneSubject(options) {
     'function',
     'Automatic standalone ownership guard required',
   );
-  return controller.automatic(() => finalizeStandaloneSubjectBody(options));
+  return controller.automatic(reconcile);
 }

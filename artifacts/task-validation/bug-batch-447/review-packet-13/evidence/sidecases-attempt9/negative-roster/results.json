@@ -1,0 +1,28 @@
+{
+  "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "status": "PASS",
+  "positiveApiMocks": 0,
+  "actual503Observed": true,
+  "injected": 1,
+  "targetPatientId": "cmvipz4zm00011gp67bygcqh9",
+  "realRecoveryTargetId": "cmvipz4zm00011gp67bygcqh9",
+  "queryBearingActualRosterEndpoint": true,
+  "sameSyntheticPatientUnknownThenVerified": true,
+  "realRecovery200": true,
+  "realRecoverySummaryEntries": 1,
+  "statuses": [
+    {
+      "phase": "negative",
+      "status": 503,
+      "path": "/patients/clinical-summary",
+      "queryPresent": true
+    },
+    {
+      "phase": "recovery",
+      "status": 200,
+      "path": "/patients/clinical-summary",
+      "queryPresent": true
+    }
+  ],
+  "errors": []
+}

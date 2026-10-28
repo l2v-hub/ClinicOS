@@ -1,0 +1,951 @@
+{
+  "label": "mutable-320x568-before",
+  "viewport": {
+    "width": 320,
+    "height": 568
+  },
+  "rawInitial": {
+    "canvas": {
+      "x": 36,
+      "y": 298.171875,
+      "width": 233,
+      "height": 330
+    },
+    "clip": {
+      "left": 36,
+      "top": 298.171875,
+      "right": 269,
+      "bottom": 292.046875
+    },
+    "visibleWidth": 233,
+    "visibleHeight": 0,
+    "visibleDarkPixels": 0,
+    "ancestors": [
+      {
+        "tag": "DIV",
+        "className": "document-pdf-preview__stage",
+        "overflowX": "auto",
+        "overflowY": "auto",
+        "box": {
+          "x": 20,
+          "y": 290.171875,
+          "width": 280,
+          "height": 227.1875
+        },
+        "clientHeight": 227,
+        "scrollHeight": 346
+      },
+      {
+        "tag": "DIV",
+        "className": "document-pdf-preview",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 20,
+          "y": 189.171875,
+          "width": 280,
+          "height": 328.1875
+        },
+        "clientHeight": 328,
+        "scrollHeight": 328
+      },
+      {
+        "tag": "DIV",
+        "className": "import-page-preview",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 20,
+          "y": 189.171875,
+          "width": 280,
+          "height": 372.1875
+        },
+        "clientHeight": 372,
+        "scrollHeight": 372
+      },
+      {
+        "tag": "DIV",
+        "className": "iw-doc",
+        "overflowX": "hidden",
+        "overflowY": "hidden",
+        "box": {
+          "x": 20,
+          "y": 50,
+          "width": 280,
+          "height": 511.359375
+        },
+        "clientHeight": 511,
+        "scrollHeight": 511
+      },
+      {
+        "tag": "DIV",
+        "className": "import-workspace import-workspace--5050",
+        "overflowX": "hidden",
+        "overflowY": "auto",
+        "box": {
+          "x": 20,
+          "y": 114,
+          "width": 280,
+          "height": 178.046875
+        },
+        "clientHeight": 178,
+        "scrollHeight": 3388
+      },
+      {
+        "tag": "DIV",
+        "className": "modal-card import-modal import-session import-modal--review",
+        "overflowX": "hidden",
+        "overflowY": "hidden",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568
+        },
+        "clientHeight": 568,
+        "scrollHeight": 693
+      },
+      {
+        "tag": "DIV",
+        "className": "modal-overlay",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568
+        },
+        "clientHeight": 568,
+        "scrollHeight": 568
+      },
+      {
+        "tag": "MAIN",
+        "className": "page-content content-panel",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 119,
+          "width": 320,
+          "height": 620
+        },
+        "clientHeight": 620,
+        "scrollHeight": 620
+      },
+      {
+        "tag": "DIV",
+        "className": "main-area-clean",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 739,
+        "scrollHeight": 739
+      },
+      {
+        "tag": "DIV",
+        "className": "app-shell",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 739,
+        "scrollHeight": 739
+      },
+      {
+        "tag": "DIV",
+        "className": "",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 739,
+        "scrollHeight": 739
+      },
+      {
+        "tag": "BODY",
+        "className": "",
+        "overflowX": "hidden",
+        "overflowY": "auto",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 739,
+        "scrollHeight": 739
+      },
+      {
+        "tag": "HTML",
+        "className": "",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 568,
+        "scrollHeight": 739
+      }
+    ]
+  },
+  "defaultFit": {
+    "canvas": {
+      "x": 36,
+      "y": 114.171875,
+      "width": 233,
+      "height": 330
+    },
+    "clip": {
+      "left": 36,
+      "top": 114.171875,
+      "right": 269,
+      "bottom": 292.046875
+    },
+    "visibleWidth": 233,
+    "visibleHeight": 177.875,
+    "visibleDarkPixels": 80,
+    "ancestors": [
+      {
+        "tag": "DIV",
+        "className": "document-pdf-preview__stage",
+        "overflowX": "auto",
+        "overflowY": "auto",
+        "box": {
+          "x": 20,
+          "y": 114.171875,
+          "width": 280,
+          "height": 227.1875
+        },
+        "clientHeight": 227,
+        "scrollHeight": 346
+      },
+      {
+        "tag": "DIV",
+        "className": "document-pdf-preview",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 20,
+          "y": 13.171875,
+          "width": 280,
+          "height": 328.1875
+        },
+        "clientHeight": 328,
+        "scrollHeight": 328
+      },
+      {
+        "tag": "DIV",
+        "className": "import-page-preview",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 20,
+          "y": 13.171875,
+          "width": 280,
+          "height": 372.1875
+        },
+        "clientHeight": 372,
+        "scrollHeight": 372
+      },
+      {
+        "tag": "DIV",
+        "className": "iw-doc",
+        "overflowX": "hidden",
+        "overflowY": "hidden",
+        "box": {
+          "x": 20,
+          "y": -126,
+          "width": 280,
+          "height": 511.359375
+        },
+        "clientHeight": 511,
+        "scrollHeight": 511
+      },
+      {
+        "tag": "DIV",
+        "className": "import-workspace import-workspace--5050",
+        "overflowX": "hidden",
+        "overflowY": "auto",
+        "box": {
+          "x": 20,
+          "y": 114,
+          "width": 280,
+          "height": 178.046875
+        },
+        "clientHeight": 178,
+        "scrollHeight": 3388
+      },
+      {
+        "tag": "DIV",
+        "className": "modal-card import-modal import-session import-modal--review",
+        "overflowX": "hidden",
+        "overflowY": "hidden",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568
+        },
+        "clientHeight": 568,
+        "scrollHeight": 693
+      },
+      {
+        "tag": "DIV",
+        "className": "modal-overlay",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568
+        },
+        "clientHeight": 568,
+        "scrollHeight": 568
+      },
+      {
+        "tag": "MAIN",
+        "className": "page-content content-panel",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 119,
+          "width": 320,
+          "height": 620
+        },
+        "clientHeight": 620,
+        "scrollHeight": 620
+      },
+      {
+        "tag": "DIV",
+        "className": "main-area-clean",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 739,
+        "scrollHeight": 739
+      },
+      {
+        "tag": "DIV",
+        "className": "app-shell",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 739,
+        "scrollHeight": 739
+      },
+      {
+        "tag": "DIV",
+        "className": "",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 739,
+        "scrollHeight": 739
+      },
+      {
+        "tag": "BODY",
+        "className": "",
+        "overflowX": "hidden",
+        "overflowY": "auto",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 739,
+        "scrollHeight": 739
+      },
+      {
+        "tag": "HTML",
+        "className": "",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 568,
+        "scrollHeight": 739
+      }
+    ]
+  },
+  "readingMode": "actual 125% zoom then internal pan, followed by real Adatta restore",
+  "nativeFocusBounds": [
+    {
+      "text": "−",
+      "box": {
+        "x": 201.53125,
+        "y": 162.171875,
+        "width": 37.421875,
+        "height": 36,
+        "right": 238.953125,
+        "bottom": 198.171875
+      },
+      "hits": [
+        {
+          "fraction": 0.25,
+          "self": true
+        },
+        {
+          "fraction": 0.5,
+          "self": true
+        },
+        {
+          "fraction": 0.75,
+          "self": true
+        }
+      ]
+    },
+    {
+      "text": "+",
+      "box": {
+        "x": 100.953125,
+        "y": 206.171875,
+        "width": 37.421875,
+        "height": 36,
+        "right": 138.375,
+        "bottom": 242.171875
+      },
+      "hits": [
+        {
+          "fraction": 0.25,
+          "self": true
+        },
+        {
+          "fraction": 0.5,
+          "self": true
+        },
+        {
+          "fraction": 0.75,
+          "self": true
+        }
+      ]
+    },
+    {
+      "text": "Adatta",
+      "box": {
+        "x": 146.375,
+        "y": 206.171875,
+        "width": 72.65625,
+        "height": 36,
+        "right": 219.03125,
+        "bottom": 242.171875
+      },
+      "hits": [
+        {
+          "fraction": 0.25,
+          "self": true
+        },
+        {
+          "fraction": 0.5,
+          "self": true
+        },
+        {
+          "fraction": 0.75,
+          "self": true
+        }
+      ]
+    }
+  ],
+  "nativeKeyboardFit": true,
+  "pan": {
+    "maxX": 43,
+    "maxY": 202,
+    "x": 16,
+    "y": 24
+  },
+  "zoomWorks": true,
+  "fitRestored": true,
+  "clipping": {
+    "canvas": {
+      "x": 28,
+      "y": 114.171875,
+      "width": 292,
+      "height": 413
+    },
+    "clip": {
+      "left": 28,
+      "top": 114.171875,
+      "right": 300,
+      "bottom": 292.046875
+    },
+    "visibleWidth": 272,
+    "visibleHeight": 177.875,
+    "visibleDarkPixels": 352,
+    "ancestors": [
+      {
+        "tag": "DIV",
+        "className": "document-pdf-preview__stage",
+        "overflowX": "auto",
+        "overflowY": "auto",
+        "box": {
+          "x": 20,
+          "y": 114.171875,
+          "width": 280,
+          "height": 227.1875
+        },
+        "clientHeight": 227,
+        "scrollHeight": 429
+      },
+      {
+        "tag": "DIV",
+        "className": "document-pdf-preview",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 20,
+          "y": 13.171875,
+          "width": 280,
+          "height": 328.1875
+        },
+        "clientHeight": 328,
+        "scrollHeight": 328
+      },
+      {
+        "tag": "DIV",
+        "className": "import-page-preview",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 20,
+          "y": 13.171875,
+          "width": 280,
+          "height": 372.1875
+        },
+        "clientHeight": 372,
+        "scrollHeight": 372
+      },
+      {
+        "tag": "DIV",
+        "className": "iw-doc",
+        "overflowX": "hidden",
+        "overflowY": "hidden",
+        "box": {
+          "x": 20,
+          "y": -126,
+          "width": 280,
+          "height": 511.359375
+        },
+        "clientHeight": 511,
+        "scrollHeight": 511
+      },
+      {
+        "tag": "DIV",
+        "className": "import-workspace import-workspace--5050",
+        "overflowX": "hidden",
+        "overflowY": "auto",
+        "box": {
+          "x": 20,
+          "y": 114,
+          "width": 280,
+          "height": 178.046875
+        },
+        "clientHeight": 178,
+        "scrollHeight": 3388
+      },
+      {
+        "tag": "DIV",
+        "className": "modal-card import-modal import-session import-modal--review",
+        "overflowX": "hidden",
+        "overflowY": "hidden",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568
+        },
+        "clientHeight": 568,
+        "scrollHeight": 776
+      },
+      {
+        "tag": "DIV",
+        "className": "modal-overlay",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568
+        },
+        "clientHeight": 568,
+        "scrollHeight": 568
+      },
+      {
+        "tag": "MAIN",
+        "className": "page-content content-panel",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 119,
+          "width": 320,
+          "height": 620
+        },
+        "clientHeight": 620,
+        "scrollHeight": 620
+      },
+      {
+        "tag": "DIV",
+        "className": "main-area-clean",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 739,
+        "scrollHeight": 739
+      },
+      {
+        "tag": "DIV",
+        "className": "app-shell",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 739,
+        "scrollHeight": 739
+      },
+      {
+        "tag": "DIV",
+        "className": "",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 739,
+        "scrollHeight": 739
+      },
+      {
+        "tag": "BODY",
+        "className": "",
+        "overflowX": "hidden",
+        "overflowY": "auto",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 739,
+        "scrollHeight": 739
+      },
+      {
+        "tag": "HTML",
+        "className": "",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 739
+        },
+        "clientHeight": 568,
+        "scrollHeight": 739
+      }
+    ]
+  },
+  "controls": [
+    {
+      "text": "‹",
+      "disabled": true,
+      "box": {
+        "x": 41.203125,
+        "y": 185.171875,
+        "width": 33.828125,
+        "height": 36
+      },
+      "hits": [
+        {
+          "fraction": 0.25,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "‹"
+        },
+        {
+          "fraction": 0.5,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "‹"
+        },
+        {
+          "fraction": 0.75,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "‹"
+        }
+      ]
+    },
+    {
+      "text": "›",
+      "disabled": true,
+      "box": {
+        "x": 159.703125,
+        "y": 185.171875,
+        "width": 33.828125,
+        "height": 36
+      },
+      "hits": [
+        {
+          "fraction": 0.25,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "›"
+        },
+        {
+          "fraction": 0.5,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "›"
+        },
+        {
+          "fraction": 0.75,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "›"
+        }
+      ]
+    },
+    {
+      "text": "−",
+      "disabled": false,
+      "box": {
+        "x": 201.53125,
+        "y": 185.171875,
+        "width": 37.421875,
+        "height": 36
+      },
+      "hits": [
+        {
+          "fraction": 0.25,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "−"
+        },
+        {
+          "fraction": 0.5,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "−"
+        },
+        {
+          "fraction": 0.75,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "−"
+        }
+      ]
+    },
+    {
+      "text": "+",
+      "disabled": false,
+      "box": {
+        "x": 100.953125,
+        "y": 185.171875,
+        "width": 37.421875,
+        "height": 36
+      },
+      "hits": [
+        {
+          "fraction": 0.25,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "+"
+        },
+        {
+          "fraction": 0.5,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "+"
+        },
+        {
+          "fraction": 0.75,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "+"
+        }
+      ]
+    },
+    {
+      "text": "Adatta",
+      "disabled": false,
+      "box": {
+        "x": 146.375,
+        "y": 185.171875,
+        "width": 72.65625,
+        "height": 36
+      },
+      "hits": [
+        {
+          "fraction": 0.25,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "Adatta"
+        },
+        {
+          "fraction": 0.5,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "Adatta"
+        },
+        {
+          "fraction": 0.75,
+          "isSelf": true,
+          "tag": "BUTTON",
+          "text": "Adatta"
+        }
+      ]
+    }
+  ],
+  "pairGeometry": {
+    "controls": [
+      {
+        "text": "‹",
+        "box": {
+          "x": 41.203125,
+          "y": 162.171875,
+          "width": 33.828125,
+          "height": 36,
+          "right": 75.03125,
+          "bottom": 198.171875
+        },
+        "disabled": true
+      },
+      {
+        "text": "›",
+        "box": {
+          "x": 159.703125,
+          "y": 162.171875,
+          "width": 33.828125,
+          "height": 36,
+          "right": 193.53125,
+          "bottom": 198.171875
+        },
+        "disabled": true
+      },
+      {
+        "text": "−",
+        "box": {
+          "x": 201.53125,
+          "y": 162.171875,
+          "width": 37.421875,
+          "height": 36,
+          "right": 238.953125,
+          "bottom": 198.171875
+        },
+        "disabled": false
+      },
+      {
+        "text": "+",
+        "box": {
+          "x": 100.953125,
+          "y": 206.171875,
+          "width": 37.421875,
+          "height": 36,
+          "right": 138.375,
+          "bottom": 242.171875
+        },
+        "disabled": false
+      },
+      {
+        "text": "Adatta",
+        "box": {
+          "x": 146.375,
+          "y": 206.171875,
+          "width": 72.65625,
+          "height": 36,
+          "right": 219.03125,
+          "bottom": 242.171875
+        },
+        "disabled": false
+      }
+    ],
+    "links": [
+      {
+        "text": "Scarica originale",
+        "x": 20,
+        "y": 488.359375,
+        "width": 141.421875,
+        "height": 36,
+        "right": 161.421875,
+        "bottom": 524.359375
+      }
+    ]
+  },
+  "links": [
+    {
+      "text": "Scarica originale",
+      "x": 20,
+      "y": 488.359375,
+      "width": 141.421875,
+      "height": 36,
+      "right": 161.421875,
+      "bottom": 524.359375
+    }
+  ],
+  "download": {
+    "download": "issue485-synthetic.pdf",
+    "hrefProtocol": "blob:",
+    "hitSelf": true,
+    "box": {
+      "x": 20,
+      "y": 185.359375,
+      "width": 141.421875,
+      "height": 36
+    },
+    "actualPdfDownload": true
+  },
+  "meaningfulVisibleOriginal": true,
+  "fitAllHitpointsSelf": true,
+  "noToolbarDownloadOverlap": true,
+  "allControlsReachable": true
+}

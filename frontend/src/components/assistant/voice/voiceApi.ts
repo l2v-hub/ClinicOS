@@ -8,6 +8,7 @@ import { DEFAULT_VAD_CONFIG, type VadConfig } from './vad';
 
 export interface VoiceStatus {
   voiceAllowed: boolean;
+  transport?: 'server' | 'webrtc';
   /** VOICE_CHANNEL_ENABLED on this backend (per environment, default off). */
   channelEnabled: boolean;
   /** Channel on AND the runtime has an STT model configured. */
@@ -72,4 +73,32 @@ export async function transcribeUtterance(
       response.status === 413 ? 'utterance_too_long' : body?.code,
     );
   return body as VoiceTranscript;
+}
+
+/** SDP only. Provider credentials and ephemeral session tokens stay in the runtime. */
+export async function negotiateRealtimeCall(
+  offerSdp: string,
+  signal: AbortSignal,
+): Promise<string> {
+  const response = await fetch(`${API_URL}/skills/voice/realtime-call`, {
+    method: 'POST',
+    cache: 'no-store',
+    headers: { ...operatorHeaders(), 'Content-Type': 'application/sdp' },
+    body: offerSdp,
+    signal,
+  });
+  const body = (await response.json().catch(() => null)) as { sdp?: unknown; code?: string } | null;
+  if (!response.ok)
+    throw new AssistantHttpError(
+      response.status,
+      'Trascrizione realtime non disponibile',
+      body?.code,
+    );
+  if (
+    typeof body?.sdp !== 'string' ||
+    !body.sdp.startsWith('v=0') ||
+    new TextEncoder().encode(body.sdp).length > 64_000
+  )
+    throw new AssistantHttpError(502, 'Risposta SDP non valida', 'stt_provider_error');
+  return body.sdp;
 }

@@ -1,0 +1,30 @@
+{
+  "files": {
+    "/usr/bin/chromium": "2c8d32d29dc6781c35ae196ea83299d507ac88fc339301abe74672feda299779",
+    "/usr/bin/ffmpeg": "e8a8d46f5225f3062cec7c07fb145d58ae73c603cb740dcd5bad34bfb54e455a",
+    "/usr/bin/ffprobe": "cefc5f81c0b18429cdbf8fa5a89e1e9c759235e10f93f9b329ff1b2fdff26f46",
+    "/workspace/.cache/clinicos-batch450-playwright/ffmpeg-1011/ffmpeg-linux": "e8a8d46f5225f3062cec7c07fb145d58ae73c603cb740dcd5bad34bfb54e455a",
+    "/workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf",
+    "/workspace/clinicos-review-handoff/agent-team/src/core/sanitize.mjs": "1a4d2b9565663b3ed5a593cdecf7cbadbd6f9cd6ef296a4b8c1c426b08ca042b",
+    "/workspace/.venvs/clinicos-ai/bin/python": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+  },
+  "versions": {
+    "node": [
+      "v24.19.0"
+    ],
+    "npm": [
+      "11.9.0"
+    ],
+    "chromium": [
+      "Chromium 154.0.8037.57 built on Debian GNU/Linux 13 (trixie)"
+    ],
+    "python": [
+      "Python 3.12.14"
+    ],
+    "ffmpeg": [
+      "ffmpeg version 7.1.5-0+deb13u1 Copyright (c) 2000-2026 the FFmpeg developers",
+      "built with gcc 14 (Debian 14.2.0-19)"
+    ]
+  },
+  "executionEnvironment": "trusted createRunner envMode verification; isolated HOME; no controller credentials/proxies; mock providers only"
+}

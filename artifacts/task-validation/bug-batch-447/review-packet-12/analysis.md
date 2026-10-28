@@ -1,0 +1,7 @@
+# Evidence analysis
+
+The manifest now binds eight independent recordings to the plan's exact paths and metadata. QA4 supplies the seven canonical issue scenarios at source `8a27ef372807a68f464c3ebcfa85ca85b2da5344`; its seven issue statuses are `PASS_SCENARIO`. The historical QA4 aggregate remains failed for its distinct Milo #486 route case, and its coverage declaration states that all-eight verification was incomplete. QA5 supplies the dedicated #486 recording at source `b76eb6baf5e87dcdb9b89a580ef48baf26e1bb7a`.
+
+The #486 recording is from continuation-2's `output/milo-ui`. Continuation-5's scoped report is linked as the later result assessment; its media-index is not treated as the recording origin. The recorded screenshot and WebM map to their exact continuation-2 files. Its raw trace is retained privately and unchanged. The publication trace is a new sanitized derivative with all 302 archive entries retained and only three synthetic session values (108 occurrences) redacted.
+
+Current publication source `43b5153` and tested source `f394e3a7` have no fresh whole-eight UI run. P11's backend51 result and retained QA10 desktop/tablet import proof are separate, source-attributed evidence. The accepted plan's current-main verifier still imposes 25 MiB per artifact; authentic #453 trace is 27,606,230 bytes. The separate unmerged 32 MiB author follow-up awaits independent QA and does not change this packet's current-main gate.

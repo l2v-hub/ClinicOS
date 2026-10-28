@@ -1,0 +1,8 @@
+{
+  "runner": "createRunner from /workspace/clinicos-review-handoff/agent-team/src/bug-pipeline/process.mjs",
+  "envMode": "verification",
+  "runtimeRoot": "/workspace/.clinicos-cloud/ux453-route486-harness-author-followup1-20261018/runtime",
+  "command": "process.execPath --check e2e/qa-bug-batch-447-route486-browser.mjs",
+  "result": "PASS",
+  "browserExecuted": false
+}

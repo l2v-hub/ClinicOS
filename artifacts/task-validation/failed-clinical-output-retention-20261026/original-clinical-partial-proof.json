@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-26T10:48:56.546Z",
+  "workflowRunId": "40307355899",
+  "workflowConclusion": "success",
+  "actualControllerStatus": "partial",
+  "blocked": 2,
+  "acceptedMainSha": "13c71ce0e2cdf6e72b4c7eeeb036754fac7e4f73",
+  "hostActionsStateCommit": "e82f9e6a079804f37fda6a9ad2b6f6716b5dd789",
+  "markerSha": "8ddbbd10644ec89195755ee75f7124d8ab8c6e94",
+  "nativeZipSha256": "105b89d5e820f702a5b799b931ff818fa0e618a06e28f7a815a4c25b029ea223",
+  "modelDiagnostics": [
+    {
+      "type": "model-diagnostic",
+      "operation": "execute",
+      "runnerError": null,
+      "exitCode": 0,
+      "failureCategory": null,
+      "stdoutBytes": 110683,
+      "stderrBytes": 0,
+      "stdoutCapturedBytes": 32768,
+      "stderrCapturedBytes": 0
+    },
+    {
+      "type": "model-diagnostic",
+      "operation": "execute",
+      "runnerError": null,
+      "exitCode": 0,
+      "failureCategory": null,
+      "stdoutBytes": 83382,
+      "stderrBytes": 0,
+      "stdoutCapturedBytes": 32768,
+      "stderrCapturedBytes": 0
+    }
+  ],
+  "providerCalls": 2,
+  "clinicalResolutionVerified": false,
+  "oldExactModelFailureCauseStillUnknown": true,
+  "newFailureCode": "workspace-verification-failed",
+  "knownOutputAvailability": "Canonical checkpoints preserve hashes, not output bytes; ephemeral failed worktree content was not uploaded by this job and is unavailable after terminal. No lost-output recovery assertion."
+}

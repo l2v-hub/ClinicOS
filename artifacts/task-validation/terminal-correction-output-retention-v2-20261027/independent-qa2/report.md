@@ -1,0 +1,9 @@
+# Independent terminal output retention QA
+
+Verdict: **PASS; source publication ready** for immutable code 2de1fb80eb9245027b356c7bfcf6798d269b9fdf. No source blocker found. Reservation 812f2b88-0d67-432c-ac2d-fc7f3f578f22 and all 11 sealed source artifacts match their SHA-256 manifest. The three working source files match the immutable commit byte for byte and retain the exact Git blob identities in the source projection.
+
+Independent focused run: **78 passed, 0 failed, 0 skipped** on Node 22 with concurrency 1. It covered native BLOCKED settlement, conflict and symlink refusal, stale-report suppression, escaped JSON length, credential redaction, unchanged failure classification, unknown/running and publication guards, and exact source/checkpoint export. The report writer catches optional read/write conflicts and sets a finite modelReportRetention[step] = not-recorded marker outside checkpoint.output; the exporter honors that marker. The final-file lstat prevents following the synthetic external symlink before report read or write. A JSON-escaped 32 KiB summary is omitted when its report would exceed the unchanged 64 KiB export limit.
+
+The first focused invocation used the preserved peer regression file directly. That historical file imports a different worktree by absolute path, so 4 failures came from the older source; the current-source suite passed all 39 tests in that invocation. A QA-only copy changed those four import paths to the reserved worktree and passed alongside the current-source suite (78/78). The original file and both raw logs are preserved.
+
+The sealed exact 37-file workflow run records 1,739 passed, 3 Windows skips, and 0 failures, with source SHA-256 values unchanged before and after. I did not rerun that broad suite. Remote CI, second peer review, fresh final QA, publication, and protected merge remain pending. This QA does not claim clinical resolution.

@@ -1,0 +1,27 @@
+{
+  "status": "FAILED_VALIDATION",
+  "candidateHead": "5a250319bae5b3f61f2c5864aee438f04d948df5",
+  "implementationCycle": 2,
+  "reviews": 0,
+  "sourceChangesDuringQa": 0,
+  "run1": {
+    "canonicalExit": 1,
+    "frontendPass": 1388,
+    "backendTotal": 1932,
+    "backendPass": 1927,
+    "backendOptInSkipped": 5,
+    "backendFail": 0,
+    "inventoryBrowserPass": 9,
+    "retryBrowserPass": true,
+    "failure": "FFmpeg registry initialized before environment cache path; QA launcher configuration corrected without source modification",
+    "complete": false,
+    "preservedPath": "canonical-run-1-env-failure"
+  },
+  "run2": {
+    "status": "intentionally cancelled after certain finding; existing canonical finally completed",
+    "explicitPlaywrightBrowsersPath": "/workspace/.cache/clinicos-batch432-playwright"
+  },
+  "updatedAt": "2026-10-17T09:47:16.160702+00:00",
+  "certainFinding": "QA432-2: awaited confirmation callback unbounded after interpreter entry; actual extracted-source node:test timeout reproduces cleanupCalled=false. Full canonical execution continues pending root coordination.",
+  "report": "validation-report.md"
+}

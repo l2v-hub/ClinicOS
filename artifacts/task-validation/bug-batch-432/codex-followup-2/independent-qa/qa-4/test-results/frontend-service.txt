@@ -1,0 +1,6 @@
+
+  VITE v8.2.2  ready in 504 ms
+
+  ➜  Local:   http://127.0.0.1:5433/
+7:52:07 PM [vite] (client) [optimizer] scanning dependencies...
+7:52:09 PM [vite] (client) [optimizer] bundling dependencies...

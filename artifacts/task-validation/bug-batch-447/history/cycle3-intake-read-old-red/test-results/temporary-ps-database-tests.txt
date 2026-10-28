@@ -1,0 +1,84 @@
+✔ confirmed pain retains original JSON/presence and never exposes other patients or pending drafts (355.630572ms)
+✔ count limit admits exactly100 and returns a distinct error at101 while preserving therapies (117.798109ms)
+✔ UTF-8 JSON byte limit includes quotes and overflow never materializes pain in therapy projection (249.166086ms)
+✔ repeatable snapshot survives historical reconciliation between budget and pain read (149.898688ms)
+✖ intake review restarts its read-only snapshot after an actual concurrent Patient row version (91.406101ms)
+✖ only declared transaction conflicts retry, with three fresh RepeatableRead attempts at most (2.723944ms)
+✔ pause/continue and return persist; retries preserve exact history and valid dose receipts (714.826712ms)
+PS_INTERLEAVING {"kind":"scheduled","initialChart":false,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"prn","initialChart":false,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"scheduled","initialChart":true,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+PS_INTERLEAVING {"kind":"prn","initialChart":true,"observedWaitingWriters":2,"scheduledDosesAfterPause":0,"prnDosesAfterPause":0,"explicitAbsenceRecord":"non_erogata","result":"passed"}
+✔ real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts (687.330443ms)
+✔ raw PostgreSQL serialization conflicts retry narrowly while unrelated query errors remain errors (4.092004ms)
+✔ exit decisions are explicit, confirmed and never accept client actor/time or mixed commands (2.25663ms)
+✔ managed hold requires matching immutable history; unknown/corrupt context is never permission to dose (4.313744ms)
+✔ ordinary writes retain managed history and active hold; explicit forge/erase/change is rejected (0.951822ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 10
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13655.476852
+
+✖ failing tests:
+
+test at backend/src/intake/__tests__/patient-review-db.test.ts:1:7862
+✖ intake review restarts its read-only snapshot after an actual concurrent Patient row version (91.406101ms)
+  AssertionError [ERR_ASSERTION]: ifError got unwanted exception: 
+  Invalid `prisma.$queryRaw()` invocation:
+  
+  
+  Raw query failed. Code: `40001`. Message: `could not serialize access due to concurrent update`
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/intake/__tests__/patient-review-db.test.ts:349:14)
+      at vn.handleRequestError (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/@prisma/client/src/runtime/RequestHandler.ts:238:13)
+      at vn.handleAndLogRequestError (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/@prisma/client/src/runtime/RequestHandler.ts:184:12)
+      at vn.request (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/@prisma/client/src/runtime/RequestHandler.ts:153:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async a (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:1014:24)
+      at async lockPatient (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/assessments/access.ts:48:16)
+      at async assessmentTransaction.isolationLevel (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/intake/patient-review.ts:27:7)
+      at async Proxy._transactionWithCallback (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:861:18)
+      at async TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/intake/__tests__/patient-review-db.test.ts:344:23)
+      at async Test.run (node:internal/test_runner/test:1389:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: PrismaClientKnownRequestError: 
+    Invalid `prisma.$queryRaw()` invocation:
+    
+    
+    Raw query failed. Code: `40001`. Message: `could not serialize access due to concurrent update`
+        at vn.handleRequestError (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/@prisma/client/src/runtime/RequestHandler.ts:238:13)
+        at vn.handleAndLogRequestError (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/@prisma/client/src/runtime/RequestHandler.ts:184:12)
+        at vn.request (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/@prisma/client/src/runtime/RequestHandler.ts:153:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async a (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:1014:24)
+        at async lockPatient (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/assessments/access.ts:48:16)
+        at async assessmentTransaction.isolationLevel (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/intake/patient-review.ts:27:7)
+        at async Proxy._transactionWithCallback (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:861:18)
+        at async TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/intake/__tests__/patient-review-db.test.ts:344:23)
+        at async Test.run (node:internal/test_runner/test:1389:7),
+    expected: null,
+    operator: 'ifError',
+    diff: 'simple'
+  }
+
+test at backend/src/intake/__tests__/patient-review-db.test.ts:6:1115
+✖ only declared transaction conflicts retry, with three fresh RepeatableRead attempts at most (2.723944ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 3
+  
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/backend/src/intake/__tests__/patient-review-db.test.ts:422:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 3,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

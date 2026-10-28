@@ -1,0 +1,18 @@
+{
+  "exit": 0,
+  "durationSeconds": 186.961,
+  "sourceStable94": true,
+  "contractsStable27": true,
+  "canonicalInvocations": 1,
+  "command": [
+    "flock",
+    "/tmp/clinicos-browser-qa.lock",
+    "node",
+    "/tmp/clinicos-native447-smoke.mjs"
+  ],
+  "wrapperSha256": "051c7897ef56868e08706b048e6d4c91751dd797d37da7ae96e064803d440c56",
+  "wholeLifecycleLock": true,
+  "explicitOwnedPostgresPort": 55447,
+  "dev5432NeverAccessed": true,
+  "sourceSubstitutionOrRuntimeHook": false
+}

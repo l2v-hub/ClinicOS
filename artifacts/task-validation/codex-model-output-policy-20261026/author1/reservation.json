@@ -1,0 +1,14 @@
+{
+  "nonce": "255080bc-bede-4c29-aef7-d893a01f220f",
+  "status": "reserved-before-session",
+  "at": "2026-10-26T00:58:52.406Z",
+  "model": "gpt-6-luna",
+  "maximumSessions": 1,
+  "used": 0,
+  "sourceMain": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "output": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/runtime-output-policy-author",
+  "scope": "Minimal model JSON progress output policy and finite failure observability with zero-provider RED/GREEN tests; preserve all normal structured-result/credential/timeout/process-group/size guards. No clinical source modifications, remote state mutation, model calls, Git publication, billing fallback, or unknown clinical replay.",
+  "policy": "Use established runner2MiB total ceiling for model progress while retaining at most64KiB captures and independent64KiB fatal stderr; default runner policy unchanged. Typed256KiB result and30minute model timeout unchanged. Record categorical exit/error/counts only.",
+  "stateCommit": "f5356acb7979c0ea6dabec092a38903e0e7702a7",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/94389330-d324-4587-a0e7-1be58b17885c/accepted.json"
+}

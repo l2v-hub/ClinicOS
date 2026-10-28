@@ -1,0 +1,170 @@
+{
+  "overflow": {
+    "html": 820,
+    "body": 820,
+    "viewport": 820
+  },
+  "elements": [
+    {
+      "tag": "UL",
+      "className": "",
+      "x": 12,
+      "y": 80,
+      "right": 1195.34375,
+      "width": 1183.34375,
+      "scrollWidth": 1183,
+      "clientWidth": 1183,
+      "overflowX": "visible"
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "x": 699.296875,
+      "y": 80,
+      "right": 867.796875,
+      "width": 168.5,
+      "scrollWidth": 169,
+      "clientWidth": 169,
+      "overflowX": "visible"
+    },
+    {
+      "tag": "BUTTON",
+      "className": "intake-index__item",
+      "x": 699.296875,
+      "y": 80,
+      "right": 867.796875,
+      "width": 168.5,
+      "scrollWidth": 169,
+      "clientWidth": 169,
+      "overflowX": "visible"
+    },
+    {
+      "tag": "SPAN",
+      "className": "intake-index__label",
+      "x": 747.296875,
+      "y": 88,
+      "right": 855.796875,
+      "width": 108.5,
+      "scrollWidth": 109,
+      "clientWidth": 109,
+      "overflowX": "visible",
+      "text": "Parametri iniziali"
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "x": 871.796875,
+      "y": 80,
+      "right": 1070.046875,
+      "width": 198.25,
+      "scrollWidth": 198,
+      "clientWidth": 198,
+      "overflowX": "visible"
+    },
+    {
+      "tag": "BUTTON",
+      "className": "intake-index__item",
+      "x": 871.796875,
+      "y": 80,
+      "right": 1070.046875,
+      "width": 198.25,
+      "scrollWidth": 198,
+      "clientWidth": 198,
+      "overflowX": "visible"
+    },
+    {
+      "tag": "SPAN",
+      "className": "intake-index__mark",
+      "x": 883.796875,
+      "y": 88,
+      "right": 907.796875,
+      "width": 24,
+      "scrollWidth": 20,
+      "clientWidth": 20,
+      "overflowX": "visible",
+      "text": ""
+    },
+    {
+      "tag": "SPAN",
+      "className": "intake-index__label",
+      "x": 919.796875,
+      "y": 88,
+      "right": 1058.046875,
+      "width": 138.25,
+      "scrollWidth": 138,
+      "clientWidth": 138,
+      "overflowX": "visible",
+      "text": "Moduli da pianificare"
+    },
+    {
+      "tag": "SPAN",
+      "className": "ds-sr-only",
+      "x": 883.796875,
+      "y": 99.5,
+      "right": 884.796875,
+      "width": 1,
+      "scrollWidth": 122,
+      "clientWidth": 1,
+      "overflowX": "hidden",
+      "text": ": facoltativa, vuota"
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "x": 1074.046875,
+      "y": 80,
+      "right": 1195.34375,
+      "width": 121.296875,
+      "scrollWidth": 121,
+      "clientWidth": 121,
+      "overflowX": "visible"
+    },
+    {
+      "tag": "BUTTON",
+      "className": "intake-index__item",
+      "x": 1074.046875,
+      "y": 80,
+      "right": 1195.34375,
+      "width": 121.296875,
+      "scrollWidth": 121,
+      "clientWidth": 121,
+      "overflowX": "visible"
+    },
+    {
+      "tag": "SPAN",
+      "className": "intake-index__mark intake-index__mark--issues",
+      "x": 1086.046875,
+      "y": 88,
+      "right": 1110.046875,
+      "width": 24,
+      "scrollWidth": 20,
+      "clientWidth": 20,
+      "overflowX": "visible",
+      "text": "1"
+    },
+    {
+      "tag": "SPAN",
+      "className": "intake-index__label",
+      "x": 1122.046875,
+      "y": 88,
+      "right": 1183.34375,
+      "width": 61.296875,
+      "scrollWidth": 61,
+      "clientWidth": 61,
+      "overflowX": "visible",
+      "text": "Riepilogo"
+    },
+    {
+      "tag": "SPAN",
+      "className": "ds-sr-only",
+      "x": 1086.046875,
+      "y": 99.5,
+      "right": 1087.046875,
+      "width": 1,
+      "scrollWidth": 95,
+      "clientWidth": 1,
+      "overflowX": "hidden",
+      "text": ": 1 da risolvere"
+    }
+  ]
+}

@@ -103,6 +103,7 @@ test('printed PS document shows each current diagnosis once and keeps documented
         lastName: 'Sintetica',
       } as Paziente,
       cartella: {
+        pazienteId: 'synthetic-preview',
         diagnosi: [
           { descrizione: 'Trauma recente sintetico', stato: 'attiva', tipo: 'principale' },
         ],

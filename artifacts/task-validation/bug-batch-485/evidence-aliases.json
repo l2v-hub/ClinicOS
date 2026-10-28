@@ -1,0 +1,24 @@
+{
+  "qaSealSha256": "ef70ff5be0a6d0684aaa8e0a3752c1959517603f296c18da1e8f0cbfb8f4aeeb",
+  "aliases": {
+    "manual-fullscreen-1903.png": {
+      "source": "qa/runtime-run/screenshots/manual-1903.png",
+      "sha256": "7d9768bbaf60584ee63244622d6f194cca41eb72d6077b58476c6c6ff92bc62b"
+    },
+    "layout-trace.zip": {
+      "source": "qa/runtime-run/trace/trace.zip",
+      "sha256": "76c3f5fb31cc24d9889345e88e73534c57f785e323a4e693c3856cebd7d35c83"
+    },
+    "layout-proof.webm": {
+      "source": "qa/runtime-run/video/issue485.webm",
+      "sha256": "f444f30b9bc3bc2340d48d592f19ccef730657286c71e4be4f14d5be62642328"
+    }
+  },
+  "baseline": {
+    "baseSha": "6d2cc7919a86e3896426a7281f28f3406d8418e4",
+    "files": {
+      "before-manual-1903.png": "7e9c018fe454efde6ac9cff171cfe1ba1d73fb897b1a71d444cecc663524d8b3",
+      "before-phone-source-390.png": "8005ca774bc3d01a0c330680bec18ce4690564749e2b101e95a6250b485f4cc3"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "number": 393,
+  "title": "feat: trascrizione realtime opzionale con conferma esplicita e gestione del microfono",
+  "headRefOid": "49e65822c168682f2f262d186357ce3c7f94ec9c",
+  "bodySha256": "8c9e71b505c92da04b8d6d376ef5ca0c26fb4d0f8eabc0648151672ec5999e7a",
+  "commentsRead": [
+    {
+      "url": "https://github.com/l2v-hub/ClinicOS/pull/393#issuecomment-5926676993",
+      "createdAt": "2026-10-01T07:20:51Z",
+      "author": "vercel",
+      "bodySha256": "f099eb02a24d6306118ce443071aaa78a951d700476d2c14a8a20a7650d27e4a"
+    },
+    {
+      "url": "https://github.com/l2v-hub/ClinicOS/pull/393#issuecomment-6236099389",
+      "createdAt": "2026-10-17T15:51:21Z",
+      "author": "l2v-hub",
+      "bodySha256": "611b94b8589c78d8a65c666436cf17f9528aa6cd3ac28d09050a886951f72ea5"
+    },
+    {
+      "url": "https://github.com/l2v-hub/ClinicOS/pull/393#issuecomment-6236299986",
+      "createdAt": "2026-10-17T16:04:57Z",
+      "author": "l2v-hub",
+      "bodySha256": "40506963ddbb26dfe0af549e570d3b2fae6408ec89584f7f9cff1b5c28f2e111"
+    }
+  ],
+  "reviewsRead": 0,
+  "contractReconciliation": "Current body describes optional provider-neutral implementation and actual Azure positive NOT RUN. Original AC1-AC7 unchanged. Source frozen separately by cycle3 manifest; native49e core failure corrected only in test adapter; no historical Azure-default claim accepted."
+}

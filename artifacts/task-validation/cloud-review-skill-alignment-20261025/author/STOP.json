@@ -1,0 +1,23 @@
+{
+  "state": "sealed",
+  "nonce": "9bd58f9a-f8fb-4ffa-8449-8ffaaa9e1761",
+  "task": "cloud-review-skill-alignment-20261025",
+  "base": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+  "targetPath": ".claude/skills/clinicos/references/bug-delivery.md",
+  "verification": [
+    "two diff hunks only",
+    "patch applies cleanly to frozen source path",
+    "base blob and artifact SHA256 values verified",
+    "protected policy passages unchanged",
+    "credential/PHI pattern scan passed",
+    "no tests, source edits, Git writes, API/provider/state writes, installs, or publication performed"
+  ],
+  "sealedArtifacts": {
+    "TaskContract.md": "93d8a0f886cf83f0eac718c9f91d70b07f3bb5a2e73966029bcadfafdb77a30e",
+    "base-bug-delivery.md": "8eec94a195a1ada58771d3312c12ace933e08e8d1e3c1e53d87a2e63b816c5f2",
+    "bug-delivery.md": "70bd5de7fb8169fdce3c98e07047f8754080beac04dad875860526584bea761d",
+    "source.patch": "a5b79c3d340f1681dbebed9bacaf17d45e23585b1f9ba0809744dc32e0f565ff",
+    "source-freeze.json": "8f8787e990969cf2bff6a30af4b08236bd69b8dad0556b0592c26ef2eeded8e6",
+    "report.md": "e84e193cc368ce50e28515282730557550ba31290bcdeafafb6df23827af5c43"
+  }
+}

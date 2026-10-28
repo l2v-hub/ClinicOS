@@ -1,0 +1,7 @@
+{
+  "method": "Recover exact original production read from unchanged HEAD; reverse only later observation logging, stats snapshot refresh and stronger cleanup nesting from final test. Both bytes SHA256-match hashes recorded before the OLDRED run. No historical executable proof rerun or output overwritten.",
+  "files": {
+    "patient-review-old-red.ts.txt": "ce4e4ee47af76aa1053002bed27e12e6b0c6347fb38cee3fd5fbb790c319fe30",
+    "patient-review-db-old-red.ts.txt": "92805ffe435348ece258bc44f323d13f3c351cae5fe859f5870ddd83f7e61a5f"
+  }
+}

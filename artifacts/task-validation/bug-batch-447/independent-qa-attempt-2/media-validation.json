@@ -1,0 +1,169 @@
+{
+  "pngs": [
+    "issue-447-role-negative.png",
+    "issue-447.png",
+    "issue-451-touch.png",
+    "issue-451.png",
+    "issue-452-empty-agenda-pending.png",
+    "issue-452-news2-partial-failure.png",
+    "issue-452.png",
+    "issue-453-fresh-allergy-warning.png",
+    "issue-453.png",
+    "issue-454.png",
+    "issue-456.png",
+    "issue-457-paused.png",
+    "issue-457.png"
+  ],
+  "videos": [
+    {
+      "path": "issue-447-role-negative.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "4.160000"
+      }
+    },
+    {
+      "path": "issue-447.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "28.120000"
+      }
+    },
+    {
+      "path": "issue-451-touch.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 554,
+          "height": 800
+        }
+      ],
+      "format": {
+        "duration": "4.600000"
+      }
+    },
+    {
+      "path": "issue-451.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "17.160000"
+      }
+    },
+    {
+      "path": "issue-452.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "20.280000"
+      }
+    },
+    {
+      "path": "issue-453.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "31.440000"
+      }
+    },
+    {
+      "path": "issue-454.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "7.840000"
+      }
+    },
+    {
+      "path": "issue-456.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "27.640000"
+      }
+    },
+    {
+      "path": "issue-457.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "21.400000"
+      }
+    }
+  ],
+  "geometryFirstMeaningfulY": {
+    "min": 131,
+    "max": 157,
+    "sections": 8
+  },
+  "unexpectedErrors": []
+}

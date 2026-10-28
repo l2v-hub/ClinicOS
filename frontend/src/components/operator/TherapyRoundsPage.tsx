@@ -1,7 +1,8 @@
+import { TherapyVerificationPanel } from '../shared/TherapyVerificationPanel';
 import { useEffect, useMemo, useState } from 'react';
 import type {
   TherapyActionInfo,
-  TherapySlot,
+  TherapyReadGroup,
   TherapySlotPageInfo,
   MotivoNonErogazione,
 } from '../../types';
@@ -9,7 +10,6 @@ import { PageHeader } from '../shared/PageHeader';
 import { RosterOrderControl } from '../shared/RosterOrderControl';
 import { TherapyGiroRows, type FiltroStato } from './TherapyGiroRows';
 import { TherapyWeekCalendar } from './TherapyWeekCalendar';
-import { localIsoDate } from '../../lib/appointmentRange';
 import { isCalendarDate, shiftCalendarDate } from '../../lib/patientTherapyCalendar';
 import { giroTimeDone, giroTimes, initialGiroTime } from '../../lib/therapyGiro';
 import { weekDays } from '../../lib/therapyWeek';
@@ -21,6 +21,9 @@ import {
   recordAdministration,
   type AdministrationOutcome,
 } from '../../lib/therapyAdministrationWrite';
+import { getCurrentOperator } from '../../lib/operatorSession';
+import { facilityLocalDate, facilityLocalMinute } from '../../lib/facilityTime';
+import { initialCurrentGiroTime } from '../../lib/therapyGiro';
 import { lateMinutes } from '../../lib/therapyDoseStatus';
 import './TherapyRoundsPage.css';
 import {
@@ -47,7 +50,7 @@ export interface TherapyRoundsEntry {
 }
 
 interface Props {
-  slots: TherapySlot[];
+  slots: TherapyReadGroup[];
   loading: boolean;
   error: string | null;
   pageInfo: TherapySlotPageInfo;
@@ -84,7 +87,7 @@ export function TherapyRoundsPage({
   onOpenPatient,
 }: Props) {
   const [date, setDate] = useState(
-    () => calendarState?.date ?? entry?.date ?? loadedDate ?? localIsoDate(),
+    () => calendarState?.date ?? entry?.date ?? loadedDate ?? facilityLocalDate(),
   );
   // Ruolo «con conferma» (supervisore): dopo il dialogo di conferma la registrazione parte da qui
   // con `confirmed: true` (il server la rifiuta senza); poi il giro si ricarica dal server.
@@ -119,7 +122,10 @@ export function TherapyRoundsPage({
   const [filtro, setFiltro] = useState<FiltroStato>('tutte');
   const [showOrder, setShowOrder] = useState(false);
   const [mode, setMode] = useState<'giro' | 'calendario'>(
-    calendarState?.mode ?? (entry ? 'giro' : 'calendario'),
+    calendarState?.mode ??
+      (entry || (getCurrentOperator()?.role === 'operatore' && canAdministerByPolicy)
+        ? 'giro'
+        : 'calendario'),
   );
   // Settimana del calendario: separata dalla data del giro, che resta quella caricata.
   const [weekOf, setWeekOf] = useState(calendarState?.weekOf ?? date);
@@ -197,10 +203,12 @@ export function TherapyRoundsPage({
     if (target) setSelected(target.ora);
   }
   if (!entryPending && ready && times.length > 0 && !times.some((t) => t.ora === selected))
-    setSelected(initialGiroTime(times));
+    setSelected(
+      date === facilityLocalDate()
+        ? initialCurrentGiroTime(times, facilityLocalMinute().slice(11, 16))
+        : initialGiroTime(times),
+    );
   const active = times.find((t) => t.ora === selected);
-  const done = active ? giroTimeDone(active) : 0;
-  const total = active?.total ?? 0;
   const s = active;
   const FILTRI: { key: FiltroStato; label: string; count: number }[] = [
     { key: 'tutte', label: 'Tutte', count: 0 },
@@ -231,8 +239,8 @@ export function TherapyRoundsPage({
             : `Calendario della settimana · ${weekLabel(weekOf)}`
         }
       />
-      {giro && ready && active && (
-        <div className="giro-bar">
+      <div className="giro-primary-controls" data-giro-controls>
+        {giro && ready && active && (
           <div className="giro-slots" role="group" aria-label="Ora della terapia">
             {times.map((t) => (
               <button
@@ -240,56 +248,14 @@ export function TherapyRoundsPage({
                 key={t.ora}
                 className="ds-chip giro-slot"
                 aria-pressed={t.ora === active.ora}
-                aria-label={`Ore ${t.ora}: ${giroTimeDone(t)} fatte su ${t.total}${t.pending > 0 ? `, ${t.pending} da erogare` : ''}`}
+                aria-label={`Ore ${t.ora}: ${giroTimeDone(t)} fatte su ${t.total}${t.pending ? `, ${t.pending} da erogare` : ''}`}
                 onClick={() => setSelected(t.ora)}
               >
                 {t.ora} · {giroTimeDone(t)}/{t.total}
               </button>
             ))}
           </div>
-          <div className="giro-progress">
-            <div
-              className="giro-progress__track"
-              role="progressbar"
-              aria-label={`Avanzamento delle ${active.ora}`}
-              aria-valuemin={0}
-              aria-valuemax={total}
-              aria-valuenow={done}
-            >
-              <i style={{ width: `${total > 0 ? (done / total) * 100 : 0}%` }} />
-            </div>
-            <span className="giro-progress__count">
-              {done}/{total}
-            </span>
-          </div>
-        </div>
-      )}
-      <div className="giro-tools">
-        <div className="ds-chip-group" role="group" aria-label="Vista della terapia">
-          <button
-            type="button"
-            className="ds-chip"
-            aria-pressed={!giro}
-            onClick={() => {
-              setWeekOf(date);
-              setCalendarOpen(null);
-              setMode('calendario');
-            }}
-          >
-            <IcoCalendar /> Calendario
-          </button>
-          <button
-            type="button"
-            className="ds-chip"
-            aria-pressed={giro}
-            onClick={() => {
-              if (loadedDate !== date) onLoad(date);
-              setMode('giro');
-            }}
-          >
-            Giro
-          </button>
-        </div>
+        )}
         {giro && ready && active && (
           <div className="giro-filters" role="group" aria-label="Stato della somministrazione">
             {FILTRI.map((f) => (
@@ -306,47 +272,90 @@ export function TherapyRoundsPage({
             ))}
           </div>
         )}
-        <div className="giro-tools__right">
-          {giro ? (
-            <DateNav
-              isToday={date === localIsoDate()}
-              onPrev={() => changeDate(shiftCalendarDate(date, -1))}
-              onToday={() => changeDate(localIsoDate())}
-              onNext={() => changeDate(shiftCalendarDate(date, 1))}
-              date={date}
-              onDateChange={changeDate}
-              dateLabel="Data terapia"
-              todayLabel="Oggi"
-              groupLabel="Data del giro"
-            />
-          ) : (
-            <DateNav
-              isToday={weekDays(weekOf).includes(localIsoDate())}
-              onPrev={() => (setCalendarOpen(null), setWeekOf(shiftCalendarDate(weekOf, -7)))}
-              onToday={() => {
-                setCalendarOpen(null);
-                setWeekOf(localIsoDate());
-              }}
-              onNext={() => (setCalendarOpen(null), setWeekOf(shiftCalendarDate(weekOf, 7)))}
-              prevLabel="Settimana precedente"
-              nextLabel="Settimana successiva"
-              todayLabel="Oggi"
-              groupLabel="Settimana del calendario"
-            />
-          )}
-          {giro && (
-            <button
-              type="button"
-              className="ds-chip"
-              aria-expanded={showOrder}
-              aria-controls="giro-order"
-              onClick={() => setShowOrder((v) => !v)}
-            >
-              Ordine del giro
-            </button>
-          )}
-        </div>
+        {giro && ready && active && (
+          <span
+            className="giro-progress__count"
+            role="progressbar"
+            aria-label={`Avanzamento delle ${active.ora}`}
+            aria-valuemin={0}
+            aria-valuemax={active.total}
+            aria-valuenow={giroTimeDone(active)}
+          >
+            {giroTimeDone(active)}/{active.total}
+          </span>
+        )}
+        <details className="giro-secondary-controls">
+          <summary>Data, vista e ordine</summary>
+          <div className="giro-tools">
+            <div className="ds-chip-group" role="group" aria-label="Vista della terapia">
+              <button
+                type="button"
+                className="ds-chip"
+                aria-pressed={!giro}
+                onClick={() => {
+                  setWeekOf(date);
+                  setCalendarOpen(null);
+                  setMode('calendario');
+                }}
+              >
+                <IcoCalendar /> Calendario
+              </button>
+              <button
+                type="button"
+                className="ds-chip"
+                aria-pressed={giro}
+                onClick={() => {
+                  if (loadedDate !== date) onLoad(date);
+                  setMode('giro');
+                }}
+              >
+                Giro
+              </button>
+            </div>
+            <div className="giro-tools__right">
+              {giro ? (
+                <DateNav
+                  isToday={date === facilityLocalDate()}
+                  onPrev={() => changeDate(shiftCalendarDate(date, -1))}
+                  onToday={() => changeDate(facilityLocalDate())}
+                  onNext={() => changeDate(shiftCalendarDate(date, 1))}
+                  date={date}
+                  onDateChange={changeDate}
+                  dateLabel="Data terapia"
+                  todayLabel="Oggi"
+                  groupLabel="Data del giro"
+                />
+              ) : (
+                <DateNav
+                  isToday={weekDays(weekOf).includes(facilityLocalDate())}
+                  onPrev={() => (setCalendarOpen(null), setWeekOf(shiftCalendarDate(weekOf, -7)))}
+                  onToday={() => {
+                    setCalendarOpen(null);
+                    setWeekOf(facilityLocalDate());
+                  }}
+                  onNext={() => (setCalendarOpen(null), setWeekOf(shiftCalendarDate(weekOf, 7)))}
+                  prevLabel="Settimana precedente"
+                  nextLabel="Settimana successiva"
+                  todayLabel="Oggi"
+                  groupLabel="Settimana del calendario"
+                />
+              )}
+              {giro && (
+                <button
+                  type="button"
+                  className="ds-chip"
+                  aria-expanded={showOrder}
+                  aria-controls="giro-order"
+                  onClick={() => setShowOrder((v) => !v)}
+                >
+                  Ordine del giro
+                </button>
+              )}
+            </div>
+          </div>
+        </details>
       </div>
+      {giro && ready && <TherapyVerificationPanel groups={slots} />}
       {giro && showOrder && (
         <div id="giro-order">
           <RosterOrderControl />

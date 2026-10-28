@@ -1,0 +1,142 @@
+[
+  {
+    "issue": 432,
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/432",
+    "state": "OPEN",
+    "sha256": "281b333f9449c2e3d905bd991356154c931df9adbdfb15aa5d9d198d5ba69377",
+    "comments": [
+      {
+        "id": "IC_kwDOSt4Zr88AAAABa57oRw",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/432#issuecomment-6100543559"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABa68g5g",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/432#issuecomment-6101606630"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2oRqg",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/432#issuecomment-6231298474"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2swWA",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/432#issuecomment-6231371864"
+      }
+    ]
+  },
+  {
+    "issue": 441,
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/441",
+    "state": "OPEN",
+    "sha256": "84c47c583d5cbd4b83b54e280084c3bae1eb688633306480a4bbe64e4073dfd0",
+    "comments": [
+      {
+        "id": "IC_kwDOSt4Zr88AAAABbah7tA",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/441#issuecomment-6134725556"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2oUQA",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/441#issuecomment-6231299136"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2swyA",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/441#issuecomment-6231371976"
+      }
+    ]
+  },
+  {
+    "issue": 442,
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/442",
+    "state": "OPEN",
+    "sha256": "18a2a6dcbaff97afcde3138afd005ad43c4efff83c6025f5c2345f5bf718758b",
+    "comments": [
+      {
+        "id": "IC_kwDOSt4Zr88AAAABbah96A",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/442#issuecomment-6134726120"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2oWjA",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/442#issuecomment-6231299724"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2sxOw",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/442#issuecomment-6231372091"
+      }
+    ]
+  },
+  {
+    "issue": 460,
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/460",
+    "state": "OPEN",
+    "sha256": "a83fd34c9aa9f689cc10e4e6cbfe1778c200c45cee6744648a789811fb4ad6c1",
+    "comments": [
+      {
+        "id": "IC_kwDOSt4Zr88AAAABbaiAOQ",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/460#issuecomment-6134726713"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2oZJw",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/460#issuecomment-6231300391"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2sxsA",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/460#issuecomment-6231372208"
+      }
+    ]
+  },
+  {
+    "issue": 463,
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/463",
+    "state": "OPEN",
+    "sha256": "f0ea7ca92e424140b7edb20fa199e59bcf07dd2b8b3bf6b2da051a2b8be65987",
+    "comments": [
+      {
+        "id": "IC_kwDOSt4Zr88AAAABbaiCUg",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/463#issuecomment-6134727250"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2obgg",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/463#issuecomment-6231300994"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2syPw",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/463#issuecomment-6231372351"
+      }
+    ]
+  },
+  {
+    "issue": 464,
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/464",
+    "state": "OPEN",
+    "sha256": "061d5bad0dc078918717f076fbaa84ef47b95ba1b32af43138581f963ecdf17c",
+    "comments": [
+      {
+        "id": "IC_kwDOSt4Zr88AAAABbaiEjw",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/464#issuecomment-6134727823"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2odrA",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/464#issuecomment-6231301548"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2symg",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/464#issuecomment-6231372442"
+      }
+    ]
+  },
+  {
+    "issue": 467,
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/467",
+    "state": "OPEN",
+    "sha256": "3376013de989afa2ef6bf80dbb71c6c0599d80a9290dacde9952f0845c61536e",
+    "comments": [
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2of3Q",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/467#issuecomment-6231302109"
+      },
+      {
+        "id": "IC_kwDOSt4Zr88AAAABc2sy8g",
+        "url": "https://github.com/l2v-hub/ClinicOS/issues/467#issuecomment-6231372530"
+      }
+    ]
+  }
+]

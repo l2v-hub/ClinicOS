@@ -1,0 +1,14 @@
+{
+  "issue": 507,
+  "nonce": "cfb97ef5-c891-41d0-b096-2bcd649419bb",
+  "role": "dedicated independent QA; not implementer or coordinator",
+  "model": "gpt-6.1-sol",
+  "reservedAt": "2026-10-24T22:19:54.708Z",
+  "reservedBeforeSession": true,
+  "status": "running",
+  "worktree": "/workspace/clinicos-bug-507",
+  "sourceManifestSha256": "41a40741b5e848a4b73a55c3fda1f8b1f67b69514484985f0d2253e12b6f21ef",
+  "sourceCount": 10,
+  "stateCommit": "3abed593ff0180086f73a1e5c2c21a9962066de1",
+  "transportReceipt": "/tmp/clinicos-root-state-transport-20261022/f000c81d-aa89-419f-b08a-313566bc611a/accepted.json"
+}

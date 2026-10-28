@@ -281,17 +281,36 @@ try {
       await page.getByText(lastName).first().waitFor({ state: 'visible', timeout: 15000 });
       await page.getByText(lastName).first().click();
       await page.getByRole('tab', { name: /^Clinica/ }).click();
-      const savedStatus = page.locator(`[data-testid="allergy-status-${vp.allergyStatus}"]`);
+      const allergySummary = page.locator('[data-chart-anchor="allergie"]');
+      await allergySummary.waitFor({ state: 'visible', timeout: 15000 });
+      const savedSummary = allergySummary.getByText(vp.allergyLabel, { exact: true });
+      await savedSummary.waitFor({ state: 'visible', timeout: 15000 });
+      await page.screenshot({ path: resolve(outDir, `${tag}-8-reload-detail.png`) });
+      // The saved radio and status hint live in the actual allergy editor dialog, opened from
+      // the rendered empty-list summary. Keep this real user action scoped to that summary.
+      await allergySummary.getByRole('button', { name: 'Verifica', exact: true }).click();
+      const allergyDialog = page.getByRole('dialog', { name: 'Allergie e Intolleranze' });
+      await allergyDialog.waitFor({ state: 'visible', timeout: 15000 });
+      const savedStatus = allergyDialog.locator(
+        `[data-testid="allergy-status-${vp.allergyStatus}"]`,
+      );
       await savedStatus.waitFor({ state: 'visible', timeout: 15000 });
       if ((await savedStatus.getAttribute('aria-checked')) !== 'true')
-        throw new Error('Saved allergy status is not selected after reload');
-      await page
-        .locator(
-          `[data-testid="${vp.allergyStatus === 'assenti' ? 'allergy-none' : 'allergy-denied'}"]`,
-        )
-        .waitFor({ state: 'visible', timeout: 15000 });
-      await page.screenshot({ path: resolve(outDir, `${tag}-8-reload-detail.png`) });
-      console.log(`${tag}: UI-after-reload OK — detail shows '${vp.allergyLabel}'`);
+        throw new Error('Saved allergy status is not selected in the editor after reload');
+      const savedHintId = vp.allergyStatus === 'assenti' ? 'allergy-none' : 'allergy-denied';
+      const savedHint = allergyDialog.locator(`[data-testid="${savedHintId}"]`);
+      await savedHint.waitFor({ state: 'visible', timeout: 15000 });
+      const expectedHint =
+        vp.allergyStatus === 'assenti'
+          ? 'Allergie assenti — verificato dall’operatore.'
+          : 'Paziente nega allergie';
+      const actualHint = (await savedHint.textContent())?.replace(/\s+/g, ' ').trim();
+      if (actualHint !== expectedHint)
+        throw new Error(`Saved allergy hint after reload was '${actualHint}', expected '${expectedHint}'`);
+      await page.screenshot({ path: resolve(outDir, `${tag}-9-reload-allergies-dialog.png`) });
+      console.log(
+        `${tag}: UI-after-reload OK — summary '${vp.allergyLabel}', editor aria-checked=true, hint='${expectedHint}'`,
+      );
 
       // The handled duplicate branch legitimately produces ONE browser console entry for the
       // expected 409 confirm response ("Failed to load resource ... 409"); every other console

@@ -1,0 +1,37 @@
+{
+  "results": [
+    {
+      "name": "operator-previous-day-and-native-history-back",
+      "pass": true,
+      "realBackend": true,
+      "administrationPosts": 0
+    },
+    {
+      "name": "admin-previous-day-and-native-history-back",
+      "pass": true,
+      "realBackend": true,
+      "administrationPosts": 0
+    }
+  ],
+  "sql": [
+    {
+      "name": "real-sql-five-readonly-items-and-acl",
+      "verification": 5,
+      "deniedWrites": 10,
+      "administrations": 0,
+      "firstPageVerificationDetails": 1,
+      "hasMore": true
+    },
+    {
+      "name": "supplement-readonly-after-native-navigation",
+      "administrations": 0,
+      "receipts": 0
+    }
+  ],
+  "phases": [
+    "operator-independent-previous-day-history",
+    "admin-independent-previous-day-history"
+  ],
+  "syntheticOnly": true,
+  "timedAgendaUiIntroduced": false
+}

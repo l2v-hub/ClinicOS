@@ -54,8 +54,8 @@ an authorized `User`. Dashboard discovery stays read-only, including before clas
 ## 2. Aggregate before changing code
 
 The controller collects newly authorized issues for a durable two-minute quiet window before
-claiming them, and processes the collected queue at the next invocation (the scheduled poll is
-every 15 minutes). Membership changes restart the quiet window, bounded by ten minutes from
+claiming them. The same serialized controller waits without invoking models, rechecks fresh
+ownership, and continues collection automatically; the fifteen-minute cron is a recovery path. Membership changes restart the quiet window, bounded by ten minutes from
 the first observation. No model session or `In progress` claim starts while collecting. Only
 issues explicitly authorized with `codex-run` or `/codex fix` may enter implementation scope.
 
@@ -126,11 +126,12 @@ Commit code, frozen plan and test evidence in the group's branch before review.
 
 ## 5. Claude review, four rounds by default
 
-Production uses the user's external Claude Code cron harness. Codex makes the tested PR
-Ready for review and persists a SHA-bound `externalReview` request. It must not require Max
-tokens in GitHub Actions or start Claude inside that runner. The user's already authenticated
-harness executes `node agent-team/src/bug-pipeline/claude-review-cron.mjs`; it reserves the
-existing remote budget before inference, saves a hashed report and publishes its GitHub review.
+The configured GitHub-hosted reviewer runs trusted main through `claude-cloud-review.yml`,
+using the existing subscription OAuth binding `CLAUDE_CODE_OAUTH_TOKEN`; there is no Anthropic
+API fallback. The optional personal cron remains a separate supported host for the same durable
+protocol. Codex makes the tested PR Ready for review and persists a SHA-bound `externalReview`
+request. Either supported host reserves the existing remote budget before inference, saves a
+hashed report and publishes the genuine review. Labels alone never authorize an inference.
 Codex reconciles that record plus all PR feedback, applies corrections and requests the next
 review only on the new verified SHA. Free-form approval comments cannot replace the report.
 The direct helper command below is an internal primitive, not a competing supervisor; never
@@ -201,10 +202,12 @@ Codex responds to findings with its adaptive executor, verification, simplificat
 independent QA and a new SHA; the selected channel persists across rounds. After a clean Claude
 report, a separate Codex QA must pass on that SHA before release readiness. Only the trusted
 release controller merges and confirms deployment/issue closure under actual protections. For
-changes to the controller's trust root, the current policy requires a native approval on the
-current head from an independent authorized human and leaves the PR for the normal manual
-protected merge; Claude/Codex reports, static QA and budget grants are not that approval. See the
-canonical [ClinicOS merge gate](../../../.claude/skills/clinicos/references/bug-delivery.md).
+authorized infrastructure changes, the single-developer flow permits automatic ordinary merge
+with a genuine clean Claude report and a separately verified Codex final on the current SHA.
+The controller does not require a second human or a second GitHub account. Native required
+reviews/checks, fresh ownership and exact-SHA merge guards remain binding; no approval is
+fabricated and no admin bypass is used. See the canonical
+[ClinicOS merge gate](../../../.claude/skills/clinicos/references/bug-delivery.md).
 The user explicitly authorized initial infrastructure-failure recovery: `request --recover-failed`
 retains the failed attempt and can request the next round on the same SHA when no substantive
 review existed. Every recovery still requires a trusted host's injected authorization verifier,

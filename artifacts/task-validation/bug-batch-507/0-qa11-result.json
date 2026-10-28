@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "reservationNonce": "b684d0b0-675d-4510-83fc-cf4f52a5b4cf",
+  "nonce": "b684d0b0-675d-4510-83fc-cf4f52a5b4cf",
+  "sourceSha": "b2735015bdd74ae96dbe5d2fb1faf17e29cbbda8",
+  "verdict": "VERIFIED",
+  "readyForNativePublication": true,
+  "findings": [],
+  "reviewScope": "independent metadata-only source QA",
+  "finalDecision": "PARTIAL",
+  "checks": {
+    "exactFiveFrozenFilesAndCandidateBlobs": true,
+    "nativeManifestEqualsPublishedPrimaryAndQualificationEvidence": true,
+    "publishedWrapperPreservedRawAndParsed": true,
+    "actualMediaBlobsVerified": 4,
+    "unchangedQualifiedApplicationFilesVerified": 10,
+    "unchangedHistoricalFilesVerified": 2,
+    "failedRound10ResultRetained": true,
+    "laterGatesPending": true
+  },
+  "newClinicalTests": 0,
+  "providerInvocations": 0
+}

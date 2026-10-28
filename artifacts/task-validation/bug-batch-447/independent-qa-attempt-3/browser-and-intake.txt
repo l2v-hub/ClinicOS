@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/tmp/qa4473-browser-and-intake.py", line 12, in <module>
+    stable();(q/'browser-command.json').write_text(json.dumps({'exit':run.returncode,'sourceStable94':True,'contractsStable26':True},indent=2));assert run.returncode==0,'Browser acceptance failed; inspect own evidence'
+                                                                                                                                                       ^^^^^^^^^^^^^^^^^
+AssertionError: Browser acceptance failed; inspect own evidence

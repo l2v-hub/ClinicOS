@@ -1,0 +1,592 @@
+{
+  "reviewer": "/root/ux_447_qa",
+  "type": "preliminary-readonly-source-snapshot",
+  "baseline": "a516d42e31f6674c39c1d130c9706cd80a7ab4c6",
+  "scopeCount": 66,
+  "entries": [
+    {
+      "file": "e2e/qa-bug-batch-447-browser.mjs",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "26a363cdddc12a20117df0f25acc54f2cc20672c833680904a16f9dc5041d7fc",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "e2e/qa-bug-batch-447.mjs",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "9297cb3085cc4ce7d278cff302c3ed7a18c6f3b65d5f0eb1c155c5da79f1a7d5",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/admin/AdminAttentionList.css",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "2d9d89b3016be1a09b9f9b5665ae0713ec4f7207d9f8cce612e1bdbbd3dd6487",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/admin/AdminAttentionList.tsx",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "33f2efcd9f025f173a18b5da49ea820bde97f6c003737730be822ce7ee53f5a3",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/admin/AdminDashboard.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "79e1b2afa3ad1c052cb7a14ed32f11bc23193d3491b72ad3b6b914c174421e41",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/admin/__tests__/adminAttention456.test.ts",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "af6ff22359d2f21c9bb3680d047f622b746630fa4d5261c2655b247bfa4a28f5",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/admin/adminAttentionModel.ts",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "43e427622c80e8c888e022573114ffda7b148a737fcccc4184f5d419b7fd32d2",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/ConsegnePatientRoster.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "49ee74df24f1c1b082e1bce4fb32fa13b19c3b12abb6cfd12ca9050c86707e3b",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/InvioPSModal.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "d360aed0626ffc544a444f8140e2c0d43e707cd73a80da39fc76e8007121f96c",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/MultiPatientParametri.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "035184fec0f6959f2e0f688d097353eb4cc9e0c8a96bda310ff1398f6e4ef540",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/OperatorAgenda.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "bdcd888be5f1abad410b8c0deffb10269d6f5c6b5c1da14da67d86f1c74f19cd",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/ParameterEntryPanel.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "1872c7f40bc3225afacdd17f2bb0b41e5f6cdc05c524ad20a98d4fe2ad765070",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/ParameterPatientPick.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "69a3cab70ce3e58c60c3bab23b4e4b783101abde415af060bdc5c6f0952de289",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/ParameterReadingForm.css",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "3367036500d2be273d11f0c93df6c26626d6f74360e1bf721196c008c3d11998",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/ParameterReadingForm.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "d23110881a3bfeb12ad33899ac322216496af268c7a149ad03f2d4537d40ed81",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/PatientDetail.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "6404e08ad620220bd63273e328e03719f838d5670802cf887d1076cea85ef3e5",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/PatientList.css",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "f8e356c57cef12b1d730b01c20f2853ada8cd07035067bcabea0048aba5c90ea",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/PatientList.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "7dceec6f9d6b19e21b800fe5ff44e030d59bcdebea194de005ab9d1a603abe67",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/PatientOverview.css",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "b475a9ce93f096b5729fae9a00a2bd3c7a433ec2140b959dfe19305bc89e3a64",
+      "untracked": false,
+      "baselineUnchanged": true
+    },
+    {
+      "file": "frontend/src/components/operator/PatientParameters.css",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "1cacea51f3cd42a1539c2a420bf1cddb0117d16baea00393ae1ab5c15e781019",
+      "untracked": false,
+      "baselineUnchanged": true
+    },
+    {
+      "file": "frontend/src/components/operator/PatientRecordData.css",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "6316c7ccc8b654ce90bd7e27fe9f240a6d58e649b6d58c21c59b50c57fc8ff7b",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/PatientRegimeControls.tsx",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "d9945dbe607753f53c68308513563c9479c7d16247dabe6e3316febf4b606fca",
+      "untracked": false,
+      "baselineUnchanged": true
+    },
+    {
+      "file": "frontend/src/components/operator/PatientRoster.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "e159daabcba59be49114c2e6cc1acf9db256d90bfb9ee6adae7be0d2104ad3e9",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/PatientToday.tsx",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "c9e50f9dd4578647833a1d8d8ead3113d86352c1e51b65c36b2701f332e59df5",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/TherapyGiroRows.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "9598aca839a4d5e6962351fb11fad9670b3231828250b5ca7fcc8a7548edb328",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/TherapyPatientAllergies.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "c1a837f0c87307a0587b5ee473a4df538194ad56627b18dbcde4d2d5d5459471",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/TherapyRoundsPage.css",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "222ab8faf100df9d3c72d13bd11d50290ac7356315f65759b8add15fdc4433f5",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/TherapyRoundsPage.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "b5fba7f8609d4a2e964fa2ed9f2804115818ee4d0f642fd04514fdabeea286d5",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/__tests__/invioPS.test.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "0c1169a5538ca3079aae4096211ba64e783e7d54c79a7b7cf0b343e8329fd233",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/__tests__/operationalLists452.test.ts",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "1795b48f823cfd938e5ea487e97368ca61b304c1193c1434cbc2f642dff0be58",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/__tests__/patientToday447.test.ts",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "13e1d11f71706952fcdab097c641b457d458167cf91e774ba0aeb6cb51e70b9c",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/AvvisoAnomalieFarmaci.tsx",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "f2e9f969db4c5285d87853d120dfa17258662175d4d566eb5c14e9033574a690",
+      "untracked": false,
+      "baselineUnchanged": true
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "0c4246d3730292d70cab2ce2d24ce10c8c8a5da7a157dcb770527cfc865d7388",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "d6f2dd8b44b11a89368f631904d9239a7a1a5e034539e0e57c2df04e99a2835d",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "cfbf5ec35e05646b4100b2ea3231ae86410752078ab43b9ae40d31fed6ac130b",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/TherapyFormFields.css",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "60852a155b8c4e5e642345b70a77dc5db32ed06169f0553109e37613b92e5937",
+      "untracked": false,
+      "baselineUnchanged": true
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "3e350f66579dec365a2aa2b41a0d213384c1abf0d299b93a39ae3070c23c2132",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/TherapyFormPreview.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "2a659ec0fa76a0bb12c91c656198ba5692afaf074c085f46ede8049347915994",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/__tests__/therapyQuickSchedule453.test.ts",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "8780a8bd68cc935632089dbfb319581d746d3a91a2ec756c4d177169c0153423",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/__tests__/uxW4Misc.test.ts",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "9ce0c5f0f0b150fd89a592c7f6d3ef7c66dfa9b878e2ff74e331afe67c66d235",
+      "untracked": false,
+      "baselineUnchanged": true
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/drugPackageSelection.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "e1cfad992bf9e4711e2d40c4e2e440d33c2ff225f43b72cb6b5ee3c4f7544a7e",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/therapyQuickSchedule.ts",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "9ace6bb18de6b86e48502d4ed437052a895a21141ffd103be48a9354a618fa12",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/invioPSModel.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "41d95438a8c58bf80509fe477f0e449091c7a28b8a4b23fc72007ee1ff675862",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/tabGroups.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "f0e97bd0a8b0812d7ace12680c63ffd190cb320e0268853ba68333f66b876c54",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/shared/DemographicsStatus.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "1d53c09e236a456ab2755f3320ca5dade244af98baa83f34269124a6742e5b7d",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/shared/PatientIdentity.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "4303a8e175b3bc1d64b3a8e009784b4b7f3d9f65166225fd5115b95db393cfca",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/shared/TherapyCalendarGrid.tsx",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "c9d74babaae2a4d27eed926ede32988c156cd1f7a768ad0356a559746a756cbe",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/__tests__/invioPSPrintLayout.test.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "2ea2c4d7923b03a27ec0ec9f4ddfa4947d621f0b1ffeea0d7ecddfcb50dddea6",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/__tests__/parameterRound451.test.ts",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "917ad656bea5f10e3040ddf1699939809794bb3715d7b98f45c269a1d815855b",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/__tests__/therapyEntry454.test.ts",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "c79c14f310f3b20ce24544e96940474bb459f462ea0cb2437af9e99684fb4de2",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/emergencyTransferContext.ts",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "7610836dc4900de795db0792b960bd19b05cb4fa745ff24b1c346a5c842213bd",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/parameterPad.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "13835229f5557976d0accada16ae2cf4e40177e065683d55b289d78bb9a261f9",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/parameterRound.ts",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "6c5d808be09813aafcf20c36d84bdc2de62b363d19d0bdfcca488e8595e97c94",
+      "untracked": true,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/therapyGiro.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "c753dc09743e526d9ba8ab63a90615bfc34d9390cf50921332582958f88369a2",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "05f881cf5d0618d3cab4ce0f73e5c541d20abd66a50949f3c445af50ca108c3d",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/__tests__/consegneReadModelGuard.test.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "5af93705e3d339476b7ab52d357f2dc4bcb7cfbcdaff9ce19f643ebe63797997",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/__tests__/operator-dashboard-anomaly-layout.test.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "bd89eaba3ca46a89a5a38d186d9a0af90c3a4c9d15d4b1fbe8a2813e1567574d",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/__tests__/clinicalOverviewResilience.test.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "190f4314ae541833e48279024269dcb74f960edc27b8c26ed7d7ba234d93b7e9",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "33eff566e105a4436daa55c7c86e5cac554632797f412a239e17a7e786839bfe",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/__tests__/patientChartNavigation.test.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "23909de1ff7f918010b82644aa2bac97d8b9c7695b9552f4f49a6797b69c1138",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/__tests__/patientDetailWorkspace.test.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "42f2d3b81f3947c806fb4eb76f82ab55af9ae333217877f4d2ad797a00ffd2ff",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "ebc98c131bfff56ad1ccf56125b65b6cd6479e49a208b00cc9059fa126bf034d",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "7c0e8bd2c675aaa554cfbe5a3ef1ddc9350f29863936c5c2cc305e7dd5b0d554",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/__tests__/clinicalHistory.test.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "ecf7122f08d25b70cfb9b2195392693ebbdaf86bc2d4026c9be6b916f82b8007",
+      "untracked": false,
+      "baselineUnchanged": false
+    },
+    {
+      "file": "frontend/src/lib/__tests__/therapyPages.test.ts",
+      "exists": true,
+      "trackedChanged": false,
+      "sha256": "6ecc6e2ac9de983d851e2efd7b9045f593cdebf433d4f7cb48fb00c176d24dd4",
+      "untracked": false,
+      "baselineUnchanged": true
+    },
+    {
+      "file": "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
+      "exists": true,
+      "trackedChanged": true,
+      "sha256": "ed8861aaafc2932c942fc55e5c4d92cc6a208fbf592ffe5bbd9e7a350cf66cf8",
+      "untracked": false,
+      "baselineUnchanged": false
+    }
+  ],
+  "packetMetadata": {
+    "task-contract.md": "1aaabdb135ab3dff474faad2b623b1ade714ee4827a9de92cecd84895c9bf6e3",
+    "analysis.md": "588fb13b7b9c36b1a6e0290c25d6b57bfc93d16245ac410353e3a32ccbf98671",
+    "implementation-plan.md": "a548a6c45df6151cc3976683c6fc7733ea118f139228ffef0c9e028ad1386845",
+    "triage-index.md": "42ee2288f97e76104b47854d715618fb1955fe2f1359dcb17e695df118845a61",
+    "scope-amendment-1.md": "83d56fd3d02a242f7070cfa18384a7eea536ec72e30c1ada8bfef81f07d08078",
+    "scope-amendment-2.md": "868ee1d36373421b6f2003cb4007f7d18f057a66228c802652be8fc100549ca7",
+    "scope-amendment-3.md": "cbbdfbaeb8c78c14160dfc6fe63afd6a269788afdb4e3242838f556d9310d1e5",
+    "scope-amendment-4.md": "da083700035882a4ae20fa039f0565ffc6a5a6ae3bbb657526a9a1ba0a9bcb2d",
+    "scope-amendment-5.md": "40c85ae6de778293257788807fd608f36c5bb5c1494de4cf3933afbdf2b616c9"
+  },
+  "sourceScopeEscapes": [],
+  "frozenPacketVerification": [
+    {
+      "name": "task-contract.md",
+      "match": true
+    },
+    {
+      "name": "analysis.md",
+      "match": true
+    },
+    {
+      "name": "implementation-plan.md",
+      "match": true
+    },
+    {
+      "name": "triage-index.md",
+      "match": true
+    },
+    {
+      "name": "scope-amendment-1.md",
+      "match": true
+    },
+    {
+      "name": "scope-amendment-2.md",
+      "match": true
+    },
+    {
+      "name": "scope-amendment-3.md",
+      "match": true
+    },
+    {
+      "name": "scope-amendment-4.md",
+      "match": true
+    },
+    {
+      "name": "scope-amendment-5.md",
+      "match": true
+    }
+  ],
+  "summary": {
+    "scope": 66,
+    "modified": 44,
+    "new": 15,
+    "unchanged": 7
+  }
+}

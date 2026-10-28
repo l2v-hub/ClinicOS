@@ -142,8 +142,30 @@ test('legacy columns retain usable controls and explicitly limit temporary order
   const local = render(React.createElement(PatientRoster, props));
   assert.match(local, /Ordine temporaneo/);
   assert.match(local, /Solo pazienti caricati/);
-  for (const label of ['regime', 'segnalazioni'])
-    assert.ok(local.includes(`Ordina per ${label}`));
+  assert.ok(local.includes('Ordina per segnalazioni'));
+  assert.doesNotMatch(local, /Ordina per regime/);
+  const availableRegime = render(
+    React.createElement(PatientRoster, {
+      ...props,
+      summaryMap: new Map([
+        [
+          identityPatient.id,
+          {
+            patientId: identityPatient.id,
+            statoRicovero: 'ricoverato',
+            hasCriticalVitals: false,
+            hasHighRisk: false,
+            allergieCount: 0,
+            hasSevereAllergy: false,
+            terapieTotali: 0,
+            terapieCompletate: 0,
+            consegneAperte: 0,
+          },
+        ],
+      ]),
+    }),
+  );
+  assert.match(availableRegime, /Ordina per regime/);
   // il codice fiscale resta ordinabile dal selettore dell'ordinamento
   assert.match(local, /<option value="fiscalCode" selected="">/);
   const server = render(React.createElement(PatientRoster, { ...props, localSortActive: false }));

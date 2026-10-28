@@ -1,0 +1,18 @@
+✔ backend: never-settling confirmation reaches release and settled cleanup (18.869058ms)
+✔ backend: timeout then late callback rejection is observed (15.775599ms)
+✔ backend: failed callback and failed cleanup preserve both exact errors (1.686672ms)
+✔ backend: entry failure still releases (15.806816ms)
+✔ backend: successful callback releases exactly once (0.938959ms)
+✔ browser: never-settling confirmation reaches release and settled cleanup (16.286523ms)
+✔ browser: timeout then late callback rejection is observed (15.305804ms)
+✔ browser: failed callback and failed cleanup preserve both exact errors (0.611918ms)
+✔ browser: entry failure still releases (15.671741ms)
+✔ browser: successful callback releases exactly once (0.681456ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 226.127504

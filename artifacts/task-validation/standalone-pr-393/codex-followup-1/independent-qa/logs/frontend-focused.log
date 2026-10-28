@@ -1,0 +1,40 @@
+✔ readback names the exact server action and values, asks explicit confirmation (4.494426ms)
+✔ blocked preview explains missing information and never asks to execute (0.281852ms)
+✔ TTS prefers available local Italian voice, softer rate, cancellable; performs no request (0.468926ms)
+✔ realtime parser accepts bounded provider partial and final events (2.310637ms)
+✔ realtime parser retains item ids and replaces provider errors with fixed messages (0.380118ms)
+✔ audio session waits for permission, displays partials without submission, and accepts only matching final (0.587837ms)
+✔ cancel and resident change invalidate pending partial capture text (0.244444ms)
+✔ transport rejects a pre-aborted signal before creating a peer (0.846364ms)
+✔ transport cancellation during negotiation closes peer and channel (11.915946ms)
+✔ transport negotiation timeout closes peer and channel (5.270102ms)
+✔ transport commits at most once and close ignores later channel events (26.852751ms)
+✔ transport removes its abort listener when closed (0.518263ms)
+✔ VAD: speech between silences → one utterance (pre-roll kept, trailing silence ends it) (13.249107ms)
+✔ VAD: silence only → no_speech after the timeout, nothing to send (8.785964ms)
+✔ VAD: steady background noise is learned as floor → never «speech» (7.79507ms)
+✔ VAD: a click / too-short sound is discarded, never sent (3.092384ms)
+✔ VAD: pauses inside a sentence do not cut it; the max length caps it (10.002316ms)
+✔ VAD: «Fine» (flush) closes the utterance now; with no speech it discards (2.995368ms)
+✔ VAD: configurable end-of-turn silence (7.458947ms)
+✔ VAD (QA M4): speech starting right at the tap is detected and kept from the start (4.323748ms)
+✔ VAD (QA M4): talking at the tap, then softer syllables → the sentence is not cut (8.686329ms)
+✔ rmsDb: silence is very low, a loud tone is near 0 dBFS (0.453821ms)
+✔ WAV: 16 kHz mono PCM16 header and samples (0.450125ms)
+✔ WAV: resampling 48 kHz → 16 kHz keeps duration (20.429268ms)
+✔ session: push-to-talk happy path to AWAITING_CONFIRMATION and COMPLETED (2.840204ms)
+✔ session: a transcript is never sent by itself; empty STT goes back to IDLE (0.354932ms)
+✔ session: stale STT answers of a cancelled capture are ignored (0.305892ms)
+✔ session: resident change discards a pending transcript (never re-targeted) (0.2434ms)
+✔ session: STT / mic failures → ERROR with a code (text fallback), no transcript (0.218573ms)
+✔ session: no new capture while audio or a request is in flight (0.203671ms)
+✔ session: discarded audio (silence / too short) → IDLE with a notice (0.168259ms)
+✔ spoken feedback never carries clinical data: fixed phrases only (0.32581ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 467.228241

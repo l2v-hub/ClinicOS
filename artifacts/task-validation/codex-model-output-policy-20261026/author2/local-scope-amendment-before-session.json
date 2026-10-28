@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-26T01:18:06.790172+00:00",
+  "canonicalReservationCommit": "03bc240b723cc5349ac69cb4fe10a2fcff3f356c",
+  "canonicalAuthorNonce": "711849b2-b278-48aa-98d4-3f5ba42780ef",
+  "authorSessionMaximum": 1,
+  "authorSessionUsedBeforeSpawn": 1,
+  "scopeAmendmentCanonicalCommitted": false,
+  "blockedMutation": "Scope amendment Git fetch failed BEFORE any writes; GitHub read-only API independently401 Bad credentials under both existing auth variants; no retry of a mutation.",
+  "authorization": "Original standing user autonomous grant and parent/root instruction to complete unaffected local work, capture blocked mutation/proposed change before further call, preserve actual scope/history.",
+  "sourceCandidate": "38b37e3322176bd9836d228d4c4ce63bf66fced2",
+  "scope": "Correct QA1 backing-memory cap with owned tail buffer + regression; update two obsolete routing raw-error assertions to finite diagnostics while preserving no-false-capacity behavior. Only process.mjs, process-output.test.mjs, routing.test.mjs differ from38. No provider/API/Git publication/auth/clinical changes.",
+  "qa1SealSha256": "62f9c0ce6862cbd0a00536ca42799a995a6c9042f7e36a4b749627cdc006d70f",
+  "remote401IsNotProviderFailure": true,
+  "historyPreserved": true
+}

@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "testedSourceSha": "4c85fdf5a97eea10c8efcc6d105cd32de054e030",
+  "app": {
+    "classification": "Actual frontend app, exact backend/src/app.ts, normal simulator auth, real HTTP and owned PostgreSQL",
+    "computedContrastGroups": 12,
+    "minimumContrastRatio": 14.3803630256408,
+    "normalAndSevere": true,
+    "desktopAndMobile": true,
+    "normalHoverFocus": true,
+    "ordinaryConfirmationHTTPStatus": 200,
+    "exactOneOwnedSQLAdministration": true,
+    "persistedConfirmedAt": true,
+    "reloadPersistence": "PASS",
+    "scoped503LoadFailureNoActionsNoWrites": "PASS_NOT_PS_STATE_PROOF"
+  },
+  "component": {
+    "classification": "Actual production React component with synthetic prop rerenders and callback recorder; NOT clinical HTTP/PG E2E",
+    "nonAssetHttpRequests": 0,
+    "allowedCallbacks": 1,
+    "blockedCallbacks": 0
+  },
+  "mediaVerification": "PASS_TWO_FINALIZED_VIDEOS_TWO_SANITIZED_CRC_VALID_TRACES",
+  "pending": [
+    "publication-head native checks",
+    "actual Claude review",
+    "final Codex review",
+    "deployment",
+    "closure"
+  ]
+}

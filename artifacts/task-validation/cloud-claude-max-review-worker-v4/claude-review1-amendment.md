@@ -1,0 +1,5 @@
+# Acceptance amendment: actual Claude review1
+
+Address6400155301 on exact9ac8233. Capacity must be qualified BEFOREnativeclaim using explicitMaxmodel/contextprofileandconservative fullpromptUTF8upperbound+nativeoverhead+reportedmaxoutput against provider-reportedmodelUsage.contextWindow. A Max-compatible1M profile canbe selected onlywithrealprobe provingcontext; noAPIkeyfallback, no assumedtokenizer. JSONsource stillbytebounded. IdentityguardenforcesoriginalPR/SHA/base/request/claim/owner/round/status (plussemanticfrozenpacket/plan ifneeded), not unrelatedobservations; exactreplacementrefusedwhilefullvalidatedsanitizedreport+digestretainedinreceipt. JobGITHUB_TOKENreadonly; installofficialCLIwithcommittedtoolslocknpmci beforecredentialstep.
+
+Safety applicability: requestedrefund/reuseonunknownmodeltimeouts/authfailuresisnotaccepted: userrequiresallattemptshistorypreserved; unknownexecutioncannotbeblindlyreplayed. Retainactualspend, finitefailures andfullvalidatedreports, notifyCodexforauditedrecovery. Positivepreinvocationsize/capabilityfailuremustspendzerorounds. Noarrayspopped/reset, no self-issuedretryallowances.

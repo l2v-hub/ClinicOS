@@ -1,0 +1,7 @@
+# Validation report — pre-publication snapshot
+
+Tested source 24f669b706193eef9ac08bd7a02ab440be692189, trusted main 13c71ce0e2cdf6e72b4c7eeeb036754fac7e4f73. Independent QA2 VERIFIED, findings0; seal rawSHA256 d7ea5bd5f765930305848954dd4d383fe8f85a220fe776041ed94be8cb732018. Actual final author test counts and command results are in author2/implementation-report.md; the independent report states which checks it independently ran. QA1 BLOCKED3 and source1 are preserved as implementation1 FAILED.
+
+The actual required bug-pipeline domain, focused native regressions, actionlint and diff checks must be green in the final author report and independently checked as appropriate. Historical broader-suite failures from author1 are retained with the author's attribution; this packet does not call that broader run green or independently establish every baseline attribution. The subsequent actual required current-head native CI is authoritative for publication. No unrelated test or guard is weakened.
+
+40312718377 actual zero-provider control PASS;40307355899 actual clinical partial/verify-before failures remain unresolved. No new clinical model invocation was used for this source. Local source exports do not prove remote artifact durability. Before peer, require actual current-head six-check proof, immutable native verification and complete reader capacity. NEW final Codex follows genuine peer approval before ordinary protected merge; future sequential gates remain pending here.

@@ -1,0 +1,11 @@
+{
+  "at": "2026-10-17T09:39:01.584941+00:00",
+  "source47Unchanged": true,
+  "ownFocusedContainerRemoved": true,
+  "ownCanonicalContainerRemoved": true,
+  "naturalExit": 1,
+  "checksPassed": 18,
+  "canonical19Passed": false,
+  "lockReleased": true,
+  "reason": "Final navigation oracle searches draft card while chooser remains open. SQL assertion not reached."
+}

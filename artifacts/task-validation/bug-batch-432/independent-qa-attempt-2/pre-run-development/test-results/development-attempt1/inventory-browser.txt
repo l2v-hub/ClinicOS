@@ -1,0 +1,41 @@
+/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/client/src/runtime/RequestHandler.ts:238
+      throw new PrismaClientKnownRequestError(message, {
+            ^
+
+PrismaClientKnownRequestError: 
+Invalid `prisma.patient.create()` invocation:
+
+
+Foreign key constraint violated on the constraint: `Patient_registeredById_fkey`
+    at vn.handleRequestError (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/client/src/runtime/RequestHandler.ts:238:13)
+    at vn.handleAndLogRequestError (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/client/src/runtime/RequestHandler.ts:184:12)
+    at vn.request (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/client/src/runtime/RequestHandler.ts:153:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async a (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:1014:24)
+    at async file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/e2e/qa-therapy-completeness-browser.mjs:22:17 {
+  code: 'P2003',
+  meta: {
+    modelName: 'Patient',
+    driverAdapterError: DriverAdapterError: ForeignKeyConstraintViolation
+        at PrismaPgAdapter.onError (file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/adapter-pg/dist/index.mjs:666:11)
+        at PrismaPgAdapter.performIO (file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/adapter-pg/dist/index.mjs:661:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async PrismaPgAdapter.queryRaw (file:///workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/adapter-pg/dist/index.mjs:595:30)
+        at async <anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/client-engine-runtime/src/interpreter/query-interpreter.ts:200:28)
+        at async e.interpretNode (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/client-engine-runtime/src/interpreter/query-interpreter.ts:228:41)
+        at async e.interpretNode (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/client-engine-runtime/src/interpreter/query-interpreter.ts:273:41)
+        at async e.run (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/client-engine-runtime/src/interpreter/query-interpreter.ts:121:23)
+        at async e.execute (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/client/src/runtime/core/engines/client/LocalExecutor.ts:81:12)
+        at async yr.request (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-432/node_modules/@prisma/client/src/runtime/core/engines/client/ClientEngine.ts:510:22) {
+      cause: {
+        originalCode: '23503',
+        originalMessage: 'insert or update on table "Patient" violates foreign key constraint "Patient_registeredById_fkey"',
+        kind: 'ForeignKeyConstraintViolation',
+        constraint: { index: 'Patient_registeredById_fkey' }
+      }
+    }
+  },
+  clientVersion: '7.10.0'
+}
+
+Node.js v24.19.0

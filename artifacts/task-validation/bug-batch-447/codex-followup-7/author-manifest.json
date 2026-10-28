@@ -1,0 +1,22 @@
+{
+  "kind": "immutable author evidence manifest",
+  "createdAt": "2026-10-21T19:08:38.368621+00:00",
+  "nonce": "dd4d6ab9-dcf8-4c3a-a6c6-038b5691bbe1",
+  "files": {
+    "artifacts/task-validation/bug-batch-447/codex-followup-7/author-source-hashes.json": {
+      "sha256": "ea126de917781c39cd9f26d26ec42888f09dc5d79357baec8e0c22f39d308123",
+      "bytes": 1770,
+      "inode": 917601
+    },
+    "artifacts/task-validation/bug-batch-447/codex-followup-7/author-results.json": {
+      "sha256": "250a68656586df6df75a7ddd042e2cbaf6924f129ea5d7230676581156e4006a",
+      "bytes": 4342,
+      "inode": 917602
+    },
+    "artifacts/task-validation/bug-batch-447/codex-followup-7/author-report.md": {
+      "sha256": "e4e72dbc539631131e32db3b2523eb8b84f6c3ab5ea9b77d38aae17b1ceb8123",
+      "bytes": 2722,
+      "inode": 917603
+    }
+  }
+}

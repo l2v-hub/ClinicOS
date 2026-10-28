@@ -1,0 +1,32 @@
+{
+  "verifiedAt": "2026-10-17T18:03:51.877551+00:00",
+  "sourceFreezeSha256": "cd3f2c3054a941fd159bd69aad3235bb925afee61c00d91ab6a703e1a85ea6e3",
+  "priorProofCount": 705,
+  "priorProofMismatches": [],
+  "sourceFileCount": 53,
+  "sourceMismatches": [],
+  "acceptedChangedSourceCount": 16,
+  "actualChangedSourcePaths": [
+    "frontend/src/components/operator/PatientList.tsx",
+    "frontend/src/components/shared/ConfirmDialog.tsx",
+    "frontend/src/components/shared/DischargeImportModal.tsx",
+    "frontend/src/components/shared/import/ImportReviewWorkspace.tsx",
+    "frontend/src/components/shared/intake/IntakeIndex.tsx",
+    "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+    "frontend/src/components/shared/intake/StepAnagrafica.tsx",
+    "frontend/src/components/shared/intake/__tests__/intakeMinimal450.test.ts",
+    "frontend/src/components/shared/intake/__tests__/intakeSexReview.test.ts",
+    "frontend/src/components/shared/intake/intakeSexReview.ts",
+    "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+    "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+    "frontend/src/lib/patientIncompleteSummary.test.ts",
+    "frontend/src/lib/patientIncompleteSummary.ts",
+    "frontend/vercel.json",
+    "scripts/e2e/issue-450-ingresso.mjs"
+  ],
+  "originalIntakePageCssUnchanged": true,
+  "historicalCheckpointSourceDiffEmpty": true,
+  "noSourceEditsByQa": true,
+  "noGitHubMutationsByQa": true,
+  "clinicalReleaseHoldPreserved": true
+}

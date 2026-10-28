@@ -1,3 +1,4 @@
+import { prescriptionSentence } from './therapyQuickSchedule';
 import { useId } from 'react';
 import type { TherapyFormValue } from './TherapyFormFields';
 import { formatFraction } from './therapyDose';
@@ -19,6 +20,7 @@ export function TherapyFormPreview({ value }: { value: TherapyFormValue }) {
   return (
     <aside className="therapy-form__preview" aria-labelledby={id}>
       <h3 id={id}>Riepilogo della terapia</h3>
+      <p data-prescription-sentence>{prescriptionSentence(value)}</p>
       <div className="therapy-form__preview-heading">
         <strong>{value.farmacoNome || 'Farmaco da selezionare'}</strong>
         <span>

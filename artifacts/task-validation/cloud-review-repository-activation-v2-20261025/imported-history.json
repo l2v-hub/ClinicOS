@@ -1,0 +1,206 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "nonce": "da7db716-2be9-4e3f-88fa-61a3534815d1",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "8d98709bb18e7e8bf44eef4e1720aa6050e86599",
+      "baseSha": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+      "evidence": "independent-qa1/report.md",
+      "reason": "Actualboundedrepositoryactivationimplementation, prior512history separateunchanged; noreset",
+      "independentQaNonce": "3112f519-172c-408c-a10c-b3b291da7a58",
+      "independentQaSealSha256": "17b792728ebbd5099f281fb20993b0d667ba327e719c409e6370a41179345f24"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "nonce": "eb35309b-2997-4e0b-afcd-b12cab590da7",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "93d86fd552d0c7fcd2ed1ff93f55939b1d34ae27",
+      "baseSha": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+      "evidence": "independent-qa2/report.md",
+      "reason": "OneactualsharedDoccorrection: PR513Claude1finding+sameportablePR511semantics; actualparentmanualround3, noreset",
+      "independentQaNonce": "3cc18b1a-a030-444c-96f3-5c77de655d84",
+      "independentQaSealSha256": "ad0113b4c24efee3b42b8b5064464f18b3c1f43878c47a1aa45720c0a5036df3"
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "e26f4cdf2060b5e3cdac64ca9d60d56cd22e8db4"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "changes-requested",
+        "subject_sha": "e26f4cdf2060b5e3cdac64ca9d60d56cd22e8db4",
+        "review_sha256": "65b881c7e61dc8f6ba8dcb247b20e6e13ca2b567b2d405504818001c102cda41"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"e26f4cdf2060b5e3cdac64ca9d60d56cd22e8db4\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"Round 1, read-only static review of PR head e26f4cdf against base e431990b. The source delta is one clause in .github/workflows/claude-cloud-review.yml and a new truth-table test, cloud-review-activation.test.mjs. I also read the task contract and the validation report. I ran nothing. This is a protected workflow change, so it still needs an independent native human approval. This review is not that approval.\\n\\nThe change. The review job's activation clause is now (vars.CLAUDE_CLOUD_REVIEW_ENABLED == '' || == 'true' || probe dispatch). An unset variable evaluates to '' in Actions, so reviews run by default. An explicit 'false' (any case) or any other value stops them. The contract records the reason: the Actions PAT gets 403 on variable reads and writes, and the owner authorized autonomous cloud reviews.\\n\\nThe expression is correct:\\n- Actions string equality ignores case, so 'TRUE' enables and 'FALSE' disables, as the test models.\\n- Values with leading spaces or typos ('tru', ' true', 'yes') fail closed.\\n- The probe-dispatch bypass is unchanged.\\n- The repository and refs/heads/main guards, the event filters, the trusted-main checkout with persist-credentials false, contents: read, the pinned actions and the lockfile install are all unchanged. The test asserts each of them.\\n\\nThe test extracts the real clause from the workflow file and evaluates it with a small strict parser. It rejects unknown identifiers or syntax, so a later edit to the gate cannot pass silently.\\n\\nPrerequisite check. #512 (context-tagged model IDs) is already on main (4f7b3ae8). Without it, enabling reviews by default would have run a failing paid probe on every trigger. A failed or invalid credential still blocks before any native claim, so it costs failed runs, not review rounds.\\n\\nResidual notes (no change requested):\\n(a) Merging this activates scheduled and label-driven cloud reviews immediately. Dispatch mode=probe on main after #512 and confirm probe-passed before or right after the merge. The validation report says activation still needs a genuine post-merge cloud review.\\n(b) The cloud worker and the local reviewer will now race for the same comment-requested subjects. The native CAS claim makes this safe: the loser spends no round.\\n\\nOne low finding: the operator documentation now contradicts the workflow.\",\n  \"findings\": [\n    {\n      \"severity\": \"low\",\n      \"file\": \"docs/cloud-claude-review.md\",\n      \"line\": 20,\n      \"problem\": \"docs/cloud-claude-review.md:20-22 still says 'Review jobs remain disabled until repository variable CLAUDE_CLOUD_REVIEW_ENABLED is true' and 'Enable review only after the actual hosted probe passes'. After this PR, an unset variable enables reviews, and only an explicit non-true value (for example 'false') stops them. An operator following the docs would believe the reviewer is off while it is actually running on schedule and on every claude-review-ready event. They would also not know that the emergency stop is now 'set the variable to false', not 'leave it unset'.\",\n      \"requested_change\": \"Update docs/cloud-claude-review.md:20-22 to match the new gate. Say that an unset variable or 'true' enables reviews, and that 'false' (or any other value) is the emergency stop. Keep the instruction to dispatch mode=probe on main and confirm probe-passed, now as the activation check that comes with the merge rather than a precondition for setting the variable.\",\n      \"test_expectation\": \"Optionally, extend cloud-review-activation.test.mjs (or a docs check) to assert the operator doc names 'false' as the emergency stop and no longer says reviews are disabled until the variable is true.\"\n    }\n  ]\n}\n"
+  },
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/claude-cloud-review.yml",
+      "blob": "78cfc11cedd79fc2558f8150399464b3d9135769",
+      "mode": "100644",
+      "baseBlob": "2cec3c15f2eb15196c2464f29d542a4db3a36fa6",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs",
+      "blob": "3a2ec499b4ea40f41044cd8769869659ff8e4344",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/actual-activation-context.json",
+      "blob": "baf9044011388b74226fbce6d79f0ccdec746d11",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/actual-variable-access.json",
+      "blob": "5b0e9acde38058b2b3658df3b23e47ee58aa08b4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/analysis.md",
+      "blob": "77edc0481ddf9b6facabf2058b70ae05c38b2d99",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/author/STOP.json",
+      "blob": "bd3b669b132055590b7ad69a51f105436a14ae64",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/author/report.md",
+      "blob": "07e5cf8174f1919988c36c9dd3daa80b2ea3e195",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/author/source-manifest.sha256",
+      "blob": "58c1207f7d11b5d44c860150d8cd7aa1a2bbc6b4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/author/source.patch",
+      "blob": "5e8f97169d17455ccb753547a20f9783eaa0ae92",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/implementation-plan.md",
+      "blob": "c4c93631095b9c2404d85052f8e48d4faf68b038",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/imported-history.json",
+      "blob": "b265ebf888b1719725579c0af437d448a845b907",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/independent-qa1/STOP.json",
+      "blob": "8dfa1797fbbec8f7a30988ae712323245c5d9fa1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/independent-qa1/report.md",
+      "blob": "e90c7b976a0c0a02e35855a990ffde70460f810a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/independent-qa1/result.json",
+      "blob": "0cc6d0ca39ffa5b26c66a95b71468cf19b02d273",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/independent-qa1/seal.json",
+      "blob": "3f99db23382192ddcf650da014d2acd0d27228fa",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/source-manifest.json",
+      "blob": "e2de049347b1254fff8c03565ef4ec91c1012520",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/task-contract.md",
+      "blob": "1e0220fc8f24e5b3570c9081970f4fd07f8f42ef",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/validation-report.md",
+      "blob": "90e707ffe0b265b17c2d11646c12d65aff33bd49",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "docs/cloud-claude-review.md",
+      "blob": "7b26e0839fabb5c812d2d8d7a969b31d622e7bb7",
+      "mode": "100644",
+      "baseBlob": "32867115a3f2e654534e29985bad7de55006846a",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "actual-Claude1-comment.json": "a54585cb836174994ed7b764a57addd09fac369f44cb1e08eeb5f0a0e6722a2d",
+    "actual-profile-receipt.json": "badb1a18ef6d7302776f5ac26db3b0d07a6a188e4e95088051286385c64e74d1",
+    "author2/STOP.json": "85ce08966ea7db4ffb29657643149878e9b1568c13139a139b7b7ffce144bab6",
+    "author2/report.md": "c41367c71d23262974f75fccd39fd324f36f8b2523b43fb42fcda27506544f37",
+    "author2/seal.json": "ac46fef5c50d0c947d227fa7e1ac51d7488befb05b41e2c1ffd9a220ee64cf57",
+    "author2/source-manifest.json": "6ae573f69ea3707dcd76263d6b29f019542bc0666f7a3139bdb0c3f3b5f97517",
+    "author2/source.patch": "b07dfe8392fe91c65406f5e070057c3eab5741c6c4c8780c0ea5e7e5744f8ad1",
+    "implementation-plan.md": "2aa8e8de2d33218f2418e3c095dd213e3eb7580281b1986377a27cccc25d1166",
+    "independent-qa1/report.md": "e16a17cc8c73d729031acf67917ae6fa52e18c98e462e99a849780703d71dcd6",
+    "independent-qa2/STOP.json": "c693ff573ddd2be06e4b727038f180987f60196574e9df0bd2e76934e294e53b",
+    "independent-qa2/report.md": "a9072ba98d151d6b09acdf9766160aa8cd2c75503d33a718cfa26ab41cdbfca7",
+    "independent-qa2/result.json": "2ecd749521ebe39e21a5a9d79aa3b29987b3869f59d943aa086802842f8cded5",
+    "independent-qa2/seal.json": "ad0113b4c24efee3b42b8b5064464f18b3c1f43878c47a1aa45720c0a5036df3",
+    "publication-topology.md": "283c8c473f6816d6266088af5562e4c4291ac1f6a9fd790aeac1f42e18462c7b",
+    "source-manifest.json": "ec6524374abcfc4db7aff1bc857498c91c1e2939edfe64566a7b237e64aeb5d3",
+    "task-contract.md": "1affe382e91eeddc27f638702dc04b2e0bd259456c1cc0799225f446b39761a7",
+    "validation-report.md": "da7bc9ea86483feb13a2827a34ef7b21e9d3f9bcd7fcee5ef5992a01c0e49d0d"
+  }
+}

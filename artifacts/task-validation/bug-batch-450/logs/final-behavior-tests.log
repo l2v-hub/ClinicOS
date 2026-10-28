@@ -1,0 +1,23 @@
+✔ effective demographics follows each explicit select/defer and preserves immutable source text (4.48949ms)
+✔ real review keeps untouched demographics current while retaining manual fields and section review (499.688902ms)
+✔ three letter identities remain distinct and compare requires an explicit source when several exist (180.267883ms)
+✔ legacy names remain labels and absent/unknown source identities never become the first original (216.601187ms)
+✔ 472 save-and-leave registers latest reviewed edits, preserves source and cleans up on unmount (262.300651ms)
+✔ 476 imported identity may continue without a birthdate; manual intake still requires it (3.367753ms)
+✔ 476 progressive import retains explicit invalid field errors and therapy review barriers (5.613257ms)
+✔ 473 fiscal-code sex inference requires valid code and preserves the numeric day distinction (0.442722ms)
+✔ 472/476 an incomplete registered identity stays actionable; missing optional phone does not make a draft (0.662442ms)
+✔ patient list exposes the canonical fiscal identity and never shows MRN (1.810521ms)
+✔ roster has five operational columns and native accessible actions (0.724979ms)
+✔ tablet and mobile use a compact two-to-one-column card grid (1.03484ms)
+✔ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance (6.301601ms)
+✔ new-patient wizard keeps required identity visible and progressively discloses optional data (1.20201ms)
+✔ patient intake uses a compact responsive layout without reducing touch targets (6.069313ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4119.391039

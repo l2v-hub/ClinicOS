@@ -1,0 +1,83 @@
+{
+  "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "capBytes": 26214400,
+  "records": [
+    {
+      "issue": 447,
+      "attempt": 6,
+      "rawBytes": 10102319,
+      "sanitizedBytes": 10091085,
+      "rawSha256": "7cbf47b9326a78034ce69e80c330aaa34ca8025231909ca1f452dcc3f393b790",
+      "sanitizedSha256": "21c2cdebda6bc9ffa8ffc0c6f8268eddf2088fb5b33b6f81bd9ea5308a353d41",
+      "underCurrentMain25MiB": true,
+      "zipCrc": "PASS",
+      "residualSignedSessionTokens": 0
+    },
+    {
+      "issue": 451,
+      "attempt": 6,
+      "rawBytes": 8756496,
+      "sanitizedBytes": 8752396,
+      "rawSha256": "21b49e7bdbb0c181c54555ec1f31769986500286386348f05b776b98f75431c8",
+      "sanitizedSha256": "fbd90e9cd0b1b509ae393f866bf4c13830c956a577a9441c985436d5db826786",
+      "underCurrentMain25MiB": true,
+      "zipCrc": "PASS",
+      "residualSignedSessionTokens": 0
+    },
+    {
+      "issue": 452,
+      "attempt": 6,
+      "rawBytes": 11601541,
+      "sanitizedBytes": 11587795,
+      "rawSha256": "6d96454c76e55f532ccbe98ab88e966cc0ca2d151c47a7aabfce6ce448830d3c",
+      "sanitizedSha256": "54b65f585885f89230597afe6dc4cdf3c587067577ca50de6b536ec52226f591",
+      "underCurrentMain25MiB": true,
+      "zipCrc": "PASS",
+      "residualSignedSessionTokens": 0
+    },
+    {
+      "issue": 453,
+      "attempt": 6,
+      "rawBytes": 24786653,
+      "sanitizedBytes": 24762937,
+      "rawSha256": "0dcd30070ba6bdffb1ae2302e36be139f4b75551e91b1b6390a3678f28639cc9",
+      "sanitizedSha256": "db406fc5e61a2889b940d2e1ace5aa2d300b4e470a4a1cc94cb89cbc56a3b58a",
+      "underCurrentMain25MiB": true,
+      "zipCrc": "PASS",
+      "residualSignedSessionTokens": 0
+    },
+    {
+      "issue": 454,
+      "attempt": 6,
+      "rawBytes": 3541079,
+      "sanitizedBytes": 3536514,
+      "rawSha256": "4aa5a652e04f9a8f89ca4f53cfa271498b57168004635abd91c256753e23a024",
+      "sanitizedSha256": "bb04c5e7c692edb07badd29a1349fe3b27b31c17d666c701bf17aca51e8bf9c8",
+      "underCurrentMain25MiB": true,
+      "zipCrc": "PASS",
+      "residualSignedSessionTokens": 0
+    },
+    {
+      "issue": 456,
+      "attempt": 6,
+      "rawBytes": 4538614,
+      "sanitizedBytes": 4534269,
+      "rawSha256": "72330ca80edcc44cd3786eac9cc8e9690b337a77295dede811835083719d5c72",
+      "sanitizedSha256": "0af9be0b7e9f12c32a4bfde924e67ff3245c27bf5da1ce99609049f54d2d1011",
+      "underCurrentMain25MiB": true,
+      "zipCrc": "PASS",
+      "residualSignedSessionTokens": 0
+    },
+    {
+      "issue": 457,
+      "attempt": 6,
+      "rawBytes": 12280863,
+      "sanitizedBytes": 12265746,
+      "rawSha256": "e7a4f31609d7ff7e6a31b534624f5aa95d4539ec511b3cabffacae4b1b5cf02c",
+      "sanitizedSha256": "265b6dba5f72b542411ad06373e0288a3a0b3869b16c0327e58c29274e7cc5dc",
+      "underCurrentMain25MiB": true,
+      "zipCrc": "PASS",
+      "residualSignedSessionTokens": 0
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "passed",
+      "nonce": "9bd58f9a-f8fb-4ffa-8449-8ffaaa9e1761",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6-luna",
+      "subjectSha": "b31c8755a06ff016ad26d40b44baf5d61c029045",
+      "baseSha": "e431990b8e28830972f7f5ab36379e3b1023b9cc",
+      "evidence": "independent-qa1/report.md",
+      "reason": "Actual reserved bounded documentationimplementation; newindependentQAverifiedexactlytwohostpolicyparagraphs",
+      "independentQaNonce": "a27701c8-ec51-432c-9af5-70d9f38c02f8",
+      "independentQaSealSha256": "644ac5f6ab8ba601f6c4e8be6918fa5f8ce81c7e994e0f292de8ada17da6e5eb"
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [
+    {
+      "path": ".claude/skills/clinicos/references/bug-delivery.md",
+      "blob": "e9d0d5c48934377249e78fcbe372c0b4f16680aa",
+      "mode": "100644",
+      "baseBlob": "7a0b0e23fc100031a7d9909fefc2e478fce9cf52",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "0150a77fdece62d7403b03513ba89afbd1ea802b8094ba0c568b5f2c20c4b5b2",
+    "author/STOP.json": "8e350bfbd69c27de31df5ce97c37331f29f3ec73584344666a90e7c7900fc93d",
+    "author/report.md": "e84e193cc368ce50e28515282730557550ba31290bcdeafafb6df23827af5c43",
+    "author/source-freeze.json": "8f8787e990969cf2bff6a30af4b08236bd69b8dad0556b0592c26ef2eeded8e6",
+    "implementation-plan.md": "50554ce03a7a74f7284452755055afda194b474763bd2e1174686f3217f00484",
+    "independent-qa1/STOP.json": "e3a43730c41efbbabdf93995fca9a9e5f6fa42790b34aac7d8eaedb5e20814ad",
+    "independent-qa1/report.md": "81003cffed6a4e46f16b68a68e9d1454cd8d87ead242fd759747dfb8c88ca776",
+    "independent-qa1/result.json": "e19e99c0d4285ed1950d2ad7546d502019f153cbdfa03f8bf77ad1aeb3c33de6",
+    "independent-qa1/seal.json": "644ac5f6ab8ba601f6c4e8be6918fa5f8ce81c7e994e0f292de8ada17da6e5eb",
+    "source-manifest.json": "c5c73a6f9567f450ae29943813d834251145ecd6eb9c0946a217ff35970ee2bc",
+    "task-contract.md": "93d8a0f886cf83f0eac718c9f91d70b07f3bb5a2e73966029bcadfafdb77a30e",
+    "validation-report.md": "0dde740ba3237d46ccda4a5b12f6ae7395c5c5f440da21825f5f97a2a5dd5936"
+  }
+}

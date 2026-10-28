@@ -1,11 +1,13 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
+import { recordedOneTimeOutcomeSql } from './therapy-query.js';
 
 export interface TherapyAdministrationCandidate {
   therapyId: string;
   patientId: string;
   drugName: string;
   fasce: string[];
+  singleDayDose?: boolean;
 }
 
 export interface TherapyAdministrationPageRow {
@@ -18,6 +20,7 @@ export interface TherapyAdministrationPageRow {
   ora?: string;
   stato: string;
   confirmedAt: Date | null;
+  updatedAt?: Date;
   operatoreNome: string | null;
   motivo: string | null;
 }
@@ -42,7 +45,12 @@ export async function findTherapyPageAdministrations(
   const dueCandidates = candidates.filter((candidate) => candidate.fasce.length > 0);
   if (dueCandidates.length === 0) return [];
   const modernCandidates = dueCandidates.flatMap((candidate) =>
-    candidate.fasce.map((fascia) => ({ therapyId: candidate.therapyId, fascia })),
+    (candidate.singleDayDose ? candidate.fasce.slice(0, 1) : candidate.fasce).map((fascia) => ({
+      therapyId: candidate.therapyId,
+      patientId: candidate.patientId,
+      fascia,
+      singleDayDose: candidate.singleDayDose === true,
+    })),
   );
   const legacyCandidates = [
     ...new Map(
@@ -58,12 +66,14 @@ export async function findTherapyPageAdministrations(
     ).values(),
   ];
 
-  const [modernRows, legacyRows] = await Promise.all([
+  const singleDayCandidates = dueCandidates.filter((candidate) => candidate.singleDayDose);
+  const [modernRows, legacyRows, dayOutcomes] = await Promise.all([
     db.$queryRaw<TherapyAdministrationPageRow[]>(Prisma.sql`
-      WITH candidate("therapyId", fascia) AS (
+      WITH candidate("therapyId", "patientId", fascia, "singleDayDose") AS (
         VALUES ${Prisma.join(
           modernCandidates.map(
-            (candidate) => Prisma.sql`(${candidate.therapyId}, ${candidate.fascia})`,
+            (candidate) =>
+              Prisma.sql`(${candidate.therapyId}, ${candidate.patientId}, ${candidate.fascia}, ${candidate.singleDayDose}::boolean)`,
           ),
         )}
       )
@@ -77,12 +87,14 @@ export async function findTherapyPageAdministrations(
         ma.ora,
         ma.stato,
         ma."confirmedAt",
+        ma."updatedAt",
         ma."operatoreNome",
         ma.motivo
       FROM candidate
       JOIN "MedicationAdministration" ma
         ON ma."therapyId" = candidate."therapyId"
-        AND ma.fascia = candidate.fascia
+        AND ma."patientId" = candidate."patientId"
+        AND (ma.fascia = candidate.fascia OR candidate."singleDayDose")
         AND ma.date = ${date}
       ORDER BY ma.id ASC
     `),
@@ -107,6 +119,7 @@ export async function findTherapyPageAdministrations(
             ma.ora,
             ma.stato,
             ma."confirmedAt",
+            ma."updatedAt",
             ma."operatoreNome",
             ma.motivo
           FROM candidate
@@ -118,6 +131,21 @@ export async function findTherapyPageAdministrations(
             AND ma."therapyId" IS NULL
           ORDER BY ma."patientId", ma."farmacoNome", ma.fascia, ma.ora, ma.id DESC
         `),
+    // Preserve the recurring legacy latest-record rule above. Single-day outcomes resolve across
+    // all bands/duplicates with the same bounded given-wins query as exact totals and assistant.
+    singleDayCandidates.length === 0
+      ? Promise.resolve([] as TherapyAdministrationPageRow[])
+      : db.$queryRaw<TherapyAdministrationPageRow[]>(Prisma.sql`
+        WITH candidate("therapyId", "patientId", "drugName") AS (
+          VALUES ${Prisma.join(singleDayCandidates.map((candidate) => Prisma.sql`(${candidate.therapyId}, ${candidate.patientId}, ${candidate.drugName})`))}
+        )
+        SELECT ma.* FROM candidate
+        JOIN LATERAL (${recordedOneTimeOutcomeSql(date, {
+          patientId: Prisma.sql`candidate."patientId"`,
+          id: Prisma.sql`candidate."therapyId"`,
+          drugName: Prisma.sql`candidate."drugName"`,
+        })}) ma ON TRUE
+      `),
   ]);
-  return [...modernRows, ...legacyRows];
+  return [...modernRows, ...dayOutcomes, ...legacyRows];
 }

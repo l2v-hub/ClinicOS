@@ -1,0 +1,255 @@
+{
+  "status": "FINAL_CANDIDATE_INVENTORY_EXCLUDES_SELF_SCAN_REPORT_AND_PUBLIC_SEAL",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1497,
+      "sha256": "e8160fb2e03442b4b4041fec96e4fc9abff3cb1a8133b3bd37fa5558cf5037c0"
+    },
+    {
+      "path": "STOP.txt",
+      "bytes": 383,
+      "sha256": "8c09299d91accf63942da450373ddcde845edba691a109c1d90f3d070a93742f"
+    },
+    {
+      "path": "analysis.md",
+      "bytes": 3470,
+      "sha256": "6296a2f48c4ccdbe7b319fc07aab1b61d9933e569fe5585205eba40589497a45"
+    },
+    {
+      "path": "browser/app/actual-dose-durable-reload.png",
+      "bytes": 85990,
+      "sha256": "d51ecd181813dd70de63a51371e90a2c55c6287df907f0c04ade80d14456c8c8"
+    },
+    {
+      "path": "browser/app/actual-scoped503-no-actions.png",
+      "bytes": 70799,
+      "sha256": "911d93687adb0b35e3600530669e8f498fe2de41f9f4ffd9e4648ba7d6edc2a3"
+    },
+    {
+      "path": "browser/app/actual-supervisor-confirmation.png",
+      "bytes": 127783,
+      "sha256": "eaa949995c81230ae1f60bfe8da179ddd4e289d1ad37925550c0c006a81f3e49"
+    },
+    {
+      "path": "browser/app/allergy-normal-1180-focus.png",
+      "bytes": 74073,
+      "sha256": "ef8605d3eb1d4a4a1806509deba0dd9ca8c3421a8c87f0a7fba5286af7793234"
+    },
+    {
+      "path": "browser/app/allergy-normal-1180-hover.png",
+      "bytes": 74073,
+      "sha256": "ef8605d3eb1d4a4a1806509deba0dd9ca8c3421a8c87f0a7fba5286af7793234"
+    },
+    {
+      "path": "browser/app/allergy-normal-1180-normal.png",
+      "bytes": 74073,
+      "sha256": "ef8605d3eb1d4a4a1806509deba0dd9ca8c3421a8c87f0a7fba5286af7793234"
+    },
+    {
+      "path": "browser/app/allergy-normal-390-focus.png",
+      "bytes": 54657,
+      "sha256": "9559142643c7ce0e5c21abf9c508ff5581900ddb67fc156e2a6dffdd23c41edd"
+    },
+    {
+      "path": "browser/app/allergy-normal-390-hover.png",
+      "bytes": 54657,
+      "sha256": "9559142643c7ce0e5c21abf9c508ff5581900ddb67fc156e2a6dffdd23c41edd"
+    },
+    {
+      "path": "browser/app/allergy-normal-390-normal.png",
+      "bytes": 54657,
+      "sha256": "9559142643c7ce0e5c21abf9c508ff5581900ddb67fc156e2a6dffdd23c41edd"
+    },
+    {
+      "path": "browser/app/allergy-severe-1180-focus.png",
+      "bytes": 85166,
+      "sha256": "bee1ab5ad7b27822267de89fdca5d7959f5df89dc05919f4eea9dcf6ec3de2ba"
+    },
+    {
+      "path": "browser/app/allergy-severe-1180-hover.png",
+      "bytes": 85166,
+      "sha256": "bee1ab5ad7b27822267de89fdca5d7959f5df89dc05919f4eea9dcf6ec3de2ba"
+    },
+    {
+      "path": "browser/app/allergy-severe-1180-normal.png",
+      "bytes": 85166,
+      "sha256": "bee1ab5ad7b27822267de89fdca5d7959f5df89dc05919f4eea9dcf6ec3de2ba"
+    },
+    {
+      "path": "browser/app/allergy-severe-390-focus.png",
+      "bytes": 63873,
+      "sha256": "d085700ac1275d66a88265cce06e84de7d9202f63625c10a61cde011f2ed9224"
+    },
+    {
+      "path": "browser/app/allergy-severe-390-hover.png",
+      "bytes": 63873,
+      "sha256": "d085700ac1275d66a88265cce06e84de7d9202f63625c10a61cde011f2ed9224"
+    },
+    {
+      "path": "browser/app/allergy-severe-390-normal.png",
+      "bytes": 63873,
+      "sha256": "d085700ac1275d66a88265cce06e84de7d9202f63625c10a61cde011f2ed9224"
+    },
+    {
+      "path": "browser/app/ffprobe.json",
+      "bytes": 58,
+      "sha256": "c049d15874d9a45fb126a7a316b9698129864f356057615e981aeb6311646ed5"
+    },
+    {
+      "path": "browser/app/final.png",
+      "bytes": 70799,
+      "sha256": "911d93687adb0b35e3600530669e8f498fe2de41f9f4ffd9e4648ba7d6edc2a3"
+    },
+    {
+      "path": "browser/app/results.json",
+      "bytes": 23406,
+      "sha256": "488c57ca9b2517b45a4af617f784a11968e9c25665f4392b05379537adcd0d8a"
+    },
+    {
+      "path": "browser/app/trace-privacy.json",
+      "bytes": 1081,
+      "sha256": "5e7890335cd3cbbd7db9aacd148f01a94b7a3c836d56d990d057f3d8f123854a"
+    },
+    {
+      "path": "browser/app/trace.zip",
+      "bytes": 5663915,
+      "sha256": "844c0677afec712256c4c87155927a1311b071b6ea8ef2f9171cb4b51a9f365d"
+    },
+    {
+      "path": "browser/app/video.webm",
+      "bytes": 846447,
+      "sha256": "4b21e04c1334186d3f4902c1cdd3f3716a241eafe9a8cba961779347c0ea3743"
+    },
+    {
+      "path": "browser/component/ffprobe.json",
+      "bytes": 57,
+      "sha256": "3a9f9a9313b6f48e351cf6f7ff9c5863624601603c539254177d42e333f3ec8d"
+    },
+    {
+      "path": "browser/component/filtered-allowed.png",
+      "bytes": 113898,
+      "sha256": "e0f9c512c1f515fd507fbf9840a57c4ab838d51e1caeb73f3673d231c02dd616"
+    },
+    {
+      "path": "browser/component/filtered-ps-blocked.png",
+      "bytes": 117197,
+      "sha256": "6ecaa4991ed2b743b9a114cf82408983b9a6343a3667e2b082d80889a34d43b9"
+    },
+    {
+      "path": "browser/component/final.png",
+      "bytes": 117197,
+      "sha256": "6ecaa4991ed2b743b9a114cf82408983b9a6343a3667e2b082d80889a34d43b9"
+    },
+    {
+      "path": "browser/component/results.json",
+      "bytes": 327,
+      "sha256": "f1d65268f3d624170efd5bc2a9a2a085495a9c3f5f593b172435aaf6b98d18ff"
+    },
+    {
+      "path": "browser/component/trace-privacy.json",
+      "bytes": 407,
+      "sha256": "c64539982d0dd3c96f141baed9fcb901df502edba0a1692a1dca5a491e3bb168"
+    },
+    {
+      "path": "browser/component/trace.zip",
+      "bytes": 585837,
+      "sha256": "fef450494244f7122e26c48bcc14612a143480b5ded2619d5cef1c022ce1a7b1"
+    },
+    {
+      "path": "browser/component/video.webm",
+      "bytes": 136399,
+      "sha256": "bc8662702e15dfe680a11c7d0aff273de0340f9687359b9dc2e51eac0ae1401d"
+    },
+    {
+      "path": "browser-input-manifest.json",
+      "bytes": 7051,
+      "sha256": "648e29d2ae13e5ee6fd23664182c1eff347aa62f505e7d8c7f9f936dcded4873"
+    },
+    {
+      "path": "browser-validation.json",
+      "bytes": 1094,
+      "sha256": "147821f01643507108039c9a766e3d84c680f424bd2d2498fc6792387b3642f0"
+    },
+    {
+      "path": "implementation-plan.md",
+      "bytes": 1029,
+      "sha256": "574e948586bf8e5bec530b05f975a3cdc0685a3588c3037535ebeedba0fc4421"
+    },
+    {
+      "path": "input-provenance.json",
+      "bytes": 1756,
+      "sha256": "3422f91881503dc1a005ea40ccf49536f3ff43045dba3c8ab3bb8b87c838a195"
+    },
+    {
+      "path": "proofs/actual-assistant-supplement-stdout.log",
+      "bytes": 161,
+      "sha256": "28890c11b5cba7dc32d3265bd51b26ae8f2a2455835b3a1b0beb54c0d916589d"
+    },
+    {
+      "path": "proofs/actual-concurrency-correlation.json",
+      "bytes": 802,
+      "sha256": "d22ce4ad6e53332c9a5bc2a41b07bebe2d949848a2cdef973b4f67eb757a3259"
+    },
+    {
+      "path": "proofs/actual-concurrency-report.md",
+      "bytes": 2414,
+      "sha256": "313325559382c1117b5cd5facde9009d9ea686ca1544b6aa975e21e11858e2cc"
+    },
+    {
+      "path": "proofs/assistant-40001-supplement-source.mjs",
+      "bytes": 7072,
+      "sha256": "d11fce7092ff795fa2246d11377492017b18182218b73a0837d58badbc473038"
+    },
+    {
+      "path": "proofs/ui15-contrast-negative.json",
+      "bytes": 2200,
+      "sha256": "5dbd6cb0292c5677a3cab6a0157bcbdf2828c1cc167b4565f12b6b8198dad468"
+    },
+    {
+      "path": "proofs/ui16-author-report.md",
+      "bytes": 1767,
+      "sha256": "7b2b8000e6a51e4873fc515ecb0ee80e5c5671b96af18a5ab7a1c83070755a7c"
+    },
+    {
+      "path": "proofs/ui16-contrast-correction.diff",
+      "bytes": 6418,
+      "sha256": "2bcdfbf1b04cd02be680b345a496eacfedc75bbbc54b1510d7e4100a97f79847"
+    },
+    {
+      "path": "proofs/ui16-contrast-metrics.json",
+      "bytes": 305,
+      "sha256": "0ef6d67f2f8d9fc02252b479d5b49da2d3be11c6c00909a7a98da57f322b0fe7"
+    },
+    {
+      "path": "proofs/ui16-focused-tests.log",
+      "bytes": 2961,
+      "sha256": "46dbc29da3130c47d4ee8710e8638eeb8c0ae9d0fee285865d2b9448406cc5ed"
+    },
+    {
+      "path": "proofs/ui16-independent-contrast.json",
+      "bytes": 1514,
+      "sha256": "556c796119bc0b3e40e6944c6cd5b5de288c12ab2305bd64b3fa226a4e1c6535"
+    },
+    {
+      "path": "proofs/ui16-independent-qa.md",
+      "bytes": 3015,
+      "sha256": "fafb2098acea89fd68d96edafab0c1676d16873152e60298223370d5befdd390"
+    },
+    {
+      "path": "source-provenance.json",
+      "bytes": 3504,
+      "sha256": "b343b53cb5a2d2ed4ca2da517e400fa0f09ebd1a55efa715835911c1601a27d8"
+    },
+    {
+      "path": "task-contract.md",
+      "bytes": 4033,
+      "sha256": "5842e17fcef23128a1a284445bd953f49f7f8812281e88c436f3b7aca9886ef1"
+    },
+    {
+      "path": "validation-report.md",
+      "bytes": 2316,
+      "sha256": "b2d174f34315b750aec16a49b773ace9e3277f6c3886c4a1bb4a7c19906d57e8"
+    }
+  ]
+}

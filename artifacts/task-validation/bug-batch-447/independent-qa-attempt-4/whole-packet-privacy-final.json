@@ -1,0 +1,57 @@
+{
+  "filesInspected": 2401,
+  "uniqueContentsScannedIncludingArchiveMembers": 17470,
+  "zipMemberVisitsIncludingHashIdenticalReferences": 57256,
+  "uniqueZipMembersDecodedAndScanned": 26948,
+  "credentialFindings": [],
+  "crcValid": true,
+  "noSymlinks": true,
+  "allFilesAtMost25MiB": true,
+  "largestFiles": [
+    {
+      "bytes": 26198501,
+      "path": "independent-qa-attempt-3/browser/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25789009,
+      "path": "independent-qa-attempt-2/preserved-pre-qa/files/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25789009,
+      "path": "independent-qa-attempt-2/browser-environment-attempt-1/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25661852,
+      "path": "history/cycle3-before-intake-read-red/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25433148,
+      "path": "history/cycle3-shared-focused-fixture-failure/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25290998,
+      "path": "independent-qa-attempt-2/preserved-pre-qa/files/history/cycle2-combined-browser-2-db-field-and-close-selector/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25290998,
+      "path": "history/cycle2-combined-browser-2-db-field-and-close-selector/issue-453-trace.zip"
+    },
+    {
+      "bytes": 24764294,
+      "path": "independent-qa-attempt-2/browser/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 24764294,
+      "path": "history/cycle2-canonical-before-cycle3/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 24680073,
+      "path": "independent-qa-attempt-4/browser/evidence/issue-453-trace.zip"
+    }
+  ],
+  "archiveObjectsClassifiedByMagicBytes": true,
+  "nestedArchivesInspected": true,
+  "cryptographicContentCache": "Every file path and SHA independently read; SHA-identical contents share CRC/member credential inspection. Exact unmaterialized JavaScript ${identifier} DSN templates are not credentials.",
+  "phiAndAuthorizationProvenance": "Only randomly marked disposable synthetic local database, fixed synthetic fixtures and normal simulator accounts; no developer/production/patient-provider data read. Live issue bodies remain private; publishable read receipts contain hashes only.",
+  "newOversizeZipRecompressionRequired": false
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "status": "INDEPENDENT_UI_QA2_PASS",
+  "at": "2026-10-21T22:11:23.447853+00:00",
+  "artifacts": {
+    "STOP.md": {
+      "sha256": "b6035174cb9827224f38b421d3db359057daf969a009e11b0073fbab67c51c55",
+      "bytes": 684
+    },
+    "adversarial-latest.json": {
+      "sha256": "60647308cceabada795c44f708c3365b9d9a444e11d4c61f982d95528cb621d0",
+      "bytes": 1434
+    },
+    "adversarial-latest.test.ts": {
+      "sha256": "6224d5a8b933506ad067b5f127ff9a5215c2974dfc1bf7c9292198523d36723d",
+      "bytes": 7015
+    },
+    "after.json": {
+      "sha256": "1dfe30c2100ac915fe2e77f5176689d3a2b46ad2ca345562cab2660cc54a6eb8",
+      "bytes": 498627
+    },
+    "before.json": {
+      "sha256": "cac5f171d321ad00636342859a662391a13e0450cb174b60d05625db45310b0b",
+      "bytes": 498627
+    },
+    "followup-source.diff": {
+      "sha256": "03d092ae5c5e2b23d51680cffdc4e06fae362124fbf405309859612b3f3ad5ca",
+      "bytes": 19160
+    },
+    "freeze-comparison.json": {
+      "sha256": "5ed6b2a9c8cd0fe802e312abe74f2aa4af6733b437a44da06b66190c1daabe99",
+      "bytes": 156
+    },
+    "freeze.py": {
+      "sha256": "2f0ea3b12276513895f70c4b1347dcbc055a50711aa9f4803de5bdc567119e0c",
+      "bytes": 3263
+    },
+    "report.md": {
+      "sha256": "16100b11ccae6fc251f22644fb513d6d1f02f4a28569ec46c035c73ec64de5fb",
+      "bytes": 8297
+    },
+    "reservation.json": {
+      "sha256": "890576d7378f107cd5f705b73eefbba4aefe1e103add809165d5b8db0380e0ab",
+      "bytes": 784
+    },
+    "runtime/frontend.tsbuildinfo": {
+      "sha256": "b789dd9d2feae7aea9d27bd627dd489c0e30209a0724af8f73c729545e9fcd75",
+      "bytes": 171224
+    },
+    "source-review.json": {
+      "sha256": "51a6dfd32ea1267e00131251d81ebe3abc0c8eaebb9462a434a95a7ae3cb8246",
+      "bytes": 744
+    },
+    "summary.json": {
+      "sha256": "dbcb96cbf56228e6493edd4a5cce64d40a59eb0015dec337e9f832e46d22dc77",
+      "bytes": 2162
+    },
+    "targeted.json": {
+      "sha256": "2ca7923dc83668b23baf98c8a9c3cc86aa624c7c91166b691a214e33291bee3e",
+      "bytes": 8399
+    },
+    "task-contract.md": {
+      "sha256": "40dfc0ab6e407457b678c766cc0a0f9b0aabac738b97e58b7fd0f43e2fa0568f",
+      "bytes": 1074
+    },
+    "typecheck.json": {
+      "sha256": "dc156aa3fb64fb3ffc8e11db1a9462b08483a3190a41b2719457990e095f6ea1",
+      "bytes": 527
+    },
+    "verification-env.mjs": {
+      "sha256": "b33c81f9284cd766fbb5dfa952e9202f8cfcaea80e0b6f4985aaff439ddc60f1",
+      "bytes": 145
+    },
+    "verify.mjs": {
+      "sha256": "eab2a90c7c07306b1b98775935af493ff365a20b14a552aaa5d2902bf20901b2",
+      "bytes": 947
+    }
+  },
+  "followupAuthorSealSha256": "746bc25005c14ed6c45f43ca41548d21d6af06115d50b6b0be090faf3366d6f4",
+  "sourceManifestSha256": "fb009000d8113138e80014b834a53a31ab0c20234325f30ed6d0e7bdd26e7969",
+  "sourceFiles": {
+    "frontend/src/components/operator/TherapyGiroRows.tsx": "9b42aa04f39f22a88a4088ce9631c57c33c1aad0aba0431fd8bd6c2f659f636a",
+    "frontend/src/components/operator/__tests__/claude1UiStaleConfirmation.test.ts": "335709183179a819590973118d4a4889d9a63f34d4f458cf161d2b253392cde1"
+  },
+  "contractSha256": "40dfc0ab6e407457b678c766cc0a0f9b0aabac738b97e58b7fd0f43e2fa0568f",
+  "originalQa1FailSealSha256": "e5b546a8cd5642d92ecc53e07746b9f3284024289e2cea53880df4781aef139f"
+}

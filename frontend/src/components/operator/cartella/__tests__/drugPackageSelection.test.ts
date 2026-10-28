@@ -148,6 +148,50 @@ test('changing package clears old commercial strength without inferring dose or 
   assert.match(markup, /20:00/);
 });
 
+test('AIFA package selection never infers route and preserves a route chosen by the operator', () => {
+  const blank = emptyTherapyForm();
+  const beforeRoute = applyTherapyFormChange(
+    blank,
+    selectDrugPackage({ ...selected, forma: 'Fiala' }, blank.pharmaceuticalForm),
+  );
+  assert.equal(beforeRoute.viaSomministrazione, '');
+  assert.ok(!('viaSomministrazione' in selectDrugPackage(selected, 'compressa')));
+
+  const chosen = applyTherapyFormChange(blank, { viaSomministrazione: 'IM' });
+  const afterRoute = applyTherapyFormChange(
+    chosen,
+    selectDrugPackage(
+      { ...selected, aic: '222222222', forma: 'Sciroppo' },
+      chosen.pharmaceuticalForm,
+    ),
+  );
+  assert.equal(afterRoute.viaSomministrazione, 'IM');
+  assert.equal(afterRoute.pharmaceuticalForm, 'sciroppo');
+  assert.equal(
+    formToPayload(afterRoute, 'synthetic-patient', 'Operatore sintetico').viaSomministrazione,
+    'IM',
+  );
+});
+
+test('explicit discharge routes survive mapping; absent and unknown routes never default to oral', () => {
+  const explicit = dischargeRowToTherapyForm({ ...baseImport, viaSomministrazione: 'IM' });
+  assert.equal(explicit.viaSomministrazione, 'IM');
+  assert.equal(therapyFormToInput(explicit).viaSomministrazione, 'IM');
+
+  const absent = dischargeRowToTherapyForm({ ...baseImport, farmacoNome: 'Farmaco sintetico' });
+  assert.equal(absent.viaSomministrazione, '');
+  assert.ok(
+    therapyFormToInput(absent).viaSomministrazione === '',
+    'an absent source route remains blank for operator review',
+  );
+  const unknown = dischargeRowToTherapyForm({ ...baseImport, viaSomministrazione: 'ZZ' });
+  assert.equal(unknown.viaSomministrazione, 'ZZ');
+  assert.ok(
+    therapyFormToInput(unknown).viaSomministrazione === 'ZZ',
+    'an unknown source route is preserved for review, never normalized to orale',
+  );
+});
+
 test('manual and imported intake JSON preserve explicit package reference through review and payload', () => {
   const form = { ...therapyToForm(savedTherapy()), drugPackageRef: '987654321' };
   const row = therapyFormToDischargeRow(form, baseImport);

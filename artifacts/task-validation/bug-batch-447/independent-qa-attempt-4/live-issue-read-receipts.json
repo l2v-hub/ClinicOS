@@ -1,0 +1,237 @@
+{
+  "readOnly": true,
+  "issues": [
+    {
+      "issue": 447,
+      "title": "[UX semplificazione][P2] Cartella: gli stessi avvisi ripetuti su ogni scheda spingono il contenuto sotto la piega",
+      "state": "OPEN",
+      "bodySha256": "e43f43dee0f7226795749b365c9f875376a3e9a268d39b0175aa6268db132542",
+      "commentsRead": 2,
+      "comments": [
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2rkeg",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:45:04Z",
+          "bodySha256": "583d0c39c7482e7266c6724fb940db7c9cdedede5d40e342c51a8e3b2337d2db"
+        },
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2tv0A",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:49:20Z",
+          "bodySha256": "c76386ee1a4e8d3599228b4559fde45d928296aa2e737514e4fd18a49938c839"
+        }
+      ],
+      "labels": [
+        "ux-ui",
+        "frontend",
+        "ux",
+        "clinical-record",
+        "priority-p2",
+        "agent-working",
+        "In progress"
+      ]
+    },
+    {
+      "issue": 451,
+      "title": "[UX semplificazione][P2] Parametri: 9 \u00abNessuna rilevazione precedente\u00bb per paziente e il giro non avanza da solo",
+      "state": "OPEN",
+      "bodySha256": "f0239722de5d82f04fe82a6ba512a75ebcfa69bf662ed6f57da96559768bce6f",
+      "commentsRead": 2,
+      "comments": [
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2rmig",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:45:08Z",
+          "bodySha256": "583d0c39c7482e7266c6724fb940db7c9cdedede5d40e342c51a8e3b2337d2db"
+        },
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2twTQ",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:49:21Z",
+          "bodySha256": "c76386ee1a4e8d3599228b4559fde45d928296aa2e737514e4fd18a49938c839"
+        }
+      ],
+      "labels": [
+        "ux-ui",
+        "frontend",
+        "ux",
+        "priority-p2",
+        "agent-working",
+        "codex-triage",
+        "codex-run",
+        "In progress"
+      ]
+    },
+    {
+      "issue": 452,
+      "title": "[UX semplificazione][P2] Dati mancanti ripetuti in ogni riga e il letto assente: Pazienti, Giro, Consegne, Clinica, Agenda",
+      "state": "OPEN",
+      "bodySha256": "4066936f4abd35fd489b91787dd6d407e48f6bd9523aa4a0927e642a4d7cba14",
+      "commentsRead": 2,
+      "comments": [
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2rokg",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:45:12Z",
+          "bodySha256": "583d0c39c7482e7266c6724fb940db7c9cdedede5d40e342c51a8e3b2337d2db"
+        },
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2tw3w",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:49:22Z",
+          "bodySha256": "c76386ee1a4e8d3599228b4559fde45d928296aa2e737514e4fd18a49938c839"
+        }
+      ],
+      "labels": [
+        "ux-ui",
+        "frontend",
+        "ux",
+        "priority-p2",
+        "agent-working",
+        "codex-triage",
+        "codex-run",
+        "In progress"
+      ]
+    },
+    {
+      "issue": 453,
+      "title": "[UX semplificazione][P2] Nuova terapia: schemi d'orario rapidi, meno campi e controllo allergie da decidere",
+      "state": "OPEN",
+      "bodySha256": "d7a053574290bd3288060f3937bdd5a3717422bb332ec3cadd7119be9a5afd1a",
+      "commentsRead": 3,
+      "comments": [
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2rqsQ",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:45:16Z",
+          "bodySha256": "583d0c39c7482e7266c6724fb940db7c9cdedede5d40e342c51a8e3b2337d2db"
+        },
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2txNA",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:49:22Z",
+          "bodySha256": "c76386ee1a4e8d3599228b4559fde45d928296aa2e737514e4fd18a49938c839"
+        },
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc3Rj-A",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T08:53:05Z",
+          "bodySha256": "5c0d2ab4d60abea4d73a68964e3d72461d87c62fd3254ef5c28aab69db337720"
+        }
+      ],
+      "labels": [
+        "ux-ui",
+        "frontend",
+        "ux",
+        "therapy",
+        "priority-p2",
+        "agent-working",
+        "codex-triage",
+        "codex-run",
+        "In progress"
+      ]
+    },
+    {
+      "issue": 454,
+      "title": "[UX semplificazione][P2] Terapia si apre su un calendario settimanale vuoto: il Giro della fascia corrente va in primo piano",
+      "state": "OPEN",
+      "bodySha256": "2db74b8aee55b388f239af75ab09b49a19042088200f98bbcd3c57da28f3d732",
+      "commentsRead": 2,
+      "comments": [
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2rsxA",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:45:20Z",
+          "bodySha256": "583d0c39c7482e7266c6724fb940db7c9cdedede5d40e342c51a8e3b2337d2db"
+        },
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2txnA",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:49:23Z",
+          "bodySha256": "c76386ee1a4e8d3599228b4559fde45d928296aa2e737514e4fd18a49938c839"
+        }
+      ],
+      "labels": [
+        "ux-ui",
+        "frontend",
+        "ux",
+        "therapy",
+        "priority-p2",
+        "agent-working",
+        "codex-triage",
+        "codex-run",
+        "In progress"
+      ]
+    },
+    {
+      "issue": 456,
+      "title": "[UX semplificazione][P1] Dashboard supervisore: 13 numeri, \u00abnessuna urgenza\u00bb con un'urgenza aperta, dosi di domani prima di quelle di oggi",
+      "state": "OPEN",
+      "bodySha256": "8b8c3e549f0ccd877310072aca78f900caed00808ed81b4d788ef961d353c6d1",
+      "commentsRead": 2,
+      "comments": [
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2rvQA",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:45:24Z",
+          "bodySha256": "583d0c39c7482e7266c6724fb940db7c9cdedede5d40e342c51a8e3b2337d2db"
+        },
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2tyFA",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:49:24Z",
+          "bodySha256": "c76386ee1a4e8d3599228b4559fde45d928296aa2e737514e4fd18a49938c839"
+        }
+      ],
+      "labels": [
+        "ux-ui",
+        "frontend",
+        "ux",
+        "priority-p1",
+        "dashboard",
+        "agent-working",
+        "codex-triage",
+        "codex-run",
+        "In progress"
+      ]
+    },
+    {
+      "issue": 457,
+      "title": "[UX semplificazione][P1] Invio in PS: la scheda non riporta motivo, ultimi parametri, ultima nota urgente e ultime dosi",
+      "state": "OPEN",
+      "bodySha256": "aff2893825fb961da1ac6fdce8a1e518a6f3e34e2636cc01f865ce7156394f8f",
+      "commentsRead": 3,
+      "comments": [
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2rxSQ",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:45:28Z",
+          "bodySha256": "583d0c39c7482e7266c6724fb940db7c9cdedede5d40e342c51a8e3b2337d2db"
+        },
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc2tydQ",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T07:49:25Z",
+          "bodySha256": "c76386ee1a4e8d3599228b4559fde45d928296aa2e737514e4fd18a49938c839"
+        },
+        {
+          "id": "IC_kwDOSt4Zr88AAAABc3Rkjw",
+          "author": "l2v-hub",
+          "createdAt": "2026-10-17T08:53:06Z",
+          "bodySha256": "0cf854dc565e19af24ead706559ae49ad359a41553ee80b10966ae54a14c1be9"
+        }
+      ],
+      "labels": [
+        "ux-ui",
+        "frontend",
+        "ux",
+        "emergency",
+        "priority-p1",
+        "agent-working",
+        "codex-triage",
+        "codex-run",
+        "In progress"
+      ]
+    }
+  ]
+}

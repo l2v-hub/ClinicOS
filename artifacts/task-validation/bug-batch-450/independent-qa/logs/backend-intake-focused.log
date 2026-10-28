@@ -1,0 +1,187 @@
+✔ confirmDraft creates patient transactionally + is idempotent (813.197654ms)
+✔ confirmDraft permits a manager to recover a stale legacy owner (81.328464ms)
+✔ confirmJob permits a manager to recover an ownerless legacy job (72.726391ms)
+✔ confirmDraft: accepts a missing CF but blocks a duplicate CF (not forcible) (67.285471ms)
+✔ confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConflict (794.568105ms)
+✔ confirmDraft: persists therapies + vitals/pain into Cartella.data (914.18612ms)
+✖ invalid therapy returns indexed 400 before any patient or therapy write (979.893887ms)
+✖ corrected retry persists precise schedules, actor and weekdays; replay is idempotent (7.164666ms)
+✖ persistence failure rolls back all writes, sanitizes audit, and permits retry (11.672688ms)
+✖ confirmation remains operator-gated and owner-scoped (13.833528ms)
+✖ one imported and three manual therapies persist in order including whole patches (7.365032ms)
+✖ a divided patch in the final row rejects the entire confirmation before writes (5.975307ms)
+✔ dose insulinica condizionale: conserva le fasce glicemia→unità senza inventare quantità fisse (18.886302ms)
+✔ dose insulinica condizionale: mantiene da verificare le fasce con estremi sovrapposti (4.481529ms)
+✔ dose insulinica condizionale: riconosce anche la notazione intervallo-freccia-dose (5.712455ms)
+✔ dose insulinica condizionale: una fascia invertita resta da verificare (1.141588ms)
+✔ #156 AC1/AC2: recognises therapy and yields one row per drug line (9.330109ms)
+✔ #156 AC3: KEPPRA structured fields (0.407658ms)
+✔ #156 AC4: multiple times are all extracted (2.613316ms)
+✔ #156 AC5: specific weekdays are captured (0.376191ms)
+✔ #156 AC6: incomplete line kept as da_verificare, original preserved, not dropped (1.344408ms)
+✔ #156 AC3: unusual dosage/quantity and empty class preserved (CETIRIZINA) (0.755247ms)
+✔ #156 AC10: no hardcoding — a DIFFERENT prescription of the same shape parses correctly (0.418493ms)
+✔ #156: every row keeps its original text verbatim (audit/reference) (1.166372ms)
+✔ #156: blank/empty text yields no rows (0.147428ms)
+✔ #274: free-text administration route is captured (per os, endovena, sottocute) (0.354386ms)
+✔ #274: full-word quantity units are captured (compressa/e, fiala/e, capsula/e) (0.161164ms)
+✔ #274: medicinale + quantitativo + via together upgrade the row to ok (0.102746ms)
+✔ #274: parenthesized route codes still work (no regression) (0.169655ms)
+✔ #296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata) (0.783841ms)
+✔ 2026-10-11: un farmaco DOPO un paragrafo di prosa resta un farmaco (la prosa è saltata) (3.336869ms)
+✔ #296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati (0.649114ms)
+✔ #296 AC4: intestazione iniziale + riga vuota non termina il blocco (0.531729ms)
+✔ #296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop) (0.904652ms)
+✔ AC1: ogni variante di intestazione non genera una riga farmaco (1.371799ms)
+✔ AC1: l'intestazione non interrompe l'elenco che la segue (0.691903ms)
+✔ AC2: una riga che prescrive resta un farmaco anche se inizia per "Terapia" (0.386097ms)
+✔ AC2: una riga di prosa clinica che nomina la terapia non viene scartata (0.20551ms)
+✔ explicit absence of therapy and inline headings do not create drug rows (0.668453ms)
+✔ negative therapy statements leave nearby prescriptions and ambiguous instructions for review (0.692825ms)
+✔ AC3: la forma non assorbe la riga; il resto finisce in note e la riga è da verificare (0.387186ms)
+✔ AC4: la via riconosciuta a parole non resta duplicata in note (0.187406ms)
+✔ AC4: note non ripete il nome del farmaco né i campi già mappati (0.127541ms)
+✔ AC4: un nome farmaco con caratteri speciali non rompe la pulizia di note (0.198784ms)
+✔ AC4: una posologia in lettere resta in note senza declassare una riga completa (0.189482ms)
+✔ multi-farmaco AC1: la forma non assorbe il nome del secondo farmaco (0.532858ms)
+✔ multi-farmaco AC2: il secondo farmaco resta leggibile nelle note (0.700574ms)
+✔ multi-farmaco AC3: nessuno split automatico, una riga in ingresso = una in uscita (0.485316ms)
+✔ multi-farmaco AC4: le forme legittime multi-token non regrediscono (0.442126ms)
+✔ AC4: un numero non collocato porta la riga a da_verificare (0.806517ms)
+✔ PO03: the administration list stops before monitoring instructions (0.300074ms)
+✔ PO03: explicit contiguous time lists retain every administration time (0.712851ms)
+✔ PO03: instructions retain their connectors and clock times after the list (0.531973ms)
+✔ PO03: a clock time introduced by clinical prose is not a schedule (1.434444ms)
+✔ PO03: alternatives and intervals remain whole instructions for review (0.719104ms)
+✔ PO03: an inferred form alone cannot turn a monitoring time into a schedule (0.183645ms)
+✔ #473: heading-free prescriptions retain quantity, schedules and source without guessing alternatives (0.313753ms)
+✔ seedDraftFromImport: creates draft seeded from narrative (408.558911ms)
+✔ seedDraftFromImport: does NOT seed allergie when allergyStatus is explicitly_absent (39.604115ms)
+✔ seedDraftFromImport: throws when job has no _narrative (27.944211ms)
+✔ isPlausibleAllergenText: rejects a multi-section narrative blob, accepts concise text (0.799271ms)
+✔ deriveAllergens: [] for a blob; one entry per concise allergen otherwise (0.304145ms)
+✔ buildImportDraftData: blob allergiesText does NOT seed a false allergy row (0.666059ms)
+✔ buildImportDraftData: concise multi-allergen text → one row per allergen (0.414542ms)
+✔ buildImportDraftData: therapyText parsed into structured terapia rows (one per drug) (21.603912ms)
+✔ #473: validated CF derives only an unambiguous encoded sex (0.744802ms)
+✔ #473: missing imported sex is an editable derived field with retained source (1.00729ms)
+✔ #473: invalid CF cannot invent sex and contradictory explicit sex remains untouched (2.073983ms)
+✔ #473: unheaded medication source remains a review inventory, not an administration (3.009934ms)
+ℹ tests 69
+ℹ suites 0
+ℹ pass 63
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 24052.829951
+
+✖ failing tests:
+
+test at src/intake/__tests__/confirm-therapy-validation.test.ts:1:4441
+✖ invalid therapy returns indexed 400 before any patient or therapy write (979.893887ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  401 !== 400
+  
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/confirm-therapy-validation.test.ts:201:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 401,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/intake/__tests__/confirm-therapy-validation.test.ts:1:5455
+✖ corrected retry persists precise schedules, actor and weekdays; replay is idempotent (7.164666ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  401 !== 400
+  
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/confirm-therapy-validation.test.ts:216:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 401,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/intake/__tests__/confirm-therapy-validation.test.ts:1:6288
+✖ persistence failure rolls back all writes, sanitizes audit, and permits retry (11.672688ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  401 !== 503
+  
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/confirm-therapy-validation.test.ts:240:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 401,
+    expected: 503,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/intake/__tests__/confirm-therapy-validation.test.ts:1:6923
+✖ confirmation remains operator-gated and owner-scoped (13.833528ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  401 !== 404
+  
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/confirm-therapy-validation.test.ts:259:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 401,
+    expected: 404,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/intake/__tests__/confirm-therapy-validation.test.ts:1:7198
+✖ one imported and three manual therapies persist in order including whole patches (7.365032ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  401 !== 201
+  
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/confirm-therapy-validation.test.ts:284:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 401,
+    expected: 201,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/intake/__tests__/confirm-therapy-validation.test.ts:1:8077
+✖ a divided patch in the final row rejects the entire confirmation before writes (5.975307ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  401 !== 400
+  
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-450/backend/src/intake/__tests__/confirm-therapy-validation.test.ts:304:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 401,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

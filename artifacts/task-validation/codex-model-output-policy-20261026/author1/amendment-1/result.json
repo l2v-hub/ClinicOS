@@ -1,0 +1,22 @@
+{
+  "status": "IMPLEMENTED — NOT VERIFIED",
+  "amends": "../seal.json",
+  "reservationNonce": "255080bc-bede-4c29-aef7-d893a01f220f",
+  "baseline": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "task": "codex-model-output-policy-20261026",
+  "amendments": [
+    "Preserve existing bounded-delegate cooldown with finite internal metadata computed from retained output, without raw messages",
+    "Represent absent runner byte counters as null",
+    "Classify only explicit terminal provider codes/phrases and ignore ordinary progress or source/tool content"
+  ],
+  "tests": { "passed": 19, "failed": 0, "providerCalls": 0 },
+  "redGreen": {
+    "baseline": "80 KiB JSON progress plus valid typed result fails at output-limit",
+    "patched": "same synthetic scenario succeeds and returns typed result"
+  },
+  "limitations": [
+    "Original clinical failure 40249337703 exact cause remains unknown",
+    "Independent QA, real Claude review and native CI are pending",
+    "imported-history.json requires coordinator import from genuine reservation and Git-bound source manifest"
+  ]
+}

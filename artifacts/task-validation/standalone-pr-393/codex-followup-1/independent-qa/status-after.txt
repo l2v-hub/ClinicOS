@@ -1,0 +1,16 @@
+ M .ai-architecture/phase-5-voice/REALTIME_RECONCILIATION.md
+ M .ai-architecture/phase-9-production/PRODUCTION_RUNBOOK.md
+ M .ai-architecture/phase-9-production/PROVIDER_CAPABILITY_MATRIX.json
+ M backend/src/skills/http.ts
+ M backend/src/voice/__tests__/realtime-client.test.ts
+ M backend/src/voice/__tests__/voice-e2e.test.ts
+ M backend/src/voice/stt.ts
+ M clinicos-ai-runtime/clinicos_ai/models/provider_registry.py
+ M clinicos-ai-runtime/clinicos_ai/voice/azure_realtime.py
+ M clinicos-ai-runtime/clinicos_ai/voice/realtime.py
+ M clinicos-ai-runtime/tests/test_voice_realtime.py
+ D e2e/qa-voice-pr-393-browser.mjs
+ D e2e/qa-voice-pr-393.mjs
+ M frontend/src/components/assistant/voice/VoicePanel.tsx
+ M frontend/src/components/assistant/voice/useVoiceCapture.ts
+?? artifacts/task-validation/standalone-pr-393/codex-followup-1/

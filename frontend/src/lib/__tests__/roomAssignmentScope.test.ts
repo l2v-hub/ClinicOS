@@ -4,12 +4,15 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const appSource = readFileSync(fileURLToPath(new URL('../../App.tsx', import.meta.url)), 'utf8');
-const roomsSource = readFileSync(
-  fileURLToPath(new URL('../../components/admin/RoomsManagement.tsx', import.meta.url)),
-  'utf8',
-) + readFileSync(new URL('../../components/admin/RoomManagementModel.ts', import.meta.url), 'utf8');
-const roomEditorSource = readFileSync(new URL('../../components/admin/RoomFormPanel.tsx', import.meta.url), 'utf8')
-  + readFileSync(new URL('../../components/admin/BedEditDialog.tsx', import.meta.url), 'utf8');
+const roomsSource =
+  readFileSync(
+    fileURLToPath(new URL('../../components/admin/RoomsManagement.tsx', import.meta.url)),
+    'utf8',
+  ) +
+  readFileSync(new URL('../../components/admin/RoomManagementModel.ts', import.meta.url), 'utf8');
+const roomEditorSource =
+  readFileSync(new URL('../../components/admin/RoomFormPanel.tsx', import.meta.url), 'utf8') +
+  readFileSync(new URL('../../components/admin/BedEditDialog.tsx', import.meta.url), 'utf8');
 const dashboardSource = readFileSync(
   fileURLToPath(new URL('../../components/admin/AdminDashboard.tsx', import.meta.url)),
   'utf8',
@@ -71,9 +74,12 @@ test('navigation-scoped room reads reject stale responses and expose a retryable
 });
 
 test('room consumers never present a failed load as zero occupancy or an empty assignment list', () => {
-  assert.match(dashboardSource, /roomSnapshotAvailable/);
-  assert.match(dashboardSource, /Caricamento occupazione struttura/);
-  assert.match(dashboardSource, />\s*Riprova\s*<IcoArrow/);
+  assert.match(dashboardSource, /camereLoadState === 'error'/);
+  assert.match(dashboardSource, /Caricamento occupazione/);
+  assert.match(dashboardSource, /Occupazione non aggiornata/);
+  assert.match(dashboardSource, /ultimi dati/);
+  assert.match(dashboardSource, /onClick=\{onRetryCamere\}/);
+  assert.match(dashboardSource, /Riprova occupazione/);
   assert.match(patientDetailSource, /canAssignRooms && \(\s*<button[\s\S]+Modifica assegnazione/);
   assert.match(patientDetailSource, /disabled=\{!roomDataReady\}/);
   assert.match(patientDetailSource, /<RoomDataNotice \/>/);

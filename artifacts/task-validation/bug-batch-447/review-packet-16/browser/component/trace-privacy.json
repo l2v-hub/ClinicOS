@@ -1,0 +1,12 @@
+{
+  "policy": "exact synthetic session values only; no event or outcome removal",
+  "zipValidation": "CRC and residual signed-token scan passed",
+  "archives": [
+    {
+      "path": "/tmp/clinicos-qa497-browser16-runtime5-20261022/output/component/trace.zip",
+      "sha256": "fef450494244f7122e26c48bcc14612a143480b5ded2619d5cef1c022ce1a7b1",
+      "tokensRemaining": 0,
+      "changed": false
+    }
+  ]
+}

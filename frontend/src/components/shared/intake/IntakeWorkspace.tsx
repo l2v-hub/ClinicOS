@@ -30,6 +30,7 @@ import { IntakeDocumentPanel, type DocumentPanelRequest } from './IntakeDocument
 import type { PanelTarget } from './intakeDocumentPages';
 import { IntakeFieldProposals } from './IntakeFieldProposals';
 import { ImportProposalsReview, type ImportProposal } from './ImportProposalsReview';
+import { acknowledgeDerivedSex, pendingDerivedSex } from './intakeSexReview';
 import { StepAnagrafica } from './StepAnagrafica';
 import { StepIngresso } from './StepIngresso';
 import type { IngressoData } from './StepIngresso';
@@ -110,6 +111,11 @@ interface IntakeWorkspaceProps {
   importDraftId?: string;
   /** When provided, return to the import review from the footer. */
   onBackToDocuments?: () => void;
+  /** Authenticated original remains available after import review handoff. */
+  importDocuments?: {
+    job: import('../import/importSessionTypes').ImportJob;
+    api: import('../import/importSessionApi').ImportSessionApi;
+  };
 }
 
 export function IntakeWorkspace({
@@ -121,6 +127,7 @@ export function IntakeWorkspace({
   operatorRole,
   importDraftId,
   onBackToDocuments,
+  importDocuments,
 }: IntakeWorkspaceProps) {
   const op = { operatorId, operatorRole };
   // Sezione visibile nel corpo (evidenziata nell'indice).
@@ -334,10 +341,12 @@ export function IntakeWorkspace({
 
   // Documento a fianco (ciclo 3a): aperto dal chip di provenienza o da "Vedi documenti"; alla
   // chiusura il focus torna a chi l'ha aperto. Sparisce con i documenti scollegati o la scheda chiusa.
-  const [docPanel, setDocPanel] = useState<DocumentPanelRequest | null>(null);
+  const [docPanel, setDocPanel] = useState<DocumentPanelRequest | null>(() =>
+    importDocuments ? { target: null, seq: 1 } : null,
+  );
   const docPanelSeq = useRef(0);
   const docPanelOpener = useRef<HTMLElement | null>(null);
-  const docsJob = open && !importDraftId && draftId ? docs.job : null;
+  const docsJob = open ? (importDocuments?.job ?? (draftId ? docs.job : null)) : null;
   if (docPanel && !docsJob) setDocPanel(null);
   // Documenti scollegati a pannello aperto: chip e pannello spariscono, il focus va su un punto
   // stabile della card Documenti ("Carica file", o il suo titolo) invece di restare sul body.
@@ -471,7 +480,7 @@ export function IntakeWorkspace({
     }
   }
 
-  function updateSection(key: keyof DraftData, value: unknown) {
+  function updateSection(key: keyof DraftData, value: unknown, confirmDerivedSex = false) {
     if (submittingRef.current || proposalRequestRef.current) return;
     const accepted = dataRef.current._accepted ?? {};
     const next = {
@@ -483,7 +492,9 @@ export function IntakeWorkspace({
           ? { _accepted: { ...accepted, demographics: false } }
           : {}),
     };
-    commitLocal(next);
+    const sexEdited =
+      key === 'anagrafica' && (value as AnagraficaData)?.sex !== dataRef.current.anagrafica?.sex;
+    commitLocal((sexEdited || confirmDerivedSex ? acknowledgeDerivedSex(next) : next) as DraftData);
 
     if (!draftId) return;
     scheduleAutosave();
@@ -594,7 +605,9 @@ export function IntakeWorkspace({
 
   async function handleConfirm(force = false, allergyConflictOverride = false) {
     if (!draftId || submittingRef.current) return;
-    const demographicErrors = intakeDemographicErrors(data.anagrafica ?? {}, true);
+    const demographicErrors = intakeDemographicErrors(data.anagrafica ?? {}, true, {
+      allowMissingBirthDate: !!importDraftId,
+    });
     const firstInvalid = Object.keys(demographicErrors)[0] as DemographicField | undefined;
     if (firstInvalid) {
       setSubmitAttempted(true);
@@ -791,6 +804,7 @@ export function IntakeWorkspace({
 
   // ── Pagina unica (HMI 1): indice con stato, sezioni una sotto l'altra, azioni nell'indice ──
   const progress = intakeProgress(data, {
+    allowMissingBirthDate: !!importDraftId,
     moduleSelected: selectedModuleId !== null,
     proposalUncertain,
   });
@@ -832,7 +846,7 @@ export function IntakeWorkspace({
       dismissible={!submitting}
       closeOnOverlay={false}
       surfaceClassName="modal-card"
-      className="import-modal import-modal--intake intake-page"
+      className={`import-modal import-modal--intake intake-page${importDraftId ? ' intake-page--import' : ''}`}
     >
       <header className="import-modal__head" data-testid="patient-intake-header">
         <div className="intake-dialog__title-group">
@@ -856,6 +870,15 @@ export function IntakeWorkspace({
             {operatoreNome ? ` · ${operatoreNome}` : ''}
           </p>
         </div>
+        {importDocuments && !docPanel && (
+          <button
+            type="button"
+            className="ds-btn ds-btn--secondary"
+            onClick={(event) => openDocPanel(null, event.currentTarget)}
+          >
+            Mostra documento
+          </button>
+        )}
         <button
           type="button"
           className="ds-icon-btn"
@@ -872,6 +895,7 @@ export function IntakeWorkspace({
 
       <div className={`intake-page__grid${docPanel && docsJob ? ' intake-page__grid--doc' : ''}`}>
         <IntakeIndex
+          importMode={!!importDraftId}
           sections={progress.sections}
           active={active}
           missing={progress.missing}
@@ -992,13 +1016,13 @@ export function IntakeWorkspace({
                 )}
 
                 <section {...sectionProps('anagrafica')}>
-                  <header className="intake-section__head">
-                    {sectionTitle('anagrafica')}
-                    <span className="form-hint">
-                      Gli altri dati possono essere completati dopo l’ingresso
-                    </span>
-                  </header>
+                  <header className="intake-section__head">{sectionTitle('anagrafica')}</header>
                   <StepAnagrafica
+                    allowMissingBirthDate={!!importDraftId}
+                    derivedSexPending={pendingDerivedSex(data)}
+                    onConfirmDerivedSex={() =>
+                      updateSection('anagrafica', data.anagrafica ?? {}, true)
+                    }
                     value={data.anagrafica ?? {}}
                     onChange={(v) => updateSection('anagrafica', v)}
                     submitAttempted={submitAttempted}
@@ -1158,6 +1182,7 @@ export function IntakeWorkspace({
                 <section {...sectionProps('riepilogo')}>
                   <header className="intake-section__head">{sectionTitle('riepilogo')}</header>
                   <StepVerifica
+                    allowMissingBirthDate={!!importDraftId}
                     data={data}
                     busy={submitting}
                     error={null}
@@ -1179,8 +1204,9 @@ export function IntakeWorkspace({
         </div>
         {docPanel && docsJob && (
           <IntakeDocumentPanel
+            persistentInline={!!importDraftId}
             job={docsJob}
-            api={docs.api}
+            api={importDocuments?.api ?? docs.api}
             request={docPanel}
             onClose={closeDocPanel}
           />

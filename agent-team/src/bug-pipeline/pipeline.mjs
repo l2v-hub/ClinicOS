@@ -20,6 +20,12 @@ import {
 } from './contracts.mjs';
 import { observationProgressDigest, validateObservationResume } from './operator-authorization.mjs';
 import { runImplementationStages } from './workspace.mjs';
+import {
+  adaptivePlanningSchema,
+  validateAdaptivePlanning,
+  createWorkItemsEnvelope,
+  validateWorkItems,
+} from './work-items.mjs';
 import { externalReviewStep } from './external-review.mjs';
 import { validateStandaloneState, finalizeStandaloneSubject } from './standalone-review.mjs';
 import {
@@ -65,7 +71,13 @@ export async function runPipeline({
   triageWindowMs = 120_000,
   standaloneController,
   standaloneInfrastructureFiles = [],
+  adaptiveWorkItems = { enabled: false, maxParallel: 2 },
 }) {
+  if (
+    typeof adaptiveWorkItems?.enabled !== 'boolean' ||
+    ![1, 2].includes(adaptiveWorkItems.maxParallel)
+  )
+    throw new Error('Invalid adaptive work-item host configuration');
   if (!['internal', 'external'].includes(reviewMode)) throw new Error('Unknown review mode');
   if (!Number.isSafeInteger(triageWindowMs) || triageWindowMs < 0 || triageWindowMs > 600_000)
     throw new Error('Invalid triage collection window');
@@ -73,6 +85,10 @@ export async function runPipeline({
     (await store.load()) ?? { schemaVersion: 1, repository: repo, batches: [] },
     repo,
   );
+  const validateGraphs = (value) => {
+    for (const batch of value.batches) if (batch.workItems) validateWorkItems(batch);
+  };
+  validateGraphs(state);
   // Ownership must be loaded before intake can normalize labels or touch old subjects.
   if (automationPaused(state)) return state;
   let processingSubject = null;
@@ -227,17 +243,20 @@ export async function runPipeline({
   const save = async (options) => {
     try {
       await freshOwnership();
+      validateGraphs(state);
       if (state.standaloneReviews) validateStandaloneState(state);
       state.updatedAt = new Date().toISOString();
       return await store.save(state, {
         ...options,
         checkFreshOwnership: (fresh) => {
           validateState(fresh, repo);
+          validateGraphs(fresh);
           if (fresh.standaloneReviews) validateStandaloneState(fresh);
           assertOwnership(fresh);
         },
         rebaseIndependentSubjects: (merged) => {
           validateState(merged, repo);
+          validateGraphs(merged);
           if (merged.standaloneReviews) validateStandaloneState(merged);
           assertOwnership(merged);
         },
@@ -247,6 +266,55 @@ export async function runPipeline({
         persistenceFailed = true;
       throw error;
     }
+  };
+  const workItemEffects = (id) => {
+    let tail = Promise.resolve(),
+      poisoned;
+    const getBatch = () => {
+      const batch = state.batches.find((entry) => entry.id === id);
+      if (!batch) throw ownershipLost();
+      return batch;
+    };
+    return {
+      getBatch,
+      assertOwnership: async () => {
+        if (poisoned) throw poisoned;
+        await freshOwnership();
+        validateWorkItems(getBatch());
+      },
+      mutate(fn) {
+        const operation = tail.then(async () => {
+          if (poisoned) throw poisoned;
+          await freshOwnership();
+          const batch = getBatch();
+          validateWorkItems(batch);
+          const integrated = () =>
+            batch.workItems.runs
+              .flatMap((run) => run.nodes)
+              .filter((node) => node.integration?.status === 'integrated').length;
+          const before = integrated();
+          const result = await fn(batch);
+          validateWorkItems(batch);
+          // A retained execute-stage checkpoint must follow durable child commits;
+          // otherwise safe observation recovery would demand the pre-graph HEAD.
+          if (
+            integrated() > before &&
+            batch.controllerProgress?.pending === 'execute' &&
+            typeof workspace.captureCheckpoint === 'function'
+          )
+            batch.controllerProgress.checkpoint = await workspace.captureCheckpoint(batch);
+          await save();
+          return structuredClone(result);
+        });
+        tail = operation.then(
+          () => undefined,
+          (error) => {
+            poisoned ??= error;
+          },
+        );
+        return operation;
+      },
+    };
   };
   if (state.standaloneReviews?.length) {
     validateStandaloneState(state);
@@ -463,17 +531,18 @@ export async function runPipeline({
     await save();
     assertSelectedUnclaimed();
     await freshOwnership();
-    const plan = validatePlan(
-      await models.plan({
-        cwd: workspace.root,
-        issues: selected,
-        scopeSchema: planSchema,
-        packet: {
-          activeBatches: occupiedSubjects(state),
-        },
-      }),
-      selected,
-    );
+    const response = await models.plan({
+      cwd: workspace.root,
+      issues: selected,
+      scopeSchema: adaptiveWorkItems.enabled ? adaptivePlanningSchema : planSchema,
+      packet: {
+        activeBatches: occupiedSubjects(state),
+      },
+    });
+    const adaptive = adaptiveWorkItems.enabled
+      ? validateAdaptivePlanning(response, selected)
+      : null;
+    const plan = adaptive?.plan ?? validatePlan(response, selected);
     const existingBatches = occupiedSubjects(state);
     for (const group of plan.groups) {
       const id = `bug-batch-${Math.min(...group.issues)}`;
@@ -489,6 +558,18 @@ export async function runPipeline({
         issues: group.issues,
         plan: frozenPlan,
         grouping: { fileMap, separationReason },
+        ...(adaptive
+          ? {
+              workItems: createWorkItemsEnvelope(
+                adaptive.workGraphs.find(
+                  (graph) =>
+                    graph.issues.length === group.issues.length &&
+                    graph.issues.every((number) => group.issues.includes(number)),
+                ),
+                { plan: frozenPlan, issues: selected, maxParallel: adaptiveWorkItems.maxParallel },
+              ),
+            }
+          : {}),
         phase: overlaps.length ? 'blocked' : 'planned',
         ...(overlaps.length
           ? {
@@ -651,6 +732,7 @@ export async function runPipeline({
               batch,
               workspace,
               save,
+              ...(batch.workItems ? { effects: workItemEffects(batch.id) } : {}),
               context: {
                 phase: 'implementation',
                 round: attempt.round,

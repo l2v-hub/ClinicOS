@@ -1,0 +1,59 @@
+{
+  "filesInspected": 1135,
+  "uniqueFileContentsScanned": 389,
+  "zipMembersVerifiedIncludingHashIdenticalCopies": 27998,
+  "uniqueZipMembersDecodedAndScanned": 10325,
+  "credentialFindings": [],
+  "sourceTemplateClassifications": [
+    {
+      "file": "independent-qa-attempt-2/final-integrity-and-privacy.py",
+      "kind": "template expression, no materialized credential"
+    },
+    {
+      "file": "independent-qa-attempt-2/launcher-backend-full.mjs",
+      "kind": "template expression, no materialized credential"
+    },
+    {
+      "file": "independent-qa-attempt-2/launcher-smoke.mjs",
+      "kind": "template expression, no materialized credential"
+    }
+  ],
+  "crcValid": true,
+  "noSymlinks": true,
+  "allFilesAtMost25MiB": true,
+  "largestFiles": [
+    {
+      "bytes": 25789009,
+      "path": "independent-qa-attempt-2/preserved-pre-qa/files/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25789009,
+      "path": "independent-qa-attempt-2/browser-environment-attempt-1/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25290998,
+      "path": "independent-qa-attempt-2/preserved-pre-qa/files/history/cycle2-combined-browser-2-db-field-and-close-selector/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25290998,
+      "path": "history/cycle2-combined-browser-2-db-field-and-close-selector/issue-453-trace.zip"
+    },
+    {
+      "bytes": 24764294,
+      "path": "independent-qa-attempt-2/browser/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 24764294,
+      "path": "evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 20883520,
+      "path": "independent-qa-attempt-2/browser/evidence/issue-447-trace.zip"
+    },
+    {
+      "bytes": 20883520,
+      "path": "evidence/issue-447-trace.zip"
+    }
+  ],
+  "cryptographicContentCache": "SHA256-identical files reuse the same byte scan and ZIP CRC/member result; every path and file hash is independently read"
+}

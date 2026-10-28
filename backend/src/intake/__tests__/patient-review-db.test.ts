@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { before, after, test } from 'node:test';
 import { Prisma } from '@prisma/client';
+import { Client } from 'pg';
 import { prisma } from '../../lib/prisma.js';
 import {
   patientIntakeReview,
@@ -268,4 +269,173 @@ test('repeatable snapshot survives historical reconciliation between budget and 
   assert.equal(later.legacyPainDrafts, null);
   assert.equal(later.legacyPainError, LEGACY_PAIN_TOO_LARGE);
   assert.equal(later.deferredTherapies.length, 1);
+});
+
+function within<T>(promise: Promise<T>, milliseconds: number, message: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout>;
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) => {
+      timer = setTimeout(() => reject(new Error(message)), milliseconds);
+    }),
+  ]).finally(() => clearTimeout(timer));
+}
+
+test(
+  'intake review restarts its read-only snapshot after an actual concurrent Patient row version',
+  { timeout: 20_000 },
+  async () => {
+    const patientId = await newPatient();
+    await draft(patientId, { dolore: { nrs: 3, note: 'Originale' }, terapiaImport: [therapy] });
+    const expected = await patientIntakeReview(patientId, actor);
+    const before = {
+      patient: await prisma.patient.findUniqueOrThrow({ where: { id: patientId } }),
+      drafts: await prisma.patientIntakeDraft.findMany({
+        where: { confirmedPatientId: patientId },
+      }),
+      documents: await prisma.patientDocument.findMany({ where: { patientId } }),
+    };
+    const writer = new Client({
+      connectionString: process.env.DATABASE_URL,
+      connectionTimeoutMillis: 2_000,
+      query_timeout: 3_000,
+    });
+    writer.on('error', () => {}); // A connection error is also observed by the awaited query.
+    let inTransaction = false;
+    let reading:
+      | Promise<{ value?: Awaited<ReturnType<typeof patientIntakeReview>>; error?: unknown }>
+      | undefined;
+    try {
+      await writer.connect();
+      await writer.query("SET statement_timeout = '3s'");
+      await writer.query("SET idle_in_transaction_session_timeout = '10s'");
+      const {
+        rows: [{ pid: writerPid }],
+      } = await writer.query<{ pid: number }>('SELECT pg_backend_pid() AS pid');
+      await writer.query('BEGIN');
+      inTransaction = true;
+      // The PS serialization protocol creates a row version without changing clinical/demographic data.
+      await writer.query('UPDATE "Patient" SET "updatedAt" = "updatedAt" WHERE id = $1', [
+        patientId,
+      ]);
+      // Observe rejection from the moment the production read starts, including assertion/cleanup failures.
+      reading = patientIntakeReview(patientId, actor).then(
+        (value) => ({ value }),
+        (error) => ({ error }),
+      );
+      const deadline = Date.now() + 2_500;
+      let readerPid: number | undefined;
+      while (!readerPid && Date.now() < deadline) {
+        // pg_stat_activity otherwise retains the first observation inside this writer transaction.
+        await writer.query('SELECT pg_stat_clear_snapshot()');
+        const waiting = await writer.query<{ pid: number }>(
+          `
+        SELECT pid FROM pg_stat_activity
+        WHERE datname = current_database() AND pid <> pg_backend_pid()
+          AND $1::int = ANY(pg_blocking_pids(pid))
+          AND query LIKE '%"Patient"%' AND query LIKE '%FOR SHARE OF p%'
+      `,
+          [writerPid],
+        );
+        readerPid = waiting.rows[0]?.pid;
+        if (!readerPid) await new Promise((resolve) => setTimeout(resolve, 20));
+      }
+      assert.ok(readerPid, 'The actual scoped reader must wait on this exact owned writer PID');
+      console.log(
+        'INTAKE_REVIEW_INTERLEAVING',
+        JSON.stringify({ writerPid, readerPid, observedOwnedBlocking: true }),
+      );
+      await writer.query('COMMIT');
+      inTransaction = false;
+      const outcome = await within(
+        reading,
+        6_000,
+        'Read-only retry did not settle within its transaction deadline',
+      );
+      assert.ifError(outcome.error);
+      assert.deepEqual(
+        outcome.value,
+        expected,
+        'A fresh snapshot returns the same complete projection',
+      );
+    } finally {
+      try {
+        if (inTransaction) await writer.query('ROLLBACK');
+      } finally {
+        try {
+          if (reading)
+            await within(reading, 6_000, 'Reader did not settle after releasing its owned writer');
+        } finally {
+          await within(writer.end(), 2_000, 'Owned writer connection did not close');
+        }
+      }
+    }
+    assert.deepEqual(
+      await prisma.patient.findUniqueOrThrow({ where: { id: patientId } }),
+      before.patient,
+    );
+    assert.deepEqual(
+      await prisma.patientIntakeDraft.findMany({ where: { confirmedPatientId: patientId } }),
+      before.drafts,
+    );
+    assert.deepEqual(
+      await prisma.patientDocument.findMany({ where: { patientId } }),
+      before.documents,
+    );
+    await assert.rejects(
+      patientIntakeReview(patientId, other),
+      (error: any) => error.status === 404,
+    );
+  },
+);
+
+test('only declared transaction conflicts retry, with three fresh RepeatableRead attempts at most', async () => {
+  const transaction = prisma.$transaction.bind(prisma);
+  const conflict = (state: string) => ({
+    code: 'P2010',
+    meta: {
+      driverAdapterError: { cause: { kind: 'TransactionWriteConflict', originalCode: state } },
+    },
+  });
+  const cases = [
+    { error: { code: 'P2034' }, attempts: 3 },
+    { error: conflict('40001'), attempts: 3 },
+    { error: conflict('40P01'), attempts: 3 },
+    { error: Object.assign(new Error('Not found'), { status: 404 }), attempts: 1 },
+    { error: Object.assign(new Error('Transaction deadline'), { code: 'P2028' }), attempts: 1 },
+    { error: conflict('42601'), attempts: 1 },
+    {
+      error: {
+        code: 'P2010',
+        meta: { driverAdapterError: { cause: { kind: 'Other', originalCode: '40001' } } },
+      },
+      attempts: 1,
+    },
+    { error: new Error('could not serialize access due to concurrent update'), attempts: 1 },
+  ];
+  try {
+    for (const { error, attempts } of cases) {
+      const callbacks = new Set<unknown>();
+      let calls = 0;
+      (prisma as any).$transaction = async (action: unknown, options: unknown) => {
+        calls++;
+        callbacks.add(action);
+        assert.deepEqual(
+          options,
+          { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead },
+          'Existing per-attempt isolation and Prisma deadlines are unchanged',
+        );
+        throw error;
+      };
+      await assert.rejects(patientIntakeReview(patient, actor), (received) => received === error);
+      assert.equal(calls, attempts);
+      assert.equal(
+        callbacks.size,
+        attempts,
+        'Each retry starts a complete new transaction callback',
+      );
+    }
+  } finally {
+    (prisma as any).$transaction = transaction;
+  }
 });

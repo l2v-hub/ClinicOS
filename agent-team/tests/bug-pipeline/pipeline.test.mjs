@@ -10,6 +10,7 @@ import {
   publicationComplete,
 } from '../../src/bug-pipeline/release.mjs';
 import { feedbackFingerprint, planSchema, sha256 } from '../../src/bug-pipeline/contracts.mjs';
+import { adaptivePlanningSchema, validateWorkItems } from '../../src/bug-pipeline/work-items.mjs';
 
 const repo = 'l2v-hub/ClinicOS';
 const sha = (letter) => letter.repeat(40);
@@ -113,6 +114,7 @@ function harness({
   triageWindowMs = 0,
   feedback,
   failSave = false,
+  adaptiveWorkItems = { enabled: false, maxParallel: 2 },
 } = {}) {
   const log = [];
   const stateRef = { value: clone(initialState) };
@@ -277,7 +279,10 @@ function harness({
       counts.plan += 1;
       assert.equal(input.cwd, workspace.root);
       assert.equal(input.issues.length, issues.length);
-      assert.deepEqual(input.scopeSchema, planSchema);
+      assert.deepEqual(
+        input.scopeSchema,
+        adaptiveWorkItems.enabled ? adaptivePlanningSchema : planSchema,
+      );
       for (const issue of input.issues) {
         assert.match(issue.body, new RegExp(`Hydrated issue body for #${issue.number}`));
         assert.equal(issue.comments[0].body, `Hydrated comment for #${issue.number}`);
@@ -315,6 +320,7 @@ function harness({
         reviewMode,
         now,
         triageWindowMs,
+        adaptiveWorkItems,
       }),
   };
 }
@@ -1816,3 +1822,117 @@ for (const format of ['legacy', 'reserved', 'missing-reservation'])
       else assert.equal(current.implementation[1].status, 'passed');
     }
   });
+
+function adaptivePlanForTest() {
+  const plan = planFor([17]);
+  return {
+    plan,
+    workGraphs: [
+      {
+        issues: [17],
+        nodes: [
+          {
+            id: 'filter',
+            title: 'Correct the filter',
+            issues: [17],
+            taskIndexes: [0],
+            criteriaRefs: [{ issue: 17, index: 0 }],
+            dependsOn: [],
+            scope: [...plan.groups[0].scope],
+            readFiles: [],
+            difficulty: 'low',
+            risk: { level: 'low', reason: 'Synthetic bounded formatter' },
+            coupling: { level: 'isolated', reason: 'One scoped file' },
+            conflictKeys: [],
+            routePreference: 'auto',
+            verificationIndexes: [0, 1],
+            summary: 'Implement the accepted filter task',
+          },
+        ],
+      },
+    ],
+  };
+}
+
+test('adaptive intake actually requests the wrapper and durably binds hydrated sources without changing the legacy plan wire format', async () => {
+  const response = adaptivePlanForTest();
+  const h = harness({
+    issues: [17],
+    plan: response,
+    adaptiveWorkItems: { enabled: true, maxParallel: 1 },
+    executeResults: [
+      async (batch, options) => {
+        assert.equal(options.phase, 'implementation');
+        assert.equal(options.implementationRound, 1);
+        assert.equal(validateWorkItems(batch).policy.maxParallel, 1);
+        assert.equal(batch.plan.workItems, undefined);
+        assert.equal(batch.plan.fileMap, undefined);
+        assert.ok(h.stateRef.value.batches[0].workItems);
+        assert.equal(typeof options.effects.mutate, 'function');
+        let saved = false;
+        await options.effects.mutate((canonical) => {
+          assert.equal(canonical, batch);
+          saved = true;
+        });
+        assert.equal(saved, true);
+        assert.equal(options.effects.getBatch(), batch);
+        return { status: 'implemented', summary: 'Synthetic pipeline caller' };
+      },
+    ],
+  });
+  const state = await h.run();
+  assert.equal(h.counts.plan, 1);
+  assert.equal(h.counts.execute, 1);
+  assert.equal(h.counts.verify, 2);
+  assert.equal(h.counts.simplify, 1);
+  assert.equal(state.batches[0].workItems.sourceIssues.length, 1);
+  const source = h.hydrated.find((issue) => issue.number === 17);
+  assert.equal(
+    state.batches[0].workItems.sourceIssues[0].bodyAndCommentsSha256,
+    sha256(
+      JSON.stringify({
+        number: 17,
+        title: source.title,
+        body: source.body,
+        comments: source.comments,
+      }),
+    ),
+  );
+});
+
+test('actual pipeline adaptive effects poison queued mutations after uncertain persistence without replaying execution', async () => {
+  let mutationCount = 0,
+    inferenceCount = 0;
+  const h = harness({
+    issues: [17],
+    plan: adaptivePlanForTest(),
+    adaptiveWorkItems: { enabled: true, maxParallel: 2 },
+    executeResults: [
+      async (_batch, options) => {
+        inferenceCount++;
+        h.store.save = async () => {
+          throw new Error('synthetic unknown graph CAS');
+        };
+        const one = options.effects.mutate(() => {
+          mutationCount++;
+        });
+        const two = options.effects.mutate(() => {
+          mutationCount++;
+        });
+        const results = await Promise.allSettled([one, two]);
+        assert.deepEqual(
+          results.map((result) => result.status),
+          ['rejected', 'rejected'],
+        );
+        assert.equal(mutationCount, 1);
+        await assert.rejects(options.effects.assertOwnership(), /synthetic unknown graph CAS/);
+        throw results[0].reason;
+      },
+    ],
+  });
+  await assert.rejects(h.run(), /synthetic unknown graph CAS/);
+  assert.equal(inferenceCount, 1);
+  assert.equal(h.counts.simplify, 0);
+  assert.equal(h.counts.review, 0);
+  assert(!h.log.includes('workspace.publish'));
+});

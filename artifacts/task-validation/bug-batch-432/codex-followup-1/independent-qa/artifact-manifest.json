@@ -1,0 +1,399 @@
+{
+  "verdict": "FAILED VALIDATION",
+  "files": [
+    {
+      "path": "ac-evidence-map.md",
+      "bytes": 1358,
+      "sha256": "748871fcd28ce892efa0f36aa5bac84a5efbe6d0d2bbd12cadbb8cae78adde79"
+    },
+    {
+      "path": "attempt-ledger.md",
+      "bytes": 1740,
+      "sha256": "bc682a41183a288ec901be1c500f38dcf598ca45e6a13503725d74301e454346"
+    },
+    {
+      "path": "canonical/issue-432-additional-trace.zip",
+      "bytes": 8691515,
+      "sha256": "64622912a8843b919bbfdd7e9dcae2abb76e3f478ccdcf787ba00727dcfef1b6"
+    },
+    {
+      "path": "canonical/issue-432-import-saved.png",
+      "bytes": 81697,
+      "sha256": "ac82e913a0b90dc92a5bc7602fe0e34bf63ae3f6d034857b3f615b7464398f56"
+    },
+    {
+      "path": "canonical/issue-432-import-trace.zip",
+      "bytes": 4149655,
+      "sha256": "4238e33242caf4365380ae9311dcc6db553e2800de37338aa9897bfcf35ac0de"
+    },
+    {
+      "path": "canonical/issue-432-import.webm",
+      "bytes": 329737,
+      "sha256": "dd5eca82060667d85e79993f24b60e2055294b58dea6c1e298fd1b2a2c134bc8"
+    },
+    {
+      "path": "canonical/issue-432-print.png",
+      "bytes": 384812,
+      "sha256": "88bb18c90e4d7ab567e60ea333fd45e55ad07800f16c345d9237b8f0dea7adfd"
+    },
+    {
+      "path": "canonical/issue-432-switch-mobile.png",
+      "bytes": 58515,
+      "sha256": "1345aad0ebc96fbdbe6882fdceffb54736e33d380693dbb54efc950f6efc8d60"
+    },
+    {
+      "path": "canonical/issue-432-trace.zip",
+      "bytes": 6806357,
+      "sha256": "cc5a683e5659dfb303cced3eeb094990cc99c75889d049f26fac102743b42a24"
+    },
+    {
+      "path": "canonical/issue-432.png",
+      "bytes": 113809,
+      "sha256": "00a9fc60f7af187eef311e867f71b3405dfe5060ebf85adb6d979d183692c52b"
+    },
+    {
+      "path": "canonical/issue-432.webm",
+      "bytes": 953543,
+      "sha256": "076fb38e12315eeb70b9c7e8ca886650b5e410307f60a8414a9e6e7a65176183"
+    },
+    {
+      "path": "canonical/issue-441.png",
+      "bytes": 167180,
+      "sha256": "137770f2fccdfd3729e377b0c8b5df2aa82772c07fb3c65ffa55523d2be5e69d"
+    },
+    {
+      "path": "canonical/issue-442-trace.zip",
+      "bytes": 52899,
+      "sha256": "f3b6651863961c285b864add1248fc1e173344089641503d585ca3320ef8daf6"
+    },
+    {
+      "path": "canonical/issue-442.png",
+      "bytes": 24276,
+      "sha256": "b81072f2843023a02fa7e28539614e5bd415fa590c430d3279f82f6b8f025d63"
+    },
+    {
+      "path": "canonical/issue-442.webm",
+      "bytes": 23128,
+      "sha256": "58e41ab0899fe0c3efedc26671a242c7d162362399c844dbd15edb88415efa68"
+    },
+    {
+      "path": "canonical/issue-460-trace.zip",
+      "bytes": 6310187,
+      "sha256": "c695dcf7dc8ac283deb087d24eba34af75cc5e4134b3477ddfa7ab9cfab741ef"
+    },
+    {
+      "path": "canonical/issue-460.png",
+      "bytes": 121017,
+      "sha256": "2f1f7418c72adf7ec076287f1155f2eb6b344678196dd6902381663cb0886ae5"
+    },
+    {
+      "path": "canonical/issue-460.webm",
+      "bytes": 746310,
+      "sha256": "cc901e6a0a6a48cd619396591901a20abb23b7c192be8cb1d046adc8f01d4aed"
+    },
+    {
+      "path": "canonical/issue-464.png",
+      "bytes": 23070,
+      "sha256": "d8892ca230fcc4b7ceb7deeee3c30aa23afc6e0b8d831ee8ee27f54b3072c399"
+    },
+    {
+      "path": "canonical/issue-467.png",
+      "bytes": 199854,
+      "sha256": "2e8de9e6f5a6c5cb7b9b4b2ae7f1b4b63d65b8bf3b1ecf002e3103cd51b8a91e"
+    },
+    {
+      "path": "clinical-followup/correction/browser-errors.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "clinical-followup/correction/flow.webm",
+      "bytes": 756755,
+      "sha256": "70a75fdc3aa530cbfacc27159630c57ede169e35dc959dfb3f51e7d4c267321f"
+    },
+    {
+      "path": "clinical-followup/correction/refusal-corrected-after-reload.png",
+      "bytes": 123353,
+      "sha256": "6b22a78b8c3424fe096019aac5e7cc88dae522e23428680eb0ff5aa9f6d41c3f"
+    },
+    {
+      "path": "clinical-followup/correction/trace.zip",
+      "bytes": 5774635,
+      "sha256": "036d3b1b17f424967b0ff9d0b5ba683f4ef3fd6d2cfe767e89cbd91fa49ce7fb"
+    },
+    {
+      "path": "clinical-followup/results.json",
+      "bytes": 487,
+      "sha256": "592f1856a7bb60580a95c451a84243757b9ea4af785ea18f9bad54c98ef2ef70"
+    },
+    {
+      "path": "clinical-followup/verification/assistant-verification.png",
+      "bytes": 216602,
+      "sha256": "e9bfcd3c0bf7ad828878e3655e6505787c6c3c86be76d44b9d72484df74aff9c"
+    },
+    {
+      "path": "clinical-followup/verification/calendar-verification.png",
+      "bytes": 123760,
+      "sha256": "4b8953e7d3bb6bef04b8899514f34e33c19af2420eded1fcb863a596067d3643"
+    },
+    {
+      "path": "clinical-followup/verification/flow.webm",
+      "bytes": 586045,
+      "sha256": "caaf57fc2d910a29f5814db31817b138bc7d2fa2a6c0d53a50605554a4d1c1ba"
+    },
+    {
+      "path": "clinical-followup/verification/giro-verification.png",
+      "bytes": 144186,
+      "sha256": "c2f7bd078c6cde5b4a5fe8dab535eb0f466f7f93448c00da4edec72ef5606ba9"
+    },
+    {
+      "path": "clinical-followup/verification/mobile-verification.png",
+      "bytes": 324165,
+      "sha256": "fc8298a53e344758dbff4ee247eb3e2f7a30b8cce43d4c9bd499509bcade97f3"
+    },
+    {
+      "path": "clinical-followup/verification/trace.zip",
+      "bytes": 4272360,
+      "sha256": "9f21052f4f2ee73f4b90623dfdfaa259d4d23d047937239daab1dba8501ececf"
+    },
+    {
+      "path": "evidence-audit.json",
+      "bytes": 2597,
+      "sha256": "966b005f273335b8340e760118ad4bec1558bfe66a4d13c2a78a309ce98fad73"
+    },
+    {
+      "path": "evidence-map.json",
+      "bytes": 11082,
+      "sha256": "b7d0c85bce7b2f734bd8b676d6a074a49ce6d14313293518be34174006082aac"
+    },
+    {
+      "path": "findings.json",
+      "bytes": 1779,
+      "sha256": "3bdb133767ccc42ee9f8d464cb61822555075e41da1abf18e0af5abe8cc75d35"
+    },
+    {
+      "path": "image-text-audit.json",
+      "bytes": 183,
+      "sha256": "f22432f3f8c000b95c15ba373ea3925e3a470b2e79b0b5ac15cd469a1daa78b7"
+    },
+    {
+      "path": "independent-extra/admin-agenda/admin-agenda-omitted-after-reload-dom.txt",
+      "bytes": 687,
+      "sha256": "e712ea5cfb26612592681ad6c210063aa546074e22409eed20bfa245baf12220"
+    },
+    {
+      "path": "independent-extra/admin-agenda/admin-agenda-omitted-after-reload.png",
+      "bytes": 82821,
+      "sha256": "1721564305d5cb07f9a0aec78b3c8876d5b568b256d3b24e113a95d476999246"
+    },
+    {
+      "path": "independent-extra/admin-agenda/admin-agenda-verification-omitted.png",
+      "bytes": 82818,
+      "sha256": "b4646ac690bae83a2012d23ca4211d73f27495b34f454f4b87d4297377cde221"
+    },
+    {
+      "path": "independent-extra/admin-agenda/flow.webm",
+      "bytes": 286466,
+      "sha256": "50d727341eadb93457f5d4101ee2f2118d7651444f619e9fc893d99edec4a0e4"
+    },
+    {
+      "path": "independent-extra/admin-agenda/trace.zip",
+      "bytes": 3271707,
+      "sha256": "9cc8d43edcb146bb11c8d49d666e0337653bf774e40543898e350dc9c56d1463"
+    },
+    {
+      "path": "independent-extra/operator-week-agenda/flow.webm",
+      "bytes": 716051,
+      "sha256": "13e03c678b80d85f2b3f7cdf7252810e0803e747b4922bbe1161139baa822cc9"
+    },
+    {
+      "path": "independent-extra/operator-week-agenda/operator-agenda-omitted-after-reload-dom.txt",
+      "bytes": 620,
+      "sha256": "6d5b212fe9e7967bcb7b875b307230110a195c23cbfc0d1f920bf9ff03437663"
+    },
+    {
+      "path": "independent-extra/operator-week-agenda/operator-agenda-omitted-after-reload.png",
+      "bytes": 84856,
+      "sha256": "9f5f36b254b426af5a1e65d65ff962628091432c35d023afb655e6ef3fd9c2d3"
+    },
+    {
+      "path": "independent-extra/operator-week-agenda/trace.zip",
+      "bytes": 4564568,
+      "sha256": "73f166ce7de650335ae905e8e7e5de9f7240947b41228c003e36f16810d7c4f5"
+    },
+    {
+      "path": "independent-extra/operator-week-agenda/week-verification-after-reload.png",
+      "bytes": 155507,
+      "sha256": "25b6aca6418b67d443ef3744f71072c684e47deefddd0a9aa0b40b86304e8039"
+    },
+    {
+      "path": "independent-extra/operator-week-agenda/week-verification.png",
+      "bytes": 155504,
+      "sha256": "34555b7f31e7848ff962b2c4b8963cf2d6c0a8514632d3902f5a211a3366da13"
+    },
+    {
+      "path": "independent-extra-browser.mjs",
+      "bytes": 15400,
+      "sha256": "322137c5b20aee38c3f0cfe742c9ce994d822d4adc6770ef4d112af9acd6cf19"
+    },
+    {
+      "path": "independent-outcomes.json",
+      "bytes": 2225,
+      "sha256": "315be824a2959269cf3cc2059a7d29442804df29d96082c2dc247c3f68eafe63"
+    },
+    {
+      "path": "integrity-and-cleanup.json",
+      "bytes": 2169,
+      "sha256": "bf759874dbd48df411e8fa47dd5897d100ec8e36dbce1fde7aa9efaab2eb4d16"
+    },
+    {
+      "path": "media-view-audit.json",
+      "bytes": 1181,
+      "sha256": "2ba3e81d1320e1641d53ededaf75ffba34203ca9b3b0e8a50725fac863f28297"
+    },
+    {
+      "path": "phase-origins.json",
+      "bytes": 9584,
+      "sha256": "c0c448dfd831af63c750c65b33f9342b8cd5fcdbedbd462817ea774523711143"
+    },
+    {
+      "path": "playwright-report/index.html",
+      "bytes": 6581,
+      "sha256": "37dc0007632dfc2220eaa9a94ef8703bdc7f537913603a26482430e691f78b48"
+    },
+    {
+      "path": "reproduce.md",
+      "bytes": 2407,
+      "sha256": "bbdb8ae1cac974ca4bab85977e1b1ed7668579e38261730cadd7837c94220085"
+    },
+    {
+      "path": "sanitization-receipt.json",
+      "bytes": 466,
+      "sha256": "d983888db4a818a224fad4f2292f5a6beecb8747377b265ec79febbd811c4cf2"
+    },
+    {
+      "path": "scope-amendment-1.md",
+      "bytes": 686,
+      "sha256": "2c26b08aa25f7ff130f58fa7d786b249edb3a64bdafd1286a4332a07ca3ded7e"
+    },
+    {
+      "path": "source-input-manifest.json",
+      "bytes": 629808,
+      "sha256": "95258401b7bb54b1614dbb2d3430ae50dffa3339181e553b9b68ddde82e4e03c"
+    },
+    {
+      "path": "source-security-review.md",
+      "bytes": 3391,
+      "sha256": "ff68849353a0aebc43d48783e028a7370fefa5fdbab50ca81c849a8a1c5770f7"
+    },
+    {
+      "path": "task-contract.md",
+      "bytes": 5533,
+      "sha256": "0434540a88f32c3bb7116fb77a8ad564da28a4098cd0a74bc7a82d28947894eb"
+    },
+    {
+      "path": "test-results/qa-4/additional-browser-results.json",
+      "bytes": 1563,
+      "sha256": "f829bcebe56a905efb70501127b10d711e4eca40f5000e10319c8d4043540c5c"
+    },
+    {
+      "path": "test-results/qa-4/backend-build.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "test-results/qa-4/backend-font-assets.txt",
+      "bytes": 60,
+      "sha256": "2502ef00b7addbf9c894176a433b4a165f7736f2f0ff3387ed18f9bc7e868060"
+    },
+    {
+      "path": "test-results/qa-4/backend-unit.txt",
+      "bytes": 194808,
+      "sha256": "a45e8cd63a059743c50e329d9fb1059149b76898a0ab057221db29270c7cc12d"
+    },
+    {
+      "path": "test-results/qa-4/database-provenance.json",
+      "bytes": 310,
+      "sha256": "4431f1698862f68b9cbafdc2621fd469b4b5c5acf1524d7e8d1d8e235d2b7051"
+    },
+    {
+      "path": "test-results/qa-4/frontend-build.txt",
+      "bytes": 16530,
+      "sha256": "006478b02a342556aa07013fda3e10f947fbf456e41e5b20373f0cc4280d2e5e"
+    },
+    {
+      "path": "test-results/qa-4/frontend-unit.txt",
+      "bytes": 130087,
+      "sha256": "b77070a2cd7b1ced481ea5317664dcb83224c7a6e5ca2adda69bc7b494d511a3"
+    },
+    {
+      "path": "test-results/qa-4/independent-extra-browser.txt",
+      "bytes": 736,
+      "sha256": "81b295819f27e538531357096a633aea84956a87a9221831b7da16002ac36535"
+    },
+    {
+      "path": "test-results/qa-4/internal-measured-results.json",
+      "bytes": 504,
+      "sha256": "2615fdef80938e99dbe6fdbf9e41723d5afc12c02fbc949286ea5032bba42d12"
+    },
+    {
+      "path": "test-results/qa-4/migration.txt",
+      "bytes": 7994,
+      "sha256": "970569a48340b5765ef3a385adc60d6562b7a2f1ceba1f1b29925f8e58ce795f"
+    },
+    {
+      "path": "test-results/qa-4/run-results.json",
+      "bytes": 859,
+      "sha256": "70abb9ea1918a4b97674175111180a59bddf1299912cec8feaae1a080ff52e0c"
+    },
+    {
+      "path": "test-results/qa-4/therapy-import-api.txt",
+      "bytes": 157,
+      "sha256": "485390af49ceed63d5552b2d44458575e3709f256b35f2f9999c94db5d7c656f"
+    },
+    {
+      "path": "test-results/qa-4/therapy-import-results.json",
+      "bytes": 284,
+      "sha256": "b8a62ccbd3f0471a0bf30550197d17feae994893f3cc1911c055eb7a4b1896b3"
+    },
+    {
+      "path": "test-results/qa-4/validation-summary.json",
+      "bytes": 1069,
+      "sha256": "bc55c763357178f72eca9f12eedd150eb181a9456dff5f0b6ef3559f8f35560e"
+    },
+    {
+      "path": "test-results/qa-6/backend-unit.txt.inherited.json",
+      "bytes": 240,
+      "sha256": "55274277e8eeecc77f0af37fd4018cc2899b6519216692425a87303aff2969e1"
+    },
+    {
+      "path": "test-results/qa-6/independent-extra-browser.txt",
+      "bytes": 534,
+      "sha256": "d2c39e7767db2f30929b4e6e0af7178e96d468d2cc5f5d6aae4d915f77486bc8"
+    },
+    {
+      "path": "test-results/qa-6/run-results.json",
+      "bytes": 1854,
+      "sha256": "9389a0f90b09d7f0c3372fa18a58216eabe4878054d065a55026596a0c4ea785"
+    },
+    {
+      "path": "test-results/qa-6/validation-summary.json",
+      "bytes": 2064,
+      "sha256": "9921b90118e3d8fbfcf2f9ae78802b3830a592e93464fd051bbaf3a2f2a304d3"
+    },
+    {
+      "path": "validation-report.md",
+      "bytes": 4930,
+      "sha256": "57c54824572e909b9848c7954c4e8605feadb55adc2b27caa86da7987011f36e"
+    }
+  ],
+  "payloadFileCount": 77,
+  "finalFileCountIncludingManifestAndSeal": 79,
+  "allFilesAtMost25MiB": true,
+  "secretFindings": [],
+  "zipMembersRescanned": 1950,
+  "decodedMediaBytesUnchangedSinceSuccessfulAudit": true,
+  "rawPrivateManifest": "/workspace/.clinicos-cloud/pr483-followup-independent-qa-20261018/analysis/private-raw-artifact-manifest.json",
+  "rawPrivateManifestSha256": "c76f1a384cd2b00eb51c90bef53eb23e7a0ebf5722a1648ca5ce464e8eae7fc9",
+  "rawPrivateArtifactCount": 397
+}

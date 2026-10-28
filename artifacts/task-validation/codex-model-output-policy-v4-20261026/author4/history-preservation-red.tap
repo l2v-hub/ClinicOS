@@ -1,0 +1,33 @@
+TAP version 13
+# Subtest: revision adoption preserves failed-request handoff history and consumed authorization nonces byte exact
+not ok 1 - revision adoption preserves failed-request handoff history and consumed authorization nonces byte exact
+  ---
+  duration_ms: 59.314909
+  type: 'test'
+  location: '/tmp/clinicos-permanent-semantic-author4/agent-team/tests/bug-pipeline/standalone-review.test.mjs:3084:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + undefined
+    - '[{"at":"2026-10-26T07:01:28.512Z","actor":"maintainer","previous":null,"recovery":false,"spentReviews":0},{"at":"2026-10-26T07:01:28.528Z","actor":"maintainer","previous":{"channel":"github-comments","status":"failed","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-26T07:01:28.512Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-26T07:01:28.520Z","feedbackFingerprint":"31f26216a249ad4ccdc6952b6e9d2703a15f951f3f9ce4371ce671e7e4bbd034","failureCode":"review-validation-failed","failedAt":"2026-10-26T07:01:28.524Z"},"recovery":true,"authorization":{"provenance":"user-session","grantId":"synthetic-session","consumptionNonce":"action-1","sourceRef":"test:session","binding":{"version":1,"repository":"l2v-hub/ClinicOS","collection":"standaloneReviews","entityId":"standalone-pr-81","pr":81,"reviewIssue":null,"actor":"maintainer","action":"retry-failed-review","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","historyDigest":"cd04ffb5c89a5a07456cdf15c8f57fa3dffcaf97a52eebee60cb4dff9e232887","reservation":{"requestId":"request-1","round":1},"budget":null},"bindingDigest":"0dca834c4c6182e9367ffbc00bb78005a1a6df149f48dcb633de63279b55661b"},"spentReviews":1}]'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '[{"at":"2026-10-26T07:01:28.512Z","actor":"maintainer","previous":null,"recovery":false,"spentReviews":0},{"at":"2026-10-26T07:01:28.528Z","actor":"maintainer","previous":{"channel":"github-comments","status":"failed","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-26T07:01:28.512Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-26T07:01:28.520Z","feedbackFingerprint":"31f26216a249ad4ccdc6952b6e9d2703a15f951f3f9ce4371ce671e7e4bbd034","failureCode":"review-validation-failed","failedAt":"2026-10-26T07:01:28.524Z"},"recovery":true,"authorization":{"provenance":"user-session","grantId":"synthetic-session","consumptionNonce":"action-1","sourceRef":"test:session","binding":{"version":1,"repository":"l2v-hub/ClinicOS","collection":"standaloneReviews","entityId":"standalone-pr-81","pr":81,"reviewIssue":null,"actor":"maintainer","action":"retry-failed-review","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","historyDigest":"cd04ffb5c89a5a07456cdf15c8f57fa3dffcaf97a52eebee60cb4dff9e232887","reservation":{"requestId":"request-1","round":1},"budget":null},"bindingDigest":"0dca834c4c6182e9367ffbc00bb78005a1a6df149f48dcb633de63279b55661b"},"spentReviews":1}]'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/clinicos-permanent-semantic-author4/agent-team/tests/bug-pipeline/standalone-review.test.mjs:3107:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 207.11896

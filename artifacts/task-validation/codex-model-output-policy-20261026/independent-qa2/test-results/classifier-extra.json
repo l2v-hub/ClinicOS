@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "synthetic": true,
+  "adversarialSourceCases": 4,
+  "nextSelectionRetainsDelegate": true,
+  "rawSourceInError": false,
+  "providerCalls": 0
+}

@@ -1,0 +1,295 @@
+{
+  "pngs": [
+    {
+      "path": "browser/evidence/issue-447-role-negative.png",
+      "width": 1180,
+      "height": 820,
+      "decoded": true,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-447.png",
+      "width": 1180,
+      "height": 820,
+      "decoded": true,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-451-touch.png",
+      "width": 820,
+      "height": 1180,
+      "decoded": true,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-451.png",
+      "width": 1180,
+      "height": 820,
+      "decoded": true,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-452-empty-agenda-pending.png",
+      "width": 1180,
+      "height": 820,
+      "decoded": true,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-452-news2-partial-failure.png",
+      "width": 1180,
+      "height": 820,
+      "decoded": true,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-452.png",
+      "width": 1180,
+      "height": 820,
+      "decoded": true,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-453-fresh-allergy-warning.png",
+      "width": 1180,
+      "height": 820,
+      "decoded": true,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-453.png",
+      "width": 1180,
+      "height": 820,
+      "decoded": true,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-454.png",
+      "width": 1180,
+      "height": 820,
+      "decoded": true,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-456.png",
+      "width": 1180,
+      "height": 820,
+      "decoded": true,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-457-paused.png",
+      "width": 1180,
+      "height": 820,
+      "decoded": true,
+      "visuallyInspected": true
+    },
+    {
+      "path": "browser/evidence/issue-457.png",
+      "width": 1180,
+      "height": 820,
+      "decoded": true,
+      "visuallyInspected": true
+    }
+  ],
+  "videos": [
+    {
+      "path": "browser/evidence/issue-447-role-negative.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "4.640000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-447.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "27.960000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-451-touch.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 554,
+          "height": 800
+        }
+      ],
+      "format": {
+        "duration": "4.200000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-451.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "16.360000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-452.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "20.960000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-453.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "28.520000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-454.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "7.600000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-456.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "18.320000"
+      }
+    },
+    {
+      "path": "browser/evidence/issue-457.webm",
+      "fullyDecoded": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 554
+        }
+      ],
+      "format": {
+        "duration": "21.440000"
+      }
+    }
+  ],
+  "traces": [
+    {
+      "path": "browser/evidence/issue-447-role-negative-trace.zip",
+      "members": 107,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-447-trace.zip",
+      "members": 720,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-451-touch-trace.zip",
+      "members": 74,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-451-trace.zip",
+      "members": 271,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-452-trace.zip",
+      "members": 495,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-453-trace.zip",
+      "members": 687,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-454-trace.zip",
+      "members": 192,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-456-trace.zip",
+      "members": 200,
+      "crcValid": true
+    },
+    {
+      "path": "browser/evidence/issue-457-trace.zip",
+      "members": 463,
+      "crcValid": true
+    }
+  ],
+  "freshPngCount": 13,
+  "pdfPages": 2,
+  "classification": "Fresh original canonical captures; scenario outcomes remain authoritative.",
+  "pdfPagesVisuallyInspected": 2,
+  "selectorDomPngVisuallyInspected": 2,
+  "baselineQa3TouchPngVisuallyCompared": true,
+  "visualObservation": "Pre-existing long synthetic room label overflow in parameter left badge; unchanged baseline CSS/button markup, no new regression. Header and accessible patient label remain complete. See pre-existing-room-badge-observation.json."
+}

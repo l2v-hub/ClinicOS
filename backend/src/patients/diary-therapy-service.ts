@@ -182,6 +182,34 @@ export function prepareDiaryTherapyInput(
   return input;
 }
 
+/**
+ * Prepare a diary request that may be an exact replay of a pre-route legacy write.
+ * A missing route is represented as missing after validating all other fields; `orale` is used
+ * only as the historical comparison value in replayMatches(), never as create input. If there is
+ * no persisted same-patient/requestId pair, createTherapyInTx receives the missing route and its
+ * strict shared validator rejects it before any write.
+ */
+export function prepareDiaryTherapyReplayInput(
+  raw: unknown,
+  operatoreInseritore: string,
+): TherapyCreateInput {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    throw new DiaryTherapyInputError('therapy obbligatoria', 'therapy_invalid');
+  }
+  const source = raw as TherapyCreateInput;
+  const route = source.viaSomministrazione as unknown;
+  if (route !== undefined && route !== null && route !== '') {
+    return prepareDiaryTherapyInput(source, operatoreInseritore);
+  }
+
+  const prepared = prepareDiaryTherapyInput(
+    { ...source, viaSomministrazione: 'orale' },
+    operatoreInseritore,
+  );
+  delete prepared.viaSomministrazione;
+  return prepared;
+}
+
 const INTENT_MESSAGES: Partial<Record<DiaryTherapyIntent, string>> = {
   sospensione: 'Sembra una sospensione: usa la sezione Terapia',
   somministrazione: 'Sembra una somministrazione già fatta: registrala dal giro terapia',
@@ -244,6 +272,8 @@ export function replayMatches(
   entry: DiaryCreateInput,
   therapy: TherapyCreateInput,
 ): boolean {
+  const route = therapy.viaSomministrazione as unknown;
+  if (route !== undefined && route !== null && typeof route !== 'string') return false;
   if (existing.entry.content !== entry.content) return false;
   if (existing.entry.entryDateTime !== entry.entryDateTime) return false;
   if (existing.entry.title !== entry.title) return false;

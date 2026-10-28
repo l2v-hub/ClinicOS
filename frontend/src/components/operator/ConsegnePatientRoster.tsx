@@ -51,7 +51,7 @@ function RosterPatient({
           {roomOf(patient)}
         </span>
         <span className="ho-who">
-          <PatientIdentity patient={patient} />
+          <PatientIdentity patient={patient} compact />
           <span className="handover-rounds__badges">
             <span>
               {summary?.status === 'ready'

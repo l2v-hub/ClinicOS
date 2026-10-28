@@ -1,0 +1,286 @@
+/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/domain/contracts.py:36: UserWarning: Field name "schema" in "CreateJobRequest" shadows an attribute in parent "BaseModel"
+  class CreateJobRequest(BaseModel):
+..........stt realtime outcome=budget_exceeded
+.......stt provider=google model=m bytes=4 durationMs=0 outcome=timeout correlationId=-
+./workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_voice_stt.py:118: StarletteDeprecationWarning: 'HTTP_413_REQUEST_ENTITY_TOO_LARGE' is deprecated. Use 'HTTP_413_CONTENT_TOO_LARGE' instead.
+  await voice_transcribe(FakeRequest({}, {"content-length": str(10_000_000)}),
+..........Executing <Task finished name='Task-68' coro=<ErrorAndUsageNormalizationTests.test_cancellation_is_real() done, defined at /workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_provider_agnostic.py:220> exception=ProviderUnavailableError("SDK OpenAI non installato: No module named 'openai'") created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.191 seconds
+EExecuting <Task finished name='Task-74' coro=<ErrorAndUsageNormalizationTests.test_fallback_only_when_enabled_and_allowed() done, defined at /workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_provider_agnostic.py:252> exception=AssertionError('RuntimeError_ not raised') created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.502 seconds
+FExecuting <Task finished name='Task-79' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() done, defined at /workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_provider_agnostic.py:212> exception=AssertionError("'PROVIDER_UNAVAILABLE' != 'RATE_LIMIT'\n- PROVIDER_UNAVAILABLE\n+ RATE_LIMIT\n : 429") created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.502 seconds
+F..Executing <Task finished name='Task-94' coro=<ErrorAndUsageNormalizationTests.test_usage_normalized() done, defined at /workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_provider_agnostic.py:242> exception=ProviderUnavailableError("SDK OpenAI non installato: No module named 'openai'") created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.501 seconds
+EExecuting <Task finished name='Task-99' coro=<ProviderSwitchTests.test_openai_then_test_provider_same_workflows() done, defined at /workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_provider_agnostic.py:165> exception=ProviderUnavailableError("SDK OpenAI non installato: No module named 'openai'") created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.501 seconds
+EExecuting <Task pending name='Task-104' coro=<ProviderSwitchTests.test_stt_switch() running at /workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_provider_agnostic.py:193> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/futures.py:389, Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.501 seconds
+......Executing <Task finished name='Task-109' coro=<CutoverFlowTests.test_ai_disabled_makes_no_provider_call() done, defined at /workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_openai_cutover.py:141> result=None created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.501 seconds
+.Executing <Task finished name='Task-114' coro=<CutoverFlowTests.test_cost_estimate_and_soft_budget_alert() done, defined at /workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_openai_cutover.py:152> exception=ProviderUnavailableError("SDK OpenAI non installato: No module named 'openai'") created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.504 seconds
+EExecuting <Task finished name='Task-119' coro=<CutoverFlowTests.test_role_mapping_on_the_wire_and_switch_openai_test_openai() done, defined at /workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_openai_cutover.py:101> exception=ProviderUnavailableError("SDK OpenAI non installato: No module named 'openai'") created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.502 seconds
+EExecuting <Task finished name='Task-124' coro=<CutoverFlowTests.test_secret_never_in_logs_or_responses() done, defined at /workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_openai_cutover.py:171> exception=ProviderUnavailableError("SDK OpenAI non installato: No module named 'openai'") created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.501 seconds
+E......
+======================================================================
+ERROR: test_cancellation_is_real (tests.test_provider_agnostic.ErrorAndUsageNormalizationTests.test_cancellation_is_real)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 78, in _client
+    from openai import AsyncOpenAI
+ModuleNotFoundError: No module named 'openai'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_provider_agnostic.py", line 228, in test_cancellation_is_real
+    await task
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/contract.py", line 277, in generate
+    raise last_error
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/contract.py", line 247, in generate
+    raw = await built.runner.run(request.prompt, request.attachments)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 129, in run
+    return await self._create(self._base_args(prompt, attachments))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 111, in _create
+    client = self._client()
+             ^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 80, in _client
+    raise ProviderUnavailableError(f"SDK OpenAI non installato: {ex}") from ex
+clinicos_ai.models.errors.ProviderUnavailableError: SDK OpenAI non installato: No module named 'openai'
+
+======================================================================
+ERROR: test_usage_normalized (tests.test_provider_agnostic.ErrorAndUsageNormalizationTests.test_usage_normalized)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 78, in _client
+    from openai import AsyncOpenAI
+ModuleNotFoundError: No module named 'openai'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_provider_agnostic.py", line 245, in test_usage_normalized
+    resp = await generate(ModelRegistry(), AIRequest(ModelRole.SUMMARY, "ASSISTANT_COMPOSE_V1"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/contract.py", line 277, in generate
+    raise last_error
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/contract.py", line 247, in generate
+    raw = await built.runner.run(request.prompt, request.attachments)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 129, in run
+    return await self._create(self._base_args(prompt, attachments))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 111, in _create
+    client = self._client()
+             ^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 80, in _client
+    raise ProviderUnavailableError(f"SDK OpenAI non installato: {ex}") from ex
+clinicos_ai.models.errors.ProviderUnavailableError: SDK OpenAI non installato: No module named 'openai'
+
+======================================================================
+ERROR: test_openai_then_test_provider_same_workflows (tests.test_provider_agnostic.ProviderSwitchTests.test_openai_then_test_provider_same_workflows)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 78, in _client
+    from openai import AsyncOpenAI
+ModuleNotFoundError: No module named 'openai'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_provider_agnostic.py", line 168, in test_openai_then_test_provider_same_workflows
+    a = await representative_workflows(ModelRegistry())
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_provider_agnostic.py", line 61, in representative_workflows
+    route = await run_skill_route(registry, "registra pressione 120/80 a questo ospite", SKILLS, None,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/agents/skill_router.py", line 93, in run_skill_route
+    resp = await _ask(registry, ModelRole.COMMAND_PARSER, prompt, "skill_route", correlation_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/agents/assistant.py", line 28, in _ask
+    return await generate(registry, AIRequest(role=role, prompt=prompt, purpose=stage),
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/contract.py", line 277, in generate
+    raise last_error
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/contract.py", line 247, in generate
+    raw = await built.runner.run(request.prompt, request.attachments)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 129, in run
+    return await self._create(self._base_args(prompt, attachments))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 111, in _create
+    client = self._client()
+             ^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 80, in _client
+    raise ProviderUnavailableError(f"SDK OpenAI non installato: {ex}") from ex
+clinicos_ai.models.errors.ProviderUnavailableError: SDK OpenAI non installato: No module named 'openai'
+
+======================================================================
+ERROR: test_cost_estimate_and_soft_budget_alert (tests.test_openai_cutover.CutoverFlowTests.test_cost_estimate_and_soft_budget_alert)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 78, in _client
+    from openai import AsyncOpenAI
+ModuleNotFoundError: No module named 'openai'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_openai_cutover.py", line 159, in test_cost_estimate_and_soft_budget_alert
+    resp = await generate(ModelRegistry(), AIRequest(ModelRole.SUMMARY, "ASSISTANT_COMPOSE_V1"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/contract.py", line 277, in generate
+    raise last_error
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/contract.py", line 247, in generate
+    raw = await built.runner.run(request.prompt, request.attachments)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 129, in run
+    return await self._create(self._base_args(prompt, attachments))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 111, in _create
+    client = self._client()
+             ^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 80, in _client
+    raise ProviderUnavailableError(f"SDK OpenAI non installato: {ex}") from ex
+clinicos_ai.models.errors.ProviderUnavailableError: SDK OpenAI non installato: No module named 'openai'
+
+======================================================================
+ERROR: test_role_mapping_on_the_wire_and_switch_openai_test_openai (tests.test_openai_cutover.CutoverFlowTests.test_role_mapping_on_the_wire_and_switch_openai_test_openai)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 78, in _client
+    from openai import AsyncOpenAI
+ModuleNotFoundError: No module named 'openai'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_openai_cutover.py", line 113, in test_role_mapping_on_the_wire_and_switch_openai_test_openai
+    route, plan, comp, tx = await flows()
+                            ^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_openai_cutover.py", line 104, in flows
+    route = await run_skill_route(reg, "registra pressione 120/80 a questo ospite", SKILLS, None,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/agents/skill_router.py", line 93, in run_skill_route
+    resp = await _ask(registry, ModelRole.COMMAND_PARSER, prompt, "skill_route", correlation_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/agents/assistant.py", line 28, in _ask
+    return await generate(registry, AIRequest(role=role, prompt=prompt, purpose=stage),
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/contract.py", line 277, in generate
+    raise last_error
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/contract.py", line 247, in generate
+    raw = await built.runner.run(request.prompt, request.attachments)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 129, in run
+    return await self._create(self._base_args(prompt, attachments))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 111, in _create
+    client = self._client()
+             ^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 80, in _client
+    raise ProviderUnavailableError(f"SDK OpenAI non installato: {ex}") from ex
+clinicos_ai.models.errors.ProviderUnavailableError: SDK OpenAI non installato: No module named 'openai'
+
+======================================================================
+ERROR: test_secret_never_in_logs_or_responses (tests.test_openai_cutover.CutoverFlowTests.test_secret_never_in_logs_or_responses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 78, in _client
+    from openai import AsyncOpenAI
+ModuleNotFoundError: No module named 'openai'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_openai_cutover.py", line 181, in test_secret_never_in_logs_or_responses
+    out = [await run_skill_route(ModelRegistry(), "registra pressione 120/80 a questo ospite",
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/agents/skill_router.py", line 93, in run_skill_route
+    resp = await _ask(registry, ModelRole.COMMAND_PARSER, prompt, "skill_route", correlation_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/agents/assistant.py", line 28, in _ask
+    return await generate(registry, AIRequest(role=role, prompt=prompt, purpose=stage),
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/contract.py", line 277, in generate
+    raise last_error
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/contract.py", line 247, in generate
+    raw = await built.runner.run(request.prompt, request.attachments)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 129, in run
+    return await self._create(self._base_args(prompt, attachments))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 111, in _create
+    client = self._client()
+             ^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/clinicos_ai/models/providers/openai.py", line 80, in _client
+    raise ProviderUnavailableError(f"SDK OpenAI non installato: {ex}") from ex
+clinicos_ai.models.errors.ProviderUnavailableError: SDK OpenAI non installato: No module named 'openai'
+
+======================================================================
+FAIL: test_fallback_only_when_enabled_and_allowed (tests.test_provider_agnostic.ErrorAndUsageNormalizationTests.test_fallback_only_when_enabled_and_allowed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_provider_agnostic.py", line 265, in test_fallback_only_when_enabled_and_allowed
+    with self.assertRaises(RuntimeError_) as ctx:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError_ not raised
+
+======================================================================
+FAIL: test_openai_adapter_errors (tests.test_provider_agnostic.ErrorAndUsageNormalizationTests.test_openai_adapter_errors)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/workspace/clinicos-voice-393/clinicos-ai-runtime/tests/test_provider_agnostic.py", line 217, in test_openai_adapter_errors
+    self.assertEqual(await self._openai_error(mode), code, mode)
+AssertionError: 'PROVIDER_UNAVAILABLE' != 'RATE_LIMIT'
+- PROVIDER_UNAVAILABLE
++ RATE_LIMIT
+ : 429
+
+----------------------------------------------------------------------
+Ran 51 tests in 5.203s
+
+FAILED (failures=2, errors=6)

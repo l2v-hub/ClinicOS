@@ -69,10 +69,13 @@ test('operator dashboard never presents unavailable clinical metrics as verified
 
 test('admin dashboard shares the same explicit unavailable-data and recovery contract', () => {
   assert.match(adminDashboard, /clinicalOverviewState: 'loading' \| 'ready' \| 'error'/);
-  assert.match(adminDashboard, /buildDashboardNotificationSections/);
+  assert.match(adminDashboard, /buildAdminAttention/);
   assert.match(adminDashboard, /onRetryClinicalOverview/);
-  assert.match(adminDashboard, /<DashboardNotificationCenter/);
-  assert.match(adminDashboard, /<AdminDashboardKpiBands/);
+  assert.match(adminDashboard, /<AdminAttentionList/);
+  assert.match(adminDashboard, /clinicalOverviewState === 'error'/);
+  assert.match(adminDashboard, /Riprova dati clinici/);
+  assert.match(adminDashboard, /sono mostrati gli ultimi dati disponibili/);
+  assert.doesNotMatch(adminDashboard, /clinicalOverview\?\.critici \?\? 0/);
   assert.match(adminKpis, /if \(!ready\)/);
   assert.match(adminKpis, /value: '—'/);
   assert.match(adminKpis, /clinicalOverviewState === 'loading'/);

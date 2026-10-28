@@ -1,0 +1,1 @@
+STOP: final public candidate files are assembled and source/media hashes have been verified against the prepared-source and runtime5 manifests. This candidate remains unpublished. Root owns independent candidate QA, final public-payload seal review, native checks, actual Claude review, final Codex review, and any publication/release decision. No deployment or closure is asserted.

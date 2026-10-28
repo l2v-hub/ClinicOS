@@ -1,0 +1,35 @@
+{
+  "status": "FAIL_PUBLICATION_PACKAGING",
+  "files": [
+    {
+      "path": "STOP.md",
+      "bytes": 192,
+      "sha256": "7f83c33533f297c076320be08d56fd87d3166369278683e2fe98ba2f53d0933f"
+    },
+    {
+      "path": "contract-validator.log",
+      "bytes": 169,
+      "sha256": "a7cb0ccf84e93e3d05fd456e9d35df056312d250f73a09224904c7a2ddc8e9d3"
+    },
+    {
+      "path": "local-verification.json",
+      "bytes": 5545,
+      "sha256": "ce1675d0433fc2ca4ba63c8a3eb5dc3eb466e64b8669319b19e5af28b0898992"
+    },
+    {
+      "path": "report.json",
+      "bytes": 2026,
+      "sha256": "51a13d2bb7791c35867bd96511e2e842077c10a9cd1bdbd8a3b9d8fdc7e56f7d"
+    },
+    {
+      "path": "screenshots-contact.png",
+      "bytes": 429912,
+      "sha256": "c4d6d668a19f8c151d03b5a07655d1cb68224749dbb1a7c28fd6f8b064aa9f07"
+    },
+    {
+      "path": "verify-local.py",
+      "bytes": 2615,
+      "sha256": "c176e4a5a1fd8e6b2be8d90bb38e78cbee21bb9074afd4445772545526f9006c"
+    }
+  ]
+}

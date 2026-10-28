@@ -1,0 +1,12 @@
+{
+  "nonce": "255080bc-bede-4c29-aef7-d893a01f220f",
+  "sourceMain": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "task": "codex-model-output-policy-20261026",
+  "status": "sealed-amendment-pending-independent-verification",
+  "amends": "../seal.json",
+  "manifestPath": "manifest.sha256",
+  "resultPath": "result.json",
+  "canonicalPacketPath": "packet",
+  "providerCalls": 0,
+  "publication": false
+}

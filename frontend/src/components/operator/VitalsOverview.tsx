@@ -12,6 +12,7 @@ interface Props {
   state: 'loading' | 'ready' | 'error';
   readings: PatientParameterReading[];
   stale: boolean;
+  verificationIncomplete?: boolean;
   onRetry: () => void;
   onOpenHistory: () => void;
   onRecordNow?: () => void;
@@ -21,6 +22,7 @@ export function VitalsOverview({
   state,
   readings,
   stale,
+  verificationIncomplete = false,
   onRetry,
   onOpenHistory,
   onRecordNow,
@@ -50,7 +52,9 @@ export function VitalsOverview({
   const tone =
     n.tone === 'high' || n.tone === 'medium' ? 'crit' : n.tone === 'single' ? 'warn' : 'none';
   const detail =
-    n.score === null
+    verificationIncomplete
+      ? 'Verifica incompleta: carica le rilevazioni precedenti nello storico NEWS2.'
+      : n.score === null
       ? n.missing.length
         ? `Mancano ${n.missing.join(', ')}`
         : 'Nessuna rilevazione'
@@ -80,11 +84,11 @@ export function VitalsOverview({
         className={`vt vt--news2 vt--${tone}`}
         onClick={history}
         aria-haspopup="dialog"
-        aria-label={`NEWS2 ${n.score ?? 'non calcolabile'}${n.measuredAt ? ` · ${readingRecencyText(n.measuredAt, now)}` : ''}: ${detail}. Apri lo storico NEWS2`}
+        aria-label={`NEWS2 ${verificationIncomplete ? 'da verificare' : n.score ?? 'non calcolabile'}${n.measuredAt ? ` · ${readingRecencyText(n.measuredAt, now)}` : ''}: ${detail}. Apri lo storico NEWS2`}
       >
         <span className="vt__label">NEWS2</span>
         <span className="vt__value">
-          {n.score ?? 'N/A'}
+          {verificationIncomplete ? 'Da verificare' : n.score ?? 'N/A'}
           {n.score !== null && <small>punti</small>}
         </span>
         {n.measuredAt && <ReadingRecency measuredAt={n.measuredAt} now={now} />}

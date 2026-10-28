@@ -55,10 +55,11 @@ osservato → QA indipendente con prove legate ai sorgenti → pubblicazione del
 e check nativi → review Claude reale tramite il canale autorizzato → nuova sessione Codex finale
 → merge protetto e prova del rilascio. Le label descrivono questa sequenza; non sostituiscono i
 gate. Una PR approvata sullo SHA attuale e in attesa di rilascio conserva la review se non sono
-cambiati sorgenti, configurazioni o feedback rilevante. Le modifiche al trust root richiedono
-anche la review nativa corrente di una persona indipendente e autorizzata e il merge manuale
-protetto; report di modello, QA o budget grant non la sostituiscono. Vedi il gate dettagliato nel
-[playbook](references/bug-delivery.md).
+cambiati sorgenti, configurazioni o feedback rilevante. Nel flusso autorizzato per sviluppatore
+singolo anche gli scope infrastrutturali del controller possono essere mergiati automaticamente
+dopo review Claude autentica e QA Codex finale separata sullo SHA corrente. Il controller non
+impone una seconda persona: restano vincolanti i check, la prenotazione e le protezioni native
+di GitHub. Vedi il gate dettagliato nel [playbook](references/bug-delivery.md).
 
 Il budget predefinito è di quattro tentativi implementativi e quattro review, conteggiati
 separatamente. Se l'utente ha già autorizzato continuazioni, mantieni tale autorizzazione e usa

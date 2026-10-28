@@ -1,0 +1,3 @@
+# Plan
+
+BoundedLunaconfiguration andactualexpressionregression; independentSolQA andnativeCI; realClaudepeer andfinalCodex; normalprotectedmerge preservingseparatePR512fix; actualpermanentworkflowlabel/request onDoc511→freshprofile→nativeclaim/report→Codexwake.

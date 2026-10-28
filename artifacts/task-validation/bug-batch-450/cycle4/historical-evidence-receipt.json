@@ -1,0 +1,12 @@
+{
+  "historicalManifest": "artifacts/task-validation/bug-batch-450/final-manifest.json",
+  "historicalManifestSha256": "ec485d748aabb7297aee12edce173e73cb86276002d5d7a613cced7bcf35ef2d",
+  "historicalStatus": "Historical author packet; never the authoritative latest evidence manifest. Preserved at original path unchanged.",
+  "evidenceCheckpoint": "0eae11061",
+  "reviewSubject": "111e672faf77b45280d8ef6ebb15268180b58376",
+  "sourceIdentityCommand": "git diff --stat 0eae11061..111e672faf77b45280d8ef6ebb15268180b58376 -- . :!artifacts",
+  "sourceDiffStat": "",
+  "sourceIdenticalOutsideArtifacts": true,
+  "latestPriorEvidenceManifest": "artifacts/task-validation/bug-batch-450/evidence-manifest.json",
+  "newEvidenceLocation": "artifacts/task-validation/bug-batch-450/cycle4/"
+}

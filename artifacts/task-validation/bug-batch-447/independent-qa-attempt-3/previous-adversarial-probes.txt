@@ -1,0 +1,18 @@
+✔ independent PS parser rejects implicit decisions, unconfirmed commands and extra authority fields (2.901363ms)
+✔ independent protected exit survives ordinary omission; null/delete/forgery cannot resume or alter history (2.78963ms)
+✔ independent adapter conflict predicate retries only explicit PostgreSQL transaction conflicts (0.418088ms)
+✔ independent actual NEWS2 loader reaches an older complete observation beyond 25 partial pages (84.475632ms)
+✔ independent actual NEWS2 loader rejects repeated cursor, duplicate observation, wrong patient and malformed completeness (3.403087ms)
+✔ independent actual roster loader retains good patient score when another source fails (2.44894ms)
+✔ independent actual next-patient loader skips unknown/completed pages and cancels on changed current selection (0.879947ms)
+✔ independent actual chart queue preserves verified PS snapshot across failed following save (1.502763ms)
+✔ independent actual allergy acknowledgement changes with patient/product/context and permits explicit warning confirmation (0.950726ms)
+✔ independent emergency model excludes future/cross-patient triggers and refused/unconfirmed doses; duration stays civil across DST (4.20768ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1458.584219

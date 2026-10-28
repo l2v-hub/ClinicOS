@@ -1,0 +1,8 @@
+# Implementation plan — source3
+
+1. Preserve source1/QA1 BLOCKED3, source2/QA2 VERIFIED0, original6c publication/sixCI and genuine Claude1 CHANGES_REQUESTED2. Native implementation1FAILED and2PASSED/review1 remain counted, all packet bytes and handoff history retained.
+2. Correct peer1 medium finding with exact initial-flow retention: native sourceSha:null/noPR, failed last round, exact plan/feedback/base/checkpoint and physical source identity. Keep correction/archive eligibility and every scope/secret/size guard unchanged. Record distinct created/already-existing/ineligible/refusal outcomes.
+3. Correct low finding with actual read-only observe context, explicit retention-failed diagnostic marker, actual CLI collector/writer and a behavioural persisted-failure/pipeline-throw/real-export/disk-diagnostic fixture; absent/throwing observer negative cases.
+4. Preserve Luna3 preliminary freeze26db and the actual native-null RED fixture. Director contribution adds exact native shape/guards and real diagnostic writer coverage; no additional delegated/provider calls. NEW independent QA3 binds final7sourcepairs and real tests.
+5. Publish a new immutable packet on the existing branch/PR; require actual new-head6CI and native verify/live capacity, then a PLAIN authenticated7source-pair/check proof BEFORE normal genuine Claude2.
+6. NEW independent final follows actual peer approval, then ordinary protected merge. Only after accepted merge and fresh recovery binding QA may legacy FAILED checkpoints be genuinely authorized/archived and NEW clinical attempts run. No future gate is fabricated.

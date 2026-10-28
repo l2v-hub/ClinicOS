@@ -1,0 +1,87 @@
+{
+  "packet": "PR497-original8-review-packet9",
+  "status": "PRIVATE_CANDIDATE_PENDING_ROOT_REVIEW",
+  "testedSourceSha": "b76eb6baf5e87dcdb9b89a580ef48baf26e1bb7a",
+  "overallClosureClaimed": false,
+  "evidenceAssessment": {
+    "originalIssueAcceptanceGapIdentified": false,
+    "basis": "The seven original issue scenarios #447, #451, #452, #453, #454, #456, and #457 each have an independent QA4 PASS_SCENARIO with 17 retained receipts total. The actual Milo #486 failure in QA4 is preserved and corrected by the fresh scoped QA5 HTTP/UI/route regression. QA5 also freshly completes the recorded matrix and lifecycle phase previously unrun in QA4.",
+    "freshness": "QA4 issue scenarios remain retained evidence, not rerun. QA5 fresh results apply to the skills compatibility fix, actual Milo route/confirmation behavior, recorded matrix, and lifecycle only.",
+    "rootReleaseGatesPending": [
+      "Root final review",
+      "Native source-SHA gates",
+      "Actual Claude review on the exact candidate SHA",
+      "Parent #483 review and reconciliation, separately owned by root",
+      "Deployment proof and issue-closure decision"
+    ]
+  },
+  "retainedIndependentQA4": {
+    "overallStatus": "FAILED — stopped on confirmed product defect",
+    "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+    "canonicalScenarios": {
+      "status": "all seven PASS_SCENARIO",
+      "receiptsTotal": 17,
+      "receiptCounts": {
+        "447": 9,
+        "451": 2,
+        "452": 2,
+        "453": 1,
+        "454": 1,
+        "456": 1,
+        "457": 1
+      },
+      "freshDB33": "PASS33/33",
+      "build": "PASS",
+      "fourViewport452": "PASS"
+    },
+    "route486": {
+      "otherSubpathsPassed": 7,
+      "actualMilo": "FAILED: valid mapper payload with doseMode fixed received preview_mismatch; zero therapy/diary writes"
+    },
+    "evidence": "provenance/qa4-canonical-seven-receipt-summary.json; provenance/qa4-final-review-report.json"
+  },
+  "freshScopedQA5": {
+    "status": "SCOPED_REGRESSION_PASS_WITH_DISCLOSED_UNRUN",
+    "sourceSha": "b76eb6baf5e87dcdb9b89a580ef48baf26e1bb7a",
+    "overallClosureClaimed": false,
+    "results": {
+      "skillsUnit": "PASS",
+      "backendTypes": "PASS",
+      "affectedAssistantHTTP": "11 pass / 0 fail",
+      "actualMiloAndRouteMatrix": "3 criteria pass; doseMode fixed; explicit route orale; valid HTTP/tools 9/9; invalid HTTP/tools 21/21; missing route blocks confirmation and writes",
+      "recordedMatrix": "8 criteria pass; 18 denied writes; actual cursor pagination click and reload",
+      "recordedLifecycle": "6 criteria pass; operator/admin actual App lifecycle and reload"
+    },
+    "failedAttemptsPreserved": [
+      "Attempt 1 setup failure; affected HTTP cases passed before stop",
+      "Attempt 2 real rate-limit stress observation preserved (222 requests, 162 HTTP 429); strict assertions failed",
+      "Attempt 3 real shared per-IP rate-limit accumulation preserved (12 dashboard HTTP 429); strict assertion failure retained",
+      "Attempt 4 omitted actual ward pagination click; no product finding"
+    ],
+    "evidence": "provenance/qa5-final-report.json; provenance/qa5-final-STOP.json"
+  },
+  "disclosedUnrunSupplements": [
+    "QA5 individual scheduled-dose panel supplement was unmounted; independent QA4 #447 and #454 receipts separately pass actual today-dose persistence.",
+    "QA5 missing-operator-metadata fixture and separate civil-date-padding browser supplement; original task-contract criterion 6 explicitly says disclose as unrun if not executed.",
+    "QA5 assistant facility snapshot/queue/skill-parity supplement; original task-contract criterion 6 explicitly says disclose as unrun if not executed.",
+    "Actual external OCR/provider extraction is outside the synthetic acceptance boundary by contract."
+  ],
+  "preservation": {
+    "sourceMutation": false,
+    "gitMutation": false,
+    "githubMutation": false,
+    "providerMutation": false,
+    "runtimeOrTestExecutionByCurator": false,
+    "QA4OriginalFailedVerdictPreserved": true,
+    "QA5Attempts1To4Preserved": true,
+    "all162QA5SealEntriesMatch": true,
+    "copiedQAReportsAndStopsByteIdentical": true
+  },
+  "publication": {
+    "published": false,
+    "approved": false,
+    "merged": false,
+    "deployed": false,
+    "issuesClosed": false
+  }
+}

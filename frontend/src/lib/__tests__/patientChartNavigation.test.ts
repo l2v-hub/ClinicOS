@@ -92,7 +92,7 @@ test('HMI 1: 8 chart sections as in the prototype; every legacy tab opens the se
   assert.deepEqual(
     CHART_SECTIONS.map((s) => s.label),
     [
-      'Panoramica',
+      'Oggi',
       'Dati di ingresso',
       'Clinica',
       'Terapia',

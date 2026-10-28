@@ -730,3 +730,12 @@
   font-weight: 400;
   opacity: 0.85;
 }
+
+.am-voice__partial {
+  margin: 0;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.am-voice__partial-label {
+  font-weight: 600;
+}

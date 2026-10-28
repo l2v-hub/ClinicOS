@@ -1,0 +1,53 @@
+{
+  "policy": "exact synthetic session values only; no event or outcome removal",
+  "zipValidation": "CRC and residual signed-token scan passed",
+  "archives": [
+    {
+      "path": "/tmp/clinicos-qa497-browser13-20261021/attempt8/route486/issue-486-trace.zip",
+      "originalSha256": "d692fd1aeb7110efb6875471a258cb9af25cfc5a5060ca0b85d437051039129e",
+      "sanitizedSha256": "c5f1198dcc69befce68ae45945b4fe2d876262f6de1e3dfa3e636a2f8b142893",
+      "sessionsRedacted": 7,
+      "entries": [
+        {
+          "entry": "trace.trace",
+          "replacements": 16
+        },
+        {
+          "entry": "trace.network",
+          "replacements": 369
+        },
+        {
+          "entry": "resources/3acce533dc9f1a1a75c6024fda18218f9ef4a8fd.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/7ae48ea3e6420d28942bd6dd9e44b2fb11d1be1f.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/50e1b5b4e063ecd538e03079dae64667bf703e0d.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/9bf7b787fccd28d0d7b5f39dedcb60e8ca851e3b.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/4cf1f5c2b4eadfcb112d35f3ed99e0cc35e7f09a.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/4ff6e1e258bad22460b85fd7a0ab08e684ebd79f.json",
+          "replacements": 1
+        },
+        {
+          "entry": "resources/a7ea43fac8c1e8eb19e1c097704524a7efedf520.json",
+          "replacements": 1
+        }
+      ],
+      "tokensRemaining": 0,
+      "changed": true,
+      "originalRetainedPrivateOutsideRepository": true
+    }
+  ]
+}

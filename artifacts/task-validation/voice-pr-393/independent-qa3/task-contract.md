@@ -1,0 +1,7 @@
+# Dedicated independent QA3 — PR #393
+
+Fresh independent session, cycle3/4 source STOP. Original AC1–AC7 and all three original contracts apply unchanged. Source manifest SHA256 313aa08cc7e327e706d2e36344f20f2738496e9f83824f59b3bf14b1574c32d5; baseline published HEAD49e65822c168682f2f262d186357ce3c7f94ec9c. Sole source delta: tests/test_voice_realtime.py replaces undeclared httpx with standard-library direct ASGI driver. No product/contract edits, commits, GitHub/provider/model calls or activation. Root sole publisher.
+
+Mandatory phases: verify contract/provenance before execution; independently review exact diff and actual app route; run full240 runtime tests with httpx imports denied plus compile check; execute original failing browser probe using own fresh app/backend/owned PostgreSQL stack under full-lifecycle global flock, actual12 backend cases; verify screenshot/video/trace CRC, privacy and true pristine before/after receipt; final identity and sealed report.
+
+Inherited only after exact source/input and sealed-artifact hashes: QA2 frontend1386/build/backend types and52-case browser; no claim these were rerun. Prior QA1/QA2/cycle author evidence immutable. Browser gate observes real UI partial/error/retry/text fallback and all tracks stopped, no commits/assistant requests/writes, no unexpected console/HTTP errors. Synthetic mock transport is not Azure availability proof. Actual Azure positive NOT RUN, feature defaultOFF. No dev5432/Railway/production.

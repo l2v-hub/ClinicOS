@@ -24,6 +24,30 @@ test('route options never contain scheduling regimes', () => {
   assert.ok(VIA_OPTIONS.includes('SC'));
 });
 
+test('fresh manual form keeps route blank until operator selection and blocks save while absent', () => {
+  const value = emptyTherapyForm();
+  assert.equal(value.viaSomministrazione, '');
+  const routeIssues = therapyInputDiagnostics(therapyFormToInput(value)).filter(
+    (issue) => issue.field === 'viaSomministrazione',
+  );
+  assert.equal(routeIssues.length, 1);
+  assert.match(routeIssues[0].message, /via/i);
+  const html = renderToStaticMarkup(
+    createElement(TherapyFormFields, { value, creation: true, onChange() {} }),
+  );
+  assert.match(html, /<option value="" selected="">Seleziona via<\/option>/);
+  assert.doesNotMatch(html, /<option value="orale" selected="">/);
+
+  const formChanged = applyTherapyFormChange(value, { pharmaceuticalForm: 'fiala' });
+  assert.equal(formChanged.viaSomministrazione, '', 'pharmaceutical form cannot imply route');
+  const chosen = applyTherapyFormChange(formChanged, { viaSomministrazione: 'IV' });
+  assert.equal(
+    applyTherapyFormChange(chosen, { pharmaceuticalForm: 'flacone' }).viaSomministrazione,
+    'IV',
+    'later form changes preserve the operator route',
+  );
+});
+
 test('legacy regimen route is not selectable or confirmed and remains unchanged for review', () => {
   for (const viaSomministrazione of regimes) {
     const value = { ...emptyTherapyForm(), viaSomministrazione };

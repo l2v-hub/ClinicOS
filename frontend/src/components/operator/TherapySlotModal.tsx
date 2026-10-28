@@ -195,11 +195,18 @@ export function TherapySlotModal({
                 <div className="therapy-patient-header">
                   <PatientIdentity patient={{ ...p, id: p.patientId }} />
                 </div>
+                {p.temporaryPsExit?.decision === 'pause' && (
+                  <p role="status">
+                    Somministrazioni in pausa per uscita PS, fino al rientro registrato. La mancata
+                    erogazione richiede una registrazione esplicita.
+                  </p>
+                )}
 
                 {/* Drug rows */}
                 {p.administrations.map((a) => {
                   const key = `${p.patientId}|${a.therapyId}|${a.scheduledTime}`;
                   const isPending = pendingKeys.has(key);
+                  const paused = p.temporaryPsExit?.decision === 'pause';
                   const identity = { ...p, id: p.patientId };
                   const actionTarget = `${patientIdentityName(identity)} · ${patientIdentifier(identity)} · ${a.drugName} · ${a.doseMode === 'glucose_scale' && a.status !== 'administered' ? 'Secondo schema glicemico' : a.dosage} · ${a.scheduledTime}`;
                   return (
@@ -239,23 +246,31 @@ export function TherapySlotModal({
                           {a.status === 'pending' && !readOnly && (
                             <>
                               {a.doseMode === 'glucose_scale' ? (
-                                <GlucoseAdministrationControl
-                                  key={`${key}|${date}|${a.scheduledTime}`}
-                                  protocol={a.doseProtocol}
-                                  target={actionTarget}
-                                  sending={isPending}
-                                  onConfirm={(measuredGlucose) => {
-                                    setPendingKeys((prev) => new Set(prev).add(key));
-                                    onConfirm?.({ ...buildInfo(p, a), measuredGlucose });
-                                  }}
-                                />
+                                <fieldset
+                                  disabled={paused}
+                                  style={{ border: 0, margin: 0, padding: 0 }}
+                                  aria-label={`Somministrazione secondo glicemia: ${actionTarget}`}
+                                >
+                                  <GlucoseAdministrationControl
+                                    key={`${key}|${date}|${a.scheduledTime}`}
+                                    protocol={a.doseProtocol}
+                                    target={actionTarget}
+                                    sending={isPending}
+                                    onConfirm={(measuredGlucose) => {
+                                      if (paused) return;
+                                      setPendingKeys((prev) => new Set(prev).add(key));
+                                      onConfirm?.({ ...buildInfo(p, a), measuredGlucose });
+                                    }}
+                                  />
+                                </fieldset>
                               ) : (
                                 <button
                                   className="therapy-action-btn therapy-action-btn--confirm"
                                   aria-label={`Erogata: ${actionTarget}`}
-                                  disabled={isPending}
+                                  disabled={isPending || paused}
                                   style={{ opacity: isPending ? 0.6 : 1 }}
                                   onClick={() => {
+                                    if (paused) return;
                                     setPendingKeys((prev) => new Set(prev).add(key));
                                     onConfirm?.(buildInfo(p, a));
                                   }}

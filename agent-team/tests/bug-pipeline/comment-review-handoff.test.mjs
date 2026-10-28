@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import { createGitHub } from '../../src/bug-pipeline/github.mjs';
 import { externalReviewStep } from '../../src/bug-pipeline/external-review.mjs';
 import { feedbackFingerprint } from '../../src/bug-pipeline/contracts.mjs';
+import { processCloudReview } from '../../src/bug-pipeline/cloud-review-worker.mjs';
 import {
   COMMENT_REVIEW_MARKER,
   createCommentReviewHandoff,
@@ -825,6 +826,293 @@ test('background normal waiting reconciliation never repairs notices across acco
   );
   assert.equal(f.pr.comments.length, notices);
   assert.deepEqual(f.remote.batches[0], previous);
+});
+
+test('owned provider failure spends its exact claim and preserves immutable history without recovery authorization', async () => {
+  const f = fixture({ authorizationVerifier: false });
+  const claimed = await requestedClaimed(f);
+  const failed = await f.handoff.failOwnedClaim(81, claimed, 'claude-timeout');
+  assert.equal(failed.phase, 'blocked');
+  assert.equal(failed.reviews.length, 1);
+  assert.equal(failed.reviews[0].status, 'failed');
+  assert.equal(failed.reviewLedger.rounds[0].verdict, 'failed');
+  assert.deepEqual(failed.implementation, claimed.implementation);
+  assert.equal(failed.externalReview.claimId, claimed.externalReview.claimId);
+  assert.equal(failed.externalReview.failureCode, 'claude-timeout');
+  assert.deepEqual(failed.recoveryHistory.at(-1).previous, claimed.externalReview);
+  assert.match(failed.recoveryHistory.at(-1).claimSnapshotSha256, /^[a-f0-9]{64}$/);
+  assert.equal(failed.recoveryHistory.at(-1).consumedReviews, 1);
+  assert.equal(f.pr.comments.filter((comment) => comment.body.includes('"kind": "report"')).length, 0);
+  await assert.rejects(f.handoff.failOwnedClaim(81, claimed, 'claude-timeout'), /snapshot changed/);
+  await assert.rejects(f.handoff.claim(81), /not available/);
+});
+
+test('provider failure rejects changed owner, live SHA, snapshot and nonfinite failure code', async () => {
+  for (const mutation of ['owner', 'sha', 'snapshot', 'code']) {
+    const f = fixture(), claimed = await requestedClaimed(f);
+    const before = clone(f.remote);
+    if (mutation === 'owner') f.setActor('another-authorized-user');
+    if (mutation === 'sha') f.feedback.head = 'd'.repeat(40);
+    if (mutation === 'snapshot') claimed.externalReview.claimId = 'not-this-claim';
+    await assert.rejects(f.handoff.failOwnedClaim(81, claimed,
+      mutation === 'code' ? 'secret-provider-output' : 'claude-nonzero-exit'));
+    assert.deepEqual(f.remote, before);
+  }
+});
+
+test('provider failure CAS cannot overwrite a competing report or changed durable claim', async () => {
+  const f = fixture(), claimed = await requestedClaimed(f);
+  let changed = false;
+  f.onViewIssue(() => {
+    if (changed) return;
+    changed = true;
+    f.remote.batches[0].externalReview.claimId = 'competing-reservation';
+  });
+  await assert.rejects(f.handoff.failOwnedClaim(81, claimed, 'claude-timeout'));
+  assert.equal(f.remote.batches[0].externalReview.claimId, 'competing-reservation');
+  assert.equal(f.remote.batches[0].reviews[0].status, 'running');
+});
+
+test('owned failure refuses to discard a genuine report already posted for its unchanged reservation', async () => {
+  const f = fixture(), claimed = await requestedClaimed(f);
+  await f.handoff.submit(81, validApproved());
+  const previous = clone(f.remote);
+  await assert.rejects(f.handoff.failOwnedClaim(81, claimed, 'claude-timeout'), /report already exists/);
+  assert.deepEqual(f.remote, previous);
+  const published = await f.handoff.reconcilePR(81);
+  assert.equal(published.externalReview.status, 'published');
+  assert.equal(published.reviews[0].status, 'approved');
+});
+
+test('cloud stale inference cannot publish under a same-actor same-SHA replacement native claim', async () => {
+  const f = fixture();
+  f.remote.batches[0].baseSha = 'b'.repeat(40);
+  await f.handoff.request(81);
+  let original, replacement;
+  const result = await processCloudReview({
+    github: f.github, handoff: f.handoff, standalone: {}, cwd: '/synthetic/worktree', env: {},
+    retrieve: async () => ({ packet: { subject_sha: sha, feedback: await f.github.reviewFeedback(81) }, tracked: new Set(['src/feature.ts']) }),
+    probe: async () => ({ profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } }), communication: { publishState: async () => assert.fail('No stale projection') },
+    wake: async () => assert.fail('No stale controller wake'),
+    run: async () => {
+      original = clone(f.remote.batches[0]);
+      await f.handoff.failOwnedClaim(81, original, 'claude-timeout');
+      await f.handoff.request(81, { recoverFailed: true, authorizationRef: 'test:session' });
+      replacement = await f.handoff.claim(81);
+      return { ok: true, stdout: JSON.stringify({ structured_output: validApproved() }) };
+    },
+  });
+  assert.equal(result.status, 'ownership-changed');
+  assert.equal(result.round, 1);
+  assert.deepEqual(result.report, validApproved());
+  assert.equal(result.reportSha256, createHash('sha256').update(JSON.stringify(validApproved())).digest('hex'));
+  assert.notEqual(original.externalReview.claimId, replacement.externalReview.claimId);
+  assert.deepEqual(f.remote.batches[0], replacement);
+  assert.deepEqual(replacement.reviews.map((item) => item.status), ['failed', 'running']);
+  assert.deepEqual(replacement.reviewLedger.rounds.map((item) => item.verdict), ['failed', 'running']);
+  assert.equal(f.pr.comments.filter((item) => item.body.includes('"kind": "report"')).length, 0);
+  assert.equal(f.reported.length, 0);
+});
+
+test('expected native submission rejects changed actor/head/request/claim/round/source/history body without publication', async () => {
+  for (const mutation of ['actor', 'head', 'request', 'claim', 'round', 'source', 'body', 'null']) {
+    const f = fixture(), expected = await requestedClaimed(f);
+    if (mutation === 'actor') f.setActor('another-authorized-user');
+    if (mutation === 'head') f.feedback.head = 'd'.repeat(40);
+    if (mutation === 'request') f.remote.batches[0].externalReview.requestId = 'replacement-request';
+    if (mutation === 'claim') f.remote.batches[0].externalReview.claimId = 'replacement-claim';
+    if (mutation === 'round') {
+      f.remote.batches[0].reviews.push({ round: 2, status: 'running', subjectSha: sha });
+      f.remote.batches[0].reviewLedger.rounds.push({ round: 2, verdict: 'running', subject_sha: sha });
+    }
+    if (mutation === 'source') f.remote.batches[0].baseSha = 'd'.repeat(40);
+    if (mutation === 'body') f.remote.batches[0].plan.analysis = 'Changed frozen review context.';
+    const preserved = clone(f.remote);
+    await assert.rejects(f.handoff.submit(81, validApproved(), {
+      expectedClaim: mutation === 'null' ? null : expected,
+    }), (error) => error.code === 'review-ownership-changed', mutation);
+    assert.deepEqual(f.remote, preserved);
+    assert.equal(f.pr.comments.filter((item) => item.body.includes('"kind": "report"')).length, 0);
+  }
+});
+
+test('expected claim is checked again after final native live/auth awaits immediately before publication', async () => {
+  const f = fixture(), expected = await requestedClaimed(f);
+  let sourceReads = 0, mutated = false;
+  f.onViewIssue((number) => {
+    if (number === 17 && ++sourceReads === 3) {
+      mutated = true;
+      f.remote.batches[0].externalReview.claimId = 'changed-inside-final-live-guard';
+    }
+  });
+  await assert.rejects(f.handoff.submit(81, validApproved(), { expectedClaim: expected }),
+    (error) => error.code === 'review-ownership-changed');
+  assert.equal(mutated, true);
+  assert.equal(f.remote.batches[0].externalReview.claimId, 'changed-inside-final-live-guard');
+  assert.equal(f.remote.batches[0].reviews[0].status, 'running');
+  assert.equal(f.pr.comments.filter((item) => item.body.includes('"kind": "report"')).length, 0);
+});
+
+test('expected native publication uses immutable validated body and claim copies across caller mutation', async () => {
+  const f = fixture(), expected = await requestedClaimed(f), review = validApproved();
+  const originalClaim = clone(expected);
+  f.onViewIssue(() => {
+    expected.externalReview.claimId = 'caller-mutated-alias';
+    review.summary = 'Caller-mutated body must never be published.';
+  });
+  await f.handoff.submit(81, review, { expectedClaim: expected });
+  const posted = JSON.parse(f.pr.comments.at(-1).body.split('\n').slice(1).join('\n'));
+  assert.deepEqual(posted.report, validApproved());
+  assert.equal(posted.claim_id, originalClaim.externalReview.claimId);
+  assert.equal(posted.round, originalClaim.reviews.length);
+});
+
+test('cloud genuine report survives benign controller observations during inference', async () => {
+  const f = fixture();
+  f.remote.batches[0].baseSha = 'b'.repeat(40);
+  await f.handoff.request(81);
+  const result = await processCloudReview({
+    github: f.github, handoff: f.handoff, standalone: {}, cwd: '/synthetic/worktree', env: {},
+    retrieve: async () => ({ packet: { subject_sha: sha, feedback: await f.github.reviewFeedback(81) }, tracked: new Set(['src/feature.ts']) }),
+    probe: async () => ({ profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } }),
+    communication: { publishState: async () => {} }, wake: async () => {},
+    run: async () => {
+      const batch = f.remote.batches[0];
+      batch.checkObservation = { passed: true, observedAt: '2026-10-25T00:00:00.000Z' };
+      batch.externalReview.lastObservedAt = '2026-10-25T00:00:00.000Z';
+      batch.reviews.at(-1).observedAt = '2026-10-25T00:00:00.000Z';
+      batch.reviewLedger.rounds.at(-1).observedAt = '2026-10-25T00:00:00.000Z';
+      return { ok: true, stdout: JSON.stringify({ structured_output: validApproved() }) };
+    },
+  });
+  assert.equal(result.status, 'published');
+  assert.deepEqual(result.report, validApproved());
+  assert.equal(f.remote.batches[0].checkObservation.passed, true);
+  assert.equal(f.remote.batches[0].reviews.at(-1).observedAt, '2026-10-25T00:00:00.000Z');
+  assert.equal(f.remote.batches[0].externalReview.status, 'published');
+  assert.equal(f.reported.length, 1);
+});
+
+test('owned failure accepts benign observations while preserving them and the spent reservation history', async () => {
+  const f = fixture(), expected = await requestedClaimed(f);
+  f.remote.batches[0].checkObservation = { passed: true };
+  const failed = await f.handoff.failOwnedClaim(81, expected, 'claude-overloaded');
+  assert.deepEqual(failed.checkObservation, { passed: true });
+  assert.equal(failed.reviews.length, 1);
+  assert.equal(failed.reviews[0].status, 'failed');
+  assert.equal(failed.recoveryHistory.at(-1).token, expected.externalReview.claimId);
+});
+
+test('preclaim source or actual GitHub feedback drift spends no review round and invokes no model', async () => {
+  for (const mutation of ['plan-during-probe', 'plan-during-retrieval', 'shared-state-alias', 'comment', 'review', 'edited-comment', 'actor']) {
+    const f = fixture();
+    f.remote.batches[0].baseSha = 'b'.repeat(40);
+    f.feedback.comments.push({ id: 901, author: 'human', body: 'Original review feedback.' });
+    await f.handoff.request(81);
+    const request = f.remote.batches[0].externalReview.requestId;
+    if (mutation === 'shared-state-alias') f.github.createStateStore = () => ({ load: async () => f.remote });
+    let modelCalls = 0;
+    const changePlan = () => { f.remote.batches[0].plan.acceptance[0].criteria[0] = 'Require a new server authorization check.'; };
+    const result = await processCloudReview({
+      github: f.github, handoff: f.handoff, standalone: {}, cwd: '/synthetic', env: {},
+      retrieve: async (subject) => {
+        const packet = { subject_sha: sha, plan: subject.plan, feedback: await f.github.reviewFeedback(81) };
+        if (mutation === 'plan-during-retrieval') changePlan();
+        return { packet, tracked: new Set(['src/feature.ts']) };
+      },
+      probe: async () => {
+        if (['plan-during-probe', 'shared-state-alias'].includes(mutation)) changePlan();
+        if (mutation === 'comment') f.feedback.comments.push({ id: 902, author: 'human', body: 'New requirement during authentication.' });
+        if (mutation === 'review') f.feedback.changesRequested = true;
+        if (mutation === 'edited-comment') f.feedback.comments[0].body = 'Revised human feedback.';
+        if (mutation === 'actor') f.setActor('another-authorized-user');
+        return { profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } };
+      },
+      communication: { publishState: async () => assert.fail('No projection') },
+      wake: async () => assert.fail('No recovery of another worker'),
+      run: async () => { modelCalls++; return { ok: true, stdout: JSON.stringify({ structured_output: validApproved() }) }; },
+    });
+    assert.equal(result.status, 'preclaim-source-changed', mutation);
+    assert.equal(result.claimed, false);
+    assert.equal(modelCalls, 0);
+    assert.equal(f.remote.batches[0].reviews.length, 0);
+    assert.equal(f.remote.batches[0].reviewLedger, undefined);
+    assert.equal(f.remote.batches[0].externalReview.status, 'comment-requested');
+    assert.equal(f.remote.batches[0].externalReview.requestId, request);
+    assert.equal(f.pr.comments.filter((item) => item.body.includes('"kind": "report"')).length, 0);
+  }
+});
+
+test('native pending claim binds all prepared semantics and clones caller aliases before its first await', async () => {
+  for (const mutation of ['plan', 'packet', 'source', 'history', 'implementation-owner', 'request', 'alias']) {
+    const f = fixture();
+    const expected = await f.handoff.request(81);
+    const fingerprint = handoffFeedbackFingerprint(await f.github.reviewFeedback(81), 'review-bot');
+    const change = () => {
+      const subject = f.remote.batches[0];
+      if (mutation === 'plan' || mutation === 'alias') subject.plan.analysis = 'Changed source specification.';
+      if (mutation === 'packet') subject.packet = { path: 'artifacts/task-validation/other', files: {} };
+      if (mutation === 'source') subject.sourceManifest = [{ path: 'src/other.ts' }];
+      if (mutation === 'history') subject.reviewReports = { 'claude-review-1.json': 'Changed prior report' };
+      if (mutation === 'implementation-owner') subject.implementation.push({ round: 2, status: 'running' });
+      if (mutation === 'request') subject.externalReview.requestId = 'replacement-request';
+    };
+    let pending = expected;
+    if (mutation === 'alias') {
+      pending = f.remote.batches[0];
+      const authorized = f.github.authorized;
+      f.github.authorized = async (...args) => { change(); return authorized(...args); };
+    } else change();
+    const writes = f.writes.length;
+    await assert.rejects(f.handoff.claim(81, { expectedSubject: pending,
+      expectedFeedbackFingerprint: fingerprint, expectedActor: 'review-bot' }),
+      (error) => error.code === 'preclaim-source-changed', mutation);
+    assert.equal(f.writes.length, writes);
+    assert.equal(f.remote.batches[0].reviews.length, 0);
+    assert.equal(f.remote.batches[0].externalReview.status, 'comment-requested');
+  }
+});
+
+test('native final CAS guard rejects feedback or same-subject drift introduced during prerequisites', async () => {
+  for (const mutation of ['feedback', 'subject']) {
+    const f = fixture(), expected = await f.handoff.request(81);
+    const fingerprint = handoffFeedbackFingerprint(await f.github.reviewFeedback(81), 'review-bot');
+    f.github.requiredChecks = async () => {
+      if (mutation === 'feedback') f.feedback.comments.push({ id: 999, author: 'human', body: 'Changed in the native guard.' });
+      else f.remote.batches[0].plan.analysis = 'Changed while native checks awaited.';
+      return { ok: true };
+    };
+    const writes = f.writes.length;
+    await assert.rejects(f.handoff.claim(81, { expectedSubject: expected,
+      expectedFeedbackFingerprint: fingerprint }), (error) => error.code === 'preclaim-source-changed');
+    assert.equal(f.writes.length, writes);
+    assert.equal(f.remote.batches[0].reviews.length, 0);
+    assert.equal(f.remote.batches[0].externalReview.status, 'comment-requested');
+  }
+});
+
+test('preclaim benign observations and own protocol comments remain eligible; later human feedback is flagged on import', async () => {
+  const f = fixture();
+  f.remote.batches[0].baseSha = 'b'.repeat(40);
+  await f.handoff.request(81);
+  const result = await processCloudReview({
+    github: f.github, handoff: f.handoff, standalone: {}, cwd: '/synthetic', env: {},
+    retrieve: async (subject) => ({ packet: { subject_sha: sha, plan: subject.plan, feedback: await f.github.reviewFeedback(81) }, tracked: new Set(['src/feature.ts']) }),
+    probe: async () => {
+      f.remote.batches[0].checkObservation = { passed: true };
+      f.pr.comments.push({ id: 999, user: { login: 'review-bot' }, body: COMMENT_REVIEW_MARKER + '\n' + JSON.stringify({ kind: 'request', observed: true }) });
+      return { profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 } };
+    },
+    communication: { publishState: async () => {} }, wake: async () => {},
+    run: async () => {
+      f.feedback.comments.push({ id: 1000, author: 'human', body: 'Feedback after the legitimate native claim.' });
+      return { ok: true, stdout: JSON.stringify({ structured_output: validApproved() }) };
+    },
+  });
+  assert.equal(result.status, 'published');
+  assert.equal(f.remote.batches[0].reviews.length, 1);
+  assert.equal(f.remote.batches[0].checkObservation.passed, true);
+  assert.equal(f.remote.batches[0].externalReview.feedbackChanged, true);
 });
 
 test('automatic native handoff reload rejects global or subject ownership without reinterpreting it as a failed review', async () => {

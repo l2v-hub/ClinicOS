@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-23T18:47:49.739708+00:00",
+  "acceptedBy": "root",
+  "scope": [
+    ".agents/skills/27 pinned Matt directories",
+    "CLAUDE.md appended shared block",
+    "docs/agents/pinned manifest and shared config",
+    "agent-team/tests/bug-pipeline/work-item-models.test.mjs"
+  ],
+  "clarifications": [
+    "Claude max-turns is used only if installed CLI documents it; independent wall timeout always applies",
+    "No live pipeline activation or old canonical work changes; new mode remains explicit opt-in",
+    "Retained Git conflicts stop parent automatic correction until explicit recovery",
+    "Source and policy binding included in trusted parent resume checkpoint"
+  ],
+  "authorization": "Current user request shared skills and adaptive native orchestration, optional Claude Max executors"
+}

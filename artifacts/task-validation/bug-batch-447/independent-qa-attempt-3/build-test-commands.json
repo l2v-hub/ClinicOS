@@ -1,0 +1,47 @@
+{
+  "frontend-tests": {
+    "exit": 0,
+    "command": [
+      "npm",
+      "test"
+    ]
+  },
+  "frontend-types": {
+    "exit": 0,
+    "command": [
+      "npm",
+      "exec",
+      "tsc",
+      "--",
+      "--noEmit"
+    ]
+  },
+  "frontend-build": {
+    "exit": 0,
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ]
+  },
+  "backend-types": {
+    "exit": 0,
+    "command": [
+      "npm",
+      "exec",
+      "tsc",
+      "--",
+      "--noEmit",
+      "-p",
+      "tsconfig.json"
+    ]
+  },
+  "backend-build": {
+    "exit": 0,
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ]
+  }
+}

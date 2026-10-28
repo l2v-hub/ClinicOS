@@ -1,0 +1,91 @@
+{
+  "baselineExpectedFromParent": {
+    "source": "895e6bd54461fcc6a00be4117e4792bde6fc4e07",
+    "tests": 1668,
+    "pass": 1665,
+    "fail": 0,
+    "skipped": 3,
+    "notRerunHere": true
+  },
+  "newTests": 20,
+  "runs": [
+    {
+      "file": "targeted-red.tap",
+      "tests": 3,
+      "pass": 0,
+      "fail": 3,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 1,
+      "reason": "Expected baseline gaps: missing shared trusted contract in cloud/local generation and missing contradiction diagnostic callback in real native standalone flow."
+    },
+    {
+      "file": "targeted-green-initial.tap",
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "reason": "Initial three implementation fixtures green before explicit blocked-empty case was added."
+    },
+    {
+      "file": "targeted-green.tap",
+      "tests": 134,
+      "pass": 132,
+      "fail": 2,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 1,
+      "reason": "Intermediate targeted failure: missing pinned workflow fixture plus a too-broad regex matching the safe runnerError field name. Both corrected; full output preserved."
+    },
+    {
+      "file": "targeted-green-complete-context.tap",
+      "tests": 134,
+      "pass": 134,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "reason": "Targeted green after restoring exact tracked workflow/skill fixture context and correcting test assertion."
+    },
+    {
+      "file": "native-full.tap",
+      "tests": 1688,
+      "pass": 1656,
+      "fail": 29,
+      "cancelled": 0,
+      "skipped": 3,
+      "todo": 0,
+      "exitCode": 1,
+      "reason": "First full attempt: two missing pinned binary test fixtures (result.png and trace.zip), leading to 29 fixture/downstream failures. No count substitution; actual failed attempt retained."
+    },
+    {
+      "file": "targeted-final.tap",
+      "tests": 204,
+      "pass": 204,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "reason": "Expanded final targeted command, including checkpoint/workspace after restoring the exact binary context. 204 pass."
+    },
+    {
+      "file": "native-full-complete-context.tap",
+      "tests": 1688,
+      "pass": 1685,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 3,
+      "todo": 0,
+      "exitCode": 0,
+      "reason": "Exact authoritative native command, final frozen code/context. 1688 total, 1685 pass, zero fail, 3 Windows skips."
+    }
+  ],
+  "formattingHistory": "Initial full changed-file check failed. New/edited production modules and new classifier tests were formatted and passed a focused check; preexisting existing-test prefixes were restored byte exact to avoid unrelated reformatting. New appended test blocks retain formatting."
+}

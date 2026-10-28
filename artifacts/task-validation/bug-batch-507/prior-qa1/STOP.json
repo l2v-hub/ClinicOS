@@ -1,0 +1,10 @@
+{
+  "issue": 507,
+  "nonce": "6592e6d1-eca2-4d1e-8bf0-81ad48b8765b",
+  "status": "stopped",
+  "reason": "FAILED VALIDATION: F507-1 confirmed in both timezones; return to implementer",
+  "verdict": "FAILED VALIDATION",
+  "sourceHashesMatch": true,
+  "report": "/workspace/.clinicos-cloud/issues-506-507-20261024/qa-507/report.md",
+  "at": "2026-10-24T22:10:45.841605+00:00"
+}

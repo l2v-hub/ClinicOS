@@ -4,6 +4,7 @@
 //   - POST /patients/:patientId/therapies  (patient-therapies.ts)
 //   - intake confirm transaction           (future: confirm-service.ts)
 
+import { normalizeTherapyClock } from './slot-scheduling.js';
 import { prisma } from '../lib/prisma.js';
 import {
   assertValidSchedulesInput,
@@ -130,6 +131,9 @@ export function validateTherapyCreateInput(input: TherapyCreateInput) {
 
   const missing = missingTherapyFieldsMessage(farmacoNome, dataInizio);
   if (missing) throw new TherapyInputError(missing);
+  if (typeof input.viaSomministrazione !== 'string' || !input.viaSomministrazione.trim()) {
+    throw new TherapyInputError('Indica la via di somministrazione');
+  }
 
   const dates = normalizeTherapyDateRange(dataInizio, input.dataFine);
   if (input.schedules !== undefined) assertValidSchedulesInput(input.schedules);
@@ -203,7 +207,7 @@ export async function createTherapyInTx(
       patientId,
       farmacoNome,
       dosaggio,
-      viaSomministrazione: input.viaSomministrazione || 'orale',
+      viaSomministrazione: input.viaSomministrazione!,
       tipo: input.tipo || 'periodica',
       stato: input.stato || 'attiva',
       dataInizio: dates.dataInizio,
@@ -218,7 +222,8 @@ export async function createTherapyInTx(
       operatoreInseritore: input.operatoreInseritore || null,
       note: input.note || null,
       dataSomministrazione: input.dataSomministrazione || null,
-      orarioSomministrazione: input.orarioSomministrazione || null,
+      orarioSomministrazione:
+        normalizeTherapyClock(input.orarioSomministrazione) ?? input.orarioSomministrazione ?? null,
       commercialStrengthValue: strengthValue,
       commercialStrengthUnit: strengthUnit,
       pharmaceuticalForm: form,

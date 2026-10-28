@@ -1,0 +1,10 @@
+{
+  "type": "hosted-receipt-evidence",
+  "kind": "probe",
+  "runId": 40232898341,
+  "status": "probe-passed",
+  "providerExecuted": true,
+  "model": "claude-opus-5-5",
+  "contextWindow": 1000000,
+  "maxOutputTokens": 128000
+}

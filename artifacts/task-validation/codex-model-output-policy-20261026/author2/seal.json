@@ -1,0 +1,24 @@
+{
+  "sealedAt": "2026-10-26T01:25:54Z",
+  "status": "IMPLEMENTED — NOT VERIFIED",
+  "parentCandidate": "38b37e3322176bd9836d228d4c4ce63bf66fced2",
+  "parentQa1Verdict": "FAILED VALIDATION",
+  "authorNonce": "711849b2-b278-48aa-98d4-3f5ba42780ef",
+  "reservationStateCommit": "03bc240b723cc5349ac69cb4fe10a2fcff3f356c",
+  "scopeAmendmentCanonicalCommitted": false,
+  "filesChanged": 3,
+  "sourceHashes": {
+    "agent-team/src/bug-pipeline/process.mjs": "71d02a1482ae0665df66d4c73b4b66c6c04c1bff2994869b8a8b408059f210e5",
+    "agent-team/tests/bug-pipeline/process-output.test.mjs": "de04a700d080ae2341bbd7d6061b98ce59590e646c821b1395986d558395725b",
+    "agent-team/tests/bug-pipeline/routing.test.mjs": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd"
+  },
+  "manifestSha256": "9562f4d97e533c3362ec0def44345818549b70a2fbee6699d984538ff8870c5b",
+  "manifestEntries": 14,
+  "focused": "26/26 pass",
+  "fullRelevant": "1663 pass, 0 fail, 3 platform skips / 1666 total",
+  "freshIndependentQa": "PENDING; must validate these exact hashes",
+  "providerCalls": 0,
+  "apiNetworkCalls": 0,
+  "gitMutations": 0,
+  "publication": "NOT PERFORMED"
+}

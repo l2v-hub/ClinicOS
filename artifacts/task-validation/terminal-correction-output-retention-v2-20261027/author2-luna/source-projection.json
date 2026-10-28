@@ -1,0 +1,23 @@
+{
+  "baseSha": "1337dfc62066ec9378e824529658c61337ae912f",
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/workspace.mjs",
+      "rawSha256": "b98003822c2fd8e44e2ff91af19e62940fcbac6a8fc37872a0c3dc02375ec115",
+      "gitBlobSha1": "cbacf1d3e059a05f9f4c8acd48b17cd953edd7c6",
+      "baselineSha256": "307c2053c4a6b08fc9c5e2398f3bf20493d63e4f88d278b9ba00df89a1ca6e03"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "rawSha256": "1d0b4831e65d99fcc71750fec10ffa90927ebf56aa95e8a9e87d94934eaf344b",
+      "gitBlobSha1": "7e6c6f3d144dc99963e3062178559a1f5cb3965b",
+      "baselineSha256": "237bdaf5fb30bf9c461af9df51d21ec750a09ea4e9cfb9744ec6767b81a11a53"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/terminal-output-retention.test.mjs",
+      "rawSha256": "9f3f8e596e83f26d04d40e21f7b35eddee8cf32882a7ced31d64e1b372b56752",
+      "gitBlobSha1": "f20b15b350b274fc2d402145c0267c2a5fdccea6",
+      "baselineSha256": "3b3c5fa79cd60b775a021b78c38b8eab8c3774c474018fcea3dc987b74ba9702"
+    }
+  ]
+}

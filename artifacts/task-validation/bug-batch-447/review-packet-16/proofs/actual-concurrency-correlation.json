@@ -1,0 +1,26 @@
+{
+  "status": "PASS_REAL_ASSISTANT_TOOL_40001_CORRELATED",
+  "sourceSha": "f26625a12bba1052da5b9af88bad88c1bf12420c",
+  "waiterPid": 121,
+  "blockerPid": 118,
+  "actualPgErrorLines": [
+    "2026-10-22 01:59:26.991 UTC [121] 40001 ERROR:  40001: could not serialize access due to concurrent update"
+  ],
+  "httpConflict": 409,
+  "errorEnvelope": {
+    "code": "conflict",
+    "status": 409,
+    "message": "Conflitto con lo stato corrente",
+    "domainCode": "P2010"
+  },
+  "unlockedPositive": 200,
+  "failureClinicalSnapshotUnchanged": true,
+  "forgedImportAtomicClinicalSnapshotUnchanged": 2,
+  "managedPSHistoryPreserved": true,
+  "deadlocksBefore": 0,
+  "deadlocksAfter": 0,
+  "deadlockLogMatches": 0,
+  "originalLockSamples": 4,
+  "originalChartTransitions": 9,
+  "fullSkillWorkflowClaim": false
+}

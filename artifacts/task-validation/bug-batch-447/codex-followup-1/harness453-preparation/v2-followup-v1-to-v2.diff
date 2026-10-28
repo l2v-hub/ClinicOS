@@ -1,0 +1,65 @@
+--- prepared-harness-v1.mjs
++++ qa-bug-batch-447-route486-browser.mjs
+@@ -1652,7 +1652,13 @@
+         await selectPackage();
+       }
+       async function selectRoute() {
+-        await page.getByLabel('Via di somministrazione', { exact: true }).selectOption('orale');
++        await routeControl().selectOption('orale');
++      }
++      function routeControl() {
++        return page.getByLabel('Via di somministrazione', { exact: true });
++      }
++      async function assertRouteBlank(message) {
++        assert.equal(await routeControl().inputValue(), '', message);
+       }
+       async function assertUnchecked(message) {
+         await eventually(
+@@ -1665,6 +1671,7 @@
+         await page.getByRole('button', { name: '7 giorni', exact: true }).click();
+       }
+       await newPrescription(negativePatient.id);
++      await assertRouteBlank('AIFA package selection leaves the known-negative route blank');
+       await text(warning, /Allergie assenti \(verificato\)/);
+       await count(acknowledgement, 0);
+       await value(page.getByLabel('Forma farmaceutica', { exact: true }), 'compressa');
+@@ -1724,10 +1731,19 @@
+ 
+       // Positive allergy context is confirmed and saved without inventing a product/allergen match.
+       await newPrescription(patient.id);
++      await assertRouteBlank('AIFA package selection leaves the positive-context route blank');
+       for (const allergy of originalAllergies) await text(warning, new RegExp(allergy.allergene));
+       await text(warning, /grave.*QA orticaria/);
+       await assertUnchecked('Positive context starts unacknowledged');
+       await value(page.getByLabel('Quantità orario 1', { exact: true }), '1');
++      const previousPositiveTherapyIds = new Set(
++        (
++          await prisma.patientTherapy.findMany({
++            where: { patientId: patient.id, drugPackageRef: aic },
++            select: { id: true },
++          })
++        ).map(({ id }) => id),
++      );
+       interactions = 0;
+       await interaction(selectRoute);
+       await interaction(() =>
+@@ -1774,11 +1790,15 @@
+         `Positive-context actual interactions after package selection: ${interactions}`,
+       );
+       const positiveInteractions = interactions;
+-      const positiveStored = await prisma.patientTherapy.findFirst({
++      const positiveRowsForAic = await prisma.patientTherapy.findMany({
+         where: { patientId: patient.id, drugPackageRef: aic },
+-        include: { schedules: true },
+-      });
+-      assert.ok(positiveStored, 'Positive-allergy prescription has a SQL record');
++        include: { schedules: { orderBy: { time: 'asc' } } },
++      });
++      const newPositiveRowsForAic = positiveRowsForAic.filter(
++        ({ id }) => !previousPositiveTherapyIds.has(id),
++      );
++      assert.equal(newPositiveRowsForAic.length, 1, 'Exactly one new positive AIC row was saved');
++      const positiveStored = newPositiveRowsForAic[0];
+       assert.equal(positiveStored.drugPackageRef, aic);
+       assert.equal(positiveStored.commercialStrengthValue, 5);
+       assert.equal(positiveStored.viaSomministrazione, 'orale');

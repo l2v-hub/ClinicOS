@@ -1,0 +1,40 @@
+{
+  "baseSha": "c439cccac33438a52f0c061b0384a0b3ff752eb5",
+  "status": "IMPLEMENTED — NOT INDEPENDENTLY VERIFIED",
+  "sources": [
+    {
+      "path": "frontend/src/components/operator/TherapyRoundsPage.css",
+      "beforeSha256": "222ab8faf100df9d3c72d13bd11d50290ac7356315f65759b8add15fdc4433f5",
+      "afterSha256": "ec0a63f4dd26018417ce23a897825d0404df6d41bec78581fabc4bf14d73406b"
+    },
+    {
+      "path": "backend/src/routes/__tests__/patient-clinical-scope.test.ts",
+      "beforeSha256": "0db253deb14308bbcf79c170144ae6302238f650a628b0421d667eadeb6f2250",
+      "afterSha256": "475c3fa07a5e68b40b5e1135d783dedf2fb322eca7f599b5a8e7d2bd8364831f"
+    },
+    {
+      "path": "e2e/qa-bug-batch-447-integrated-browser.mjs",
+      "beforeSha256": "a0f3c78da5af1315b633887861c709bf8895499b06c5aca3e667f204d823f6be",
+      "afterSha256": "b965be8aaaa980391b2554018880127fc43c915de01f519295c537a68cdaf7d3"
+    }
+  ],
+  "diff": {
+    "filesChanged": 3,
+    "insertions": 27,
+    "deletions": 3,
+    "gitDiffCheck": "PASS"
+  },
+  "validation": {
+    "focusedFrontendTests": { "passed": 29, "failed": 0, "skipped": 0 },
+    "frontendTypecheckAndBuild": "PASS",
+    "integratedBrowserHarnessSyntax": "PASS",
+    "realBrowser": "NOT RUN — reserved for fresh independent QA",
+    "backendDatabaseFixture": "NOT RUN — reserved for fresh independent QA"
+  },
+  "priorIndependentStop": {
+    "status": "STOPPED — FAILED VALIDATION",
+    "sourceSha": "c439cccac33438a52f0c061b0384a0b3ff752eb5",
+    "reason": "Real issue-452 Giro controls opened offscreen; one positive no-schedules fixture omitted viaSomministrazione"
+  },
+  "authorStop": true
+}

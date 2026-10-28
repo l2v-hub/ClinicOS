@@ -1,0 +1,16 @@
+[
+  {
+    "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+    "blob": "df7c0ff208121f011bb8dbd6fe75f5db93d5d89f",
+    "mode": "100644",
+    "baseBlob": "b1045645644a81aaf8314b6e4990f3b392a9e8a0",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+    "blob": "5be4e8f0537e80213110b88e3f96e2c453c86d08",
+    "mode": "100644",
+    "baseBlob": "3aa52fd3c9040e39c1446deddf6ea97e9fa3ea8b",
+    "baseMode": "100644"
+  }
+]

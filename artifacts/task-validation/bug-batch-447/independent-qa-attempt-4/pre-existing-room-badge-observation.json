@@ -1,0 +1,14 @@
+{
+  "classification": "Low pre-existing visual limitation; not a source regression or new implementation round",
+  "screenshot": "browser/evidence/issue-451-touch.png",
+  "comparisonScreenshot": "../independent-qa-attempt-3/browser/evidence/issue-451-touch.png",
+  "description": "Long synthetic camera label QA44-ad94226b overflows32px badge and partly overlaps adjacent name in820px touch list. Current patient full header and full aria-label remain available. Same overflow visible in archivedQA3 capture.",
+  "cssPath": "frontend/src/components/operator/ParametriVitali.css",
+  "cssSha256": "1726db5e5ee1909542bed2f18f47e6ec639c7267ff8215458b4364a9c1dbbc32",
+  "cssIdenticalToBaseline": true,
+  "componentPath": "frontend/src/components/operator/ParameterPatientPick.tsx",
+  "roomAndButtonMarkupSha256": "52281ba86b108aa3366f84944d3104f23a503a0c1ad94bc4280d344a959adbab",
+  "roomAndButtonMarkupIdenticalToBaseline": true,
+  "noFixPerformed": true,
+  "notNewReleaseApproval": true
+}

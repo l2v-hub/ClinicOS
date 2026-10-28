@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { facilityLocalDate } from '../../../lib/facilityTime';
+import { therapyAdmissionDate, therapyAdministrationDate, type TherapyDateField } from '../../../lib/therapyAdmissionDate';
 import { CampoFarmaco } from './CampoFarmaco';
 import { needsCommercialStrengthReview } from './drugPackageSelection';
 import {
@@ -11,6 +11,7 @@ import {
 } from './therapyDose';
 import { applyTherapyFormChange } from './therapyFormChange';
 import { TherapyScheduleEditor } from './TherapyScheduleEditor';
+import { QUICK_SCHEDULES, quickSchedule, durationEnd } from './therapyQuickSchedule';
 import { TherapyFormPreview } from './TherapyFormPreview';
 import { therapyFieldFeedback, type TherapyFieldIssue } from './therapyFieldFeedback';
 import './TherapyFormFields.css';
@@ -67,10 +68,6 @@ export interface TherapyFormValue {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function todayStr(): string {
-  return facilityLocalDate();
-}
-
 // #241: ISO weekdays (1=Lun … 7=Dom) for the intermittent-posology selector.
 const WEEKDAYS: ReadonlyArray<{ n: number; l: string }> = [
   { n: 1, l: 'Lun' },
@@ -82,7 +79,8 @@ const WEEKDAYS: ReadonlyArray<{ n: number; l: string }> = [
   { n: 7, l: 'Dom' },
 ];
 
-export function emptyTherapyForm(): TherapyFormValue {
+export function emptyTherapyForm(admissionDate?: string): TherapyFormValue {
+  const startDate = therapyAdmissionDate(admissionDate);
   return {
     farmacoNome: '',
     drugPackageRef: null,
@@ -90,10 +88,11 @@ export function emptyTherapyForm(): TherapyFormValue {
     commercialStrengthValue: '',
     commercialStrengthUnit: 'mg',
     allowedFractions: ['1'],
-    viaSomministrazione: 'orale',
+    // Route is prescription data: leave it unset until an explicit source or the operator supplies it.
+    viaSomministrazione: '',
     tipo: 'periodica',
     stato: 'attiva',
-    dataInizio: todayStr(),
+    dataInizio: startDate,
     dataFine: '',
     schedules: [
       {
@@ -106,7 +105,7 @@ export function emptyTherapyForm(): TherapyFormValue {
     giorniSettimana: [],
     prescrittore: '',
     note: '',
-    dataSomministrazione: todayStr(),
+    dataSomministrazione: therapyAdministrationDate(admissionDate),
     orarioSomministrazione: '',
     doseMode: 'fixed',
     glucoseScale: [],
@@ -116,12 +115,16 @@ export function emptyTherapyForm(): TherapyFormValue {
 interface TherapyFormFieldsProps {
   value: TherapyFormValue;
   onChange: (next: TherapyFormValue) => void;
+  /** Native input, including reselecting the current day, makes this date operator-owned. */
+  onDateInput?: (field: TherapyDateField) => void;
   operatoreNome?: string;
   issues?: readonly TherapyFieldIssue[];
   /** Il nome del farmaco viene da un testo libero (Diario), non dall'anagrafica. */
   nomeDaTesto?: boolean;
   /** Prescrittori proposti con un tocco (es. «Dimissione ospedaliera» all'ingresso). */
   prescriberSuggestions?: readonly string[];
+  /** Only genuine new manual prescriptions; imports/editors retain explicit state review. */
+  creation?: boolean;
 }
 
 const THERAPY_TYPES = [
@@ -133,9 +136,11 @@ const THERAPY_TYPES = [
 export function TherapyFormFields({
   value,
   onChange,
+  onDateInput,
   issues,
   nomeDaTesto,
   prescriberSuggestions,
+  creation = false,
 }: TherapyFormFieldsProps) {
   const id = useId();
   const routeNeedsReview = isTherapyRegimenRoute(value.viaSomministrazione);
@@ -288,7 +293,62 @@ export function TherapyFormFields({
             </label>
           ))}
         </div>
+        {creation && (
+          <div className="therapy-form__chips" role="group" aria-label="Schemi rapidi">
+            {QUICK_SCHEDULES.map((preset) => (
+              <button
+                key={preset.id}
+                type="button"
+                className="ds-btn ds-btn--secondary"
+                onClick={() => onChange(quickSchedule(value, preset.times))}
+              >
+                {preset.label}
+              </button>
+            ))}
+            <button
+              type="button"
+              className="ds-btn ds-btn--secondary"
+              onClick={() => update({ tipo: 'al_bisogno' })}
+            >
+              Al bisogno
+            </button>
+            <button
+              type="button"
+              className="ds-link"
+              onClick={() =>
+                document.getElementById(`${id}-doses`)?.scrollIntoView({ block: 'nearest' })
+              }
+            >
+              Altro: modifica orari e dosi
+            </button>
+          </div>
+        )}
         {feedback.error('tipo')}
+        {creation && value.tipo === 'periodica' && (
+          <div className="therapy-form__chips" role="group" aria-label="Durata della terapia">
+            <button
+              type="button"
+              className="ds-btn ds-btn--secondary"
+              aria-pressed={value.dataFine === durationEnd(value.dataInizio, 7)}
+              onClick={() => {
+                const dataFine = durationEnd(value.dataInizio, 7);
+                // Choosing a duration owns the current start as well as its end.
+                if (dataFine) onDateInput?.('dataInizio');
+                update({ dataFine });
+              }}
+            >
+              7 giorni
+            </button>
+            <button
+              type="button"
+              className="ds-btn ds-btn--secondary"
+              aria-pressed={!value.dataFine}
+              onClick={() => update({ dataFine: '' })}
+            >
+              Senza fine
+            </button>
+          </div>
+        )}
         <div className="therapy-form__grid">
           <div className="form-group">
             <label htmlFor={`${id}-start`}>Data inizio *</label>
@@ -298,6 +358,7 @@ export function TherapyFormFields({
               className="form-input"
               type="date"
               value={value.dataInizio}
+              onInput={() => onDateInput?.('dataInizio')}
               onChange={(e) => update({ dataInizio: e.target.value })}
             />
             {feedback.error('dataInizio')}
@@ -313,6 +374,9 @@ export function TherapyFormFields({
                 className="form-input"
                 type="date"
                 value={value.dataFine}
+                onInput={(e) => {
+                  if (e.currentTarget.value) onDateInput?.('dataInizio');
+                }}
                 onChange={(e) => update({ dataFine: e.target.value })}
               />
               {feedback.error('dataFine')}
@@ -328,6 +392,7 @@ export function TherapyFormFields({
                   className="form-input"
                   type="date"
                   value={value.dataSomministrazione}
+                  onInput={() => onDateInput?.('dataSomministrazione')}
                   onChange={(e) => update({ dataSomministrazione: e.target.value })}
                 />
                 {feedback.error('dataSomministrazione')}
@@ -346,26 +411,28 @@ export function TherapyFormFields({
               </div>
             </>
           )}
-          <div className="form-group">
-            <label htmlFor={`${id}-status`}>Stato terapia</label>
-            <select
-              id={`${id}-status`}
-              {...feedback.attributes('stato')}
-              className="form-select"
-              value={value.stato}
-              onChange={(e) => update({ stato: e.target.value as TherapyFormValue['stato'] })}
-            >
-              {value.stato === '' && (
-                <option value="" disabled>
-                  — Verifica lo stato —
-                </option>
-              )}
-              <option value="attiva">Attiva</option>
-              <option value="sospesa">Sospesa</option>
-              <option value="conclusa">Conclusa</option>
-            </select>
-            {feedback.error('stato')}
-          </div>
+          {!creation && (
+            <div className="form-group">
+              <label htmlFor={`${id}-status`}>Stato terapia</label>
+              <select
+                id={`${id}-status`}
+                {...feedback.attributes('stato')}
+                className="form-select"
+                value={value.stato}
+                onChange={(e) => update({ stato: e.target.value as TherapyFormValue['stato'] })}
+              >
+                {value.stato === '' && (
+                  <option value="" disabled>
+                    — Verifica lo stato —
+                  </option>
+                )}
+                <option value="attiva">Attiva</option>
+                <option value="sospesa">Sospesa</option>
+                <option value="conclusa">Conclusa</option>
+              </select>
+              {feedback.error('stato')}
+            </div>
+          )}
         </div>
         {(value.tipo === 'periodica' ||
           issues?.some((issue) => issue.field === 'giorniSettimana')) && (

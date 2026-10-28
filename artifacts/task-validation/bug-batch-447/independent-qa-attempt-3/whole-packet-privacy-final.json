@@ -1,0 +1,46 @@
+{
+  "filesInspected": 2296,
+  "uniqueFileContentsScanned": 757,
+  "zipMembersVerifiedIncludingHashIdenticalCopies": 53432,
+  "uniqueZipMembersDecodedAndScanned": 23726,
+  "credentialFindings": [],
+  "crcValid": true,
+  "noSymlinks": true,
+  "allFilesAtMost25MiB": true,
+  "largestFiles": [
+    {
+      "bytes": 26198501,
+      "path": "independent-qa-attempt-3/browser/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 26198501,
+      "path": "evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25789009,
+      "path": "independent-qa-attempt-2/preserved-pre-qa/files/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25789009,
+      "path": "independent-qa-attempt-2/browser-environment-attempt-1/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25661852,
+      "path": "history/cycle3-before-intake-read-red/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25433148,
+      "path": "history/cycle3-shared-focused-fixture-failure/evidence/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25290998,
+      "path": "independent-qa-attempt-2/preserved-pre-qa/files/history/cycle2-combined-browser-2-db-field-and-close-selector/issue-453-trace.zip"
+    },
+    {
+      "bytes": 25290998,
+      "path": "history/cycle2-combined-browser-2-db-field-and-close-selector/issue-453-trace.zip"
+    }
+  ],
+  "archiveObjectsClassifiedByMagicBytes": true,
+  "cryptographicContentCache": "Every path and SHA independently read; SHA-identical content shares byte and ZIP CRC/member inspection. Exact non-materialized JavaScript ${identifier} DSN templates are not credentials."
+}

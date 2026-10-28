@@ -1,0 +1,11 @@
+{
+  "base": "05fd62363d89573d6e2449235a7499cc855434cd",
+  "candidateHead": "ef801dd4707fb0a599f8a8a833cbbf64fe6600b2",
+  "scopedSourcePaths": 94,
+  "capturedDiffSha256": "80a7a88e50750cede2d16768f8156ada5074018e4c65eb32cef439a0f455ed37",
+  "capturedDiffBytes": 594512,
+  "capturedDiffLines": 14548,
+  "command": "git diff 05fd62363d89573d6e2449235a7499cc855434cd -- <all94frozen sourcepaths>",
+  "rawDiffRetention": "Private QA input outside repository; published path/hash index plus actual source Git diff suffice for review.",
+  "publicationHygiene": "Whole-packet scan flagged a copied public development test-default PostgreSQL DSN in this duplicate source excerpt. The duplicate raw excerpt was withheld, without changing any source, fixture, test, expected value or scanner rule. No live signed or personal credential was involved."
+}

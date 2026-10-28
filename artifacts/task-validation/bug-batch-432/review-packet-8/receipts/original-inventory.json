@@ -1,0 +1,43 @@
+{
+  "results": [
+    {
+      "name": "106-prescription-inventory",
+      "pass": true,
+      "active": 105
+    },
+    {
+      "name": "suspended-prescription-visible",
+      "pass": true
+    },
+    {
+      "name": "PRN-visible-day-and-week",
+      "pass": true
+    },
+    {
+      "name": "missing-feed-prescription-read-only",
+      "pass": true
+    },
+    {
+      "name": "later-dose-confirmed-first-dose-still-pending",
+      "pass": true
+    },
+    {
+      "name": "one-off-explicit-clock-with-empty-flags",
+      "pass": true,
+      "scheduledTime": "11:30"
+    },
+    {
+      "name": "one-off-given-stays-given-after-band-shift-and-reload",
+      "pass": true
+    },
+    {
+      "name": "empty-catalog-no-automatic-name-searches",
+      "pass": true
+    },
+    {
+      "name": "mobile-and-javascript",
+      "pass": true
+    }
+  ],
+  "note": "Individual passing assertions from original QA8 invocation; original overall verdict FAILED VALIDATION."
+}

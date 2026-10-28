@@ -1,0 +1,82 @@
+{
+  "status": "prepared-e2e-unexecuted",
+  "files": [
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/accepted-plan-amendment.json",
+      "sha256": "7aeb7dc7960a035c06f4867b969db9222dc789d4def858534d378a9823bf12fc",
+      "bytes": 76582
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/task-contract.md",
+      "sha256": "89ce49e2b394e67925223d89194eb0b3b5df08817b246b99e82138fb0b3d486a",
+      "bytes": 1770
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/v1-author-attempt-log.md",
+      "sha256": "ebcedaceba292a9eba559296e8a2a0403218dd11948ba58204be54a700df59dd",
+      "bytes": 872
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/v1-harness453-exact.diff",
+      "sha256": "d8d89d8dc699445b9e8723c50313b265012972421d9d837075022780cb1a3728",
+      "bytes": 8357
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/v1-report.md",
+      "sha256": "b6fbb3755927a34a7e8d2a719a799c8e4a25a7055c1a9bb3da3a4d7433d0db3f",
+      "bytes": 2062
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/v1-static-check.json",
+      "sha256": "c5eccca903c20b95cab43874142feecb2f12ad3313d0be17f3af7cb9566afc3b",
+      "bytes": 533
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/v1-syntax-check.json",
+      "sha256": "d155d3b037fffb5205964032cd2d5910bad14870122cdb6bc3913b1c6f7042f6",
+      "bytes": 365
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/v2-attempt-log.md",
+      "sha256": "b5fd2b74ce7a6c1dc73eed81b3268bae88813f9788be2c039375098dca5d544c",
+      "bytes": 659
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/v2-followup-v1-to-v2.diff",
+      "sha256": "b0f69b5915b1db3dee08eea4b2cb92a2f38e5429cd53bbae0a86e34131eab7ae",
+      "bytes": 3110
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/v2-original-to-v2.diff",
+      "sha256": "d29571b40d9d3a483820f8e6627e4020488e0ffb048b3db3f066a59873959eec",
+      "bytes": 9492
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/v2-report.md",
+      "sha256": "cb41422d914146864d25cdbb01833bf2af12212ce9472cea426893c9d25b4348",
+      "bytes": 1769
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/v2-static-check.json",
+      "sha256": "f1a6c77ad970d3a88655eeda009052bbf1d32ff2c8a049ed5bdb1fddf183f8cf",
+      "bytes": 1002
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/v2-syntax-check.json",
+      "sha256": "ad5c347b48c931ff2e59c9b7f96d6f321de30c343f5ecf3f426f438d713fc2dc",
+      "bytes": 375
+    },
+    {
+      "path": "artifacts/task-validation/bug-batch-447/codex-followup-1/harness453-preparation/validation-report.md",
+      "sha256": "fef8d9ab8c0c28cca04718ac96ba6441814c219313b1e496e833e1f3271fb76b",
+      "bytes": 2624
+    },
+    {
+      "path": "e2e/qa-bug-batch-447-route486-browser.mjs",
+      "sha256": "971c8e507eaec83f7e44869bc661f59544601aff1030086f5000e4967ed58651",
+      "bytes": 110075
+    }
+  ],
+  "rawRuntimeLogsPublished": false,
+  "originalHarnessUnchanged": true
+}

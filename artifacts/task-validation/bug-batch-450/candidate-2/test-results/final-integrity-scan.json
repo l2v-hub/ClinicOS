@@ -1,0 +1,23 @@
+{
+  "pass": true,
+  "capturedAt": "2026-10-17T09:43:20.483597+00:00",
+  "source47Unchanged": true,
+  "isolatedGuardSource47Matches": true,
+  "finalAmendedHarnessBrowserVerdict": "UNRUN_PENDING_INDEPENDENT_QA2",
+  "originalFrozen7Unchanged": true,
+  "controllerFrozen10Verified": true,
+  "originalManifest134Unchanged": true,
+  "credentialFindings": [],
+  "archives": [
+    {
+      "file": "development-attempt-1/test-results/failure-trace.zip",
+      "sha256": "ff99aaee01cb7acfa165093422ba4957fd33cd28f2514537fdd64debfae56bda",
+      "validTraceJsonLines": 4486
+    },
+    {
+      "file": "development-attempt-2/test-results/failure-trace.zip",
+      "sha256": "253ca0d7bf2837e6cebd039883e72137f583fbabe72b9c9bcad2865745941935",
+      "validTraceJsonLines": 4538
+    }
+  ]
+}

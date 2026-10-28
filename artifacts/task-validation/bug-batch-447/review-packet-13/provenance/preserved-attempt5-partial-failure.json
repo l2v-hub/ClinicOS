@@ -1,0 +1,105 @@
+{
+  "status": "PARTIAL_FAIL_PRESERVED_NOT_APPROVED",
+  "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "seven": {
+    "passed": [
+      453,
+      454
+    ],
+    "failed": [
+      {
+        "issue": 456,
+        "message": "Expected content /1\\/1 occupati/: The input did not match the regular expression /1\\/1 occupati/. Input:\n\n'Letti: 9/9 occupati \u00b7 0 liberi\\nGestisci letti'\n"
+      },
+      {
+        "issue": 447,
+        "message": "Expected content /ruolo non pu\u00f2 consultare tutte le fonti/: The input did not match the regular expression /ruolo non pu\u00f2 consultare tutte le fonti/. Input:\n\n'Alcune fonti cliniche sono parziali o non verificabili. La stampa \u00e8 disponibile con il motivo; verifica e completa a mano le sezioni indicate.\\n' +\n  'Riprova'\n"
+      },
+      {
+        "issue": 451,
+        "message": "Expected content /Rilevazione salvata/: locator.innerText: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.parameter-single-entry__success')\n"
+      },
+      {
+        "issue": 452,
+        "message": "Synthetic agenda has genuinely zero appointments\n\n5 !== 0\n"
+      },
+      {
+        "issue": 457,
+        "message": "Expected 1 matching elements: Expected values to be strictly equal:\n\n0 !== 1\n"
+      }
+    ]
+  },
+  "route486": {
+    "pass": 7,
+    "fail": 3,
+    "results": [
+      {
+        "name": "fresh blank; package description/form never infer; blocked save; explicit route preserved across package/form",
+        "status": "PASS"
+      },
+      {
+        "name": "real authenticated HTTP rejects missing blank/regimen route with zero writes; explicit SC persists unchanged",
+        "status": "PASS"
+      },
+      {
+        "name": "shared actual transaction rejects missing route before persistence",
+        "status": "PASS"
+      },
+      {
+        "name": "actual diary atomic rejection, explicit IM and complete exact persisted legacy replay route matrix",
+        "status": "FAIL",
+        "message": "Legacy replay cannot duplicate audit\n\n5 !== 2\n",
+        "stack": "AssertionError [ERR_ASSERTION]: Legacy replay cannot duplicate audit\n\n5 !== 2\n\n    at file:///workspace/.clinicos-cloud/497-Claude1-followup-20261021/integrated-browser-qa13/snapshot/e2e/qa13-route486.mjs:95:39\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async step (file:///workspace/.clinicos-cloud/497-Claude1-followup-20261021/integrated-browser-qa13/snapshot/e2e/qa13-route486.mjs:24:36)\n    at async file:///workspace/.clinicos-cloud/497-Claude1-followup-20261021/integrated-browser-qa13/snapshot/e2e/qa13-route486.mjs:86:1"
+      },
+      {
+        "name": "actual intake confirm manual and imported draft missing route atomic; explicit route SQL and retry once",
+        "status": "PASS"
+      },
+      {
+        "name": "actual tool registry missing malformed regimen routes invalid_input no therapy persistence; auth denied; explicit unchanged",
+        "status": "PASS"
+      },
+      {
+        "name": "actual imported discharge review known codes, absent/unknown blank; package never infers; explicit operator routes confirm/reload exact SQL",
+        "status": "FAIL",
+        "message": "locator.fill: Timeout 15000ms exceeded.\nCall log:\n  - waiting for getByTestId('discharge-therapy-row').nth(2).getByRole('searchbox', { name: 'Cerca il farmaco per nome commerciale', exact: true })\n",
+        "stack": "locator.fill: Timeout 15000ms exceeded.\nCall log:\n  - waiting for getByTestId('discharge-therapy-row').nth(2).getByRole('searchbox', { name: 'Cerca il farmaco per nome commerciale', exact: true })\n\n    at /workspace/.clinicos-cloud/497-Claude1-followup-20261021/integrated-browser-qa13/snapshot/e2e/qa13-route486.mjs:128:97\n    at async step (/workspace/.clinicos-cloud/497-Claude1-followup-20261021/integrated-browser-qa13/snapshot/e2e/qa13-route486.mjs:24:36)\n    at async file:///workspace/.clinicos-cloud/497-Claude1-followup-20261021/integrated-browser-qa13/snapshot/e2e/qa13-route486.mjs:119:1"
+      },
+      {
+        "name": "actual Milo UI explicit per-os parse attachment preview confirm SQL/reload; missing route cannot confirm and writes nothing",
+        "status": "FAIL",
+        "message": "locator.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for getByRole('dialog', { name: 'Milo \u00b7 assistente clinico AI', exact: true }).getByRole('button', { name: 'Cambia ospite', exact: true })\n",
+        "stack": "locator.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for getByRole('dialog', { name: 'Milo \u00b7 assistente clinico AI', exact: true }).getByRole('button', { name: 'Cambia ospite', exact: true })\n\n    at /workspace/.clinicos-cloud/497-Claude1-followup-20261021/integrated-browser-qa13/snapshot/e2e/qa13-route486.mjs:137:246\n    at async step (/workspace/.clinicos-cloud/497-Claude1-followup-20261021/integrated-browser-qa13/snapshot/e2e/qa13-route486.mjs:24:36)\n    at async file:///workspace/.clinicos-cloud/497-Claude1-followup-20261021/integrated-browser-qa13/snapshot/e2e/qa13-route486.mjs:133:1"
+      },
+      {
+        "name": "periodic PRN oneoff explicit route matrix and restricted foreign-owner tool scope",
+        "status": "PASS"
+      },
+      {
+        "name": "no unexpected page/console/HTTP errors in actual UI flows",
+        "status": "PASS"
+      }
+    ]
+  },
+  "regressionsCompleted": [
+    {
+      "regression": "actual focus refresh",
+      "outcome": "PASS",
+      "patient": "synthetic",
+      "focusPreservedDraft": true,
+      "sameInputNode": true,
+      "unrelatedPatientDidNotRefresh": true,
+      "status": 200,
+      "path": "/therapy-slots",
+      "date": "2026-10-22",
+      "expectedPatientPresent": true,
+      "expectedTherapyPresent": true,
+      "source": "actual local HTTP response, no route mock"
+    }
+  ],
+  "criticalHookLimitation": "Actual open NonSomm and supervisor disabled-state assertions executed; private later Giro navigation failed before final mixed-group/identity assertions, so no full critical-hook PASS. Roster/parameter hook UNRUN.",
+  "handback": "resource-handback5.json",
+  "baselineUnchanged": true,
+  "noSourceDefectEstablished": true,
+  "allEightPass": false
+}

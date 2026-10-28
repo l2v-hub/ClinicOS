@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "nonce": "b5903280-392e-4013-8af5-2f6df465c7c5",
+  "stoppedAt": "2026-10-25T14:39:53.686415+00:00",
+  "status": "STOPPED",
+  "verdict": "FAILED VALIDATION",
+  "reason": "Concrete exact-claim publication race reproduced; frozen-source QA sealed for repair in a new reservation",
+  "furtherWritesAllowed": false,
+  "sourceUnchanged": true
+}

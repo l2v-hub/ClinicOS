@@ -1,0 +1,31 @@
+{
+  "baseSha": "635c11a560e878f98b2d1c729893a203f1dc932c",
+  "status": "IMPLEMENTED — NOT INDEPENDENTLY VERIFIED",
+  "source": {
+    "path": "frontend/src/components/operator/TherapyRoundsPage.css",
+    "beforeSha256": "ec0a63f4dd26018417ce23a897825d0404df6d41bec78581fabc4bf14d73406b",
+    "afterSha256": "4a642bc1799ada68959c178517880fb5f5a3d17403dca4d2c9eb7a9dce6b2741"
+  },
+  "diff": {
+    "filesChanged": 1,
+    "insertions": 1,
+    "deletions": 0,
+    "change": "Add flex-wrap: wrap to .giro-drug > .giro-row__act inside the existing max-width: 720px media query.",
+    "gitDiffCheck": "PASS"
+  },
+  "validation": {
+    "focusedFrontendTests": { "tests": 29, "passed": 29, "failed": 0, "skipped": 0 },
+    "frontendTypecheckAndBuild": "PASS",
+    "buildWarnings": ["Vite chunk larger than 500 kB", "Plugin timing diagnostics"],
+    "realBrowser": "NOT RUN — reserved for fresh independent QA",
+    "database": "NOT RUN — reserved for fresh independent QA"
+  },
+  "authorFailedAttempts": 0,
+  "authorStop": true,
+  "priorIndependentStop": {
+    "status": "STOPPED — FAILED VALIDATION",
+    "sourceSha": "635c11a560e878f98b2d1c729893a203f1dc932c",
+    "reason": "Canonical issue 452 at 320x740 had document scrollWidth 356px; two real dose buttons extended to x=355.86px from a 258px action row.",
+    "causeReceipt": "/workspace/.clinicos-cloud/ux320-live-diagnostic-20261019/cause-receipt.json"
+  }
+}

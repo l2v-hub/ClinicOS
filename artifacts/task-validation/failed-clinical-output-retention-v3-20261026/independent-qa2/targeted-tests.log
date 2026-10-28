@@ -1,0 +1,436 @@
+TAP version 13
+# Subtest: partial exit zero still schedules diagnostic and failed code artifact upload
+ok 1 - partial exit zero still schedules diagnostic and failed code artifact upload
+  ---
+  duration_ms: 14.808996
+  type: 'test'
+  ...
+# Subtest: actual verification failure records command and sanitized captured stream identities without changing failure
+ok 2 - actual verification failure records command and sanitized captured stream identities without changing failure
+  ---
+  duration_ms: 22.465207
+  type: 'test'
+  ...
+# Subtest: actual verification excerpt redacts spaced known credential assignments
+ok 3 - actual verification excerpt redacts spaced known credential assignments
+  ---
+  duration_ms: 7.398986
+  type: 'test'
+  ...
+# Subtest: verification sanitization covers every core known credential key with spacing, quotes and case
+ok 4 - verification sanitization covers every core known credential key with spacing, quotes and case
+  ---
+  duration_ms: 1.293679
+  type: 'test'
+  ...
+# Subtest: verification boundary observes real stripped-environment child exit and redacted capture
+ok 5 - verification boundary observes real stripped-environment child exit and redacted capture
+  ---
+  duration_ms: 74.140146
+  type: 'test'
+  ...
+# Subtest: guarded failed code export retains only exact allowed source, bounded patch and metadata
+ok 6 - guarded failed code export retains only exact allowed source, bounded patch and metadata
+  ---
+  duration_ms: 60.175354
+  type: 'test'
+  ...
+# Subtest: export refuses changed checkpoint, hash, size, symlink, secret, traversal and outside-plan files
+ok 7 - export refuses changed checkpoint, hash, size, symlink, secret, traversal and outside-plan files
+  ---
+  duration_ms: 278.987651
+  type: 'test'
+  ...
+# Subtest: export rejects spaced GH_TOKEN source before creating patch or copied source
+ok 8 - export rejects spaced GH_TOKEN source before creating patch or copied source
+  ---
+  duration_ms: 301.055301
+  type: 'test'
+  ...
+# Subtest: native archive consumes exact external observation and authorization while preserving FAILED history and counts
+ok 9 - native archive consumes exact external observation and authorization while preserving FAILED history and counts
+  ---
+  duration_ms: 9.07085
+  type: 'test'
+  ...
+# Subtest: native archive rejects unknown/running/stale and malformed checkpoint proof before consuming authorization
+ok 10 - native archive rejects unknown/running/stale and malformed checkpoint proof before consuming authorization
+  ---
+  duration_ms: 4.185198
+  type: 'test'
+  ...
+# Subtest: free text and mutable receipt JSON cannot substitute for trusted external verifier
+ok 11 - free text and mutable receipt JSON cannot substitute for trusted external verifier
+  ---
+  duration_ms: 3.568794
+  type: 'test'
+  ...
+# Subtest: verified external user session permits same-account round5 with one-use exact binding
+ok 12 - verified external user session permits same-account round5 with one-use exact binding
+  ---
+  duration_ms: 2.367372
+  type: 'test'
+  ...
+# Subtest: wrong owner, history, action, head, budget and reservation are rejected at verifier boundary
+ok 13 - wrong owner, history, action, head, budget and reservation are rejected at verifier boundary
+  ---
+  duration_ms: 4.358232
+  type: 'test'
+  ...
+# Subtest: only canonical manual issue owner can receive absent-PR authorization
+ok 14 - only canonical manual issue owner can receive absent-PR authorization
+  ---
+  duration_ms: 0.941352
+  type: 'test'
+  ...
+# Subtest: Claude504 exact authorized settlement fails the running journal and attempt once without a new allowance
+ok 15 - Claude504 exact authorized settlement fails the running journal and attempt once without a new allowance
+  ---
+  duration_ms: 1.764627
+  type: 'test'
+  ...
+# Subtest: Claude504 settlement refuses absent auth, changed digest/round/history, wrong binding and replay
+ok 16 - Claude504 settlement refuses absent auth, changed digest/round/history, wrong binding and replay
+  ---
+  duration_ms: 2.830098
+  type: 'test'
+  ...
+# Subtest: executor and simplifier blocked stage results retain the implementation failure code
+ok 17 - executor and simplifier blocked stage results retain the implementation failure code
+  ---
+  duration_ms: 2.823819
+  type: 'test'
+  ...
+# Subtest: child environment isolates verification, executor, reviewer, and controller credentials
+ok 18 - child environment isolates verification, executor, reviewer, and controller credentials
+  ---
+  duration_ms: 0.956285
+  type: 'test'
+  ...
+# Subtest: local Codex login directory is available only to Codex model authentication
+ok 19 - local Codex login directory is available only to Codex model authentication
+  ---
+  duration_ms: 0.392401
+  type: 'test'
+  ...
+# Subtest: createRunner subprocess receives only the role credential and a demo localhost database
+ok 20 - createRunner subprocess receives only the role credential and a demo localhost database
+  ---
+  duration_ms: 171.249217
+  type: 'test'
+  ...
+# Subtest: fresh CLI configuration directories are private and survive repeated isolated launches
+ok 21 - fresh CLI configuration directories are private and survive repeated isolated launches
+  ---
+  duration_ms: 269.246027
+  type: 'test'
+  ...
+# Subtest: createRunner reports child exit failure and output overflow as failures
+ok 22 - createRunner reports child exit failure and output overflow as failures
+  ---
+  duration_ms: 96.011287
+  type: 'test'
+  ...
+# Subtest: createRunner timeout terminates the subprocess group, including a child process
+ok 23 - createRunner timeout terminates the subprocess group, including a child process
+  ---
+  duration_ms: 1515.64061
+  type: 'test'
+  ...
+# Subtest: validateEvidence accepts a valid synthetic PNG and a recorded Playwright trace and records content digests
+ok 24 - validateEvidence accepts a valid synthetic PNG and a recorded Playwright trace and records content digests
+  ---
+  duration_ms: 23.511284
+  type: 'test'
+  ...
+# Subtest: validateEvidence rejects missing files, wrong headers, path traversal, and symlinks outside the packet
+ok 25 - validateEvidence rejects missing files, wrong headers, path traversal, and symlinks outside the packet
+  ---
+  duration_ms: 24.319742
+  type: 'test'
+  ...
+# Subtest: validateEvidence rejects PNG signature filler and PNG/trace checksum corruption
+ok 26 - validateEvidence rejects PNG signature filler and PNG/trace checksum corruption
+  ---
+  duration_ms: 17.220032
+  type: 'test'
+  ...
+# Subtest: real Git workspace prepares the exact batch branch, freezes its task packet, and regenerates evidence after clearing stale files
+ok 27 - real Git workspace prepares the exact batch branch, freezes its task packet, and regenerates evidence after clearing stale files
+  ---
+  duration_ms: 270.109183
+  type: 'test'
+  ...
+# Subtest: real Git workspace rejects changes outside the accepted source-file scope
+ok 28 - real Git workspace rejects changes outside the accepted source-file scope
+  ---
+  duration_ms: 129.116969
+  type: 'test'
+  ...
+# Subtest: only verification receives the absolute trusted browser cache while HOME and credential boundaries remain isolated
+ok 29 - only verification receives the absolute trusted browser cache while HOME and credential boundaries remain isolated
+  ---
+  duration_ms: 0.846383
+  type: 'test'
+  ...
+# Subtest: actual verification subprocess sees the trusted shared cache independently of isolated HOME
+ok 30 - actual verification subprocess sees the trusted shared cache independently of isolated HOME
+  ---
+  duration_ms: 67.816071
+  type: 'test'
+  ...
+# Subtest: trusted browser installation, controller and native sandbox service proof share the explicit cache before credentials
+ok 31 - trusted browser installation, controller and native sandbox service proof share the explicit cache before credentials
+  ---
+  duration_ms: 2.814596
+  type: 'test'
+  ...
+# Subtest: post-Claude independent final QA leaves a real reviewed worktree clean for a correction
+ok 32 - post-Claude independent final QA leaves a real reviewed worktree clean for a correction
+  ---
+  duration_ms: 181.907922
+  type: 'test'
+  ...
+# Subtest: standalone final QA creates an exact detached source checkout without installing or executing PR code
+ok 33 - standalone final QA creates an exact detached source checkout without installing or executing PR code
+  ---
+  duration_ms: 139.94723
+  type: 'test'
+  ...
+# Subtest: evidence collector accepts valid trace at 32MiB and rejects a byte above it before ZIP parsing
+ok 34 - evidence collector accepts valid trace at 32MiB and rejects a byte above it before ZIP parsing
+  ---
+  duration_ms: 2444.518344
+  type: 'test'
+  ...
+# Subtest: Author7 F3 retained controller checkpoint accepts exact dirty output and rejects changed, unknown, frozen or lost output
+ok 35 - Author7 F3 retained controller checkpoint accepts exact dirty output and rejects changed, unknown, frozen or lost output
+  ---
+  duration_ms: 414.956582
+  type: 'test'
+  ...
+# Subtest: Author7 F3 real retained worktree resumes the same attempt after execute without replaying its paid model
+ok 36 - Author7 F3 real retained worktree resumes the same attempt after execute without replaying its paid model
+  ---
+  duration_ms: 883.961985
+  type: 'test'
+  ...
+# Subtest: Author7 F3 lost Actions worktree fails closed after authorized recovery without replaying a completed model
+ok 37 - Author7 F3 lost Actions worktree fails closed after authorized recovery without replaying a completed model
+  ---
+  duration_ms: 237.507418
+  type: 'test'
+  ...
+# Subtest: Author9 F2 definite execute failure records the failed step and preserves its journal
+ok 38 - Author9 F2 definite execute failure records the failed step and preserves its journal
+  ---
+  duration_ms: 0.774092
+  type: 'test'
+  ...
+# Subtest: Author9 F2 definite simplify failure records the failed step and preserves its journal
+ok 39 - Author9 F2 definite simplify failure records the failed step and preserves its journal
+  ---
+  duration_ms: 0.587439
+  type: 'test'
+  ...
+# Subtest: Author9 F2 definite qa failure records the failed step and preserves its journal
+ok 40 - Author9 F2 definite qa failure records the failed step and preserves its journal
+  ---
+  duration_ms: 0.286174
+  type: 'test'
+  ...
+# Subtest: Author9 F2 definite verify-before failure records the failed step and preserves its journal
+ok 41 - Author9 F2 definite verify-before failure records the failed step and preserves its journal
+  ---
+  duration_ms: 0.494779
+  type: 'test'
+  ...
+# Subtest: Author9 F2 definite verify-after failure records the failed step and preserves its journal
+ok 42 - Author9 F2 definite verify-after failure records the failed step and preserves its journal
+  ---
+  duration_ms: 0.298418
+  type: 'test'
+  ...
+# Subtest: Author9 F2 model-execution retains a running unknown outcome and cannot invoke a second worker
+ok 43 - Author9 F2 model-execution retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.635489
+  type: 'test'
+  ...
+# Subtest: Author9 F2 model-result retains a running unknown outcome and cannot invoke a second worker
+ok 44 - Author9 F2 model-result retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.139402
+  type: 'test'
+  ...
+# Subtest: Author9 F2 arbitrary-execute retains a running unknown outcome and cannot invoke a second worker
+ok 45 - Author9 F2 arbitrary-execute retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.101554
+  type: 'test'
+  ...
+# Subtest: Author9 F2 blocked-code-throw retains a running unknown outcome and cannot invoke a second worker
+ok 46 - Author9 F2 blocked-code-throw retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.091699
+  type: 'test'
+  ...
+# Subtest: Author9 F2 malformed-result retains a running unknown outcome and cannot invoke a second worker
+ok 47 - Author9 F2 malformed-result retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.096896
+  type: 'test'
+  ...
+# Subtest: Author9 F2 before-stage retains a running unknown outcome and cannot invoke a second worker
+ok 48 - Author9 F2 before-stage retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.378134
+  type: 'test'
+  ...
+# Subtest: Author9 F2 pending-save retains a running unknown outcome and cannot invoke a second worker
+ok 49 - Author9 F2 pending-save retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.099159
+  type: 'test'
+  ...
+# Subtest: Author9 F2 post-stage-save retains a running unknown outcome and cannot invoke a second worker
+ok 50 - Author9 F2 post-stage-save retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.092902
+  type: 'test'
+  ...
+# Subtest: Author9 F2 initial-capture retains a running unknown outcome and cannot invoke a second worker
+ok 51 - Author9 F2 initial-capture retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.185824
+  type: 'test'
+  ...
+# Subtest: Author9 F2 post-capture retains a running unknown outcome and cannot invoke a second worker
+ok 52 - Author9 F2 post-capture retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.286597
+  type: 'test'
+  ...
+# Subtest: Author9 F2 checkpoint retains a running unknown outcome and cannot invoke a second worker
+ok 53 - Author9 F2 checkpoint retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.586054
+  type: 'test'
+  ...
+# Subtest: Author9 F2 publish retains a running unknown outcome and cannot invoke a second worker
+ok 54 - Author9 F2 publish retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.384334
+  type: 'test'
+  ...
+# Subtest: Author9 F2 ownership-invalid retains a running unknown outcome and cannot invoke a second worker
+ok 55 - Author9 F2 ownership-invalid retains a running unknown outcome and cannot invoke a second worker
+  ---
+  duration_ms: 0.172551
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree exact requires exact retained output before another paid call
+ok 56 - Author9 F2 real failed correction worktree exact requires exact retained output before another paid call
+  ---
+  duration_ms: 965.994612
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree changed requires exact retained output before another paid call
+ok 57 - Author9 F2 real failed correction worktree changed requires exact retained output before another paid call
+  ---
+  duration_ms: 282.600154
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree missing requires exact retained output before another paid call
+ok 58 - Author9 F2 real failed correction worktree missing requires exact retained output before another paid call
+  ---
+  duration_ms: 247.65245
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree foreign requires exact retained output before another paid call
+ok 59 - Author9 F2 real failed correction worktree foreign requires exact retained output before another paid call
+  ---
+  duration_ms: 246.698366
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree frozen requires exact retained output before another paid call
+ok 60 - Author9 F2 real failed correction worktree frozen requires exact retained output before another paid call
+  ---
+  duration_ms: 258.62727
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree capture-failure requires exact retained output before another paid call
+ok 61 - Author9 F2 real failed correction worktree capture-failure requires exact retained output before another paid call
+  ---
+  duration_ms: 254.591834
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree unknown requires exact retained output before another paid call
+ok 62 - Author9 F2 real failed correction worktree unknown requires exact retained output before another paid call
+  ---
+  duration_ms: 192.444912
+  type: 'test'
+  ...
+# Subtest: Author9 F2 real failed correction worktree scope-invalid requires exact retained output before another paid call
+ok 63 - Author9 F2 real failed correction worktree scope-invalid requires exact retained output before another paid call
+  ---
+  duration_ms: 753.642619
+  type: 'test'
+  ...
+# Subtest: Claude504 real outside-scope failure consumes initial attempts inside the native retry budget
+ok 64 - Claude504 real outside-scope failure consumes initial attempts inside the native retry budget
+  ---
+  duration_ms: 618.779092
+  type: 'test'
+  ...
+# Subtest: Claude504 real symlink failure consumes initial attempts inside the native retry budget
+ok 65 - Claude504 real symlink failure consumes initial attempts inside the native retry budget
+  ---
+  duration_ms: 670.966795
+  type: 'test'
+  ...
+# Subtest: Claude504 real frozen-contract failure consumes initial attempts inside the native retry budget
+ok 66 - Claude504 real frozen-contract failure consumes initial attempts inside the native retry budget
+  ---
+  duration_ms: 626.390253
+  type: 'test'
+  ...
+# Subtest: Claude504 real empty evidence is a typed definite validation failure
+ok 67 - Claude504 real empty evidence is a typed definite validation failure
+  ---
+  duration_ms: 182.597692
+  type: 'test'
+  ...
+# Subtest: Claude504 real oversize evidence is a typed definite validation failure
+ok 68 - Claude504 real oversize evidence is a typed definite validation failure
+  ---
+  duration_ms: 217.264342
+  type: 'test'
+  ...
+# Subtest: Claude504 real noncontained evidence is a typed definite validation failure
+ok 69 - Claude504 real noncontained evidence is a typed definite validation failure
+  ---
+  duration_ms: 202.968324
+  type: 'test'
+  ...
+# Subtest: Claude504 real video evidence is a typed definite validation failure
+ok 70 - Claude504 real video evidence is a typed definite validation failure
+  ---
+  duration_ms: 225.680558
+  type: 'test'
+  ...
+# Subtest: Claude504 real symlink-directory evidence is a typed definite validation failure
+ok 71 - Claude504 real symlink-directory evidence is a typed definite validation failure
+  ---
+  duration_ms: 177.469578
+  type: 'test'
+  ...
+1..71
+# tests 71
+# suites 0
+# pass 71
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14140.412081

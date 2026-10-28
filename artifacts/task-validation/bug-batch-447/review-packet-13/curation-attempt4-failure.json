@@ -1,0 +1,5 @@
+{
+  "status": "FAILED_SOURCE-MAP_LOOKUP_PRESERVED",
+  "problem": "Byte-exact copy audit built issue-447-png instead of issue-447.png and stopped before writing source-manifest.json. No source or prior evidence changed; corrected explicit source mapping will be used.",
+  "sourceOrPriorProofChanged": false
+}

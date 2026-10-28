@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "classification": "Actual React production component browser with synthetic prop rerenders/callback recorder; NOT clinical HTTP/PG E2E",
+  "nonAssetHttpRequests": [],
+  "allowedCallbacks": 1,
+  "blockedCallbacks": 0,
+  "sourceSha": "4c85fdf5a97eea10c8efcc6d105cd32de054e030",
+  "scenario": "component"
+}

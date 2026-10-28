@@ -138,7 +138,11 @@ test('capacity errors consume their call and influence only a later requested at
     },
   });
   const input = { cwd, packet: {}, plan: assessed(), round: 1 };
-  await assert.rejects(() => models.execute(input), /model_capacity_exceeded/);
+  await assert.rejects(() => models.execute(input), (error) => {
+    assert.equal(error.code, 'model-execution-failed');
+    assert.equal(error.modelCapacityFailure, true);
+    return true;
+  });
   assert.equal(calls.length, 1, 'no automatic retry outside the controller budget');
   await models.execute(input);
   assert.equal(option(calls[1].args, '--model'), senior);
@@ -181,7 +185,11 @@ test('incidental line numbers in diagnostics do not invent provider capacity pre
     },
   });
   const input = { cwd, packet: {}, plan: assessed(), round: 1 };
-  await assert.rejects(() => models.execute(input), /fixture line 503/);
+  await assert.rejects(() => models.execute(input), (error) => {
+    assert.equal(error.code, 'model-execution-failed');
+    assert.equal(error.modelCapacityFailure, false);
+    return true;
+  });
   await models.execute(input);
   assert.deepEqual(
     calls.map((c) => option(c.args, '--model')),

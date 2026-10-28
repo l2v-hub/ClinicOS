@@ -148,20 +148,33 @@ export function useRisoluzioniFarmaco(righe: RigaDaRisolvere[]): Map<string, Ris
     }
     let annullato = false;
 
-    void Promise.all(
-      chiaviUniche.split('\n').map(async (chiave): Promise<[string, FarmacoTrovato[] | null]> => {
-        try {
-          const risposta = await cachedGetJson<RispostaRicerca>(
-            `${API_URL}/farmaci/cerca?q=${encodeURIComponent(chiave)}&limite=${LIMITE_CONFEZIONI}`,
-            TTL_MS,
-          );
-          // Una risposta senza `esiti` non e' una risposta vuota: e' una risposta malformata.
-          return [chiave, Array.isArray(risposta?.esiti) ? risposta.esiti : null];
-        } catch {
-          return [chiave, null];
-        }
-      }),
-    ).then((coppie) => {
+    void (async () => {
+      let catalogoNonCaricato = false;
+      try {
+        const stato = await cachedGetJson<{ caricata: boolean }>(
+          `${API_URL}/farmaci/stato`,
+          15_000,
+        );
+        catalogoNonCaricato = stato?.caricata === false;
+      } catch {
+        /* Unknown catalog status must not be interpreted as an empty catalog. */
+      }
+      if (annullato) return;
+      const coppie = await Promise.all(
+        chiaviUniche.split('\n').map(async (chiave): Promise<[string, FarmacoTrovato[] | null]> => {
+          if (catalogoNonCaricato) return [chiave, null];
+          try {
+            const risposta = await cachedGetJson<RispostaRicerca>(
+              `${API_URL}/farmaci/cerca?q=${encodeURIComponent(chiave)}&limite=${LIMITE_CONFEZIONI}`,
+              TTL_MS,
+            );
+            // Una risposta senza `esiti` non e' una risposta vuota: e' una risposta malformata.
+            return [chiave, Array.isArray(risposta?.esiti) ? risposta.esiti : null];
+          } catch {
+            return [chiave, null];
+          }
+        }),
+      );
       if (annullato) return;
       const perNome = new Map(coppie);
       const esito = new Map<string, RisoluzioneFarmaco>();
@@ -173,7 +186,7 @@ export function useRisoluzioniFarmaco(righe: RigaDaRisolvere[]): Map<string, Ris
         );
       }
       setRisoluzioni(esito);
-    });
+    })();
 
     return () => {
       annullato = true;

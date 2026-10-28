@@ -1,0 +1,14 @@
+{
+  "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "grantNonce": "1da51a1b-dadb-4230-a424-ccd1a151768a",
+  "preparedBeforeExecution": true,
+  "files": {
+    "runtime-worker6.mjs": "4a59f9191472f5f46fc3b5c62ded1a3f252b0bda8d1d82ede450495d638d3b61",
+    "launch-runtime6.mjs": "59d016a5b31472c3f7c74a71276ff836f8a2df29aeb78760796394a907ef8266",
+    "snapshot/e2e/qa13-seven6.mjs": "39c0eae5516dfd6d4e1e9cb53fd34ad2607979d95f1c9e3c9f8b6296cb38f528",
+    "snapshot/e2e/qa13-route486-6.mjs": "2b89c9820096e276d13f13fcd0ac68fb635d6d828f36fd0fd204e0c901895d18",
+    "snapshot/e2e/qa13-critical6.mjs": "925b2f2eed0e5a4a1374377d9c91cfa904848b3729a04fd6955db8102b653e20",
+    "snapshot/e2e/qa13-roster-regressions.mjs": "281297840de6c9636a801aa7b4ee9d7949e76617e91d899b205157808dde278b"
+  },
+  "controlChange": "Preserve and stop on first scenario/critical failure; no assertion removed. Root grant6 approved exact legitimate warning/audit/navigation corrections."
+}

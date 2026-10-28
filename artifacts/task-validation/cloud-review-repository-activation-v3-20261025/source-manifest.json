@@ -1,0 +1,261 @@
+[
+  {
+    "path": ".github/workflows/claude-cloud-review.yml",
+    "blob": "78cfc11cedd79fc2558f8150399464b3d9135769",
+    "mode": "100644",
+    "baseBlob": "2cec3c15f2eb15196c2464f29d542a4db3a36fa6",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs",
+    "blob": "3a2ec499b4ea40f41044cd8769869659ff8e4344",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/actual-activation-context.json",
+    "blob": "baf9044011388b74226fbce6d79f0ccdec746d11",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/actual-variable-access.json",
+    "blob": "5b0e9acde38058b2b3658df3b23e47ee58aa08b4",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/analysis.md",
+    "blob": "77edc0481ddf9b6facabf2058b70ae05c38b2d99",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/author/STOP.json",
+    "blob": "bd3b669b132055590b7ad69a51f105436a14ae64",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/author/report.md",
+    "blob": "07e5cf8174f1919988c36c9dd3daa80b2ea3e195",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/author/source-manifest.sha256",
+    "blob": "58c1207f7d11b5d44c860150d8cd7aa1a2bbc6b4",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/author/source.patch",
+    "blob": "5e8f97169d17455ccb753547a20f9783eaa0ae92",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/implementation-plan.md",
+    "blob": "c4c93631095b9c2404d85052f8e48d4faf68b038",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/imported-history.json",
+    "blob": "b265ebf888b1719725579c0af437d448a845b907",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/independent-qa1/STOP.json",
+    "blob": "8dfa1797fbbec8f7a30988ae712323245c5d9fa1",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/independent-qa1/report.md",
+    "blob": "e90c7b976a0c0a02e35855a990ffde70460f810a",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/independent-qa1/result.json",
+    "blob": "0cc6d0ca39ffa5b26c66a95b71468cf19b02d273",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/independent-qa1/seal.json",
+    "blob": "3f99db23382192ddcf650da014d2acd0d27228fa",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/source-manifest.json",
+    "blob": "e2de049347b1254fff8c03565ef4ec91c1012520",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/task-contract.md",
+    "blob": "1e0220fc8f24e5b3570c9081970f4fd07f8f42ef",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-20261025/validation-report.md",
+    "blob": "90e707ffe0b265b17c2d11646c12d65aff33bd49",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/actual-Claude1-comment.json",
+    "blob": "b896514d66c184b03ca1e7aeb6dae3e14e2ea934",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/actual-profile-receipt.json",
+    "blob": "880f6801f5e3c2241a62fa07c4d1036315f23593",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/author2/STOP.json",
+    "blob": "b719f1e282b6c40842254a868e70ce12cb2c3c00",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/author2/report.md",
+    "blob": "a9e9f044da28d8e01931d5b6467cc758792d045a",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/author2/seal.json",
+    "blob": "ddf6d35ccdba006ae292c3c1f418e022f132b368",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/author2/source-manifest.json",
+    "blob": "ee7305bfa9fe45ac2247860a0fdfa3f182bd2fbe",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/author2/source.patch",
+    "blob": "cfdcb0cdcb201551bb5d726cb4e0b4e3c1dbe8f3",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/implementation-plan.md",
+    "blob": "efd1706e91e91396a36a0395773681c9aa6cf0c2",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/imported-history.json",
+    "blob": "973ae41ed491bc08f2b27a829aa2aee3144e24b6",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/independent-qa1/report.md",
+    "blob": "e90c7b976a0c0a02e35855a990ffde70460f810a",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/independent-qa2/STOP.json",
+    "blob": "f919a829beffff9f9e7f0057f077c9282ea4e79e",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/independent-qa2/report.md",
+    "blob": "06d8a2f5ba31d2f7722bed76572c02448120aba4",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/independent-qa2/result.json",
+    "blob": "2e1147d0e79cc66a0e81da456943a40fcb8f97c2",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/independent-qa2/seal.json",
+    "blob": "bedc4d79fbf26cbad7309aefd5028954cda1b279",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/publication-topology.md",
+    "blob": "855634e4ad8885581ff9d6b5e190d66b70a6ad9c",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/source-manifest.json",
+    "blob": "0364652fbff56c95bc7286bacb2f39c99c51fa70",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/task-contract.md",
+    "blob": "ac6f75797095ba458730ba2924e2ecbfe96554b6",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "artifacts/task-validation/cloud-review-repository-activation-v2-20261025/validation-report.md",
+    "blob": "6dcf906391d41cefaec1d6280d8cbd38f8728c2c",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  },
+  {
+    "path": "docs/cloud-claude-review.md",
+    "blob": "7b26e0839fabb5c812d2d8d7a969b31d622e7bb7",
+    "mode": "100644",
+    "baseBlob": "32867115a3f2e654534e29985bad7de55006846a",
+    "baseMode": "100644"
+  }
+]

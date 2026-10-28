@@ -31,11 +31,11 @@ test('therapy reads and writes apply patient scope before loading clinical data'
   // UX 2026-10-03: the body passes through the explicit-confirmation gate (supervisor) first.
   assert.match(
     route,
-    /recordTherapyAdministration\(taken\.body, actor, \{ notAdministered: false \}\)/,
+    /recordTherapyAdministrationResult\(\s*taken\.body,\s*actor,\s*\{\s*notAdministered:\s*false,?\s*\}\s*\)/,
   );
   assert.match(
     route,
-    /recordTherapyAdministration\(taken\.body, actor, \{ notAdministered: true \}\)/,
+    /recordTherapyAdministrationResult\(\s*taken\.body,\s*actor,\s*\{\s*notAdministered:\s*true,?\s*\}\s*\)/,
   );
   assert.equal(route.match(/takeConfirmation\(/g)?.length, 4, 'helper + confirm + not-given + PRN');
   assert.equal(
@@ -48,6 +48,7 @@ test('therapy reads and writes apply patient scope before loading clinical data'
   );
   assert.match(writer, /patient:\s*\{ registeredById: actor\.id \}/);
   assert.match(writer, /if \(!therapy\) throw new TherapyNotFoundError/);
+  assert.match(administrationRecord, /patientIsInOperatorScope\(input\.patientId, actor, tx\)/);
   assert.match(assistant, /findTherapiesDue\([\s\S]*patientIds: ctx\.permittedPatientIds/);
   assert.match(dueQuery, /therapyAccessSql\(access\)/);
   assert.doesNotMatch(assistant, /patients:\s*s\.patients\.filter/);
@@ -55,8 +56,13 @@ test('therapy reads and writes apply patient scope before loading clinical data'
 
 test('therapy slot relations and administration candidates are bounded', () => {
   assert.match(slots, /schedules:\s*\{\s*take: MAX_THERAPY_SCHEDULES \+ 1/);
-  assert.match(administrationPage, /WITH candidate\("therapyId", fascia\) AS/);
+  assert.match(
+    administrationPage,
+    /WITH candidate\("therapyId", "patientId", fascia, "singleDayDose"\) AS/,
+  );
+  assert.match(administrationPage, /ma\.fascia = candidate\.fascia OR candidate\."singleDayDose"/);
   assert.match(administrationPage, /ma\."therapyId" = candidate\."therapyId"/);
+  assert.match(administrationPage, /ma\."patientId" = candidate\."patientId"/);
   assert.match(administrationPage, /WITH candidate\("patientId", "farmacoNome", fascia\) AS/);
   assert.match(administrationPage, /VALUES \$\{Prisma\.join/);
   assert.match(administrationPage, /ma\."patientId" = candidate\."patientId"/);
@@ -70,7 +76,7 @@ test('assistant therapy queue is exact-counted, bounded and declares sampled res
   assert.doesNotMatch(assistant, /buildTherapySlots/);
   assert.match(dueQuery, /COUNT\(\*\) OVER \(PARTITION BY bucket\)/);
   assert.match(dueQuery, /sample_rank <= \$\{boundedSample\}/);
-  assert.match(dueQuery, /truncated: overdueCount > overdueRows\.length/);
+  assert.match(dueQuery, /truncated:\s*overdueCount > overdueRows\.length/);
   assert.match(assistant, /therapiesOverdueSampleCount/);
   assert.match(assistant, /truncated:\s*therapies\.truncated/);
 });

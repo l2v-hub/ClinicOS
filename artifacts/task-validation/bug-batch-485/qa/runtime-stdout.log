@@ -1,0 +1,10 @@
+PASS actual pinned normal and bold fonts load with distinct text geometry
+PASS manual 1903: {"x":0,"y":0,"width":1903,"height":1032}
+PASS manual 820: {"x":0,"y":0,"width":820,"height":1180}
+PASS manual 390: {"x":0,"y":0,"width":390,"height":844}
+PASS import-review 1903: {"x":0,"y":0,"width":1903,"height":1032}
+PASS import-review 820: {"x":0,"y":0,"width":820,"height":1180}
+PASS import-review 390: {"x":0,"y":0,"width":390,"height":844}
+PASS import-editable-workspace 1903: {"x":0,"y":0,"width":1903,"height":1032}
+PASS import-editable-workspace 820: {"x":0,"y":0,"width":820,"height":1180}
+PASS import-editable-workspace 390: {"x":0,"y":0,"width":390,"height":844}

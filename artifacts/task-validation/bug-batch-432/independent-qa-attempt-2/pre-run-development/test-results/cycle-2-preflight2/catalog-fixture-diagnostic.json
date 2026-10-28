@@ -1,0 +1,33 @@
+{
+  "status": 200,
+  "catalog": {
+    "confezioni": 1,
+    "principiAttivi": 0,
+    "caricata": true,
+    "ultimoCaricamento": null
+  },
+  "lookupStatus": 200,
+  "lookup": {
+    "query": "QA SECOND 000",
+    "esiti": [
+      {
+        "aic": "QA332132c22fb846a0871c",
+        "denominazione": "QA second 000",
+        "descrizione": "1 compressa",
+        "forma": "Compressa",
+        "atc": null,
+        "statoAmministrativo": "Autorizzata",
+        "fornitura": null,
+        "linkFi": null,
+        "linkRcp": null,
+        "principiAttivi": [],
+        "confidenza": 0.9,
+        "criterio": "prefisso"
+      }
+    ],
+    "pageInfo": {
+      "hasMore": false,
+      "nextCursor": null
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "sealedAt": "2026-10-21T21:50:33.831420+00:00",
+  "files": {
+    "STOP": "d498a2aad20252a7f97e68ae13d34cfa0b5ca77d2b3ff65ae6ed6f5bc5d8f75b",
+    "assigned-findings.json": "372cc149aef71bcdd8bcf4a1098624f2c9ae10d75d216da0ed193e0a871fc191",
+    "changes.diff": "c0eabcad2579c1d482b7be2cf27fbd2844f099a1169ba200ab0e986321ae8556",
+    "diff-manifest.json": "3fff8f726f4db880f3ce6aff72f4429c8457ca90ca6ef258b1184f619230f1d7",
+    "edit-context.py": "3a8ebec97fed8d088c9ffd75ccc00d5268ced928f461591c45230f67070e7a4f",
+    "finalize.py": "b347b536785687b59d44245b89cd54aafb2e7ebd6d6d0cf695ad9663817010ef",
+    "format-1792619287934.receipt.json": "dd198db56f66a318f52480ab81881c49f5df9d990248d5bd6623215b020e6861",
+    "freeze-after.json": "6d3323b26df567b0d387dc94edefda225a5d0bdc6705f9f1d9ac3a75a9eb07eb",
+    "freeze-before.json": "0283d17ee26d274aeb77bd71728f7ea835762310173a50e0b5f294d7a1237432",
+    "report.json": "e8bfca9d48cd577f4041029ac5cf1c5e0f328d37bf35f36cb33a21f4099bfd89",
+    "reservation.json": "1ff6306f991d1d7584e13421bf3738bf6d9293fec17c411aea8ffe4677d41bf3",
+    "scope-amendment-1.md": "2f94ce2a821714b3e763acb28e739fa110bf6712f4c3055a3c6dfb585acee359",
+    "summary.md": "7480eed421f51b9158d78370eaa6678514ffdd938a28303ab662d9f8d39cea16",
+    "task-contract.md": "3f4344da462f23c7c758b8c6f8bf7cf85fb6c528f2240bdaa399b0efdf7bf759",
+    "test-bootstrap.mjs": "6c4b5ee97de3d04019e4f19aec9b729f0b2df8522f2108f5cc313dc6e955d463",
+    "tests-1792619210143.receipt.json": "ebd315fcd7b8def6e7b222cd0e9a5a6aab71ff011e5200c9117d25866daf32d2",
+    "tests-1792619249491.receipt.json": "94f5e66a26f6bee43050c2689f4d6f518b2d50a57a15b6cb4b555be253ee8195",
+    "tests-1792619298731.receipt.json": "439c2ea55137757b682067a7f6552e5eb136dcf4e400f1bbe1e6e7d6089e4b0b",
+    "types-1792619121330.receipt.json": "c7ab245f0de392345a75bab986f692afa07425f698c231b0a6398b89b2d94bce",
+    "types-1792619339986.receipt.json": "8b95bcd286f3d7b0282d388d24891f21a5dc3ceef6edfddb918710e335014243",
+    "verify.mjs": "31f939e1eedfc67c9af0889a5f18ea0ce01be8a2be8a991f5e5bcccb1ae02dc6"
+  },
+  "sourceManifestSha256": "3fff8f726f4db880f3ce6aff72f4429c8457ca90ca6ef258b1184f619230f1d7",
+  "sourceFreezeAfterSha256": "6d3323b26df567b0d387dc94edefda225a5d0bdc6705f9f1d9ac3a75a9eb07eb",
+  "status": "STOP"
+}

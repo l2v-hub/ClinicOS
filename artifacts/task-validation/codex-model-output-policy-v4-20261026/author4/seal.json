@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "status": "sealed-one-author-session-final-history-amendment",
+  "nonce": "96c30272-a025-47de-bd41-1dd8cd076ee9",
+  "sourceParent": "895e6bd54461fcc6a00be4117e4792bde6fc4e07",
+  "sourceManifestSha256": "4de535bba3d28400c09172427c68c03e40be8ef761e9145203081d9f00340ea6",
+  "snapshotFreezeSha256": "fcd7c0433b7c74c8d45a7e79e7c3871c0dc82caa69bb7cd0c1864e12db2b8a56",
+  "patchSha256": "b64b013465ec642c78ca2fb2ac29c4d3bc4a6ac5b2aa657751bf0ac0c8cdf98c",
+  "artifactManifestSha256": "694ca4c3d2c019d2c70e75c075ac20036da48ea79ee8cbf6d4687abb4efbc208",
+  "resultSha256": "61a5b38c6653bc9e1a112ed7ce13fa1bddde7bea0bea57b72aad91b9830245f7",
+  "priorSealSha256": "4378363ec83a63cf45a80d88c571afcc2c8e43abd52d4342533633c3f00bf082",
+  "noApproval": true,
+  "at": "2026-10-26T07:04:43.066661+00:00"
+}

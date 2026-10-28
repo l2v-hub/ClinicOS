@@ -1,6 +1,6 @@
 import { IcoChevronRight, IcoPill } from '../../icons';
 import { useEffect, useRef } from 'react';
-import { facilityLocalDate } from '../../lib/facilityTime';
+import { facilityLocalDate, facilityLocalMinute } from '../../lib/facilityTime';
 import './TherapyCalendarGrid.css';
 
 // Ward aggregate cue, not a uniform per-dose outcome. The visible detail retains mixed states.
@@ -36,6 +36,7 @@ export function TherapyCalendarGrid({
   loadingDays = [],
   errorDays = [],
   today = facilityLocalDate(),
+  contextKey = '',
 }: {
   days: string[];
   cells: TherapyCalendarCell[];
@@ -45,20 +46,25 @@ export function TherapyCalendarGrid({
   loadingDays?: string[];
   errorDays?: string[];
   today?: string;
+  contextKey?: string;
 }) {
   const root = useRef<HTMLDivElement>(null);
   const scrolledDay = useRef<string | null>(null);
   const times = [...new Set(cells.map((cell) => cell.time))].sort();
-  const firstTime = selected?.time ?? times[0];
+  const firstTime =
+    (selected?.date === days[0] ? selected.time : null) ??
+    times[0] ??
+    `${facilityLocalMinute().slice(11, 13)}:00`;
   useEffect(() => {
-    if (days.length !== 1 || !firstTime || scrolledDay.current === days[0]) return;
+    const scrollKey = `${contextKey}:${days[0]}:${times.length ? 'occupied' : 'empty'}`;
+    if (days.length !== 1 || !firstTime || scrolledDay.current === scrollKey) return;
     const grid = root.current;
     const row = grid?.querySelector<HTMLElement>(`tr[data-time="${firstTime}"]`);
     if (grid && row) {
       grid.scrollTop = Math.max(0, row.offsetTop - 40);
-      scrolledDay.current = days[0];
+      scrolledDay.current = scrollKey;
     }
-  }, [days, firstTime]);
+  }, [days, firstTime, contextKey, times.length]);
   const rows =
     days.length === 1 || onCreate
       ? [

@@ -1,0 +1,13 @@
+{
+  "historicalSealSha256": "e507a838d395467915a17369697c4c29f33eafbbfb869a5fe9c0583c3cb6ebd4",
+  "oldProofCount": 69,
+  "oldProofHashMismatches": [],
+  "runtimeSourceCount": 53,
+  "runtimeSourceDifferences": [
+    "frontend/src/components/shared/import/ImportSession.css",
+    "frontend/src/components/shared/intake/IntakePage.css"
+  ],
+  "backendSourceCount": 11,
+  "backend49": "INHERITED, NOT RERUN; matching source and old proof hashes",
+  "clinical22": "HISTORICAL, NOT RERUN; UI CSS differs, no fresh clinical22 certification from this session"
+}

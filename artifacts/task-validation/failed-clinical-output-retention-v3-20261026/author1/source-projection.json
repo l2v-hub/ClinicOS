@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-26T11:52:07.049Z",
+  "reservationNonce": "cace566b-942f-4735-a50f-6cf30d7e1188",
+  "reservationCommit": "6af59292e1697236559d8685bc88fd2a745e8d7c",
+  "baseSha": "13c71ce0e2cdf6e72b4c7eeeb036754fac7e4f73",
+  "worktree": "/tmp/clinicos-failed-output-retention-source1",
+  "files": [
+    {
+      "path": ".github/workflows/codex-bug-pipeline.yml",
+      "bytes": 4162,
+      "sha256": "9a041cf6f4ebfd505fd588983743213587840656c9ae6ca576582c8ab34ea27f"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "bytes": 9454,
+      "sha256": "a19585fd5b9ffc318d6d7810013253373e1eaaf44eef4693970ec6db1f83b8b4"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "bytes": 48980,
+      "sha256": "086ee18c81a07353d8dbc1d835b39e2338d4b7c1bed1a38e65ab6570dceea435"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/operator-authorization.mjs",
+      "bytes": 20136,
+      "sha256": "f8482ea808f443d31487932927e820bbb74f0c60418b9b51c423c8090d68f661"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/workspace.mjs",
+      "bytes": 35347,
+      "sha256": "958d9eeb5939e728a828bc8b93fc853450c2138dd42d7a9d4ab50a6e60bb2cf3"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "bytes": 9657,
+      "sha256": "f0189b0e2a7793b4b0c739f7e125b1ac57d8c70c17195ebef1547047043557ed"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/failed-output-retention.test.mjs",
+      "bytes": 14342,
+      "sha256": "53e11f491e96f2218d4a4ca193b1c386397093e84e8cac02abac10c48d56164f"
+    }
+  ],
+  "status": [
+    "M .github/workflows/codex-bug-pipeline.yml",
+    " M agent-team/src/bug-pipeline/cli.mjs",
+    " M agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+    " M agent-team/src/bug-pipeline/operator-authorization.mjs",
+    " M agent-team/src/bug-pipeline/workspace.mjs",
+    "?? agent-team/src/bug-pipeline/failed-output-export.mjs",
+    "?? agent-team/tests/bug-pipeline/failed-output-retention.test.mjs"
+  ]
+}

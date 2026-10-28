@@ -1,0 +1,20 @@
+{
+  "nonce": "3112f519-172c-408c-a10c-b3b291da7a58",
+  "algorithm": "sha256",
+  "files": {
+    "STOP.json": "44d48c98ec8b0016fae9b6c67c5c0ad80e5c8137d41ca860285e591260ea3f8d",
+    "actionlint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "green/.github/workflows/claude-cloud-review.yml": "440d65be34c642e63e6017fd59bd92a9f8e11ecfb63eaf65dc1ec15d77812365",
+    "green/agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs": "8f1a9cb971eaa70359c1ad1552a648e62864294cbcd9f8f237918dd30fcea371",
+    "green.log": "92850cf1afd7475a3c2e11b611269793497cbbb21c1304baec456909fa99901d",
+    "independent.log": "1c73392251cde9d9322c3c6903b441195ec2c370bd7c02e7ba1d083e812d9257",
+    "independent.mjs": "b452279db9b8cf6686c7f1679e8af64506d2b6f99fb721f0a9728fea60fc3b6d",
+    "red/.github/workflows/claude-cloud-review.yml": "e1bec27ba5fe1263817fc06f42e22aeae99203897a775747c01f7c912093cda4",
+    "red/agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs": "8f1a9cb971eaa70359c1ad1552a648e62864294cbcd9f8f237918dd30fcea371",
+    "red.log": "e132fd93a270c6c171784c2b8760fe6deaed30849a6e02d455f34915653da24f",
+    "report.md": "e16a17cc8c73d729031acf67917ae6fa52e18c98e462e99a849780703d71dcd6",
+    "reservation.json": "3ead2c5256681fe9df0558bf9dea93ad74d0795333a72c110675f76c010c7768",
+    "result.json": "e5184eaff8077b23b27eac4942e31385c8e6e45c5ccb2b3b15381d5852a631e7",
+    "scope-verification.json": "0650e7ce2efa6c6357e565d71841872c2c3d06139332d94e6045769195cb4cc0"
+  }
+}

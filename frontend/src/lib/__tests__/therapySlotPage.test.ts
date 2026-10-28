@@ -5,6 +5,7 @@ import {
   buildTherapySlotPageUrl,
   mergeTherapySlotPages,
   parseTherapySlotPage,
+  parseTherapySlots,
 } from '../therapySlotPage';
 
 const slot = (therapyId: string, total: number): TherapySlot => ({
@@ -38,6 +39,34 @@ const slot = (therapyId: string, total: number): TherapySlot => ({
   ],
 });
 
+test('authoritative PS hold is retained and malformed or foreign metadata never becomes no pause', () => {
+  const actual = slot('t1', 1);
+  const hold = {
+    exitId: 'exit-1',
+    decision: 'pause' as const,
+    departedAt: '2026-10-17T10:00:00.000Z',
+  };
+  actual.patients[0]!.temporaryPsExit = hold;
+  assert.deepEqual(parseTherapySlots([actual])[0]!.patients[0]!.temporaryPsExit, hold);
+  for (const invalid of [
+    { ...hold, decision: undefined },
+    { ...hold, exitId: '' },
+    { ...hold, departedAt: '2026-10-17' },
+    { ...hold, patientId: 'foreign-patient' },
+    'pause',
+  ]) {
+    const malformed = structuredClone(actual);
+    (malformed.patients[0] as any).temporaryPsExit = invalid;
+    assert.throws(() => parseTherapySlots([malformed]));
+  }
+  delete actual.patients[0]!.temporaryPsExit;
+  assert.equal(
+    parseTherapySlots([actual])[0]!.patients[0]!.temporaryPsExit,
+    null,
+    'Legacy missing field stays compatible',
+  );
+});
+
 test('therapy slot URL is bounded and carries an opaque cursor', () => {
   const url = buildTherapySlotPageUrl('https://api.test', '2030-06-15', 'opaque+/=');
   assert.equal(
@@ -69,5 +98,27 @@ test('therapy page parser rejects partial responses without a continuation curso
         summaryExact: true,
       },
     }),
+  );
+});
+
+test('merging another candidate page preserves distinct scheduled doses of one periodic therapy', () => {
+  const multidose = slot('multi', 3);
+  const first = multidose.patients[0].administrations[0];
+  first.scheduledTime = '08:00';
+  multidose.patients[0].administrations.push({
+    ...first,
+    scheduledTime: '10:00',
+    dosage: '2 compressa',
+  });
+  const merged = mergeTherapySlotPages([multidose], [slot('other', 1)]);
+  const scheduled = merged[0];
+  if (scheduled.kind === 'verification') throw new Error('unexpected verification');
+  assert.deepEqual(
+    scheduled.patients[0].administrations.map((item) => [item.therapyId, item.scheduledTime]),
+    [
+      ['multi', '08:00'],
+      ['multi', '10:00'],
+      ['other', '09:00'],
+    ],
   );
 });

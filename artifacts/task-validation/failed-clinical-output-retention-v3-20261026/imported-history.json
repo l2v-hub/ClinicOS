@@ -1,0 +1,316 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "subjectSha": "09be584076e3bb4f7131be94608f063d9b20a98b",
+      "evidence": "independent-qa1/qa-report.md",
+      "nonce": "cace566b-942f-4735-a50f-6cf30d7e1188",
+      "reason": "Independent QA1 BLOCKED3; original candidate and exact reports retained."
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "subjectSha": "24f669b706193eef9ac08bd7a02ab440be692189",
+      "evidence": "independent-qa2/qa-report.md",
+      "nonce": "76c2f780-5e52-462d-aa38-294b107d5875",
+      "reason": "Bounded correction of QA1 three concrete findings; new independent exact-byte QA2 VERIFIED0.",
+      "independentQaSealSha256": "d7ea5bd5f765930305848954dd4d383fe8f85a220fe776041ed94be8cb732018"
+    },
+    {
+      "round": 3,
+      "status": "passed",
+      "subjectSha": "0dbe3066b41ff1f5a8462de2a4c6604b89b56e5b",
+      "evidence": "independent-qa3/qa-report.md",
+      "nonce": "ab72ffd3-091c-496a-b5b3-5b1000d8970a",
+      "directorAmendmentNonce": "837c373d-7168-469f-a5dd-13f2665b92ad",
+      "independentQaNonce": "ced5e6c8-ce77-4122-9e66-fbbac0caee26",
+      "independentQaSealSha256": "d0e4b0c82d07cdb0fbe7aca72566809de001f1644dc432578e987404a017f3ca",
+      "reason": "Genuine peer1 initial-flow and thrown-controller retention findings corrected; actual native-null RED/GREEN and real export/diagnostic disk behaviour independently verified. All original freezes/history preserved."
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "6c25842fec463302d129edf653be060d1746dd6e"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "changes-requested",
+        "subject_sha": "6c25842fec463302d129edf653be060d1746dd6e",
+        "review_sha256": "ce00f26998a1270e619fdfc394c5ad15ae37f59585b9cbb2c82bfe811c16ed42"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"6c25842fec463302d129edf653be060d1746dd6e\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"I reviewed the frozen diff statically. I ran no tests and executed nothing. Most of the change holds up: verification diagnostics are bounded and sanitized, the command result, 1 MiB output cap and timeout are unchanged, and the source export is guarded. It checks the exact checkpoint, plan scope, regular-file identity, hashes, sizes, credential patterns and sensitive paths, and writes to immutable destinations. The workflow now uploads with always(). The new archive action checks that the checkpoint is well-formed and that the external observer agrees before it consumes any authorization, and it keeps the full failed history and every attempt count. The supplied QA2 evidence says all three QA1 findings are fixed. Two gaps remain. First, the CLI picks out every verification failure for export, but the export only works for correction flows, so a failure in the first implementation flow can never keep its source and is reported as an ambiguous refusal. Second, the export on the thrown-controller path calls a store method that does not appear in the diff, swallows every error, and is tested only by matching the CLI source text with a regex. These are behavioural gaps in AC2 and AC3, so I am requesting changes.\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/failed-output-export.mjs\",\n      \"line\": 74,\n      \"problem\": \"exportFailedCode requires knownFailedCorrection, which only accepts the pr-feedback, review-correction and external-review-correction flows. The CLI selector (exportKnownFailures in cli.mjs) picks every batch whose progress failed at verify-before or verify-after with workspace-verification-failed, including the first 'implementation' flow. For a first-implementation verification failure, the export is therefore always refused. The source is never kept, and the diagnostic records the generic status 'guard-refused-or-output-unavailable', which looks the same as a real guard rejection. AC2/AC3 say failed source should be kept whenever a known verification failure happens, but the most common first-attempt failure is silently excluded.\",\n      \"requested_change\": \"Pick one of two fixes. (a) Let the export accept the first-implementation flow under equally exact guards: a failed status, the exact failed step and code, and a checkpoint that matches the plan and base (the head may come from the local worktree when no PR SHA exists yet). Or (b) make the CLI selector use the same predicate as the export and record a distinct, explicit status such as 'flow-not-eligible' for skipped flows. Also tell 'destination already exists' apart from a guard refusal in the reported status.\",\n      \"test_expectation\": \"Add a native fixture with a first-implementation verify-before failure. Assert that either a guarded export is created with the expected manifest, or the summary records the explicit not-eligible status instead of the generic refusal. Add a fixture that exports the same checkpoint twice and assert that the second status says the export already exists.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"agent-team/src/bug-pipeline/cli.mjs\",\n      \"line\": 198,\n      \"problem\": \"On the thrown-controller path, the export calls store.observe() inside a try/catch that swallows every error. observe is not defined or changed anywhere in this diff. The only test for this path (failed-output-retention.test.mjs) matches the CLI source text with a regex and never runs it. If the state store has no observe method, or it throws, the throw-path export required by AC3 silently never happens and nothing in tests or diagnostics shows it.\",\n      \"requested_change\": \"Show that the state store returned by createGitHub(...).createStateStore() provides a read-only observe() with the expected shape. When the throw-path export itself fails, record an explicit marker in the blocked-controller diagnostic, such as failedOutputExports or exportError, rather than discarding the failure silently.\",\n      \"test_expectation\": \"Add a behavioural test that runs main(), or an extracted helper, with a stub runPipeline that persists a failed verification batch and then throws. Assert that the blocked-controller diagnostic.json is written and that the failed-code export is attempted against the state from observe(). Assert that a missing or throwing observe() leaves an explicit marker in the diagnostic.\"\n    }\n  ]\n}\n"
+  },
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/codex-bug-pipeline.yml",
+      "blob": "8c788d7dbab5f83bd6e03bed5204cd134d8ce2fe",
+      "mode": "100644",
+      "baseBlob": "3dbad7899b05dd6dd964b70b91edf1da5b7da1a8",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "blob": "d239c6db29627683ae3999f5612a7280a17bb6ac",
+      "mode": "100644",
+      "baseBlob": "b42cd83de4b6442451a7437926271e70b761b712",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "blob": "ea6cec8a0cace0dbb3876dce48e3efe8daf796be",
+      "mode": "100644",
+      "baseBlob": "1aecac72761dd714724623ff3386b2529e51ec46",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "blob": "ef9ad03732c9102dc2e03b465fc78e1e00f32b2a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/operator-authorization.mjs",
+      "blob": "f40ca1a1b58e168e7c9bb9dbb76e582367a96fbf",
+      "mode": "100644",
+      "baseBlob": "d0882853f8cb8b9e76e446a3b441b5d2ca9ab104",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/workspace.mjs",
+      "blob": "248d04d93959696bbf3d4095d6828e33c70983cc",
+      "mode": "100644",
+      "baseBlob": "0eb7cb187d1e4aa97660a8aa615ac9e1022c8031",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/failed-output-retention.test.mjs",
+      "blob": "0d57e2e4070f46e02a05b88e99de9f233bf7761c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/analysis.md",
+      "blob": "8f93e1ff8d28840815ad50a0cd5fc4b041dda43f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/author1/implementation-report.md",
+      "blob": "eb40911f889212315cdbc35ecf9b7e45b8059fe2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/author1/seal.json",
+      "blob": "58b51b3a4d5307b0442137b40276e6b74c8be005",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/author1/source-projection.json",
+      "blob": "2554b6b024bf66e64db510a09aacee558bcd27f7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/author2/implementation-report.md",
+      "blob": "3bdf04f9b12d110e9af5f1eb9ab73d37cc3998ec",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/author2/seal.json",
+      "blob": "72ceca166c01ec6e1c3735ba18ca71fe91ae12f4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/author2/source-projection.json",
+      "blob": "07b30152b69912b25df4002f71c721bc6104ceb4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/implementation-plan.md",
+      "blob": "271373c09c6fd707d8078f86fa9c5b2d4f92eb00",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/imported-history.json",
+      "blob": "3e19666ce437485127942f2efd5fe0841df9554b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/independent-qa1/independent-repro.log",
+      "blob": "2f9a1c37dbde3f294c272a2533e8a4e5a4f278ff",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/independent-qa1/qa-report.md",
+      "blob": "78f01f52bca6248b1abb75986c44321395c06687",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/independent-qa1/qa-seal.json",
+      "blob": "25ac2e9778aee99ddaadc472adbb3e5b918c229d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/independent-qa2/check-projection.py",
+      "blob": "413c5c20632432c59ca91ad684391f89961be520",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/independent-qa2/independent-repro.log",
+      "blob": "45920529d1ae95cabe4795d5ff10b4e03066e075",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/independent-qa2/independent-repro.mjs",
+      "blob": "3d93ed3cc14a7fb200557036a4d96529b45fa26d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/independent-qa2/projection.log",
+      "blob": "d34a1cb4f6b6810ad0a9a488280d908e664ac12b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/independent-qa2/qa-report.md",
+      "blob": "4f4ee11fd13e3ed7976472b226c4cb2942ccbd06",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/independent-qa2/qa-seal.json",
+      "blob": "553fc320f6d30daadc1b4f8b194e6564a534de96",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/independent-qa2/static-checks.log",
+      "blob": "9b8d07eb34beffadb67ebbb1077d19485ee7ab38",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/independent-qa2/targeted-tests.log",
+      "blob": "209149090e8a5912cfdb698968ceccc7403f8c40",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/original-clinical-partial-proof.json",
+      "blob": "db86b8122d50097169741dffc2f1a8c9bf9af5c1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/task-contract.md",
+      "blob": "2a0a890d2ee63eb47f9ad71cf58910ee17749959",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/validation-report.md",
+      "blob": "d0a9bad8119f959a35faec1a657557c7144100f6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/failed-clinical-output-retention-20261026/zero-provider-qualification-proof.json",
+      "blob": "a6890cf119b9dd9d14fddea53cfaee255fbd993d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "actual-peer1-proof.json": "8ca2c0f2a9678b6e8d91f086e46901d31a70511b998119781488a7c6b791fa71",
+    "analysis.md": "0f11b3c8c8624cc51e72be29867e87a7e9553ee059e73dcd61c93d8eb2b9d651",
+    "author1/implementation-report.md": "07788db550c0b74fce1564d4e6b2383ecc1f94ae647af593df805403247755cd",
+    "author1/seal.json": "47f4f0c7de69c641f301c4e52a683b1cafc1b30ca41fead2c7d0acc778f47014",
+    "author1/source-projection.json": "8e1a6db66ebf6861b1c353775c8e9358ffb163fb668910037a8c5e246b1ac8bc",
+    "author2/implementation-report.md": "3418c5b2e9e1e56dee5cd3469b177a3fefe302c18268c1e43c8c1377d03c3d7b",
+    "author2/seal.json": "3afbc445ace2fe02b404a8ffb08ee094dba41dfa6d47d8d656a116be214751ee",
+    "author2/source-projection.json": "e438836ec4cdc3a641a73e4fae85631fcefc1ce95b8e93a34ecbe7c996fa0465",
+    "author3-director/focused-green.log": "c1c65c26a171dcbb9c9418b080c711a61ba2c92a59dc36bb131ed8da1896a9b7",
+    "author3-director/implementation-report.md": "eaeb480260885d6235ed7695f6e090829c767eb54b29c1cb18e72a4d8c14ef68",
+    "author3-director/initial-native-null-red.log": "d2fab4dbf033fbaf77e46aebacdb22e8fffac5db9a702bf592acc39ad78b2f17",
+    "author3-director/seal.json": "15f59524cf302d9ac5fc076eb5df0b5ecfa638d042f41ecc735054075e7627fa",
+    "author3-director/source-projection.json": "c5e6f33e9e95d1b7c2e9763d52b66bcdd9406e4b6f672ec06634816f4fd4d775",
+    "author3-luna/implementation-report.md": "7b477d5175e8d9ba1df079ed078f2faffe04610a5e28ac597ea85c373733c912",
+    "author3-luna/seal.json": "885dd7fb3d6b0037fc16ecd28e3eaef072211429b02ae330d3805dde68479133",
+    "author3-luna/source-projection.json": "06dfa368db9b012502e73b3f499897abab2dc8ebf8c5795cd2a8e57024676448",
+    "claude-review-1.json": "ce00f26998a1270e619fdfc394c5ad15ae37f59585b9cbb2c82bfe811c16ed42",
+    "implementation-plan.md": "3d8fd9bb71ab4f10d2878bfdd9c0609445bc6389349196deb684edcdf92a2f2a",
+    "independent-qa1/independent-repro.log": "5abbaa0c91ff60661779466935475ecfd260525fa9f0108b6cabac5cdadd1250",
+    "independent-qa1/qa-report.md": "aff88a0359b4216a1b73051fde0ed8c37a99479f987374f31f42b766469e20cd",
+    "independent-qa1/qa-seal.json": "412a532563208fa99b82b9b3aa3b8a14d4d6216ba35e66d13849d19ec1cd155d",
+    "independent-qa2/check-projection.py": "defcd63525d31228773ca7bc7de87111f5ebaa823916476647385a87e1aacbc1",
+    "independent-qa2/independent-repro.log": "7a30ae80c0f7441fc27131d0d24d604fceb4b820187d1723997925674b00372a",
+    "independent-qa2/independent-repro.mjs": "5fa1e67cdce44908b63e39840564f94c1fbe4f18c545cc90b1bf9213bf51bfb2",
+    "independent-qa2/projection.log": "2206fe1cf90fd17441d0adeca580412119a02a6f118576c04b01fd8e94514e2c",
+    "independent-qa2/qa-report.md": "af53acc5f877a60904d6655e545cd37b8a6f0c62f5b9e3ded03c52df363185d8",
+    "independent-qa2/qa-seal.json": "d7ea5bd5f765930305848954dd4d383fe8f85a220fe776041ed94be8cb732018",
+    "independent-qa2/static-checks.log": "f826e7afe0aaf36bd10a13f83ac80b628dcc31a7f5325525a2610d06929014a2",
+    "independent-qa2/targeted-tests.log": "f7a8585da46bd99695ef6d332d6d13f7d7cf3b2d04ca41609cd3673f5fa23b8e",
+    "independent-qa3/independent-repro.log": "a5b626651fb5f697cf534fc2216a306f2bb7ceaef538daa4b69cbd240ca99904",
+    "independent-qa3/independent-repro.mjs": "6e1d5916a9770f012908d372e0407723aed0a24aa4c3c9a0aadc5284d9ddcfe5",
+    "independent-qa3/qa-report.md": "82398628d906539d3d85b9be4892ce338e71b25c338e7f17ed66cda7a2e608cf",
+    "independent-qa3/qa-seal.json": "d0e4b0c82d07cdb0fbe7aca72566809de001f1644dc432578e987404a017f3ca",
+    "independent-qa3/source-focused.log": "fc793d89d554a944ac8bb59b8f00b1c910edbd7c07a5df24c9c45e1ecb0ccc94",
+    "independent-qa3/static-checks.log": "fc441742e352219362836817967373ac25d85d89d3ca720653b8e5bb734d8e9c",
+    "independent-qa3/verify-frozen.log": "68f005a36db794732396b7c794108cb83c5fb7a47a95384d139793d09a7a2f7d",
+    "independent-qa3/verify-frozen.mjs": "a03adda422d6963989c4890126f385c7ceaacd109d66a52daee7a42f973f1307",
+    "original-clinical-partial-proof.json": "e0bc607f20e0088fe0a981c775d46d25ebda8c322566efe968bf8487ce6a38c3",
+    "task-contract.md": "e04b212da8c797c5b2e2a199db468374e562580d398f2c82bce541b39eaeef77",
+    "validation-report.md": "1a0721973ef019f8596e01b1f48ddf129a5a31f03d192b26367e5604f9528bbc",
+    "zero-provider-qualification-proof.json": "e5e5d9536acd32e115becc3f502966b3aa963d153e47197dc3ca6c9687d2d301"
+  }
+}

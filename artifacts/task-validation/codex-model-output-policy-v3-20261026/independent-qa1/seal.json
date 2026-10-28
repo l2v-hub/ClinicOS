@@ -1,0 +1,18 @@
+{
+  "status": "STOPPED",
+  "sealedAt": "2026-10-26T01:16:51.668430+00:00",
+  "verdict": "FAILED VALIDATION",
+  "code": "38b37e3322176bd9836d228d4c4ce63bf66fced2",
+  "qaNonce": "26a7189c-6330-45ec-b019-ca73be5f13f6",
+  "stateCommit": "a36a294cd13e23122e547928a365bd8e447053f1",
+  "manifestSha256": "17fb180fc2d1d38db10dfcddb7e642a394129a41960029f6dc80ae59ca66cb06",
+  "artifacts": 25,
+  "sourceHashes": {
+    "agent-team/src/bug-pipeline/process.mjs": "43c3f16b715349b8c474e1d3d6d2efddecd5904efa54f687e707a643aa90d67a",
+    "agent-team/src/bug-pipeline/models.mjs": "1cd2bf6c650264a976c938caf36c498fe67eae2812dcf06adbfc61b36afac122",
+    "agent-team/src/bug-pipeline/cli.mjs": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed",
+    "agent-team/tests/bug-pipeline/models.test.mjs": "71159e884f0b688afb06854163a041289a9b0ae8a408e13b381b43d303a40996",
+    "agent-team/tests/bug-pipeline/process-output.test.mjs": "dadde17c49a95901cfab8cbcd55c82ee0deceffa7d91cef4cd27d8833bb28b16"
+  },
+  "notes": "Source-only independent QA; no publication or imported-history certification. All author and shared checkout files preserved."
+}

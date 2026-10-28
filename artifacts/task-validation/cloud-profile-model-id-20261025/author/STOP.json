@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "status": "STOP",
+  "nonce": "503fa11e-0afc-4c3c-95d8-1dd9e9e844f1",
+  "round": 2,
+  "parent": "d6d23302e999a435c1b4d912ed563e42ab33c60e",
+  "sealedAt": "2026-10-25T20:02:03.124059+00:00",
+  "manifestSha256": "0a6be99714a23618567f46d51edc19ad26106c327d00f238b298c7b996ed9bc6",
+  "reportSha256": "2ff6c1425dd5a9907507d1fc34e5d325b961e3a5de96c177d50c909cccd99b84",
+  "patchSha256": "dc627d815fd88441924d6cf49211a910c8f7413b75f872a3bd31bf21a40615f7",
+  "instruction": "No further author edits. Root fresh independent QA required."
+}

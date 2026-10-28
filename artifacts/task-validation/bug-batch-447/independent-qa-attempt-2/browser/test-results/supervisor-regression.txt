@@ -1,0 +1,43 @@
+✔ admin first view prioritizes the actionable unified attention queue (2.452244ms)
+✔ room failures remain explicit and independently recoverable without stale occupancy claims (0.3162ms)
+✔ management and clinical values use one native shared KPI primitive (0.684112ms)
+✔ shared KPI layout has equal card geometry and responsive no-overflow grids (0.432719ms)
+✔ on-duty roster uses configured schedules and preserves the independent operator heading primitive (13.241969ms)
+✔ 456 unified queue includes diary and handover, excludes own and already acknowledged urgencies (5.989656ms)
+✔ 456 attention orders severity then oldest source time without mutating source queue (1.598767ms)
+✔ 456 tomorrow doses are absent even when mixed into every summary partition; today target is exact (0.92193ms)
+✔ 456 clinical overview uses truthful filtered-list actions and never invents patients or observation times (0.68674ms)
+✔ 456 every anomalous drug remains visible with its exact prescription target (5.206441ms)
+✔ 456 configured day shifts use Rome civil time and exclude inactive/unscheduled accounts (1.586519ms)
+✔ 456 overnight shifts include previous day tail and preserve DST repeated-hour attendance (1.000481ms)
+✔ 456 malformed schedule responses fail closed instead of claiming on-duty staff (4.81558ms)
+✔ 456 attention renders actual source timestamp, source identity, single actionable count and escaped content (33.217984ms)
+✔ 456 incomplete queue and unavailable queue never render definitive zero or false reassurance (1.287517ms)
+✔ 456 dashboard first screen omits passive KPI/alarm tiles, preserves clinical/room recovery and role-negative status (22.935465ms)
+✔ dashboard anomaly worklist is bounded by patients and lists every drug of a row (1.939172ms)
+✔ operator keeps bounded notification details and supervisor preserves every drug in its actionable list (0.639608ms)
+✔ patient, drug chips and compact count have explicit visual hierarchy (0.577651ms)
+✔ anomaly row exposes an intentional accessible name and keyboard focus (0.66166ms)
+✔ notification bar keeps all severity labels visible and responsive (7.717428ms)
+✔ clinical overview owns an abortable retry without reloading unrelated dashboard feeds (2.309043ms)
+✔ operator dashboard never presents unavailable clinical metrics as verified zeroes (11.523372ms)
+✔ admin dashboard shares the same explicit unavailable-data and recovery contract (0.617722ms)
+✔ login loads only handover overview while the bounded feed is navigation-scoped (5.436006ms)
+✔ dashboards use authoritative read models rather than deriving counts from a handover feed page (0.659437ms)
+✔ patient list badges come from visible-id clinical summaries, not a handover roster prop (0.335431ms)
+✔ patient detail distinguishes an exact total from the loaded page and exposes recovery (0.528394ms)
+✔ camera synchronization requests only the bounded active room-assignment scope (1.786005ms)
+✔ room editor mirrors server bounds and never persists derived occupancy (0.434969ms)
+✔ facility loading is abortable and exposes retry instead of a false zero snapshot (0.544889ms)
+✔ App does not download facility rooms during ordinary login bootstrap (0.976978ms)
+✔ navigation-scoped room reads reject stale responses and expose a retryable state (0.769118ms)
+✔ room consumers never present a failed load as zero occupancy or an empty assignment list (0.916969ms)
+✔ patient assignment editor uses dependent labelled selects and an exact bed id (0.368464ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2895.793413

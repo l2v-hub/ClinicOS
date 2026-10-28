@@ -1,0 +1,135 @@
+{
+  "at": "2026-10-19T01:03:41.137728+00:00",
+  "status": "FAILED \u2014 stopped on confirmed product defect",
+  "qaNonce": "85916d83-e6f7-4593-92f9-207d751d1d61",
+  "resourceNonce": "d8036c7a-57d0-475a-99f1-a4d10b995dc2",
+  "sourceSha": "8a27ef372807a68f464c3ebcfa85ca85b2da5344",
+  "acceptanceCriteria": {
+    "1 preservation/source identity": {
+      "status": "PASS",
+      "evidence": "Final integrity readback verified 5,803 source files, 10,899 old proof files, preserved QA1/QA2/QA3/UX320 trees and 1,822 frozen source snapshot files; same source SHA and git status."
+    },
+    "2 reservation and exclusive grant": {
+      "status": "PASS",
+      "evidence": "Same QA nonce 85916d83-e6f7-4593-92f9-207d751d1d61; current canonical resumption owner was this QA agent; original grant/reservation files left unchanged."
+    },
+    "3 runtime isolation and cleanup": {
+      "status": "PASS",
+      "evidence": "Only owned synthetic PostgreSQL 16 runtime was used for these phases; attempt12 provenance verifies DB removed and cleanup errors empty; owned 3447/5447/55432/8432 ports clear and lock free at stop; baseline container preserved."
+    },
+    "4 452, DB33, build, canonical7": {
+      "status": "PASS",
+      "evidence": "Attempt1 actual 452 browser scenario passed at four viewports with Enter and native click. Attempt2 build, affected DB33 and all seven fresh canonical criteria passed (17 receipts)."
+    },
+    "5 remaining486 actual callers": {
+      "status": "FAIL",
+      "evidence": "Seven distinct subpaths passed: fresh form, authenticated HTTP, shared transaction, diary/legacy replay, actual manual/imported intake, registry/tool rejection/authorization, and phase11 actual discharge review/confirmation/reload. Actual full-screen Milo typed prescription failed: server rejected valid mapper-produced therapy with preview_mismatch; no confirmation UI or save. Six prior legacy/route paths were passing before discharge work; phase11 discharge passed."
+    },
+    "6 Agenda/calendar/lifecycle recorded phase7": {
+      "status": "UNRUN",
+      "evidence": "Frozen recorded-attempt7 helper exists but was not launched. Agenda roles, paging, retry/error, lifecycle, and SQL-denial criteria remain unverified in this QA4 run."
+    },
+    "7 failure diagnosis and stop policy": {
+      "status": "PASS",
+      "evidence": "Classified phase12 as a product defect from actual browser trace and API bodies; no harness weakening, source edit, or confirm bypass. Stopped further clinical runtime work."
+    },
+    "8 final seal and safe handback": {
+      "status": "PASS",
+      "evidence": "Private report and STOP/resource handback recorded; artifact hashes and final source/proof integrity readback recorded; no owned process or lock remains."
+    }
+  },
+  "failedRunnerAttempts": 6,
+  "failedPhaseExecutions": [
+    {
+      "attempt": 6,
+      "failed_step": "actual diary atomic rejection / legacy replay",
+      "class": "fixture or assertion baseline",
+      "detail": "Expected 2 audit records, observed 5; same path later passed in attempt8."
+    },
+    {
+      "attempt": 8,
+      "failed_step": "actual imported discharge review",
+      "class": "harness locator/setup",
+      "detail": "patient-intake-header did not become visible; preserved output."
+    },
+    {
+      "attempt": 9,
+      "failed_step": "actual imported discharge review",
+      "class": "harness locator/setup",
+      "detail": "searchbox locator for the third discharge therapy row timed out; preserved output."
+    },
+    {
+      "attempt": 10,
+      "failed_step": "actual imported discharge review",
+      "class": "harness assertion/fixture",
+      "detail": "Expected source text in flattened row as UNKNOWN ore 08:00; DOM retained exact source line but represented review fields separately; later phase11 passed."
+    },
+    {
+      "attempt": 11,
+      "failed_step": "actual Milo workflow",
+      "class": "harness locator/setup",
+      "detail": "Used stale sidebar launcher and timed out on Cambia ospite; later attempt12 used the actual full-screen launcher."
+    },
+    {
+      "attempt": 12,
+      "failed_step": "actual Milo workflow",
+      "class": "confirmed product defect",
+      "detail": "Valid explicit OS prescription produced a server draft; actual AssistantMode mapper attached orale plus exact schedules/date. API returned preview_mismatch / Terapia diversa dalla bozza, kept therapyBound false, and rendered no Conferma. Zero therapy/diary writes."
+    }
+  ],
+  "passed486Subpaths": 7,
+  "agendaLifecyclePhase7": "UNRUN",
+  "productFinding": {
+    "source": "backend/src/skills/engine.ts, prepareTherapyDraft/therapyMatchesDraft",
+    "diagnosis": "prepareTherapyDraft stores result.data wrapper as therapyDraft.preview. therapyMatchesDraft reads row at the wrapper top level, while actual data has the row nested under preview.row; the lookup is empty and rejects the UI-mapped therapy.",
+    "observedApi": "Second POST /skills/converse returned error code preview_mismatch and message Terapia diversa dalla bozza; workflow remained NEEDS_CONFIRMATION and therapyBound=false.",
+    "writes": {
+      "newTherapy": 0,
+      "newDiaryEntry": 0
+    },
+    "externalExtraction": "not exercised; deterministic synthetic fixture only"
+  },
+  "integrity": {
+    "sourceFiles": 5803,
+    "oldProofFiles": 10899,
+    "priorQATrees": [
+      "integrated-clinical-independent-qa-20261019",
+      "ux447-independent-focused-qa2-20261019",
+      "ux447-independent-focused-qa3-20261019",
+      "ux320-live-diagnostic-20261019"
+    ],
+    "snapshotSourceFiles": 1822,
+    "failures": 0,
+    "gitStatusUnchanged": true,
+    "sourceShaUnchanged": true
+  },
+  "proofs": {
+    "attempt12TraceZip": {
+      "path": "attempt12/route486/private-trace.zip",
+      "sha256": "594b6a19831bd6ba133b17c5100d79ba68e2faa74ad58bfac774f4af47d1dc43"
+    },
+    "attempt12FinalDOM": {
+      "path": "attempt12/route486/final-dom.txt",
+      "sha256": "af65c5aafc48b15f0e0a0f2b92681fa9359ca5ade32c7fb857d389601119d2cc"
+    },
+    "attempt12RouteResults": {
+      "path": "attempt12/route486/results.json",
+      "sha256": "2e431593e3d5294b3ea5429e17327528cb259c906b3483f44a2f4d6754fc387b"
+    },
+    "attempt12DatabaseProvenance": {
+      "path": "attempt12/test-results/database-provenance.json",
+      "sha256": "5904e159e8ead44f136c123da049b0f06d5102286f5e32b48c967979689eac46"
+    },
+    "attempt12RunnerOutput": {
+      "path": "console-attempt12.txt",
+      "sha256": "1a6a97fc637f08f919550f89dc94a98a35aa66f525f58166af712cfce22198cf"
+    },
+    "finalIntegrityReadback": {
+      "path": "integrity-readback-resumed-010306.json",
+      "sha256": "ee5a5f9c103ebef20be2e2eff39489953fe239d94dbce5cd61ddf94926063213"
+    }
+  },
+  "sourceEdits": 0,
+  "gitEdits": 0,
+  "externalActions": 0
+}

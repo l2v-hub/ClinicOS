@@ -1,18 +1,26 @@
+import { TherapyVerificationPanel } from '../../shared/TherapyVerificationPanel';
+import { parseTherapySlots } from '../../../lib/therapySlotPage';
 // «Tocca un farmaco → somministra lì» (UX 2026-10-03, regola del proprietario): pannello in linea
 // sotto la riga del farmaco con le dosi del giorno di QUEL farmaco e, per chi può, le stesse azioni
 // del giro (TherapyGiroRows: Somministra / Non somm. con motivo, «altro» con nota obbligatoria).
 // I farmaci «al bisogno» hanno «Somministra al bisogno» con l'indicazione obbligatoria.
 // Nessuna regola nuova: dose e ora le decide il server, che rifiuta i ruoli non autorizzati.
 import { useEffect, useRef, useState } from 'react';
-import type { MotivoNonErogazione, PatientTherapyAPI, TherapySlot } from '../../../types';
+import type {
+  MotivoNonErogazione,
+  PatientTherapyAPI,
+  TherapyReadGroup,
+  TemporaryPsExit,
+} from '../../../types';
 import { API_URL } from '../../../config';
-import { cachedGetJson } from '../../../lib/cachedFetch';
+import { cachedGetJson, invalidateCachedGet } from '../../../lib/cachedFetch';
+import { operatorHeaders } from '../../../lib/operatorSession';
+import { parseTemporaryPsExit, TEMPORARY_PS_EXIT_CHANGED } from '../../../lib/temporaryPsExit';
 import { useRequiresConfirmation } from '../../../lib/capabilities';
 import { useCanAdministerTherapy } from '../../../lib/therapyPermissions';
 import { createSubmissionKey } from '../../../lib/submissionKey';
 import { patientDrugTimes, administeredTime } from '../../../lib/therapyGiro';
 import {
-  loadPrnAdministrations,
   recordAdministration,
   recordPrnAdministration,
   type AdministrationOutcome,
@@ -93,10 +101,12 @@ function ScheduledPanel({
   needsConfirmation: boolean;
   onRecorded?: () => void;
 }) {
-  const [revision, setRevision] = useState(0);
-  const key = `${patientId}|${therapy.id}|${date}|${revision}`;
+  const [revision, setRevision] = useExitRevision(patientId);
+  const key = `${patientId}|${therapy.id}|${date}`;
   const [loaded, setLoaded] = useState<
-    { key: string; status: 'ready'; slots: TherapySlot[] } | { key: string; status: 'error' } | null
+    | { key: string; status: 'ready'; slots: TherapyReadGroup[]; refreshError?: boolean }
+    | { key: string; status: 'error' }
+    | null
   >(null);
   const state = loaded?.key === key ? loaded : { status: 'loading' as const };
   const [feedback, setFeedback] = useState<Feedback>(null);
@@ -104,18 +114,21 @@ function ScheduledPanel({
 
   useEffect(() => {
     let active = true;
-    cachedGetJson<TherapySlot[]>(`${API_URL}/therapy-slots?date=${date}`).then(
-      (slots) => {
-        if (active) setLoaded({ key, status: 'ready', slots: Array.isArray(slots) ? slots : [] });
-      },
-      () => {
-        if (active) setLoaded({ key, status: 'error' });
-      },
-    );
+    cachedGetJson<unknown>(`${API_URL}/therapy-slots?date=${date}`)
+      .then(parseTherapySlots)
+      .then(
+        (slots) => {
+          if (active) setLoaded({ key, status: 'ready', slots });
+        },
+        () => {
+          if (active) setLoaded((previous) => previous?.key === key && previous.status === 'ready'
+            ? { ...previous, refreshError: true } : { key, status: 'error' });
+        },
+      );
     return () => {
       active = false;
     };
-  }, [date, key]);
+  }, [date, key, revision]);
 
   const times =
     state.status === 'ready' ? patientDrugTimes(state.slots, patientId, therapy.id) : [];
@@ -161,7 +174,7 @@ function ScheduledPanel({
     <div ref={rootRef}>
       <h5 className="drug-dose-panel__title">Dosi di {formatDay(date)}</h5>
       {state.status === 'loading' && <p role="status">Caricamento delle dosi…</p>}
-      {state.status === 'error' && (
+      {(state.status === 'error' || (state.status === 'ready' && state.refreshError)) && (
         <div role="alert" className="drug-dose-panel__msg">
           Impossibile caricare le dosi del giorno.{' '}
           <button
@@ -174,7 +187,14 @@ function ScheduledPanel({
         </div>
       )}
       {state.status === 'ready' && times.length === 0 && (
-        <p className="drug-dose-panel__msg">Nessuna dose prevista per questo giorno.</p>
+        <p className="drug-dose-panel__msg">Nessuna dose programmata per questo giorno.</p>
+      )}
+      {state.status === 'ready' && (
+        <TherapyVerificationPanel
+          groups={state.slots}
+          patientId={patientId}
+          therapyId={therapy.id}
+        />
       )}
       {state.status === 'ready' &&
         times.map((time) => (
@@ -235,10 +255,16 @@ function PrnPanel({
   needsConfirmation: boolean;
   onRecorded?: () => void;
 }) {
-  const [revision, setRevision] = useState(0);
-  const key = `${patientId}|${therapy.id}|${revision}`;
+  const [revision, setRevision] = useExitRevision(patientId);
+  const key = `${patientId}|${therapy.id}`;
   const [loaded, setLoaded] = useState<
-    | { key: string; status: 'ready'; items: PrnAdministration[] }
+    | {
+        key: string;
+        status: 'ready';
+        refreshError?: boolean;
+        items: PrnAdministration[];
+        temporaryPsExit: TemporaryPsExit | null;
+      }
     | { key: string; status: 'error' }
     | null
   >(null);
@@ -253,21 +279,45 @@ function PrnPanel({
 
   useEffect(() => {
     const controller = new AbortController();
-    loadPrnAdministrations(patientId, undefined, controller.signal).then(
-      (items) => setLoaded({ key, status: 'ready', items }),
-      () => {
-        if (!controller.signal.aborted) setLoaded({ key, status: 'error' });
-      },
-    );
+    fetch(`${API_URL}/therapy-slots/prn?${new URLSearchParams({ patientId })}`, {
+      headers: operatorHeaders(),
+      signal: controller.signal,
+      cache: 'no-store',
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error('Somministrazioni al bisogno non disponibili.');
+        const body = await response.json();
+        if (
+          !Array.isArray(body.items) ||
+          !Object.hasOwn(body, 'temporaryPsExit') ||
+          body.items.some((item: PrnAdministration) => item.patientId !== patientId)
+        )
+          throw new Error('Contesto al bisogno non verificato.');
+        return {
+          items: body.items as PrnAdministration[],
+          temporaryPsExit: parseTemporaryPsExit(body.temporaryPsExit),
+        };
+      })
+      .then(
+        ({ items, temporaryPsExit }) => {
+          if (!controller.signal.aborted)
+            setLoaded({ key, status: 'ready', items, temporaryPsExit });
+        },
+        () => {
+          if (!controller.signal.aborted) setLoaded((previous) => previous?.key === key && previous.status === 'ready'
+            ? { ...previous, refreshError: true } : { key, status: 'error' });
+        },
+      );
     return () => controller.abort();
-  }, [patientId, key]);
+  }, [patientId, key, revision]);
 
   const doses =
     state.status === 'ready' ? state.items.filter((item) => item.therapyId === therapy.id) : [];
   const indicationMissing = !indication.trim();
+  const paused = state.status !== 'ready' || state.temporaryPsExit?.decision === 'pause';
 
   async function submit(confirmed: boolean) {
-    if (sending) return;
+    if (sending || paused) return;
     setSending(true);
     setFeedback(null);
     const request = {
@@ -299,7 +349,7 @@ function PrnPanel({
 
   function start() {
     setAttempted(true);
-    if (indicationMissing || sending) return;
+    if (indicationMissing || sending || paused) return;
     if (needsConfirmation) setAskConfirm(true);
     else void submit(false);
   }
@@ -308,8 +358,13 @@ function PrnPanel({
   return (
     <div className="drug-dose-panel__prn">
       <h5 className="drug-dose-panel__title">Al bisogno · dosi di oggi</h5>
+      {state.status === 'ready' && state.temporaryPsExit?.decision === 'pause' && (
+        <p role="status">
+          Somministrazioni in pausa durante l’uscita PS. Registra il rientro prima di erogare.
+        </p>
+      )}
       {state.status === 'loading' && <p role="status">Caricamento delle dosi al bisogno…</p>}
-      {state.status === 'error' && (
+      {(state.status === 'error' || (state.status === 'ready' && state.refreshError)) && (
         <p role="alert" className="drug-dose-panel__msg">
           Impossibile caricare le dosi al bisogno di oggi.
         </p>
@@ -369,7 +424,7 @@ function PrnPanel({
           <button
             type="button"
             className="ds-btn ds-btn--primary"
-            disabled={sending}
+            disabled={sending || paused}
             onClick={start}
           >
             {sending ? 'Invio…' : 'Somministra al bisogno'}
@@ -407,4 +462,47 @@ function formatDay(date: string) {
     day: 'numeric',
     month: 'long',
   });
+}
+
+const invalidatedRefreshes = new WeakSet<Event>();
+
+/** Revalidate without changing the identity of dose rows or their local drafts. */
+export function useExitRevision(patientId: string) {
+  const state = useState(0);
+  const setRevision = state[1];
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let lastFocus = -Infinity;
+    const refresh = (event: Event) => {
+      if (
+        event.type !== 'focus' &&
+        (event as CustomEvent<{ patientId: string }>).detail?.patientId !== patientId
+      ) return;
+      const apply = () => {
+        if (!invalidatedRefreshes.has(event)) {
+          invalidatedRefreshes.add(event);
+          invalidateCachedGet(`${API_URL}/therapy-slots`);
+        }
+        setRevision((value) => value + 1);
+      };
+      if (event.type !== 'focus') {
+        clearTimeout(timer);
+        apply();
+      } else if (Date.now() - lastFocus >= 1000) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          lastFocus = Date.now();
+          apply();
+        }, 250);
+      }
+    };
+    window.addEventListener(TEMPORARY_PS_EXIT_CHANGED, refresh);
+    window.addEventListener('focus', refresh);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener(TEMPORARY_PS_EXIT_CHANGED, refresh);
+      window.removeEventListener('focus', refresh);
+    };
+  }, [patientId, setRevision]);
+  return state;
 }

@@ -1,0 +1,35 @@
+{
+  "verified": false,
+  "results": [
+    {
+      "label": "migration",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "backend-build",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "frontend-build",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "frontend-unit",
+      "code": 0,
+      "signal": null
+    },
+    {
+      "label": "backend-unit",
+      "code": null,
+      "signal": "SIGKILL"
+    }
+  ],
+  "evidence": "evidence/",
+  "lifecycleAndScopeClean": false,
+  "limitations": [
+    "Independent QA, exact-SHA Claude review and production deployment are separate root-owned gates."
+  ]
+}

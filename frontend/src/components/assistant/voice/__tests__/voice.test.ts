@@ -206,7 +206,7 @@ function play(events: AudioEvent[], from: AudioSession = initialAudioSession) {
 }
 
 test('session: push-to-talk happy path to AWAITING_CONFIRMATION and COMPLETED', () => {
-  let s = play([{ type: 'start', residentId: 'r1' }]);
+  let s = play([{ type: 'start', residentId: 'r1' }, { type: 'listening' }]);
   assert.equal(s.state, 'LISTENING');
   assert.equal(micOpen(s.state), true);
   s = play([{ type: 'speech_start' }, { type: 'utterance', speechMs: 1800 }], s);
@@ -235,6 +235,7 @@ test('session: push-to-talk happy path to AWAITING_CONFIRMATION and COMPLETED', 
 test('session: a transcript is never sent by itself; empty STT goes back to IDLE', () => {
   let s = play([
     { type: 'start', residentId: null },
+    { type: 'listening' },
     { type: 'speech_start' },
     { type: 'utterance', speechMs: 900 },
   ]);
@@ -253,6 +254,7 @@ test('session: a transcript is never sent by itself; empty STT goes back to IDLE
 test('session: stale STT answers of a cancelled capture are ignored', () => {
   let s = play([
     { type: 'start', residentId: 'r1' },
+    { type: 'listening' },
     { type: 'speech_start' },
     { type: 'utterance', speechMs: 900 },
   ]);
@@ -272,6 +274,7 @@ test('session: stale STT answers of a cancelled capture are ignored', () => {
 test('session: resident change discards a pending transcript (never re-targeted)', () => {
   let s = play([
     { type: 'start', residentId: 'r1' },
+    { type: 'listening' },
     { type: 'speech_start' },
     { type: 'utterance', speechMs: 900 },
   ]);
@@ -308,6 +311,7 @@ test('session: no new capture while audio or a request is in flight', () => {
 test('session: discarded audio (silence / too short) → IDLE with a notice', () => {
   const s = play([
     { type: 'start', residentId: null },
+    { type: 'listening' },
     { type: 'discarded', reason: 'no_speech' },
   ]);
   assert.equal(s.state, 'IDLE');

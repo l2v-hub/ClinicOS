@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "status": "AUTHOR_STATIC_TESTS_PASS_PENDING_INDEPENDENT_QA_AND_NATIVE_CI",
+  "reservationNonce": "5f471e85-2984-44ed-9318-0fcbb249098e",
+  "baseSha": "1bcc12ffb31d47a46e9113a7e54c6f72fb846191",
+  "sourceSnapshot": "/tmp/clinicos-497-native-fixtures13",
+  "allowedSourceFiles": {
+    "frontend/src/components/operator/__tests__/operationalLists452.test.ts": {
+      "baselineBytes": 10076,
+      "baselineSha256": "b9b5f3eadd063358b40bbddeb816f8f6bc9683e8a14b5621b1f95a16361821c5",
+      "resultBytes": 10174,
+      "resultSha256": "0ddacd5f194e1e9e3ba3e3d8a21ea12acb6a8cc16f3c369f6d407a5bc4b7b057",
+      "diffSha256": "54e86b0cb423f52ed6889a169a63c78692836fadc05ec3ece96dd8fafcac6c41",
+      "changedLines": 5
+    },
+    "frontend/src/lib/__tests__/therapyPages.test.ts": {
+      "baselineBytes": 10053,
+      "baselineSha256": "bb28571bba6b39d8e5c2ec8fe8d45a24acbc58c2a14b216f9262be4193e83058",
+      "resultBytes": 10520,
+      "resultSha256": "656150a3a348777f0def67a581283d79716fc927d4795d243404135b152f9af5",
+      "diffSha256": "9b6c616cf58b00b1535fc1835291dae2ec054c1adc5e3fa6b08078e224178603",
+      "changedLines": 20
+    }
+  },
+  "outOfScopeEditsByAuthor": [],
+  "environment": {
+    "node": "v24.19.0",
+    "dependencies": "existing linked node_modules; no install",
+    "databaseBrowserProviderGit": "not used"
+  },
+  "checks": {
+    "contractValidator": "PASS",
+    "targetedSuite": "PASS: 46 tests, 0 failures across six named suites",
+    "fullFrontend": "PASS: 1549 tests, 0 failures, 0 skipped",
+    "actualNative": "PENDING",
+    "actualClaude2": "PENDING"
+  },
+  "testLogs": {
+    "targeted-tests.log": {
+      "bytes": 4757,
+      "sha256": "30d1eb9087e8d62394ffdcd66a2fa3e22f780378ea5ec5fbaf82f8011de9caa6"
+    },
+    "full-frontend.log": {
+      "bytes": 146199,
+      "sha256": "e41940780a3e513bd1a1b69df92f0e8de06922cc81537f6adbf3fd072bf17af7"
+    }
+  },
+  "preservedDiagnosticFailure": {
+    "path": "/workspace/.clinicos-cloud/497-native-frontend-diagnostic-20261021/diagnosis.md",
+    "status": "unchanged; 1547/1549 reproduced before correction"
+  }
+}

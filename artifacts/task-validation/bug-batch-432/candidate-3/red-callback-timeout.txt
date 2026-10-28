@@ -1,0 +1,22 @@
+✖ actual backend helper must bound a never-settling callback after entry (151.33638ms)
+{"sourceFile":"backend/src/skills/__tests__/skills-e2e.test.ts","sourceSha256":"6073169999fa3812a6faefe684b00aa35d06206d785cc89d751901dab04fd588","syntheticActualHelperOnly":true,"released":false,"settled":false}
+✖ actual browser helper must bound a never-settling callback after entry (151.468025ms)
+{"sourceFile":"e2e/qa-bug-batch-432-browser.mjs","sourceSha256":"1193384be31c008857faea4850e2d1dee69b55ed58279cea93fef1c7e253dfba","syntheticActualHelperOnly":true,"released":false,"settled":false}
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 0
+ℹ cancelled 2
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 310.741718
+
+✖ failing tests:
+
+test at artifacts/task-validation/bug-batch-432/candidate-3/red-backend-callback-timeout.mjs:55:1
+✖ actual backend helper must bound a never-settling callback after entry (151.33638ms)
+  'test timed out after 150ms'
+
+test at artifacts/task-validation/bug-batch-432/candidate-3/red-browser-callback-timeout.mjs:55:1
+✖ actual browser helper must bound a never-settling callback after entry (151.468025ms)
+  'test timed out after 150ms'

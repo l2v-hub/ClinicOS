@@ -1,0 +1,111 @@
+INVIO IN PRONTO SOCCORSO
+COGNOME E NOME
+QA A Clinical447 Synthetic
+SCHEDA / MRN
+QA447-fbe5c55b-main
+DATA NASCITA
+01/01/1970
+SESSO /
+ETÀ
+— · 56
+anni
+DATA STAMPA
+17/10/2026 14:07
+MOTIVO DELL'INVIO
+QA motivo verificato e modificato dall’operatore
+Ultima nota urgente nelle 24 ore: QA motivo urgente: febbre sintetica · 17/10/2026 14:05
+⚠ ALLERGIE QA penicillina (QA orticaria) · QA lattice (QA reazione sintetica) · QA acido
+acetilsalicilico (QA reazione sintetica)
+ULTIMI PARAMETRI RILEVATI
+PARAMETRO
+VALORE
+DATA E ORA RILEVAZIONE
+PA
+125/80 mmHg
+17/10/2026 11:05
+SpO₂
+97 %
+17/10/2026 11:05
+O₂
+No
+17/10/2026 11:05
+FC
+78 bpm
+17/10/2026 11:05
+FR
+18 atti/min
+17/10/2026 14:05
+TC
+36.8 °C
+17/10/2026 11:05
+Coscienza
+A · Vigile
+17/10/2026 11:05
+DTX
+Non rilevato
+Da rilevare o completare
+Evacuazione
+Non rilevato
+Da rilevare o completare
+ULTIME DOSI EFFETTIVAMENTE SOMMINISTRATE
+Registrazioni con orario effettivo nelle ultime 24 ore. Eventuali dati storici senza ora sono indicati
+separatamente e non confermano l’orario della dose.
+FARMACO / DOSE / VIA
+SOMMINISTRAZIONE REGISTRATA
+TIPO
+QA PRN457 · 5 mg compressa · orale
+17/10/2026 14:07
+Al bisogno
+QA PS prior457 · 1 compressa · orale
+17/10/2026 14:07
+Programmata
+QA Prescription447 · 1 compressa — 5 mg · orale
+17/10/2026 14:06
+Programmata
+RISCHI DOCUMENTATI
+caduta · alto · QA rischio sintetico
+FAMILIARE / CONTATTO DA AVVISARE
+QA Contact · 0000000000
+TERAPIA FARMACOLOGICA ATTIVA
+FARMACO
+DOSE
+VIA
+FASCE / ORARIO
+QA PS prior457
+1 compressa
+orale
+08:00 (1 compressa)
+QA PS pending457
+1 compressa
+orale
+08:00 (1 compressa); 20:00 (1 compressa)
+QA453 COMPRESSE 5
+MG
+5 mg
+compressa
+orale
+08:00 (1 compressa, 5 mg); 20:00 (1 compressa, 5 mg)
+
+FARMACO
+DOSE
+VIA
+FASCE / ORARIO
+QA PRN457
+5 mg
+compressa
+orale
+Mattina
+QA Tomorrow Only456
+5 mg
+compressa
+orale
+08:00 (1 compressa, 5 mg)
+QA Prescription447
+5 mg
+compressa
+orale
+08:00 (1 compressa, 5 mg); 14:00 (1 compressa, 5 mg); 20:00 (1
+compressa, 5 mg)
+OPERATORE
+DATA E ORA
+TIMBRO / FIRMA

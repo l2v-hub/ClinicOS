@@ -1,0 +1,134 @@
+{
+  "config": {
+    "argv": [
+      "/tmp/clinicos-autonomy-node22/node_modules/node/bin/node",
+      "/tmp/clinicos-qa-tools/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "artifacts/task-validation/merge-automatico-sviluppatore-singolo-20261028/independent-qa/playwright.config.cjs"
+    ],
+    "configFile": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/merge-automatico-sviluppatore-singolo-20261028/independent-qa/playwright.config.cjs",
+    "rootDir": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/merge-automatico-sviluppatore-singolo-20261028/independent-qa",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/merge-automatico-sviluppatore-singolo-20261028/independent-qa/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/merge-automatico-sviluppatore-singolo-20261028/independent-qa",
+        "testIgnore": [],
+        "testMatch": [
+          "qa-surface.spec.cjs"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/merge-automatico-sviluppatore-singolo-20261028/independent-qa/playwright-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/merge-automatico-sviluppatore-singolo-20261028/independent-qa/test-results/report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 2,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "qa-surface.spec.cjs",
+      "file": "qa-surface.spec.cjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "local synthetic result surface shows this QA run and explicit evidence limits",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 429,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T17:56:18.124Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspace/clinicos-autonomy-complete-20261028/artifacts/task-validation/merge-automatico-sviluppatore-singolo-20261028/independent-qa/test-results/qa-surface-local-synthetic-4c7bf-nd-explicit-evidence-limits/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "837eafabe15274ecd366-0bbcc447d5b6c99d936c",
+          "file": "qa-surface.spec.cjs",
+          "line": 21,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T17:56:17.741Z",
+    "duration": 1167.8049999999998,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

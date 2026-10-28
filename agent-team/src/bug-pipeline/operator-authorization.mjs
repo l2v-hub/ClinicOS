@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import { historyDigest, implementationAttempts } from './attempt-budget.mjs';
+import { knownFailedCorrection } from './workspace.mjs';
+import { relativeFile, safeText } from './contracts.mjs';
 
 // This module cannot authenticate JSON. The verifier is injected by a trusted host
 // that observes the actual user session, or verifies an external maintainer source.
@@ -79,6 +81,7 @@ export function authorizationBinding({
       finalQaResolutions: subject.finalQaHistoryResolutions ?? [],
       controllerInterruption: subject.controllerInterruption ?? null,
       controllerProgress: subject.controllerProgress ?? null,
+      ...(subject.workItems ? { workItems: subject.workItems } : {}),
     }),
     reservation,
     budget,
@@ -278,6 +281,105 @@ export async function settleImplementationAttempt({
   });
   return authorization;
 }
+
+// A trusted host may archive a known failed verification checkpoint only after
+// independently observing that its old runner output is unavailable. This does
+// not settle a running invocation or grant a new attempt.
+export async function archiveUnavailableFailedOutput({
+  state, subject, actor, reference, verifier, verifyUnavailability,
+  evidence, progressSha256, checkpointSha256, reason, now = () => new Date(),
+}) {
+  const progress = subject.controllerProgress;
+  const attempts = implementationAttempts(subject);
+  const attempt = attempts.at(-1);
+  const steps = ['execute', 'verify-before', 'simplify', 'verify-after', 'qa', 'checkpoint', 'publish'];
+  assert.ok(
+    progress?.schemaVersion === 1 && knownFailedCorrection(subject) &&
+      progress.status === 'failed' && subject.phase === 'blocked' &&
+      subject.failureCode === 'workspace-verification-failed' &&
+      progress.failureCode === subject.failureCode &&
+      ['verify-before', 'verify-after'].includes(progress.failedStep) &&
+      progress.checkpoint?.schemaVersion === 1 &&
+      typeof progress.checkpoint.cwd === 'string' && progress.checkpoint.cwd.length > 0 &&
+      typeof progress.checkpoint.branch === 'string' && progress.checkpoint.branch.length > 0 &&
+      progress.checkpoint.head === subject.sha &&
+      progress.checkpoint.planSha256 === progress.planSha256 &&
+      progress.checkpoint.baseSha === subject.baseSha &&
+      progress.checkpoint.output !== null &&
+      typeof progress.checkpoint.output === 'object' &&
+      !Array.isArray(progress.checkpoint.output) &&
+      Object.entries(progress.checkpoint.output).every(([file, identity]) =>
+        relativeFile(file) === file && (identity === null || (
+          identity !== null && typeof identity === 'object' && !Array.isArray(identity) &&
+          /^[a-f0-9]{64}$/.test(identity.sha256) &&
+          Number.isSafeInteger(identity.bytes) && identity.bytes >= 0 &&
+          typeof identity.executable === 'boolean' &&
+          Object.keys(identity).sort().join(',') === 'bytes,executable,sha256'
+        ))),
+      progress.checkpoint.packetHashes !== null &&
+      typeof progress.checkpoint.packetHashes === 'object' &&
+      !Array.isArray(progress.checkpoint.packetHashes) &&
+      Object.entries(progress.checkpoint.packetHashes).every(([file, digest]) =>
+        relativeFile(file) === file && /^[a-f0-9]{64}$/.test(digest)),
+      Number.isSafeInteger(progress.next) &&
+      progress.next === (progress.failedStep === 'verify-before' ? 1 : 3) &&
+      Array.isArray(progress.completed) && progress.completed.length === progress.next &&
+      progress.completed.every((item, index) => item.step === steps[index]) &&
+      progress.pending === progress.failedStep &&
+      attempt?.status === 'failed' && attempt.round === (progress.implementationRound ?? progress.round) &&
+      !attempts.some((item) => item.status === 'running') &&
+      !subject.reviews.some((item) => item.status === 'running') &&
+      subject.codexFinalReview?.status !== 'running' && !subject.release,
+    'Exact known failed verification checkpoint required',
+  );
+  assert.equal(progressSha256, historyDigest(progress), 'Failed progress changed');
+  assert.ok(typeof reason === 'string' && reason.trim() && reason.length <= 1000);
+  assert.ok(typeof actor === 'string' && actor.trim() && actor.length <= 200);
+  safeText(reason);
+  safeText(actor);
+  assert.ok(evidence?.origin === 'github-actions' && Number.isSafeInteger(evidence.runId) &&
+    evidence.runId > 0 && evidence.runId <= Number.MAX_SAFE_INTEGER &&
+    evidence.conclusion === 'success' &&
+    typeof evidence.artifactName === 'string' &&
+    /^[A-Za-z0-9][A-Za-z0-9_-]{0,119}$/.test(evidence.artifactName) &&
+    evidence.outputStatus === 'unavailable' &&
+    typeof evidence.observedAt === 'string' && evidence.observedAt.length <= 30 &&
+    /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{3})?Z$/.test(evidence.observedAt) &&
+    !Number.isNaN(Date.parse(evidence.observedAt)) &&
+    Object.keys(evidence).sort().join(',') ===
+      'artifactName,conclusion,observedAt,origin,outputStatus,runId',
+  'Exact external failed output observation required');
+  assert.equal(typeof verifyUnavailability, 'function', 'Trusted external output observer required');
+  const checkpoint = structuredClone(progress.checkpoint);
+  assert.equal(checkpointSha256, historyDigest(checkpoint), 'Canonical failed checkpoint changed');
+  const observationRequest = { evidence: structuredClone(evidence), repository: state.repository,
+    batchId: subject.id, sourceSha: subject.sha, failedStep: progress.failedStep,
+    failureCode: progress.failureCode };
+  const observed = await verifyUnavailability(structuredClone(observationRequest));
+  assert.deepEqual(observed, { ...observationRequest, terminal: true, onlyDiagnosticArtifact: true },
+    'External terminal artifact observation changed');
+  const budget = { kind: 'failed-verification-output-unavailable',
+    progressSha256, checkpointSha256,
+    sourceSha: progress.sourceSha, planSha256: progress.planSha256,
+    feedbackSha256: progress.feedbackSha256, evidenceSha256: historyDigest(evidence) };
+  const binding = authorizationBinding({ state, subject, actor,
+    action: 'archive-unavailable-failed-output', budget });
+  const authorization = await consumeOperatorAuthorization({ verifier, reference, binding, state });
+  assert.deepEqual(authorizationBinding({ state, subject, actor,
+    action: 'archive-unavailable-failed-output', budget }), binding,
+  'Failed output authorization state changed');
+  assert.equal(historyDigest(progress), progressSha256, 'Failed progress changed during authorization');
+  assert.equal(historyDigest(progress.checkpoint), checkpointSha256,
+    'Canonical checkpoint changed during authorization');
+  const previous = structuredClone(progress);
+  subject.recoveryHistory ??= [];
+  subject.recoveryHistory.push({ action: 'archive-unavailable-failed-output', actor,
+    at: now().toISOString(), reason, subjectSha: subject.sha, progressSha256,
+    checkpointSha256: budget.checkpointSha256, evidence: structuredClone(evidence),
+    previous, authorization });
+  delete progress.checkpoint;
+  return authorization;
+}
 function validateObservationCheckpoint(subject) {
   const progress = subject.controllerProgress,
     steps = ['execute', 'verify-before', 'simplify', 'verify-after', 'qa', 'checkpoint', 'publish'];
@@ -301,6 +403,9 @@ function validateObservationCheckpoint(subject) {
           entry.step === steps[index] && (entry.step !== 'checkpoint' || entry.sha === subject.sha),
       ) &&
       progress.planSha256 === historyDigest(subject.plan) &&
+      (!subject.workItems ||
+        (progress.workItemsSha256 === subject.workItems.specSha256 &&
+          progress.workItemsBindingSha256 === subject.workItems.bindingSha256)) &&
       progress.feedbackSha256 === historyDigest(progress.feedback ?? null) &&
       progress.checkpoint &&
       (!progress.pending || progress.pending === steps[progress.next]),

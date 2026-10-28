@@ -262,7 +262,7 @@ export function InlineEditableField({
             </span>
           )}
         </button>
-        <span className="sr-only" role="status" aria-live="polite">
+        <span className="ds-sr-only" role="status" aria-live="polite">
           {status}
         </span>
       </div>
@@ -288,7 +288,7 @@ export function InlineEditableField({
           </span>
         )}
       </span>
-      <span className="sr-only" role="status" aria-live="polite">
+      <span className="ds-sr-only" role="status" aria-live="polite">
         {status}
       </span>
     </button>

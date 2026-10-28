@@ -1,0 +1,31 @@
+{
+  "authorSourceSha": "e405399427e7c738dc32070b17a50494b629608b",
+  "phase": "codex-followup-5 continuation-1",
+  "status": "IMPLEMENTED \u2014 NOT VERIFIED",
+  "privateAuthorEvidence": "/workspace/.clinicos-cloud/483-legacy-writer-author9-20261021/continuation-1",
+  "firstAuthorSeal": {
+    "sha256": "d7f3e947737c1b7cf2e52e139d3a9840728cb1ba78eac662789524b559035d5c",
+    "files": 666
+  },
+  "continuationSeal": {
+    "sha256": "9493e3397d0b4871924152e1d1d51a80cd2d83d84d7fdee28c042ee6d4b2a58d",
+    "files": 624
+  },
+  "results": {
+    "actualWriter": {
+      "tests": 15,
+      "pass": 15,
+      "fail": 0,
+      "skip": 0
+    },
+    "slotScheduling": {
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0
+    },
+    "backendTypes": "PASS"
+  },
+  "runtime": "UNRUN in author phase; independent QA9 runtime followed a separate explicit grant",
+  "old omitted-state probe": "2 expected failing cases and 1 compatibility pass on prior query-fixed source; final continuation requires explicit expected non_erogata"
+}

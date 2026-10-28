@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "nonce": "fe7976fa-c9a0-49f1-be6c-6bccfb76203b",
+  "status": "stopped-and-sealed",
+  "verdict": "FAILED VALIDATION",
+  "stoppedAt": "2026-10-25T17:00:59.644329+00:00",
+  "noFurtherWrites": true,
+  "handoff": "Author correction and new independent reservation required; hosted authentication unverified"
+}

@@ -1,0 +1,160 @@
+{
+  "algorithm": "SHA-256",
+  "sourceSha": "74b260cdbcf36b1f7395477f4e35d07aba7fcf90",
+  "qaNonce": "f0c25356-7f94-45d5-a0e7-48c0c8ed0dae",
+  "grantNonce": "e6ce576f-9b62-4fc4-8798-355c32d14053",
+  "amendmentNonce": "6bd95f4e-981f-404f-a8de-42c0f86b1a34",
+  "attempt": "attempt-006",
+  "files": [
+    {
+      "path": "FOLLOWUP10-REPORT.md",
+      "bytes": 1478,
+      "sha256": "156503be8bdd7db6900050083f9bc2d1017a366a90a8acdc20208085c6cc4b73"
+    },
+    {
+      "path": "FOLLOWUP10-REPORT.json",
+      "bytes": 8740,
+      "sha256": "f5ca7c8032c4d6bece552a555f3acfee494bc6ec9f8972d0605d7df148eb6cd9"
+    },
+    {
+      "path": "FOLLOWUP10-STOP.json",
+      "bytes": 2410,
+      "sha256": "7c325d42435cb798df6e7ad47c7de5e989b55298edc023a22b4075a2925c90ae"
+    },
+    {
+      "path": "attempt-006/frozen-inputs.json",
+      "bytes": 2218,
+      "sha256": "af2d8c1891318368945c4bfbbb074faf6370dc012aa1f69fb9e6454d057edc88"
+    },
+    {
+      "path": "attempt-006/private-qa10.mjs",
+      "bytes": 15020,
+      "sha256": "781d71e7e1be5e28fc1870bad1c487720d8bd53ed5b9bb989fa1d02029cc039f"
+    },
+    {
+      "path": "attempt-006/frozen-manifests.json",
+      "bytes": 852217,
+      "sha256": "c3cfe0764a89f79678276a5a6d34e0ef84cf17d516ec5ae9412ce0a71201e873"
+    },
+    {
+      "path": "attempt-006/qa-summary.json",
+      "bytes": 547523,
+      "sha256": "c3d6ad1b5b87153a22715af96a4dcb015fe14cac88b50094e454d355fa637856"
+    },
+    {
+      "path": "attempt-006/runtime-cleanup.json",
+      "bytes": 231,
+      "sha256": "d7fa2b68ec3619cc50c9e0b7cc1b8abde1ff62a97678fa6136b5ca0e76eaea6f"
+    },
+    {
+      "path": "attempt-006/preservation-after.json",
+      "bytes": 519855,
+      "sha256": "7c2c48c882b2c8bc430adf0a5077ae6f1255babe5dadc9f79bdca0c53bc63cc8"
+    },
+    {
+      "path": "attempt-006/output/test-results/runner-receipts.json",
+      "bytes": 1303,
+      "sha256": "2ed4913f1306c479925610be782070639ccedbf62da72c8699af4b72eca7d618"
+    },
+    {
+      "path": "attempt-006/output/test-results/import-happy-path.stdout.txt",
+      "bytes": 611,
+      "sha256": "b02c6a09867708ba447da34e2bbb5cd3e36764b211d90db7ac12a59079bcd13f"
+    },
+    {
+      "path": "attempt-006/output/test-results/import-happy-path.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-1-upload.png",
+      "bytes": 63079,
+      "sha256": "bd5cdf1bff8c07405d2ffa3fae1e3d3a6bbc108ddab8de6ddca700cc1ca17469"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-2-review.png",
+      "bytes": 78292,
+      "sha256": "3609251ff59077d05c2ed3d0ab890484c866285ba202c75e6146ac98f4c7270f"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-3-prefilled.png",
+      "bytes": 87524,
+      "sha256": "4806c4d1c37b213b87215973bafc3548586692221466146a7c8de7122a532aed"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-4-step3-clinica.png",
+      "bytes": 92624,
+      "sha256": "2e8c07eb4f762bd299c612792c4d8fc09c1b44311b34cc499183013e7f745fe7"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-5-riepilogo.png",
+      "bytes": 92624,
+      "sha256": "2e8c07eb4f762bd299c612792c4d8fc09c1b44311b34cc499183013e7f745fe7"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-7-created.png",
+      "bytes": 69471,
+      "sha256": "ac7661dabfbdb4fc756598a1e3cbf737639b4d4c6d2a98d966e33159e67c3d70"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-8-reload-detail.png",
+      "bytes": 80366,
+      "sha256": "cf99096830d416caa082ea50b580ab43305b8261f0816626da9cac891f2a2647"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-9-reload-allergies-dialog.png",
+      "bytes": 116512,
+      "sha256": "5287530a6083f60b1ed6417a9bc1f0b1b205d342731c05ebbc19dc2bc4aba469"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-desktop-trace.zip",
+      "bytes": 5078308,
+      "sha256": "94b16dd3eb30a544e6a0adfeda3bada70074a0864f8ede9541c13969801a9631"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-1-upload.png",
+      "bytes": 61086,
+      "sha256": "24c3a3f41cfd5f2400ac06f818e2abb6d541ce589938cdd7d58a03e30f3b64d6"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-2-review.png",
+      "bytes": 75766,
+      "sha256": "b82d50287784a5dd7c3c926105d16ad05dbc2e8ba61cf726bf82e6a3593f3206"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-3-prefilled.png",
+      "bytes": 84059,
+      "sha256": "89d3d7fc7c7abb863e91c927cc5908fc0a76b5490b2ad662899a33af56a1211e"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-4-step3-clinica.png",
+      "bytes": 92984,
+      "sha256": "fd3594733848b0ad1f508e10bacff7750fc25eae2bb9c06713f697ecee9ada9f"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-5-riepilogo.png",
+      "bytes": 92984,
+      "sha256": "fd3594733848b0ad1f508e10bacff7750fc25eae2bb9c06713f697ecee9ada9f"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-7-created.png",
+      "bytes": 64677,
+      "sha256": "84d4eb81413a96613ad42fcc907572c189b44d8f4556b859f45a66de425200ec"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-8-reload-detail.png",
+      "bytes": 75739,
+      "sha256": "75002f5e3b3b02d2a8887570e017cdaf44e7486c868f3925f136f3312b6f8a27"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-9-reload-allergies-dialog.png",
+      "bytes": 103816,
+      "sha256": "6d3a0f7fadab07462a9828915833c0c8c4ee8456c3045bfc1cc28c27a3b3c5d9"
+    },
+    {
+      "path": "attempt-006/output/evidence/req020-tablet-trace.zip",
+      "bytes": 7155859,
+      "sha256": "c95202efd929f0554c0e91589cfa4d1000b5cea00f755445ac2d651283c8e907"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "sourceSha": "2de1fb80eb9245027b356c7bfcf6798d269b9fdf",
+  "reservationNonce": "812f2b88-0d67-432c-ac2d-fc7f3f578f22",
+  "verdict": "PASS",
+  "sourcePublicationReady": true,
+  "blockers": [],
+  "independentFocused": {
+    "command": "/tmp/clinicos-node22-native12/node_modules/node/bin/node --test --test-concurrency=1 agent-team/tests/bug-pipeline/terminal-output-retention.test.mjs /workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/terminal-output-retention-independent-qa2/peer-regressions-rebound.test.mjs",
+    "tests": 78,
+    "pass": 78,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0,
+    "log": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/terminal-output-retention-independent-qa2/independent-focused-rebound.log",
+    "logSha256": "9eeb9809e8bf429c36fbdacb68dd1d0f27d02174ded30e78d1e31dab03e45495",
+    "peerTestSource": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/terminal-output-retention-author2/amendment-1/baseline-peer-regressions.test.mjs",
+    "peerTestReboundCopy": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/terminal-output-retention-independent-qa2/peer-regressions-rebound.test.mjs",
+    "peerTestReboundCopySha256": "ff0f153b8ecda30661998eb3f96831086398e0668c50f3d4297fe80c4f5de8de"
+  },
+  "originalAbsoluteImportRun": {
+    "tests": 78,
+    "pass": 74,
+    "fail": 4,
+    "exitCode": 1,
+    "log": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/terminal-output-retention-independent-qa2/independent-focused.log",
+    "logSha256": "5847d61ccdaeaf8df974b5466a52c11a327eb96cedcddbc27314da511c348d90",
+    "explanation": "Preserved peer regression file imported an older absolute worktree; its four failures exercised that older source. The source-local suite passed all 39 tests in this run."
+  },
+  "manifest": {
+    "reservation.json": "b92dc45df61926bdbed434a0d427c81d3b612b27a97ea677ad717f8e23e11b18",
+    "source-projection.json": "9a4e0657f4594e3ec6bd09a2cc4ebeb316c3ecaa8c059feaff3d8f1f586f63d7",
+    "candidate-prepared.json": "a38fb48d8ca00109bf27d0d30faae31522704ed51859eeacc219e27dbf3c7154",
+    "implementation-report.md": "b984c2ab025a74a50f0125c8190065ee1fd662fadd66dd3550bfe0296ff619dd",
+    "required-exact-invocation.json": "e556530eb6abfc748d67bafbabb32127c7e0e673d00bdb8c1f92eaf6632020ac",
+    "required-exact-exit.json": "11945691646645ecce2b7e86e208713b7a1ba4d4a8b185ae14990dd781fc5514",
+    "required-exact.log": "00ef26298f993363fe28455d91e8cff32d6d80ff20a6194985f3a628bc566e63",
+    "red-original-peer-cases.log": "c33ff9dea3846e477eb7d1bcdac88665bbc3cf5862993ecf9bc32a3abc25324e",
+    "red-final-file-symlink.log": "732dc9eb715ea46bc938f9aa2a9cf85e5fc0d3bff02da3c56a4a731257a36bfd",
+    "green-final-file-symlink.log": "8ac8eb5fea173c37f9f7ffe30bed1d2cbe6da7826b997b059acbf044cc83102b",
+    "seal.json": "65a37fc43816bcd39d65d45d3735e4570e34eaed862a38eab2ad3d1e594af5ec"
+  },
+  "sourceFiles": [
+    {
+      "path": "agent-team/src/bug-pipeline/workspace.mjs",
+      "rawSha256": "da2f4c3566026e4c612af2c874b29a09cc6e9084064255091606627ba63095f8",
+      "gitBlobSha1": "30fb23bd77af07edd2136e55d1c76c8715441e24"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/failed-output-export.mjs",
+      "rawSha256": "1d0b4831e65d99fcc71750fec10ffa90927ebf56aa95e8a9e87d94934eaf344b",
+      "gitBlobSha1": "7e6c6f3d144dc99963e3062178559a1f5cb3965b"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/terminal-output-retention.test.mjs",
+      "rawSha256": "07e7c2e0500ef20921769ebc53fe96fc802d2e78fd6e79bba0faa385ca9ab342",
+      "gitBlobSha1": "92de2d8737527e0f5495a3c299f5d3c8aa06b6a6"
+    }
+  ],
+  "requiredWorkflowEvidence": {
+    "tests": 1742,
+    "pass": 1739,
+    "fail": 0,
+    "skip": 3,
+    "logSha256": "00ef26298f993363fe28455d91e8cff32d6d80ff20a6194985f3a628bc566e63",
+    "sourceUnchangedDuringRun": true
+  },
+  "limitations": [
+    "Remote CI, peer2, fresh final QA, publication, and protected merge remain pending.",
+    "This QA does not claim clinical resolution."
+  ]
+}

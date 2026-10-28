@@ -1,0 +1,127 @@
+[
+  {
+    "path": "artifacts/task-validation/po-16-giro/backend/fresh-v2-proof.json",
+    "sha256": "59454baa3fe56771859d7b74ffd32452c983808632509d03bbf0c23cd244be7e",
+    "disposition": "restored exact original HEAD bytes after archiving newly generated synthetic proof"
+  },
+  {
+    "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-v2-half-point.pdf",
+    "sha256": "385800f191d63619dd8408e5c86c7582ff065c57256faa74aad762fa8fa01e11",
+    "disposition": "restored exact original HEAD bytes after archiving newly generated synthetic proof"
+  },
+  {
+    "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-v2-half-point.snapshot.json",
+    "sha256": "d851bfdc986984e5a602fc4d8d527a7920674a3a83dab41fc8ad2f5af6f9457b",
+    "disposition": "restored exact original HEAD bytes after archiving newly generated synthetic proof"
+  },
+  {
+    "path": "artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/barthel-paper.pdf",
+    "sha256": "410e23fb3dcbef7c260db5dbdb5145dbc2753dcea663b7dd2edc734878519cd2",
+    "disposition": "restored exact original HEAD bytes after archiving newly generated synthetic proof"
+  },
+  {
+    "path": "artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/gds15-paper.pdf",
+    "sha256": "bb1514256d4bb25fbc515015c89ab0aadf30b1a313d82583096c8958ba26e0b6",
+    "disposition": "restored exact original HEAD bytes after archiving newly generated synthetic proof"
+  },
+  {
+    "path": "artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/mna-paper.pdf",
+    "sha256": "f42e2c7fc7a8c1fa14af19b026e3bd0916e80a85f6082ffeb1e72071e63a5b7d",
+    "disposition": "restored exact original HEAD bytes after archiving newly generated synthetic proof"
+  },
+  {
+    "path": "artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/painad-paper.pdf",
+    "sha256": "82397cfb1fd07b09aefc19e7029b2e2e063e92c1aed769f7de1fc87543631e9b",
+    "disposition": "restored exact original HEAD bytes after archiving newly generated synthetic proof"
+  },
+  {
+    "path": "artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/tinetti-paper.pdf",
+    "sha256": "8ac90ccff1a8c95b273f2db2718a2ff7fd99d134fbb133e5c2e40f49cbe7b117",
+    "disposition": "restored exact original HEAD bytes after archiving newly generated synthetic proof"
+  },
+  {
+    "path": "artifacts/task-validation/ux-direct-access-cycle/w3/pdf-unit/ucla_npi_sleep-paper.pdf",
+    "sha256": "3cfdfac5dd0343624478c8a957ef20fe89231db2c05cdd289ed26d3e5454c84e",
+    "disposition": "restored exact original HEAD bytes after archiving newly generated synthetic proof"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-10-painad/backend/pdf-qa/painad-long.pdf",
+    "sha256": "009e21460d0608d58b9f368ec0dec1279f26d8e913f469a3e345dcf1185c8b89",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-10-painad/backend/pdf-qa/painad-normal.pdf",
+    "sha256": "21b8c537f43447241f1a814c7845e363316ea0aba4d7660d5c4aabcd75548045",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/transfers-long.pdf",
+    "sha256": "f73c0f04dd38b2026fd2d2ba62cf034b36ea12cadff984a2721a985ac241ac65",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/transfers-normal.pdf",
+    "sha256": "95d8e8254897adf088b3beed63691495493f2351ba83c8aa450b6eae4bc31be6",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-12-tinetti/backend/pdf-qa/tinetti-long.pdf",
+    "sha256": "d1c5ab18db5e4f67c1960cbcd30b90b6515debf2fe8d3a004c58cbe8bac58643",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-12-tinetti/backend/pdf-qa/tinetti-normal.pdf",
+    "sha256": "ea4301dfdd6d0d588eac5e5c54eda36cf443998a332f5c08251ab795f327bf47",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-13-mna/backend/pdf-qa/mna-full-long.pdf",
+    "sha256": "c406dcb272e99cb2b8d8ec18849f8b9cb227cc20f2cee0362a7dd341b0753fee",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-13-mna/backend/pdf-qa/mna-full-long.snapshot.json",
+    "sha256": "122a113c1e3f226f649fae27ae013c605bda2e6f723a13abd9a2d2a57ef659dd",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-13-mna/backend/pdf-qa/mna-full-normal.pdf",
+    "sha256": "fbc5aefeb5db5a3ba053e7e3cfab13ca0fe0a36e6c29460624f2066b553b0ef9",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-13-mna/backend/pdf-qa/mna-full-normal.snapshot.json",
+    "sha256": "c10d35633da9fa196c782a207b1169edf2f1565b348e44c4baa3e1edbf02cc6b",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-13-mna/backend/pdf-qa/mna-screening-partial.pdf",
+    "sha256": "8fb405e2b9ae135592b77c2172e38f0f83d41a2309963d990f765d650f67ad66",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-13-mna/backend/pdf-qa/mna-screening-partial.snapshot.json",
+    "sha256": "7a594b76caed01c2db11651ff9a6c307411a404dce1d97ec76da2d3126ab5446",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-14-gds/backend/pdf-qa/gds15-long.pdf",
+    "sha256": "d40aa76e161ca0cf0f734e635086f6cc1a745aadeba7ae591ea2d90a4f8d78c2",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-14-gds/backend/pdf-qa/gds15-long.snapshot.json",
+    "sha256": "65b1125528ef8760225bc2230b70d5da53d4f9c173a5c5daf4c016c01f73605c",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-14-gds/backend/pdf-qa/gds15-normal.pdf",
+    "sha256": "3af7265a66ab944003396413a6826918edb26a137a3d43903d015df925f3a216",
+    "disposition": "removed only known new test output after archiving"
+  },
+  {
+    "path": "backend/artifacts/task-validation/po-14-gds/backend/pdf-qa/gds15-normal.snapshot.json",
+    "sha256": "1dcd2914692af48e3d551620c909ad64a3bc0a65113d4ee4ef3ebffc79c640e9",
+    "disposition": "removed only known new test output after archiving"
+  }
+]

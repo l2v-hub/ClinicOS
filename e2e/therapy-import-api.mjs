@@ -3,9 +3,26 @@
 // No browser, no real key (mock extraction can't produce text, so we seed a job with a therapy
 // narrative directly). Run: tsx e2e/therapy-import-api.mjs
 import assert from 'node:assert/strict';
+import { writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import app from '../backend/src/app.js';
 import { prisma } from '../backend/src/lib/prisma.js';
 import { createTestOperator } from '../backend/src/test-support/operator-fixture.js';
+
+const target = new URL(process.env.DATABASE_URL ?? '');
+assert.ok(
+  ['127.0.0.1', 'localhost'].includes(target.hostname),
+  'Synthetic local database required',
+);
+assert.match(target.pathname, /^\/(?:clinicos_test|clinicos_qa_[a-z0-9_]+)$/);
+const retainFixture = process.env.QA_KEEP_THERAPY_IMPORT_FIXTURE === '1';
+if (retainFixture) assert.equal(target.pathname, '/clinicos_qa_batch432');
+const reportFile = process.env.QA_THERAPY_IMPORT_RESULT_FILE;
+if (reportFile)
+  assert.equal(
+    resolve(reportFile),
+    resolve('artifacts/task-validation/bug-batch-432/test-results/therapy-import-results.json'),
+  );
 
 const OP = { 'X-Operator-Id': 'op-e2e-ther', 'X-Operator-Role': 'operatore' };
 const cleanupOperator = await createTestOperator(OP['X-Operator-Id'], 'therapy-e2e@clinicos.test');
@@ -267,15 +284,33 @@ try {
     persisted.some((t) => t.farmacoNome === 'KEPPRA'),
     'KEPPRA persisted',
   );
+  if (reportFile)
+    writeFileSync(
+      reportFile,
+      JSON.stringify(
+        {
+          patientId,
+          detected: rows.length,
+          persisted: persisted.length,
+          deferred: savedDraft.data._confirmation.deferredImportIndexes,
+          names: persisted.map((t) => t.farmacoNome).sort(),
+          replay: 'idempotent',
+          missingIncludedRowsRejected: true,
+          staleLegacyOmissionsRejected: true,
+        },
+        null,
+        2,
+      ),
+    );
   console.log(`therapy-import-api: OK — ${rows.length} detected, ${persisted.length} persisted`);
 } catch (e) {
   failed = true;
   console.error('therapy-import-api FAILED:', e.message);
 } finally {
-  for (const id of patientIds) {
+  for (const id of retainFixture && !failed ? [] : patientIds) {
     await prisma.patientTherapy.deleteMany({ where: { patientId: id } }).catch(() => {});
   }
-  for (const id of patientIds) {
+  for (const id of retainFixture && !failed ? [] : patientIds) {
     await prisma.patient.delete({ where: { id } }).catch(() => {});
   }
   for (const id of draftIds) {

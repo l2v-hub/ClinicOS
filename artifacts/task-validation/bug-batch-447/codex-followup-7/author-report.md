@@ -1,0 +1,13 @@
+# Author implementation report — integration11
+
+Status: IMPLEMENTED — NOT VERIFIED. This is author evidence, not independent QA certification. The source is available for the root controller to stage and commit the ancestry-preserving merge; publication and review gates remain pending.
+
+The writer import resolution retains the parent recorded one-off outcome helper and the child temporary-PS helpers. Both writer serialization calls, confirmation admission check, and narrow PostgreSQL concurrency handling remain intact. The SQL scope conflict resolves to the child version with patient projection and patient join assertion. The automatically merged HTTP suite is unchanged by this author.
+
+The parent pure transaction double now validates the exact patient-and-owner-scoped row-version lock query and parameters, models its returned patient row, asserts scoped patient lookup arguments, and supplies cartella reads. This executes the production temporary-PS helper. No production helper is replaced. New probes verify both-writer serialization, lock denial before clinical reads/writes, confirmation with no active exit, and PS pause blocking legacy refusal correction. Original 15 clinical test bodies and the denial helper are byte-for-byte preserved.
+
+The stripped verification runner reproduced 15/15 baseline failures from the missing transaction dependency. A first extension attempt passed all original tests but failed two new probes due to an incorrect assumption that refusal recording also performs admission checks. The corrected targeted run passed 30/30 with no skips. The official backend TypeScript project check passed. All failed outputs remain private. A failed structural comparison is retained too: its delimiter included the parent's concurrency function in the lookup slice; the corrected function boundaries pass exact preservation checks.
+
+All 3,479 prior frozen proof files match their pre-merge bytes, SHA-256 values, and inodes. New source files were preserved before each edit; scoped writes used replacement files, so earlier inodes and any linked proof were not modified. Source changes relative to the child are limited to three of the four reserved paths; the resolved SQL test exactly matches the child. Exact hashes and command outcomes are in author-source-hashes.json and author-results.json.
+
+No Git/index/ref/GitHub/canonical/provider writes, database, server, browser, Docker, network, or full suites were performed by this author. The Git index remains for the root controller to resolve. Independent integration QA, native6, parent actual Claude5, and child first actual Claude remain pending. No ready label, deployment, closure, or overall verification claim is made.

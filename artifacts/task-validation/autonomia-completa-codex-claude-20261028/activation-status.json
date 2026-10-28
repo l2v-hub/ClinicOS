@@ -1,0 +1,20 @@
+{
+  "observedAtUTC": "2026-10-28T07:54:13.170870+00:00",
+  "repository": "l2v-hub/ClinicOS",
+  "gitRead": {
+    "result": "PASS",
+    "main": "d8e85d77536a4770d79f197ca75b3f7299895d40",
+    "pr505Head": "10153ed09e4b16d36f68e49bd6e503b0255c7dc2"
+  },
+  "githubAPI": {
+    "result": "BLOCKED",
+    "operation": "GET repos/l2v-hub/ClinicOS/actions/workflows",
+    "observedMessage": "Forbidden",
+    "savedCustomAllowlistContainsApiGitHubCom": true,
+    "cause": "Not established; Git proxy and REST route have different capabilities. No token refresh requested."
+  },
+  "liveWorkflowEnabledState": "NOT_OBSERVED",
+  "realModelInvocation": "NOT_RUN_THIS_TASK",
+  "realReleaseDeployClosure": "NOT_RUN_THIS_TASK",
+  "trustRootPolicy": "Native independent human approval on current SHA and ordinary protected manual merge required; preserved."
+}

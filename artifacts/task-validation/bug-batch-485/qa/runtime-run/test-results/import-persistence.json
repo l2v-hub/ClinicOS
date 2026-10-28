@@ -1,0 +1,237 @@
+[
+  {
+    "data": {
+      "_sections": null,
+      "_narrative": {
+        "sex": "",
+        "email": "",
+        "phone": "",
+        "address": "",
+        "boldTags": [],
+        "lastName": "Sintetica",
+        "warnings": [],
+        "firstName": "Maria",
+        "fiscalCode": "SNTMRA80A41H501Z",
+        "dateOfBirth": "",
+        "therapyText": "Ramipril 5 mg 1 compressa ore 08:00\nParacetamolo 500 mg 1 compressa al bisogno",
+        "placeOfBirth": "",
+        "unmappedText": "",
+        "allergiesText": "",
+        "allergyStatus": "not_documented",
+        "anamnesisText": "",
+        "diagnosisText": "",
+        "schemaVersion": "clinicos-discharge-narrative-v1",
+        "missingSections": [
+          "DIAGNOSI",
+          "ANAMNESI",
+          "DECORSO_OSPEDALIERO",
+          "CONSULENZE",
+          "DIAGNOSTICA_PER_IMMAGINI",
+          "PRESTAZIONI_E_INTERVENTI",
+          "CONSIGLI_E_CONTROLLI",
+          "ALLERGIE"
+        ],
+        "sourceReferences": [
+          {
+            "fileId": "0a7a055f-9582-4536-9cac-da57b69faca8",
+            "fileName": "Lettera 1",
+            "sectionKey": "TERAPIA"
+          }
+        ],
+        "consultationsText": "",
+        "hospitalCourseText": "",
+        "adviceAndFollowUpText": "",
+        "imagingDiagnosticsText": "",
+        "proceduresAndInterventionsText": ""
+      },
+      "anagrafica": {
+        "sex": "F",
+        "phone": "",
+        "lastName": "Sintetica485",
+        "firstName": "Short320",
+        "dateOfBirth": "",
+        "codiceFiscale": "SNTMRA80A41H501Z",
+        "codiceFiscaleOrigine": "import"
+      },
+      "_terapiaText": "Ramipril 5 mg 1 compressa ore 08:00\nParacetamolo 500 mg 1 compressa al bisogno",
+      "_importReview": {
+        "decisions": [],
+        "unresolvedConflictIds": []
+      },
+      "_importSource": {
+        "resultHash": "66e4877054280186cd78d9cbe2986f14cb816d1a64832f45820e0d3bbad3f875",
+        "reviewHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "groupHashes": {
+          "0a7a055f-9582-4536-9cac-da57b69faca8": "d5faf3be443353f86901946ac755df5910dd3c989210daab5b0afdc82ee1b98e"
+        },
+        "manifestRevision": 1
+      },
+      "terapiaImport": [
+        {
+          "note": "",
+          "forma": "",
+          "orari": [
+            "08:00"
+          ],
+          "stato": "ok",
+          "classe": "",
+          "giorni": [],
+          "dosaggio": "5 mg",
+          "doseMode": "fixed",
+          "quantita": "1 compressa",
+          "dataInizio": "2026-10-18",
+          "farmacoNome": "RAMIPRIL",
+          "importRowKey": "5206e5e07e73daf845c38954799a1d38f0db012cf83cddcb210b1a145e9d2680",
+          "importSource": {
+            "groupId": "0a7a055f-9582-4536-9cac-da57b69faca8",
+            "inputHash": "d5faf3be443353f86901946ac755df5910dd3c989210daab5b0afdc82ee1b98e"
+          },
+          "originalText": "Ramipril 5 mg 1 compressa ore 08:00",
+          "importSources": [
+            {
+              "groupId": "0a7a055f-9582-4536-9cac-da57b69faca8",
+              "inputHash": "d5faf3be443353f86901946ac755df5910dd3c989210daab5b0afdc82ee1b98e"
+            }
+          ],
+          "sourceOutdated": false,
+          "viaSomministrazione": ""
+        },
+        {
+          "note": "al bisogno",
+          "tipo": "al_bisogno",
+          "forma": "",
+          "orari": [],
+          "stato": "da_verificare",
+          "classe": "",
+          "giorni": [],
+          "dosaggio": "500 mg",
+          "doseMode": "fixed",
+          "quantita": "1 compressa",
+          "dataInizio": "2026-10-18",
+          "farmacoNome": "PARACETAMOLO",
+          "importRowKey": "3fe2e0e75fb1d3e9f9649c43b6c5a042c8e9834b7fd1754a0252c9a3c491ce31",
+          "importSource": {
+            "groupId": "0a7a055f-9582-4536-9cac-da57b69faca8",
+            "inputHash": "d5faf3be443353f86901946ac755df5910dd3c989210daab5b0afdc82ee1b98e"
+          },
+          "originalText": "Paracetamolo 500 mg 1 compressa al bisogno",
+          "importSources": [
+            {
+              "groupId": "0a7a055f-9582-4536-9cac-da57b69faca8",
+              "inputHash": "d5faf3be443353f86901946ac755df5910dd3c989210daab5b0afdc82ee1b98e"
+            }
+          ],
+          "sourceOutdated": false,
+          "viaSomministrazione": ""
+        }
+      ],
+      "_derivedFields": {
+        "anagrafica": {
+          "sex": {
+            "value": "F",
+            "source": "codiceFiscale",
+            "reviewRequired": true
+          }
+        }
+      },
+      "_importSections": true,
+      "_importedFields": [
+        "anagrafica",
+        "terapiaImport"
+      ],
+      "_importProposals": [],
+      "documentSections": [
+        {
+          "title": "Diagnosi",
+          "rawText": "",
+          "sources": [],
+          "sectionKey": "DISCHARGE_DIAGNOSIS",
+          "targetArea": "CARTELLA",
+          "annotations": [],
+          "reviewStatus": "accepted",
+          "reviewedText": null
+        },
+        {
+          "title": "Anamnesi",
+          "rawText": "",
+          "sources": [],
+          "sectionKey": "ANAMNESIS",
+          "targetArea": "CARTELLA",
+          "annotations": [],
+          "reviewStatus": "accepted",
+          "reviewedText": null
+        },
+        {
+          "title": "Decorso ospedaliero",
+          "rawText": "",
+          "sources": [],
+          "sectionKey": "HOSPITAL_COURSE",
+          "targetArea": "DIARY",
+          "annotations": [],
+          "reviewStatus": "accepted",
+          "reviewedText": null
+        },
+        {
+          "title": "Consulenze",
+          "rawText": "",
+          "sources": [],
+          "sectionKey": "CONSULTATIONS",
+          "targetArea": "DIARY",
+          "annotations": [],
+          "reviewStatus": "accepted",
+          "reviewedText": null
+        },
+        {
+          "title": "Diagnostica per immagini",
+          "rawText": "",
+          "sources": [],
+          "sectionKey": "IMAGING_DIAGNOSTICS",
+          "targetArea": "DIARY",
+          "annotations": [],
+          "reviewStatus": "accepted",
+          "reviewedText": null
+        },
+        {
+          "title": "Prestazioni e interventi",
+          "rawText": "",
+          "sources": [],
+          "sectionKey": "PROCEDURES_AND_INTERVENTIONS",
+          "targetArea": "DIARY",
+          "annotations": [],
+          "reviewStatus": "accepted",
+          "reviewedText": null
+        },
+        {
+          "title": "Terapia domiciliare",
+          "rawText": "Ramipril 5 mg 1 compressa ore 08:00\nParacetamolo 500 mg 1 compressa al bisogno",
+          "sources": [
+            {
+              "fileId": "0a7a055f-9582-4536-9cac-da57b69faca8",
+              "fileName": "Lettera 1"
+            }
+          ],
+          "sectionKey": "DISCHARGE_HOME_THERAPY",
+          "targetArea": "THERAPY",
+          "annotations": [],
+          "reviewStatus": "accepted",
+          "reviewedText": null
+        },
+        {
+          "title": "Consigli e controlli",
+          "rawText": "",
+          "sources": [],
+          "sectionKey": "ADVICE_AND_FOLLOW_UP",
+          "targetArea": "CARTELLA",
+          "annotations": [],
+          "reviewStatus": "accepted",
+          "reviewedText": null
+        }
+      ],
+      "_allergyNarrative": {
+        "status": "not_documented",
+        "rawText": "",
+        "acknowledged": true
+      }
+    }
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-25T14:26:34.215Z",
+  "repository": "l2v-hub/ClinicOS",
+  "workflowSha": "d77d8ea51a72bb697747b819cfeec771d51397a2",
+  "runId": "40202235777",
+  "runAttempt": "1",
+  "cliVersion": "2.1.301",
+  "authMode": "subscription-oauth-only",
+  "tokenPresent": true,
+  "apiFallbackAllowed": false,
+  "issueClaimsMade": 0,
+  "credentialValuesPublished": false,
+  "providerAuthenticated": false,
+  "code": "claude-authentication-error"
+}

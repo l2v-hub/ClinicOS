@@ -1,0 +1,23 @@
+{
+  "sourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "grantNonce": "47bc6c28-d8d4-49a6-b50b-853ff8db7035",
+  "preparedBeforeExecution": true,
+  "attempt": 9,
+  "sequence": [
+    "migration only",
+    "one minimal actual synthetic fixture",
+    "exact same patient actual503-to200 recovery",
+    "read-only PS failedcontext print and reason boundary"
+  ],
+  "sevenRerun": false,
+  "full486Rerun": false,
+  "physicalOutput": "/tmp/clinicos-qa497-browser13-20261021/attempt9",
+  "files": {
+    "runtime-worker9.mjs": "ca3f23c36de5e0fc9dc17f84437ec0e77bcdf9e8577b936a23155c2ac04ae3af",
+    "launch-runtime9.mjs": "3af65b5ce0b0ed5736259fc586b7f2a9dd80ba471233cd90abf66038a9d08875",
+    "snapshot/qa13-server9.mjs": "8f4346a9f02207704fbe5a908a8aa3e37f271736dc3994e3268b2a586531676d",
+    "snapshot/e2e/qa13-minimal-fixture9.mjs": "db234b9a45c6f75dde0d8ffef18b3ba86d565fa6db73c552c66bb4ea817f1fb0",
+    "snapshot/e2e/qa13-negative-final.mjs": "524c8b992e88d59c4c673a0e37b15e3b270364353583ae43d8342f6167c7b29b",
+    "snapshot/e2e/qa13-ps-readonly9.mjs": "5cf18c6078591e7b3e9a5b1186102764ed4a135795be516f3e96c205e6d22fa5"
+  }
+}

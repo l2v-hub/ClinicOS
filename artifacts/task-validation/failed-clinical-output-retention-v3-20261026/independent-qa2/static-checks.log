@@ -1,0 +1,8 @@
+/workspace/.tools/actionlint/actionlint -shellcheck= -pyflakes= .github/workflows/codex-bug-pipeline.yml
+exit=0
+
+
+git -C /workspace/ClinicOS diff --check 13c71ce0e2cdf6e72b4c7eeeb036754fac7e4f73..24f669b706193eef9ac08bd7a02ab440be692189
+exit=0
+
+

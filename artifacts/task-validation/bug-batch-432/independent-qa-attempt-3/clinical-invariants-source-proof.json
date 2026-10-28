@@ -1,0 +1,17 @@
+{
+  "realClinicalH1BodyUnchangedFromCandidate2": true,
+  "bodySha256": "be729cff454b6c0bb7637c3e552682a78f3b89921e3e01247ad566b240b1a273",
+  "outerTimeoutMs": 20000,
+  "helperDefaultPhaseTimeoutMs": 5000,
+  "preservedAssertions": [
+    "COMPLETED confirmation/late correction/replay",
+    "actual stored 120/80",
+    "actual actor",
+    "exactly one clinical write",
+    "full original record deep equality"
+  ],
+  "changedFromCandidate2": [
+    "bounded callback inside existing lifecycle helper",
+    "new adversarial test only"
+  ]
+}

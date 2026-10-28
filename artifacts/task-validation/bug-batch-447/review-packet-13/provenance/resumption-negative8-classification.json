@@ -1,0 +1,17 @@
+{
+  "classification": "PRIVATE_FIRST_MATCH_SELECTOR_DEFECT_NO_PRODUCT_FINDING",
+  "actual503Observed": true,
+  "actualDOMUnknownWarning": true,
+  "actualDOMTargetRowUnknown": true,
+  "sourceDefect": false,
+  "recoveryExecuted": false,
+  "originalFailurePreserved": true,
+  "actualSnapshot": "before@call@259",
+  "actualFrame": "negative8-final-actual-frame.jpeg",
+  "actualDOMReceipt": "negative8-actual-dom-analysis.json",
+  "cause": "querySelector selects first of two valid status elements; first warning is intentionally different text. Recovery innerText would also require scoped locator to avoid strict multi-match.",
+  "proposedPrivateFix": "Scoped exact semantic status, separate first warning assertion, same-target row marker assertions and actual recovery200payloadtarget binding; no acceptance weakened",
+  "originalHarnessSha256": "c873cf11b81f11fbf5d1695ae863f2f2c6216641d4c2bb99dc36088253fbdbe5",
+  "candidateSha256": "6411288dc15d2510a11579336c03c53ce012b20f5f94b53c5b86d9201c4f79e0",
+  "execution": "NOT_AUTHORIZED_NOT_EXECUTED"
+}

@@ -1,0 +1,115 @@
+{
+  "checks": [
+    {
+      "name": "partial exact visible value",
+      "status": "PASS"
+    },
+    {
+      "name": "partial has no submission control",
+      "status": "PASS"
+    },
+    {
+      "name": "partial triggers no assistant request",
+      "status": "PASS"
+    },
+    {
+      "name": "final transcript exact value",
+      "status": "PASS"
+    },
+    {
+      "name": "one negotiation and no file/provider fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "one local end-of-turn commit",
+      "status": "PASS"
+    },
+    {
+      "name": "final releases microphone tracks",
+      "status": "PASS"
+    },
+    {
+      "name": "final alone performs no clinical write",
+      "status": "PASS"
+    },
+    {
+      "name": "final submission enters existing policy preview",
+      "status": "PASS"
+    },
+    {
+      "name": "preview persists no clinical write",
+      "status": "PASS"
+    },
+    {
+      "name": "explicit UI confirmation completes",
+      "status": "PASS"
+    },
+    {
+      "name": "exactly one persisted reading",
+      "status": "PASS"
+    },
+    {
+      "name": "persisted values retain literal blood pressure",
+      "status": "PASS"
+    },
+    {
+      "name": "cancel partial closes microphone and peer",
+      "status": "PASS"
+    },
+    {
+      "name": "cancel never submits or uploads",
+      "status": "PASS"
+    },
+    {
+      "name": "late permission stream stopped after cancellation",
+      "status": "PASS"
+    },
+    {
+      "name": "permission denied offers text fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "provider failure releases tracks without silent file fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "text Assistant works after realtime failure",
+      "status": "PASS"
+    },
+    {
+      "name": "only explicit confirmation changed clinical database",
+      "status": "PASS"
+    },
+    {
+      "name": "disconnect releases mic and shows safe fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "resident change discards partial and closes peer",
+      "status": "PASS"
+    },
+    {
+      "name": "resident change never submits stale transcript",
+      "status": "PASS"
+    },
+    {
+      "name": "hidden tab cancels pending permission and stops late stream",
+      "status": "PASS"
+    },
+    {
+      "name": "unmount releases late permission stream without background capture",
+      "status": "PASS"
+    },
+    {
+      "name": "lifecycle interruptions never write or upload",
+      "status": "PASS"
+    },
+    {
+      "name": "all provider sessions closed",
+      "status": "PASS"
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('assistant-entry')\u001b[22m\n"
+}

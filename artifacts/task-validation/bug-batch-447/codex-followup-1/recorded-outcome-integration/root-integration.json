@@ -1,0 +1,51 @@
+{
+  "nonce": "f824340b-b000-460b-b3fc-fac1c83fa139",
+  "reservedAt": "2026-10-18T23:06:58.374Z",
+  "status": "reserved",
+  "sourceSha": "2901ee690f5c4d21ed44fed610c256a5f59f7823",
+  "parentSha": "4308210cc166440e546239c247ffdd26f51737ce",
+  "parentActuallyApproved": false,
+  "scope": [
+    "backend/src/routes/__tests__/therapy-authoritative-write.test.ts",
+    "backend/src/therapies/__tests__/slot-scheduling.test.ts",
+    "backend/src/therapies/due-therapy-query.ts",
+    "backend/src/therapies/slot-scheduling.ts",
+    "backend/src/therapies/therapy-administration-page.ts",
+    "backend/src/therapies/therapy-query.ts",
+    "backend/src/therapies/therapy-slots.ts",
+    "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+    "frontend/src/components/shared/TherapyVerificationPanel.tsx",
+    "frontend/src/components/shared/__tests__/agendaTherapyVerification.test.ts",
+    "frontend/src/lib/__tests__/therapyVerification.test.ts",
+    "frontend/src/lib/dashboardTherapies.ts",
+    "frontend/src/lib/therapySlotPage.ts",
+    "frontend/src/types.ts"
+  ],
+  "reason": "Port exactnew483recorded-outcome fix beforefresh15issue integratedclinical QA; preserveUXtemporaryPSexit,facilityday,routeguards; noexternalapprovalinferred",
+  "finalQa": false,
+  "stateReadbackVerified": true,
+  "integration": "normal three-way merge, zero conflicts",
+  "sourceFreeze": {
+    "backend/src/routes/__tests__/therapy-authoritative-write.test.ts": "0d6851420609dfb20151882b62b4fb36563fd9744823c2a2b628d93e3d063a85",
+    "backend/src/therapies/__tests__/slot-scheduling.test.ts": "318df6c089d8f9a0d10228e792ff9280edea6263bea9ef5e6ecaa68b5fb27bda",
+    "backend/src/therapies/due-therapy-query.ts": "348a137c72410ee48b96068285cc75e90b46c40dc8e9f5053bba8844fb870af9",
+    "backend/src/therapies/slot-scheduling.ts": "dbe8667c9d03137c3b9e7efab34034e12065d2e76d1b58f9a671205b38455b99",
+    "backend/src/therapies/therapy-administration-page.ts": "583820df6f5945b2003a1f6a2019bbc5d93f7241b19e7f45950e610cdfcfe550",
+    "backend/src/therapies/therapy-query.ts": "38683cf5bb57569653f936babfc01baabcf1faef0b849a84977899aa81df2c54",
+    "backend/src/therapies/therapy-slots.ts": "7ff9223c0c1b972c9b20c9955f96f22fc7b0725991e006c2b64468ff0b517ad8",
+    "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx": "8400f702d17b05b0aa3369bf96508f054667114e907ed81f112f13503635fd0c",
+    "frontend/src/components/shared/TherapyVerificationPanel.tsx": "ec588e1c991405a093e34f067bc06c8b27e27c922888ab06b5938267ea213f5d",
+    "frontend/src/components/shared/__tests__/agendaTherapyVerification.test.ts": "65cebb704aa30ea0ebf8cf158f147affeb9477edde4c561da1d1373536f56b70",
+    "frontend/src/lib/__tests__/therapyVerification.test.ts": "e30084d985126f302e00db7ba55aa6393d79a39dc77f174811afc180ae18b665",
+    "frontend/src/lib/dashboardTherapies.ts": "01d3fa687c4b658bc7808ccc65e0caeff11212036f2e8b0fc182fa0540009ab6",
+    "frontend/src/lib/therapySlotPage.ts": "da5230eef01965fb2a21b31516110df19b0d4ee52abbf8b73d1a53c57175522e",
+    "frontend/src/types.ts": "4a59b66d5c2a4fa5fa26eb93b0d417b5ff81437fffbbd81e59d2ad566cd92155"
+  },
+  "finalClinicalQa": false,
+  "authorChecks": {
+    "parentFrontend": 43,
+    "parentBackend": 21,
+    "uxFocused": 96,
+    "roomMockedClock": 11
+  }
+}

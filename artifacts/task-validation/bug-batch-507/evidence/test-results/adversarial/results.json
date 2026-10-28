@@ -1,0 +1,14 @@
+{
+  "results": [
+    "Europe/Rome: capability loss closes draft and clears lineage PASS",
+    "Europe/Rome: intake nondate edits retain automatic lineage; hydration consumes lineage PASS",
+    "Europe/Rome: deliberately blank intake start protected independently PASS",
+    "Europe/Rome: persisted/external row replacement has no automatic lineage PASS",
+    "America/Los_Angeles: capability loss closes draft and clears lineage PASS",
+    "America/Los_Angeles: intake nondate edits retain automatic lineage; hydration consumes lineage PASS",
+    "America/Los_Angeles: deliberately blank intake start protected independently PASS",
+    "America/Los_Angeles: persisted/external row replacement has no automatic lineage PASS"
+  ],
+  "errors": [],
+  "unexpected": []
+}

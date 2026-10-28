@@ -1,0 +1,27 @@
+{
+  "mode": "independent-manual-qa",
+  "testedSourceCheckpoint": "0eae11061ada23a60f888c36fd8923a6dbba93d1",
+  "sourceFiles": 47,
+  "frontend": {
+    "passed": 1390,
+    "failed": 0
+  },
+  "backendFocused": {
+    "passed": 69,
+    "failed": 0
+  },
+  "proactive": {
+    "passed": 23,
+    "failed": 0
+  },
+  "canonicalBrowser": {
+    "passed": 19,
+    "failed": 0,
+    "errors": []
+  },
+  "typecheck": "passed",
+  "frontendBuild": "passed",
+  "sourceAndBundleSecretScanFindings": 0,
+  "report": "artifacts/task-validation/bug-batch-450/independent-qa-attempt-2/validation-report.md",
+  "providerBoundary": "OCR/extraction declared synthetic externalfixture; application/storage/PDF/parser/HTTP/SQL real, no paidinferenceclaimed"
+}

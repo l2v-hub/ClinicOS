@@ -1,0 +1,20 @@
+✔ 450 automatic dates and whitespace do not complete admission; actual entered content does (2.803212ms)
+✔ 450 entry renders one disabled-until-ready document choice and a working manual choice (11.092692ms)
+✔ 450 actual demographics render keeps field errors and useful computed-code notice without duplicate prose (11.188152ms)
+✔ 476 imported identity may continue without a birthdate; manual intake still requires it (4.005216ms)
+✔ 476 progressive import retains explicit invalid field errors and therapy review barriers (6.24023ms)
+✔ 473 fiscal-code sex inference requires valid code and preserves the numeric day distinction (0.426826ms)
+✔ patient list exposes the canonical fiscal identity and never shows MRN (3.828329ms)
+✔ roster has five operational columns and native accessible actions (0.463982ms)
+✔ tablet and mobile use a compact two-to-one-column card grid (0.323921ms)
+✔ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance (2.478372ms)
+✔ new-patient wizard keeps required identity visible and progressively discloses optional data (0.283472ms)
+✔ patient intake uses a compact responsive layout without reducing touch targets (0.583356ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 909.899269

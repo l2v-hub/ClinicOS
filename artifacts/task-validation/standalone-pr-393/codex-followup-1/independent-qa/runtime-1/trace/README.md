@@ -1,0 +1,1 @@
+Reconstruct in listed order: `cat trace.zip.part-* > trace.zip`. Verify SHA256 from trace-manifest.json, then `unzip -t trace.zip`. Every decompressed member was CRC checked, hashed and scanned; JPEG/PNG members decoded. Synthetic demo sessions were redacted. Raw original stays private and must not be published.

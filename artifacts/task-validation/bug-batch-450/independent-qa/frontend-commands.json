@@ -1,0 +1,35 @@
+[
+  {
+    "name": "frontend-tsc",
+    "command": [
+      "npm",
+      "exec",
+      "--",
+      "tsc",
+      "--noEmit",
+      "-p",
+      "tsconfig.app.json"
+    ],
+    "startedAt": "2026-10-17T08:58:26.144693+00:00",
+    "exitCode": 0
+  },
+  {
+    "name": "frontend-build",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "startedAt": "2026-10-17T08:59:12.295551+00:00",
+    "exitCode": 0
+  },
+  {
+    "name": "frontend-all-units",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "startedAt": "2026-10-17T09:00:34.114155+00:00",
+    "exitCode": 0
+  }
+]

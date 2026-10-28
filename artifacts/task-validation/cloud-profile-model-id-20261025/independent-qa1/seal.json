@@ -1,0 +1,432 @@
+{
+  "schemaVersion": 1,
+  "nonce": "30377597-f7bf-4513-8c4a-3935e9938505",
+  "code": "8591ab31abf9eeab4b92d6c10a32bfee9d191483",
+  "sealedAt": "2026-10-25T20:08:37.811411+00:00",
+  "files": [
+    {
+      "path": "baseline-regression-fixture/.github/workflows/claude-cloud-review.yml",
+      "sha256": "e1bec27ba5fe1263817fc06f42e22aeae99203897a775747c01f7c912093cda4",
+      "bytes": 3227
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/adapters/process-runner.mjs",
+      "sha256": "8bade29dd5161b5d8daf0038165a4138eabd34a4bf7e771f7f04d98177e541ae",
+      "bytes": 5071
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/attempt-budget.mjs",
+      "sha256": "555b457b375c4fe35b1e73f2081671e951748503adf598cf0312a5ce8d6e6094",
+      "bytes": 19260
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/claude-review-cron.mjs",
+      "sha256": "5d54688f8187d3fbffa2a1106b52343b3a223b53366119d4b2f7f8c8d49e9d03",
+      "bytes": 14709
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "sha256": "2456492ae734a32a4b813f2c82a93fcf4add80fb0c3df2f50ff7e2a31f00107b",
+      "bytes": 26798
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "sha256": "c9ba132c5744b11a4bbb4fcdc58e4b928e0c89c5a736d0b80758db5bbd9cc604",
+      "bytes": 48081
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/contracts.mjs",
+      "sha256": "084599442394406bd89ee5ae7c4a25417c48da47adbfbc281dc533ad511d1482",
+      "bytes": 11325
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "sha256": "873f90f8885652f0533b1a5983f9f15fb61b5b578103bcbdc6ee7f9f0cd850cf",
+      "bytes": 41745
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/evidence-limits.mjs",
+      "sha256": "78ddc3908b941ef895aeef8e6416b68e1e110d0852b57f0f331b42fe127d237b",
+      "bytes": 186
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/evidence.mjs",
+      "sha256": "9ddfd51b9fa2bff9e4a626a11301457afa5ff3ed52b612205329c214af293d1b",
+      "bytes": 5156
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/exact-demo-dispatch.mjs",
+      "sha256": "41967d487d283eda67a2052904c8116dc2fc04c5bb8df5cc575d039eed9bb673",
+      "bytes": 24277
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/exact-demo-recovery.mjs",
+      "sha256": "9ec8ef543bca46fb0cfd88540aaf66de77d5b81dc9d9706286c3920bfa3673bd",
+      "bytes": 6176
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/external-review.mjs",
+      "sha256": "abd2e1fc05fe9d6dd616a28e2a0413b9ebb5a463bc4586ef24507b1320be299b",
+      "bytes": 15494
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/github.mjs",
+      "sha256": "7909a91bd172e067bd4e5d7afc963991dd89d9999c771c6873551834b965b26b",
+      "bytes": 60943
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "sha256": "44a1caf63b8bf114a1bbc8a7d6915e1c0f11282cc1e9574caa9de2c8f466a7b9",
+      "bytes": 26331
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/operator-authorization.mjs",
+      "sha256": "c2fba194bbc10e8bf8dbef6cc4a6a5c1f827480865284c83bf0da7e2b5c471e3",
+      "bytes": 15002
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/operator-ownership.mjs",
+      "sha256": "15fafef81826c7d7424ce903b73dab8a9ea8d6a19954b62c02c68fd0a117b77d",
+      "bytes": 3951
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/process.mjs",
+      "sha256": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf",
+      "bytes": 6760
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/release.mjs",
+      "sha256": "774fab99bf5c7c88c74c42a894d08e217c1859fee97be918e144b78ecd5ee2c1",
+      "bytes": 65973
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/review-policy.mjs",
+      "sha256": "500124168a97311d658e89f02fd64d88d1d00e562e17c2abf53c7d515d6cf080",
+      "bytes": 1197
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/routing.mjs",
+      "sha256": "9c89cf5f3dcde5ff7423efd8110cb07b12a5a5077bba82c8d8ef5f60d053400c",
+      "bytes": 2096
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/standalone-review.mjs",
+      "sha256": "0665d6803eca2099884b22e283bcdd9aa60069e1bc282c66b7a23faad6448af6",
+      "bytes": 46007
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/verification.mjs",
+      "sha256": "4eb9a32abb129d74ee7694fbfac443f00da9ab2bdd10a6106d2423cb50a41b64",
+      "bytes": 3034
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/bug-pipeline/workspace.mjs",
+      "sha256": "0ea132835f2d32a339711c12c234ef860ccff4921a5512f7976896c10e574a2c",
+      "bytes": 32765
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/core/json-schema.mjs",
+      "sha256": "ff1be260e9ba0450e8cbbe9079302ce538a652a35e479c90e4233bddb0198661",
+      "bytes": 1706
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/src/core/sanitize.mjs",
+      "sha256": "1a4d2b9565663b3ed5a593cdecf7cbadbd6f9cd6ef296a4b8c1c426b08ca042b",
+      "bytes": 1012
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "sha256": "fee5c174a884741a4c3ee894b819546959762c8561a74b370fee66d199a23353",
+      "bytes": 33623
+    },
+    {
+      "path": "baseline-regression-fixture/agent-team/tests/unit/process-runner.test.mjs",
+      "sha256": "1354edf8d1ed3b281d7995aff6ba53499315835a07bd535fdc12a4338e8aaf6f",
+      "bytes": 3352
+    },
+    {
+      "path": "baseline-regression-fixture/qa-model-id.test.mjs",
+      "sha256": "e27b58bd73b2bf4cd555546227bf914e9306f72cea74401592bac72a5ffda500",
+      "bytes": 7019
+    },
+    {
+      "path": "baseline-regression-fixture/scripts/automation/claude-cloud-tools/package-lock.json",
+      "sha256": "70cf34a9a534c37fbcfa1580cd2da69c749bbaafac97f07f3be8bcf63aefea11",
+      "bytes": 5198
+    },
+    {
+      "path": "baseline-regression-fixture/scripts/automation/claude-cloud-tools/package.json",
+      "sha256": "545379c90727ef75e5d7278d8484e36a24f7cc034edd92a56a69b049c7326f59",
+      "bytes": 246
+    },
+    {
+      "path": "baseline-regression-fixture/scripts/automation/configure-demo-source.mjs",
+      "sha256": "3bac135aaecfe5c95b48f38f613f27a0326d8ebb905a4753cb5ecc0d1513264b",
+      "bytes": 17195
+    },
+    {
+      "path": "baseline-regression-fixture/scripts/quality-gate/claude-bug-review.mjs",
+      "sha256": "fa5982c31c10a2e9020141990c218a817b2247e0e9ed46a89a5c1f765827263b",
+      "bytes": 13263
+    },
+    {
+      "path": "baseline-regression-fixture/scripts/quality-gate/review-bug-setup.mjs",
+      "sha256": "e959277f3bb82a0a8f206025b19b15375678743017be62ec032e3a5aa5f485a0",
+      "bytes": 8307
+    },
+    {
+      "path": "fixture/.github/workflows/claude-cloud-review.yml",
+      "sha256": "e1bec27ba5fe1263817fc06f42e22aeae99203897a775747c01f7c912093cda4",
+      "bytes": 3227
+    },
+    {
+      "path": "fixture/agent-team/src/adapters/process-runner.mjs",
+      "sha256": "8bade29dd5161b5d8daf0038165a4138eabd34a4bf7e771f7f04d98177e541ae",
+      "bytes": 5071
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/attempt-budget.mjs",
+      "sha256": "555b457b375c4fe35b1e73f2081671e951748503adf598cf0312a5ce8d6e6094",
+      "bytes": 19260
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/claude-review-cron.mjs",
+      "sha256": "5d54688f8187d3fbffa2a1106b52343b3a223b53366119d4b2f7f8c8d49e9d03",
+      "bytes": 14709
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "sha256": "ee331b4cc10e24d957982f7a942b13a7b58c481a5dda418e32bb421fe043f4dd",
+      "bytes": 26951
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "sha256": "c9ba132c5744b11a4bbb4fcdc58e4b928e0c89c5a736d0b80758db5bbd9cc604",
+      "bytes": 48081
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/contracts.mjs",
+      "sha256": "084599442394406bd89ee5ae7c4a25417c48da47adbfbc281dc533ad511d1482",
+      "bytes": 11325
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/demo-deployment.mjs",
+      "sha256": "873f90f8885652f0533b1a5983f9f15fb61b5b578103bcbdc6ee7f9f0cd850cf",
+      "bytes": 41745
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/evidence-limits.mjs",
+      "sha256": "78ddc3908b941ef895aeef8e6416b68e1e110d0852b57f0f331b42fe127d237b",
+      "bytes": 186
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/evidence.mjs",
+      "sha256": "9ddfd51b9fa2bff9e4a626a11301457afa5ff3ed52b612205329c214af293d1b",
+      "bytes": 5156
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/exact-demo-dispatch.mjs",
+      "sha256": "41967d487d283eda67a2052904c8116dc2fc04c5bb8df5cc575d039eed9bb673",
+      "bytes": 24277
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/exact-demo-recovery.mjs",
+      "sha256": "9ec8ef543bca46fb0cfd88540aaf66de77d5b81dc9d9706286c3920bfa3673bd",
+      "bytes": 6176
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/external-review.mjs",
+      "sha256": "abd2e1fc05fe9d6dd616a28e2a0413b9ebb5a463bc4586ef24507b1320be299b",
+      "bytes": 15494
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/github.mjs",
+      "sha256": "7909a91bd172e067bd4e5d7afc963991dd89d9999c771c6873551834b965b26b",
+      "bytes": 60943
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "sha256": "44a1caf63b8bf114a1bbc8a7d6915e1c0f11282cc1e9574caa9de2c8f466a7b9",
+      "bytes": 26331
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/operator-authorization.mjs",
+      "sha256": "c2fba194bbc10e8bf8dbef6cc4a6a5c1f827480865284c83bf0da7e2b5c471e3",
+      "bytes": 15002
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/operator-ownership.mjs",
+      "sha256": "15fafef81826c7d7424ce903b73dab8a9ea8d6a19954b62c02c68fd0a117b77d",
+      "bytes": 3951
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/process.mjs",
+      "sha256": "be2a2eabe01b9a74a4793c6f99fad5a5562ed1b4edf1069b634e25dd8907ebbf",
+      "bytes": 6760
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/release.mjs",
+      "sha256": "774fab99bf5c7c88c74c42a894d08e217c1859fee97be918e144b78ecd5ee2c1",
+      "bytes": 65973
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/review-policy.mjs",
+      "sha256": "500124168a97311d658e89f02fd64d88d1d00e562e17c2abf53c7d515d6cf080",
+      "bytes": 1197
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/routing.mjs",
+      "sha256": "9c89cf5f3dcde5ff7423efd8110cb07b12a5a5077bba82c8d8ef5f60d053400c",
+      "bytes": 2096
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/standalone-review.mjs",
+      "sha256": "0665d6803eca2099884b22e283bcdd9aa60069e1bc282c66b7a23faad6448af6",
+      "bytes": 46007
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/verification.mjs",
+      "sha256": "4eb9a32abb129d74ee7694fbfac443f00da9ab2bdd10a6106d2423cb50a41b64",
+      "bytes": 3034
+    },
+    {
+      "path": "fixture/agent-team/src/bug-pipeline/workspace.mjs",
+      "sha256": "0ea132835f2d32a339711c12c234ef860ccff4921a5512f7976896c10e574a2c",
+      "bytes": 32765
+    },
+    {
+      "path": "fixture/agent-team/src/core/json-schema.mjs",
+      "sha256": "ff1be260e9ba0450e8cbbe9079302ce538a652a35e479c90e4233bddb0198661",
+      "bytes": 1706
+    },
+    {
+      "path": "fixture/agent-team/src/core/sanitize.mjs",
+      "sha256": "1a4d2b9565663b3ed5a593cdecf7cbadbd6f9cd6ef296a4b8c1c426b08ca042b",
+      "bytes": 1012
+    },
+    {
+      "path": "fixture/agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "sha256": "fee5c174a884741a4c3ee894b819546959762c8561a74b370fee66d199a23353",
+      "bytes": 33623
+    },
+    {
+      "path": "fixture/agent-team/tests/unit/process-runner.test.mjs",
+      "sha256": "1354edf8d1ed3b281d7995aff6ba53499315835a07bd535fdc12a4338e8aaf6f",
+      "bytes": 3352
+    },
+    {
+      "path": "fixture/qa-model-id.test.mjs",
+      "sha256": "e27b58bd73b2bf4cd555546227bf914e9306f72cea74401592bac72a5ffda500",
+      "bytes": 7019
+    },
+    {
+      "path": "fixture/scripts/automation/claude-cloud-tools/package-lock.json",
+      "sha256": "70cf34a9a534c37fbcfa1580cd2da69c749bbaafac97f07f3be8bcf63aefea11",
+      "bytes": 5198
+    },
+    {
+      "path": "fixture/scripts/automation/claude-cloud-tools/package.json",
+      "sha256": "545379c90727ef75e5d7278d8484e36a24f7cc034edd92a56a69b049c7326f59",
+      "bytes": 246
+    },
+    {
+      "path": "fixture/scripts/automation/configure-demo-source.mjs",
+      "sha256": "3bac135aaecfe5c95b48f38f613f27a0326d8ebb905a4753cb5ecc0d1513264b",
+      "bytes": 17195
+    },
+    {
+      "path": "fixture/scripts/quality-gate/claude-bug-review.mjs",
+      "sha256": "fa5982c31c10a2e9020141990c218a817b2247e0e9ed46a89a5c1f765827263b",
+      "bytes": 13263
+    },
+    {
+      "path": "fixture/scripts/quality-gate/review-bug-setup.mjs",
+      "sha256": "e959277f3bb82a0a8f206025b19b15375678743017be62ec032e3a5aa5f485a0",
+      "bytes": 8307
+    },
+    {
+      "path": "independent-case-counts.json",
+      "sha256": "4e2485a52de25b3155d45072693532a81e77f75ba05c25acec029c5fc3655c9e",
+      "bytes": 112
+    },
+    {
+      "path": "logs/baseline-regressions.tap",
+      "sha256": "95bda5481456d9d720393933d77ab32767499e67748ee53006777fddc1b36b8a",
+      "bytes": 5429
+    },
+    {
+      "path": "logs/format-check.txt",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "bytes": 66
+    },
+    {
+      "path": "logs/independent-tests.tap",
+      "sha256": "f7c6b11a10dfca7af22462ff27e2556645b8b3dccad217ba19e69d3ed378bbbd",
+      "bytes": 997
+    },
+    {
+      "path": "logs/targeted-tests.tap",
+      "sha256": "dada8a2bd79e0fac51e96ee1733be4703cb27696dec022fa5df4160e00b4b686",
+      "bytes": 8647
+    },
+    {
+      "path": "provenance-validation.json",
+      "sha256": "0d60393f8198e089b7f6059d764dfbb2d745495e47db479e7de6fe6fd5d175b8",
+      "bytes": 2962
+    },
+    {
+      "path": "report.md",
+      "sha256": "8b5048e80c15faf184a134c6a4789b93f2d6b84ca1cdc38f9acd5c4ecc28ec4d",
+      "bytes": 3813
+    },
+    {
+      "path": "reservation.json",
+      "sha256": "fabba4dee17fe1d469c369e7124efc1456fa602a2f1a27853ea90d3aa5d81cfd",
+      "bytes": 770
+    },
+    {
+      "path": "result.json",
+      "sha256": "bd139dd3d4bb731984bedf0faa39fb36407f7ce024f225132723fa933a520fdd",
+      "bytes": 2790
+    },
+    {
+      "path": "task-contract.md",
+      "sha256": "1aa1c80d8012e01d89379309b8bf2c8a2fa58e9a176cd0f11b3c7d6767a2933c",
+      "bytes": 1314
+    },
+    {
+      "path": "tmp/independent-native-ambiguous/fake-claude.mjs",
+      "sha256": "4dbee23ded43592b6bb6adb74422acd2b1d1a3603b7b13c9671f51e8494db72c",
+      "bytes": 1279
+    },
+    {
+      "path": "tmp/independent-native-captured/fake-claude.mjs",
+      "sha256": "55cbda5acea4fdd46341ca358937edf452103441c3c610a03c899bc184cfca70",
+      "bytes": 1208
+    },
+    {
+      "path": "tmp/independent-native-missing/fake-claude.mjs",
+      "sha256": "613e3fde01c634eef84483454a0ef847b864b5de3725166ab52b90daad7f86c5",
+      "bytes": 1182
+    },
+    {
+      "path": "tmp/independent-native-small/fake-claude.mjs",
+      "sha256": "c9d81d13988cd1f7f6507be70503a02d91c6c9421cef0afafc81139a30c622a6",
+      "bytes": 1201
+    },
+    {
+      "path": "tmp/independent-native-unexpectedTag/fake-claude.mjs",
+      "sha256": "22a3f1c6be3123cdfe684a0f6e39083796dfe7ad42c5a5ca3c4222dba40ac2e8",
+      "bytes": 1220
+    },
+    {
+      "path": "tmp/independent-native-unsafe/fake-claude.mjs",
+      "sha256": "6bb8e1614bb8c814aaf67786525db5cf540cd40bc27ba90da8fa5fafa998aedf",
+      "bytes": 1219
+    }
+  ],
+  "externalDependencySymlinks": [
+    "fixture/node_modules -> /workspace/ClinicOS/node_modules",
+    "baseline-regression-fixture/node_modules -> /workspace/ClinicOS/node_modules"
+  ]
+}

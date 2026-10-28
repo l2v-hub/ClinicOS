@@ -1,0 +1,32 @@
+{
+  "algorithm": "sha256",
+  "sealedAt": "2026-10-21T22:05:36.474447+00:00",
+  "status": "STOP_STATIC_PURE_PASS_RUNTIME_UNRUN",
+  "files": {
+    "STOP.json": "160673cef45fc478d207353e39ffe7f8c69d1a7540653409bbac420a51a7b8d1",
+    "adversarial-backend.receipt.json": "058af5a563bf3231b77ecbd966b288f9b692f0a3b3edbe0c15440dcfdee14b0e",
+    "adversarial-backend.test.ts": "0e0aa63039c3e503d3b2720815dbb97793a0ebeda69b90415b3f537139bc3b12",
+    "adversarial-ps.receipt.json": "4ff51fbbef79d62ab2979d68229bc11fb36e8fb6b64f4c5b7baf5ba62578c735",
+    "adversarial-ps.test.ts": "eff53ca57dc6f054b8927b789efa0302da50482af0bba7a72ce84f9f7c61c7d5",
+    "author-seal-validation.json": "481ff04c8196f8d32b1eb8e810fa2186bb52b5b142140a2f5257036fd66755cb",
+    "backendTests.receipt.json": "a2d08a59e0fb8cbd4e24a4497fe6989ebfad1e5da2d2d1b405bf5609851ac0f1",
+    "backendTypes.receipt.json": "f58f43c94ec8018f4a223695fa971f2cea556ebdc8bbf517f1aa4f06924b6fe4",
+    "duplicate-types-runner-failure.json": "425d392fcce78630938ff9e4c63eea233562da8a6b3d4f5ff761daa58ec0f7eb",
+    "freeze-after.json": "77379510b54c54b2378f4281fef944866696df8897c9095ad36dc5eb1c65d14f",
+    "freeze-before.json": "77379510b54c54b2378f4281fef944866696df8897c9095ad36dc5eb1c65d14f",
+    "freeze-comparison.json": "cc92d6cfdb03e755c22d4d2297bedf11fa362e4bc9e303bdeb523348757996f8",
+    "freeze.py": "e8f300fc11727e0a62d40734d9f8567a46823ae313a6336162b8a59fa54172fb",
+    "psTests.receipt.json": "1ea2dc0a00ab411ca4684ce1bffe4463f2822345995089ff56b2880ecdd13f23",
+    "psTypes.receipt.json": "7aeee52347af0477ba5339110cf22b0a4be383fd54cc5a331cecc4777f0dc552",
+    "registration-function-parity.json": "2be1203ac9cb8f03fe01210f1996a196a1376c1eaac1f0136f3871f39ab56e4a",
+    "report.json": "e04b7e77fb470a2778d2498dfc79f34562752f315cf795bbc7738b676a1a96e6",
+    "report.md": "ebb86e903815567195dcda3a13c931547094086dc3f2072d747b7b55cf722912",
+    "reservation.json": "39f3fcfade1ef75841fb67d6c4563f23bac7154d1956efaf3bde2f9b9110dab2",
+    "root-runtime-sql-parity-cases.UNRUN.json": "90a7fa767381bdc8881b0698a338a9fcca584ae013d7cdd3f5bd8b210572d708",
+    "run-adversarial-ps.mjs": "4874a870a9d161d60aa140a698406c95f13f3550c46277ef643d119704715e41",
+    "run-adversarial.mjs": "87cbf6180e11bfa64e6117b4d3915a7b493571a62ff810dd339504ac3859df50",
+    "summary.md": "60efeda076ce2777e8332b2d2ec3303c687aea510f75e80498f17b8efdcf5cfa",
+    "task-contract.md": "6efdcb49c405026267f20b1858ed6e563f5e33596d8aea87e24fbb6aa60a787a",
+    "verify.mjs": "19fad9f3554e65d0978da3f63ad60f99c5c2dc940c32a7b6432c1233bc2b8c82"
+  }
+}

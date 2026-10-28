@@ -1,0 +1,64 @@
+{
+  "results": [
+    {
+      "name": "independent-invalid-clock-band-duplicates-exact-summary-pagination-sample-acl",
+      "pass": true,
+      "verification": 5,
+      "pages": 6,
+      "deniedWrites": 10,
+      "normalized": "08:30"
+    },
+    {
+      "name": "independent-two-key-concurrent-refusal-correction-role-denial-replay",
+      "pass": true,
+      "statuses": [
+        200,
+        409
+      ],
+      "clinicalRecords": 1,
+      "receipts": 1
+    },
+    {
+      "name": "operator-agenda-verification-omitted",
+      "pass": false,
+      "expectedVerificationPrescriptions": 5,
+      "actualVisibleVerificationPrescriptions": 0,
+      "apiAndSqlValidated": true,
+      "sourceFinding": "App.tsx omits therapySlots props and loads therapy feed only on terapie route"
+    },
+    {
+      "name": "operator-agenda-omitted-after-reload",
+      "pass": false,
+      "expectedVerificationPrescriptions": 5,
+      "actualVisibleVerificationPrescriptions": 0,
+      "apiAndSqlValidated": true,
+      "sourceFinding": "App.tsx omits therapySlots props and loads therapy feed only on terapie route"
+    },
+    {
+      "name": "independent-week-readonly-reload",
+      "pass": true
+    },
+    {
+      "name": "admin-agenda-verification-omitted",
+      "pass": false,
+      "expectedVerificationPrescriptions": 5,
+      "actualVisibleVerificationPrescriptions": 0,
+      "apiAndSqlValidated": true,
+      "sourceFinding": "App.tsx omits therapySlots props and loads therapy feed only on terapie route"
+    },
+    {
+      "name": "admin-agenda-omitted-after-reload",
+      "pass": false,
+      "expectedVerificationPrescriptions": 5,
+      "actualVisibleVerificationPrescriptions": 0,
+      "apiAndSqlValidated": true,
+      "sourceFinding": "App.tsx omits therapySlots props and loads therapy feed only on terapie route"
+    }
+  ],
+  "scheduledDrugComponent": {
+    "status": "UNVERIFIED",
+    "cause": "QA-only HTML shell omitted Vite React refresh preamble; actual product defect is separate agenda wiring",
+    "productFinding": false,
+    "privateFailureRetained": "/workspace/.clinicos-cloud/pr483-followup-independent-qa-20261018/snapshot-qa6/artifacts/task-validation/bug-batch-432/independent-extra/failure.json"
+  }
+}

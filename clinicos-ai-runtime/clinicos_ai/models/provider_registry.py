@@ -24,6 +24,8 @@ class ProviderEntry:
     credential_env: tuple[str, ...]
     # Optional STT adapter module exposing transcribe(model, audio, mime, locale, timeout)
     stt_module: str | None = None
+    # Optional SDP negotiation adapter (realtime remains a separate explicit opt-in).
+    realtime_module: str | None = None
     # Env-facing aliases accepted in configuration
     aliases: tuple[str, ...] = ()
     # Model id -> declared capabilities (config data, no SDK)
@@ -78,10 +80,12 @@ PROVIDERS: dict[str, ProviderEntry] = {
     "azure": ProviderEntry(
         "azure", "clinicos_ai.models.providers.azure", ("AZURE_OPENAI_API_KEY",),
         stt_module="clinicos_ai.voice.providers.azure",
+        realtime_module="clinicos_ai.voice.azure_realtime",
         aliases=("azure-openai", "openai-azure"),
         capabilities=_caps("azure"),
         description="Azure OpenAI (deployment name = model id)",
         required_env=("AZURE_OPENAI_ENDPOINT",),
+        # Adapter implemented, but provider protocol and authoritative session termination unverified.
         traits={"usage_metadata": True, "cancellation": False, "timeout": True, "model_discovery": False, "realtime": False, "sdk": "agno + http (structured)"},
     ),
     "google": ProviderEntry(

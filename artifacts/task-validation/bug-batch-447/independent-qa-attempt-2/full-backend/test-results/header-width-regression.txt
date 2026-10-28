@@ -1,0 +1,25 @@
+✔ Today vitals use facility civil date and exclude adjacent day and unrelated old readings (3.413134ms)
+✔ Today surface never offers denied therapy/clinical read or record action (10.489402ms)
+✔ Today counts the complete daily history and selects latest after paginated duplicates (1.094127ms)
+✔ Today rejects foreign patients, wrong civil days, repeated cursors and failed subsequent pages (1.62471ms)
+✔ chart groups organize intake and clinical work while legacy links keep their destination (4.733291ms)
+✔ discharge opens directly beside Documents and legacy links keep the same module (0.425685ms)
+✔ Agnos opens the separate therapy page for both roles without confusing the agenda (3.983887ms)
+✔ demographic write preview opens the page that displays the field being changed (0.792404ms)
+✔ HMI 1: 8 chart sections as in the prototype; every legacy tab opens the section that holds it (1.743283ms)
+✔ Prompt 10 AT-13: le sezioni negate dalla policy non sono offerte al ruolo (4.330294ms)
+✔ patient record exposes ONE labelled section rail and a controlled tab panel (1.973423ms)
+✔ top navigation follows the keyboard tab pattern with one focusable active tab (0.357554ms)
+✔ therapy sections reuse the canonical contextual navigation (0.531686ms)
+✔ 447 Today uses actual dose actions, shared diary acknowledgement and real daily readings, retaining diary and module state (0.919755ms)
+✔ overview is three columns on wide screens, two on tablet and one on phone (0.890216ms)
+✔ patient record applies one screen-only contract to cards, key-value rows and tables (0.424297ms)
+✔ patient record data contract keeps tablet overflow local and stacks key-value rows on phones (0.355868ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1076.185646

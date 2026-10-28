@@ -26,13 +26,26 @@ export function selectDrugPackage(
   farmaco: FarmacoTrovato,
   currentForm: string,
 ): Partial<TherapyFormValue> {
+  const strengths = (farmaco.principiAttivi ?? []).filter(
+    (p) =>
+      p.quantita != null &&
+      Number.isFinite(p.quantita) &&
+      p.quantita > 0 &&
+      p.unita &&
+      ['mg', 'g', 'mcg', 'UI', 'ml', '%'].includes(p.unita),
+  );
+  const strength =
+    strengths.length === 1 && farmaco.principiAttivi?.length === 1 ? strengths[0] : null;
   return {
     farmacoNome: farmaco.denominazione,
     drugPackageRef: farmaco.aic,
     pharmaceuticalForm: formaDellaMaschera(farmaco.forma) ?? currentForm,
-    // A previous product's strength is not evidence for this package. The operator
-    // confirms commercial strength separately; administration quantities are untouched.
-    commercialStrengthValue: '',
+    // Prefill only one unambiguous structured active-ingredient strength. Never
+    // parse a product name or retain the previous package's strength.
+    commercialStrengthValue: strength ? String(strength.quantita) : '',
+    ...(strength
+      ? { commercialStrengthUnit: strength.unita!, commercialStrengthNeedsReview: false }
+      : {}),
   };
 }
 

@@ -1,0 +1,1 @@
+Update only two obsolete test fixtures, preserve actual visible identity and capability-aware emergency print behavior. Author targeted46 and full1549 PASS, independent full frontend and types verified. Preserve all previous failures and E2E captures; wait for six native checks on exact publication before requesting actual Claude2.

@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: cloud semantic diagnostics preserve actual native standalone failure and publication outcomes
+ok 1 - cloud semantic diagnostics preserve actual native standalone failure and publication outcomes
+  ---
+  duration_ms: 96.831263
+  type: 'test'
+  ...
+# Subtest: revision adoption preserves failed-request handoff history and consumed authorization nonces byte exact
+ok 2 - revision adoption preserves failed-request handoff history and consumed authorization nonces byte exact
+  ---
+  duration_ms: 23.682626
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 234.760091

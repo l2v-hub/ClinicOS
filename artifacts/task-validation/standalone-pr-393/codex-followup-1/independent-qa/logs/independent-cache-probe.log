@@ -1,0 +1,1 @@
+{"status":"PASS","checks":3,"requests":67,"boundedEntries":64,"network":"loopback only","clock":"deterministic milliseconds"}

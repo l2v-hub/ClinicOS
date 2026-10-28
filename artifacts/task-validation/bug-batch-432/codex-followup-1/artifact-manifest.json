@@ -1,0 +1,296 @@
+{
+  "auditPath": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/analysis/author-evidence-audit.json",
+  "auditSha256": "3938a3034d54468d7a91bb8c2a2a1bd5f7ad910c8ff121d4601a9b6737195018",
+  "files": [
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-441.webm",
+      "bytes": 985405,
+      "sha256": "15ca19a8863911a1717fb85a03a3aad35da56c0ed96912f63292ff41f4e054bf"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-442.png",
+      "bytes": 24276,
+      "sha256": "b81072f2843023a02fa7e28539614e5bd415fa590c430d3279f82f6b8f025d63"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-464.png",
+      "bytes": 23070,
+      "sha256": "d8892ca230fcc4b7ceb7deeee3c30aa23afc6e0b8d831ee8ee27f54b3072c399"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-460.webm",
+      "bytes": 816341,
+      "sha256": "50b4aecb6617a39b7f11cf91cb1ac9305e805e208500febd72a24ad06439ee19"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-463.png",
+      "bytes": 113680,
+      "sha256": "337b248e91754c6b934aee6ecce27c3a42f73d836e07cd8d68c4da9e00fa06d1"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-441-trace.zip",
+      "bytes": 7430497,
+      "sha256": "4f715412f7e08980177f332b4856ec0d98f5c0f21f902d8bcdb541c4df99ec0e"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-463.webm",
+      "bytes": 985405,
+      "sha256": "15ca19a8863911a1717fb85a03a3aad35da56c0ed96912f63292ff41f4e054bf"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-463-trace.zip",
+      "bytes": 7430497,
+      "sha256": "4f715412f7e08980177f332b4856ec0d98f5c0f21f902d8bcdb541c4df99ec0e"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-432-import-saved.png",
+      "bytes": 81636,
+      "sha256": "4cfa49d8df0e268b5503e920d3e53b3a55ee129c5cd435be5a19ce5a84f7b3dd"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-460.png",
+      "bytes": 120746,
+      "sha256": "88e2a4a6e9acaa082dace8b0e5a39a1b59c006b1849beeb5a2eb62035d86eb6e"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-432-print.png",
+      "bytes": 385001,
+      "sha256": "6f642c596ab9a5c966580a46a2c45800d894bc0e653677ee6bc6c05c4c88c883"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-432-switch-mobile.png",
+      "bytes": 56070,
+      "sha256": "fb1acdebd0926f94433c834e7e2d619f75c33d3a45b655225a0861496338cfa8"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-460-trace.zip",
+      "bytes": 5128787,
+      "sha256": "f1cb3a4a311f45145d918c2f9691cc4507337755ea789c2cc3c03997bca9c0ea"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-432.png",
+      "bytes": 113680,
+      "sha256": "337b248e91754c6b934aee6ecce27c3a42f73d836e07cd8d68c4da9e00fa06d1"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-467.webm",
+      "bytes": 985405,
+      "sha256": "15ca19a8863911a1717fb85a03a3aad35da56c0ed96912f63292ff41f4e054bf"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-432-import.webm",
+      "bytes": 340572,
+      "sha256": "16515fea9dae1c947b6bfc5532b7a229b7a210908c81931b99a9a6652e7dfd3c"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-464-trace.zip",
+      "bytes": 65503,
+      "sha256": "791ad76eff4e6bb0c0882c131e7fc02f53436ba3a2d0f6575c96a4d79db2556a"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-432-trace.zip",
+      "bytes": 7430497,
+      "sha256": "4f715412f7e08980177f332b4856ec0d98f5c0f21f902d8bcdb541c4df99ec0e"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-432-import-trace.zip",
+      "bytes": 4100782,
+      "sha256": "47f4ee9f4ee014202ba5e2bb2b24431ac5fec4e5a56d85defd705511b05fec49"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-442.webm",
+      "bytes": 26657,
+      "sha256": "b4d7944b48e09f6cf8be11b0dff1265ffaba96cb9a7c544eef834d60653f1873"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-464.webm",
+      "bytes": 26657,
+      "sha256": "b4d7944b48e09f6cf8be11b0dff1265ffaba96cb9a7c544eef834d60653f1873"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-432.webm",
+      "bytes": 985405,
+      "sha256": "15ca19a8863911a1717fb85a03a3aad35da56c0ed96912f63292ff41f4e054bf"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-467-trace.zip",
+      "bytes": 7430497,
+      "sha256": "4f715412f7e08980177f332b4856ec0d98f5c0f21f902d8bcdb541c4df99ec0e"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-432-additional-trace.zip",
+      "bytes": 8368143,
+      "sha256": "1e83bc3f147ac467cc3cea7c7abcbb69d29b11069fea53fc4b3bcd34c28c3471"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-467.png",
+      "bytes": 199771,
+      "sha256": "0bfc529f657943e9812e720deb8c654459279fcc0dc4ba106cfb2c61fc91a789"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-441.png",
+      "bytes": 167153,
+      "sha256": "77b4211bce2c1e32992961fc305e1777b5fc96bd53098a3cf007d60878c508c6"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/evidence/issue-442-trace.zip",
+      "bytes": 65503,
+      "sha256": "791ad76eff4e6bb0c0882c131e7fc02f53436ba3a2d0f6575c96a4d79db2556a"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/inventory-browser/flow.webm",
+      "bytes": 985405,
+      "sha256": "15ca19a8863911a1717fb85a03a3aad35da56c0ed96912f63292ff41f4e054bf"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/inventory-browser/oneoff-after-band-shift.png",
+      "bytes": 199771,
+      "sha256": "0bfc529f657943e9812e720deb8c654459279fcc0dc4ba106cfb2c61fc91a789"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/inventory-browser/inventory-complete.png",
+      "bytes": 113680,
+      "sha256": "337b248e91754c6b934aee6ecce27c3a42f73d836e07cd8d68c4da9e00fa06d1"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/inventory-browser/mobile-distinct-doses.png",
+      "bytes": 216461,
+      "sha256": "f110242076342d875e01a89227c1c9cfe8d501f0685803e7cf4a857aa2a162bd"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/inventory-browser/trace.zip",
+      "bytes": 7430497,
+      "sha256": "4f715412f7e08980177f332b4856ec0d98f5c0f21f902d8bcdb541c4df99ec0e"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/inventory-browser/desktop-distinct-doses.png",
+      "bytes": 167153,
+      "sha256": "77b4211bce2c1e32992961fc305e1777b5fc96bd53098a3cf007d60878c508c6"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/internal-video/page@76ad91730a67583b22ec809f50d3450c.webm",
+      "bytes": 26657,
+      "sha256": "b4d7944b48e09f6cf8be11b0dff1265ffaba96cb9a7c544eef834d60653f1873"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/additional-video/page@f2a88c6e936d12c4be65e5193ff000ba.webm",
+      "bytes": 984720,
+      "sha256": "e4505eeb3a941dff06a81546ad76482f4db237caf0e8f804f7f5a0dbf7c4db9f"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/import-video/page@bad115b9ccae32c0b1a86b1a8998ec67.webm",
+      "bytes": 340572,
+      "sha256": "16515fea9dae1c947b6bfc5532b7a229b7a210908c81931b99a9a6652e7dfd3c"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/retry-browser/flow.webm",
+      "bytes": 816341,
+      "sha256": "50b4aecb6617a39b7f11cf91cb1ac9305e805e208500febd72a24ad06439ee19"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/retry-browser/lost-response-uncertain.png",
+      "bytes": 125418,
+      "sha256": "81f197756afd6f920aa1cec02618c3cc7b506f7341ab554b1baa674d70f70f6f"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/retry-browser/visible-retry-after-reload.png",
+      "bytes": 121447,
+      "sha256": "0aa8641a6fb5ac49fa2dc941d4041f7a79605fa62bd831280d81ef0137b646cf"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/retry-browser/trace.zip",
+      "bytes": 5128787,
+      "sha256": "f1cb3a4a311f45145d918c2f9691cc4507337755ea789c2cc3c03997bca9c0ea"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/retry-browser/after-reload-one-record.png",
+      "bytes": 120746,
+      "sha256": "88e2a4a6e9acaa082dace8b0e5a39a1b59c006b1849beeb5a2eb62035d86eb6e"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/inventory-browser/video/page@7338ebc0dcb9cdd80c2f9036c2b32fc3.webm",
+      "bytes": 985405,
+      "sha256": "15ca19a8863911a1717fb85a03a3aad35da56c0ed96912f63292ff41f4e054bf"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/clinical-followup/correction/failure.png",
+      "bytes": 40874,
+      "sha256": "183c0888d8c992dea07af7483f237511505e5de3f629ae2e1e2cdfe19b244743"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/clinical-followup/correction/flow.webm",
+      "bytes": 591492,
+      "sha256": "727762dc2e98b548fe0d1409da4fd6ebc2ee973424f9d37c456ed6b9796a7fac"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/clinical-followup/correction/trace.zip",
+      "bytes": 2927951,
+      "sha256": "b59b707249104799b3b06b921c61b6843f8e717a5edb3cd916bc47cb512c87fd"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/clinical-followup/correction/video/page@092116502e37f6054e7d3cb409ece30a.webm",
+      "bytes": 591492,
+      "sha256": "727762dc2e98b548fe0d1409da4fd6ebc2ee973424f9d37c456ed6b9796a7fac"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-6/runtime-packet/retry-browser/video/page@71599bf47d12f4c93477591bc08339b6.webm",
+      "bytes": 816341,
+      "sha256": "50b4aecb6617a39b7f11cf91cb1ac9305e805e208500febd72a24ad06439ee19"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-10/runtime-packet/clinical-followup/verification/calendar-verification.png",
+      "bytes": 123697,
+      "sha256": "78344258c7fcfa0d5ede971697545d4f074ec02018b9d1c58b7470e892f1fc8c"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-10/runtime-packet/clinical-followup/verification/giro-verification.png",
+      "bytes": 143920,
+      "sha256": "4bc2637f3c4002de98f103cfe1c1dd41096f746dfc5476958a92452fecc94d5b"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-10/runtime-packet/clinical-followup/verification/flow.webm",
+      "bytes": 591384,
+      "sha256": "40492745ae21d2130192675152302047992bd564a9922f48350e2f0156e788f5"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-10/runtime-packet/clinical-followup/verification/mobile-verification.png",
+      "bytes": 321685,
+      "sha256": "9953095678835bcbbe5b8eff28e5a3a31b260e2c13293df36551bf8b61300dc6"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-10/runtime-packet/clinical-followup/verification/trace.zip",
+      "bytes": 4642099,
+      "sha256": "739b86fd5355f9b5ea58b14280cb74d6ad1bdcdfe77dd79f22c5921615f2a898"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-10/runtime-packet/clinical-followup/verification/assistant-verification.png",
+      "bytes": 216691,
+      "sha256": "c468fe72881268db6cb25bb16e4e7ad7c2ddb75f2edb220a33ddef679107e297"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-10/runtime-packet/clinical-followup/correction/refusal-corrected-after-reload.png",
+      "bytes": 123318,
+      "sha256": "343a4111a31715b0332e5dec231244f12776db427846b2087556261a15ef60e9"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-10/runtime-packet/clinical-followup/correction/flow.webm",
+      "bytes": 840599,
+      "sha256": "fdcbbca0d127c01d82ee5f143c68516a72e96c6664aec6b6554a00c5cedbbf9b"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-10/runtime-packet/clinical-followup/correction/trace.zip",
+      "bytes": 5277455,
+      "sha256": "fa73544ff2d4b4761457087e68e7bda65adbd34588ef1be2c33aebc6d7e05585"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-10/runtime-packet/clinical-followup/verification/video/page@e07e1a92c55c8b10b101e7c919282965.webm",
+      "bytes": 591384,
+      "sha256": "40492745ae21d2130192675152302047992bd564a9922f48350e2f0156e788f5"
+    },
+    {
+      "path": "/workspace/.clinicos-cloud/pr483-codex-followup-20261018/runs/author-10/runtime-packet/clinical-followup/correction/video/page@86e340ba4991419c711e216c07ffca59.webm",
+      "bytes": 840599,
+      "sha256": "fdcbbca0d127c01d82ee5f143c68516a72e96c6664aec6b6554a00c5cedbbf9b"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "path": ".github/workflows/claude-cloud-review.yml",
+    "blob": "78cfc11cedd79fc2558f8150399464b3d9135769",
+    "mode": "100644",
+    "baseBlob": "2cec3c15f2eb15196c2464f29d542a4db3a36fa6",
+    "baseMode": "100644"
+  },
+  {
+    "path": "agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs",
+    "blob": "3a2ec499b4ea40f41044cd8769869659ff8e4344",
+    "mode": "100644",
+    "baseBlob": null,
+    "baseMode": null
+  }
+]

@@ -1,0 +1,118 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "nonce": "63298673-dab9-4083-b65f-6e930ee3e604",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "65832e2c00861f9b2e2fbd9873f196373d60a7a2",
+      "baseSha": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+      "evidence": "independent-qa1/report.md",
+      "reason": "Actual independently reserved child attempt 1; FAILED independent QA, preserved unchanged",
+      "independentQaNonce": "b5903280-392e-4013-8af5-2f6df465c7c5",
+      "independentQaSealSha256": "2a58a46ae81da07a168237fbbf81600a0429e9f2c20fb507ff75ef8ca0624a65"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "nonce": "5f4c166d-91f7-4c93-a701-337cf77ceddc",
+      "owner": "codex-cloud-root",
+      "model": "gpt-6.1-sol",
+      "subjectSha": "33a6081b021487336b4508ea9e4468d32085f392",
+      "baseSha": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+      "evidence": "independent-qa2/report.md",
+      "reason": "Actual independently reserved child attempt 2; New independent QA2 verified frozen bytes; hosted auth and activation remain separate failed/unverified gates",
+      "independentQaNonce": "39759edd-9ecc-4354-83fc-fecf1f3f8964",
+      "independentQaSealSha256": "04d88598b770dd3741956f108c54485cbe129abfa1ee656591cb47921927009f"
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/claude-cloud-review.yml",
+      "blob": "ae27222380fa005d279685d788195aaa47867af4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "blob": "eacfb9c47c4cdd6f222c7af5cba16cf1fd0c843d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "blob": "f62e15437170c9408dd612c89f839cd5be29b510",
+      "mode": "100644",
+      "baseBlob": "92da9466f34bd68bf9768b3fbd0b68b1e8398974",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "blob": "77a75472db11df2140bdd1fe9f072f72448d9ee7",
+      "mode": "100644",
+      "baseBlob": "8f87543ed92814ae71abbc2a1c9af8e6866247a6",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "blob": "380ef48f343b48868a242813d7e966e80df75a19",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/comment-review-handoff.test.mjs",
+      "blob": "d8d815b429e9d8693d3e961e9a3f08a6d1356158",
+      "mode": "100644",
+      "baseBlob": "882553fb0bf75b13fa24e6f86b9617b62a3297a3",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "blob": "f8d2038a3e34e204866cccbcc49307835248340d",
+      "mode": "100644",
+      "baseBlob": "472a374ec57c1aa3c770dcf5952cc576e819162b",
+      "baseMode": "100644"
+    },
+    {
+      "path": "docs/cloud-claude-review.md",
+      "blob": "61481869a65a62a44cc4fb11b3739a049dcdb6c0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/quality-gate/claude-bug-review.mjs",
+      "blob": "fe1bf08d106c11aef44731a4d1cef708fe661aa8",
+      "mode": "100644",
+      "baseBlob": "9524356fb52bae39cde92de27daeb14c370db090",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "actual-authentication-result.json": "8d20613ea24e7c54cf25c456e955952612687a934b3698f0d6bf2fe8ff88d9f6",
+    "actual-format-result.json": "f3d2acb5961296d4e19a05eba48d387902b3bdee68b689827ecc4e72c5a19b85",
+    "analysis.md": "fb44bd2d929815f7244d0b41ff187772138a17363b779f29c16edb185de30309",
+    "implementation-plan.md": "2eff4fb933d4c17ca1b81eb22dcecb2291d6e8c1cad55d274ff6f1587ffbc2a9",
+    "independent-qa1/STOP.json": "8440b0bf0c3817108fbba871b7f15a23df1f398fa7995c17f8ab42779f1db7d2",
+    "independent-qa1/claim-race-probe-node22.log": "6cbfdbe4eab35efacd00d4595ad50bb3fecfe570721127ee5df22f7cdeda9140",
+    "independent-qa1/focused-node22.log": "a7e8a2ae1e7ddc8fdeb148d6568b4676e6b535ee01c9a4c81bb3f593c2bcbb75",
+    "independent-qa1/report.md": "49c2ccead1b56e5c2d99c65f23ddb6aa157171fdb845f1492dfdf41db650e87f",
+    "independent-qa1/result.json": "e0bc7444eacfd4705f0b2b078187f16860d92077a4880496cd132674411242a1",
+    "independent-qa1/seal.json": "2a58a46ae81da07a168237fbbf81600a0429e9f2c20fb507ff75ef8ca0624a65",
+    "independent-qa2/STOP.json": "6a1ee721b2d8db8ec6d1d9863f3b140a5f856623c2940b156f0fd5dd6c4225bb",
+    "independent-qa2/focused-node22.log": "fb60ff9eb54ee5dd160b38acf0a0724d8678a5a69352164ff7d546d74dd61176",
+    "independent-qa2/report.md": "3c0b5eb16fa01faa589b277441981ef7eca7ca5a2168805c656a5a292063ac11",
+    "independent-qa2/result.json": "4401e5069f9ced2cea821a01f24ed2a05412c4a85072b5575898195fa971969b",
+    "independent-qa2/seal.json": "04d88598b770dd3741956f108c54485cbe129abfa1ee656591cb47921927009f",
+    "source-manifest.json": "5431052cc7f90ebf766ce57a9f7afeeecd301700b9e68b5411a45a818c317493",
+    "task-contract.md": "dcf8b76f02c7a3758e1da763ad182dd8a1da37e30cf7a44f892a19a0eee0ae32",
+    "validation-report.md": "8ce3ac4159cf5f353e34bfb576f7b1da2f339181652922660321cb8d8ec63cbd"
+  }
+}

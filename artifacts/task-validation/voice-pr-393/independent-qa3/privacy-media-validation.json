@@ -1,0 +1,1112 @@
+{
+  "scope": "independent-qa3 owned packet only",
+  "filesChecked": 35,
+  "zipMemberVisits": 193,
+  "zips": [
+    {
+      "path": "early-buffer-probe/trace/trace.zip",
+      "crc": "PASS"
+    }
+  ],
+  "pngs": [
+    {
+      "path": "early-buffer-probe/screenshots/01-partial-display-only.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    },
+    {
+      "path": "early-buffer-probe/screenshots/independent-early-empty-buffer-error.png",
+      "width": 1280,
+      "height": 900,
+      "decode": "PASS"
+    }
+  ],
+  "videos": [
+    {
+      "path": "early-buffer-probe/video/page@d54c03d8990840fabdfe10e14d35471e.webm",
+      "fullDecode": "PASS",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 800,
+          "height": 562
+        }
+      ],
+      "format": {
+        "duration": "16.320000"
+      }
+    }
+  ],
+  "embeddedImages": [
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253593444.jpeg",
+      "width": 701,
+      "height": 493,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253593472.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253594907.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253596144.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253596330.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253596423.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253596427.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253596804.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253596839.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253596969.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253596994.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597021.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597043.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597067.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597087.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597131.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597133.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597161.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597171.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597284.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597307.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597323.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597347.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597379.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597413.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597415.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597427.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597438.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597460.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597471.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597485.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597497.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597509.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597523.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597535.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597555.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597572.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597594.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597625.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597629.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597648.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597659.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597679.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597692.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597715.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597721.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597734.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597751.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597767.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597784.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597804.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597826.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597859.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597890.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597901.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597920.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597937.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597942.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597943.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253597955.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253598158.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253598383.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253598603.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253598808.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253599017.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253599233.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253599440.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253599654.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253599869.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253600097.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253600301.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253600503.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253600731.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253600939.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253601152.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253601358.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253601566.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253601799.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253602006.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253602221.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253602435.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253602647.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253602853.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253603069.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253603269.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253603485.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253603686.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253603914.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253604117.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253604333.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253604550.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253604755.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253604993.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253605205.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253605407.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253605664.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253605914.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253606130.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253606351.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253606594.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253606620.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253606638.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253606683.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253606724.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253606832.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253606885.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253606931.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253606979.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253606990.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607005.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607018.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607221.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607315.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607351.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607392.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607475.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607503.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607728.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607748.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607759.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607819.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607840.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607841.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607858.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607867.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607915.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607928.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607942.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607953.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607970.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253607992.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608007.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608180.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608200.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608204.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608219.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608228.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608240.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608256.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608273.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608358.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608361.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608389.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608401.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608419.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608471.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608496.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608585.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    },
+    {
+      "archive": "early-buffer-probe/trace/trace.zip",
+      "member": "resources/page@d54c03d8990840fabdfe10e14d35471e-1792253608751.jpeg",
+      "width": 799,
+      "height": 562,
+      "decode": "PASS"
+    }
+  ],
+  "credentialPatternFindings": 0,
+  "realPatientDataUsed": false,
+  "transientSyntheticRedactions": [
+    {
+      "path": "early-buffer-probe/trace/trace.zip",
+      "beforeSha256": "b0b9b112794eefc0a4b937f576a3d2431f91695f542b44c78c3a9868b8116a14",
+      "afterSha256": "3324c0078232c15a42e61ab9ae706f045f7fa8b8fd6c5d37c014cd37b2151ffa",
+      "redactedMembers": [
+        {
+          "member": "trace.network",
+          "redactions": 32,
+          "beforeSha256": "4d8670ff703b4cba03f8670512ed45d8fb2abc692fabd9d68a5957471368afc0",
+          "afterSha256": "3e1c7651fdaeb69ceda6be26e6034189de4ab841ad416be42a3bbaecacda90c1"
+        },
+        {
+          "member": "resources/c860740e836a9fa225b2155817d98df17902d3ad.json",
+          "redactions": 1,
+          "beforeSha256": "cac21d90deb0744967e2eefc497c2e7b0a3b7b6dd9d9cc5c15f2b9ba924d2a35",
+          "afterSha256": "e492db57f62692cbd6a1a847c97975a1610b3e5fb4b25f44f4f5c4a8dcf06ba3"
+        }
+      ]
+    }
+  ],
+  "note": "Synthetic bearer and QA DSN redaction only. ZIP CRC validated before/after. Existing member resource names are retained as identifiers; modified payload digests are explicitly recorded, not asserted unchanged. No executable source or assertions modified."
+}

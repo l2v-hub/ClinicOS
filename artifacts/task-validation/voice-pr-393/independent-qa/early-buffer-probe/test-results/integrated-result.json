@@ -1,0 +1,12 @@
+{
+  "mode": "synthetic-provider-transport-real-app-and-owned-postgres16",
+  "parentDatabaseUsed": false,
+  "developmentDatabaseUsed": false,
+  "realProviderProof": false,
+  "checks": [],
+  "status": "FAILED",
+  "failure": "early empty-buffer provider error must exit microphone-open UI states",
+  "failureStack": "AssertionError [ERR_ASSERTION]: early empty-buffer provider error must exit microphone-open UI states\n    at check (file:///workspace/clinicos-voice-393/artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-browser.mjs:15:12)\n    at runVoiceBrowser (file:///workspace/clinicos-voice-393/artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-browser.mjs:275:5)\n    at async file:///workspace/clinicos-voice-393/artifacts/task-validation/voice-pr-393/independent-qa/early-buffer-runner.mjs:251:24",
+  "databaseOwnershipVerified": true,
+  "ownedContainerRemoved": true
+}

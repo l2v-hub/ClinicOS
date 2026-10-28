@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
+import { isConcurrentWriteConflict } from '../therapies/administration-record.js';
 import type { Operator } from '../ai/auth.js';
 import { hasFacilityPatientScope, patientScopeWhere } from '../patients/patient-scope.js';
 import { assessmentId } from './input.js';
@@ -38,6 +39,20 @@ export function assessmentTransaction<T>(
     await tx.$executeRaw`SET LOCAL TIME ZONE 'UTC'`;
     return action(tx);
   }, options);
+}
+/** Read-only snapshots only: restart the entire read after a concurrent Patient version bump. */
+export async function assessmentReadTransaction<T>(
+  action: (tx: Prisma.TransactionClient) => Promise<T>,
+): Promise<T> {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await assessmentTransaction(action, {
+        isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead,
+      });
+    } catch (error) {
+      if (attempt >= 3 || !isConcurrentWriteConflict(error)) throw error;
+    }
+  }
 }
 export async function lockPatient(
   tx: Prisma.TransactionClient,

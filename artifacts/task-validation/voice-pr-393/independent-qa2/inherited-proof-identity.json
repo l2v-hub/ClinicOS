@@ -1,0 +1,453 @@
+{
+  "changedSourceFiles": [
+    "e2e/qa-voice-pr-393-browser.mjs",
+    "frontend/src/components/assistant/voice/useVoiceChannel.ts"
+  ],
+  "unchangedTrackedInputs": {
+    "backend/package.json": {
+      "sha256": "fb59d18f3ad37c914de0e6321c036cf9ae2c3c41b45392f1955312d1f581fd9f",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "backend/src/voice/__tests__/voice-e2e.test.ts": {
+      "sha256": "6774e069a6fbe37761dd0730b19ca0c04f8748824fda0f848baf4a4de5ff349a",
+      "comparison": "QA1 frozen source"
+    },
+    "backend/src/voice/stt.ts": {
+      "sha256": "eacb046f82d98d8e636d0cd04c0bdb6735a793ac064421562651437906898d11",
+      "comparison": "QA1 frozen source"
+    },
+    "backend/src/voice/vad-config.ts": {
+      "sha256": "16f34484a18b02e339673914f9e3a1e6320d131498cd8f75bf14e9296308342a",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "backend/tsconfig.json": {
+      "sha256": "33f7dd83cb13505d642c93c18799d7f4d97ada0ab17671cdce2a459d4d2d4dc1",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/.env.example": {
+      "sha256": "9f7d7098e873f38568b1c16e3fca015316174a82ef464679139bc1bf0bbe2db3",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/.gitignore": {
+      "sha256": "1faaa7621d729028b5070c0c77e203ca3f8998e3b525f48868e25ce57a69254a",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/Dockerfile": {
+      "sha256": "f655856ca046c98a8013299d03889a3a92344fca86e9544c7b43d39d2233d204",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/README.md": {
+      "sha256": "57511ad8a6ed6c63515c8420dbabb811e0d13868a0e2160f3fc58dbf74c252c9",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/agents/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/agents/assistant.py": {
+      "sha256": "dfb050bc66c8cfd5d22a9eedae6ce807454583adf34bcc29992c87b81ad22c97",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/agents/extraction.py": {
+      "sha256": "5c828cb98bed9e3f8e75d869e41a6f7847f2fee5d578bff928420c6a59e39ba6",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/agents/skill_router.py": {
+      "sha256": "1aeb867dc2e91bcb00bb4aa01378e9f5443dd8cdc8ec70f5adc75c03c9207c41",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/agents/untrusted.py": {
+      "sha256": "04b4eea481c24128e33ab3d02b15b0a8dbe01cb516f348834ef4ecb50ebc8617",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/api/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/api/app.py": {
+      "sha256": "1cb98b5d7c846fd53c7ec33fc35a2025f195b647cb5d225cb949217f01cc9c76",
+      "comparison": "QA1 frozen source"
+    },
+    "clinicos-ai-runtime/clinicos_ai/api/job_control.py": {
+      "sha256": "a074c4c63ed6657b653a813f04a1d6408e31645441c822e81ce95e09528f8e9a",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/correlation.py": {
+      "sha256": "1b3cbbcc52824ba3b86649a4cb3075ead55dd6884bb9c137e15b5c42fa403473",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/document_profiles/__init__.py": {
+      "sha256": "3b77c598f5649b9be0e1affee9bae28195fec1b6dce81dd070faf9df1531872c",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/document_profiles/models.py": {
+      "sha256": "02e8e021fcc53aa0d2fb333332813ff54c5f64a63e862e9651c3069843af6bce",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/document_profiles/processing.py": {
+      "sha256": "e7eb5c860d334ddf9183fa9bb2ed13ac51ded402ac86bdb9789ba9f8011b815c",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/document_profiles/profiles/ausl_imola_discharge_letter_v1.json": {
+      "sha256": "b9cfdfd1cc5a2977474b67b7b723df3a0e2bd19b5892ef7b414d9bf9a4ac18d7",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/document_profiles/profiles/generic_discharge_letter.json": {
+      "sha256": "aced83ca1f36899d97e23718198014abc3009c815d3c23886bcce98239f05e48",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py": {
+      "sha256": "4394a2d6eaa0ba970470a33232f499fd4212a2e5a36e0d060a746d545e79ca9e",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/domain/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/domain/contracts.py": {
+      "sha256": "6f50e119fa71067e9ceebf8877c8c27315b3935582a0a504562baa5a2cd2fb64",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/main.py": {
+      "sha256": "3ef8922ea2edf30facca906bf9c21a22b1a91e411f5a7fe8c2db30766dc62b88",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/capabilities.py": {
+      "sha256": "7ec66fb1322b1c2d713090c2e92abd4dd6a71951a1e6a90a359c10e125abc479",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/configuration.py": {
+      "sha256": "e9644893a4d7bac9bbf5c16a83dc517b3e56c0c5b4d7d14eb64438d1d467acee",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/contract.py": {
+      "sha256": "20b5d70afb94f049bf186833506e82c5c17125d25004286a295276fe55c5f61f",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/cost.py": {
+      "sha256": "bd4f17f05ff9761404a4d2b1fb9403333445c27479ac6c0fd2c236e1f184154f",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/env_config.py": {
+      "sha256": "8f1f34cd4ce16289d2828436dd1fc15a813a3cfbb8f7b5f5c453ca0c6a9c9bad",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/errors.py": {
+      "sha256": "d36b140112424cd6ea9217c128c74bbbaca8f3d6b996032fa45c3e20c31b38b0",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/factory.py": {
+      "sha256": "1ccf99ec0a0995d6fdce55f052c457650e4e6b3cc27ee1fae0b046b14aef522f",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/mistral_config.py": {
+      "sha256": "d2af298008ccee7c460f568d6cd94ca8f1a3de18aa5b06f53a02325b8d0ce1ba",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/profiles.py": {
+      "sha256": "3f3f0e568bce826c54734c2e1b886717cd7931a1c2c2a3110d6089e24534883e",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/provider_registry.py": {
+      "sha256": "4d2c4f0d33e61d79d95442d169814fc01f339f493032567ad6016f28d6528223",
+      "comparison": "QA1 frozen source"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/providers/_common.py": {
+      "sha256": "da56a4781d83d5068039f663161bc8a481f4ef18d55b4a0c20187e965c8f4d4c",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py": {
+      "sha256": "288310a1a6147dc90242c7e06b8a181a0b6195a5f79612bd0f1b800d7e52f30c",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/providers/azure.py": {
+      "sha256": "2205200b4c6f52346afc49462b513047ce73510047a5591dd4460a42498469b9",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/providers/azure_docintel.py": {
+      "sha256": "30ff006727204d9f0234642d9ef4d41ee5da2646ddab0c15a77f0d1e8e0173a8",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/providers/base.py": {
+      "sha256": "8c58b490dcf42b6d438172f002d2e86cf898505d548ae7c8c4d98bb4dd09d009",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/providers/completion.py": {
+      "sha256": "7aed89e1f8c6eeb0e83855616e90fadda1e36aaa6fe838d08e0a09d91dd8ac8c",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/providers/fake.py": {
+      "sha256": "5287d6051a2779fc0d81861eb9d4680a907b56a7f651532e935d8ab908b96003",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/providers/google.py": {
+      "sha256": "a824c3d5fe33d83a05dad957d3d63fd5c0b7a260c51031daec391ae61616a8d8",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py": {
+      "sha256": "ad453219142894aa3d675534d6605e3fb3812a50210b6eb4a3e86e6ac5ac349c",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/providers/mock.py": {
+      "sha256": "d7d83e96698884d792a5c8be6d734048eba4552dda0056ce7879e71495754bf5",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/providers/ocr_errors.py": {
+      "sha256": "964d9c5aff4adefa04eb10a2020e444f37a6ae692bf09d68c3854c04c9a5f35a",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/providers/openai.py": {
+      "sha256": "64322d4a4723ce74ce53722b56a1735d3036de5e012f908121a7fd809f1b9aa4",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/providers/openai_like.py": {
+      "sha256": "21150e16192baed57595f469a691d6db2af5b7693f33429f9eacf58902031fec",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/registry.py": {
+      "sha256": "ea0643013b6bc60584dcc71ff9de159c82195276ec631fc24edf87a93a4621bc",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/spec.py": {
+      "sha256": "16c923bb9cbaadd2b32dd2183f9a5b236cb9acf39754781d3d37760ad27b3c49",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/models/validation.py": {
+      "sha256": "6191fc8864b379b311bbc694f353d1ccc36f88b664828bda3ca14e7bfc7374eb",
+      "comparison": "QA1 frozen source"
+    },
+    "clinicos-ai-runtime/clinicos_ai/voice/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/voice/providers/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/voice/providers/azure.py": {
+      "sha256": "51058e9f52525c76c59c1959ca85f3eddc8177a7ba781994beeaf5ed7cb44ae9",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/voice/providers/fake.py": {
+      "sha256": "4d51d545126fe1e781bc4ed47230d9338b0d56ad8b4caa6dedd021cf87f65323",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/voice/providers/google.py": {
+      "sha256": "731becddc64c520bf08c63b0ac41582913365ff4690abc302d9a0b7b714d0171",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/voice/providers/mock.py": {
+      "sha256": "0c3c47dce30749be019de7f590f144561ab156a7cd152d7954801532e794f395",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/voice/providers/openai.py": {
+      "sha256": "4545d23be057896e7d3502944e4a7242bc6d0223f0f94ff45ff259f1c7ce0805",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/clinicos_ai/voice/stt.py": {
+      "sha256": "4ae5ea5fd97b3e440470314a757c54cd1d5fee9c7ea3d281e7177352708e6f10",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/docs/po05-contract.md": {
+      "sha256": "52d388f9b453f4ecb0f8f8ca4dd948305ab141fca0bacba0d3f2503977613560",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/docs/po05-validation-root.json": {
+      "sha256": "c7e8407cb1d7498684f066b33932b98f5c086691738cad27ed308314ea06f6eb",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/docs/po05-validation-worker.json": {
+      "sha256": "ac422d6e4c4ebad7cf8f8ea111a91d7fbaab85bcb8f9302043d322ed6451677f",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/railway.json": {
+      "sha256": "9dc5f24ac2b1663631063c3c8e61909e09ccde1cfcc50b59176bec67fbaf0ab3",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/requirements.txt": {
+      "sha256": "fb358c4459769e949792f55fb592ae82c9d9c8f57f35afc9b22e747ee43dbbee",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/openai_stub.py": {
+      "sha256": "294a735370915cde0f2c233d2331afc3420c3b09674cc58d8076401d22a8ff27",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_app_limits.py": {
+      "sha256": "ea79e39fb689ca85e7431d730248c3c7d85101f8d8d8b01bb0244b726f67f8cf",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_assistant_plan.py": {
+      "sha256": "8b4d2bfc322930e0d982fbc2a6f09afd90a9f0bcaf08442a4a36aca7c41ad32c",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_azure_gpt5.py": {
+      "sha256": "0d236a9849a08cfe8cdbf3cbc6948c4705119ab6fa92477908f6f071dcad88eb",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_azure_structured.py": {
+      "sha256": "174c7db473939c28a3d8c27b927f7e9fdff04fd515cdd0c814275bd8ff04e1da",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_completion_integrity.py": {
+      "sha256": "1f848add8786bfff46ad36172e2d60ed858552023aa4ad75eac92876ad3135ed",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_docintel.py": {
+      "sha256": "72d42f4d2b53b6e912f6690d345fa32d1fcfef832ecef974116211ae768d89e3",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_document_profiles.py": {
+      "sha256": "badd34564e2c7d374e2fcbe37c85e30001fc10b823ab63e685925a4c9d8292e2",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_env_config.py": {
+      "sha256": "725832dc584bf85ab729e2a4bd91c9a15fe02c519d82a1bc63545986ae0b47f5",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_factory.py": {
+      "sha256": "223f0e146a714a6dd73be50195f6609dcbb22f75ffff108a569457ebdcdecb1a",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_job_recovery.py": {
+      "sha256": "5368f81761293352417d44dc99b8e4e80ab3ad74bb266b91d2a7b1fa54508065",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_mistral.py": {
+      "sha256": "aff4ae9a3a4fa33b5f2ba2cd07746d10e3bb6b20f84e92822539a1bd70818eea",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_mistral_azure.py": {
+      "sha256": "1cc345de160b49b8670bfaa7f6e7d54b4b31a8478a33187f25b37dcfcf6953e6",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_openai_cutover.py": {
+      "sha256": "081fa09b24f69b9252658d34beb43356b5565a1af9836470a2b072faf8eb2b23",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_phase9_hardening.py": {
+      "sha256": "32f2684de00d533ba8e1fb9a554102da22d8472ab52ba66fd536913625541137",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_provider_agnostic.py": {
+      "sha256": "782a4a22a244eb6a1bc775e216faa7ee9b3a95d9b3ca2375468f0ec04e70f4de",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_recovery_http.py": {
+      "sha256": "91643798821f4cd980096b6b2c359838c8b2f986647d264420d93b35cd35e0db",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_registry.py": {
+      "sha256": "9cf0d394cd3e889ccd6bdadc8cdee5fc02dd296ecfde21aff1b7c128cb85097d",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_runner.py": {
+      "sha256": "594b76dea41e5bad95dce3361c9384b6eaec5be022cb110f5f85b1c743cfc391",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_skill_route.py": {
+      "sha256": "d98691ab0a999a4d93645c473f14ce0a1ba8748bfddec574ae0874c2b3f9ac0a",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_untrusted.py": {
+      "sha256": "a12d945d90a5d9dfe492b528e52b8f3adb4b10d091c95708f0acd6acb2b2747c",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tests/test_voice_stt.py": {
+      "sha256": "af3daf0d3e38ee9bb922fb83b33eea87983aafafa33aaa590038f4ac043fb533",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tools/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tools/benchmark/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tools/benchmark/fixtures.json": {
+      "sha256": "1732d04d13726abc31d34e94c64147838152f6457b0cb4673df45c6e80703a4b",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tools/benchmark/run.py": {
+      "sha256": "88be031bd44d98dc4df8bb222922cb9fd74ed26a1854f767f0da9a3f1641ec6d",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tools/benchmark/skills.json": {
+      "sha256": "acad17cef0541bae153396b8fc80779b53adf06d388b3a513e6d7a6d2c6bd0ac",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tools/capability_matrix.py": {
+      "sha256": "f7bbcfc7fa0b660bb9e8c49f269278bb04d4fb604cfca01b1ecbc84039843f57",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tools/openai_smoke.py": {
+      "sha256": "b12d57a8f8690669192883a4a6de66cc84fabee3a3ac909c98e31c6e4e696cf1",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tools/openai_stub_server.py": {
+      "sha256": "fdccffcf683b4213250034bd90899bcf187e56240dbcca66da2dd19f74b95da2",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tools/req025_demo.py": {
+      "sha256": "9203298d6f75212b1cdbfd282144fff68a62859bc2e28b74db4a8f176efbc725",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "clinicos-ai-runtime/tools/verify_po05.py": {
+      "sha256": "20b0e585fd00e32e01cb5c96250515989034ee49ea0b200faeb927029f2e0e72",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "frontend/package.json": {
+      "sha256": "8778ce5a408bdbb75bb809d71e2c3a99a2447a761fe8a674139eeef8e38e0c58",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "frontend/tsconfig.app.json": {
+      "sha256": "e647dcd5a2953bcf672a6830b2b449452043a68eb97e85684f2ef45ba97b7941",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "frontend/vite.config.ts": {
+      "sha256": "98e4dbea95b45e86d2b12f4baabc20f0917419a29ff4bc382ad92c4609291540",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "package-lock.json": {
+      "sha256": "a2e80872c9085f8ec028c968ef0f6d0f6622235c649bf081f7289f5cde6593f6",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "package.json": {
+      "sha256": "e7d8062faaa67db5dd7544b4c4f063ec1878ffdb232222ff3e21e31456bf30a9",
+      "comparison": "unchanged baseline tracked blob"
+    },
+    "prisma/schema.prisma": {
+      "sha256": "eb8a0636699576e8b8c18e515a3e109de13b5cdf4bde77ff1eb5002d81003de1",
+      "comparison": "unchanged baseline tracked blob"
+    }
+  },
+  "qa1FrozenRuntimeAndBackendSources": {
+    "backend/src/skills/http.ts": "6f562334d7ba900440e686fe953c309799576cc49a0bef9b9a48835444e7e441",
+    "backend/src/voice/__tests__/realtime-client.test.ts": "8460500a88cd24bce74df183444fe2db66723318b64e729ea791719c500d6564",
+    "backend/src/voice/__tests__/voice-e2e.test.ts": "6774e069a6fbe37761dd0730b19ca0c04f8748824fda0f848baf4a4de5ff349a",
+    "backend/src/voice/stt.ts": "eacb046f82d98d8e636d0cd04c0bdb6735a793ac064421562651437906898d11",
+    "clinicos-ai-runtime/clinicos_ai/api/app.py": "1cb98b5d7c846fd53c7ec33fc35a2025f195b647cb5d225cb949217f01cc9c76",
+    "clinicos-ai-runtime/clinicos_ai/models/provider_registry.py": "4d2c4f0d33e61d79d95442d169814fc01f339f493032567ad6016f28d6528223",
+    "clinicos-ai-runtime/clinicos_ai/models/validation.py": "6191fc8864b379b311bbc694f353d1ccc36f88b664828bda3ca14e7bfc7374eb",
+    "clinicos-ai-runtime/clinicos_ai/voice/azure_realtime.py": "f3944d1212265f21518089e980d5a55f96ee92f1edcb34566d40d8524d94114d",
+    "clinicos-ai-runtime/clinicos_ai/voice/realtime.py": "ee54b994effaf26b69ec68b4bcee886967b587aae44c9b05d256c8a25e71c31f",
+    "clinicos-ai-runtime/tests/test_voice_realtime.py": "73f9e7220abbb5ccaabf3aebd691d10d2ef45dd3e0aa7756845c39f89bb7b4fe"
+  },
+  "inheritedLogsSha256": {
+    "logs/python-full.log": "dc224944b7b2494c83dc63e2a9f97d814546218baea967fdc048a35389ca8706",
+    "logs/independent-runtime.log": "dfc0437186740bcc34ec5af0b4cb75881c4eb3c8aa15600481f0c9bcbdffe633",
+    "logs/backend-types.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "inheritedOnly": {
+    "python": "240 PASS plus6 independent ASGI/config/bounds PASS, inherited from QA1; not executed by QA2"
+  },
+  "independentlyReexecuted": "frontend full suite/build and backend types; isolated wrapper12 focused backend cases"
+}

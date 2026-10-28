@@ -1,0 +1,18 @@
+{
+  "source": "895e6bd54461fcc6a00be4117e4792bde6fc4e07",
+  "files": [
+    {
+      "path": "artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/result.png",
+      "sourceGitBlobSha1": "9f2cabd0c23416eec70ee92ecfce37b93af4d96a",
+      "rawSha256": "b22057bfb3c8af76226d1bd4b4c2f14e27b6ecaa632852f9f90710b3ec1b6ebb",
+      "bytes": 131348
+    },
+    {
+      "path": "artifacts/task-validation/codex-triage-bug-github-e-piano-per-claude/trace.zip",
+      "sourceGitBlobSha1": "aca16a5486f035f4fcffa6e42aa479e7a521bd1a",
+      "rawSha256": "008d36bda06472a22c86244c8e06bdad0bde622bce35f637058c13cd977545eb",
+      "bytes": 175354
+    }
+  ],
+  "reason": "Native full command exposed two missing tracked binary fixtures; exact pinned bytes restored before further validation."
+}

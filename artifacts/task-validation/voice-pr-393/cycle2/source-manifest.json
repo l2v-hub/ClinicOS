@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "baseline": "299ba8ff8d048631cdb969f26656d02de981da83",
+  "implementationAttempt": 2,
+  "parentSourceManifestSha256": "eeeebb5fa6ddc80940ec50baba8b3aad4383311845b3dda4a72034db577877c6",
+  "qa1FailureReportSha256": "d807ccae6aa2830d72607923b36b304ce649b1303356856597dbff9de247eb2f",
+  "createdAt": "2026-10-17T15:48:44.638777+00:00",
+  "sourceFiles": {
+    ".ai-architecture/phase-5-voice/REALTIME_RECONCILIATION.md": "d035ecb7e2c51f9e8447290459349a6c92dee26d96f27d87a2aa8d0e7f9a608e",
+    ".ai-architecture/phase-9-production/PRODUCTION_RUNBOOK.md": "5e5bb4060b639c9e06865764dc05f6a414456a7bf00826c40375f3099ec9d586",
+    ".ai-architecture/phase-9-production/PROVIDER_CAPABILITY_MATRIX.json": "8f4cd200385522f954425bf06d16bdaa403211f5edb1eafb3e4cd30aad0ce032",
+    "backend/src/skills/http.ts": "6f562334d7ba900440e686fe953c309799576cc49a0bef9b9a48835444e7e441",
+    "backend/src/voice/__tests__/realtime-client.test.ts": "8460500a88cd24bce74df183444fe2db66723318b64e729ea791719c500d6564",
+    "backend/src/voice/__tests__/voice-e2e.test.ts": "6774e069a6fbe37761dd0730b19ca0c04f8748824fda0f848baf4a4de5ff349a",
+    "backend/src/voice/stt.ts": "eacb046f82d98d8e636d0cd04c0bdb6735a793ac064421562651437906898d11",
+    "clinicos-ai-runtime/clinicos_ai/api/app.py": "1cb98b5d7c846fd53c7ec33fc35a2025f195b647cb5d225cb949217f01cc9c76",
+    "clinicos-ai-runtime/clinicos_ai/models/provider_registry.py": "4d2c4f0d33e61d79d95442d169814fc01f339f493032567ad6016f28d6528223",
+    "clinicos-ai-runtime/clinicos_ai/models/validation.py": "6191fc8864b379b311bbc694f353d1ccc36f88b664828bda3ca14e7bfc7374eb",
+    "clinicos-ai-runtime/clinicos_ai/voice/azure_realtime.py": "f3944d1212265f21518089e980d5a55f96ee92f1edcb34566d40d8524d94114d",
+    "clinicos-ai-runtime/clinicos_ai/voice/realtime.py": "ee54b994effaf26b69ec68b4bcee886967b587aae44c9b05d256c8a25e71c31f",
+    "clinicos-ai-runtime/tests/test_voice_realtime.py": "73f9e7220abbb5ccaabf3aebd691d10d2ef45dd3e0aa7756845c39f89bb7b4fe",
+    "e2e/qa-voice-pr-393-browser.mjs": "684dc2d066e8e2fdf22f1f53cc9a188e2f038c6c1b5a3bd42e84c800feade026",
+    "e2e/qa-voice-pr-393.mjs": "be9be0dbceb051f9b54e6521b52297c6ff404a041a1e897de3736b1bf32c2bd4",
+    "frontend/src/components/assistant/AssistantMode.css": "8d7048e23958b13f7ef57ff6b144117b77e1ff0736a7b2e3dfea6094ff051b8a",
+    "frontend/src/components/assistant/AssistantMode.tsx": "92264efd65ad8d2a26e116665d709d9bbb3bd29f8008158cab4b49e11bc3b153",
+    "frontend/src/components/assistant/voice/VoicePanel.tsx": "26e6d8c37c3c53ef3dae65304e4388beaa2dd564f5f7317f56ab4bcce8143590",
+    "frontend/src/components/assistant/voice/__tests__/realtime.test.ts": "754b1b09693fcc8816836a72aa90f817e24d935156b41ce1a113623d04fb5659",
+    "frontend/src/components/assistant/voice/__tests__/voice.test.ts": "666535f4e267d59d8e250d2f6bd5889573bce02cbcada45528a268c349ccab8c",
+    "frontend/src/components/assistant/voice/audioSession.ts": "f5236fbaefd9727168e9498d5eff4433d331c4ff37a06a192ad0f4390288eee9",
+    "frontend/src/components/assistant/voice/realtimeTransport.ts": "8bbb28b6859726aba645713e8494b79de851b1cbd51604d6b0af80a590cc8731",
+    "frontend/src/components/assistant/voice/useVoiceCapture.ts": "c6990dfac8f26ad261fdc2bde36df3b98b011afe403efd41293be38ee4531aba",
+    "frontend/src/components/assistant/voice/useVoiceChannel.ts": "9558eda3ee0f7678aa48e4edda52f1d1750ef2f993049b7deb95b092e0b40f50",
+    "frontend/src/components/assistant/voice/voiceApi.ts": "e477ab017f970e9f05e8dd9d0a3428b3cf7cbf37d1acaba456afc0d1a53479f3"
+  },
+  "contracts": {
+    "artifacts/task-validation/voice-pr-393/task-contract.md": "e3ce930de16e67f776d9b28e1778d3e381967d0a85a6a4140580d845182d466f",
+    "artifacts/task-validation/voice-pr-393/analysis.md": "b2ac7cd9aa9f5d358442dd92dbb502994121a717bb94975a4cd6807f44fb3e03",
+    "artifacts/task-validation/voice-pr-393/implementation-plan.md": "bcdac2bb95b522180adcdb24c549991024871315e1e67853c0ed33632d6682d1"
+  },
+  "supplements": {
+    "artifacts/task-validation/voice-pr-393/cycle2/analysis-and-plan.md": "a0dd5e12af455593828360d373e1e23b2630dc6679ec5b01f2f638db383678ce",
+    "artifacts/task-validation/voice-pr-393/cycle2/implementation-reservation.json": "fde573b1f027f692f61301b945a4b57822d92ce39f408aa8cf4821c2f4b4eec2"
+  },
+  "changedFromCandidate1": [
+    "e2e/qa-voice-pr-393-browser.mjs",
+    "frontend/src/components/assistant/voice/useVoiceChannel.ts"
+  ]
+}

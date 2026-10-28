@@ -1,0 +1,45 @@
+{
+  "baseline": "d0c5fd82e358de60b4e31879e02f04929c7b0954",
+  "files": [
+    {
+      "path": ".agents/skills/codex-bug-triage/SKILL.md",
+      "sha256": "32f6a00845d7b95bc5f1d0b094fc36a409992a00cf8da017e3a578bee0161da8"
+    },
+    {
+      "path": ".claude/skills/clinicos/SKILL.md",
+      "sha256": "e4517bb8923bad10917d9ffce089123201d6fa3d8c67db52a9c8a50884dc7fae"
+    },
+    {
+      "path": ".claude/skills/clinicos/references/bug-delivery.md",
+      "sha256": "cb2c8def2405d56fe2c542c9ee2cd1caf97b02931b4887e2d0f7a0e166771efd"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "sha256": "d9ac03bd6359a178cf507874272acfdff935facfa0477e2031b82ee5c2107ccd"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/review-policy.mjs",
+      "sha256": "5c8d5f4980a34606e1ba71be81f2b6597c09efc4eafaa912afbbac49c358db20"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "sha256": "10f94026e6622b85ea80d0565c43e77ba1c56a22e93db94608678924a6382efd"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/review-policy.test.mjs",
+      "sha256": "dfb0d0595c91432dabc0913a5ce077df19be934c8431dea17390161a22e39fac"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/standalone-review.test.mjs",
+      "sha256": "6031755f6455420ec247fa358b981d6518f80abed4d29a7f34c4bbe86fa6e38c"
+    },
+    {
+      "path": "docs/codex-bug-workflow.md",
+      "sha256": "087b99c72930235e56f4d92ead6f15b5994a7c956c65f12400997de6c5b1b7a3"
+    },
+    {
+      "path": "docs/standalone-pr-review.md",
+      "sha256": "043d7f4f93a8201782b4f7d20b5b7eb03feb18d00ba7ec147a89efb890118ba4"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "base": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "code": "3f1311dbdf2bc17d2ae5a1ec42e8adb4ea9ba94b",
+  "files": [
+    {
+      "path": "agent-team/src/bug-pipeline/cli.mjs",
+      "blob": "b42cd83de4b6442451a7437926271e70b761b712",
+      "mode": "100644",
+      "baseBlob": "49f6863999ec35956ab5075e2261156788cb3116",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/models.mjs",
+      "blob": "fb415a13e3cdce716ab4bae84fc75f842f897ee1",
+      "mode": "100644",
+      "baseBlob": "afeaedc93a27018fb668e3258e29f870b82852f9",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/process.mjs",
+      "blob": "81cfe2994d34f0a835e46e512ed89fb131015b1e",
+      "mode": "100644",
+      "baseBlob": "a814921e49f21b54ebf3dfc42226d421d53a269d",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/models.test.mjs",
+      "blob": "9d3cf397bc02f86f6cf9385f1a3afca56d270c35",
+      "mode": "100644",
+      "baseBlob": "20d1de14d876ecc3f4f14810eb90cfcec6b0f406",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/process-output.test.mjs",
+      "blob": "039e5b441119bd0e1f488676865649ceb841b23e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/routing.test.mjs",
+      "blob": "d2d1290e1fb70498a109490acec362497218f0c7",
+      "mode": "100644",
+      "baseBlob": "f90c16f6ee37e4c785c378186d21b95ed4bd0f66",
+      "baseMode": "100644"
+    }
+  ],
+  "sha256": {
+    "agent-team/src/bug-pipeline/cli.mjs": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed",
+    "agent-team/src/bug-pipeline/models.mjs": "1cd2bf6c650264a976c938caf36c498fe67eae2812dcf06adbfc61b36afac122",
+    "agent-team/src/bug-pipeline/process.mjs": "71d02a1482ae0665df66d4c73b4b66c6c04c1bff2994869b8a8b408059f210e5",
+    "agent-team/tests/bug-pipeline/models.test.mjs": "71159e884f0b688afb06854163a041289a9b0ae8a408e13b381b43d303a40996",
+    "agent-team/tests/bug-pipeline/process-output.test.mjs": "de04a700d080ae2341bbd7d6061b98ce59590e646c821b1395986d558395725b",
+    "agent-team/tests/bug-pipeline/routing.test.mjs": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd"
+  }
+}

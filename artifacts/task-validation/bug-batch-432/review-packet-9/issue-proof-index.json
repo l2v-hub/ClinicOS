@@ -1,0 +1,140 @@
+{
+  "sourceSha": "e405399427e7c738dc32070b17a50494b629608b",
+  "issues": {
+    "432": {
+      "criteria": "AC432.1\u2013AC432.5",
+      "result": "Historical acceptance evidence remains attributable to QA8 individual assertions: inventory/pagination, PRN day/week, retry/read-only scope, patient switch, print and import save/replay. QA9 did not rerun the seven-feature UI matrix. Review/deployment/closure remain pending.",
+      "packet8ProofIndex": "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/issue-proof-index.md",
+      "selectedProof": "original-inventory.json, original-additional.json, original-import.json; screenshots/video in frozen packet8.",
+      "packet8EvidenceLinks": [
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/original-inventory.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/original-additional.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/original-import.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/issue-432-import-saved.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/issue-432-print.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/issue-432-switch-mobile.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/original-inventory.webm",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/original-import.webm"
+      ]
+    },
+    "441": {
+      "criteria": "AC441.1\u2013AC441.2",
+      "result": "Historical explicit-clock administration evidence and exact-identity API/unit provenance remain in packet8. The new QA9 writer work adds related legacy one-off guard coverage; do not infer a fresh full issue suite.",
+      "packet8ProofIndex": "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/issue-proof-index.md",
+      "selectedProof": "original-inventory.json, actual-AppAgenda.json, retained-QA7-provenance.json in frozen packet8.",
+      "packet8EvidenceLinks": [
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/original-inventory.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/actual-AppAgenda.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/retained-QA7-provenance.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/issue-441.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/original-inventory.webm"
+      ]
+    },
+    "442": {
+      "criteria": "AC442.1\u2013AC442.2",
+      "result": "Historical backend correction barrier, late correction, replay and measured value are retained in packet8; broad full-backend-load regression retains QA7 provenance.",
+      "packet8ProofIndex": "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/issue-proof-index.md",
+      "selectedProof": "original-internal-measurements.json, original-additional.json, retained-QA7-provenance.json in frozen packet8.",
+      "packet8EvidenceLinks": [
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/original-internal-measurements.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/original-additional.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/retained-QA7-provenance.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/issue-442.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/original-additional.webm"
+      ]
+    },
+    "460": {
+      "criteria": "AC460.1\u2013AC460.3",
+      "result": "Historical response-loss replay, pre-write retry and refusal correction evidence remain in packet8. QA9 adds legacy correction receipt/replay assertions in the affected HTTP/PG file; no new complete issue suite claim.",
+      "packet8ProofIndex": "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/issue-proof-index.md",
+      "selectedProof": "original-retry.json, F1F2.json and retained-QA7-provenance.json in frozen packet8.",
+      "packet8EvidenceLinks": [
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/original-retry.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/F1F2.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/retained-QA7-provenance.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/issue-460.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/original-retry.webm",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/F1-refusal-corrected.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/F1-correction.webm"
+      ]
+    },
+    "463": {
+      "criteria": "AC463.1\u2013AC463.2",
+      "result": "Historical catalog behavior and strict parser/public-limit provenance remain in packet8; QA9 did not rerun that feature matrix.",
+      "packet8ProofIndex": "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/issue-proof-index.md",
+      "selectedProof": "original-inventory.json, original-additional.json, retained-QA7-provenance.json in frozen packet8.",
+      "packet8EvidenceLinks": [
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/original-inventory.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/original-additional.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/retained-QA7-provenance.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/issue-463.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/original-inventory.webm",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/original-additional.webm"
+      ]
+    },
+    "464": {
+      "criteria": "AC464.1\u2013AC464.2",
+      "result": "Historical time-boundary/DST and actual Rome civil-day display evidence remain in packet8; broader timezone-boundary checks retain QA7 provenance.",
+      "packet8ProofIndex": "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/issue-proof-index.md",
+      "selectedProof": "original-internal-measurements.json, recorded-database.json, remaining-UI.json and retained-QA7-provenance.json in frozen packet8.",
+      "packet8EvidenceLinks": [
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/original-internal-measurements.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/recorded-database.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/remaining-UI.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/retained-QA7-provenance.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/issue-464.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/civil-operator.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/civil-admin.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/civil-ward-continuation.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/civil-date.webm"
+      ]
+    },
+    "467": {
+      "criteria": "AC467.1\u2013AC467.2",
+      "result": "The prior final Codex F1 failed the modern-vs-legacy writer guard at QA8 source. QA9 now passes the scoped writer tests and actual selected valid/repaired legacy cases: given/refused render and reload; 14 stale/omitted/already-given requests return 409 with zero SQL changes; two explicit observed-refusal corrections update one historical row each, create no clinical row, attribute SIM-NURSE-1, create one receipt, and replay idempotently. Scheduled individual drug-dose detail remains UNRUN.",
+      "packet8ProofIndex": "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/issue-proof-index.md",
+      "selectedProof": "Fresh QA9 report, summary, four screenshots and video in this candidate; prior QA8 read-side and exact dose/identity receipts in frozen packet8.",
+      "packet8EvidenceLinks": [
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/original-inventory.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/recorded-database.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/remaining-UI.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/F1F2.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/receipts/retained-QA7-provenance.json",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/distinct-doses-mobile.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/original-inventory.webm",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/operator-recorded-reload.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/admin-recorded-reload.png",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/operator-recorded.webm",
+        "https://github.com/l2v-hub/ClinicOS/blob/c02e34c0041752eb4f4772255580807201f2c863/artifacts/task-validation/bug-batch-432/review-packet-8/media/admin-recorded.webm"
+      ]
+    }
+  },
+  "currentScopedQa9": {
+    "verdict": "READY FOR CODEX QA",
+    "independent": true,
+    "proof": "independent-qa/validation-report.md",
+    "unrun": [
+      "full unchanged backend/frontend suites",
+      "unchanged original seven-feature/QA8 browser matrix",
+      "scheduled individual drug-dose detail actual App mount",
+      "native current-publication checks",
+      "actual Claude5",
+      "fresh final Codex",
+      "release/deployment"
+    ]
+  },
+  "historicalReviews": {
+    "actualClaude4": {
+      "verdict": "approved",
+      "subjectSha": "c02e34c0041752eb4f4772255580807201f2c863",
+      "commentId": 6322587090,
+      "url": "https://github.com/l2v-hub/ClinicOS/pull/483#issuecomment-6322587090"
+    },
+    "finalCodexAfterClaude4": {
+      "verdict": "FAILED VALIDATION",
+      "finding": "P1 F1 legacy one-off outcomes did not participate in authoritative writer guard",
+      "sourceSha": "ae12862e8ff9ce03f117fc646ecd11a4a8a8bb56",
+      "record": "history/actual-final-codex-failed-report.md"
+    }
+  }
+}

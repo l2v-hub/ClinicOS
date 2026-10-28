@@ -1,0 +1,18 @@
+[
+  {
+    "path": "/assets/pdfPreviewResources-BxsAF4WT.js",
+    "bytes": 181,
+    "staticModule": "function e(e,t,n){if(!/^\\d+\\.\\d+\\.\\d+$/.test(n))throw Error(`Invalid PDF decoder version`);return{wasmUrl:new URL(`pdfjs-${n}/`,new URL(e,t)).href,useWorkerFetch:!0}}export{e as t};"
+  },
+  {
+    "path": "/assets/pdf.worker.min-0cTqlNvF.js",
+    "bytes": 127,
+    "staticModule": "import{r as e}from\"./react-B3nAlWH0.js\";var t=e({default:()=>n}),n=`/assets/pdf.worker.min-CHFwMXne.mjs`;export{t as n,n as t};"
+  },
+  {
+    "path": "/assets/pdf-BhrN1pI7.js",
+    "bytes": 427303,
+    "pdfVersions": [],
+    "semanticVersions": []
+  }
+]

@@ -1,0 +1,37 @@
+{
+  "status": "FAIL_PUBLICATION_PACKAGING",
+  "candidate": "candidate3",
+  "candidateSealSha256": "3f36a4d7a2fb8f243b7b5d1c58d5606ec488c4837bcd9343f75ef8ea7fb8fb21",
+  "testedSourceSha": "bb12eb738817bf1c64ed08844f162ea4ccf7e473",
+  "findings": [
+    {
+      "id": "P1",
+      "severity": "medium",
+      "problem": "Trusted task contract validator rejects missing Impact Classification, Current Behaviour, Expected Behaviour, Acceptance Criteria, Test Plan, Evidence Plan.",
+      "proof": "contract-validator.log"
+    },
+    {
+      "id": "P2",
+      "severity": "medium",
+      "problem": "seal.json lists 94 entries and fileCount94, while packet contains 105 files. Ten provenance/cohorts/*/seal.json files are absent from seal; seal itself is the eleventh additional file.",
+      "proof": "local-verification.json"
+    }
+  ],
+  "passedChecks": [
+    "All 94 listed file bytes and SHA256 match",
+    "All 86 source-manifest records match actual original files byte for byte",
+    "1942 snapshot entries and 1906 frozen source entries independently verified",
+    "Ten ZIPs CRC pass, expanded signed JWT scans NONE; text signed JWT scans NONE",
+    "Ten videos ffprobe decode metadata/durations pass; issue447 authentic original 1455486 bytes and 21.16 seconds",
+    "PNG signatures and visual contact-sheet inspection of twelve screenshots pass",
+    "Eight canonical current-source media sets correspond to actual attempts6/8; attempt9 negative/recovery and PS evidence retained",
+    "18-finding mapping preserves actual Claude1 attribution, cohort boundaries and UI QA1 failure",
+    "Fresh versus retained attribution honest; future publication SHA null and releaseReady false"
+  ],
+  "limits": [
+    "Publication QA only; no browser/server/database/Git/provider mutations or product execution",
+    "Native6, actualClaude2, finalCodex, deployment and closure remain UNRUN/pending",
+    "No publication PASS until corrected immutable candidate independently checked"
+  ],
+  "at": "2026-10-21T23:17:25.922507+00:00"
+}

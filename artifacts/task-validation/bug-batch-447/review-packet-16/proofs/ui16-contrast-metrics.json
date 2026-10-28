@@ -1,0 +1,15 @@
+{
+  "tokens": {
+    "text": "#16202e",
+    "amber": "#c77700",
+    "red": "#d93a4a",
+    "amber-bg": "#fdf3e2",
+    "red-bg": "#fdecee"
+  },
+  "contrastRatios": {
+    "readableTextOnAmberBg": 14.916,
+    "readableTextOnRedBg": 14.38,
+    "formerAmberOnAmberBg": 3.147,
+    "formerRedOnRedBg": 3.955
+  }
+}

@@ -1,0 +1,5 @@
+# Analysis
+
+The reviewed workflow enables native queued Claude Max reviews when the activation variable is absent/empty or true, preserves explicit false/invalid stop and the authentication-probe exception. Real native main probe40232898341, read through read-only relay40235815007, confirms Opus5.5/1M/128k subscription authentication. Claude513 review1 requested one low operator-document correction; the actual shared Luna correction aligned README and portable skill, and new independent Sol QA found no issue. This branch contains only its mapped document change.
+
+An operator assembly omission left analysis.md out of the previous revision packet. Native validation refused before adoption or any new review claim. This metadata-only third packet repairs that omission while retaining all previous packets byte-for-byte, the same two implementation records and every actual review/report/claim history. No additional implementation/model call or budget reset is claimed. New-head native checks, actual native verification, genuine review and final independent Codex remain required. No clinical deploy/closure is claimed.

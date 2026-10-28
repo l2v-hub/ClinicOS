@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { listDrafts, type DraftResponse } from '../shared/intake/intakeDraftApi';
 import { API_URL } from '../../config';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { useAnomalieReparto } from './cartella/useAnomalieReparto';
@@ -30,6 +31,7 @@ import { matchesPatientRegime, type PatientRegimeFilter } from '../../lib/patien
 import { RosterOrderControl } from '../shared/RosterOrderControl';
 import { useRosterOrderContext } from '../shared/RosterOrderContext';
 import { sortPatientRoster, type PatientRosterSort } from '../../lib/patientRosterSort';
+import { filterIncompletePatients } from '../../lib/patientIncompleteSummary';
 import './PatientList.css';
 
 interface PatientListProps {
@@ -118,6 +120,27 @@ export function PatientList({
   // Nuovo ingresso: pagina di scelta (HMI 1), poi il flusso scelto nella sua finestra di sempre.
   // Tornando all'elenco il fuoco torna su "Nuovo ingresso" (la card che lo aveva non c'è più).
   const [newPatientPath, setNewPatientPath] = useState<NewPatientPath | null>(null);
+  const [resumeDraftId, setResumeDraftId] = useState<string | undefined>();
+  const [drafts, setDrafts] = useState<DraftResponse[]>([]);
+  const [draftError, setDraftError] = useState(false);
+  const [draftRefresh, setDraftRefresh] = useState(0);
+  useEffect(() => {
+    if (!canIntake || newPatientPath) return;
+    let active = true;
+    void listDrafts({ operatorId, operatorRole })
+      .then((items) => {
+        if (active) {
+          setDrafts(items.filter((draft) => draft.source === 'import'));
+          setDraftError(false);
+        }
+      })
+      .catch(() => {
+        if (active) setDraftError(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, [canIntake, operatorId, operatorRole, newPatientPath, draftRefresh]);
   const newIntakeButtonRef = useRef<HTMLButtonElement>(null);
   const focusNewIntakeRef = useRef(false);
   useEffect(() => {
@@ -135,6 +158,7 @@ export function PatientList({
   const [vista, setVista] = useState<ListView>(entry?.view ?? 'in_carico');
   const [regime, setRegime] = useState<PatientRegimeFilter>('tutti');
   const [segnale, setSegnale] = useState<PatientListSignal | null>(entry?.signal ?? null);
+  const [incompleteOnly, setIncompleteOnly] = useState(false);
   const appliedEntryRef = useRef(entry?.key);
   useEffect(() => {
     if (!entry || appliedEntryRef.current === entry.key) return;
@@ -142,6 +166,7 @@ export function PatientList({
     setVista(entry.view ?? 'in_carico');
     setSegnale(entry.signal ?? null);
     setRegime('tutti');
+    setIncompleteOnly(false);
   }, [entry]);
   const [showFilters, setShowFilters] = useState(false);
   // Vista scelta prima di iniziare una ricerca: cancellata la ricerca, si torna lì.
@@ -209,10 +234,15 @@ export function PatientList({
   }, [clinicalSummary]);
 
   // Same local regime/signal intersection for view counts and rendered patients.
-  const filtratiBase = useMemo(() => pazienti.filter(p =>
-    matchesPatientRegime(summaryMap.get(p.id)?.statoRicovero, regime) &&
-    matchesListSignal(summaryMap.get(p.id), anomalie.perPaziente.has(p.id), segnale)),
-    [pazienti, summaryMap, regime, segnale, anomalie.perPaziente]);
+  const filtratiBase = useMemo(
+    () =>
+      pazienti.filter(
+        (p) =>
+          matchesPatientRegime(summaryMap.get(p.id)?.statoRicovero, regime) &&
+          matchesListSignal(summaryMap.get(p.id), anomalie.perPaziente.has(p.id), segnale),
+      ),
+    [pazienti, summaryMap, regime, segnale, anomalie.perPaziente],
+  );
 
   // Conteggi sulle pagine già caricate: il backend non espone ancora un aggregato per stato.
   const contiVista = useMemo(
@@ -224,12 +254,13 @@ export function PatientList({
     [filtratiBase, summaryMap],
   );
   const filtrati = useMemo(
-    () =>
-      filtratiBase.filter(
-        (p) =>
-          matchesListView(summaryMap.get(p.id)?.statoRicovero, vista),
-      ),
+    () => filtratiBase.filter((p) => matchesListView(summaryMap.get(p.id)?.statoRicovero, vista)),
     [filtratiBase, vista, summaryMap, segnale, anomalie.perPaziente],
+  );
+  const incompletePatients = useMemo(() => filterIncompletePatients(filtrati), [filtrati]);
+  const incompletePatientIds = useMemo(
+    () => new Set(incompletePatients.map((patient) => patient.id)),
+    [incompletePatients],
   );
   const ordinati = useMemo(
     () =>
@@ -241,6 +272,13 @@ export function PatientList({
           })
         : filtrati,
     [filtrati, localSort, summaryMap, consegneAperteMap, anomalie.perPaziente],
+  );
+  const rosterPatients = useMemo(
+    () =>
+      incompleteOnly && incompletePatients.length > 0
+        ? ordinati.filter((patient) => incompletePatientIds.has(patient.id))
+        : ordinati,
+    [ordinati, incompleteOnly, incompletePatientIds, incompletePatients.length],
   );
 
   // Fine import dal pulsante "Importa dimissione": ricarica la lista e apre
@@ -255,12 +293,17 @@ export function PatientList({
   const newPatientFlow = canIntake && newPatientPath && (
     <NewPatientFlow
       initialPath={newPatientPath}
+      resumeDraftId={resumeDraftId}
       onClose={() => {
         focusNewIntakeRef.current = true;
         setNewPatientPath(null);
+        setResumeDraftId(undefined);
+        setDraftRefresh((value) => value + 1);
       }}
       onDone={(patientId, moduleTabId, path) => {
         setNewPatientPath(null);
+        setResumeDraftId(undefined);
+        setDraftRefresh((value) => value + 1);
         if (path === 'documenti' || !patientId) void loadPage(undefined, false);
         onImported?.(patientId, moduleTabId);
       }}
@@ -363,6 +406,42 @@ export function PatientList({
         </p>
       )}
 
+      {canIntake && (drafts.length > 0 || draftError) && (
+        <section className="plist-card" aria-label="Ingressi in bozza">
+          <h2>Ingressi in bozza · dati da completare</h2>
+          {draftError ? (
+            <p role="alert">
+              Bozze non disponibili.{' '}
+              <button type="button" onClick={() => setDraftRefresh((value) => value + 1)}>
+                Riprova
+              </button>
+            </p>
+          ) : (
+            drafts.map((draft) => {
+              const identity = (draft.data.anagrafica ?? {}) as {
+                firstName?: string;
+                lastName?: string;
+              };
+              return (
+                <button
+                  key={draft.id}
+                  type="button"
+                  className="ds-btn ds-btn--secondary"
+                  onClick={() => {
+                    setResumeDraftId(draft.id);
+                    setNewPatientPath('documenti');
+                  }}
+                >
+                  Riprendi bozza ·{' '}
+                  {[identity.lastName, identity.firstName].filter(Boolean).join(' ') ||
+                    'Identità da completare'}
+                </button>
+              );
+            })
+          )}
+        </section>
+      )}
+
       <section className="plist-card plist-list" aria-label="Elenco pazienti">
         <div className="plist-toolbar">
           <div className="search-wrap plist-search">
@@ -415,10 +494,22 @@ export function PatientList({
                 onClick={() => setVista(v)}
               >
                 {LIST_VIEW_LABEL[v]}
-                {contiVista[v] !== null && (v === 'tutti' || (!summaryLoading && !summaryError)) &&
-                  <span className="ds-chip__count">{contiVista[v]}</span>}
+                {contiVista[v] !== null &&
+                  (v === 'tutti' || (!summaryLoading && !summaryError)) && (
+                    <span className="ds-chip__count">{contiVista[v]}</span>
+                  )}
               </button>
             ))}
+            {canIntake && incompletePatients.length > 0 && (
+              <button
+                type="button"
+                className="ds-chip"
+                aria-pressed={incompleteOnly}
+                onClick={() => setIncompleteOnly((active) => !active)}
+              >
+                {incompleteOnly ? 'Mostra tutti i pazienti' : 'Filtra anagrafiche da completare'}
+              </button>
+            )}
             <button
               type="button"
               className="ds-chip"
@@ -434,10 +525,6 @@ export function PatientList({
             </button>
           </div>
         </div>
-        <PatientRegimeControls regime={regime} onChange={setRegime} view={vista}
-          count={filtrati.length} loaded={pazienti.length} hasMore={hasMore}
-          unverified={summaryLoading || Boolean(summaryError) || contiVista.in_carico === null || contiVista.dimessi === null}
-          loading={summaryLoading} />
         {segnale && (
           <p className="plist-note plist-note--signal" role="status" data-list-signal={segnale}>
             Filtro attivo: <strong>{LIST_SIGNAL_LABEL[segnale]}</strong> ({filtrati.length} fra i
@@ -457,6 +544,22 @@ export function PatientList({
         )}
         {showFilters && (
           <div className="plist-filters" id="plist-filters">
+            <PatientRegimeControls
+              regime={regime}
+              onChange={setRegime}
+              view={vista}
+              count={filtrati.length}
+              loaded={pazienti.length}
+              hasMore={hasMore}
+              unverified={
+                summaryLoading ||
+                Boolean(summaryError) ||
+                contiVista.in_carico === null ||
+                contiVista.dimessi === null
+              }
+              loading={summaryLoading}
+            />
+
             <div className="filter-chips" role="group" aria-label="Filtra pazienti per sesso">
               {(['tutti', 'M', 'F'] as const).map((s) => (
                 <button
@@ -513,7 +616,8 @@ export function PatientList({
             <PatientRoster
               localSortActive={Boolean(localSort)}
               serverCriterion={rosterOrder.order.criterion}
-              patients={ordinati}
+              patients={rosterPatients}
+              completionPatients={canIntake ? filterIncompletePatients(rosterPatients) : []}
               sort={sort}
               onSortChange={setSort}
               hasMore={hasMore}

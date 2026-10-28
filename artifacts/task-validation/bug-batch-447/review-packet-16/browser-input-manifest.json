@@ -1,0 +1,180 @@
+{
+  "sourceSha": "4c85fdf5a97eea10c8efcc6d105cd32de054e030",
+  "runtimeSealSha256": "fb9b9998531f1ca348ee456131af9c7ec333c8589fe18c478a0c929b4bc309b3",
+  "files": [
+    {
+      "path": "browser/app/actual-dose-durable-reload.png",
+      "bytes": 85990,
+      "sha256": "d51ecd181813dd70de63a51371e90a2c55c6287df907f0c04ade80d14456c8c8",
+      "sourceManifestPath": "output/app/actual-dose-durable-reload.png"
+    },
+    {
+      "path": "browser/app/actual-scoped503-no-actions.png",
+      "bytes": 70799,
+      "sha256": "911d93687adb0b35e3600530669e8f498fe2de41f9f4ffd9e4648ba7d6edc2a3",
+      "sourceManifestPath": "output/app/actual-scoped503-no-actions.png"
+    },
+    {
+      "path": "browser/app/actual-supervisor-confirmation.png",
+      "bytes": 127783,
+      "sha256": "eaa949995c81230ae1f60bfe8da179ddd4e289d1ad37925550c0c006a81f3e49",
+      "sourceManifestPath": "output/app/actual-supervisor-confirmation.png"
+    },
+    {
+      "path": "browser/app/allergy-normal-1180-focus.png",
+      "bytes": 74073,
+      "sha256": "ef8605d3eb1d4a4a1806509deba0dd9ca8c3421a8c87f0a7fba5286af7793234",
+      "sourceManifestPath": "output/app/allergy-normal-1180-focus.png"
+    },
+    {
+      "path": "browser/app/allergy-normal-1180-hover.png",
+      "bytes": 74073,
+      "sha256": "ef8605d3eb1d4a4a1806509deba0dd9ca8c3421a8c87f0a7fba5286af7793234",
+      "sourceManifestPath": "output/app/allergy-normal-1180-hover.png"
+    },
+    {
+      "path": "browser/app/allergy-normal-1180-normal.png",
+      "bytes": 74073,
+      "sha256": "ef8605d3eb1d4a4a1806509deba0dd9ca8c3421a8c87f0a7fba5286af7793234",
+      "sourceManifestPath": "output/app/allergy-normal-1180-normal.png"
+    },
+    {
+      "path": "browser/app/allergy-normal-390-focus.png",
+      "bytes": 54657,
+      "sha256": "9559142643c7ce0e5c21abf9c508ff5581900ddb67fc156e2a6dffdd23c41edd",
+      "sourceManifestPath": "output/app/allergy-normal-390-focus.png"
+    },
+    {
+      "path": "browser/app/allergy-normal-390-hover.png",
+      "bytes": 54657,
+      "sha256": "9559142643c7ce0e5c21abf9c508ff5581900ddb67fc156e2a6dffdd23c41edd",
+      "sourceManifestPath": "output/app/allergy-normal-390-hover.png"
+    },
+    {
+      "path": "browser/app/allergy-normal-390-normal.png",
+      "bytes": 54657,
+      "sha256": "9559142643c7ce0e5c21abf9c508ff5581900ddb67fc156e2a6dffdd23c41edd",
+      "sourceManifestPath": "output/app/allergy-normal-390-normal.png"
+    },
+    {
+      "path": "browser/app/allergy-severe-1180-focus.png",
+      "bytes": 85166,
+      "sha256": "bee1ab5ad7b27822267de89fdca5d7959f5df89dc05919f4eea9dcf6ec3de2ba",
+      "sourceManifestPath": "output/app/allergy-severe-1180-focus.png"
+    },
+    {
+      "path": "browser/app/allergy-severe-1180-hover.png",
+      "bytes": 85166,
+      "sha256": "bee1ab5ad7b27822267de89fdca5d7959f5df89dc05919f4eea9dcf6ec3de2ba",
+      "sourceManifestPath": "output/app/allergy-severe-1180-hover.png"
+    },
+    {
+      "path": "browser/app/allergy-severe-1180-normal.png",
+      "bytes": 85166,
+      "sha256": "bee1ab5ad7b27822267de89fdca5d7959f5df89dc05919f4eea9dcf6ec3de2ba",
+      "sourceManifestPath": "output/app/allergy-severe-1180-normal.png"
+    },
+    {
+      "path": "browser/app/allergy-severe-390-focus.png",
+      "bytes": 63873,
+      "sha256": "d085700ac1275d66a88265cce06e84de7d9202f63625c10a61cde011f2ed9224",
+      "sourceManifestPath": "output/app/allergy-severe-390-focus.png"
+    },
+    {
+      "path": "browser/app/allergy-severe-390-hover.png",
+      "bytes": 63873,
+      "sha256": "d085700ac1275d66a88265cce06e84de7d9202f63625c10a61cde011f2ed9224",
+      "sourceManifestPath": "output/app/allergy-severe-390-hover.png"
+    },
+    {
+      "path": "browser/app/allergy-severe-390-normal.png",
+      "bytes": 63873,
+      "sha256": "d085700ac1275d66a88265cce06e84de7d9202f63625c10a61cde011f2ed9224",
+      "sourceManifestPath": "output/app/allergy-severe-390-normal.png"
+    },
+    {
+      "path": "browser/app/ffprobe.json",
+      "bytes": 58,
+      "sha256": "c049d15874d9a45fb126a7a316b9698129864f356057615e981aeb6311646ed5",
+      "sourceManifestPath": "output/app/ffprobe.json"
+    },
+    {
+      "path": "browser/app/final.png",
+      "bytes": 70799,
+      "sha256": "911d93687adb0b35e3600530669e8f498fe2de41f9f4ffd9e4648ba7d6edc2a3",
+      "sourceManifestPath": "output/app/final.png"
+    },
+    {
+      "path": "browser/app/results.json",
+      "bytes": 23406,
+      "sha256": "488c57ca9b2517b45a4af617f784a11968e9c25665f4392b05379537adcd0d8a",
+      "sourceManifestPath": "output/app/results.json"
+    },
+    {
+      "path": "browser/app/trace-privacy.json",
+      "bytes": 1081,
+      "sha256": "5e7890335cd3cbbd7db9aacd148f01a94b7a3c836d56d990d057f3d8f123854a",
+      "sourceManifestPath": "output/app/trace-privacy.json"
+    },
+    {
+      "path": "browser/app/trace.zip",
+      "bytes": 5663915,
+      "sha256": "844c0677afec712256c4c87155927a1311b071b6ea8ef2f9171cb4b51a9f365d",
+      "sourceManifestPath": "output/app/trace.zip"
+    },
+    {
+      "path": "browser/app/video.webm",
+      "bytes": 846447,
+      "sha256": "4b21e04c1334186d3f4902c1cdd3f3716a241eafe9a8cba961779347c0ea3743",
+      "sourceManifestPath": "output/app/video.webm"
+    },
+    {
+      "path": "browser/component/ffprobe.json",
+      "bytes": 57,
+      "sha256": "3a9f9a9313b6f48e351cf6f7ff9c5863624601603c539254177d42e333f3ec8d",
+      "sourceManifestPath": "output/component/ffprobe.json"
+    },
+    {
+      "path": "browser/component/filtered-allowed.png",
+      "bytes": 113898,
+      "sha256": "e0f9c512c1f515fd507fbf9840a57c4ab838d51e1caeb73f3673d231c02dd616",
+      "sourceManifestPath": "output/component/filtered-allowed.png"
+    },
+    {
+      "path": "browser/component/filtered-ps-blocked.png",
+      "bytes": 117197,
+      "sha256": "6ecaa4991ed2b743b9a114cf82408983b9a6343a3667e2b082d80889a34d43b9",
+      "sourceManifestPath": "output/component/filtered-ps-blocked.png"
+    },
+    {
+      "path": "browser/component/final.png",
+      "bytes": 117197,
+      "sha256": "6ecaa4991ed2b743b9a114cf82408983b9a6343a3667e2b082d80889a34d43b9",
+      "sourceManifestPath": "output/component/final.png"
+    },
+    {
+      "path": "browser/component/results.json",
+      "bytes": 327,
+      "sha256": "f1d65268f3d624170efd5bc2a9a2a085495a9c3f5f593b172435aaf6b98d18ff",
+      "sourceManifestPath": "output/component/results.json"
+    },
+    {
+      "path": "browser/component/trace-privacy.json",
+      "bytes": 407,
+      "sha256": "c64539982d0dd3c96f141baed9fcb901df502edba0a1692a1dca5a491e3bb168",
+      "sourceManifestPath": "output/component/trace-privacy.json"
+    },
+    {
+      "path": "browser/component/trace.zip",
+      "bytes": 585837,
+      "sha256": "fef450494244f7122e26c48bcc14612a143480b5ded2619d5cef1c022ce1a7b1",
+      "sourceManifestPath": "output/component/trace.zip"
+    },
+    {
+      "path": "browser/component/video.webm",
+      "bytes": 136399,
+      "sha256": "bc8662702e15dfe680a11c7d0aff273de0340f9687359b9dc2e51eac0ae1401d",
+      "sourceManifestPath": "output/component/video.webm"
+    }
+  ]
+}

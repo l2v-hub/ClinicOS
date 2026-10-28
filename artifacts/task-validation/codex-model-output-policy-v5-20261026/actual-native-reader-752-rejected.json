@@ -1,0 +1,11 @@
+{
+  "at": "2026-10-26T07:46:31.243Z",
+  "head": "752a053e3a94d785e577236923e1dbbf6f27365e",
+  "trustedMain": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "actualTrustedNativeReader": true,
+  "liveAuthenticatedGithubReads": true,
+  "providerCalls": 0,
+  "accepted": false,
+  "code": "ERR_ASSERTION",
+  "finiteMessage": "Review packet exceeds byte bound"
+}

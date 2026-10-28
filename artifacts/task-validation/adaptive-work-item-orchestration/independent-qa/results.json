@@ -1,0 +1,83 @@
+{
+  "at": "2026-10-23T18:58:55.584198+00:00",
+  "verdict": "READY FOR CODEX QA",
+  "independent": true,
+  "sourceEditsByQA": false,
+  "base": "26a4137814f47c78d590f1b4dfe928d480e92909",
+  "phases": {
+    "0": "PASS",
+    "1": "PASS",
+    "2": "PASS",
+    "3": "PASS",
+    "4": "PASS",
+    "5": "PASS"
+  },
+  "suite": {
+    "tests": 1564,
+    "pass": 1561,
+    "fail": 0,
+    "skipped": 3,
+    "skipReason": "native Windows-specific PowerShell/ACL/bootstrap tests on Linux"
+  },
+  "novelRealCallerFaults": {
+    "pass": 3,
+    "fail": 0
+  },
+  "syntax": {
+    "pass": 16,
+    "fail": 0
+  },
+  "browser": {
+    "status": "PASS",
+    "assertions": 48,
+    "consoleErrors": [],
+    "httpErrors": [],
+    "externalRequests": [],
+    "reloadChecked": true,
+    "sourceEventsSha256": "88975a052e55123a1c1204385a029bbcc144fe024931b6f6925a6d07a3b1dbd6",
+    "actualFeature": "bounded real Git DAG production stage caller",
+    "syntheticBoundaries": [
+      "model provider outputs",
+      "codex verification sandbox dispatch replaced with actual native Node fixture verification"
+    ]
+  },
+  "openFindings": [],
+  "resolvedFindings": [
+    {
+      "id": "QA-1",
+      "path": "docs/adaptive-work-items.md",
+      "line": 15,
+      "description": "Native controller max-turns support overstated",
+      "resolution": "Author documented current native time/output bounds and explicit-caller-only optional adapter turn bounds",
+      "independentRecheck": "PASS"
+    }
+  ],
+  "sourceBinding": {
+    "beforeFiles": 103,
+    "afterFiles": 103,
+    "matchesFinalFreeze": true,
+    "onlyChangedFile": "docs/adaptive-work-items.md",
+    "authorAmendment": "../source-amendment-qa1.json"
+  },
+  "artifacts": {
+    "validation-report.md": "5445611bb0631aeef94f8172d13f572bfa9bfaefd1e873cd8b3e248926729417",
+    "report.md": "5445611bb0631aeef94f8172d13f572bfa9bfaefd1e873cd8b3e248926729417",
+    "commands.md": "7726994aaec66983e387bab3f59df52045130d78d723af0cbf53f584d1cd2f11",
+    "caller-events.json": "88975a052e55123a1c1204385a029bbcc144fe024931b6f6925a6d07a3b1dbd6",
+    "source-after.json": "d7fa9f364d4eb96620135ccde5b11e329dea924c04e950a8cf3b33dccbd38996",
+    "static-review.json": "cd8ce5308f3120109ae64b3d3baa2368ebde2c2444693e2907e5fdfb42c370dc",
+    "trace.zip": "4506675db1be351fead80c1f63dc8c83ce2782eb8c13f38b87c3d5aee64bb993",
+    "result.png": "d93ed9a2c531aa7e69824d78bbbd6ace54dc4132cf729619e9b3f4334de6803f",
+    "actual-caller-report.html": "bbc3a224b8611d1009afcb67c824aea80c42143d5a95ddf04c357023911e0ac1",
+    "browser-evidence.cjs": "b36c5c0d4315408297f0f550190d7ff3855752442c08e51b528a40a2254e9d8b",
+    "novel-caller-faults.test.mjs": "9b5d6574b660c5e4e73fab89e0582575a428be8fbb68c2cff91fa9edae2d312f",
+    "source-before.json": "8ddd88960694dd07e7028e50bef449436df0f1a781c12dd5b23f6a04672697a8",
+    "index.html": "4e87764d345c36ffe7750056265efc1d097130945aa5b49dcee9c90c423d4619",
+    "browser-results.json": "65f1897c1ac579be37100e5b0f25795a4df8eb7f6d3c4d29e572469081a78732",
+    "playwright-final.log": "7100af5ed33384e890c99c7e5ca9e071c51da280abeb025c69b9940399bb57ad",
+    "playwright.log": "b7a798e41b46f628798ff33bec34d1e616fe29b3fcda54e6b13bf932dd2b82ab",
+    "novel-caller-faults-final.log": "4e0b80b2478a053447366f1d013df910c8313df4144c0f4c93c4ffb3faa48dca",
+    "novel-caller-faults.log": "b30c217e970cbc538c1ef1ee41b846277eaf9be24d1acf3603d10d8241e443a9",
+    "independent-node22-suite.log": "a1e0d3bde8e21b3e42599cbe1e38c6f351f71615fe0f5da3b4bee154d21fa201"
+  }
+}

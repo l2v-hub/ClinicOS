@@ -1,0 +1,7 @@
+{
+  "mode": "native-adapter-emulated-with-owned-postgres16",
+  "port": 55447,
+  "parent": "clinicos_test",
+  "status": "failed",
+  "message": "Owned QA container name must be free"
+}

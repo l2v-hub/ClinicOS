@@ -14,13 +14,27 @@ import {
   scheduleDoseLabel,
   type ScheduleInput,
 } from '../lib/therapy-dose.js';
-import { earliestOra } from './slot-scheduling.js';
+import {
+  earliestOra,
+  oneTimeSlot,
+  oneTimeVerificationReason,
+  recordedOneTimeOutcome,
+  therapyBandEnabled,
+} from './slot-scheduling.js';
 import {
   findTherapyPageAdministrations,
   legacyAdministrationKey,
 } from './therapy-administration-page.js';
 import { TherapySlotCapacityError } from './therapy-capacity.js';
-import { therapyWhereForAccess, type TherapyPatientAccess } from './therapy-query.js';
+import { temporaryPsExitReadState, type TemporaryPsExit } from '../patients/temporary-ps-exits.js';
+import {
+  therapyWhereForAccess,
+  therapyBandEnabledSql,
+  normalizedTherapyClockSql,
+  oneTimeVerificationWhereSql,
+  recordedOneTimeOutcomeSql,
+  type TherapyPatientAccess,
+} from './therapy-query.js';
 import {
   loadOperationalIdentities,
   type PatientLocationDto,
@@ -67,9 +81,54 @@ export interface SlotPatient {
   room: string;
   bed: string;
   administrations: SlotAdministration[];
+  temporaryPsExit: TemporaryPsExit | null;
+  temporaryPsExitUnverified?: true;
+}
+
+export interface TherapyRecordedOutcome {
+  administrationId: string;
+  therapyId: string;
+  patientId: string;
+  date: string;
+  status: 'administered' | 'not_administered';
+  recordedAt: string | null;
+  recordedBy: string | null;
+  notAdministeredReason: string | null;
+}
+export interface TherapyVerificationItem {
+  therapyId: string;
+  drugName: string;
+  status: 'to_verify';
+  reason: 'missing_time' | 'invalid_time' | 'conflicting_schedule';
+  scheduledTime: null;
+  quantityLabel: null;
+  dosage: null;
+  canAdminister: false;
+  recordedOutcome?: TherapyRecordedOutcome | null;
+}
+export interface TherapyVerificationGroup {
+  kind: 'verification';
+  id: 'therapy-verification';
+  date: string;
+  label: 'Da verificare';
+  fascia: null;
+  ora: null;
+  summary: {
+    total: number;
+    verification: number;
+    administered?: number;
+    notAdministered?: number;
+    unrecorded?: number;
+  };
+  patients: Array<Omit<SlotPatient, 'administrations'> & { items: TherapyVerificationItem[] }>;
+}
+export type TherapyReadGroup = TherapySlot | TherapyVerificationGroup;
+export function isScheduledTherapySlot(group: TherapyReadGroup): group is TherapySlot {
+  return group.kind !== 'verification';
 }
 
 export interface TherapySlot {
+  kind?: 'scheduled';
   id: string;
   fascia: string;
   label: string;
@@ -79,7 +138,7 @@ export interface TherapySlot {
 }
 
 export interface TherapySlotSourcePage {
-  slots: TherapySlot[];
+  slots: TherapyReadGroup[];
   roster?: AppliedRosterOrder;
   pageInfo: {
     hasMore: boolean;
@@ -121,10 +180,11 @@ export async function buildTherapySlotExactSummary(
     WITH due_therapy AS (
       SELECT
         pt.id,
+        pt.tipo,
         pt."patientId",
         pt."farmacoNome",
         band.fascia,
-        COALESCE(schedule.time, band.ora) AS "scheduledTime",
+        COALESCE(CASE WHEN pt.tipo = 'una_tantum' THEN ${normalizedTherapyClockSql()} ELSE schedule.time END, band.ora) AS "scheduledTime",
         (
           SELECT count(*)::int FROM "TherapySchedule" bs
           WHERE bs."therapyId" = pt.id AND bs.fascia = band.fascia
@@ -157,7 +217,7 @@ export async function buildTherapySlotExactSummary(
             ',' || regexp_replace(pt."giorniSettimana", '[[:space:]]+', '', 'g') || ','
           ) LIKE ${weekdayPattern}
         )
-        AND band.enabled = TRUE
+        AND ${therapyBandEnabledSql()}
         ${therapyAccessSql(access)}
     ), legacy_administration AS (
       SELECT DISTINCT ON (ma."patientId", ma."farmacoNome", ma.fascia, ma.ora)
@@ -175,16 +235,24 @@ export async function buildTherapySlotExactSummary(
         AND ma."therapyId" IS NULL
       ORDER BY ma."patientId", ma."farmacoNome", ma.fascia, ma.ora, ma.id DESC
     ), resolved AS (
-      SELECT due.fascia, COALESCE(modern.stato, legacy.stato) AS stato
+      SELECT due.fascia, COALESCE(day_record.stato, modern.stato, legacy.stato) AS stato
       FROM due_therapy due
+      LEFT JOIN LATERAL (${recordedOneTimeOutcomeSql(date, {
+        patientId: Prisma.sql`due."patientId"`,
+        id: Prisma.sql`due.id`,
+        drugName: Prisma.sql`due."farmacoNome"`,
+      })}) day_record ON due.tipo = 'una_tantum'
       -- Same rule as the slot detail: ONE prescribed dose in a band = one record whatever its hour.
       LEFT JOIN LATERAL (
         SELECT ma.id, ma.stato
         FROM "MedicationAdministration" ma
         WHERE ma."therapyId" = due.id
           AND ma.date = ${date}
-          AND ma.fascia = due.fascia
-          AND (ma.ora = due."scheduledTime" OR due."bandDoses" <= 1)
+          AND ma."patientId" = due."patientId"
+          AND (due.tipo = 'una_tantum' OR (
+            ma.fascia = due.fascia
+            AND (ma.ora = due."scheduledTime" OR due."bandDoses" <= 1)
+          ))
         ORDER BY (ma.stato = 'erogata') DESC, (ma.ora = due."scheduledTime") DESC, ma.id ASC
         LIMIT 1
       ) modern ON TRUE
@@ -194,6 +262,11 @@ export async function buildTherapySlotExactSummary(
         AND legacy."farmacoNome" = due."farmacoNome"
         AND legacy.fascia = due.fascia
         AND legacy.ora = due."scheduledTime"
+      UNION ALL
+      SELECT 'verification' AS fascia, recorded.stato
+      FROM "PatientTherapy" pt JOIN "Patient" p ON p.id = pt."patientId"
+      LEFT JOIN LATERAL (${recordedOneTimeOutcomeSql(date)}) recorded ON TRUE
+      WHERE ${oneTimeVerificationWhereSql(date, access)}
     )
     SELECT
       fascia,
@@ -242,6 +315,7 @@ async function buildTherapySlotSourcePage(
       dosaggio: true,
       viaSomministrazione: true,
       tipo: true,
+      orarioSomministrazione: true,
       fasceMattina: true,
       fascePranzo: true,
       fascePomeriggio: true,
@@ -278,7 +352,12 @@ async function buildTherapySlotSourcePage(
   }
   const hasMore = sourceRows.length > limit;
   const therapies = sourceRows.slice(0, limit);
-  if (therapies.some((therapy) => therapy.schedules.length > MAX_THERAPY_SCHEDULES)) {
+  if (
+    therapies.some(
+      (therapy) =>
+        therapy.tipo !== 'una_tantum' && therapy.schedules.length > MAX_THERAPY_SCHEDULES,
+    )
+  ) {
     throw new TherapySlotCapacityError(
       `Terapia con troppi orari (massimo ${MAX_THERAPY_SCHEDULES})`,
     );
@@ -294,7 +373,9 @@ async function buildTherapySlotSourcePage(
 
   const legacyCandidateKeys = new Set(
     validTherapies.flatMap((therapy) =>
-      FASCE.filter((fascia) => therapy[fascia.flagField as FlagField] === true).map((fascia) =>
+      FASCE.filter((fascia) =>
+        therapyBandEnabled(therapy, fascia.fascia, therapy[fascia.flagField as FlagField] === true),
+      ).map((fascia) =>
         legacyAdministrationKey(therapy.patientId, therapy.farmacoNome, fascia.fascia),
       ),
     ),
@@ -306,15 +387,32 @@ async function buildTherapySlotSourcePage(
     db,
     today,
   );
+  const exitRows = validTherapies.length
+    ? await db.cartella.findMany({
+        where: {
+          patientId: { in: [...new Set(validTherapies.map((therapy) => therapy.patientId))] },
+        },
+        select: { patientId: true, data: true },
+      })
+    : [];
+  const exits = new Map(exitRows.map((row) => [row.patientId, temporaryPsExitReadState(row.data)]));
   const administrations = await findTherapyPageAdministrations(
     date,
     validTherapies.map((therapy) => ({
       therapyId: therapy.id,
       patientId: therapy.patientId,
       drugName: therapy.farmacoNome,
-      fasce: FASCE.filter((fascia) => therapy[fascia.flagField as FlagField] === true).map(
-        ({ fascia }) => fascia,
-      ),
+      singleDayDose: therapy.tipo === 'una_tantum',
+      fasce:
+        therapy.tipo === 'una_tantum'
+          ? FASCE.map(({ fascia }) => fascia)
+          : FASCE.filter((fascia) =>
+              therapyBandEnabled(
+                therapy,
+                fascia.fascia,
+                therapy[fascia.flagField as FlagField] === true,
+              ),
+            ).map(({ fascia }) => fascia),
     })),
     db,
   );
@@ -351,6 +449,11 @@ async function buildTherapySlotSourcePage(
   // A band with ONE prescribed dose has one record for the day whatever its hour (the time may
   // have been moved after the dose was given); `erogata` wins so a given dose never reopens.
   const bandRecords = new Map<string, (typeof administrations)[0]>();
+  const dayRecords = new Map<string, (typeof administrations)[0]>();
+  for (const therapy of validTherapies.filter((therapy) => therapy.tipo === 'una_tantum')) {
+    const record = recordedOneTimeOutcome(therapy, administrations);
+    if (record) dayRecords.set(therapy.id, record);
+  }
   for (const administration of administrations) {
     if (!administration.therapyId) continue;
     const key = `${administration.therapyId}|${administration.fascia}`;
@@ -360,7 +463,9 @@ async function buildTherapySlotSourcePage(
   }
 
   const slots: TherapySlot[] = FASCE.map((f) => {
-    const fasciaTherapies = validTherapies.filter((pt) => pt[f.flagField as FlagField] === true);
+    const fasciaTherapies = validTherapies.filter((pt) =>
+      therapyBandEnabled(pt, f.fascia, pt[f.flagField as FlagField] === true),
+    );
     const patientMap = new Map<string, SlotPatient>();
 
     for (const pt of fasciaTherapies) {
@@ -374,10 +479,15 @@ async function buildTherapySlotSourcePage(
       const schedules = (pt.schedules as ScheduleInput[]).filter((s) => s.fascia === f.fascia);
       const doses: Array<ScheduleInput | undefined> = schedules.length ? schedules : [undefined];
       for (const sched of doses) {
-        const time = sched?.time || f.ora;
-        const bandRecord = doses.length === 1 ? bandRecords.get(`${pt.id}|${f.fascia}`) : undefined;
+        const time = oneTimeSlot(pt)?.time || sched?.time || f.ora;
+        const bandRecord =
+          pt.tipo === 'una_tantum'
+            ? dayRecords.get(pt.id)
+            : doses.length === 1
+              ? bandRecords.get(`${pt.id}|${f.fascia}`)
+              : undefined;
         const existing =
-          (bandRecord?.stato === 'erogata' ? bandRecord : undefined) ??
+          (pt.tipo === 'una_tantum' || bandRecord?.stato === 'erogata' ? bandRecord : undefined) ??
           adminMap.get(`${pt.id}|${f.fascia}|${time}`) ??
           adminMap.get(legacyAdministrationKey(pt.patientId, pt.farmacoNome, f.fascia, time)) ??
           (doses.length === 1
@@ -407,7 +517,7 @@ async function buildTherapySlotSourcePage(
               : (quantityLabel ?? pt.dosaggio),
           quantityLabel,
           route: pt.viaSomministrazione || 'orale',
-          scheduledTime: sched?.time || f.ora,
+          scheduledTime: time,
           status,
           administeredAt: existing?.confirmedAt
             ? new Date(existing.confirmedAt).toISOString()
@@ -429,6 +539,7 @@ async function buildTherapySlotSourcePage(
             room,
             bed,
             administrations: [],
+            ...(exits.get(pt.patientId) ?? { temporaryPsExit: null }),
           });
         }
         patientMap.get(pt.patientId)!.administrations.push(administrationEntry);
@@ -456,8 +567,84 @@ async function buildTherapySlotSourcePage(
     };
   });
 
+  const verificationPatients = new Map<string, TherapyVerificationGroup['patients'][number]>();
+  for (const therapy of validTherapies) {
+    const reason = oneTimeVerificationReason(therapy);
+    if (!reason) continue;
+    const patient = identities.get(therapy.patientId);
+    if (!patient) continue;
+    if (!verificationPatients.has(therapy.patientId)) {
+      const location = patient.location;
+      verificationPatients.set(therapy.patientId, {
+        patientId: therapy.patientId,
+        firstName: patient.firstName,
+        lastName: patient.lastName,
+        codiceFiscale: patient.codiceFiscale,
+        dateOfBirth: patient.dateOfBirth,
+        location,
+        room: location.room ?? 'Non assegnato',
+        bed: location.bed ?? 'Non assegnato',
+        ...(exits.get(therapy.patientId) ?? { temporaryPsExit: null }),
+        items: [],
+      });
+    }
+    const recorded = dayRecords.get(therapy.id);
+    // Refusals have no confirmedAt: the record update timestamp is their actual recording time.
+    const recordedAt = recorded?.confirmedAt ?? recorded?.updatedAt ?? null;
+    verificationPatients.get(therapy.patientId)!.items.push({
+      therapyId: therapy.id,
+      drugName: therapy.farmacoNome,
+      status: 'to_verify',
+      reason,
+      scheduledTime: null,
+      quantityLabel: null,
+      dosage: null,
+      canAdminister: false,
+      recordedOutcome: recorded
+        ? {
+            administrationId: recorded.id,
+            therapyId: therapy.id,
+            patientId: therapy.patientId,
+            date,
+            status: recorded.stato === 'erogata' ? 'administered' : 'not_administered',
+            recordedAt: recordedAt ? new Date(recordedAt).toISOString() : null,
+            recordedBy: recorded.operatoreNome,
+            notAdministeredReason: recorded.stato === 'non_erogata' ? recorded.motivo : null,
+          }
+        : null,
+    });
+  }
+  const verificationTotal = [...verificationPatients.values()].reduce(
+    (sum, patient) => sum + patient.items.length,
+    0,
+  );
+  const verification: TherapyVerificationGroup = {
+    kind: 'verification',
+    id: 'therapy-verification',
+    date,
+    label: 'Da verificare',
+    fascia: null,
+    ora: null,
+    summary: {
+      total: verificationTotal,
+      verification: verificationTotal,
+      administered: [...verificationPatients.values()]
+        .flatMap((p) => p.items)
+        .filter((i) => i.recordedOutcome?.status === 'administered').length,
+      notAdministered: [...verificationPatients.values()]
+        .flatMap((p) => p.items)
+        .filter((i) => i.recordedOutcome?.status === 'not_administered').length,
+      unrecorded: [...verificationPatients.values()]
+        .flatMap((p) => p.items)
+        .filter((i) => !i.recordedOutcome).length,
+    },
+    patients: [...verificationPatients.values()],
+  };
   return {
-    slots: slots.filter((slot) => slot.patients.length > 0),
+    slots: [
+      ...slots.filter((slot) => slot.patients.length > 0),
+      ...(verificationTotal ? [verification] : []),
+    ],
     pageInfo: {
       hasMore,
       nextId: hasMore && therapies.length > 0 ? therapies[therapies.length - 1]!.id : null,
@@ -470,7 +657,7 @@ async function buildTherapySlotSourcePage(
 export async function buildTherapySlots(
   date: string,
   access: TherapyPatientAccess = {},
-): Promise<TherapySlot[]> {
+): Promise<TherapyReadGroup[]> {
   const page = await buildTherapySlotSourcePage(date, access, MAX_THERAPY_SLOT_SOURCE_ROWS);
   if (page.pageInfo.hasMore) {
     throw new TherapySlotCapacityError(
@@ -510,7 +697,12 @@ export async function buildTherapySlotPage(
       return page;
     }
     const exactSummary = await buildTherapySlotExactSummary(date, access, tx);
-    const pageByFascia = new Map(page.slots.map((slot) => [slot.fascia, slot]));
+    const verification = page.slots.find(
+      (slot): slot is TherapyVerificationGroup => !isScheduledTherapySlot(slot),
+    );
+    const pageByFascia = new Map(
+      page.slots.filter(isScheduledTherapySlot).map((slot) => [slot.fascia, slot]),
+    );
     page.slots = FASCE.flatMap((fascia) => {
       const summary = exactSummary.get(fascia.fascia);
       if (!summary?.total) return [];
@@ -526,6 +718,25 @@ export async function buildTherapySlotPage(
         },
       ];
     });
+    const verificationCount = exactSummary.get('verification');
+    const total = Number(verificationCount?.total ?? 0);
+    if (total)
+      page.slots.push({
+        kind: 'verification',
+        id: 'therapy-verification',
+        date,
+        label: 'Da verificare',
+        fascia: null,
+        ora: null,
+        summary: {
+          total,
+          verification: total,
+          administered: Number(verificationCount?.administered ?? 0),
+          notAdministered: Number(verificationCount?.notAdministered ?? 0),
+          unrecorded: Number(verificationCount?.pending ?? 0),
+        },
+        patients: verification?.patients ?? [],
+      });
     return page;
   });
 }

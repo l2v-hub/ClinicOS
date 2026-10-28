@@ -1,0 +1,10 @@
+{
+  "pdf": "browser/evidence/issue-457-print.pdf",
+  "pages": 2,
+  "bytes": 54022,
+  "allPagesRendered": true,
+  "allRequiredActualValuesFound": true,
+  "requiredAssertions": 15,
+  "refusedAndPrescribedOnlyNotGiven": true,
+  "pagesVisuallyInspected": 2
+}

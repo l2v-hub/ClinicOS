@@ -222,16 +222,14 @@ export function NarrativeSectionsTab({
       {renderCurrentTopic &&
         STRUCTURED_CLINICAL_TOPICS.map((topic) => {
           const section = visibleSections.find((s) => s.sectionKey === topic);
-          const sourceDetail =
-            loading || error || !section ? (
-              <p className="srev-source">
-                Testo sorgente non disponibile per questo argomento; non conferma l’assenza clinica.
-              </p>
-            ) : (
-              <NarrativeSourceDetail section={section}>
-                {renderSource(section)}
-              </NarrativeSourceDetail>
+          const hasSource =
+            section &&
+            [section.originalText, section.reviewedText, section.displayText].some(
+              (value) => typeof value === 'string' && value.trim(),
             );
+          const sourceDetail = hasSource ? (
+            <NarrativeSourceDetail section={section}>{renderSource(section)}</NarrativeSourceDetail>
+          ) : null;
           return (
             <div key={topic} data-clinical-topic={topic}>
               {renderCurrentTopic(topic, sourceDetail)}

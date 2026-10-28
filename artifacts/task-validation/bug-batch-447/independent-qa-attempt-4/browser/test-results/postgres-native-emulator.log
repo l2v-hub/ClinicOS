@@ -1,0 +1,94 @@
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "en_US.utf8".
+The default database encoding has accordingly been set to "UTF8".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /var/lib/postgresql/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Etc/UTC
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /var/lib/postgresql/data -l logfile start
+
+waiting for server to start....2026-10-17 12:24:05.719 UTC [59] LOG:  starting PostgreSQL 16.15 (Debian 16.15-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-17 12:24:05.721 UTC [59] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-10-17 12:24:05.725 UTC [68] LOG:  database system was shut down at 2026-10-17 12:24:05 UTC
+2026-10-17 12:24:05.730 UTC [59] LOG:  database system is ready to accept connections
+ done
+server started
+CREATE DATABASE
+
+
+/usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+
+waiting for server to shut down....2026-10-17 12:24:05.908 UTC [59] LOG:  received fast shutdown request
+2026-10-17 12:24:05.909 UTC [59] LOG:  aborting any active transactions
+2026-10-17 12:24:05.912 UTC [59] LOG:  background worker "logical replication launcher" (PID 71) exited with exit code 1
+2026-10-17 12:24:05.913 UTC [66] LOG:  shutting down
+2026-10-17 12:24:05.914 UTC [66] LOG:  checkpoint starting: shutdown immediate
+2026-10-17 12:24:06.063 UTC [66] LOG:  checkpoint complete: wrote 926 buffers (5.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.014 s, sync=0.133 s, total=0.150 s; sync files=301, longest=0.003 s, average=0.001 s; distance=4273 kB, estimate=4273 kB; lsn=0/191F0F0, redo lsn=0/191F0F0
+2026-10-17 12:24:06.068 UTC [59] LOG:  database system is shut down
+ done
+server stopped
+
+PostgreSQL init process complete; ready for start up.
+
+initdb: warning: enabling "trust" authentication for local connections
+initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+2026-10-17 12:24:06.132 UTC [1] LOG:  starting PostgreSQL 16.15 (Debian 16.15-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-17 12:24:06.132 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2026-10-17 12:24:06.132 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2026-10-17 12:24:06.134 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-10-17 12:24:06.137 UTC [81] LOG:  database system was shut down at 2026-10-17 12:24:06 UTC
+2026-10-17 12:24:06.141 UTC [1] LOG:  database system is ready to accept connections
+2026-10-17 12:24:10.768 UTC [96] ERROR:  could not serialize access due to concurrent update
+2026-10-17 12:24:10.768 UTC [96] STATEMENT:  
+	    UPDATE "Patient" p SET "updatedAt" = p."updatedAt" WHERE p.id = $1
+	    AND p."registeredById" = $2
+	    RETURNING p.id
+2026-10-17 12:24:10.879 UTC [98] WARNING:  there is no transaction in progress
+2026-10-17 12:24:10.961 UTC [99] ERROR:  could not serialize access due to concurrent update
+2026-10-17 12:24:10.961 UTC [99] STATEMENT:  
+	    UPDATE "Patient" p SET "updatedAt" = p."updatedAt" WHERE p.id = $1
+	    AND p."registeredById" = $2
+	    RETURNING p.id
+2026-10-17 12:24:11.018 UTC [100] WARNING:  there is no transaction in progress
+2026-10-17 12:24:11.100 UTC [96] ERROR:  could not serialize access due to concurrent update
+2026-10-17 12:24:11.100 UTC [96] STATEMENT:  
+	    UPDATE "Patient" p SET "updatedAt" = p."updatedAt" WHERE p.id = $1
+	    AND p."registeredById" = $2
+	    RETURNING p.id
+2026-10-17 12:24:11.144 UTC [101] WARNING:  there is no transaction in progress
+2026-10-17 12:24:11.259 UTC [97] ERROR:  could not serialize access due to concurrent update
+2026-10-17 12:24:11.259 UTC [97] STATEMENT:  
+	    UPDATE "Patient" p SET "updatedAt" = p."updatedAt" WHERE p.id = $1
+	    AND p."registeredById" = $2
+	    RETURNING p.id
+2026-10-17 12:24:11.316 UTC [102] WARNING:  there is no transaction in progress
+2026-10-17 12:24:12.004 UTC [103] ERROR:  could not serialize access due to concurrent update
+2026-10-17 12:24:12.004 UTC [103] STATEMENT:  
+	    SELECT p.id FROM "Patient" p WHERE p.id = $1
+	      AND p."registeredById" = $2
+	    FOR SHARE OF p
+2026-10-17 12:24:22.136 UTC [79] LOG:  checkpoint starting: immediate force wait
+2026-10-17 12:24:22.232 UTC [79] LOG:  checkpoint complete: wrote 8 buffers (0.0%); 1 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.002 s, total=0.096 s; sync files=7, longest=0.001 s, average=0.001 s; distance=6350 kB, estimate=6350 kB; lsn=0/1F52BE0, redo lsn=0/1F52BA8
+2026-10-17 12:26:35.238 UTC [133] ERROR:  could not serialize access due to concurrent update
+2026-10-17 12:26:35.238 UTC [133] STATEMENT:  
+	    SELECT p.id FROM "Patient" p WHERE p.id = $1
+	      
+	    FOR SHARE OF p
+2026-10-17 12:27:02.884 UTC [79] LOG:  checkpoint starting: immediate force wait
+2026-10-17 12:27:02.898 UTC [79] LOG:  checkpoint complete: wrote 50 buffers (0.3%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.005 s, sync=0.006 s, total=0.015 s; sync files=17, longest=0.001 s, average=0.001 s; distance=6773 kB, estimate=6773 kB; lsn=0/25F02E8, redo lsn=0/25F02B0

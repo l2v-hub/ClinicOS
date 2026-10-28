@@ -1,0 +1,9 @@
+{
+  "freshCanonicalStartedUtc": "2026-10-17T09:57:06Z",
+  "historicalSnapshotFiles": 37,
+  "staleTopLevelRuntimeFilesRelocatedToPreservedHistory": [
+    "test-results/failure.json"
+  ],
+  "historicalHashesMatch": true,
+  "freshResultsExcludeHistoricalFailureFiles": true
+}

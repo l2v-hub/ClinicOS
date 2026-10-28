@@ -1,0 +1,295 @@
+✔ Today vitals use facility civil date and exclude adjacent day and unrelated old readings (4.304688ms)
+✔ Today surface never offers denied therapy/clinical read or record action (11.281162ms)
+✔ Today counts the complete daily history and selects latest after paginated duplicates (0.774717ms)
+✔ Today rejects foreign patients, wrong civil days, repeated cursors and failed subsequent pages (1.409153ms)
+✔ patient record exposes ONE labelled section rail and a controlled tab panel (50.484463ms)
+✔ top navigation follows the keyboard tab pattern with one focusable active tab (0.501016ms)
+✔ therapy sections reuse the canonical contextual navigation (0.916922ms)
+✖ 447 Today uses actual dose actions, shared diary acknowledgement and real daily readings, retaining diary and module state (25.34164ms)
+✔ overview is three columns on wide screens, two on tablet and one on phone (5.476164ms)
+✔ patient record applies one screen-only contract to cards, key-value rows and tables (0.758436ms)
+✔ patient record data contract keeps tablet overflow local and stacks key-value rows on phones (4.18141ms)
+✔ nurse entry selects pending current hour then first pending rather than completed slot (9.823809ms)
+✔ current clinical band wins over an older pending night dose and preserves exact hour (0.275503ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 12
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1750.335017
+
+✖ failing tests:
+
+test at frontend/src/lib/__tests__/patientDetailWorkspace.test.ts:1:3098
+✖ 447 Today uses actual dose actions, shared diary acknowledgement and real daily readings, retaining diary and module state (25.34164ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /fetchParameterReadings\(/. Input:
+  
+  "import { useEffect, useState } from 'react';\n" +
+    "import type { PatientTherapyAPI } from '../../types';\n" +
+    "import { readPatientCalendarTherapies } from '../../lib/patientTherapyCalendarRead';\n" +
+    "import { buildPatientTherapyDay } from '../../lib/patientTherapyCalendar';\n" +
+    "import { facilityLocalMinute } from '../../lib/facilityTime';\n" +
+    "import { useRecencyClock } from '../../lib/useRecencyClock';\n" +
+    "import { useCan } from '../../lib/capabilities';\n" +
+    "import { useUnreadUrgencies } from '../../lib/useUnreadUrgencies';\n" +
+    'import {\n' +
+    '  PARAMETER_FIELDS,\n' +
+    '  formatParameterValue,\n' +
+    '  fetchParameterReadings,\n' +
+    '  readingTime,\n' +
+    '  type PatientParameterReading,\n' +
+    "} from '../../lib/patientParameterReadings';\n" +
+    "import { API_URL } from '../../config';\n" +
+    "import { operatorHeaders } from '../../lib/operatorSession';\n" +
+    "import { postDiaryAck } from './cartella/diaryAck';\n" +
+    "import { postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from '../../lib/urgency';\n" +
+    "import type { UnreadDiaryEntry } from '../../lib/diaryUnreadQueue';\n" +
+    "import { UrgencyNotice } from '../shared/UrgencyNotice';\n" +
+    "import { PatientTherapySlotDetail } from './cartella/PatientTherapySlotDetail';\n" +
+    "import { TherapyDrugDosePanel } from './cartella/TherapyDrugDosePanel';\n" +
+    '\n' +
+    'export function todayReadings(readings: PatientParameterReading[], day: string) {\n' +
+    '  return readings.filter((r) => facilityLocalMinute(new Date(r.measuredAt)).slice(0, 10) === day);\n' +
+    '}\n' +
+    '\n' +
+    '/** The daily count and latest values require every page, never an exact count from a prefix. */\n' +
+    'export async function loadTodayReadings(\n' +
+    '  patientId: string,\n' +
+    '  date: string,\n' +
+    '  signal: AbortSignal,\n' +
+    '  readPage = fetchParameterReadings,\n' +
+    '): Promise<PatientParameterReading[]> {\n' +
+    '  const readings = new Map<string, PatientParameterReading>();\n' +
+    '  const cursors = new Set<string>();\n' +
+    '  let cursor: string | undefined;\n' +
+    '  for (let pageIndex = 0; pageIndex < 200; pageIndex++) {\n' +
+    '    const page = await readPage(API_URL, patientId, { date, cursor }, {\n' +
+    '      headers: operatorHeaders(), signal,\n' +
+    '    });\n' +
+    "    if (signal.aborted) throw new DOMException('Lettura annullata', 'AbortError');\n" +
+    '    for (const reading of page.readings) {\n' +
+    '      if (!reading.id || reading.patientId !== patientId || !Number.isFinite(Date.parse(reading.measuredAt)) ||\n' +
+    '        facilityLocalMinute(new Date(reading.measuredAt)).slice(0,10) !== date)\n' +
+    "        throw new Error('Storico del giorno non verificabile');\n" +
+    '      readings.set(reading.id, reading);\n' +
+    '    }\n' +
+    '    if (!page.hasMore) return [...readings.values()].sort((a,b) =>\n' +
+    '      Date.parse(b.measuredAt) - Date.parse(a.measuredAt) || b.id.localeCompare(a.id));\n' +
+    '    if (!page.nextCursor || cursors.has(page.nextCursor) || !page.readings.length)\n' +
+    "      throw new Error('Storico del giorno incompleto');\n" +
+    '    cursors.add(page.nextCursor);\n' +
+    '    cursor = page.nextCursor;\n' +
+    '  }\n' +
+    "  throw new Error('Storico del giorno incompleto');\n" +
+    '}\n' +
+    '\n' +
+    '/** Reuses existing dose write and shared urgency acknowledgement boundaries. */\n' +
+    'export function PatientToday({\n' +
+    '  patientId,\n' +
+    '  onRecordVitals,\n' +
+    '  onOpenDiary,\n' +
+    '}: {\n' +
+    '  patientId: string;\n' +
+    '  onRecordVitals: () => void;\n' +
+    '  onOpenDiary?: () => void;\n' +
+    '}) {\n' +
+    '  const now = useRecencyClock(),\n' +
+    '    date = facilityLocalMinute(now).slice(0, 10),\n' +
+    '    key = `${patientId}:${date}`;\n' +
+    "  const canTherapy = useCan('therapy.list'),\n" +
+    "    canVitals = useCan('parameters.list_readings'),\n" +
+    "    canRecord = useCan('parameters.create_reading'),\n" +
+    "    canDiary = useCan('diary.list');\n" +
+    '  const urgencies = useUnreadUrgencies(canDiary);\n' +
+    '  const [state, setState] = useState<{\n' +
+    '    key: string;\n' +
+    '    therapies: PatientTherapyAPI[];\n' +
+    '    readings: PatientParameterReading[];\n' +
+    '    therapyError: boolean;\n' +
+    '    vitalError: boolean;\n' +
+    '  } | null>(null);\n' +
+    '  const [revision, setRevision] = useState(0),\n' +
+    "    [ack, setAck] = useState(''),\n" +
+    "    [ackError, setAckError] = useState('');\n" +
+    '  useEffect(() => {\n' +
+    '    const c = new AbortController();\n' +
+    '    void Promise.allSettled([\n' +
+    '      canTherapy ? readPatientCalendarTherapies(patientId, c.signal) : Promise.resolve([]),\n' +
+    '      canVitals\n' +
+    '        ? loadTodayReadings(patientId, date, c.signal)\n' +
+    '        : Promise.resolve([]),\n' +
+    '    ]).then(([t, v]) => {\n' +
+    '      if (!c.signal.aborted)\n' +
+    '        setState({\n' +
+    '          key,\n' +
+    "          therapies: t.status === 'fulfilled' ? t.value : [],\n" +
+    "          readings: v.status === 'fulfilled' ? v.value : [],\n" +
+    "          therapyError: t.status === 'rejected',\n" +
+    "          vitalError: v.status === 'rejected',\n" +
+    '        });\n' +
+    '    });\n' +
+    '    return () => c.abort();\n' +
+    '  }, [patientId, key, revision, canTherapy, canVitals]);\n' +
+    '  const current = state?.key === key ? state : null;\n' +
+    '  const day = buildPatientTherapyDay(current?.therapies ?? [], patientId, date);\n' +
+    '  const times = [...new Set(day.events.map((e) => e.time))].sort();\n' +
+    '  const readings = todayReadings(current?.readings ?? [], date);\n' +
+    '  const rows = urgencies.rows.filter((row) => row.patientId === patientId);\n' +
+    '  async function acknowledge(row: UnreadDiaryEntry) {\n' +
+    '    if (ack) return;\n' +
+    '    setAck(row.id);\n' +
+    "    setAckError('');\n" +
+    '    try {\n' +
+    "      if (row.sourceType === 'diary') await postDiaryAck(patientId, row.sourceId);\n" +
+    '      else\n' +
+    '        await postUrgencyAck(\n' +
+    '          `${API_URL}/consegne/${encodeURIComponent(row.sourceId)}/ack`,\n' +
+    '          operatorHeaders(),\n' +
+    '        );\n' +
+    '      window.dispatchEvent(new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId } }));\n' +
+    '    } catch {\n' +
+    "      setAckError('Conferma non registrata. Riprova.');\n" +
+    '    } finally {\n' +
+    "      setAck('');\n" +
+    '    }\n' +
+    '  }\n' +
+    '  return (\n' +
+    '    <section className="patient-today" data-patient-today>\n' +
+    "      <h2>Oggi · {date.split('-').reverse().join('/')}</h2>\n" +
+    '      {canTherapy && (\n' +
+    '        <section aria-label="Terapia di oggi">\n' +
+    '          <h3>Terapia di oggi</h3>\n' +
+    '          {!current ? (\n' +
+    '            <p role="status">Caricamento terapie…</p>\n' +
+    '          ) : current.therapyError ? (\n' +
+    '            <p role="alert">\n' +
+    "              Terapie non disponibili.{' '}\n" +
+    '              <button className="ds-link" onClick={() => setRevision((r) => r + 1)}>\n' +
+    '                Riprova\n' +
+    '              </button>\n' +
+    '            </p>\n' +
+    '          ) : (\n' +
+    '            <>\n' +
+    '              {!day.events.length && !day.unscheduled.length && (\n' +
+    '                <p>Nessuna terapia programmata oggi.</p>\n' +
+    '              )}\n' +
+    '              {times.map((time) => (\n' +
+    '                <div key={`${key}:${time}`} className="patient-today__time">\n' +
+    '                  <h4>Ore {time}</h4>\n' +
+    '                  <PatientTherapySlotDetail\n' +
+    '                    patientId={patientId}\n' +
+    '                    date={date}\n' +
+    '                    time={time}\n' +
+    '                    events={day.events.filter((e) => e.time === time)}\n' +
+    '                    embedded\n' +
+    '                    onClose={() => {}}\n' +
+    '                  />\n' +
+    '                </div>\n' +
+    '              ))}\n' +
+    '              {day.unscheduled.map((item) => (\n' +
+    '                <div key={item.therapyId}>\n' +
+    '                  <strong>{item.drugName}</strong>\n' +
+    '                  <span>\n' +
+    "                    {' '}\n" +
+    '                    · {item.dose} · {item.route}\n' +
+    '                  </span>\n' +
+    "                  {item.kind === 'as_needed' ? (\n" +
+    '                    <TherapyDrugDosePanel\n' +
+    '                      patientId={patientId}\n' +
+    '                      therapy={current.therapies.find((t) => t.id === item.therapyId)!}\n' +
+    '                    />\n' +
+    '                  ) : (\n' +
+    '                    <p>{item.reason} · Verifica nella Terapia.</p>\n' +
+    '                  )}\n' +
+    '                </div>\n' +
+    '              ))}\n' +
+    '            </>\n' +
+    '          )}\n' +
+    '        </section>\n' +
+    '      )}\n' +
+    '      {canDiary && (\n' +
+    '        <section aria-label="Urgenze da comprendere">\n' +
+    '          <h3>Urgenze del diario e consegne</h3>\n' +
+    "          {urgencies.state === 'loading' ? (\n" +
+    '            <p role="status">Caricamento urgenze…</p>\n' +
+    "          ) : urgencies.state === 'error' ? (\n" +
+    '            <p role="alert">Urgenze non disponibili: consulta Diario e Consegne.</p>\n' +
+    '          ) : (\n' +
+    '            <>\n' +
+    '              {rows.map((row) => (\n' +
+    '                <article key={row.id} data-today-urgency={row.id}>\n' +
+    "                  <strong>{row.title || 'Nota urgente'}</strong>\n" +
+    '                  <p>{row.content}</p>\n' +
+    '                  <UrgencyNotice\n' +
+    '                    urgency={row.urgency}\n' +
+    '                    subject={row.title ?? undefined}\n' +
+    '                    busy={ack === row.id}\n' +
+    '                    disabled={Boolean(ack)}\n' +
+    '                    onAcknowledge={() => void acknowledge(row)}\n' +
+    '                  />\n' +
+    '                </article>\n' +
+    '              ))}\n' +
+    '              {urgencies.atLeast ? (\n' +
+    '                <p role="status">\n' +
+    '                  La coda è parziale: consulta Diario e Consegne per tutte le voci.\n' +
+    '                </p>\n' +
+    '              ) : (\n' +
+    '                !rows.length && <p>Nessuna urgenza da comprendere nella coda verificata.</p>\n' +
+    '              )}\n' +
+    '            </>\n' +
+    '          )}\n' +
+    '          {ackError && <p role="alert">{ackError}</p>}\n' +
+    '          {onOpenDiary && (\n' +
+    '            <button type="button" className="ds-link" onClick={onOpenDiary}>\n' +
+    '              Apri diario completo\n' +
+    '            </button>\n' +
+    '          )}\n' +
+    '        </section>\n' +
+    '      )}\n' +
+    '      {canVitals && (\n' +
+    '        <p className="patient-today__vitals" role="status">\n' +
+    '          {!current\n' +
+    "            ? 'Caricamento parametri…'\n" +
+    '            : current.vitalError\n' +
+    "              ? 'Parametri non disponibili'\n" +
+    '              : readings.length\n' +
+    '                ? `${readings.length} rilevazioni oggi · ultima ${readingTime(readings[0].measuredAt)} · ${PARAMETER_FIELDS.filter(\n' +
+    '                    (field) => readings[0].values[field.key]?.trim(),\n' +
+    '                  )\n' +
+    '                    .map(\n' +
+    '                      (field) =>\n' +
+    '                        `${field.label} ${formatParameterValue(field.key, readings[0].values[field.key]!)} ${field.unit}`,\n' +
+    '                    )\n' +
+    "                    .join(' · ')}`\n" +
+    "                : 'Nessuna rilevazione oggi'}\n" +
+    '          {canRecord && (\n' +
+    '            <>\n' +
+    "              {' '}\n" +
+    "              ·{' '}\n" +
+    '              <button className="ds-link" onClick={onRecordVitals}>\n' +
+    '                Rileva ora\n' +
+    '              </button>\n' +
+    '            </>\n' +
+    '          )}\n' +
+    '        </p>\n' +
+    '      )}\n' +
+    '    </section>\n' +
+    '  );\n' +
+    '}\n'
+  
+      at TestContext.<anonymous> (/workspace/ClinicOS/agent-team/.worktrees/bug-batch-447/frontend/src/lib/__tests__/patientDetailWorkspace.test.ts:84:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import { useEffect, useState } from \'react\';\nimport type { PatientTherapyAPI } from \'../../types\';\nimport { readPatientCalendarTherapies } from \'../../lib/patientTherapyCalendarRead\';\nimport { buildPatientTherapyDay } from \'../../lib/patientTherapyCalendar\';\nimport { facilityLocalMinute } from \'../../lib/facilityTime\';\nimport { useRecencyClock } from \'../../lib/useRecencyClock\';\nimport { useCan } from \'../../lib/capabilities\';\nimport { useUnreadUrgencies } from \'../../lib/useUnreadUrgencies\';\nimport {\n  PARAMETER_FIELDS,\n  formatParameterValue,\n  fetchParameterReadings,\n  readingTime,\n  type PatientParameterReading,\n} from \'../../lib/patientParameterReadings\';\nimport { API_URL } from \'../../config\';\nimport { operatorHeaders } from \'../../lib/operatorSession\';\nimport { postDiaryAck } from \'./cartella/diaryAck\';\nimport { postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from \'../../lib/urgency\';\nimport type { UnreadDiaryEntry } from \'../../lib/diaryUnreadQueue\';\nimport { UrgencyNotice } from \'../shared/UrgencyNotice\';\nimport { PatientTherapySlotDetail } from \'./cartella/PatientTherapySlotDetail\';\nimport { TherapyDrugDosePanel } from \'./cartella/TherapyDrugDosePanel\';\n\nexport function todayReadings(readings: PatientParameterReading[], day: string) {\n  return readings.filter((r) => facilityLocalMinute(new Date(r.measuredAt)).slice(0, 10) === day);\n}\n\n/** The daily count and latest values require every page, never an exact count from a prefix. */\nexport async function loadTodayReadings(\n  patientId: string,\n  date: string,\n  signal: AbortSignal,\n  readPage = fetchParameterReadings,\n): Promise<PatientParameterReading[]> {\n  const readings = new Map<string, PatientParameterReading>();\n  const cursors = new Set<string>();\n  let cursor: string | undefined;\n  for (let pageIndex = 0; pageIndex < 200; pageIndex++) {\n    const page = await readPage(API_URL, patientId, { date, cursor }, {\n      headers: operatorHeaders(), signal,\n    });\n    if (signal.aborted) throw new DOMException(\'Lettura annullata\', \'AbortError\');\n    for (const reading of page.readings) {\n      if (!reading.id || reading.patientId !== patientId || !Number.isFinite(Date.parse(reading.measuredAt)) ||\n        facilityLocalMinute(new Date(reading.measuredAt)).slice(0,10) !== date)\n        throw new Error(\'Storico del giorno non verificabile\');\n      readings.set(reading.id, reading);\n    }\n    if (!page.hasMore) return [...readings.values()].sort((a,b) =>\n      Date.parse(b.measuredAt) - Date.parse(a.measuredAt) || b.id.localeCompare(a.id));\n    if (!page.nextCursor || cursors.has(page.nextCursor) || !page.readings.length)\n      throw new Error(\'Storico del giorno incompleto\');\n    cursors.add(page.nextCursor);\n    cursor = page.nextCursor;\n  }\n  throw new Error(\'Storico del giorno incompleto\');\n}\n\n/** Reuses existing dose write and shared urgency acknowledgement boundaries. */\nexport function PatientToday({\n  patientId,\n  onRecordVitals,\n  onOpenDiary,\n}: {\n  patientId: string;\n  onRecordVitals: () => void;\n  onOpenDiary?: () => void;\n}) {\n  const now = useRecencyClock(),\n    date = facilityLocalMinute(now).slice(0, 10),\n    key = `${patientId}:${date}`;\n  const canTherapy = useCan(\'therapy.list\'),\n    canVitals = useCan(\'parameters.list_readings\'),\n    canRecord = useCan(\'parameters.create_reading\'),\n    canDiary = useCan(\'diary.list\');\n  const urgencies = useUnreadUrgencies(canDiary);\n  const [state, setState] = useState<{\n    key: string;\n    therapies: PatientTherapyAPI[];\n    readings: PatientParameterReading[];\n    therapyError: boolean;\n    vitalError: boolean;\n  } | null>(null);\n  const [revision, setRevision] = useState(0),\n    [ack, setAck] = useState(\'\'),\n    [ackError, setAckError] = useState(\'\');\n  useEffect(() => {\n    const c = new AbortController();\n    void Promise.allSettled([\n      canTherapy ? readPatientCalendarTherapies(patientId, c.signal) : Promise.resolve([]),\n      canVitals\n        ? loadTodayReadings(patientId, date, c.signal)\n        : Promise.resolve([]),\n    ]).then(([t, v]) => {\n      if (!c.signal.aborted)\n        setState({\n          key,\n          therapies: t.status === \'fulfilled\' ? t.value : [],\n          readings: v.status === \'fulfilled\' ? v.value : [],\n          therapyError: t.status === \'rejected\',\n          vitalError: v.status === \'rejected\',\n        });\n    });\n    return () => c.abort();\n  }, [patientId, key, revision, canTherapy, canVitals]);\n  const current = state?.key === key ? state : null;\n  const day = buildPatientTherapyDay(current?.therapies ?? [], patientId, date);\n  const times = [...new Set(day.events.map((e) => e.time))].sort();\n  const readings = todayReadings(current?.readings ?? [], date);\n  const rows = urgencies.rows.filter((row) => row.patientId === patientId);\n  async function acknowledge(row: UnreadDiaryEntry) {\n    if (ack) return;\n    setAck(row.id);\n    setAckError(\'\');\n    try {\n      if (row.sourceType === \'diary\') await postDiaryAck(patientId, row.sourceId);\n      else\n        await postUrgencyAck(\n          `${API_URL}/consegne/${encodeURIComponent(row.sourceId)}/ack`,\n          operatorHeaders(),\n        );\n      window.dispatchEvent(new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId } }));\n    } catch {\n      setAckError(\'Conferma non registrata. Riprova.\');\n    } finally {\n      setAck(\'\');\n    }\n  }\n  return (\n    <section className="patient-today" data-patient-today>\n      <h2>Oggi · {date.split(\'-\').reverse().join(\'/\')}</h2>\n      {canTherapy && (\n        <section aria-label="Terapia di oggi">\n          <h3>Terapia di oggi</h3>\n          {!current ? (\n            <p role="status">Caricamento terapie…</p>\n          ) : current.therapyError ? (\n            <p role="alert">\n              Terapie non disponibili.{\' \'}\n              <button className="ds-link" onClick={() => setRevision((r) => r + 1)}>\n                Riprova\n              </button>\n            </p>\n          ) : (\n            <>\n              {!day.events.length && !day.unscheduled.length && (\n                <p>Nessuna terapia programmata oggi.</p>\n              )}\n              {times.map((time) => (\n                <div key={`${key}:${time}`} className="patient-today__time">\n                  <h4>Ore {time}</h4>\n                  <PatientTherapySlotDetail\n                    patientId={patientId}\n                    date={date}\n                    time={time}\n                    events={day.events.filter((e) => e.time === time)}\n                    embedded\n                    onClose={() => {}}\n                  />\n                </div>\n              ))}\n              {day.unscheduled.map((item) => (\n                <div key={item.therapyId}>\n                  <strong>{item.drugName}</strong>\n                  <span>\n                    {\' \'}\n                    · {item.dose} · {item.route}\n                  </span>\n                  {item.kind === \'as_needed\' ? (\n                    <TherapyDrugDosePanel\n                      patientId={patientId}\n                      therapy={current.therapies.find((t) => t.id === item.therapyId)!}\n                    />\n                  ) : (\n                    <p>{item.reason} · Verifica nella Terapia.</p>\n                  )}\n                </div>\n              ))}\n            </>\n          )}\n        </section>\n      )}\n      {canDiary && (\n        <section aria-label="Urgenze da comprendere">\n          <h3>Urgenze del diario e consegne</h3>\n          {urgencies.state === \'loading\' ? (\n            <p role="status">Caricamento urgenze…</p>\n          ) : urgencies.state === \'error\' ? (\n            <p role="alert">Urgenze non disponibili: consulta Diario e Consegne.</p>\n          ) : (\n            <>\n              {rows.map((row) => (\n                <article key={row.id} data-today-urgency={row.id}>\n                  <strong>{row.title || \'Nota urgente\'}</strong>\n                  <p>{row.content}</p>\n                  <UrgencyNotice\n                    urgency={row.urgency}\n                    subject={row.title ?? undefined}\n                    busy={ack === row.id}\n                    disabled={Boolean(ack)}\n                    onAcknowledge={() => void acknowledge(row)}\n                  />\n                </article>\n              ))}\n              {urgencies.atLeast ? (\n                <p role="status">\n                  La coda è parziale: consulta Diario e Consegne per tutte le voci.\n                </p>\n              ) : (\n                !rows.length && <p>Nessuna urgenza da comprendere nella coda verificata.</p>\n              )}\n            </>\n          )}\n          {ackError && <p role="alert">{ackError}</p>}\n          {onOpenDiary && (\n            <button type="button" className="ds-link" onClick={onOpenDiary}>\n              Apri diario completo\n            </button>\n          )}\n        </section>\n      )}\n      {canVitals && (\n        <p className="patient-today__vitals" role="status">\n          {!current\n            ? \'Caricamento parametri…\'\n            : current.vitalError\n              ? \'Parametri non disponibili\'\n              : readings.length\n                ? `${readings.length} rilevazioni oggi · ultima ${readingTime(readings[0].measuredAt)} · ${PARAMETER_FIELDS.filter(\n                    (field) => readings[0].values[field.key]?.trim(),\n                  )\n                    .map(\n                      (field) =>\n                        `${field.label} ${formatParameterValue(field.key, readings[0].values[field.key]!)} ${field.unit}`,\n                    )\n                    .join(\' · \')}`\n                : \'Nessuna rilevazione oggi\'}\n          {canRecord && (\n            <>\n              {\' \'}\n              ·{\' \'}\n              <button className="ds-link" onClick={onRecordVitals}>\n                Rileva ora\n              </button>\n            </>\n          )}\n        </p>\n      )}\n    </section>\n  );\n}\n',
+    expected: /fetchParameterReadings\(/,
+    operator: 'match',
+    diff: 'simple'
+  }

@@ -1,0 +1,28 @@
+{
+  "reproduced": true,
+  "syntheticOnly": true,
+  "result": {
+    "status": "published",
+    "pr": 81,
+    "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "round": 2,
+    "verdict": "approved",
+    "blockedSubjects": [],
+    "providerExecuted": true
+  },
+  "original": {
+    "claim": "nonce-2",
+    "request": "nonce-1",
+    "round": 1
+  },
+  "replacement": {
+    "claim": "nonce-4",
+    "request": "nonce-3",
+    "round": 2
+  },
+  "posted": {
+    "claim": "nonce-4",
+    "request": "nonce-3",
+    "round": 2
+  }
+}

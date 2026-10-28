@@ -1,0 +1,22 @@
+{
+  "results": [
+    {
+      "timezoneId": "Europe/Rome",
+      "initial": "2026-10-25",
+      "hydrated": "2026-09-15",
+      "once": "2026-09-15",
+      "expected": "2026-09-15",
+      "pass": true
+    },
+    {
+      "timezoneId": "America/Los_Angeles",
+      "initial": "2026-10-25",
+      "hydrated": "2026-09-15",
+      "once": "2026-09-15",
+      "expected": "2026-09-15",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "unexpected": []
+}

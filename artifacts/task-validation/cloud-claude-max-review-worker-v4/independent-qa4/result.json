@@ -1,0 +1,45 @@
+{
+  "nonce": "0b09d6e7-82bd-48a8-afed-2bdea9d6043c",
+  "verdict": "READY FOR CODEX QA",
+  "findings": [],
+  "priorQa3FailurePreserved": true,
+  "qa3PreclaimBindingFixed": true,
+  "phases": {
+    "0": "PASS",
+    "1": "PASS",
+    "2": "PASS",
+    "3": "PASS",
+    "4": "PASS",
+    "5": "PASS"
+  },
+  "tests": {
+    "focused": {
+      "total": 134,
+      "passed": 134,
+      "failed": 0,
+      "skipped": 0
+    },
+    "full": {
+      "total": 1265,
+      "passed": 1262,
+      "failed": 0,
+      "skipped": 3,
+      "executedOnce": true
+    },
+    "independentScenarioGroups": 59
+  },
+  "sourceManifestSha256": "6e63324f25e2047bc57877d520d4fd0227345c6f8cda69a7c3584cb15ab691fe",
+  "sourceAndPriorEvidenceUnchanged": true,
+  "realProviderExecuted": false,
+  "authenticationRetried": false,
+  "realGithubApiMutated": false,
+  "canonicalStateMutated": false,
+  "gitMutated": false,
+  "installedDependencies": false,
+  "activationVerified": false,
+  "actualAuthenticationRun": "40202235777",
+  "actualAuthenticationResult": "claude-authentication-error",
+  "actualFormatRun": "40208616713",
+  "actualFormatResult": "unrecognizedFormat",
+  "report": "report.md"
+}

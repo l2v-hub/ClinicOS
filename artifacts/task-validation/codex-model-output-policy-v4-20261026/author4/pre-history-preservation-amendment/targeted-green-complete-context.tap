@@ -1,0 +1,822 @@
+TAP version 13
+# Subtest: empty queue and label-only or manual subjects have no provider call or claim
+ok 1 - empty queue and label-only or manual subjects have no provider call or claim
+  ---
+  duration_ms: 7.847374
+  type: 'test'
+  ...
+# Subtest: source then actual auth probe precede the one native claim, validated report, reconciliation, projection and wake
+ok 2 - source then actual auth probe precede the one native claim, validated report, reconciliation, projection and wake
+  ---
+  duration_ms: 6.579468
+  type: 'test'
+  ...
+# Subtest: missing/invalid subscription credentials and stale source stop before native claim
+ok 3 - missing/invalid subscription credentials and stale source stop before native claim
+  ---
+  duration_ms: 4.411048
+  type: 'test'
+  ...
+# Subtest: native CAS loser never invokes review inference
+ok 4 - native CAS loser never invokes review inference
+  ---
+  duration_ms: 0.980031
+  type: 'test'
+  ...
+# Subtest: original source and packet snapshots cannot be rewritten through reader aliases during qualification
+ok 5 - original source and packet snapshots cannot be rewritten through reader aliases during qualification
+  ---
+  duration_ms: 2.054666
+  type: 'test'
+  ...
+# Subtest: an unexpected returned claim transition cannot authorize inference using an older specification
+ok 6 - an unexpected returned claim transition cannot authorize inference using an older specification
+  ---
+  duration_ms: 4.81693
+  type: 'test'
+  ...
+# Subtest: invalid report spends its own claim, notifies recovery and never retries automatically
+ok 7 - invalid report spends its own claim, notifies recovery and never retries automatically
+  ---
+  duration_ms: 1.527475
+  type: 'test'
+  ...
+# Subtest: uncertain publication preserves genuine findings and the existing running claim
+ok 8 - uncertain publication preserves genuine findings and the existing running claim
+  ---
+  duration_ms: 1.973869
+  type: 'test'
+  ...
+# Subtest: unavailable Codex dispatch retains exact published review receipt without another model call
+ok 9 - unavailable Codex dispatch retains exact published review receipt without another model call
+  ---
+  duration_ms: 2.041557
+  type: 'test'
+  ...
+# Subtest: real auth probe requires a real successful structured inference and qualified version
+ok 10 - real auth probe requires a real successful structured inference and qualified version
+  ---
+  duration_ms: 1.250924
+  type: 'test'
+  ...
+# Subtest: probe qualifies only one explicit Opus profile, ignoring internal models and clamping the known context maximum
+ok 11 - probe qualifies only one explicit Opus profile, ignoring internal models and clamping the known context maximum
+  ---
+  duration_ms: 6.709125
+  type: 'test'
+  ...
+# Subtest: numeric Opus version/date IDs normalize an exact optional 1M tag before inference
+ok 12 - numeric Opus version/date IDs normalize an exact optional 1M tag before inference
+  ---
+  duration_ms: 0.681749
+  type: 'test'
+  ...
+# Subtest: base and tagged Opus aliases remain ambiguous and malformed IDs never qualify
+ok 13 - base and tagged Opus aliases remain ambiguous and malformed IDs never qualify
+  ---
+  duration_ms: 1.330075
+  type: 'test'
+  ...
+# Subtest: tagged profiles retain explicit context/output bounds and the 1M inference clamp
+ok 14 - tagged profiles retain explicit context/output bounds and the 1M inference clamp
+  ---
+  duration_ms: 0.984107
+  type: 'test'
+  ...
+# Subtest: actual tagged modelUsage response shape passes the genuine probe before one native claim
+ok 15 - actual tagged modelUsage response shape passes the genuine probe before one native claim
+  ---
+  duration_ms: 1.388961
+  type: 'test'
+  ...
+# Subtest: a real successful probe envelope without context metadata still refuses qualification
+ok 16 - a real successful probe envelope without context metadata still refuses qualification
+  ---
+  duration_ms: 0.756027
+  type: 'test'
+  ...
+# Subtest: missing/small/ambiguous probe context and oversized complete inputs never claim or invoke review
+ok 17 - missing/small/ambiguous probe context and oversized complete inputs never claim or invoke review
+  ---
+  duration_ms: 13.596779
+  type: 'test'
+  ...
+# Subtest: the exact serialized Unicode/escaped prompt and schema fit the qualified profile before its pinned model call
+ok 18 - the exact serialized Unicode/escaped prompt and schema fit the qualified profile before its pinned model call
+  ---
+  duration_ms: 2.166063
+  type: 'test'
+  ...
+# Subtest: every publication stage retains the full sanitized valid report and digest without retrying or failing a claim
+ok 19 - every publication stage retains the full sanitized valid report and digest without retrying or failing a claim
+  ---
+  duration_ms: 2.995881
+  type: 'test'
+  ...
+# Subtest: retained ownership-change report is sanitized and hashed without exposing clinical/contact fields
+ok 20 - retained ownership-change report is sanitized and hashed without exposing clinical/contact fields
+  ---
+  duration_ms: 0.788112
+  type: 'test'
+  ...
+# Subtest: a post-claim timeout spends one round, notifies recovery and never mints a retry
+ok 21 - a post-claim timeout spends one round, notifies recovery and never mints a retry
+  ---
+  duration_ms: 1.115142
+  type: 'test'
+  ...
+# Subtest: workflow token is read-only and the precredential CLI installation uses the complete committed integrity lock
+ok 22 - workflow token is read-only and the precredential CLI installation uses the complete committed integrity lock
+  ---
+  duration_ms: 14.789861
+  type: 'test'
+  ...
+# Subtest: API source packet binds complete base/head source, contract and evidence without executing reviewed content
+ok 23 - API source packet binds complete base/head source, contract and evidence without executing reviewed content
+  ---
+  duration_ms: 2.844171
+  type: 'test'
+  ...
+# Subtest: 77+ binary proof changes remain hash metadata and do not block an ordinary small source review
+ok 24 - 77+ binary proof changes remain hash metadata and do not block an ordinary small source review
+  ---
+  duration_ms: 2.662529
+  type: 'test'
+  ...
+# Subtest: complete tree inventories prove all source changes when comparison files hit GitHub cap300
+ok 25 - complete tree inventories prove all source changes when comparison files hit GitHub cap300
+  ---
+  duration_ms: 4.04054
+  type: 'test'
+  ...
+# Subtest: unsupported first candidate never starves a later eligible native review
+ok 26 - unsupported first candidate never starves a later eligible native review
+  ---
+  duration_ms: 1.681703
+  type: 'test'
+  ...
+# Subtest: API source reader rejects identity/traversal/truncation/omitted diff/blob corruption/oversize
+ok 27 - API source reader rejects identity/traversal/truncation/omitted diff/blob corruption/oversize
+  ---
+  duration_ms: 7.780142
+  type: 'test'
+  ...
+# Subtest: actual review subprocess receives only subscription provider credentials and private empty HOME/cwd
+ok 28 - actual review subprocess receives only subscription provider credentials and private empty HOME/cwd
+  ---
+  duration_ms: 63.88255
+  type: 'test'
+  ...
+# Subtest: trusted cloud generation contract precedes untrusted JSON and states strict verdict consistency
+ok 29 - trusted cloud generation contract precedes untrusted JSON and states strict verdict consistency
+  ---
+  duration_ms: 0.838758
+  type: 'test'
+  ...
+# Subtest: runner throw and diagnostic callback rejection keep the native spent failure
+ok 30 - runner throw and diagnostic callback rejection keep the native spent failure
+  ---
+  duration_ms: 1.010803
+  type: 'test'
+  ...
+# Subtest: diagnostic callback failure never replaces the original native controller exception
+ok 31 - diagnostic callback failure never replaces the original native controller exception
+  ---
+  duration_ms: 1.177092
+  type: 'test'
+  ...
+# Subtest: finite classification: approved with three genuine low findings
+ok 32 - finite classification: approved with three genuine low findings
+  ---
+  duration_ms: 3.566579
+  type: 'test'
+  ...
+# Subtest: finite classification: changes requested without findings
+ok 33 - finite classification: changes requested without findings
+  ---
+  duration_ms: 0.391235
+  type: 'test'
+  ...
+# Subtest: finite classification: stale exact SHA
+ok 34 - finite classification: stale exact SHA
+  ---
+  duration_ms: 0.602462
+  type: 'test'
+  ...
+# Subtest: finite classification: over 100 findings
+ok 35 - finite classification: over 100 findings
+  ---
+  duration_ms: 3.121409
+  type: 'test'
+  ...
+# Subtest: finite classification: untracked file
+ok 36 - finite classification: untracked file
+  ---
+  duration_ms: 0.463611
+  type: 'test'
+  ...
+# Subtest: finite classification: nonpositive line
+ok 37 - finite classification: nonpositive line
+  ---
+  duration_ms: 0.270501
+  type: 'test'
+  ...
+# Subtest: finite classification: whitespace-only field
+ok 38 - finite classification: whitespace-only field
+  ---
+  duration_ms: 0.292599
+  type: 'test'
+  ...
+# Subtest: finite classification: blank summary
+ok 39 - finite classification: blank summary
+  ---
+  duration_ms: 0.186565
+  type: 'test'
+  ...
+# Subtest: finite classification: unknown report property
+ok 40 - finite classification: unknown report property
+  ---
+  duration_ms: 0.458548
+  type: 'test'
+  ...
+# Subtest: finite classification: credential-shaped content
+ok 41 - finite classification: credential-shaped content
+  ---
+  duration_ms: 1.273089
+  type: 'test'
+  ...
+# Subtest: finite classification: post-communication growth
+ok 42 - finite classification: post-communication growth
+  ---
+  duration_ms: 11.567972
+  type: 'test'
+  ...
+# Subtest: valid approved, actionable changes and blocked-empty are accepted without mutation
+ok 43 - valid approved, actionable changes and blocked-empty are accepted without mutation
+  ---
+  duration_ms: 0.702797
+  type: 'test'
+  ...
+# Subtest: supported schema patterns reject blank text; manual semantic limits remain authoritative
+ok 44 - supported schema patterns reject blank text; manual semantic limits remain authoritative
+  ---
+  duration_ms: 1.325331
+  type: 'test'
+  ...
+# Subtest: envelope failures and runner errors retain only finite metadata and sanitized-string hashes
+ok 45 - envelope failures and runner errors retain only finite metadata and sanitized-string hashes
+  ---
+  duration_ms: 0.626236
+  type: 'test'
+  ...
+# Subtest: diagnostic exceptions and runner throws expose only finite flags
+ok 46 - diagnostic exceptions and runner throws expose only finite flags
+  ---
+  duration_ms: 0.57095
+  type: 'test'
+  ...
+# Subtest: standalone adoption binds true PR identity, source/config projection, packet and all three imported attempts
+ok 47 - standalone adoption binds true PR identity, source/config projection, packet and all three imported attempts
+  ---
+  duration_ms: 15.418391
+  type: 'test'
+  ...
+# Subtest: adoption rejects fork, base drift, missing native checks, malformed source or packet, and historical source mismatch
+ok 48 - adoption rejects fork, base drift, missing native checks, malformed source or packet, and historical source mismatch
+  ---
+  duration_ms: 9.278948
+  type: 'test'
+  ...
+# Subtest: CAS claim reserves before analysis, retains imported history, and exclusive PR labels follow request/running/published
+ok 49 - CAS claim reserves before analysis, retains imported history, and exclusive PR labels follow request/running/published
+  ---
+  duration_ms: 33.456349
+  type: 'test'
+  ...
+# Subtest: cloud provider failure settles only its native standalone claim and projects blocked without refunding history
+ok 50 - cloud provider failure settles only its native standalone claim and projects blocked without refunding history
+  ---
+  duration_ms: 11.71412
+  type: 'test'
+  ...
+# Subtest: cloud standalone stale result preserves old failed round and replacement native reservation without a report
+ok 51 - cloud standalone stale result preserves old failed round and replacement native reservation without a report
+  ---
+  duration_ms: 23.817258
+  type: 'test'
+  ...
+# Subtest: standalone submit forwards full expected claim and permits the unchanged native reservation
+ok 52 - standalone submit forwards full expected claim and permits the unchanged native reservation
+  ---
+  duration_ms: 11.937278
+  type: 'test'
+  ...
+# Subtest: standalone cloud preclaim spec or feedback drift preserves its pending request without inference
+ok 53 - standalone cloud preclaim spec or feedback drift preserves its pending request without inference
+  ---
+  duration_ms: 12.43685
+  type: 'test'
+  ...
+# Subtest: standalone optional claim snapshot is copied before gated asynchronous verification
+ok 54 - standalone optional claim snapshot is copied before gated asynchronous verification
+  ---
+  duration_ms: 4.447669
+  type: 'test'
+  ...
+# Subtest: standalone simultaneous claims use one durable reservation and no fifth review is inferred
+ok 55 - standalone simultaneous claims use one durable reservation and no fifth review is inferred
+  ---
+  duration_ms: 6.546563
+  type: 'test'
+  ...
+# Subtest: owner, nonce, SHA and full tracked tree protect standalone comment import
+ok 56 - owner, nonce, SHA and full tracked tree protect standalone comment import
+  ---
+  duration_ms: 12.839824
+  type: 'test'
+  ...
+# Subtest: pipeline independent QA reserves ownership, keeps release hold, and exposes genuine two-review readiness only
+ok 57 - pipeline independent QA reserves ownership, keeps release hold, and exposes genuine two-review readiness only
+  ---
+  duration_ms: 12.458209
+  type: 'test'
+  ...
+# Subtest: QA findings and changed feedback block, while an existing running owner remains pending
+ok 58 - QA findings and changed feedback block, while an existing running owner remains pending
+  ---
+  duration_ms: 32.692954
+  type: 'test'
+  ...
+# Subtest: infrastructure merge boundary reuses exact-SHA protected merge and rejects application/deployment scope
+ok 59 - infrastructure merge boundary reuses exact-SHA protected merge and rejects application/deployment scope
+  ---
+  duration_ms: 22.015238
+  type: 'test'
+  ...
+# Subtest: revision appends new packet and preserves every old proof byte on the current head
+ok 60 - revision appends new packet and preserves every old proof byte on the current head
+  ---
+  duration_ms: 5.076394
+  type: 'test'
+  ...
+# Subtest: revision rejects rewritten old-attempt copy and rewritten or removed historical packet bytes on NEW head
+ok 61 - revision rejects rewritten old-attempt copy and rewritten or removed historical packet bytes on NEW head
+  ---
+  duration_ms: 15.593829
+  type: 'test'
+  ...
+# Subtest: trusted runtime fixed policy protects all original infrastructure paths and leaves protected merge manual
+ok 62 - trusted runtime fixed policy protects all original infrastructure paths and leaves protected merge manual
+  ---
+  duration_ms: 26.756591
+  type: 'test'
+  ...
+# Subtest: runtime never merges held, unknown, application, unreviewed or failed independent QA subjects
+ok 63 - runtime never merges held, unknown, application, unreviewed or failed independent QA subjects
+  ---
+  duration_ms: 83.590603
+  type: 'test'
+  ...
+# Subtest: runtime recovers an actual exact-SHA merge after interruption without merging or reviewing again
+ok 64 - runtime recovers an actual exact-SHA merge after interruption without merging or reviewing again
+  ---
+  duration_ms: 13.38895
+  type: 'test'
+  ...
+# Subtest: authenticated frozen merge-base survives a real main advance and rejects changed review ancestry/head/base
+ok 65 - authenticated frozen merge-base survives a real main advance and rejects changed review ancestry/head/base
+  ---
+  duration_ms: 143.394825
+  type: 'test'
+  ...
+# Subtest: finalize authentication accepts only an explicit synthetic directory without API-key conflict
+ok 66 - finalize authentication accepts only an explicit synthetic directory without API-key conflict
+  ---
+  duration_ms: 44.861628
+  type: 'test'
+  ...
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-26T06:52:02.576Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-26T06:52:02.578Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-26T06:52:02.583Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"docs/standalone-pr-review.md","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reservedAt":"2026-10-26T06:52:02.587Z","nonce":"e8fa567a-2d28-4ef5-a509-42af3cfee771","summary":"Independent synthetic QA callback; no actual model invoked."},"recoveryTokens":{"implementation":null,"qa":"e8fa567a-2d28-4ef5-a509-42af3cfee771","merge":null,"resume":"2d5a49758bb5845adca8962c40a5661df42c602b9b330e85f1339c10293a5fe9"},"authMode":"existing-codex-auth"}
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-26T06:52:02.576Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-26T06:52:02.578Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-26T06:52:02.583Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"docs/standalone-pr-review.md","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reservedAt":"2026-10-26T06:52:02.587Z","nonce":"e8fa567a-2d28-4ef5-a509-42af3cfee771","summary":"Independent synthetic QA callback; no actual model invoked."},"recoveryTokens":{"implementation":null,"qa":"e8fa567a-2d28-4ef5-a509-42af3cfee771","merge":null,"resume":"2d5a49758bb5845adca8962c40a5661df42c602b9b330e85f1339c10293a5fe9"},"authMode":"existing-codex-auth"}
+# Subtest: production finalize CLI dispatch runs separate Codex QA and leaves protected merge manual without repeating QA
+ok 67 - production finalize CLI dispatch runs separate Codex QA and leaves protected merge manual without repeating QA
+  ---
+  duration_ms: 22.370562
+  type: 'test'
+  ...
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"blocked","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-26T06:52:02.599Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-26T06:52:02.601Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-26T06:52:02.606Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"docs/synthetic-review-regression.md","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"failed","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reservedAt":"2026-10-26T06:52:02.609Z","nonce":"a591aff0-f6de-4e3a-8e4a-578fd9585425","failureCode":"controller-execution-failed"},"recoveryTokens":{"implementation":null,"qa":"a591aff0-f6de-4e3a-8e4a-578fd9585425","merge":null,"resume":"83685f4e957bf4b7ee3cad3eebe40bc3daeeb7507bf385384097c0b6d8fbe388"},"failureCode":"controller-execution-failed","authMode":"existing-codex-auth"}
+# Subtest: finalize CLI cannot process normal/unadopted PR and preserves failed Codex execution as blocked
+ok 68 - finalize CLI cannot process normal/unadopted PR and preserves failed Codex execution as blocked
+  ---
+  duration_ms: 18.303288
+  type: 'test'
+  ...
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"waiting-review","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-26T06:52:02.616Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-26T06:52:02.618Z","feedbackFingerprint":"5fa4c0577da063fd59e6dad5d8bc1aba7a330d9cfe84888b82f349822c9f7e40","reportComment":2,"reportBodySha256":"84dfbd63ffafd193b5ec398ebcc09156c0c29f6c8a1f1c7a936c318b394bdc34","completedAt":"2026-10-26T06:52:02.632Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/tests/example.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":"Await genuine reviews and infrastructure authorization","recoveryTokens":{"implementation":null,"qa":null,"merge":null,"resume":"d75024ecaf69c43393dff223b660dccf817dbef38f38aa5ba671044799e88d17"}}
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"waiting-review","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-26T06:52:02.641Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-26T06:52:02.643Z","feedbackFingerprint":"82c1ced056690ea6e831886181e247a18ee14c43303a158365aa8c42f4168a88","reportComment":2,"reportBodySha256":"11fc20d1b0f47a6cff813146f51f0ede2ef937be8d8dd7ea910093f343032366","completedAt":"2026-10-26T06:52:02.657Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/tests/example.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":"Await genuine reviews and infrastructure authorization","recoveryTokens":{"implementation":null,"qa":null,"merge":null,"resume":"d75024ecaf69c43393dff223b660dccf817dbef38f38aa5ba671044799e88d17"}}
+# Subtest: standalone production CLI imports legitimate UTF8 CJK and surrogate-pair reports from real temp files
+ok 69 - standalone production CLI imports legitimate UTF8 CJK and surrogate-pair reports from real temp files
+  ---
+  duration_ms: 53.593993
+  type: 'test'
+  ...
+# Subtest: Unicode CLI pre-read allowance never expands canonical comment limit or normal60kB input guard
+ok 70 - Unicode CLI pre-read allowance never expands canonical comment limit or normal60kB input guard
+  ---
+  duration_ms: 12.701803
+  type: 'test'
+  ...
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"waiting-review","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-26T06:52:02.683Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-26T06:52:02.686Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-26T06:52:02.691Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"docs/synthetic-review-regression.md","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"running","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reservedAt":"2026-10-26T06:52:02.693Z","nonce":"2792b899-1351-4eaa-b654-82714a9b7ff9"},"recoveryTokens":{"implementation":null,"qa":"2792b899-1351-4eaa-b654-82714a9b7ff9","merge":null,"resume":"d75024ecaf69c43393dff223b660dccf817dbef38f38aa5ba671044799e88d17"},"authMode":"existing-codex-auth"}
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"ready","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-26T06:52:02.683Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-26T06:52:02.686Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-26T06:52:02.691Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"docs/synthetic-review-regression.md","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":false,"codexFinalReview":{"status":"verified","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","claudeRound":1,"feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reservedAt":"2026-10-26T06:52:02.693Z","nonce":"2792b899-1351-4eaa-b654-82714a9b7ff9","summary":"Independent owner completed its bounded QA."},"recoveryTokens":{"implementation":null,"qa":"2792b899-1351-4eaa-b654-82714a9b7ff9","merge":null,"resume":"2d5a49758bb5845adca8962c40a5661df42c602b9b330e85f1339c10293a5fe9"},"authMode":"existing-codex-auth"}
+# Subtest: concurrent production finalize and pipeline observe active Codex QA without mutation, duplicate inference or merge
+ok 71 - concurrent production finalize and pipeline observe active Codex QA without mutation, duplicate inference or merge
+  ---
+  duration_ms: 27.016043
+  type: 'test'
+  ...
+# Subtest: an existing open merge reservation remains pending instead of racing its active owner
+ok 72 - an existing open merge reservation remains pending instead of racing its active owner
+  ---
+  duration_ms: 17.586769
+  type: 'test'
+  ...
+# Subtest: organic24subject92report near-capacity history refuses claim before durable round or report, and QA before inference
+ok 73 - organic24subject92report near-capacity history refuses claim before durable round or report, and QA before inference
+  ---
+  duration_ms: 4232.13977
+  type: 'test'
+  ...
+# Subtest: actual store disjoint request+claim while QA waits preserves both entities and the owner result, merges once
+ok 74 - actual store disjoint request+claim while QA waits preserves both entities and the owner result, merges once
+  ---
+  duration_ms: 87.341837
+  type: 'test'
+  ...
+# Subtest: actual store same-subject modification during QA remains a conflict without overwriting peer hold or duplicating inference
+ok 75 - actual store same-subject modification during QA remains a conflict without overwriting peer hold or duplicating inference
+  ---
+  duration_ms: 28.416395
+  type: 'test'
+  ...
+# Subtest: F1 trust-root and workflow changes never merge even through a caller-supplied allowlist
+ok 76 - F1 trust-root and workflow changes never merge even through a caller-supplied allowlist
+  ---
+  duration_ms: 136.016236
+  type: 'test'
+  ...
+# Subtest: F2 existing manual PR, branch or issue ownership blocks adoption without shortening history
+ok 77 - F2 existing manual PR, branch or issue ownership blocks adoption without shortening history
+  ---
+  duration_ms: 3.45603
+  type: 'test'
+  ...
+# Subtest: F3 same-account report cannot authorize merge; distinct reviewer or protected native human approval can
+ok 78 - F3 same-account report cannot authorize merge; distinct reviewer or protected native human approval can
+  ---
+  duration_ms: 16.407799
+  type: 'test'
+  ...
+# Subtest: F4 head-drift claim recovery preserves the consumed round and enables adoption of the new SHA
+ok 79 - F4 head-drift claim recovery preserves the consumed round and enables adoption of the new SHA
+  ---
+  duration_ms: 23.207362
+  type: 'test'
+  ...
+# Subtest: F4 audited QA release is one-use, maintainer-only, preserves old reservation and reserves a fresh nonce
+ok 80 - F4 audited QA release is one-use, maintainer-only, preserves old reservation and reserves a fresh nonce
+  ---
+  duration_ms: 21.27976
+  type: 'test'
+  ...
+# Subtest: F4 merge release requires native open/unmerged identity and archives the exact reservation
+ok 81 - F4 merge release requires native open/unmerged identity and archives the exact reservation
+  ---
+  duration_ms: 14.815469
+  type: 'test'
+  ...
+# {"pr":81,"kind":"standalone-pr-review","batch":"standalone-pr-81","sha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","phase":"waiting-review","issues":[],"reviews":1,"implementation":3,"legacyImplementation":3,"implementationLimit":4,"reviewLimit":4,"handoff":{"channel":"github-comments","status":"published","subjectSha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","requestId":"request-1","requestedAt":"2026-10-26T06:52:07.291Z","requestedBy":"maintainer","owner":"maintainer","claimId":"request-2","startedAt":"2026-10-26T06:52:07.294Z","feedbackFingerprint":"f271d30f33a812f0b63b436948caeb60ac929218879c575a2d6b16ecd77c4542","reportComment":2,"reportBodySha256":"490f602436694918a1b264b4fc453f73dcd102710ef8d7fd77d6c76aefcb82c0","completedAt":"2026-10-26T06:52:07.308Z","feedbackChanged":false},"baseSha":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","packet":"artifacts/task-validation/standalone-review-81","sourceManifest":[{"path":"agent-team/tests/example.mjs","blob":"dddddddddddddddddddddddddddddddddddddddd","mode":"100644","baseBlob":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","baseMode":"100644"}],"releaseHold":"Await genuine reviews and infrastructure authorization","recoveryTokens":{"implementation":null,"qa":null,"merge":null,"resume":"d75024ecaf69c43393dff223b660dccf817dbef38f38aa5ba671044799e88d17"}}
+# Subtest: F5 persisted submit reports failed projection and reconcile alone converges without another round/comment
+ok 82 - F5 persisted submit reports failed projection and reconcile alone converges without another round/comment
+  ---
+  duration_ms: 103.916134
+  type: 'test'
+  ...
+# Subtest: F7 immutable packet reads occur once through submit/reconcile/projection, while native identity remains live
+ok 83 - F7 immutable packet reads occur once through submit/reconcile/projection, while native identity remains live
+  ---
+  duration_ms: 11.674432
+  type: 'test'
+  ...
+# Subtest: F8 only optional exact-name Vercel failures are tolerated; required checks remain mandatory
+ok 84 - F8 only optional exact-name Vercel failures are tolerated; required checks remain mandatory
+  ---
+  duration_ms: 1.023971
+  type: 'test'
+  ...
+# Subtest: F9 independent QA reservation uses injected time
+ok 85 - F9 independent QA reservation uses injected time
+  ---
+  duration_ms: 10.974505
+  type: 'test'
+  ...
+# Subtest: F7 unusable persistence halts all later mutations and cannot leak an unsaved QA reservation
+ok 86 - F7 unusable persistence halts all later mutations and cannot leak an unsaved QA reservation
+  ---
+  duration_ms: 19.423585
+  type: 'test'
+  ...
+# Subtest: F4 a transient waiting-subject read failure leaves phase and consumed history unchanged
+ok 87 - F4 a transient waiting-subject read failure leaves phase and consumed history unchanged
+  ---
+  duration_ms: 11.220654
+  type: 'test'
+  ...
+# Subtest: audited completed operator continuation remains the latest tested source across revision adoption without legacy folding
+ok 88 - audited completed operator continuation remains the latest tested source across revision adoption without legacy folding
+  ---
+  duration_ms: 9.744178
+  type: 'test'
+  ...
+# Subtest: transient fairness uses elapsed backoff, keeps three rapid ticks pending, and exhausts only after the window
+ok 89 - transient fairness uses elapsed backoff, keeps three rapid ticks pending, and exhausts only after the window
+  ---
+  duration_ms: 33.945279
+  type: 'test'
+  ...
+# Subtest: permanent read failure blocks once while the next standalone subject progresses in the same tick
+ok 90 - permanent read failure blocks once while the next standalone subject progresses in the same tick
+  ---
+  duration_ms: 9.983498
+  type: 'test'
+  ...
+# Subtest: transient counters reset on successful work and changed SHA without resetting consumed attempts
+ok 91 - transient counters reset on successful work and changed SHA without resetting consumed attempts
+  ---
+  duration_ms: 23.125302
+  type: 'test'
+  ...
+# Subtest: human-protected prompt and policy tests reject automatic merge even with a supplied allowlist and native override
+ok 92 - human-protected prompt and policy tests reject automatic merge even with a supplied allowlist and native override
+  ---
+  duration_ms: 0.559641
+  type: 'test'
+  ...
+# Subtest: post-save request notice failure is repaired by the actual suggested CLI command, idempotently without spending a round
+ok 93 - post-save request notice failure is repaired by the actual suggested CLI command, idempotently without spending a round
+  ---
+  duration_ms: 9.792636
+  type: 'test'
+  ...
+# Subtest: uncertain request comment that committed is reconciled without a second notice; changed actor cannot repair it
+ok 94 - uncertain request comment that committed is reconciled without a second notice; changed actor cannot repair it
+  ---
+  duration_ms: 7.184659
+  type: 'test'
+  ...
+# Subtest: merge lease covers bounded preparation plus command; recovery at 31 seconds still needs verified force
+ok 95 - merge lease covers bounded preparation plus command; recovery at 31 seconds still needs verified force
+  ---
+  duration_ms: 20.933885
+  type: 'test'
+  ...
+# Subtest: force-live flag alone cannot replace trusted external capability verification
+ok 96 - force-live flag alone cannot replace trusted external capability verification
+  ---
+  duration_ms: 15.441093
+  type: 'test'
+  ...
+# Subtest: explicit verified force is audited and cannot reset consumed implementation or review history
+ok 97 - explicit verified force is audited and cannot reset consumed implementation or review history
+  ---
+  duration_ms: 10.941167
+  type: 'test'
+  ...
+# Subtest: merge completed before release converges to exact-head receipt rather than waiting review
+ok 98 - merge completed before release converges to exact-head receipt rather than waiting review
+  ---
+  duration_ms: 13.769876
+  type: 'test'
+  ...
+# Subtest: merge during actual save guard refuses stale recovery and reconciles the retained reservation
+ok 99 - merge during actual save guard refuses stale recovery and reconciles the retained reservation
+  ---
+  duration_ms: 19.528774
+  type: 'test'
+  ...
+# Subtest: merge after recovery CAS is reconciled through tombstone without a second merge
+ok 100 - merge after recovery CAS is reconciled through tombstone without a second merge
+  ---
+  duration_ms: 33.006777
+  type: 'test'
+  ...
+# Subtest: failed QA reservation is terminal and needs no invented lease, but each release requires a fresh external consumption
+ok 101 - failed QA reservation is terminal and needs no invented lease, but each release requires a fresh external consumption
+  ---
+  duration_ms: 19.158282
+  type: 'test'
+  ...
+# Subtest: definite protected merge rejection archives the full reservation for explicit resume without retrying
+ok 102 - definite protected merge rejection archives the full reservation for explicit resume without retrying
+  ---
+  duration_ms: 38.167521
+  type: 'test'
+  ...
+# Subtest: completed gh mergePullRequest GraphQL refusal archives after a fresh exact-open check and resumes without retrying
+ok 103 - completed gh mergePullRequest GraphQL refusal archives after a fresh exact-open check and resumes without retrying
+  ---
+  duration_ms: 26.354775
+  type: 'test'
+  ...
+# Subtest: unknown-outcome merge that committed reconciles receipt and preserves reservation nonce without a second write
+ok 104 - unknown-outcome merge that committed reconciles receipt and preserves reservation nonce without a second write
+  ---
+  duration_ms: 22.268118
+  type: 'test'
+  ...
+# Subtest: projection 502 retries block with operation metadata and resume only after exact evidence verification
+ok 105 - projection 502 retries block with operation metadata and resume only after exact evidence verification
+  ---
+  duration_ms: 85.151977
+  type: 'test'
+  ...
+# Subtest: uncertain or rejected non-projection mutations remain fail closed for resume
+ok 106 - uncertain or rejected non-projection mutations remain fail closed for resume
+  ---
+  duration_ms: 4.016448
+  type: 'test'
+  ...
+# Subtest: revision adoption preserves a full merging tombstone only at a verified OPEN different head
+ok 107 - revision adoption preserves a full merging tombstone only at a verified OPEN different head
+  ---
+  duration_ms: 11.924463
+  type: 'test'
+  ...
+# Subtest: new adoption cannot supply a legacy budget authorization exemption; both validators reject unauthorized appended PR extensions
+ok 108 - new adoption cannot supply a legacy budget authorization exemption; both validators reject unauthorized appended PR extensions
+  ---
+  duration_ms: 5.609145
+  type: 'test'
+  ...
+# Subtest: background standalone waiting notice neither reads the notice nor blocks when actor differs or notice reads fail
+ok 109 - background standalone waiting notice neither reads the notice nor blocks when actor differs or notice reads fail
+  ---
+  duration_ms: 6.625466
+  type: 'test'
+  ...
+# Subtest: slow merge readiness keeps 31-second reservation live and prevents commands after preparation deadline
+ok 110 - slow merge readiness keeps 31-second reservation live and prevents commands after preparation deadline
+  ---
+  duration_ms: 34.227577
+  type: 'test'
+  ...
+# Subtest: definite merge rejection cannot archive a reservation after native head/state becomes uncertain
+ok 111 - definite merge rejection cannot archive a reservation after native head/state becomes uncertain
+  ---
+  duration_ms: 71.38378
+  type: 'test'
+  ...
+# Subtest: standalone publisher explicitly rejects source cohorts without projecting labels
+ok 112 - standalone publisher explicitly rejects source cohorts without projecting labels
+  ---
+  duration_ms: 6.549118
+  type: 'test'
+  ...
+# Subtest: automatic pipeline with prebuilt native controller observes takeover without projection or owned diagnostics
+ok 113 - automatic pipeline with prebuilt native controller observes takeover without projection or owned diagnostics
+  ---
+  duration_ms: 7.652059
+  type: 'test'
+  ...
+# Subtest: prebuilt native controller isolates automatic context across concurrent explicit calls and exceptions
+ok 114 - prebuilt native controller isolates automatic context across concurrent explicit calls and exceptions
+  ---
+  duration_ms: 17.850534
+  type: 'test'
+  ...
+# Subtest: automatic standalone last publication guard observes ownership acquired during authorization
+ok 115 - automatic standalone last publication guard observes ownership acquired during authorization
+  ---
+  duration_ms: 5.83671
+  type: 'test'
+  ...
+# Subtest: automatic ownership loss after a genuine QA reservation retains its running tombstone without inference or block
+ok 116 - automatic ownership loss after a genuine QA reservation retains its running tombstone without inference or block
+  ---
+  duration_ms: 15.922583
+  type: 'test'
+  ...
+# Subtest: explicit authorized exact-SHA Max request and claim remain allowed during operator takeover
+ok 117 - explicit authorized exact-SHA Max request and claim remain allowed during operator takeover
+  ---
+  duration_ms: 7.082584
+  type: 'test'
+  ...
+# Subtest: F2 standalone modern QA binds live feedback and freezes the exact proof before native merge
+ok 118 - F2 standalone modern QA binds live feedback and freezes the exact proof before native merge
+  ---
+  duration_ms: 28.768589
+  type: 'test'
+  ...
+# Subtest: F2 standalone rejects stale final-QA feedback and missing frozen reservation proof at actual merge boundary
+ok 119 - F2 standalone rejects stale final-QA feedback and missing frozen reservation proof at actual merge boundary
+  ---
+  duration_ms: 29.558623
+  type: 'test'
+  ...
+# Subtest: cloud semantic diagnostics preserve actual native standalone failure and publication outcomes
+ok 120 - cloud semantic diagnostics preserve actual native standalone failure and publication outcomes
+  ---
+  duration_ms: 65.077104
+  type: 'test'
+  ...
+# Subtest: four rejected rounds remain blocked and a fifth model call is impossible
+ok 121 - four rejected rounds remain blocked and a fifth model call is impossible
+  ---
+  duration_ms: 264.713161
+  type: 'test'
+  ...
+# Subtest: the same rejected commit cannot spend a second round
+ok 122 - the same rejected commit cannot spend a second round
+  ---
+  duration_ms: 85.027145
+  type: 'test'
+  ...
+# Subtest: approval is reusable only at the same SHA and code changes require another review
+ok 123 - approval is reusable only at the same SHA and code changes require another review
+  ---
+  duration_ms: 119.944828
+  type: 'test'
+  ...
+# Subtest: missing authentication consumes no review round
+ok 124 - missing authentication consumes no review round
+  ---
+  duration_ms: 48.329211
+  type: 'test'
+  ...
+# Subtest: reviewer has only read tools and no project settings, MCP or bypass
+ok 125 - reviewer has only read tools and no project settings, MCP or bypass
+  ---
+  duration_ms: 65.003273
+  type: 'test'
+  ...
+# Subtest: dirty implementation and packets outside the worktree are rejected before model invocation
+ok 126 - dirty implementation and packets outside the worktree are rejected before model invocation
+  ---
+  duration_ms: 51.038729
+  type: 'test'
+  ...
+# Subtest: corrupted approved evidence is rejected
+ok 127 - corrupted approved evidence is rejected
+  ---
+  duration_ms: 71.974215
+  type: 'test'
+  ...
+# Subtest: a malformed provider response is a failed attempt rather than approval
+ok 128 - a malformed provider response is a failed attempt rather than approval
+  ---
+  duration_ms: 57.862023
+  type: 'test'
+  ...
+# Subtest: files changed during review invalidate the result
+ok 129 - files changed during review invalidate the result
+  ---
+  duration_ms: 65.087531
+  type: 'test'
+  ...
+# Subtest: concurrent callers cannot invoke two reviewers for the same packet
+ok 130 - concurrent callers cannot invoke two reviewers for the same packet
+  ---
+  duration_ms: 60.91968
+  type: 'test'
+  ...
+# Subtest: review validation rejects stale SHA, invented paths and contradictory approval
+ok 131 - review validation rejects stale SHA, invented paths and contradictory approval
+  ---
+  duration_ms: 0.492151
+  type: 'test'
+  ...
+# Subtest: a tracked prerequisite symlink cannot read an external implementation plan
+ok 132 - a tracked prerequisite symlink cannot read an external implementation plan
+  ---
+  duration_ms: 47.512546
+  type: 'test'
+  ...
+# Subtest: an explicitly audited effective allowance permits round5 and preserves historical max_rounds4 and reports
+ok 133 - an explicitly audited effective allowance permits round5 and preserves historical max_rounds4 and reports
+  ---
+  duration_ms: 283.888648
+  type: 'test'
+  ...
+# Subtest: local review uses the same trusted generation contract with frozen SHA and read-only rules
+ok 134 - local review uses the same trusted generation contract with frozen SHA and read-only rules
+  ---
+  duration_ms: 66.664214
+  type: 'test'
+  ...
+1..134
+# tests 134
+# suites 0
+# pass 134
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8141.15103

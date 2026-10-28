@@ -1,5 +1,6 @@
+import { TherapyVerificationPanel } from '../shared/TherapyVerificationPanel';
 import { useEffect, useRef, useState } from 'react';
-import type { TherapySlot, TherapySlotPageInfo } from '../../types';
+import type { TherapyReadGroup, TherapySlotPageInfo } from '../../types';
 import { API_URL } from '../../config';
 import { operatorHeaders } from '../../lib/operatorSession';
 import {
@@ -15,7 +16,8 @@ import { TherapyCalendarDialog } from './TherapyCalendarDialog';
 import './TherapyWeekCalendar.css';
 
 type DayState =
-  { status: 'error' } | { status: 'ready'; slots: TherapySlot[]; pageInfo: TherapySlotPageInfo };
+  | { status: 'error' }
+  | { status: 'ready'; slots: TherapyReadGroup[]; pageInfo: TherapySlotPageInfo };
 interface Props {
   date: string;
   open: { date: string; time: string; patientId?: string } | null;
@@ -200,6 +202,12 @@ export function TherapyWeekCalendar({
         ref={root}
         onScrollCapture={(event) => onScroll?.((event.target as HTMLElement).scrollTop)}
       >
+        {days.map((day) => {
+          const loaded = byDay[day];
+          return loaded?.status === 'ready' ? (
+            <TherapyVerificationPanel key={day} groups={loaded.slots} />
+          ) : null;
+        })}
         <TherapyCalendarGrid
           days={days}
           cells={cells}

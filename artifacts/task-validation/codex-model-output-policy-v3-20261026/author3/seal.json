@@ -1,0 +1,14 @@
+{
+  "status": "STOPPED",
+  "round": 3,
+  "nonce": "d25ba2ca-b40f-483a-b6e8-53f7e1d17db6",
+  "baseline": "b868e72ceb2d2e29fdaf077b3d7144c34481e176",
+  "report": "validation-report.md",
+  "result": "result.json",
+  "sourceHashes": "source-hashes.json",
+  "scope": "agent-team/src/bug-pipeline/{process,models}.mjs and corresponding models/process-output tests",
+  "publicationClaimed": false,
+  "providerCalls": 0,
+  "externalRequests": 0,
+  "stop": "Coordinator owns final composition, final-head hash map, native CI and independent review sequence."
+}

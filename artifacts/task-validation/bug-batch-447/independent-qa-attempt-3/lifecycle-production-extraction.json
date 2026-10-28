@@ -1,0 +1,21 @@
+{
+  "productionRunnerSha256": "b1931a96a381468b6a032020481c61707eef098cd77f33d7843a96b081e368d1",
+  "helperHashes": {
+    "verifyOwnedDatabase": "a9483aea663cac056c5e30078e78d575ea94483ccfda50d9cf73d268d4de21e1",
+    "waitForOwnedConnectionsToClose": "b72380e8c4a1943f3dba4374dc050fdda1bd1456fec464cb8f8a647243ddda78"
+  },
+  "exactResetSha256": "ebe14febce0b7ecd53809cc9372687e95be7988ae97648768ad2d598a1ea2ae5",
+  "syntheticTransportOnly": true,
+  "receipts": [
+    {
+      "nativeMode": true,
+      "case": "positive",
+      "queryCount": 6
+    },
+    {
+      "nativeMode": false,
+      "case": "positive",
+      "queryCount": 6
+    }
+  ]
+}

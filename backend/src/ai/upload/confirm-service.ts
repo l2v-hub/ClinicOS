@@ -1,3 +1,7 @@
+import {
+  TemporaryPsExitError,
+  preserveTemporaryPsExits,
+} from '../../patients/temporary-ps-exits.js';
 // A draft and its OCR job share one locked, atomic confirmation boundary.
 import { prisma } from '../../lib/prisma.js';
 import { AiExtractionError } from '../types.js';
@@ -351,7 +355,10 @@ async function confirm(
           current?.data,
           preserveTinettiHistory(current?.data, cartella, true),
         );
-        const merged = mergeCartella(asData(current?.data), incoming);
+        const merged = preserveTemporaryPsExits(
+          current?.data,
+          mergeCartella(asData(current?.data), preserveTemporaryPsExits(current?.data, incoming)),
+        );
         delete merged.codiceFiscale;
         await tx.cartella.upsert({
           where: { patientId: patient.id },
@@ -403,7 +410,7 @@ async function confirm(
     return result;
   } catch (error) {
     await audit(jobId, 'confirm_failed', undefined, 'transaction_failed');
-    if (error instanceof CartellaUpdateError)
+    if (error instanceof CartellaUpdateError || error instanceof TemporaryPsExitError)
       throw new ImportSessionError(error.status, error.code, error.message);
     if (error instanceof AiExtractionError || error instanceof ImportSessionError) throw error;
     if (error instanceof PatientIdentityInputError || isTherapyValidationError(error))

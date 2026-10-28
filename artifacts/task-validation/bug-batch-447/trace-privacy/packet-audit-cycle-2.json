@@ -1,0 +1,91 @@
+{
+  "status": "passed",
+  "zipArchives": [
+    {
+      "path": "evidence/issue-447-role-negative-trace.zip",
+      "sha256": "64e1ff08f231dc314f330dcab49a423b87b9f272c4e40da5e7f1072cef98a46f",
+      "entries": 96,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-447-trace.zip",
+      "sha256": "8c5bfff8058b7238cc50aba568a5bb1cd3350e71b8b82e54c4721c2a85853d87",
+      "entries": 588,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-451-touch-trace.zip",
+      "sha256": "626563fbf6b8ff99c0b3fc2245720d5e79ed59e343fcb87b48fb9d2cfea387c6",
+      "entries": 71,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-451-trace.zip",
+      "sha256": "005728f76954822b671877c5c077dc5f8a5b269811e176b85ddece5243841c79",
+      "entries": 274,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-452-trace.zip",
+      "sha256": "ca41da9fc21bd568bdf2a776bb7d966b8e267bd111f26e1b82ab5944203e3431",
+      "entries": 263,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-453-trace.zip",
+      "sha256": "c9f0ef69cee800be20e660e31aae27691271dea70db7cc1477792aa061d3123b",
+      "entries": 693,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-454-trace.zip",
+      "sha256": "d01f9adcca2f63ffe15ef1c12d4fac3b07364632b7e8d422864236bb7d37b0e4",
+      "entries": 197,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-456-trace.zip",
+      "sha256": "2af6c170cdcfe5959a2e1f386603658784275884cf7f90059e17a8637c142720",
+      "entries": 215,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "evidence/issue-457-trace.zip",
+      "sha256": "947f2b528bbf5e407c90208ffd4adec1d675b05382db9845403692a818d2cac0",
+      "entries": 264,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "history/cycle2-browser-1-unwired-agenda-and-fraction-input/issue-452-trace.zip",
+      "sha256": "cb5260e75661a2af49da16b04a0e1b9d9e31669e3a80c387dcccf1c8170e5c20",
+      "entries": 225,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "history/cycle2-browser-1-unwired-agenda-and-fraction-input/issue-453-trace.zip",
+      "sha256": "c387925d5605489f6a35c863a2d45f8e9ff8d7b5a6b63f7fea7bab05b31d48e0",
+      "entries": 450,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "history/cycle2-combined-browser-2-db-field-and-close-selector/issue-452-trace.zip",
+      "sha256": "ca41da9fc21bd568bdf2a776bb7d966b8e267bd111f26e1b82ab5944203e3431",
+      "entries": 263,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "history/cycle2-combined-browser-2-db-field-and-close-selector/issue-453-trace.zip",
+      "sha256": "c9f0ef69cee800be20e660e31aae27691271dea70db7cc1477792aa061d3123b",
+      "entries": 693,
+      "residualSignedTokens": 0
+    },
+    {
+      "path": "history/cycle2-combined-browser-2-db-field-and-close-selector/issue-457-trace.zip",
+      "sha256": "947f2b528bbf5e407c90208ffd4adec1d675b05382db9845403692a818d2cac0",
+      "entries": 264,
+      "residualSignedTokens": 0
+    }
+  ],
+  "residualSignedTokens": 0,
+  "textFilesWithSignedTokens": []
+}

@@ -14,6 +14,9 @@ interface Props {
   tone?: 'danger' | 'primary';
   /** Disables buttons while the action runs. */
   busy?: boolean;
+  confirmDisabled?: boolean;
+  /** Optional non-destructive alternative, such as leaving without saving. */
+  alternativeAction?: { label: string; onClick: () => void };
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -31,6 +34,8 @@ export function ConfirmDialog({
   cancelLabel = 'Annulla',
   tone = 'danger',
   busy = false,
+  confirmDisabled = false,
+  alternativeAction,
   onConfirm,
   onCancel,
 }: Props) {
@@ -62,15 +67,34 @@ export function ConfirmDialog({
         {message}
       </p>
 
-      <div className="confirm-dialog__actions">
-        <button type="button" className="btn-secondary" disabled={busy} onClick={onCancel}>
-          <IcoX /> {cancelLabel}
-        </button>
+      <div
+        className="confirm-dialog__actions"
+        style={alternativeAction ? { flexWrap: 'wrap' } : undefined}
+      >
         <button
           type="button"
-          data-dialog-initial-focus
-          className={tone === 'danger' ? 'btn-danger' : 'btn-primary'}
+          className="btn-secondary"
+          data-dialog-initial-focus={confirmDisabled || undefined}
           disabled={busy}
+          onClick={onCancel}
+        >
+          <IcoX /> {cancelLabel}
+        </button>
+        {alternativeAction && (
+          <button
+            type="button"
+            className="btn-secondary"
+            disabled={busy}
+            onClick={alternativeAction.onClick}
+          >
+            {alternativeAction.label}
+          </button>
+        )}
+        <button
+          type="button"
+          data-dialog-initial-focus={!confirmDisabled || undefined}
+          className={tone === 'danger' ? 'btn-danger' : 'btn-primary'}
+          disabled={busy || confirmDisabled}
           onClick={onConfirm}
         >
           <IcoCheck /> {confirmLabel}

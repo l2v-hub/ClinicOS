@@ -1,0 +1,18 @@
+{
+  "surface": "Declared independent QA-only HTTP/DOM adapter; no application substitution",
+  "beforeSelector": ".patient-roster tbody tr",
+  "afterSelector": ".patient-roster tbody tr.patient-roster__row",
+  "originalTimeoutMs": 30000,
+  "oldWaitMatchedPlaceholder": true,
+  "oldSameValueAssertionRejected": true,
+  "newWaitRemainedPendingWithoutActualRow": true,
+  "newWaitMatchedActualRow": true,
+  "newValue": "Camera QA · Letto 7\tQA44 Resident",
+  "reloadPreserved": true,
+  "elapsedNewWaitMs": 608,
+  "errors": [],
+  "sourceSha256": "f0cc1ef82e21761bfb104128c1087b5c7498442d509d06d44870baf26fbca50a",
+  "patientRosterSha256": "482eb628428d522e24e44ea5302a4d02a3eaa4a1bd66775f0c847eee2bdfca10",
+  "productSourcesModified": false,
+  "actualCanonicalSuiteExecutedSeparately": true
+}

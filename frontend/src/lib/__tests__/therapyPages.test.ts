@@ -21,7 +21,7 @@ afterEach(() => {
   clearCachedGet();
 });
 
-test('therapy page loader returns a complete deduplicated clinical list', async () => {
+test('therapy page loader returns the complete patient-scoped clinical list', async () => {
   const urls: string[] = [];
   globalThis.fetch = (async (input: string | URL | Request) => {
     const url = String(input);
@@ -31,12 +31,15 @@ test('therapy page loader returns a complete deduplicated clinical list', async 
       JSON.stringify(
         second
           ? {
-              items: [{ id: 'b' }, { id: 'c' }],
+              items: [{ id: 'c', patientId: 'patient/a', stato: 'sospesa' }],
               summary: null,
               pageInfo: { hasMore: false, nextCursor: null },
             }
           : {
-              items: [{ id: 'a' }, { id: 'b' }],
+              items: [
+                { id: 'a', patientId: 'patient/a', stato: 'attiva' },
+                { id: 'b', patientId: 'patient/a', stato: 'attiva' },
+              ],
               summary: { total: 3, active: 2, inactive: 1 },
               pageInfo: { hasMore: true, nextCursor: 'next-1' },
             },
@@ -45,21 +48,22 @@ test('therapy page loader returns a complete deduplicated clinical list', async 
     );
   }) as typeof fetch;
 
-  const rows = await loadAllTherapyPages('patient/a', 'attiva');
+  const rows = await loadAllTherapyPages('patient/a', 'tutte');
   assert.deepEqual(
     rows.map((row) => row.id),
     ['a', 'b', 'c'],
   );
   assert.equal(urls.length, 2);
-  assert.ok(urls.every((url) => url.includes('limit=100&status=attiva')));
+  assert.ok(urls.every((url) => url.includes('limit=100&status=tutte')));
   assert.ok(urls.every((url) => url.includes('patient%2Fa')));
 });
 
 test('therapy page loader rejects a repeating cursor instead of looping forever', async () => {
+  let calls = 0;
   globalThis.fetch = (async () =>
     new Response(
       JSON.stringify({
-        items: [{ id: 'a' }],
+        items: [{ id: `a-${calls++}`, patientId: 'patient-1', stato: 'attiva' }],
         summary: { total: 2, active: 2, inactive: 0 },
         pageInfo: { hasMore: true, nextCursor: 'same' },
       }),
@@ -93,7 +97,7 @@ test('therapy page loader carries every server filter on the first page', async 
   assert.match(requested, /data=2030-01-02/);
 });
 
-test('therapy plan and emergency print require every page, never a manual partial plan', async () => {
+test('therapy plan requires every page while emergency print preserves manual source warnings', async () => {
   const [tab, emergencyPrint] = await Promise.all([
     readFile(therapyTabUrl, 'utf8'),
     readFile(emergencyPrintUrl, 'utf8'),
@@ -105,9 +109,21 @@ test('therapy plan and emergency print require every page, never a manual partia
   assert.match(tab, /completeTherapySnapshot/);
   assert.match(tab, /Vedi tutti i farmaci nel piano terapeutico/);
   assert.match(tab, /setTherapies\(\[\]\);[\s\S]*setTherapySummary\(null\);/);
-  assert.match(emergencyPrint, /loadAllTherapyPages\(paziente\.id, 'attiva'\)/);
-  assert.match(emergencyPrint, /disabled=\{loading \|\| Boolean\(fetchError\)\}/);
-  assert.match(emergencyPrint, /La stampa è bloccata/);
+  assert.match(
+    emergencyPrint,
+    /loadEmergencyTransferSources\(paziente\.id, controller\.signal, new Date\(\), \{[\s\S]*?allowed:/,
+  );
+  assert.match(emergencyPrint, /data-ps-source=\{source\} data-ps-source-state=\{status\.state\}/);
+  assert.match(emergencyPrint, /emergencySourceMessage\(status\)/);
+  assert.match(emergencyPrint, /La stampa è[\s\S]*verifica e completa a mano le sezioni indicate/);
+  assert.match(
+    emergencyPrint,
+    /onClick=\{\(\) => \{\s*if \(!printBlocked\) window\.print\(\);\s*\}\}[\s\S]{0,80}data-invio-ps-print/,
+  );
+  assert.match(emergencyPrint, /disabled=\{printBlocked\}/);
+  assert.match(emergencyPrint, /const printBlocked = !reason\.trim\(\);/);
+  assert.match(emergencyPrint, /data-invio-ps-reason-print/);
+  assert.match(emergencyPrint, /Motivo da completare prima della stampa/);
 });
 
 test('therapy failures are announced and never rendered as empty clinical results', async () => {
@@ -151,4 +167,106 @@ test('medication administration history follows the bounded opaque cursor feed',
   assert.equal(page.pageInfo.nextCursor, 'next-history');
   assert.match(urls[0], /patient%2Fa\/medication-administrations\/page\?limit=100/);
   assert.match(urls[0], /cursor=cursor%2Fcurrent/);
+});
+
+// Emergency-print and other consumers use this loader, rather than the calendar-specific reader.
+// Their count must never certify cross-patient or inconsistent source pages as a complete plan.
+for (const [name, items, summary] of [
+  [
+    'foreign patient',
+    [{ id: 'a', patientId: 'other', stato: 'attiva' }],
+    { total: 1, active: 1, inactive: 0 },
+  ],
+  [
+    'wrong state counts',
+    [{ id: 'a', patientId: 'patient-1', stato: 'sospesa' }],
+    { total: 1, active: 1, inactive: 0 },
+  ],
+  [
+    'repeated prescription',
+    [
+      { id: 'a', patientId: 'patient-1', stato: 'attiva' },
+      { id: 'a', patientId: 'patient-1', stato: 'attiva' },
+    ],
+    { total: 1, active: 1, inactive: 0 },
+  ],
+  [
+    'short terminal page',
+    [{ id: 'a', patientId: 'patient-1', stato: 'attiva' }],
+    { total: 2, active: 2, inactive: 0 },
+  ],
+] as const) {
+  test(`complete printable inventory rejects ${name}`, async () => {
+    globalThis.fetch = (async () =>
+      Response.json({
+        items,
+        summary,
+        pageInfo: { hasMore: false, nextCursor: null },
+      })) as typeof fetch;
+    await assert.rejects(() => loadAllTherapyPages('patient-1'));
+  });
+}
+
+test('failed printable inventory can retry and never returns a partial page', async () => {
+  let fail = true;
+  globalThis.fetch = (async () =>
+    fail
+      ? new Response('unavailable', { status: 503 })
+      : Response.json({
+          items: [{ id: 'a', patientId: 'patient-1', stato: 'attiva' }],
+          summary: { total: 1, active: 1, inactive: 0 },
+          pageInfo: { hasMore: false, nextCursor: null },
+        })) as typeof fetch;
+  await assert.rejects(() => loadAllTherapyPages('patient-1'));
+  fail = false;
+  assert.deepEqual(
+    (await loadAllTherapyPages('patient-1')).map((item) => item.id),
+    ['a'],
+  );
+});
+
+test('printable inventory rejects changed page totals and empty nonterminal pages', async () => {
+  globalThis.fetch = (async (input: string | URL | Request) =>
+    Response.json(
+      String(input).includes('cursor=')
+        ? {
+            items: [{ id: 'b', patientId: 'patient-1', stato: 'attiva' }],
+            summary: { total: 3, active: 3, inactive: 0 },
+            pageInfo: { hasMore: false, nextCursor: null },
+          }
+        : {
+            items: [{ id: 'a', patientId: 'patient-1', stato: 'attiva' }],
+            summary: { total: 2, active: 2, inactive: 0 },
+            pageInfo: { hasMore: true, nextCursor: 'next' },
+          },
+    )) as typeof fetch;
+  await assert.rejects(() => loadAllTherapyPages('patient-1'), /Riepilogo terapie cambiato/);
+  clearCachedGet();
+  globalThis.fetch = (async () =>
+    Response.json({
+      items: [],
+      summary: { total: 1, active: 1, inactive: 0 },
+      pageInfo: { hasMore: true, nextCursor: 'next' },
+    })) as typeof fetch;
+  await assert.rejects(() => loadAllTherapyPages('patient-1'), /Risposta terapie non valida/);
+});
+
+test('a rejected short printable snapshot is evicted so retry reads repaired server data', async () => {
+  let calls = 0;
+  globalThis.fetch = (async () =>
+    Response.json({
+      items: [{ id: 'a', patientId: 'patient-1', stato: 'attiva' }],
+      summary: { total: ++calls === 1 ? 2 : 1, active: calls === 1 ? 2 : 1, inactive: 0 },
+      pageInfo: { hasMore: false, nextCursor: null },
+    })) as typeof fetch;
+  await assert.rejects(() => loadAllTherapyPages('patient-1'), /incompleto/);
+  assert.deepEqual(
+    (await loadAllTherapyPages('patient-1')).map((item) => item.id),
+    ['a'],
+  );
+  assert.equal(
+    calls,
+    2,
+    'Retry must issue a fresh HTTP read instead of replaying the rejected cache',
+  );
 });

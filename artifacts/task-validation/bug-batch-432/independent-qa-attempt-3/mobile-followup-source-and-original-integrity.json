@@ -1,0 +1,19 @@
+{
+  "sourcePathsUnchanged": 37,
+  "originalCanonicalMobileImage": {
+    "path": "evidence/issue-432-switch-mobile.png",
+    "sha256": "2d72676eeabdc1efd4dbdb469377e255fdbba6800f919f65b69606dbef34fbfa",
+    "bytes": 58421
+  },
+  "originalCanonicalImageUnchanged": true,
+  "fullCanonicalSummaryStillVerified": true,
+  "focusedCasesPassed": 2,
+  "focusedExitCode": 0,
+  "independentOwnedPortsClosedAfterFollowup": [
+    3432,
+    5433,
+    8432
+  ],
+  "applicationSourceModified": false,
+  "fullCanonicalRepeated": false
+}

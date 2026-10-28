@@ -1,3 +1,5 @@
+import { TherapyVerificationPanel } from '../../shared/TherapyVerificationPanel';
+import { parseTherapySlots } from '../../../lib/therapySlotPage';
 // Il calendario raggruppa le dosi nello slot; dettagli e azioni sono nella popup dell'ora.
 // Il proprietario inoltra onCreate solo ai profili autorizzati a prescrivere.
 // Vista giorno (24 ore) e vista settimana (7 giorni; a 820 px un blocco per giorno).
@@ -5,7 +7,7 @@
 // dose da somministrare (azioni visibili senza tocchi in più); un farmaco o una dose richiesti da un
 // collegamento diretto restano evidenziati.
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
-import type { PatientTherapyAPI, TherapySlot } from '../../../types';
+import type { PatientTherapyAPI, TherapyReadGroup } from '../../../types';
 import { AccessibleDialogSurface } from '../../shared/AccessibleDialogSurface';
 import { TherapyCalendarGrid, type TherapyCalendarCell } from '../../shared/TherapyCalendarGrid';
 import { DateNav } from '../../shared/DateNav';
@@ -35,7 +37,7 @@ type ReadState = {
   status: 'loading' | 'ready' | 'error';
   therapies: PatientTherapyAPI[];
 };
-type DaySlots = { status: 'ready'; slots: TherapySlot[] } | { status: 'error' };
+type DaySlots = { status: 'ready'; slots: TherapyReadGroup[] } | { status: 'error' };
 type SlotsState = Record<string, DaySlots>;
 
 interface Props {
@@ -138,25 +140,27 @@ export function PatientTherapyCalendar({
   useEffect(() => {
     let active = true;
     for (const day of visibleDays) {
-      cachedGetJson<TherapySlot[]>(`${API_URL}/therapy-slots?date=${day}`).then(
-        (slots) => {
-          if (!active) return;
-          setSlotsByDay((prev) => ({
-            key: slotsKey,
-            days: {
-              ...(prev.key === slotsKey ? prev.days : {}),
-              [day]: { status: 'ready', slots: Array.isArray(slots) ? slots : [] },
-            },
-          }));
-        },
-        () => {
-          if (!active) return;
-          setSlotsByDay((prev) => ({
-            key: slotsKey,
-            days: { ...(prev.key === slotsKey ? prev.days : {}), [day]: { status: 'error' } },
-          }));
-        },
-      );
+      cachedGetJson<unknown>(`${API_URL}/therapy-slots?date=${day}`)
+        .then(parseTherapySlots)
+        .then(
+          (slots) => {
+            if (!active) return;
+            setSlotsByDay((prev) => ({
+              key: slotsKey,
+              days: {
+                ...(prev.key === slotsKey ? prev.days : {}),
+                [day]: { status: 'ready', slots },
+              },
+            }));
+          },
+          () => {
+            if (!active) return;
+            setSlotsByDay((prev) => ({
+              key: slotsKey,
+              days: { ...(prev.key === slotsKey ? prev.days : {}), [day]: { status: 'error' } },
+            }));
+          },
+        );
     }
     return () => {
       active = false;
@@ -336,7 +340,20 @@ export function PatientTherapyCalendar({
               Stato delle somministrazioni non disponibile: è mostrata solo la programmazione.
             </p>
           )}
+          {visibleDays.map((visibleDate) => {
+            const loaded = slots[visibleDate];
+            return loaded?.status === 'ready' ? (
+              <TherapyVerificationPanel
+                key={visibleDate}
+                groups={loaded.slots.filter(
+                  (group) => group.kind === 'verification' && group.date === visibleDate,
+                )}
+                patientId={patientId}
+              />
+            ) : null;
+          })}
           <TherapyCalendarGrid
+            contextKey={patientId}
             days={visibleDays}
             cells={cells}
             selected={open}

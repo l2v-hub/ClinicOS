@@ -132,6 +132,7 @@ model Patient {
   appointments          Appointment[]
   cartella              Cartella?
   medicationAdministrations MedicationAdministration[]
+  administrationReceipts    TherapyAdministrationReceipt[]
   prnAdministrations        PrnAdministration[]
   intakeDocuments           PatientIntakeDocument[]
   therapies                 PatientTherapy[]
@@ -375,11 +376,22 @@ model MedicationAdministration {
   @@index([patientId, date, createdAt, id], map: "MedicationAdministration_patient_history_idx")
 }
 
-// PRN («al bisogno») administrations (UX cycle 2026-10-03, owner-approved). Separate append-only
-// table: a PRN drug can be given several times a day, so it cannot live under the scheduled
-// scheduled-dose key of MedicationAdministration (therapyId/date/fascia/ora).
-// Drug, dose and route are resolved from the prescription and the time is the server
-// time; the client sends only therapy, indication and an idempotency key (unique per operator).
+// Immutable first response for a scheduled write, atomic with the clinical record.
+model TherapyAdministrationReceipt {
+  actorId      String
+  requestId    String
+  requestHash  String
+  patientId    String
+  result       Json
+  createdAt    DateTime @default(now())
+  patient      Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@id([actorId, requestId])
+  @@index([patientId])
+}
+
+// PRN («al bisogno») doses are append-only and can occur several times in one day.
+// Drug, dose and route come from the prescription, time and operator from the server.
 model PrnAdministration {
   id               String          @id @default(cuid())
   therapyId        String?

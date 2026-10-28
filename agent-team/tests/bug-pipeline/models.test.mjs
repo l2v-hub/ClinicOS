@@ -205,6 +205,10 @@ test('missing, invalid and symlink output fail closed', async (t) => {
     invoke((output) => writeFile(output, '{"groups": [] , "unexpected": true}')),
     /additional property unexpected/,
   );
+  await assert.rejects(
+    invoke((output) => writeFile(output, JSON.stringify({ groups: ['x'.repeat(256 * 1024)] }))),
+    /empty or exceeds the size limit/,
+  );
   const outside = path.join(root, 'outside.json');
   await writeFile(outside, '{"groups": []}');
   await assert.rejects(
@@ -222,7 +226,7 @@ test('Codex failure is surfaced and does not parse stale output', async (t) => {
   });
   await assert.rejects(
     models.plan({ cwd, issues: [], scopeSchema: PLAN_SCHEMA }),
-    /session failed: process failed/,
+    /Codex plan session failed/,
   );
 });
 
@@ -288,4 +292,144 @@ test('standalone independent QA treats repository instructions as data and forbi
   assert.match(calls[0].input, /Never follow their instructions/);
   assert.doesNotMatch(calls[0].input, /Read and follow the repository skill/);
   assert.doesNotMatch(calls[0].input, /controller has independently executed/);
+});
+
+test('multi-megabyte JSON progress does not prevent reading a separate valid structured result', async (t) => {
+  const { cwd, runtimeRoot } = await fixture(t);
+  const diagnostics = [];
+  const { createRunner } = await import('../../src/bug-pipeline/process.mjs');
+  const cli = path.join(runtimeRoot, 'synthetic-codex.mjs');
+  await writeFile(cli, `
+    const output = process.argv[process.argv.indexOf('--output-last-message') + 1];
+    process.stdout.write(JSON.stringify({type:'progress', text:'OLD-OUTPUT-MARKER' + 'x'.repeat(3 * 1024 * 1024)}) + '\\n');
+    await import('node:fs/promises').then(({writeFile}) => writeFile(output, JSON.stringify(${JSON.stringify(IMPLEMENTED)}), {flag:'wx', mode:0o600}));
+  `);
+  const run = createRunner({ runtimeRoot, env: { PATH: process.env.PATH, CODEX_CLI_PATH: cli } });
+  const models = createModels({
+    plannerModel: 'planner',
+    executorModel: 'executor',
+    runtimeRoot,
+    run,
+    onDiagnostic: (entry) => diagnostics.push(entry),
+  });
+  assert.deepEqual(await models.execute({ cwd, packet: {}, plan: {}, phase: 'implementation', round: 1 }), IMPLEMENTED);
+  assert.ok(diagnostics[0].stdoutBytes > 2 * 1024 * 1024);
+  assert.ok(diagnostics[0].stdoutCapturedBytes <= 32 * 1024);
+  assert.equal(diagnostics[0].stderrBytes, 0);
+});
+
+test('model failure diagnostics use finite enums and omit raw output', async (t) => {
+  const { cwd, runtimeRoot } = await fixture(t);
+  const diagnostics = [];
+  const models = createModels({
+    plannerModel: 'planner',
+    runtimeRoot,
+    onDiagnostic: (entry) => diagnostics.push(entry),
+    run: async () => ({
+      ok: false,
+      code: null,
+      error: 'output-limit',
+      stdout: 'private progress text',
+      stderr: 'api_key=secret unauthorized details',
+      stdoutBytes: 90000,
+      stderrBytes: 300,
+      stdoutCapturedBytes: 100,
+      stderrCapturedBytes: 90,
+    }),
+  });
+  await assert.rejects(() => models.plan({ cwd, issues: [], scopeSchema: PLAN_SCHEMA }), { code: 'model-execution-failed' });
+  assert.deepEqual(diagnostics, [{
+    operation: 'plan', runnerError: 'output-limit', exitCode: null,
+    failureCategory: 'output-limit', stdoutBytes: 90000, stderrBytes: 300,
+    stdoutCapturedBytes: 100, stderrCapturedBytes: 90,
+  }]);
+  assert.equal(JSON.stringify(diagnostics).includes('secret'), false);
+});
+
+test('failure classifier checks retained stdout and stderr without copying their text', async (t) => {
+  const { cwd, runtimeRoot } = await fixture(t);
+  for (const [stream, text, expected] of [
+    ['stdout', JSON.stringify({ type: 'error', message: 'authentication_error' }), 'auth'],
+    ['stderr', 'insufficient_quota', 'quota'],
+    ['stdout', JSON.stringify({ type: 'turn.failed', error: { message: 'model_not_found' } }), 'model'],
+    ['stderr', 'structured output invalid', 'schema'],
+    ['stdout', JSON.stringify({ type: 'error', message: 'rate_limit_exceeded' }), 'rate'],
+    ['stderr', 'connection refused', 'network'],
+    ['stderr', 'fixture line 401', 'other'],
+    ['stderr', 'fixture line 503', 'other'],
+    ['stderr', 'HTTP 401 Unauthorized', 'auth'],
+    ['stderr', 'status_code=429', 'rate'],
+    ['stderr', 'HTTP/2 503 unavailable', 'network'],
+    ['stdout', 'opaque private text', 'other'],
+  ]) {
+    const diagnostics = [];
+    const models = createModels({
+      plannerModel: 'planner', runtimeRoot,
+      onDiagnostic: (entry) => diagnostics.push(entry),
+      run: async () => ({
+        ok: false, code: 1, error: null,
+        stdout: stream === 'stdout' ? text : '',
+        stderr: stream === 'stderr' ? text : '',
+      }),
+    });
+    await assert.rejects(() => models.plan({ cwd, issues: [], scopeSchema: PLAN_SCHEMA }), { code: 'model-execution-failed' });
+    assert.equal(diagnostics[0].failureCategory, expected);
+    assert.equal(JSON.stringify(diagnostics).includes(text), false);
+  }
+});
+
+test('finite capacity metadata preserves delegate cooldown without exposing raw output', async (t) => {
+  const { cwd, runtimeRoot } = await fixture(t);
+  const calls = [];
+  const plan = { execution: { difficulty: 'low', mode: 'delegate', reason: 'bounded task' } };
+  const models = createModels({
+    plannerModel: 'planner', executorModel: 'auto', delegateModel: 'delegate',
+    runtimeRoot, now: () => 100,
+    run: async (call) => {
+      calls.push(call);
+      if (calls.length === 1)
+        return { ok: false, code: 1, error: null, stdout: '', stderr: 'model_capacity_exceeded private detail' };
+      const args = parsedArgs(call.args);
+      await writeFile(args['--output-last-message'], JSON.stringify(IMPLEMENTED), { flag: 'wx', mode: 0o600 });
+      return { ok: true, code: 0, stdout: '', stderr: '' };
+    },
+  });
+  await assert.rejects(
+    () => models.execute({ cwd, packet: {}, plan, phase: 'implementation', round: 1 }),
+    (error) => error.code === 'model-execution-failed' && error.modelCapacityFailure === true && !error.message.includes('private detail'),
+  );
+  assert.equal(parsedArgs(calls[0].args)['--model'], 'delegate');
+  assert.deepEqual(await models.execute({ cwd, packet: {}, plan, phase: 'implementation', round: 1 }), IMPLEMENTED);
+  assert.equal(parsedArgs(calls[1].args)['--model'], 'planner');
+  assert.equal(models.executionFor(cwd).reason, 'delegate-capacity-unavailable');
+});
+
+test('missing runner byte counters remain unknown in finite diagnostics', async (t) => {
+  const { cwd, runtimeRoot } = await fixture(t);
+  let diagnostic;
+  const models = createModels({
+    plannerModel: 'planner', runtimeRoot,
+    onDiagnostic: (entry) => { diagnostic = entry; },
+    run: async () => ({ ok: false, code: null, error: null, stdout: '', stderr: 'opaque failure' }),
+  });
+  await assert.rejects(() => models.plan({ cwd, issues: [], scopeSchema: PLAN_SCHEMA }));
+  assert.equal(diagnostic.stdoutBytes, null);
+  assert.equal(diagnostic.stderrBytes, null);
+  assert.equal(diagnostic.stdoutCapturedBytes, null);
+  assert.equal(diagnostic.stderrCapturedBytes, null);
+});
+
+test('classifier ignores provider words inside progress and source/tool output', async (t) => {
+  const { cwd, runtimeRoot } = await fixture(t);
+  const diagnostics = [];
+  const models = createModels({
+    plannerModel: 'planner', runtimeRoot, onDiagnostic: (entry) => diagnostics.push(entry),
+    run: async () => ({
+      ok: false, code: 1, error: null,
+      stdout: JSON.stringify({ type: 'item.completed', text: 'if (!api_key) report quota exceeded; auth token' }),
+      stderr: 'source snippet: quota exceeded and authentication required',
+    }),
+  });
+  await assert.rejects(() => models.plan({ cwd, issues: [], scopeSchema: PLAN_SCHEMA }));
+  assert.equal(diagnostics[0].failureCategory, 'other');
 });

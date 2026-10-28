@@ -3,6 +3,30 @@ import path from 'node:path';
 import { mkdir } from 'node:fs/promises';
 import { sanitizeText } from '../core/sanitize.mjs';
 
+const MAX_RUNNER_LIMIT = 64 * 1024 * 1024;
+function validateLimit(value, name, { allowZero = false } = {}) {
+  const minimum = allowZero ? 0 : 1;
+  if (!Number.isSafeInteger(value) || value < minimum || value > MAX_RUNNER_LIMIT) {
+    throw new RangeError(`invalid ${name} limit`);
+  }
+  return value;
+}
+
+function appendCapture(previous, chunk, limit, tail) {
+  if (limit === 0) return Buffer.alloc(0);
+  if (tail) {
+    const retainedLength = Math.min(limit, previous.length + chunk.length);
+    const retained = Buffer.alloc(retainedLength);
+    const chunkLength = Math.min(chunk.length, retainedLength);
+    const previousLength = retainedLength - chunkLength;
+    if (previousLength) previous.copy(retained, 0, previous.length - previousLength);
+    if (chunkLength) chunk.copy(retained, previousLength, chunk.length - chunkLength);
+    return retained;
+  }
+  const remaining = Math.max(0, limit - previous.length);
+  return remaining ? Buffer.concat([previous, chunk.subarray(0, remaining)]) : previous;
+}
+
 // Models/tests never receive the controller's GitHub or deployment credentials.
 export function childEnvironment(mode, env, runtimeRoot) {
   const binPaths = [env.CODEX_CLI_PATH, env.CLAUDE_CLI_PATH]
@@ -27,6 +51,7 @@ export function childEnvironment(mode, env, runtimeRoot) {
       if (env[key]) base[key] = env[key];
     if (
       mode === 'controller' ||
+      mode === 'claude-execution' ||
       (mode === 'review' && env.CLAUDE_REVIEW_AUTH_MODE === 'subscription-local')
     ) {
       for (const key of ['USERPROFILE', 'APPDATA']) if (env[key]) base[key] = env[key];
@@ -50,13 +75,18 @@ export function childEnvironment(mode, env, runtimeRoot) {
   } else {
     base.HOME = path.join(
       runtimeRoot,
-      mode === 'model' || mode === 'review' ? 'model-home' : 'verification-home',
+      ['model', 'review', 'claude-execution'].includes(mode) ? 'model-home' : 'verification-home',
     );
     base.CODEX_HOME =
       mode === 'model' && !env.CODEX_API_KEY && env.CODEX_HOME
         ? env.CODEX_HOME
         : path.join(base.HOME, '.codex');
     base.CLAUDE_CONFIG_DIR = path.join(base.HOME, '.claude');
+    if (mode === 'claude-execution') {
+      // The opt-in implementation profile is separate from the read-only reviewer.
+      // No API/OAuth, Codex, GitHub or deployment credential is inherited.
+      base.CLAUDE_CONFIG_DIR = env.CLINICOS_CLAUDE_EXECUTOR_CONFIG_DIR || '';
+    }
     if (mode === 'model' && env.CODEX_API_KEY) base.CODEX_API_KEY = env.CODEX_API_KEY;
     if (mode === 'review') {
       const localSubscription = env.CLAUDE_REVIEW_AUTH_MODE === 'subscription-local';
@@ -100,9 +130,42 @@ export function createRunner({ env = process.env, runtimeRoot }) {
     input,
     timeoutMs = 30_000,
     maxOutputBytes = 2 * 1024 * 1024,
+    maxCapturedBytesPerStream,
+    maxStderrBytes,
+    captureTail = false,
+    limitStdout = true,
     envMode = 'controller',
+    claudeConfigDir,
   }) => {
+    validateLimit(maxOutputBytes, 'maxOutputBytes');
+    const legacyCapture =
+      maxCapturedBytesPerStream === undefined &&
+      maxStderrBytes === undefined &&
+      !captureTail &&
+      limitStdout;
+    maxCapturedBytesPerStream ??= maxOutputBytes;
+    validateLimit(maxCapturedBytesPerStream, 'maxCapturedBytesPerStream', { allowZero: true });
+    if (typeof captureTail !== 'boolean') throw new TypeError('captureTail must be a boolean');
+    if (typeof limitStdout !== 'boolean') throw new TypeError('limitStdout must be a boolean');
+    if (maxStderrBytes !== undefined) validateLimit(maxStderrBytes, 'maxStderrBytes');
     const childEnv = childEnvironment(envMode, env, runtimeRoot);
+    if (
+      envMode === 'claude-execution' &&
+      (env.CLINICOS_CLAUDE_EXECUTOR_ENABLED !== 'true' ||
+        env.GITHUB_ACTIONS === 'true' ||
+        !path.isAbsolute(env.CLINICOS_CLAUDE_EXECUTOR_CONFIG_DIR || '') ||
+        !path.isAbsolute(env.CLAUDE_CLI_PATH || '') ||
+        command !== env.CLAUDE_CLI_PATH ||
+        !path.isAbsolute(claudeConfigDir || '') ||
+        path.resolve(claudeConfigDir) !== path.resolve(env.CLINICOS_CLAUDE_EXECUTOR_CONFIG_DIR))
+    )
+      return {
+        ok: false,
+        code: null,
+        error: 'local-claude-executor-profile-required',
+        stdout: '',
+        stderr: '',
+      };
     if (
       envMode === 'review' &&
       env.CLAUDE_REVIEW_AUTH_MODE === 'subscription-local' &&
@@ -130,6 +193,8 @@ export function createRunner({ env = process.env, runtimeRoot }) {
     }
     if (envMode !== 'controller') {
       for (const directory of [childEnv.HOME, childEnv.CODEX_HOME, childEnv.CLAUDE_CONFIG_DIR]) {
+        // Personal authentication is read in place by Claude; never create/copy its profile.
+        if (envMode === 'claude-execution' && directory === childEnv.CLAUDE_CONFIG_DIR) continue;
         await mkdir(directory, { recursive: true, mode: 0o700 });
       }
     }
@@ -140,10 +205,11 @@ export function createRunner({ env = process.env, runtimeRoot }) {
           ? env.CLAUDE_CLI_PATH || command
           : command;
     return new Promise((resolve) => {
-      let stdout = '',
-        stderr = '',
+      let stdout = Buffer.alloc(0),
+        stderr = Buffer.alloc(0),
         failure = null,
-        bytes = 0,
+        stdoutBytes = 0,
+        stderrBytes = 0,
         finished = false;
       const javascriptCli = ['claude', 'codex'].includes(command) && /\.[cm]?js$/i.test(executable);
       const child = spawn(
@@ -173,10 +239,19 @@ export function createRunner({ env = process.env, runtimeRoot }) {
       };
       const timer = setTimeout(() => fail('timeout'), timeoutMs);
       const data = (kind, chunk) => {
-        bytes += chunk.length;
-        if (bytes > maxOutputBytes) return fail('output-limit');
-        if (kind === 'out') stdout += chunk;
-        else stderr += chunk;
+        if (kind === 'out') stdoutBytes = Math.min(Number.MAX_SAFE_INTEGER, stdoutBytes + chunk.length);
+        else stderrBytes = Math.min(Number.MAX_SAFE_INTEGER, stderrBytes + chunk.length);
+        const limitedBytes = limitStdout ? stdoutBytes + stderrBytes : stderrBytes;
+        if (limitedBytes > maxOutputBytes && legacyCapture) {
+          fail('output-limit');
+          return;
+        }
+        if (kind === 'out') stdout = appendCapture(stdout, chunk, maxCapturedBytesPerStream, captureTail);
+        else {
+          stderr = appendCapture(stderr, chunk, maxCapturedBytesPerStream, captureTail);
+          if (maxStderrBytes !== undefined && stderrBytes > maxStderrBytes) fail('stderr-limit');
+        }
+        if (limitedBytes > maxOutputBytes) fail('output-limit');
       };
       child.stdout.on('data', (c) => data('out', c));
       child.stderr.on('data', (c) => data('err', c));
@@ -190,8 +265,12 @@ export function createRunner({ env = process.env, runtimeRoot }) {
           ok: code === 0 && !failure && !error,
           code,
           error: failure ?? error,
-          stdout: sanitizeText(stdout),
-          stderr: sanitizeText(stderr),
+          stdout: sanitizeText(stdout.toString('utf8')),
+          stderr: sanitizeText(stderr.toString('utf8')),
+          stdoutBytes,
+          stderrBytes,
+          stdoutCapturedBytes: stdout.length,
+          stderrCapturedBytes: stderr.length,
         });
       };
       child.on('error', () => finish(null, 'spawn-failed'));

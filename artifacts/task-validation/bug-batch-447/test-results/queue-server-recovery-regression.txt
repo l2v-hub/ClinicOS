@@ -1,0 +1,25 @@
+✔ verified server command serializes with ordinary saves and preserves its authoritative state (3.08935ms)
+✔ failed command never contaminates queued snapshots or another session (1.032531ms)
+✔ a later ordinary server receipt recovers an exit committed during an uncertain command (1.061399ms)
+✔ serializes full snapshots, retaining earlier successful edits regardless of section order (0.841342ms)
+✔ failed edits are not carried into later saves; independent patients do not block (3.249984ms)
+✔ record deltas retain additions made while a document form was reopened (3.559623ms)
+✔ rejected requests release queue and a new session uses its own baseline (2.701498ms)
+✔ patient list exposes the canonical fiscal identity and never shows MRN (2.121337ms)
+✔ 452 roster leads with bed and preserves native accessible actions while optional empty columns disappear (23.081615ms)
+✔ tablet and mobile use a compact two-to-one-column card grid (0.262667ms)
+✔ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance (2.054036ms)
+✔ new-patient wizard keeps required identity visible and progressively discloses optional data (1.425456ms)
+✔ patient intake uses a compact responsive layout without reducing touch targets (1.427893ms)
+✔ authoritative PS hold is retained and malformed or foreign metadata never becomes no pause (13.050221ms)
+✔ therapy slot URL is bounded and carries an opaque cursor (0.555942ms)
+✔ therapy pages merge patients and therapies while replacing exact summaries (0.852283ms)
+✔ therapy page parser rejects partial responses without a continuation cursor (0.389266ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1904.289412

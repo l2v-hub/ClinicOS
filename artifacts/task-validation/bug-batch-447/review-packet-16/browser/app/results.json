@@ -1,0 +1,891 @@
+{
+  "status": "PASS",
+  "classification": "Actual frontend app, exact backend/src/app.ts, normal simulator auth, real HTTP+ownedPG",
+  "contrast": [
+    {
+      "patientId": "cmviy1ap70002nrp6ly4t8xrk",
+      "severe": false,
+      "viewport": {
+        "width": 1180,
+        "height": 820
+      },
+      "state": "normal",
+      "sample": [
+        {
+          "text": "Allergie: QA penicillinaGestisci →",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 112,
+            "right": 251.65625,
+            "width": 139.65625,
+            "height": 44
+          },
+          "clientWidth": 138,
+          "scrollWidth": 138
+        },
+        {
+          "text": "Allergie: QA penicillina",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 117,
+            "right": 246.65625,
+            "width": 129.65625,
+            "height": 17.390625
+          },
+          "clientWidth": 130,
+          "scrollWidth": 130
+        },
+        {
+          "text": "Allergie:",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "700",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 117,
+            "right": 166.203125,
+            "width": 49.203125,
+            "height": 15
+          },
+          "clientWidth": 0,
+          "scrollWidth": 0
+        }
+      ]
+    },
+    {
+      "patientId": "cmviy1ap70002nrp6ly4t8xrk",
+      "severe": false,
+      "viewport": {
+        "width": 1180,
+        "height": 820
+      },
+      "state": "hover",
+      "sample": [
+        {
+          "text": "Allergie: QA penicillinaGestisci →",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 112,
+            "right": 251.65625,
+            "width": 139.65625,
+            "height": 44
+          },
+          "clientWidth": 138,
+          "scrollWidth": 138
+        },
+        {
+          "text": "Allergie: QA penicillina",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 117,
+            "right": 246.65625,
+            "width": 129.65625,
+            "height": 17.390625
+          },
+          "clientWidth": 130,
+          "scrollWidth": 130
+        },
+        {
+          "text": "Allergie:",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "700",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 117,
+            "right": 166.203125,
+            "width": 49.203125,
+            "height": 15
+          },
+          "clientWidth": 0,
+          "scrollWidth": 0
+        }
+      ]
+    },
+    {
+      "patientId": "cmviy1ap70002nrp6ly4t8xrk",
+      "severe": false,
+      "viewport": {
+        "width": 1180,
+        "height": 820
+      },
+      "state": "focus",
+      "sample": [
+        {
+          "text": "Allergie: QA penicillinaGestisci →",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 112,
+            "right": 251.65625,
+            "width": 139.65625,
+            "height": 44
+          },
+          "clientWidth": 138,
+          "scrollWidth": 138
+        },
+        {
+          "text": "Allergie: QA penicillina",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 117,
+            "right": 246.65625,
+            "width": 129.65625,
+            "height": 17.390625
+          },
+          "clientWidth": 130,
+          "scrollWidth": 130
+        },
+        {
+          "text": "Allergie:",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "700",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 117,
+            "right": 166.203125,
+            "width": 49.203125,
+            "height": 15
+          },
+          "clientWidth": 0,
+          "scrollWidth": 0
+        }
+      ]
+    },
+    {
+      "patientId": "cmviy1ap70002nrp6ly4t8xrk",
+      "severe": false,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "state": "normal",
+      "sample": [
+        {
+          "text": "Allergie: QA penicillinaGestisci →",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 72,
+            "right": 374,
+            "width": 302,
+            "height": 44
+          },
+          "clientWidth": 300,
+          "scrollWidth": 300
+        },
+        {
+          "text": "Allergie: QA penicillina",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 77,
+            "right": 206.65625,
+            "width": 129.65625,
+            "height": 17.390625
+          },
+          "clientWidth": 130,
+          "scrollWidth": 130
+        },
+        {
+          "text": "Allergie:",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "700",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 77,
+            "right": 126.203125,
+            "width": 49.203125,
+            "height": 15
+          },
+          "clientWidth": 0,
+          "scrollWidth": 0
+        }
+      ]
+    },
+    {
+      "patientId": "cmviy1ap70002nrp6ly4t8xrk",
+      "severe": false,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "state": "hover",
+      "sample": [
+        {
+          "text": "Allergie: QA penicillinaGestisci →",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 72,
+            "right": 374,
+            "width": 302,
+            "height": 44
+          },
+          "clientWidth": 300,
+          "scrollWidth": 300
+        },
+        {
+          "text": "Allergie: QA penicillina",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 77,
+            "right": 206.65625,
+            "width": 129.65625,
+            "height": 17.390625
+          },
+          "clientWidth": 130,
+          "scrollWidth": 130
+        },
+        {
+          "text": "Allergie:",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "700",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 77,
+            "right": 126.203125,
+            "width": 49.203125,
+            "height": 15
+          },
+          "clientWidth": 0,
+          "scrollWidth": 0
+        }
+      ]
+    },
+    {
+      "patientId": "cmviy1ap70002nrp6ly4t8xrk",
+      "severe": false,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "state": "focus",
+      "sample": [
+        {
+          "text": "Allergie: QA penicillinaGestisci →",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 72,
+            "right": 374,
+            "width": 302,
+            "height": 44
+          },
+          "clientWidth": 300,
+          "scrollWidth": 300
+        },
+        {
+          "text": "Allergie: QA penicillina",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 77,
+            "right": 206.65625,
+            "width": 129.65625,
+            "height": 17.390625
+          },
+          "clientWidth": 130,
+          "scrollWidth": 130
+        },
+        {
+          "text": "Allergie:",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9529411764705882,
+            0.8862745098039215
+          ],
+          "fontSize": "12px",
+          "fontWeight": "700",
+          "ratio": 14.915950828955753,
+          "rect": {
+            "left": 77,
+            "right": 126.203125,
+            "width": 49.203125,
+            "height": 15
+          },
+          "clientWidth": 0,
+          "scrollWidth": 0
+        }
+      ]
+    },
+    {
+      "patientId": "cmviy1apg0004nrp6eiwrbw8f",
+      "severe": true,
+      "viewport": {
+        "width": 1180,
+        "height": 820
+      },
+      "state": "normal",
+      "sample": [
+        {
+          "text": "Allergie gravi: QA penicillinaGestisci →",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 112,
+            "right": 284.015625,
+            "width": 172.015625,
+            "height": 44
+          },
+          "clientWidth": 170,
+          "scrollWidth": 170
+        },
+        {
+          "text": "Allergie gravi: QA penicillina",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 117,
+            "right": 279.015625,
+            "width": 162.015625,
+            "height": 17.390625
+          },
+          "clientWidth": 162,
+          "scrollWidth": 162
+        },
+        {
+          "text": "Allergie gravi:",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "700",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 117,
+            "right": 198.5625,
+            "width": 81.5625,
+            "height": 15
+          },
+          "clientWidth": 0,
+          "scrollWidth": 0
+        }
+      ]
+    },
+    {
+      "patientId": "cmviy1apg0004nrp6eiwrbw8f",
+      "severe": true,
+      "viewport": {
+        "width": 1180,
+        "height": 820
+      },
+      "state": "hover",
+      "sample": [
+        {
+          "text": "Allergie gravi: QA penicillinaGestisci →",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 112,
+            "right": 284.015625,
+            "width": 172.015625,
+            "height": 44
+          },
+          "clientWidth": 170,
+          "scrollWidth": 170
+        },
+        {
+          "text": "Allergie gravi: QA penicillina",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 117,
+            "right": 279.015625,
+            "width": 162.015625,
+            "height": 17.390625
+          },
+          "clientWidth": 162,
+          "scrollWidth": 162
+        },
+        {
+          "text": "Allergie gravi:",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "700",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 117,
+            "right": 198.5625,
+            "width": 81.5625,
+            "height": 15
+          },
+          "clientWidth": 0,
+          "scrollWidth": 0
+        }
+      ]
+    },
+    {
+      "patientId": "cmviy1apg0004nrp6eiwrbw8f",
+      "severe": true,
+      "viewport": {
+        "width": 1180,
+        "height": 820
+      },
+      "state": "focus",
+      "sample": [
+        {
+          "text": "Allergie gravi: QA penicillinaGestisci →",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 112,
+            "right": 284.015625,
+            "width": 172.015625,
+            "height": 44
+          },
+          "clientWidth": 170,
+          "scrollWidth": 170
+        },
+        {
+          "text": "Allergie gravi: QA penicillina",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 117,
+            "right": 279.015625,
+            "width": 162.015625,
+            "height": 17.390625
+          },
+          "clientWidth": 162,
+          "scrollWidth": 162
+        },
+        {
+          "text": "Allergie gravi:",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "700",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 117,
+            "right": 198.5625,
+            "width": 81.5625,
+            "height": 15
+          },
+          "clientWidth": 0,
+          "scrollWidth": 0
+        }
+      ]
+    },
+    {
+      "patientId": "cmviy1apg0004nrp6eiwrbw8f",
+      "severe": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "state": "normal",
+      "sample": [
+        {
+          "text": "Allergie gravi: QA penicillinaGestisci →",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 72,
+            "right": 374,
+            "width": 302,
+            "height": 44
+          },
+          "clientWidth": 300,
+          "scrollWidth": 300
+        },
+        {
+          "text": "Allergie gravi: QA penicillina",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 77,
+            "right": 239.015625,
+            "width": 162.015625,
+            "height": 17.390625
+          },
+          "clientWidth": 162,
+          "scrollWidth": 162
+        },
+        {
+          "text": "Allergie gravi:",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "700",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 77,
+            "right": 158.5625,
+            "width": 81.5625,
+            "height": 15
+          },
+          "clientWidth": 0,
+          "scrollWidth": 0
+        }
+      ]
+    },
+    {
+      "patientId": "cmviy1apg0004nrp6eiwrbw8f",
+      "severe": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "state": "hover",
+      "sample": [
+        {
+          "text": "Allergie gravi: QA penicillinaGestisci →",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 72,
+            "right": 374,
+            "width": 302,
+            "height": 44
+          },
+          "clientWidth": 300,
+          "scrollWidth": 300
+        },
+        {
+          "text": "Allergie gravi: QA penicillina",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 77,
+            "right": 239.015625,
+            "width": 162.015625,
+            "height": 17.390625
+          },
+          "clientWidth": 162,
+          "scrollWidth": 162
+        },
+        {
+          "text": "Allergie gravi:",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "700",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 77,
+            "right": 158.5625,
+            "width": 81.5625,
+            "height": 15
+          },
+          "clientWidth": 0,
+          "scrollWidth": 0
+        }
+      ]
+    },
+    {
+      "patientId": "cmviy1apg0004nrp6eiwrbw8f",
+      "severe": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "state": "focus",
+      "sample": [
+        {
+          "text": "Allergie gravi: QA penicillinaGestisci →",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 72,
+            "right": 374,
+            "width": 302,
+            "height": 44
+          },
+          "clientWidth": 300,
+          "scrollWidth": 300
+        },
+        {
+          "text": "Allergie gravi: QA penicillina",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 77,
+            "right": 239.015625,
+            "width": 162.015625,
+            "height": 17.390625
+          },
+          "clientWidth": 162,
+          "scrollWidth": 162
+        },
+        {
+          "text": "Allergie gravi:",
+          "color": "rgb(22, 32, 46)",
+          "background": [
+            0.9921568627450981,
+            0.9254901960784314,
+            0.9333333333333333
+          ],
+          "fontSize": "12px",
+          "fontWeight": "700",
+          "ratio": 14.3803630256408,
+          "rect": {
+            "left": 77,
+            "right": 158.5625,
+            "width": 81.5625,
+            "height": 15
+          },
+          "clientWidth": 0,
+          "scrollWidth": 0
+        }
+      ]
+    }
+  ],
+  "confirmResponseStatus": 200,
+  "actualConfirmedWrite": {
+    "httpStatus": 200,
+    "records": [
+      {
+        "id": "cmviy1tso0001p7p6v741ksj5",
+        "therapyId": "cmviy1aq20006nrp6hnnn6bfu",
+        "patientId": "cmviy1apg0004nrp6eiwrbw8f",
+        "farmacoNome": "QA16 Dose",
+        "farmacoDose": "1 compressa — 5 mg",
+        "farmacoVia": "orale",
+        "date": "2026-10-22",
+        "fascia": "mattina",
+        "ora": "08:00",
+        "stato": "erogata",
+        "operatoreId": "SIM-SUPERVISOR-1",
+        "operatoreNome": "Supervisore 1",
+        "confirmedAt": "2026-10-22T02:50:45.910Z",
+        "doseContext": null,
+        "motivo": null,
+        "note": null,
+        "createdAt": "2026-10-22T02:50:45.912Z",
+        "updatedAt": "2026-10-22T02:50:45.912Z"
+      }
+    ]
+  },
+  "scoped503": {
+    "classification": "Actual app load-failure/no clinical mutations; not PS-unknown retained-modal coverage",
+    "noWrites": true
+  },
+  "psUnknownRetainedModal": "Covered separately only by production React component browser fixture; no positive API payload mock.",
+  "sourceSha": "4c85fdf5a97eea10c8efcc6d105cd32de054e030",
+  "scenario": "app"
+}

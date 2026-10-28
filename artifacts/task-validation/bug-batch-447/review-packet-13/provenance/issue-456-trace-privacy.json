@@ -1,0 +1,25 @@
+{
+  "policy": "exact synthetic session values only; no event or outcome removal",
+  "zipValidation": "CRC and residual signed-token scan passed",
+  "archives": [
+    {
+      "path": "/workspace/.clinicos-cloud/497-Claude1-followup-20261021/integrated-browser-qa13/attempt6/seven/issue-456-trace.zip",
+      "originalSha256": "72330ca80edcc44cd3786eac9cc8e9690b337a77295dede811835083719d5c72",
+      "sanitizedSha256": "0af9be0b7e9f12c32a4bfde924e67ff3245c27bf5da1ce99609049f54d2d1011",
+      "sessionsRedacted": 1,
+      "entries": [
+        {
+          "entry": "trace.network",
+          "replacements": 65
+        },
+        {
+          "entry": "resources/e8e54af060fe571aa44e6f04362786870d837849.json",
+          "replacements": 1
+        }
+      ],
+      "tokensRemaining": 0,
+      "changed": true,
+      "originalRetainedPrivateOutsideRepository": true
+    }
+  ]
+}

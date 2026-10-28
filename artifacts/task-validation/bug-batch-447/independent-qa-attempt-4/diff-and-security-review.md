@@ -1,0 +1,21 @@
+# Independent QA4 scoped review
+
+The full target remains94 frozen source paths at verification base05fd62363d89573d6e2449235a7499cc855434cd. This review independently verifies all94 source and27 contract hashes, compares the exact previous browser source with the new one, reads the prior complete clinical scope review and finds exactly one changed line: scenario452 now waits for `.patient-roster tbody tr.patient-roster__row` instead of any `tbody tr`. The product's actual loading row at PatientRoster.tsx:458 has no patient-row class; actual residents at477 have it. Default visible readiness and30000ms bound remain unchanged. No sleep/retry, assertion/order/fixture removal, source hook, production behavior or source path is added.
+
+The separate browser DOM probe exercises both exact selectors against a real loopback synthetic DOM with the same loading/actual-row classes. It preserves the old successful-placeholder wait followed by the rejected original value assertion and verifies the new wait stays unresolved until the actual row exists. The corrected canonical suite executes directly from the frozen source without a runtime substitution.
+
+All93 other source hashes and26 old contracts match QA3. Stronger than a scoped-only comparison, independently reconstructing the canonical fingerprint using the exact old browser bytes matches QA3 across every frontend/src, backend/src and prisma source file plus the remaining harness/privacy helper bytes. Thus previous independent full clinical diff/security review and broad suites remain source-bound and explicitly inherited. The current complete scoped diff is hashed and read privately; its raw duplicate is withheld because existing public development defaults can resemble credentials. The publishable94-path hash index and exact one-line diff retain reviewability.
+
+Scope/pattern/hygiene: original backend/App limitations are explicitly superseded only by frozen amendments6/7/9/14. No new schema, migration, dependency, auth/CORS/TLS flag or external endpoint is introduced by this correction. Existing shared design and native accessible disclosure/controls are preserved. Every clinical and identity/ACL/time/paging oracle remains present. Independent whitespace/syntax checks pass.
+
+Security checklist for this test-only correction and unchanged clinical target:
+
+- Secrets/PHI: exclusively synthetic resident/actor data. No live/personal credentials inherited into runtimes. Fresh signed simulator values are redacted by the byte-unchanged committed trace helper; events/HTTP outcomes/font/media are retained. Whole packet and actual archive members are audited separately.
+- Logging: the selector adds no log. Existing source-bound QA3 review confirms no new clinical payload logger; only bounded synthetic PID/test receipts are added by earlier clinical work.
+- Input validation: no input/schema changes. Existing strict PS command fields/confirmation/request bounds, server actor/time, exact patient-bound receipts and capped three-transaction read retry retain their prior proofs and are exercised by the fresh full-stack scenarios/focusedDB suite.
+- AuthZ: role-negative reads and OSS/forged-managed-state attempts must remain denied. Paused GIVEN/PRN mutations remain blocked server-side, valid prior replay/explicit NOT_GIVEN remain available, other patients remain independent and returns never reopen already-given doses.
+- Injection/XSS: the correction is a constant selector. No new raw SQL, HTML injection, eval or user-controlled selector. Existing parameterized clinical SQL and exact owned QA database-identifier guards retain their verified bytes; the separate QA adapter contains fixed synthetic HTML only.
+- Dependencies/config: no package changes or new secret/API configuration, no production simulator enablement, no developer5432 access. The safe wrapper uses only its marked random55447 child and preserves the empty parent.
+- Remaining gate: actual reviewed parentmain432/450 is mandatory before finalREADY/UXPR. Local proof cannot produce Claude approval, waive review failure or establish deploy/closure.
+
+No new source correctness/security finding is established by this diff review. Actual runtime/media/privacy results and the final external gate verdict are recorded in validation-report.md.

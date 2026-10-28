@@ -1,0 +1,19 @@
+{
+  "parentCandidate": "38b37e3322176bd9836d228d4c4ce63bf66fced2",
+  "base": "995e2ff6d14a96b5d67e0d14d708f4a95c4c816f",
+  "binding": "Exact SHA-256 values for the three files changed in the isolated author2 workspace; no Git commit or remote publication is claimed.",
+  "corrected": {
+    "agent-team/src/bug-pipeline/process.mjs": "71d02a1482ae0665df66d4c73b4b66c6c04c1bff2994869b8a8b408059f210e5",
+    "agent-team/tests/bug-pipeline/process-output.test.mjs": "de04a700d080ae2341bbd7d6061b98ce59590e646c821b1395986d558395725b",
+    "agent-team/tests/bug-pipeline/routing.test.mjs": "46844bbf6cc9536515307d1b0b6c2c8caeae9627db19cfc5f52433bc8f0f25fd"
+  },
+  "parentCandidate38": {
+    "agent-team/src/bug-pipeline/process.mjs": "43c3f16b715349b8c474e1d3d6d2efddecd5904efa54f687e707a643aa90d67a",
+    "agent-team/tests/bug-pipeline/process-output.test.mjs": "dadde17c49a95901cfab8cbcd55c82ee0deceffa7d91cef4cd27d8833bb28b16",
+    "agent-team/tests/bug-pipeline/routing.test.mjs": "a8ee77e83ed96a56b3cb01ad2e8bae66f3111e852e82d1485080ef2498ec135b"
+  },
+  "unchangedReviewedFiles": {
+    "agent-team/src/bug-pipeline/models.mjs": "1cd2bf6c650264a976c938caf36c498fe67eae2812dcf06adbfc61b36afac122",
+    "agent-team/src/bug-pipeline/cli.mjs": "a34f3009edd29bd0b0e5e2f5a707fd80aaf7c1063be7bd4e68e32b7e162b93ed"
+  }
+}

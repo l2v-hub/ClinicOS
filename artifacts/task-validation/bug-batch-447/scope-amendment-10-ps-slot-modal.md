@@ -1,0 +1,3 @@
+# Scope amendment 10 — actual therapy slot modal PS state
+
+Exactly one existing file `frontend/src/components/operator/TherapySlotModal.tsx` is added (90 total) for the actual slot modal used by the day agenda. It must consume existing patient-bound operational pause metadata, show the reason and disable only GIVEN/glucose administration for paused patients. Keep explicit NOT_GIVEN, immutable completed events, other patients and existing role restrictions. This implements the already approved explicit pause/continue decision and aligns UI with the authoritative server guard, without introducing new clinical policy or endpoint. Original frozen documents and dependency base remain unchanged. Same implementation2/4, reviews0/4.
