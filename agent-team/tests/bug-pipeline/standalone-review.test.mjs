@@ -31,7 +31,7 @@ import { mkdtemp, rm, mkdir, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import nodePath from 'node:path';
 const clone = (value) => structuredClone(value);
-// Core merge fixtures inject a harmless scope; production CLI policy remains empty.
+// Core merge fixtures inject one harmless file; production uses the fixed trusted scopes.
 const FIXTURE_INFRASTRUCTURE_FILES = Object.freeze(['docs/synthetic-review-regression.md']);
 const sha = 'a'.repeat(40),
   baseSha = 'b'.repeat(40),
@@ -894,6 +894,7 @@ async function runRuntime(
       summary: 'Read-only source and evidence inspection passed.',
     }),
   },
+  infrastructureFiles = STANDALONE_INFRASTRUCTURE_FILES,
 ) {
   f.github.intake = async () => {};
   f.github.discoverQueue = async () => [];
@@ -905,7 +906,7 @@ async function runRuntime(
     workspace,
     store: f.github.createStateStore(),
     standaloneController: f.controller,
-    standaloneInfrastructureFiles: STANDALONE_INFRASTRUCTURE_FILES,
+    standaloneInfrastructureFiles: infrastructureFiles,
   });
 }
 function makeAllowlisted(f, file = FIXTURE_INFRASTRUCTURE_FILES[0]) {
@@ -916,32 +917,57 @@ function makeAllowlisted(f, file = FIXTURE_INFRASTRUCTURE_FILES[0]) {
   f.manifest.packet.files['imported-history.json'] = sha256(f.content['imported-history.json']);
 }
 
-test('trusted runtime fixed policy protects all original infrastructure paths and leaves protected merge manual', async () => {
-  assert.deepEqual(STANDALONE_INFRASTRUCTURE_FILES, []);
+test('trusted runtime supplies the fixed infrastructure scopes and merges after genuine two-model proof', async () => {
+  assert.deepEqual(
+    STANDALONE_INFRASTRUCTURE_FILES,
+    (await import('../../src/bug-pipeline/review-policy.mjs')).STANDALONE_INFRASTRUCTURE_SCOPES,
+  );
   assert.equal(Object.isFrozen(STANDALONE_INFRASTRUCTURE_FILES), true);
   const f = fixture();
   makeAllowlisted(f, 'docs/standalone-pr-review.md');
   f.manifest.releaseHold = false;
   await published(f);
-  f.github.mergePullRequest = async () => assert.fail('Runbook is human protected');
+  let merges = 0;
+  f.github.mergePullRequest = async (pr, head, { guard }) => {
+    await guard();
+    merges++;
+    f.pr.state = 'closed';
+    f.pr.merged = true;
+    f.pr.merge_commit_sha = '8'.repeat(40);
+    return { number: pr, reviewedSha: head, mergeSha: '8'.repeat(40) };
+  };
   const state = await runRuntime(f);
-  assert.equal(state.standaloneReviews[0].phase, 'ready');
+  assert.equal(state.standaloneReviews[0].release.status, 'merged');
   assert.equal(state.standaloneReviews[0].codexFinalReview.status, 'verified');
-  assert.equal(state.standaloneReviews[0].release, undefined);
+  assert.equal(merges, 1);
   await runRuntime(f, {
     finalQaStandalone: async () => assert.fail('Verified QA is idempotent'),
   });
 });
 
-test('runtime never merges held, unknown, application, unreviewed or failed independent QA subjects', async () => {
-  for (const kind of ['hold', 'unknown', 'application', 'no-claude', 'codex-finding']) {
+test('runtime refuses held, unknown, application and failed-proof subjects', async () => {
+  for (const kind of [
+    'hold',
+    'unknown',
+    'application',
+    'backend',
+    'database',
+    'provider',
+    'no-claude',
+    'codex-finding',
+  ]) {
     const f = fixture();
     makeAllowlisted(
       f,
-      kind === 'application'
-        ? 'frontend/src/actual.ts'
+      ['application', 'backend', 'database', 'provider'].includes(kind)
+        ? {
+            application: 'frontend/src/actual.ts',
+            backend: 'backend/api/routes.mjs',
+            database: 'prisma/schema.prisma',
+            provider: 'agent-team/providers/cloud.mjs',
+          }[kind]
         : kind === 'unknown'
-          ? 'agent-team/src/unreviewed-policy.mjs'
+          ? 'misc/unreviewed-policy.mjs'
           : undefined,
     );
     f.manifest.releaseHold = kind === 'hold' ? 'Existing release hold' : false;
@@ -1135,7 +1161,7 @@ test('finalize authentication accepts only an explicit synthetic directory witho
   );
 });
 
-test('production finalize CLI dispatch runs separate Codex QA and leaves protected merge manual without repeating QA', async (t) => {
+test('production finalize CLI dispatches separate Codex QA and merges once without repeating QA', async (t) => {
   const env = await isolatedFinalizeEnvironment(t);
   const f = fixture();
   makeAllowlisted(f, 'docs/standalone-pr-review.md');
@@ -1168,12 +1194,11 @@ test('production finalize CLI dispatch runs separate Codex QA and leaves protect
   };
   assert.equal(await handoffMain({ args: ['finalize', '--pr', '81'], env, dependencies }), 0);
   assert.equal(qa, 1);
-  assert.equal(merges, 0);
-  assert.equal(f.remote().standaloneReviews[0].phase, 'ready');
-  assert.equal(f.remote().standaloneReviews[0].release, undefined);
+  assert.equal(merges, 1);
+  assert.equal(f.remote().standaloneReviews[0].release.status, 'merged');
   assert.equal(await handoffMain({ args: ['finalize', '--pr', '81'], env, dependencies }), 0);
   assert.equal(qa, 1);
-  assert.equal(merges, 0);
+  assert.equal(merges, 1);
 });
 
 test('finalize CLI cannot process normal/unadopted PR and preserves failed Codex execution as blocked', async (t) => {
@@ -1272,7 +1297,7 @@ test('Unicode CLI pre-read allowance never expands canonical comment limit or no
   assert.equal(normal.comments.length, 0);
 });
 
-test('concurrent production finalize and pipeline observe active Codex QA without mutation, duplicate inference or merge', async (t) => {
+test('concurrent production finalize and pipeline observe active Codex QA without mutation or duplicate inference', async (t) => {
   const env = await isolatedFinalizeEnvironment(t);
   const f = fixture();
   makeAllowlisted(f);
@@ -1337,9 +1362,8 @@ test('concurrent production finalize and pipeline observe active Codex QA withou
   assert.equal(merges, 0);
   finish();
   assert.equal(await first, 0);
-  assert.equal(merges, 0);
-  assert.equal(f.remote().standaloneReviews[0].phase, 'ready');
-  assert.equal(f.remote().standaloneReviews[0].release, undefined);
+  assert.equal(merges, 1);
+  assert.equal(f.remote().standaloneReviews[0].release.status, 'merged');
   assert.equal(f.remote().standaloneReviews[0].codexFinalReview.status, 'verified');
 });
 
@@ -1626,7 +1650,7 @@ test('actual store same-subject modification during QA remains a conflict withou
   assert.equal(models, 1);
 });
 
-test('F1 trust-root and workflow changes never merge even through a caller-supplied allowlist', async () => {
+test('F1 reviewed trust-root and workflow changes merge after exact proof and durable reservation', async () => {
   for (const file of [
     'agent-team/src/bug-pipeline/cli.mjs',
     'agent-team/src/bug-pipeline/review-policy.mjs',
@@ -1649,8 +1673,26 @@ test('F1 trust-root and workflow changes never merge even through a caller-suppl
         summary: 'Synthetic QA',
       })),
     );
-    f.github.mergePullRequest = async () =>
-      assert.fail('Human-protected trust root cannot auto-merge');
+    f.setActor(subject.externalReview.owner);
+    assert.equal(subject.externalReview.owner, 'maintainer');
+    subject.release = {
+      reviewProof: captureReleaseReviewProof(subject, {
+        repository: repo,
+        collection: 'standaloneReviews',
+      }),
+      status: 'merging',
+      reviewedSha: sha,
+      prNumber: 81,
+      nonce: `reservation-${file}`,
+      reservedAt: new Date().toISOString(),
+    };
+    await stepOptions(f, subject, async () => assert.fail()).save();
+    let merges = 0;
+    f.github.mergePullRequest = async (_pr, _sha, { guard }) => {
+      await guard();
+      merges++;
+      return { mergeSha: '8'.repeat(40) };
+    };
     const result = await mergeStandaloneReview({
       subject,
       controller: f.controller,
@@ -1658,17 +1700,9 @@ test('F1 trust-root and workflow changes never merge even through a caller-suppl
       infrastructureFiles: [file],
       execute: true,
     });
-    assert.equal(result.status, 'ready-to-merge');
-    assert.equal(result.reason, 'human-protected-trust-root');
+    assert.equal(result.mergeSha, '8'.repeat(40));
+    assert.equal(merges, 1);
   }
-  assert.ok(
-    STANDALONE_INFRASTRUCTURE_FILES.every(
-      (file) =>
-        !file.startsWith('.github/') &&
-        !file.startsWith('agent-team/src/') &&
-        !file.includes('inspect-demo-source-topology'),
-    ),
-  );
 });
 
 test('F2 existing manual PR, branch or issue ownership blocks adoption without shortening history', async () => {
@@ -1697,7 +1731,7 @@ test('F2 existing manual PR, branch or issue ownership blocks adoption without s
   }
 });
 
-test('F3 same-account report cannot authorize merge; distinct reviewer or protected native human approval can', async () => {
+test('F3 same-account Claude report can merge after separate Codex proof and durable reservation', async () => {
   const f = fixture();
   f.manifest.releaseHold = false;
   const subject = await published(f);
@@ -1707,11 +1741,10 @@ test('F3 same-account report cannot authorize merge; distinct reviewer or protec
       summary: 'Synthetic QA',
     })),
   );
-  f.github.nativeReviewAuthorization = async () => ({
-    author: 'maintainer',
-    humanApproved: false,
-    protectedReviews: true,
-  });
+  f.setActor(subject.externalReview.owner);
+  assert.equal(subject.externalReview.owner, 'maintainer');
+  f.github.nativeReviewAuthorization = async () =>
+    assert.fail('Model independence is established by the review proof, not account comparison');
   subject.release = {
     reviewProof: captureReleaseReviewProof(subject, {
       repository: repo,
@@ -1738,24 +1771,9 @@ test('F3 same-account report cannot authorize merge; distinct reviewer or protec
       infrastructureFiles: [subject.sourceManifest[0].path],
       execute: true,
     });
-  assert.equal((await merge()).reason, 'independent-reviewer-required');
-  assert.equal(merges, 0);
-  f.github.nativeReviewAuthorization = async () => ({
-    author: 'different-author',
-    humanApproved: false,
-    protectedReviews: true,
-  });
-  f.setActor('distinct-finalizer');
-  await merge();
+  const receipt = await merge();
+  assert.equal(receipt.mergeSha, '8'.repeat(40));
   assert.equal(merges, 1);
-  f.setActor('maintainer');
-  f.github.nativeReviewAuthorization = async () => ({
-    author: 'maintainer',
-    humanApproved: true,
-    protectedReviews: true,
-  });
-  await merge();
-  assert.equal(merges, 2);
 });
 
 test('F4 head-drift claim recovery preserves the consumed round and enables adoption of the new SHA', async () => {
@@ -2070,7 +2088,7 @@ test('native check observations reconcile on the same head without repeating fin
       };
       const reconcile = async () =>
         entrypoint === 'runtime'
-          ? (await runRuntime(f, workspace)).standaloneReviews[0]
+          ? (await runRuntime(f, workspace, [])).standaloneReviews[0]
           : f.controller.finalize(81, { workspace, infrastructureFiles: [] });
       const ready = await reconcile();
       assert.equal(ready.phase, 'ready');
@@ -2535,10 +2553,8 @@ test('transient counters reset on successful work and changed SHA without resett
   );
 });
 
-test('human-protected prompt and policy tests reject automatic merge even with a supplied allowlist and native override', async () => {
-  const { requiresHumanReview, standaloneMergePolicy } = await import(
-    '../../src/bug-pipeline/review-policy.mjs'
-  );
+test('standalone merge policy accepts bounded infrastructure and refuses clinical or malformed paths', async () => {
+  const { standaloneMergePolicy } = await import('../../src/bug-pipeline/review-policy.mjs');
   const paths = [
     'docs/claude-local-review-prompt.md',
     'agent-team/tests/bug-pipeline/github.test.mjs',
@@ -2550,25 +2566,22 @@ test('human-protected prompt and policy tests reject automatic merge even with a
     'agent-team/tests/bug-pipeline/models.test.mjs',
     'agent-team/tests/bug-pipeline/workspace.test.mjs',
   ];
-  for (const path of paths) {
-    assert.equal(requiresHumanReview(path), true);
-    assert.equal(STANDALONE_INFRASTRUCTURE_FILES.includes(path), false);
-    for (const files of [[path], ['docs/standalone-pr-review.md', path]])
-      assert.equal(
-        standaloneMergePolicy({
-          files,
-          reviewer: 'reviewer',
-          actor: 'actor',
-          native: {
-            humanApproved: true,
-            author: 'author',
-            protectedReviews: true,
-          },
-        }),
-        'human-protected-trust-root',
-      );
-  }
-  assert.equal(requiresHumanReview('docs/standalone-pr-review.md'), true);
+  for (const path of paths)
+    assert.equal(standaloneMergePolicy({ files: [path], infrastructureFiles: [path] }), null, path);
+  for (const path of [
+    'frontend/src/app.ts',
+    'backend/api/routes.mjs',
+    'prisma/schema.prisma',
+    'agent-team/providers/runtime.mjs',
+    'misc/unknown.mjs',
+    '../docs/standalone-pr-review.md',
+    'docs//standalone-pr-review.md',
+  ])
+    assert.equal(
+      standaloneMergePolicy({ files: [path], infrastructureFiles: [path, '../'] }),
+      'unsupported-infrastructure-scope',
+      path,
+    );
 });
 
 test('post-save request notice failure is repaired by the actual suggested CLI command, idempotently without spending a round', async () => {

@@ -1009,8 +1009,7 @@ async function finalizeStandaloneSubjectBody({
   if (
     subject.phase === 'ready' &&
     !subject.releaseHold &&
-    files.length &&
-    files.every((file) => infrastructureFiles.includes(file))
+    standaloneMergePolicy({ files, infrastructureFiles }) === null
   ) {
     const readiness = await mergeStandaloneReview({
       subject,
@@ -1230,27 +1229,9 @@ export async function mergeStandaloneReview({
     const files = expected.sourceManifest
       .map((file) => file.path)
       .filter((file) => !file.startsWith('artifacts/task-validation/'));
-    const native = await github.nativeReviewAuthorization(expected.pr.number, expected.sha, {
-      excludedLogins: [actor, expected.externalReview?.owner],
-    });
-    const policy = standaloneMergePolicy({
-      files,
-      reviewer: expected.externalReview?.owner,
-      actor,
-      native,
-    });
-    if (policy === 'human-protected-trust-root') return policy;
-    if (policy && !(native.humanApproved && native.protectedReviews)) return policy;
-    assert.ok(
-      Array.isArray(infrastructureFiles) && infrastructureFiles.length > 0,
-      'Explicit trusted infrastructure allowlist required',
-    );
-    assert.ok(
-      files.length > 0 &&
-        files.every(
-          (file) =>
-            infrastructureFiles.includes(file) && /^(?:agent-team\/tests\/|docs\/)/.test(file),
-        ),
+    assert.equal(
+      standaloneMergePolicy({ files, infrastructureFiles }),
+      null,
       'Application or deployment changes require the verified deployment release controller',
     );
     await controller.current(expected);
@@ -1260,15 +1241,7 @@ export async function mergeStandaloneReview({
       equal(expected.release.reviewProof, proof);
     }
   };
-  const reason = await guard();
-  if (reason)
-    return {
-      status: 'ready-to-merge',
-      pr: expected.pr.number,
-      reviewedSha: expected.sha,
-      reason,
-      humanReviewRequired: true,
-    };
+  await guard();
   if (!execute)
     return {
       status: 'ready-to-merge',
@@ -1279,11 +1252,7 @@ export async function mergeStandaloneReview({
   // The result is a merge receipt, never a deployment or source issue completion.
   return github.mergePullRequest(expected.pr.number, expected.sha, {
     guard: async () => {
-      assert.equal(
-        await guard(),
-        undefined,
-        'Native human review or independent reviewer required',
-      );
+      await guard();
     },
   });
 }

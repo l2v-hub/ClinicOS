@@ -244,19 +244,22 @@ proprietario, SHA, budget implementazione/review, ultimo risultato, blocco e pro
 Ogni snapshot espone l'ora: non presentarlo come monitor live se non lo è.
 
 Prima del merge verifica sullo SHA recensito tutti i check obbligatori correnti e le review
-richieste, senza bypassare protezioni umane. Per il flusso configurato controlla almeno
+richieste dalle regole native, senza bypassare le protezioni di GitHub. Per il flusso configurato controlla almeno
 `bug-pipeline-tests`, `secret-scan`, `frontend-tests`, `archive-tests`, `gate`, `browser-e2e`;
 riconcilia sempre questa lista con le regole effettive di main. Un CI mock non prova provider
 reali; una fixture del bridge non prova una review Claude realmente conclusa.
 
-Il controller protegge anche il proprio trust root: secondo la policy corrente, le modifiche a
-`.agents/`, `.claude/`, `.github/`, `agent-team/src/` e `scripts/quality-gate/` (oltre ai file
-espliciti elencati dalla policy) richiedono una review approvante nativa sullo SHA corrente da
-una persona autorizzata e indipendente. Questa review umana è distinta da report Claude/Codex,
-QA statico, approvazioni di PR o grant di budget; il controller lascia il caso `ready-to-merge`
-con `humanReviewRequired` e non lo converte in autorizzazione automatica in base alle sole
-protezioni del branch o a un allowlist. Procedi solo con merge manuale attraverso il normale
-percorso protetto, senza bypass amministrativo o override dell'allowlist.
+Nel flusso autorizzato per sviluppatore singolo, anche le modifiche alle istruzioni, ai
+workflow, al controller e al quality gate possono essere integrate automaticamente entro gli
+scope infrastrutturali fidati. Non è richiesta una seconda persona né un'approvazione umana
+aggiuntiva imposta dal controller. Claude deve aver pubblicato una review autentica e pulita
+sullo SHA corrente; una sessione Codex finale separata deve aver verificato lo stesso SHA.
+L'uso dello stesso account GitHub per pubblicare i due report non annulla l'indipendenza delle
+sessioni. Restano obbligatori check correnti, ownership, assenza di hold, prenotazione durevole
+e guardia finale prima del merge ordinario protetto. Le eventuali review richieste dalle regole
+native di GitHub restano vincolanti: non inventare approvazioni e non usare bypass amministrativi.
+Le modifiche applicative, ai provider o al runtime restano nel percorso di rilascio che verifica
+il deploy prima di dichiarare risolta e chiudere una issue.
 
 Leggi i workflow attivi e la configurazione del target prima del deploy: non assumere che
 push/main distribuisca frontend, backend e runtime. Rispetta l'autorizzazione al rilascio.

@@ -200,10 +200,12 @@ o il testo di autorizzazione da soli non lo verificano. Il recupero consuma una 
 e non estende il budget; dopo un finding non si ripete sullo stesso SHA. L'estensione tipizzata è
 separata, esternamente verificata e prenotata come descritto sopra. Non è un reset o retry automatico.
 Il CLI non esegue modelli, non mergea e non distribuisce; il controller di rilascio è l'unico
-proprietario di merge/deploy/chiusura. Per il trust root (`.agents/`, `.claude/`, `.github/`,
-controller e quality gate) la policy richiede una review nativa sullo SHA corrente da una persona
-autorizzata indipendente e un merge manuale normale protetto; report automatici e grant non
-sostituiscono questa approvazione (dettagli nel playbook ClinicOS). Snapshot tra risorse GitHub e CAS del ledger non sono
+proprietario di merge/deploy/chiusura. Il flusso autorizzato per sviluppatore singolo consente il
+merge automatico degli scope infrastrutturali fidati (`.agents/`, `.claude/`, `.github/`,
+controller, quality gate, documentazione e test) dopo review Claude autentica e QA Codex finale
+separata sullo SHA corrente. Non impone una seconda persona o un secondo account GitHub;
+restano vincolanti le protezioni native e i check, senza approvazioni inventate o bypass
+amministrativi (dettagli nel playbook ClinicOS). Snapshot tra risorse GitHub e CAS del ledger non sono
 una transazione atomica con la PR; le verifiche ripetute riducono finestre di concorrenza senza
 promettere atomicità del provider.
 

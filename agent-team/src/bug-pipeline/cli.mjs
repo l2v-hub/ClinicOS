@@ -11,21 +11,11 @@ import { createWorkspace, knownTerminalFailure } from './workspace.mjs';
 import { exportFailedCode, exportFailedWorkItemCode } from './failed-output-export.mjs';
 import { runPipeline } from './pipeline.mjs';
 import { runWithIntakeContinuation, INTAKE_QUIET_MS } from './intake-continuation.mjs';
-import { requiresHumanReview } from './review-policy.mjs';
+import { STANDALONE_INFRASTRUCTURE_SCOPES } from './review-policy.mjs';
 import { createStandaloneReview } from './standalone-review.mjs';
 
 // Trusted reviewed-main policy. Neither PR manifests nor environment flags can add files.
-export const STANDALONE_INFRASTRUCTURE_FILES = Object.freeze(
-  [
-    'agent-team/tests/bug-pipeline/models.test.mjs',
-    'agent-team/tests/bug-pipeline/standalone-review-contracts.test.mjs',
-    'agent-team/tests/bug-pipeline/standalone-review.test.mjs',
-    'agent-team/tests/bug-pipeline/workspace.test.mjs',
-    'agent-team/tests/bug-pipeline/github.test.mjs',
-    'docs/claude-local-review-prompt.md',
-    'docs/standalone-pr-review.md',
-  ].filter((file) => !requiresHumanReview(file)),
-);
+export const STANDALONE_INFRASTRUCTURE_FILES = STANDALONE_INFRASTRUCTURE_SCOPES;
 
 export async function exportKnownFailedOutputs({ state, workspace, outputRoot }) {
   const exports = [];

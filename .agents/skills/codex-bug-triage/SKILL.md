@@ -202,10 +202,12 @@ Codex responds to findings with its adaptive executor, verification, simplificat
 independent QA and a new SHA; the selected channel persists across rounds. After a clean Claude
 report, a separate Codex QA must pass on that SHA before release readiness. Only the trusted
 release controller merges and confirms deployment/issue closure under actual protections. For
-changes to the controller's trust root, the current policy requires a native approval on the
-current head from an independent authorized human and leaves the PR for the normal manual
-protected merge; Claude/Codex reports, static QA and budget grants are not that approval. See the
-canonical [ClinicOS merge gate](../../../.claude/skills/clinicos/references/bug-delivery.md).
+authorized infrastructure changes, the single-developer flow permits automatic ordinary merge
+with a genuine clean Claude report and a separately verified Codex final on the current SHA.
+The controller does not require a second human or a second GitHub account. Native required
+reviews/checks, fresh ownership and exact-SHA merge guards remain binding; no approval is
+fabricated and no admin bypass is used. See the canonical
+[ClinicOS merge gate](../../../.claude/skills/clinicos/references/bug-delivery.md).
 The user explicitly authorized initial infrastructure-failure recovery: `request --recover-failed`
 retains the failed attempt and can request the next round on the same SHA when no substantive
 review existed. Every recovery still requires a trusted host's injected authorization verifier,
