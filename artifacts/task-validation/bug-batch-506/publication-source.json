@@ -1,0 +1,178 @@
+{
+  "issue": 506,
+  "baseline": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+  "publishedBase": "ff91e103827612337346520f2939694c6ae6bb92",
+  "qualifiedCode": "7736adffea3394c8a70b76f71967309f1aa32b7a",
+  "knownRetainedSource9": "a918212c55b2b13707a6e2551317bac780fec45d",
+  "metadataAuthorNonce": "6d495d79-29d9-4a39-8078-92ca9ca695b9",
+  "sourceManifest": {
+    "e2e/issue506-workspace.mjs": "340026b02700fda168a95fa0d36f0a294f24f9441adbc6487c89eca47d29f370",
+    "frontend/e2e/issue506-workspace.html": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05",
+    "frontend/e2e/issue506-workspace.tsx": "4fc31c5319186440b5b9db661589a444d9960b96bb431d2c69136a0fd22fc975",
+    "frontend/src/components/operator/NewPatientFlow.tsx": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895",
+    "frontend/src/components/shared/AccessibleDialogSurface.tsx": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac",
+    "frontend/src/components/shared/DialogLoading.tsx": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4",
+    "frontend/src/components/shared/DischargeImportModal.tsx": "0c77209bfb755c6bc5d99037c1fe1526ea78ed2d512e903d550e358e9ba8aee7",
+    "frontend/src/components/shared/PatientWorkspaceSurface.css": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395",
+    "frontend/src/components/shared/PatientWorkspaceSurface.tsx": "27ff12f6020ef24cc897b03570c3fc4d95156d7584e3f0d70e618b805235084d",
+    "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41",
+    "frontend/src/components/shared/intake/IntakeWorkspace.tsx": "e7053e3aa70ea6909bb84b6f190abe80d719ff3046378a2af89e716ba907f296",
+    "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde"
+  },
+  "sourceManifestSha256": "b5e8dabad466c108949b80223e9c8aadf19d00bfb106794615ab49599cee58a8",
+  "independentQa": {
+    "nonce": "f65973b7-8451-4594-8878-84e7c26e93d3",
+    "sourceSha": "7736adffea3394c8a70b76f71967309f1aa32b7a",
+    "verdict": "VERIFIED",
+    "sealSha256": "c25a130c0da32e1b4284302c5f74736f3cb617b0849e2b354a02e34296bf25b2",
+    "copies": [
+      {
+        "path": "artifacts/task-validation/bug-batch-506/history/source10/independent-qa/report.md",
+        "bytes": 3032,
+        "sha256": "e38b292c510e618cf37b8a7d8dc9fcc14def832fe60b43a36586b68c612f2728"
+      },
+      {
+        "path": "artifacts/task-validation/bug-batch-506/history/source10/independent-qa/result.json",
+        "bytes": 1028,
+        "sha256": "2247a716aac0cd890ef9adbf16e20aee0e31985458fbcdf5af833fafb0119588"
+      },
+      {
+        "path": "artifacts/task-validation/bug-batch-506/history/source10/independent-qa/seal.json",
+        "bytes": 175,
+        "sha256": "c25a130c0da32e1b4284302c5f74736f3cb617b0849e2b354a02e34296bf25b2"
+      }
+    ]
+  },
+  "nativeQualification": {
+    "runId": 40535859044,
+    "privateCandidate": "7736adffea3394c8a70b76f71967309f1aa32b7a",
+    "acceptedMain": "2dc0c0050a9f18a51a7ac980b42b46057870e27e",
+    "actualNativeVerification": true,
+    "proofSha256": "4634c4e29c848f324c78aaa2a63c7dc84275197f013e0794adde29abf2ff6dd0",
+    "logZipSha256": "c7c65ea7c91d3ac722de111d5ceacee717a388da2d802bc7261a9f25c4e7180f",
+    "providerInvocations": 0
+  },
+  "oldFailureHistoryPreserved": true,
+  "oldPublication8MetadataAndMedia": {
+    "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+    "relocatedMedia": [
+      {
+        "kind": "screenshot",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/import-1440.png",
+        "bytes": 68523,
+        "sha256": "20ac8a5ebb384164b10d9fa5096504bd12db4143200263185479fb09e5114679",
+        "historicalPath": "artifacts/task-validation/bug-batch-506/history/publication8/evidence/screenshots/import-1440.png",
+        "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+        "historicalBytesVerified": true
+      },
+      {
+        "kind": "trace",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
+        "bytes": 6593867,
+        "sha256": "c6aeaf7b6c86bdf6616b8adcf038adf1e349c22fadb6d9c33c12ceec5971ba91",
+        "historicalPath": "artifacts/task-validation/bug-batch-506/history/publication8/evidence/trace/issue506-1440.zip",
+        "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+        "historicalBytesVerified": true
+      },
+      {
+        "kind": "video",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm",
+        "bytes": 1375055,
+        "sha256": "f5746e3b676eb704e1cdb641b59d47a1aa0896d84a2d665dcd7cc0767a7df920",
+        "historicalPath": "artifacts/task-validation/bug-batch-506/history/publication8/evidence/video/issue506-1440.webm",
+        "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+        "historicalBytesVerified": true
+      },
+      {
+        "kind": "supplemental-screenshot",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/save-failure-recovered-390.png",
+        "bytes": 82429,
+        "sha256": "188582bf6b3da365d2050446028aa5fe315d9e416394e099f66691d8f424bbc5",
+        "historicalPath": "artifacts/task-validation/bug-batch-506/history/publication8/evidence/screenshots/save-failure-recovered-390.png",
+        "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+        "historicalBytesVerified": true
+      }
+    ],
+    "unchangedHistoricalPaths": [
+      {
+        "path": "artifacts/task-validation/bug-batch-506/evidence/screenshots/native-baseline-original-import-covers-shell.png",
+        "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+        "bytes": 56403,
+        "sha256": "115e700ee588a3b72e5a0e5ace0c5f8ec9f8a59bdbd63d276585ccd773a90083",
+        "preservation": "existing tracked path must remain byte-identical; no replacement requested"
+      },
+      {
+        "path": "artifacts/task-validation/bug-batch-506/evidence/trace/native-baseline-original-import-covers-shell.zip",
+        "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+        "bytes": 260851,
+        "sha256": "0596da1d8c4d8022ff948eb1ccc71fdb91962e8645b77073e7daafc5c07dda1e",
+        "preservation": "existing tracked path must remain byte-identical; no replacement requested"
+      }
+    ]
+  },
+  "planAcceptanceFileMapUnchanged": true,
+  "canonicalStateNotModifiedByMetadataAuthor": true,
+  "futureGatesNotClaimed": [
+    "final-head CI",
+    "Claude4",
+    "new final Codex",
+    "merge",
+    "deploy",
+    "online verification",
+    "closure"
+  ],
+  "sourceAndVerificationAncestry": {
+    "qualifiedCode": "7736adffea3394c8a70b76f71967309f1aa32b7a",
+    "codeGitParent": "a918212c55b2b13707a6e2551317bac780fec45d",
+    "codeDescendsFromPublishedBase": "ff91e103827612337346520f2939694c6ae6bb92",
+    "trustedNativeVerificationBaseline": "2dc0c0050a9f18a51a7ac980b42b46057870e27e",
+    "qualificationSourceParentMeaning": "The native qualifier checks twelve copied app files in a trusted verification worktree based on 2dc. qualification.sourceParent is this verification baseline, not the Git parent of CODE7736. The qualified code Git parent is retained-source9 a918.",
+    "finalPublicationPlan": "Parent will create a metadata/media child of CODE7736, preserving twelve qualified source bytes and reachable known-source9/CODE objects. No publication head exists in this author packet."
+  },
+  "actualMediaTransport": {
+    "readerRun": 40543644056,
+    "readerOperatorSha": "59727f4af656daadcfd151a3c08e89f3bc4d0542",
+    "sourceRun": 40535859044,
+    "artifactId": 12749930437,
+    "receipt": {
+      "path": "artifacts/task-validation/bug-batch-506/history/source10/media-reader-proof.json",
+      "bytes": 2265,
+      "sha256": "3fc2e8773e76792e6e03199c2b90030ad0839b26123af514a580e115483a9a2a"
+    },
+    "selectedFiles": [
+      {
+        "kind": "screenshot",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/import-1440.png",
+        "bytes": 68523,
+        "sha256": "20ac8a5ebb384164b10d9fa5096504bd12db4143200263185479fb09e5114679"
+      },
+      {
+        "kind": "trace",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
+        "bytes": 9199409,
+        "sha256": "e00b065560be1f892e2c54c84aca249850eb8a1966ee948feaa7664821867205"
+      },
+      {
+        "kind": "video",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm",
+        "bytes": 1817023,
+        "sha256": "b3c0fc75fa66cec5c16c23e3e97dc3bb44a7ab4d9756897a7524e10be86a2fd2"
+      },
+      {
+        "kind": "supplemental-screenshot",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/save-failure-recovered-390.png",
+        "bytes": 82429,
+        "sha256": "188582bf6b3da365d2050446028aa5fe315d9e416394e099f66691d8f424bbc5"
+      },
+      {
+        "kind": "supplemental-screenshot",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/upload-notice-cleared-390.png",
+        "bytes": 60092,
+        "sha256": "7eb5298cefbbdcbad44e1941d4750b7962e96b47ebf9898ac83a6d30d4d7ea2b"
+      }
+    ],
+    "selectedTotalBytes": 11227476,
+    "allStreamBindingsAndSelectedBytesVerified": true,
+    "archiveDigestIsPinnedProvenanceNotLocalArchiveHash": true
+  }
+}

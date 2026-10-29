@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "reservationNonce": "79d58321-6c61-4aa8-a269-68477c15e533",
+  "verdict": "PASS",
+  "readyForNativeQualification": true,
+  "findings": [],
+  "checks": {
+    "frozenManifestFiles": 16,
+    "frozenManifestHashes": "PASS",
+    "candidateSourceFiles": 12,
+    "candidateRawHashesBlobsModes": "PASS",
+    "sourceCode": "7736adffea3394c8a70b76f71967309f1aa32b7a",
+    "trustedKernel": "2dc0c0050a9f18a51a7ac980b42b46057870e27e",
+    "planCommands": 3,
+    "planCommandsAndPrimaryMedia": "PASS",
+    "nodeSyntaxExitCode": 0,
+    "actionlintExitCode": 0,
+    "staticConstructor": "PASS",
+    "qualifierExecuted": false,
+    "nativeCommandsExecuted": false,
+    "providerInvocations": 0,
+    "sourceEdits": 0,
+    "gitApiWrites": 0
+  }
+}

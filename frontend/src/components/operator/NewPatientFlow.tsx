@@ -17,7 +17,7 @@ const DischargeImportModal = lazy(() =>
 /** A failed browser module import can stay cached until reload. Recover locally
  * without dropping the method route or pretending a patient was created. */
 class IntakeFlowBoundary extends Component<
-  { children: ReactNode; onClose: () => void },
+  { children: ReactNode; onClose: () => void; presentation: 'dialog' | 'page' },
   { failed: boolean }
 > {
   state = { failed: false };
@@ -29,7 +29,8 @@ class IntakeFlowBoundary extends Component<
   render() {
     if (!this.state.failed) return this.props.children;
     return (
-      <AccessibleDialogSurface labelledBy="intake-flow-error" onClose={this.props.onClose}>
+      <AccessibleDialogSurface labelledBy="intake-flow-error" onClose={this.props.onClose}
+        presentation={this.props.presentation}>
         <h2 id="intake-flow-error">Impossibile aprire il modulo</h2>
         <p role="alert">
           Il modulo non è stato caricato. Riprova ricarica la pagina mantenendo la scelta del metodo
@@ -79,14 +80,16 @@ export function NewPatientFlow({
   resumeDraftId,
 }: Props) {
   const [path, setPath] = useState<NewPatientPath | null>(initialPath ?? null);
+  const presentation = initialPath ? 'page' : 'dialog';
 
   if (path === null) return <NewPatientChooser onClose={onClose} onChoose={setPath} />;
 
   return (
-    <IntakeFlowBoundary onClose={onClose}>
-      <Suspense fallback={<DialogLoading onClose={onClose} />}>
+    <IntakeFlowBoundary onClose={onClose} presentation={presentation}>
+      <Suspense fallback={<DialogLoading onClose={onClose} presentation={presentation} />}>
         {path === 'documenti' ? (
           <DischargeImportModal
+            presentation={presentation}
             initialDraftId={resumeDraftId}
             open
             onClose={onClose}
@@ -96,6 +99,7 @@ export function NewPatientFlow({
           />
         ) : (
           <IntakeWorkspace
+            presentation={presentation}
             open
             onClose={onClose}
             onCreated={(patientId, moduleTabId) => onDone(patientId, moduleTabId, 'manuale')}

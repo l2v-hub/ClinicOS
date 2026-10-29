@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react';
+import { PatientWorkspaceSurface } from './PatientWorkspaceSurface';
 
 const FOCUSABLE =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -16,9 +17,17 @@ interface Props {
   dialogRole?: 'dialog' | 'alertdialog';
   /** Destination for dialogs opened by a route rather than a visible trigger. */
   returnFocus?: () => HTMLElement | null;
+  presentation?: 'dialog' | 'page';
+  beforeNavigate?: () => Promise<boolean>;
 }
 
-export function AccessibleDialogSurface({
+export function AccessibleDialogSurface({ presentation = 'dialog', ...props }: Props) {
+  return presentation === 'page'
+    ? <PatientWorkspaceSurface {...props} />
+    : <DialogSurface {...props} />;
+}
+
+function DialogSurface({
   labelledBy,
   describedBy,
   onClose,

@@ -1,0 +1,22 @@
+{
+  "baseline": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+  "box": {
+    "x": 0,
+    "y": 0,
+    "width": 1382.390625,
+    "height": 940
+  },
+  "topbar": {
+    "x": 96,
+    "y": 0,
+    "width": 1344,
+    "height": 64
+  },
+  "sidebar": {
+    "x": 0,
+    "y": 0,
+    "width": 96,
+    "height": 1000
+  },
+  "actualOriginalOverlapReproduced": true
+}

@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "reservationNonce": "2edf4823-dcaf-479e-b083-0887152f77d1",
+  "actor": "/root",
+  "mode": "known-retained-source-one-harness-correction-zero-provider",
+  "authoredAt": "2026-10-27T15:07:34.191923+00:00",
+  "verdict": "READY_FOR_INDEPENDENT_QA",
+  "finalDecision": "PARTIAL",
+  "knownRetainedCode": "a918212c55b2b13707a6e2551317bac780fec45d",
+  "sourceProjection": {
+    "file": "e2e/issue506-workspace.mjs",
+    "bytes": 27863,
+    "sha256": "340026b02700fda168a95fa0d36f0a294f24f9441adbc6487c89eca47d29f370",
+    "gitBlobSha1": "bbd78cfe5c358d7e96188fd9f853c700fe65b991"
+  },
+  "otherRetainedSourceFilesUnchanged": 11,
+  "actualBaselineRed": "red2 exact original line515; old source a918 unchanged",
+  "firstAttempt": "red1 setupfailure missing tracked tsconfig, preserved; coordinator restored exact baseline configs",
+  "actualGreen": {
+    "exitCode": 0,
+    "viewports": [
+      1440,
+      1024,
+      768,
+      390
+    ],
+    "errors": 0,
+    "nativeEvidenceValidatorSets": 4,
+    "fullWebmDecodes": 4
+  },
+  "assertions": [
+    "workspace closed after successful save",
+    "operation notice cleared",
+    "navigation count0",
+    "exactly1createddraft"
+  ],
+  "syntheticFixtureDrafts": 4,
+  "evidenceFiles": 29,
+  "evidenceBytes": 48937914,
+  "visuallyInspected": [
+    "save-failure-recovered-390.png",
+    "upload-notice-cleared-1440.png"
+  ],
+  "newFrontendBuildOrDomainTestRuns": 0,
+  "existingActualNativeBuildAnd1560FrontendPassRun": 40512823458,
+  "providerInvocations": 0,
+  "sqlOrOnlineClinicalWrites": 0,
+  "gitApiCanonicalWrites": 0,
+  "pending": [
+    "independentQA",
+    "nativebundled149qualification",
+    "newheadCI",
+    "genuineClaude4",
+    "freshfinalCodex",
+    "ordinaryrelease",
+    "onlineacceptance"
+  ]
+}

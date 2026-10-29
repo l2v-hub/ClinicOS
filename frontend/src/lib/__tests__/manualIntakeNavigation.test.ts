@@ -57,5 +57,5 @@ test('failed lazy module gets local announced retry and cancel instead of silent
   assert.match(flow, /Riprova/);
   assert.match(flow, /window\.location\.reload\(\)/);
   assert.match(flow, /Annulla/);
-  assert.match(flow, /<IntakeFlowBoundary onClose=\{onClose\}>/);
+  assert.match(flow, /<IntakeFlowBoundary onClose=\{onClose\} presentation=\{presentation\}>/);
 });

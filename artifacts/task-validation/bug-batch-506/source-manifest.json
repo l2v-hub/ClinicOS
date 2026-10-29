@@ -1,0 +1,93 @@
+{
+  "qualifiedCode": "7736adffea3394c8a70b76f71967309f1aa32b7a",
+  "files": [
+    {
+      "file": "e2e/issue506-workspace.mjs",
+      "sha256": "340026b02700fda168a95fa0d36f0a294f24f9441adbc6487c89eca47d29f370",
+      "gitBlobSha1": "bbd78cfe5c358d7e96188fd9f853c700fe65b991",
+      "bytes": 27863,
+      "mode": "100644"
+    },
+    {
+      "file": "frontend/e2e/issue506-workspace.html",
+      "sha256": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05",
+      "gitBlobSha1": "d7d68f51e77a498b4064fc25193021f327dede54",
+      "bytes": 272,
+      "mode": "100644"
+    },
+    {
+      "file": "frontend/e2e/issue506-workspace.tsx",
+      "sha256": "4fc31c5319186440b5b9db661589a444d9960b96bb431d2c69136a0fd22fc975",
+      "gitBlobSha1": "d469c3f2a1f6bcb13f9483cf24b2304024914d98",
+      "bytes": 2560,
+      "mode": "100644"
+    },
+    {
+      "file": "frontend/src/components/operator/NewPatientFlow.tsx",
+      "sha256": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895",
+      "gitBlobSha1": "f265694f12882013acd29d203ac571973e8589c7",
+      "bytes": 3887,
+      "mode": "100644"
+    },
+    {
+      "file": "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+      "sha256": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac",
+      "gitBlobSha1": "44489324f9b25fc6200b4fcec5289c8fe1c004cd",
+      "bytes": 3914,
+      "mode": "100644"
+    },
+    {
+      "file": "frontend/src/components/shared/DialogLoading.tsx",
+      "sha256": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4",
+      "gitBlobSha1": "35651a3c8e0f142f1979babc7c1cfbb7cd081495",
+      "bytes": 624,
+      "mode": "100644"
+    },
+    {
+      "file": "frontend/src/components/shared/DischargeImportModal.tsx",
+      "sha256": "0c77209bfb755c6bc5d99037c1fe1526ea78ed2d512e903d550e358e9ba8aee7",
+      "gitBlobSha1": "ec207906bc227aa0a9c093a27f09db99c9ef06a2",
+      "bytes": 19618,
+      "mode": "100644"
+    },
+    {
+      "file": "frontend/src/components/shared/PatientWorkspaceSurface.css",
+      "sha256": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395",
+      "gitBlobSha1": "9709e7a2392526f01722128ee9187dbaf82e5e0c",
+      "bytes": 504,
+      "mode": "100644"
+    },
+    {
+      "file": "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+      "sha256": "27ff12f6020ef24cc897b03570c3fc4d95156d7584e3f0d70e618b805235084d",
+      "gitBlobSha1": "f2310f2a621c3cd4c6387f45ed21cc734f1c0cc8",
+      "bytes": 4901,
+      "mode": "100644"
+    },
+    {
+      "file": "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+      "sha256": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41",
+      "gitBlobSha1": "649163e1f774ef26e7e40c0179514c1788790651",
+      "bytes": 975,
+      "mode": "100644"
+    },
+    {
+      "file": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+      "sha256": "e7053e3aa70ea6909bb84b6f190abe80d719ff3046378a2af89e716ba907f296",
+      "gitBlobSha1": "6d1312b41df97e688f662be3b63abd1afc871bcb",
+      "bytes": 50277,
+      "mode": "100644"
+    },
+    {
+      "file": "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts",
+      "sha256": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde",
+      "gitBlobSha1": "8b7443afa1d65b92c168bb55b3cef286969f6076",
+      "bytes": 2903,
+      "mode": "100644"
+    }
+  ],
+  "independentQaSealSha256": "c25a130c0da32e1b4284302c5f74736f3cb617b0849e2b354a02e34296bf25b2",
+  "nativeQualificationRun": 40535859044,
+  "gitParentSha": "a918212c55b2b13707a6e2551317bac780fec45d",
+  "nativeBaselineIsNotCodeGitParent": "2dc0c0050a9f18a51a7ac980b42b46057870e27e"
+}

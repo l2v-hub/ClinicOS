@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "nonce": "f65973b7-8451-4594-8878-84e7c26e93d3",
+  "sourceSha": "7736adffea3394c8a70b76f71967309f1aa32b7a",
+  "parentSha": "a918212c55b2b13707a6e2551317bac780fec45d",
+  "verdict": "VERIFIED",
+  "readyForNativeQualification": true,
+  "findings": [
+    "Only the expected one-hunk E2E assertion correction differs from known retained source9; all 11 other retained source files are byte-identical.",
+    "Corrected save-and-close assertion follows the unchanged product call path; local RED2 failed at the old assertion and GREEN passed at four widths with zero browser errors.",
+    "All 29 synthetic browser evidence files match their manifest hashes; four native evidence sets and full WebM decodes passed.",
+    "RED1 was a separate partial-worktree setup failure, and original native verify-before remains FAILED; release gates remain pending."
+  ],
+  "reviewedAt": "2026-10-27T15:32:23.028179+00:00",
+  "evidenceScope": "read-only source comparison and existing local synthetic browser evidence"
+}

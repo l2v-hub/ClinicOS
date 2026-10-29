@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "scope": "All four complete local synthetic recordings decoded by FFmpeg, not header-only checks",
+  "records": [
+    {
+      "file": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/video/issue506-1440.webm",
+      "exitCode": 0,
+      "diagnostic": ""
+    },
+    {
+      "file": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/video/issue506-1024.webm",
+      "exitCode": 0,
+      "diagnostic": ""
+    },
+    {
+      "file": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/video/issue506-768.webm",
+      "exitCode": 0,
+      "diagnostic": ""
+    },
+    {
+      "file": "artifacts/task-validation/bug-batch-506/evidence/known-root10-green/video/issue506-390.webm",
+      "exitCode": 0,
+      "diagnostic": ""
+    }
+  ]
+}

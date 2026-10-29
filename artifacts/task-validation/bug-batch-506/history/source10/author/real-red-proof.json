@@ -1,0 +1,17 @@
+{
+  "knownCode": "a918212c55b2b13707a6e2551317bac780fec45d",
+  "sourceHashBeforeEdit": "a6988c89a14a8c995650ce19b6b5326f0dcf834b1fb6eae0ea0cb063bb7af7b5",
+  "redStage": "red2",
+  "exitCode": 1,
+  "failureLocation": "e2e/issue506-workspace.mjs:515:77",
+  "expectedMissingHeading": "Nuovo ingresso inside patient-workspace after save-and-close",
+  "red1Classification": "setupfailure preserved separately",
+  "sourceEditPerformedAfterRealRed": true,
+  "onlyFileEdited": "e2e/issue506-workspace.mjs",
+  "newAssertions": [
+    "workspace closed",
+    "operation notice absent",
+    "navigation0",
+    "exactly one created draft"
+  ]
+}

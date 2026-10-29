@@ -1,0 +1,111 @@
+{
+  "results": [
+    {
+      "name": "rejected-save-retains-draft",
+      "verdict": "PASS",
+      "errors": [
+        "Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)"
+      ],
+      "responses": [
+        {
+          "status": 422,
+          "path": "/__fixture_api/intake/drafts/draft-qa-506"
+        }
+      ],
+      "requests": [
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        }
+      ],
+      "patches": 2
+    },
+    {
+      "name": "loading-navigation-cleanup",
+      "verdict": "PASS",
+      "errors": [],
+      "responses": [],
+      "requests": [
+        {
+          "path": "/ai/extraction/jobs",
+          "method": "POST"
+        }
+      ],
+      "patches": 0
+    },
+    {
+      "name": "review-modal-blocks-background-navigation",
+      "verdict": "PASS",
+      "errors": [],
+      "responses": [],
+      "requests": [
+        {
+          "path": "/ai/extraction/jobs",
+          "method": "POST"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        }
+      ],
+      "patches": 0
+    },
+    {
+      "name": "resize-scroll-and-focus",
+      "verdict": "PASS",
+      "errors": [],
+      "responses": [],
+      "requests": [
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        }
+      ],
+      "patches": 1
+    }
+  ]
+}

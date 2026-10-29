@@ -1,0 +1,13 @@
+{
+  "issue": 506,
+  "nonce": "64b40274-d129-449e-9c54-60307616eb30",
+  "status": "COMPLETE",
+  "verdict": "READY FOR CODEX QA",
+  "completedAt": "2026-10-24T22:17:10.348067+00:00",
+  "sourceManifestSha256": "abbfefa3a79ebe8aade35abae537c9533e2f236ad54c40e2dcdaebb9e1e441ca",
+  "sourceUnchanged": true,
+  "artifactManifestSha256": "f6fc4abfd6e3889a6fec4e6c414a8ebbe79658de506784379b93f25131ab5d93",
+  "resultSha256": "9bebfa104045795e0f0ee4ee1f5395986f9184c48e7822de78ee5c22e50bb584",
+  "reportSha256": "0c018c4f0e3bab9142fc701d115dab158c23fc609d7fcd244c34e9b314de79f9",
+  "stopReason": "Independent five-phase QA finished; no application source changes; release/publication decisions remain with root and required external review."
+}

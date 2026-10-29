@@ -1,0 +1,22 @@
+[
+  {
+    "issue": 506,
+    "files": {
+      "screenshot": {
+        "path": "artifacts/task-validation/bug-batch-506/evidence/screenshots/import-1440.png",
+        "sha256": "20ac8a5ebb384164b10d9fa5096504bd12db4143200263185479fb09e5114679",
+        "bytes": 68523
+      },
+      "trace": {
+        "path": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
+        "sha256": "e00b065560be1f892e2c54c84aca249850eb8a1966ee948feaa7664821867205",
+        "bytes": 9199409
+      },
+      "video": {
+        "path": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm",
+        "sha256": "b3c0fc75fa66cec5c16c23e3e97dc3bb44a7ab4d9756897a7524e10be86a2fd2",
+        "bytes": 1817023
+      }
+    }
+  }
+]

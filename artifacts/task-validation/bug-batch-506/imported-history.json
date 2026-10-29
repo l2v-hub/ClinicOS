@@ -1,0 +1,17 @@
+{
+  "kind": "new-host-authored-source-correction-after-genuine-peer",
+  "priorPublishedSha": "5105becde8bb222652ab2df7e72b0d32f05a7262",
+  "priorBaseSha": "715a4b9e47ff9bd0192b7f58f24271e48da4900d",
+  "priorPlanSha256": "a63f6fd348dd54f209934f931e9531a3d6595e67966749cfb7b129ac9872f863",
+  "priorImplementationCount": 7,
+  "priorImplementationHistorySha256": "152237a9b1c75ea1cc73ca90cc27cde0681e6829989ed92150ac4a64ee56ec81",
+  "priorReviewsSha256": "6ecd843ecd07ba1f4f78fd8b266b64356d04265a24dd663fe2f041afbd3b301f",
+  "priorProgressSha256": "159cf5ff9ef0c32d68f7eac331a5d226c33983f46bd0c354fbf21ff38d405ae0",
+  "priorCheckpointSha256": "e0527c6d58dcb9f065569d3f4b13aacd2b24d3414998ae761c53ccb842a53343",
+  "completeOldWorktreeRecovered": false,
+  "priorFailedOutputAvailability": "QA7 source and report unavailable; genuine FAILED and full checkpoint journal retained in canonical history. No unknown source7 applied.",
+  "sourceCandidate": "fc9e503e31e8f22210999fdf6a5153ecd5e80389",
+  "qualificationRun": 40482705275,
+  "mediaReaderRun": 40491321534,
+  "clinicalProviderInvocationsForThisSource": 0
+}

@@ -1,0 +1,162 @@
+{
+  "runId": 40535859044,
+  "logZipSha256": "c7c65ea7c91d3ac722de111d5ceacee717a388da2d802bc7261a9f25c4e7180f",
+  "qualification": {
+    "type": "clinical-harness-qualification-v1",
+    "issue": 506,
+    "runId": "40535859044",
+    "acceptedMain": "2dc0c0050a9f18a51a7ac980b42b46057870e27e",
+    "sourceParent": "2dc0c0050a9f18a51a7ac980b42b46057870e27e",
+    "privateCandidate": "7736adffea3394c8a70b76f71967309f1aa32b7a",
+    "sourceFiles": [
+      {
+        "file": "e2e/issue506-workspace.mjs",
+        "sha256": "340026b02700fda168a95fa0d36f0a294f24f9441adbc6487c89eca47d29f370"
+      },
+      {
+        "file": "frontend/e2e/issue506-workspace.html",
+        "sha256": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05"
+      },
+      {
+        "file": "frontend/e2e/issue506-workspace.tsx",
+        "sha256": "4fc31c5319186440b5b9db661589a444d9960b96bb431d2c69136a0fd22fc975"
+      },
+      {
+        "file": "frontend/src/components/operator/NewPatientFlow.tsx",
+        "sha256": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895"
+      },
+      {
+        "file": "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+        "sha256": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac"
+      },
+      {
+        "file": "frontend/src/components/shared/DialogLoading.tsx",
+        "sha256": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4"
+      },
+      {
+        "file": "frontend/src/components/shared/DischargeImportModal.tsx",
+        "sha256": "0c77209bfb755c6bc5d99037c1fe1526ea78ed2d512e903d550e358e9ba8aee7"
+      },
+      {
+        "file": "frontend/src/components/shared/PatientWorkspaceSurface.css",
+        "sha256": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395"
+      },
+      {
+        "file": "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+        "sha256": "27ff12f6020ef24cc897b03570c3fc4d95156d7584e3f0d70e618b805235084d"
+      },
+      {
+        "file": "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+        "sha256": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41"
+      },
+      {
+        "file": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+        "sha256": "e7053e3aa70ea6909bb84b6f190abe80d719ff3046378a2af89e716ba907f296"
+      },
+      {
+        "file": "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts",
+        "sha256": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde"
+      }
+    ],
+    "actualNativeVerification": true,
+    "providerInvocations": 0,
+    "results": [
+      {
+        "index": 0,
+        "command": "npm",
+        "args": [
+          "--prefix",
+          "frontend",
+          "run",
+          "build"
+        ],
+        "ok": true,
+        "noTestsSignal": false,
+        "exitCode": 0,
+        "runnerError": null,
+        "stdoutBytes": 25103,
+        "stderrBytes": 1915,
+        "stdoutSha256": "c2d9b10d30134f519d30ca1a5e54b99752bf76ab6673027166659c6d7214a74b",
+        "stderrSha256": "1d62dd0ea94785d800bcfb319a314ed0e979bb5d65c62dd55709d726808d2122"
+      },
+      {
+        "index": 1,
+        "command": "npm",
+        "args": [
+          "--prefix",
+          "frontend",
+          "test"
+        ],
+        "ok": true,
+        "noTestsSignal": false,
+        "exitCode": 0,
+        "runnerError": null,
+        "stdoutBytes": 509636,
+        "stderrBytes": 1150,
+        "stdoutSha256": "0f880d1ede620de339d408db7fb6dfca4c29aec98836ad87ce4cc5512d639305",
+        "stderrSha256": "a046c29f1028e6b5e8df8deafa324dd6663f307c2408c387a9361394b2911bd0"
+      },
+      {
+        "index": 2,
+        "command": "node",
+        "args": [
+          "--import",
+          "tsx",
+          "e2e/issue506-workspace.mjs"
+        ],
+        "ok": true,
+        "noTestsSignal": false,
+        "exitCode": 0,
+        "runnerError": null,
+        "stdoutBytes": 9100,
+        "stderrBytes": 798,
+        "stdoutSha256": "0ffcd5fb838589c1d7dd95878091911da3445dee41adab222aea4ed261ca5750",
+        "stderrSha256": "b1a79cdad8f089aa6897f6e4cbc04db7cfb3403d5ae289aedd1a33727cc701f1"
+      }
+    ],
+    "artifacts": [
+      {
+        "kind": "screenshot",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/import-1440.png",
+        "bytes": 68523,
+        "sha256": "20ac8a5ebb384164b10d9fa5096504bd12db4143200263185479fb09e5114679"
+      },
+      {
+        "kind": "trace",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
+        "bytes": 9199409,
+        "sha256": "e00b065560be1f892e2c54c84aca249850eb8a1966ee948feaa7664821867205"
+      },
+      {
+        "kind": "video",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm",
+        "bytes": 1817023,
+        "sha256": "b3c0fc75fa66cec5c16c23e3e97dc3bb44a7ab4d9756897a7524e10be86a2fd2"
+      }
+    ],
+    "nativeEvidence": [
+      {
+        "issue": 506,
+        "files": {
+          "screenshot": {
+            "path": "artifacts/task-validation/bug-batch-506/evidence/screenshots/import-1440.png",
+            "sha256": "20ac8a5ebb384164b10d9fa5096504bd12db4143200263185479fb09e5114679",
+            "bytes": 68523
+          },
+          "trace": {
+            "path": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
+            "sha256": "e00b065560be1f892e2c54c84aca249850eb8a1966ee948feaa7664821867205",
+            "bytes": 9199409
+          },
+          "video": {
+            "path": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm",
+            "sha256": "b3c0fc75fa66cec5c16c23e3e97dc3bb44a7ab4d9756897a7524e10be86a2fd2",
+            "bytes": 1817023
+          }
+        }
+      }
+    ],
+    "ok": true,
+    "scope": "Private506Root10 app projection: actual three native commands and four-width React browser with synthetic loopback HTTP. Includes both preserved notice fixes. Not authenticated backend/OCR/provider or deployment acceptance."
+  }
+}

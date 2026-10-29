@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "issue": 506,
+  "sourceSha": "7736adffea3394c8a70b76f71967309f1aa32b7a",
+  "qualificationRun": 40535859044,
+  "primary": [
+    {
+      "issue": 506,
+      "files": {
+        "screenshot": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/screenshots/import-1440.png",
+          "sha256": "20ac8a5ebb384164b10d9fa5096504bd12db4143200263185479fb09e5114679",
+          "bytes": 68523
+        },
+        "trace": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
+          "sha256": "e00b065560be1f892e2c54c84aca249850eb8a1966ee948feaa7664821867205",
+          "bytes": 9199409
+        },
+        "video": {
+          "path": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm",
+          "sha256": "b3c0fc75fa66cec5c16c23e3e97dc3bb44a7ab4d9756897a7524e10be86a2fd2",
+          "bytes": 1817023
+        }
+      }
+    }
+  ],
+  "supplemental": [
+    {
+      "kind": "supplemental-screenshot",
+      "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/save-failure-recovered-390.png",
+      "bytes": 82429,
+      "sha256": "188582bf6b3da365d2050446028aa5fe315d9e416394e099f66691d8f424bbc5"
+    },
+    {
+      "kind": "supplemental-screenshot",
+      "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/upload-notice-cleared-390.png",
+      "bytes": 60092,
+      "sha256": "7eb5298cefbbdcbad44e1941d4750b7962e96b47ebf9898ac83a6d30d4d7ea2b"
+    }
+  ],
+  "readerRun": 40543644056,
+  "readerOperatorSha": "59727f4af656daadcfd151a3c08e89f3bc4d0542",
+  "artifactId": 12749930437,
+  "expectedArchiveSha256": "d99970c9c0cfe95fd0b9a7d68b7c06551198ba3698c9f5f328a8654421921594",
+  "archiveDigestScope": "Pinned native artifact provenance; the complete original artifact archive was not downloaded or rehashed locally. Reader log ZIP and selected-file/stream hashes were actually verified.",
+  "mediaReceiptVerified": true,
+  "receipt": {
+    "path": "artifacts/task-validation/bug-batch-506/history/source10/media-reader-proof.json",
+    "bytes": 2265,
+    "sha256": "3fc2e8773e76792e6e03199c2b90030ad0839b26123af514a580e115483a9a2a"
+  },
+  "selectedTotalBytes": 11227476,
+  "oldPublication8": {
+    "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+    "rawWrapperPath": "artifacts/task-validation/bug-batch-506/history/publication8/evidence-manifest.json",
+    "rawWrapperSha256": "0152facc464577af1eb94de4ce152b78afc7a8aa04aa160cd91eb3c63f9006cf",
+    "rawWrapperUnmodified": true,
+    "resolveOriginalReferencesByPublicationOrMap": true,
+    "relocatedMedia": [
+      {
+        "kind": "screenshot",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/import-1440.png",
+        "bytes": 68523,
+        "sha256": "20ac8a5ebb384164b10d9fa5096504bd12db4143200263185479fb09e5114679",
+        "historicalPath": "artifacts/task-validation/bug-batch-506/history/publication8/evidence/screenshots/import-1440.png",
+        "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+        "historicalBytesVerified": true
+      },
+      {
+        "kind": "trace",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
+        "bytes": 6593867,
+        "sha256": "c6aeaf7b6c86bdf6616b8adcf038adf1e349c22fadb6d9c33c12ceec5971ba91",
+        "historicalPath": "artifacts/task-validation/bug-batch-506/history/publication8/evidence/trace/issue506-1440.zip",
+        "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+        "historicalBytesVerified": true
+      },
+      {
+        "kind": "video",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm",
+        "bytes": 1375055,
+        "sha256": "f5746e3b676eb704e1cdb641b59d47a1aa0896d84a2d665dcd7cc0767a7df920",
+        "historicalPath": "artifacts/task-validation/bug-batch-506/history/publication8/evidence/video/issue506-1440.webm",
+        "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+        "historicalBytesVerified": true
+      },
+      {
+        "kind": "supplemental-screenshot",
+        "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/save-failure-recovered-390.png",
+        "bytes": 82429,
+        "sha256": "188582bf6b3da365d2050446028aa5fe315d9e416394e099f66691d8f424bbc5",
+        "historicalPath": "artifacts/task-validation/bug-batch-506/history/publication8/evidence/screenshots/save-failure-recovered-390.png",
+        "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+        "historicalBytesVerified": true
+      }
+    ],
+    "unchangedHistoricalPaths": [
+      {
+        "path": "artifacts/task-validation/bug-batch-506/evidence/screenshots/native-baseline-original-import-covers-shell.png",
+        "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+        "bytes": 56403,
+        "sha256": "115e700ee588a3b72e5a0e5ace0c5f8ec9f8a59bdbd63d276585ccd773a90083",
+        "preservation": "existing tracked path must remain byte-identical; no replacement requested"
+      },
+      {
+        "path": "artifacts/task-validation/bug-batch-506/evidence/trace/native-baseline-original-import-covers-shell.zip",
+        "publicationSha": "ff91e103827612337346520f2939694c6ae6bb92",
+        "bytes": 260851,
+        "sha256": "0596da1d8c4d8022ff948eb1ccc71fdb91962e8645b77073e7daafc5c07dda1e",
+        "preservation": "existing tracked path must remain byte-identical; no replacement requested"
+      }
+    ]
+  }
+}

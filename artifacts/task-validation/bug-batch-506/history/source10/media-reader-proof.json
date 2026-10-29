@@ -1,0 +1,51 @@
+{
+  "readerRun": 40543644056,
+  "readerOperatorSha": "59727f4af656daadcfd151a3c08e89f3bc4d0542",
+  "sourceRun": 40535859044,
+  "sourceSha": "7736adffea3394c8a70b76f71967309f1aa32b7a",
+  "logsZipBytes": 22290519,
+  "logsZipSha256": "19f55d892b55290a3b7047406472d8d52ab40da168368d16261ed7604b01b3a4",
+  "payloadBytes": 14971385,
+  "payloadSha256": "6055d65713611bf6f4a65cef0fa1c4d077650c530eb780d2178ed23b2dd523c5",
+  "gzipBytes": 11057948,
+  "gzipSha256": "fb80ec0e179913e677050a8d73187a3b1589dd2207ee8e3bce1cad1e8f2ff067",
+  "artifactId": 12749930437,
+  "expectedArchiveSha256": "d99970c9c0cfe95fd0b9a7d68b7c06551198ba3698c9f5f328a8654421921594",
+  "expectedArchiveDigestIsPinnedProvenanceNotLocalArchiveHash": true,
+  "selectedFiles": [
+    {
+      "kind": "screenshot",
+      "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/import-1440.png",
+      "bytes": 68523,
+      "sha256": "20ac8a5ebb384164b10d9fa5096504bd12db4143200263185479fb09e5114679"
+    },
+    {
+      "kind": "trace",
+      "file": "artifacts/task-validation/bug-batch-506/evidence/trace/issue506-1440.zip",
+      "bytes": 9199409,
+      "sha256": "e00b065560be1f892e2c54c84aca249850eb8a1966ee948feaa7664821867205"
+    },
+    {
+      "kind": "video",
+      "file": "artifacts/task-validation/bug-batch-506/evidence/video/issue506-1440.webm",
+      "bytes": 1817023,
+      "sha256": "b3c0fc75fa66cec5c16c23e3e97dc3bb44a7ab4d9756897a7524e10be86a2fd2"
+    },
+    {
+      "kind": "supplemental-screenshot",
+      "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/save-failure-recovered-390.png",
+      "bytes": 82429,
+      "sha256": "188582bf6b3da365d2050446028aa5fe315d9e416394e099f66691d8f424bbc5"
+    },
+    {
+      "kind": "supplemental-screenshot",
+      "file": "artifacts/task-validation/bug-batch-506/evidence/screenshots/upload-notice-cleared-390.png",
+      "bytes": 60092,
+      "sha256": "7eb5298cefbbdcbad44e1941d4750b7962e96b47ebf9898ac83a6d30d4d7ea2b"
+    }
+  ],
+  "selectedTotalBytes": 11227476,
+  "filesRoot": "/workspace/.clinicos-cloud/cloud-review-activation-20261025/codex-execution-diagnostics/source506-root10-media-reader1/actual-run40543644056/files",
+  "providerInvocations": 0,
+  "allStreamBindingsAndSelectedBytesVerified": true
+}

@@ -1,0 +1,52 @@
+{
+  "issue": 506,
+  "verdict": "READY FOR CODEX QA",
+  "qaSession": "/root/qa_issue506",
+  "nonce": "64b40274-d129-449e-9c54-60307616eb30",
+  "independent": true,
+  "reservedBeforeSession": true,
+  "completedAt": "2026-10-24T22:17:10.348067+00:00",
+  "sourceManifestSha256": "abbfefa3a79ebe8aade35abae537c9533e2f236ad54c40e2dcdaebb9e1e441ca",
+  "sourceFilesCheckedBefore": 12,
+  "sourceFilesCheckedAfter": 12,
+  "sourceUnchanged": true,
+  "phases": {
+    "0": "PASS",
+    "1": "PASS",
+    "2": "PASS",
+    "3": "PASS",
+    "4": "PASS",
+    "5": "PASS"
+  },
+  "counts": {
+    "frontendTestsPassed": 1560,
+    "frontendTestsFailed": 0,
+    "viewportFlowsPassed": 4,
+    "adversarialProbesPassed": 4,
+    "coldLazyProbesPassed": 1,
+    "baselineReproductionsPassed": 1,
+    "videosDecoded": 10,
+    "traceZipsCRCVerified": 10,
+    "screenshots": 19
+  },
+  "expectedNegativeResponses": [
+    {
+      "status": 422,
+      "endpoint": "/__fixture_api/intake/drafts/draft-qa-506",
+      "count": 1,
+      "classified": "intentional private rejected-save fixture; field retained, navigation denied, retry/reload passed"
+    }
+  ],
+  "report": "report.md",
+  "htmlReport": "evidence/playwright-report/index.html",
+  "mediaIntegrity": "media-integrity.json",
+  "artifactsManifest": "artifact-hashes.json",
+  "artifactsManifestSha256": "f6fc4abfd6e3889a6fec4e6c414a8ebbe79658de506784379b93f25131ab5d93",
+  "findings": [],
+  "limitations": [
+    "Actual production React components/CSS in synthetic shell and synthetic API fixture; no full authenticated App/backend/OCR/provider run",
+    "Fixture-backed reload persistence, not real database persistence",
+    "Default appointment true-modal preserved by scoped code/tests; appointment UI not opened end-to-end",
+    "No Claude approval, commit, push, merge, deployment, issue closure or external publication by QA"
+  ]
+}

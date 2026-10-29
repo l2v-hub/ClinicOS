@@ -100,6 +100,7 @@ interface DraftData {
 
 interface IntakeWorkspaceProps {
   open: boolean;
+  presentation?: 'dialog' | 'page';
   onClose: () => void;
   /** #243: moduleTabId is the id of the module card selected in step 4 (Moduli), if any —
    * lets the caller navigate the newly created patient straight to that module's flow. */
@@ -120,6 +121,7 @@ interface IntakeWorkspaceProps {
 
 export function IntakeWorkspace({
   open,
+  presentation = 'dialog',
   onClose,
   onCreated,
   operatoreNome,
@@ -159,6 +161,11 @@ export function IntakeWorkspace({
 
   // Confirm / submit state
   const [submitting, setSubmitting] = useState(false);
+  const [navigationNotice, setNavigationNotice] = useState('');
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!submitting) setNavigationNotice('');
+  }, [submitting]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [duplicateWarn, setDuplicateWarn] = useState(false);
   // Set when confirm is blocked by a contradictory allergy reading (REQ-026).
@@ -199,7 +206,17 @@ export function IntakeWorkspace({
   }, [focusField]);
   useEffect(
     () => () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = null;
+        // Route/history changes can unmount before the debounce fires. Capture both
+        // the queue and payload now; a later workspace must not replace either.
+        const queue = saveQueueRef.current;
+        const latest = dataRef.current;
+        if (queue) void queue.save(latest).catch(() => {
+          // Unmounted UI cannot display an error; leave the existing draft intact.
+        });
+      }
     },
     [],
   );
@@ -212,7 +229,10 @@ export function IntakeWorkspace({
   useEffect(() => {
     if (!open) {
       initialManualFocusRef.current = false;
-      if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = null;
+      }
       setActive('anagrafica');
       setSavedAt(null);
       setDraftId(null);
@@ -445,9 +465,15 @@ export function IntakeWorkspace({
 
   function scheduleAutosave() {
     if (!saveQueueRef.current) return;
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = null;
+    }
     setSaveState('saving');
-    debounceRef.current = setTimeout(() => void autosave(), 500);
+    debounceRef.current = setTimeout(() => {
+      debounceRef.current = null;
+      void autosave();
+    }, 500);
   }
 
   // La bozza si legge al momento dell'invio: un'unione arrivata nel frattempo non viene sovrascritta.
@@ -547,7 +573,10 @@ export function IntakeWorkspace({
     submittingRef.current = true;
     setSubmitting(true);
     setSubmitError(null);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = null;
+    }
     try {
       if (!existing) {
         await persistDraft(data);
@@ -673,7 +702,10 @@ export function IntakeWorkspace({
     };
 
     try {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = null;
+      }
       commitLocal(confirmData);
       const res = await confirmPersistedDraft(
         draftId,
@@ -776,19 +808,23 @@ export function IntakeWorkspace({
       );
   }
 
-  async function saveAndClose(close = onClose) {
-    if (submittingRef.current) return;
+  async function saveAndClose(close = onClose): Promise<boolean> {
+    if (submittingRef.current) return false;
     if (!draftId || loading || error) {
       close();
-      return;
+      return true;
     }
     submittingRef.current = true;
     setSubmitting(true);
     try {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = null;
+      }
       await persistDraft(data);
       setSaveState('saved');
       close();
+      return true;
     } catch (e) {
       setSaveState('error');
       const reason = draftRejectionReason(e);
@@ -796,6 +832,7 @@ export function IntakeWorkspace({
       setSubmitError(
         reason ? `Bozza non salvata: ${reason}` : 'Bozza non salvata. Riprova prima di chiudere.',
       );
+      return false;
     } finally {
       submittingRef.current = false;
       setSubmitting(false);
@@ -841,6 +878,17 @@ export function IntakeWorkspace({
 
   return (
     <AccessibleDialogSurface
+      presentation={presentation}
+      beforeNavigate={async () => {
+        if (submittingRef.current) {
+          setNavigationNotice(
+            'Operazione in corso. Attendi il completamento prima di cambiare pagina.',
+          );
+          return false;
+        }
+        if (saveState !== 'saving' && saveState !== 'error') return true;
+        return saveAndClose(() => {});
+      }}
       labelledBy="patient-intake-dialog-title"
       onClose={() => void saveAndClose()}
       dismissible={!submitting}
@@ -892,6 +940,8 @@ export function IntakeWorkspace({
           <IcoX />
         </button>
       </header>
+
+      {navigationNotice && <p role="alert">{navigationNotice}</p>}
 
       <div className={`intake-page__grid${docPanel && docsJob ? ' intake-page__grid--doc' : ''}`}>
         <IntakeIndex
