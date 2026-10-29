@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-29T22:57:25.310Z",
+  "status": "CLOSURE_HELD_AFTER_ACTUAL_ONLINE_FAILURE",
+  "record": {
+    "at": "2026-10-29T22:57:03.863Z",
+    "status": "FAILED_VALIDATION_ONLINE",
+    "reviewedSha": "8075cdb61bb329ea56943a0199edc64f67146981",
+    "mergeSha": "59f0a9ea60bd56d1823305da9b18fa0bca8db213",
+    "deploymentId": "dpl_3KXmbe8VZ8UodnGdC92Mo6MRU5Kd",
+    "proofSha256": "0ddae4e9567d4b8a8ee5faf4c4f404af28fedf050c519454799dc454cc05a9d8",
+    "screenshotSha256": "3135ca0630a8edcbc8295c78874a63978a488e61407f0a2b62e5841bc81aedbe",
+    "reason": "Patient-list direct import renders AIImportStatus default dialog, not the NewPatientFlow page tested by the local fixture. Actual online workspace absent; topbar/sidebar obstructed.",
+    "safeSurface": "Normal authenticated demo Medico1; zero patients, empty own import session, no upload/OCR/clinical writes",
+    "reviewBudget": "4/4 genuine rounds retained; no additional review requested or budget reset"
+  },
+  "releaseHold": {
+    "code": "ONLINE_ACCEPTANCE_FAILED",
+    "at": "2026-10-29T22:57:03.863Z",
+    "mergeSha": "59f0a9ea60bd56d1823305da9b18fa0bca8db213",
+    "proofSha256": "0ddae4e9567d4b8a8ee5faf4c4f404af28fedf050c519454799dc454cc05a9d8",
+    "reason": "Patient-list direct import renders AIImportStatus default dialog, not the NewPatientFlow page tested by the local fixture. Actual online workspace absent; topbar/sidebar obstructed."
+  },
+  "issueStillOpen": true,
+  "historyPreserved": true
+}

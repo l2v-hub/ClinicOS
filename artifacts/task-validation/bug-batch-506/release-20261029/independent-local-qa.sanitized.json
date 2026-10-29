@@ -1,0 +1,1473 @@
+{
+  "verdict": "READY FOR CODEX QA",
+  "issue": 506,
+  "pr": 508,
+  "subjectSha": "8075cdb61bb329ea56943a0199edc64f67146981",
+  "reservationNonce": "93c09f21-37aa-4b6e-9284-d874e933f51c",
+  "claudeRound": 4,
+  "claudeReportSha256": "49e465cd888c2d93726fc6b9278ecd69e7a9028770dfa1398fcb2372d3ec5555",
+  "claudeReviewUrl": "https://github.com/l2v-hub/ClinicOS/pull/508#pullrequestreview-5705720879",
+  "feedbackFingerprint": "b1800d8afa4f31a9e31acdf4e6532fc55a666d1218c4e9993a1767bdf2351282",
+  "completedAt": "2026-10-29T22:43:02.638Z",
+  "findings": [],
+  "phases": {
+    "contract": "PASS",
+    "diffReview": "PASS",
+    "buildTests": "PASS",
+    "browser": "PASS",
+    "security": "PASS"
+  },
+  "acceptanceCriteria": [
+    {
+      "criterion": "Import, review and resumed draft fill main pane below topbar and beside sidebar at1440/1024/768/390",
+      "status": "PASS"
+    },
+    {
+      "criterion": "Page is nonmodal; realconfirmations retain modal focus/Escape and unoccluded controls",
+      "status": "PASS"
+    },
+    {
+      "criterion": "Pending save flushed for shell/history navigation; controlled failed save leavesdraft/retryusable; no stale route replay",
+      "status": "PASS"
+    },
+    {
+      "criterion": "Both round3noticefindings corrected and verified fresh on approvedhead",
+      "status": "PASS"
+    },
+    {
+      "criterion": "Independent realReact evidence, sourceintegrity, build,1560tests and privacy checks",
+      "status": "PASS"
+    }
+  ],
+  "commands": [
+    {
+      "command": "npm ci --ignore-scripts --no-audit --no-fund",
+      "exit": 0,
+      "result": "initial sparse install395 packages; HUSKY0"
+    },
+    {
+      "command": "npm --prefix frontend run build",
+      "exit": 0,
+      "log": "<preserved-private-runtime>/final506-build.log",
+      "result": "tsc-b + Vite production build PASS; chunk-size warning only"
+    },
+    {
+      "command": "npm --prefix frontend test (initial sparse clone)",
+      "exit": 1,
+      "log": "<preserved-private-runtime>/final506-unit.log",
+      "result": "1504PASS;6 missing-backend-module environment failures; no assertion changed"
+    },
+    {
+      "command": "node --import tsx e2e/issue506-workspace.mjs (initial sparse clone)",
+      "exit": 1,
+      "log": "<preserved-private-runtime>/final506-e2e.log",
+      "result": "loader ERR_MODULE_NOT_FOUND pdf-lib; browser not started"
+    },
+    {
+      "command": "git sparse-checkout add backend prisma; npm ci --ignore-scripts --no-audit --no-fund",
+      "exit": 0,
+      "log": "<preserved-private-runtime>/final506-install-full.log",
+      "result": "materialized immutable HEAD sources;496 packages; lock unchanged"
+    },
+    {
+      "command": "node ../node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json",
+      "exit": 0,
+      "log": "<preserved-private-runtime>/final506-tsc-app.log",
+      "result": "PASS"
+    },
+    {
+      "command": "node ../node_modules/typescript/bin/tsc --noEmit -p tsconfig.node.json",
+      "exit": 0,
+      "log": "<preserved-private-runtime>/final506-tsc-node.log",
+      "result": "PASS"
+    },
+    {
+      "command": "npm --prefix frontend test (full exact-head dependencies)",
+      "exit": 0,
+      "log": "<preserved-private-runtime>/final506-unit-full.log",
+      "tests": 1560,
+      "passed": 1560,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "node --import tsx e2e/issue506-workspace.mjs",
+      "environment": {
+        "QA_ORIGIN": "http://127.0.0.1:5296",
+        "QA_EVIDENCE_DIR": "<dedicated-qa-checkout>/artifacts/task-validation/bug-batch-506/evidence/final-codex-20261029",
+        "QA_CHROMIUM_EXECUTABLE": "<installed-Chromium149>/chrome.exe"
+      },
+      "exit": 0,
+      "log": "<preserved-private-runtime>/final506-e2e-full.log",
+      "result": "PASS fourviewports,4persisteddrafts"
+    },
+    {
+      "command": "node scripts/security/scan-frontend-secrets.mjs frontend/src frontend/index.html frontend/dist",
+      "exit": 0,
+      "result": "0findings"
+    },
+    {
+      "command": "native createGitHub reviewFeedback/requiredChecks + immutable source hashes and read-only canonical inspection",
+      "exit": 0,
+      "logs": [
+        "<preserved-private-runtime>/final506-integrity-before.json",
+        "<preserved-private-runtime>/final506-integrity-after.json"
+      ],
+      "result": "all12sourceexact;6requiredchecksPASS;genuineClaude4digest exact;no unresolved/changesrequested;reserved finalnonce matches"
+    },
+    {
+      "command": "System.IO.Compression.ZipFile OpenRead all entries CopyTo Stream.Null",
+      "exit": 0,
+      "result": "all4traces fully decompressed; entrycounts251,280,287,232"
+    },
+    {
+      "command": "FFmpeg -v error -xerror -i issue506-WIDTH.webm -an -c:v png -f image2 -update1 -y NUL",
+      "exit": 0,
+      "result": "full decode all4freshvideos; empty errorlogs",
+      "logs": [
+        "<preserved-private-runtime>/final506-decode-1440.log",
+        "<preserved-private-runtime>/final506-decode-1024.log",
+        "<preserved-private-runtime>/final506-decode-768.log",
+        "<preserved-private-runtime>/final506-decode-390.log"
+      ]
+    }
+  ],
+  "sourceIntegrity": {
+    "before": {
+      "checkedAt": "2026-10-29T22:35:35.544Z",
+      "sha": "8075cdb61bb329ea56943a0199edc64f67146981",
+      "files": [
+        {
+          "file": "e2e/issue506-workspace.mjs",
+          "bytes": 27863,
+          "sha256": "340026b02700fda168a95fa0d36f0a294f24f9441adbc6487c89eca47d29f370",
+          "exact": true
+        },
+        {
+          "file": "frontend/e2e/issue506-workspace.html",
+          "bytes": 272,
+          "sha256": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05",
+          "exact": true
+        },
+        {
+          "file": "frontend/e2e/issue506-workspace.tsx",
+          "bytes": 2560,
+          "sha256": "4fc31c5319186440b5b9db661589a444d9960b96bb431d2c69136a0fd22fc975",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/operator/NewPatientFlow.tsx",
+          "bytes": 3887,
+          "sha256": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+          "bytes": 3914,
+          "sha256": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/DialogLoading.tsx",
+          "bytes": 624,
+          "sha256": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/DischargeImportModal.tsx",
+          "bytes": 19618,
+          "sha256": "0c77209bfb755c6bc5d99037c1fe1526ea78ed2d512e903d550e358e9ba8aee7",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/PatientWorkspaceSurface.css",
+          "bytes": 504,
+          "sha256": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+          "bytes": 4901,
+          "sha256": "27ff12f6020ef24cc897b03570c3fc4d95156d7584e3f0d70e618b805235084d",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+          "bytes": 975,
+          "sha256": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+          "bytes": 50277,
+          "sha256": "e7053e3aa70ea6909bb84b6f190abe80d719ff3046378a2af89e716ba907f296",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts",
+          "bytes": 2903,
+          "sha256": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde",
+          "exact": true
+        }
+      ],
+      "trackedDiffEmpty": true,
+      "feedbackFingerprint": "b1800d8afa4f31a9e31acdf4e6532fc55a666d1218c4e9993a1767bdf2351282",
+      "unresolved": false,
+      "changesRequested": false,
+      "checks": {
+        "ok": true,
+        "details": [
+          "bug-pipeline-tests: SUCCESS",
+          "browser-e2e: SUCCESS",
+          "frontend-tests: SUCCESS",
+          "archive-tests: SUCCESS",
+          "gate: SUCCESS",
+          "secret-scan: SUCCESS",
+          "secret-scan: SUCCESS"
+        ]
+      },
+      "claudeRound": 4,
+      "claudeReportSha256": "49e465cd888c2d93726fc6b9278ecd69e7a9028770dfa1398fcb2372d3ec5555",
+      "reservationNonce": "93c09f21-37aa-4b6e-9284-d874e933f51c",
+      "operatorHoldActive": true
+    },
+    "after": {
+      "checkedAt": "2026-10-29T22:40:51.937Z",
+      "sha": "8075cdb61bb329ea56943a0199edc64f67146981",
+      "files": [
+        {
+          "file": "e2e/issue506-workspace.mjs",
+          "bytes": 27863,
+          "sha256": "340026b02700fda168a95fa0d36f0a294f24f9441adbc6487c89eca47d29f370",
+          "exact": true
+        },
+        {
+          "file": "frontend/e2e/issue506-workspace.html",
+          "bytes": 272,
+          "sha256": "678b56ef7bdd63ecaddf6f17e9770cac3a78ef1a033dfa9daa08552c1e159c05",
+          "exact": true
+        },
+        {
+          "file": "frontend/e2e/issue506-workspace.tsx",
+          "bytes": 2560,
+          "sha256": "4fc31c5319186440b5b9db661589a444d9960b96bb431d2c69136a0fd22fc975",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/operator/NewPatientFlow.tsx",
+          "bytes": 3887,
+          "sha256": "ff7f753defce63604e4449d9094cc97519e7349768bdfd0a830464a41023c895",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+          "bytes": 3914,
+          "sha256": "87edd5305aeef4509c72ffcbf6f681fd210b6c1bea665352c3c888f602c02cac",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/DialogLoading.tsx",
+          "bytes": 624,
+          "sha256": "8ba39e9daa138a1dbd7e64b7b57f414d3a77ad94565e6c0877f5291e9f5ee6f4",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/DischargeImportModal.tsx",
+          "bytes": 19618,
+          "sha256": "0c77209bfb755c6bc5d99037c1fe1526ea78ed2d512e903d550e358e9ba8aee7",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/PatientWorkspaceSurface.css",
+          "bytes": 504,
+          "sha256": "b3acc70438a8ffda9e36558534e77ea025f7acd7453ec06348dcb889e1d2b395",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/PatientWorkspaceSurface.tsx",
+          "bytes": 4901,
+          "sha256": "27ff12f6020ef24cc897b03570c3fc4d95156d7584e3f0d70e618b805235084d",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/__tests__/workspacePresentation506.test.ts",
+          "bytes": 975,
+          "sha256": "038b80019589d2ad4fb4c23850ba763b9c20abdb8e53beccd445e3f6a938fc41",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+          "bytes": 50277,
+          "sha256": "e7053e3aa70ea6909bb84b6f190abe80d719ff3046378a2af89e716ba907f296",
+          "exact": true
+        },
+        {
+          "file": "frontend/src/lib/__tests__/manualIntakeNavigation.test.ts",
+          "bytes": 2903,
+          "sha256": "875319eb92fd41cb1b2e274ca697485d0fed88777c296b7e7b6833415b22cbde",
+          "exact": true
+        }
+      ],
+      "trackedDiffEmpty": true,
+      "feedbackFingerprint": "b1800d8afa4f31a9e31acdf4e6532fc55a666d1218c4e9993a1767bdf2351282",
+      "unresolved": false,
+      "changesRequested": false,
+      "checks": {
+        "ok": true,
+        "details": [
+          "bug-pipeline-tests: SUCCESS",
+          "browser-e2e: SUCCESS",
+          "frontend-tests: SUCCESS",
+          "archive-tests: SUCCESS",
+          "gate: SUCCESS",
+          "secret-scan: SUCCESS",
+          "secret-scan: SUCCESS"
+        ]
+      },
+      "claudeRound": 4,
+      "claudeReportSha256": "49e465cd888c2d93726fc6b9278ecd69e7a9028770dfa1398fcb2372d3ec5555",
+      "reservationNonce": "93c09f21-37aa-4b6e-9284-d874e933f51c",
+      "operatorHoldActive": true
+    },
+    "originalWorkspaceTouched": false,
+    "sourceChangesByThisQa": [],
+    "generatedChanges": [
+      "node_modules/",
+      "frontend/node_modules/",
+      "frontend/dist/",
+      "frontend/node_modules/.tmp/",
+      "artifacts/task-validation/bug-batch-506/evidence/final-codex-20261029/"
+    ]
+  },
+  "browserEvidence": {
+    "browser": "Chromium149.0.7827.55",
+    "playwright": "1.61.1",
+    "platform": "Windows",
+    "results": [
+      {
+        "width": 1440,
+        "bounds": {
+          "x": 96,
+          "y": 64,
+          "width": 1344,
+          "height": 936
+        },
+        "resumedDraft": true,
+        "reviewPhase": true,
+        "nestedConfirmationEscapePreserved": true,
+        "navigationClicks": 4,
+        "immediateNavigationFlushedPendingSave": true,
+        "browserBackFlushedPendingSave": true,
+        "confirmedNavigationReplayed": true,
+        "patches": 6,
+        "reloadPersistence": "synthetic fixture server state",
+        "saveFailureReleasedNavigation": true,
+        "laterHeaderCloseDidNotReplayRoute": true,
+        "successfulSaveNavigationCount": 1,
+        "failedSaveResponses": 1,
+        "expectedConsoleFailures": 1,
+        "uploadNoticeClearedWithoutInteraction": true,
+        "confirmationTitleAndBoundsVisible": true,
+        "confirmationUnoccluded": true,
+        "contrasts": {
+          "saveFailure": {
+            "ratio": 4.511813580771399,
+            "foreground": [
+              0.8509803921568627,
+              0.22745098039215686,
+              0.2901960784313726
+            ],
+            "background": [
+              1,
+              1,
+              1
+            ]
+          },
+          "uploadNotice": {
+            "ratio": 16.40406207106621,
+            "foreground": [
+              0.08627450980392157,
+              0.12549019607843137,
+              0.1803921568627451
+            ],
+            "background": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "errors": [],
+        "requests": [
+          {
+            "path": "/ai/extraction/jobs",
+            "method": "POST"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/from-import",
+            "method": "POST"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/from-import",
+            "method": "POST"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/from-import",
+            "method": "POST"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/files",
+            "method": "POST"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/files/document-upload/content",
+            "method": "GET"
+          }
+        ],
+        "status": "PASS"
+      },
+      {
+        "width": 1024,
+        "bounds": {
+          "x": 96,
+          "y": 64,
+          "width": 928,
+          "height": 936
+        },
+        "resumedDraft": true,
+        "reviewPhase": true,
+        "nestedConfirmationEscapePreserved": true,
+        "navigationClicks": 4,
+        "immediateNavigationFlushedPendingSave": true,
+        "browserBackFlushedPendingSave": true,
+        "confirmedNavigationReplayed": true,
+        "patches": 6,
+        "reloadPersistence": "synthetic fixture server state",
+        "saveFailureReleasedNavigation": true,
+        "laterHeaderCloseDidNotReplayRoute": true,
+        "successfulSaveNavigationCount": 1,
+        "failedSaveResponses": 1,
+        "expectedConsoleFailures": 1,
+        "uploadNoticeClearedWithoutInteraction": true,
+        "confirmationTitleAndBoundsVisible": true,
+        "confirmationUnoccluded": true,
+        "contrasts": {
+          "saveFailure": {
+            "ratio": 4.511813580771399,
+            "foreground": [
+              0.8509803921568627,
+              0.22745098039215686,
+              0.2901960784313726
+            ],
+            "background": [
+              1,
+              1,
+              1
+            ]
+          },
+          "uploadNotice": {
+            "ratio": 16.40406207106621,
+            "foreground": [
+              0.08627450980392157,
+              0.12549019607843137,
+              0.1803921568627451
+            ],
+            "background": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "errors": [],
+        "requests": [
+          {
+            "path": "/ai/extraction/jobs",
+            "method": "POST"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/from-import",
+            "method": "POST"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/from-import",
+            "method": "POST"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/from-import",
+            "method": "POST"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/files",
+            "method": "POST"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/files/document-upload/content",
+            "method": "GET"
+          }
+        ],
+        "status": "PASS"
+      },
+      {
+        "width": 768,
+        "bounds": {
+          "x": 0,
+          "y": 64,
+          "width": 768,
+          "height": 936
+        },
+        "resumedDraft": true,
+        "reviewPhase": true,
+        "nestedConfirmationEscapePreserved": true,
+        "navigationClicks": 4,
+        "immediateNavigationFlushedPendingSave": true,
+        "browserBackFlushedPendingSave": true,
+        "confirmedNavigationReplayed": true,
+        "patches": 7,
+        "reloadPersistence": "synthetic fixture server state",
+        "saveFailureReleasedNavigation": true,
+        "laterHeaderCloseDidNotReplayRoute": true,
+        "successfulSaveNavigationCount": 1,
+        "failedSaveResponses": 1,
+        "expectedConsoleFailures": 1,
+        "uploadNoticeClearedWithoutInteraction": true,
+        "confirmationTitleAndBoundsVisible": true,
+        "confirmationUnoccluded": true,
+        "contrasts": {
+          "saveFailure": {
+            "ratio": 4.511813580771399,
+            "foreground": [
+              0.8509803921568627,
+              0.22745098039215686,
+              0.2901960784313726
+            ],
+            "background": [
+              1,
+              1,
+              1
+            ]
+          },
+          "uploadNotice": {
+            "ratio": 16.40406207106621,
+            "foreground": [
+              0.08627450980392157,
+              0.12549019607843137,
+              0.1803921568627451
+            ],
+            "background": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "errors": [],
+        "requests": [
+          {
+            "path": "/ai/extraction/jobs",
+            "method": "POST"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/from-import",
+            "method": "POST"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/from-import",
+            "method": "POST"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/from-import",
+            "method": "POST"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/files",
+            "method": "POST"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/files/document-upload/content",
+            "method": "GET"
+          }
+        ],
+        "status": "PASS"
+      },
+      {
+        "width": 390,
+        "bounds": {
+          "x": 0,
+          "y": 64,
+          "width": 390,
+          "height": 936
+        },
+        "resumedDraft": true,
+        "reviewPhase": true,
+        "nestedConfirmationEscapePreserved": true,
+        "navigationClicks": 4,
+        "immediateNavigationFlushedPendingSave": true,
+        "browserBackFlushedPendingSave": true,
+        "confirmedNavigationReplayed": true,
+        "patches": 5,
+        "reloadPersistence": "synthetic fixture server state",
+        "saveFailureReleasedNavigation": true,
+        "laterHeaderCloseDidNotReplayRoute": true,
+        "successfulSaveNavigationCount": 1,
+        "failedSaveResponses": 1,
+        "expectedConsoleFailures": 1,
+        "uploadNoticeClearedWithoutInteraction": true,
+        "confirmationTitleAndBoundsVisible": true,
+        "confirmationUnoccluded": true,
+        "contrasts": {
+          "saveFailure": {
+            "ratio": 4.511813580771399,
+            "foreground": [
+              0.8509803921568627,
+              0.22745098039215686,
+              0.2901960784313726
+            ],
+            "background": [
+              1,
+              1,
+              1
+            ]
+          },
+          "uploadNotice": {
+            "ratio": 16.40406207106621,
+            "foreground": [
+              0.08627450980392157,
+              0.12549019607843137,
+              0.1803921568627451
+            ],
+            "background": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        "errors": [],
+        "requests": [
+          {
+            "path": "/ai/extraction/jobs",
+            "method": "POST"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/from-import",
+            "method": "POST"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/from-import",
+            "method": "POST"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/result",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/intake/drafts/from-import",
+            "method": "POST"
+          },
+          {
+            "path": "/intake/drafts/draft-qa-506",
+            "method": "PATCH"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one",
+            "method": "GET"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/files",
+            "method": "POST"
+          },
+          {
+            "path": "/ai/extraction/jobs/job-one/files/document-upload/content",
+            "method": "GET"
+          }
+        ],
+        "status": "PASS"
+      }
+    ],
+    "traceAllStreamsRead": true,
+    "videoFullDecode": true,
+    "visualInspection": [
+      "review-1440.png",
+      "save-failure-recovered-390.png"
+    ],
+    "files": [
+      {
+        "path": "evidence/playwright-report/index.html",
+        "bytes": 2257,
+        "sha256": "f7e082cb1f682ae81247682ee57ff7732bcdfd727c009278fca6757941990b1e"
+      },
+      {
+        "path": "evidence/screenshots/import-1024.png",
+        "bytes": 47536,
+        "sha256": "85ca75d984600b4d6d6c9de22a30d4f2c25e6cb3e198094e4b1c252b0ed7a423",
+        "width": 1024,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/import-1440.png",
+        "bytes": 48815,
+        "sha256": "bc2275e10ef4981f272fddad6aa440c636dcaf5534aeef41942596e9e3a06a48",
+        "width": 1440,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/import-390.png",
+        "bytes": 41564,
+        "sha256": "25406170864564f3821d96ca92344d044cf0e4a370235965d94c68a3902a4936",
+        "width": 390,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/import-768.png",
+        "bytes": 44307,
+        "sha256": "453436d1fc7627227660e8b17ab739a0e22ff9f314397dbe41f1ee0a32fa8f4b",
+        "width": 768,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/resumed-draft-1024.png",
+        "bytes": 92092,
+        "sha256": "2496446559bfefe8befe6e348de10ce033fac1837c5c1e0fb03457dc2604986f",
+        "width": 1024,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/resumed-draft-1440.png",
+        "bytes": 92639,
+        "sha256": "db4e990339165bdfd0a3b34e14ff43879e853f62614c2b75a5bcf9d83ae10bf4",
+        "width": 1440,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/resumed-draft-390.png",
+        "bytes": 42529,
+        "sha256": "49a7dfd4d60160163099878db27883e80d98859363354fcf7f485a2665b31117",
+        "width": 390,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/resumed-draft-768.png",
+        "bytes": 68830,
+        "sha256": "ecc40b352c8d339b5bb76c077e9476813dc68c9b35c706f3aea70f981624582d",
+        "width": 768,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/review-1024.png",
+        "bytes": 72982,
+        "sha256": "5b6229549fe466c3f1f9e3c41f8da7983e4f45710b1eff809eb705414964374e",
+        "width": 1024,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/review-1440.png",
+        "bytes": 76072,
+        "sha256": "49897ced9c6119306a649eeec85fb264f48a4c74ea01affea899bed30ad29839",
+        "width": 1440,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/review-390.png",
+        "bytes": 49023,
+        "sha256": "7ce06fb73e983852574275e794d651b956941e4d92156735a87913ead08e4b18",
+        "width": 390,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/review-768.png",
+        "bytes": 67024,
+        "sha256": "efdcc0cf984c4e81807baaad7573d4999f8f355759c1464a429b123dddf4b0f0",
+        "width": 768,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/save-failure-recovered-1024.png",
+        "bytes": 117859,
+        "sha256": "909712d2b2811a96800ea18581aafc8a8644d84c240187db468f61c721d16e17",
+        "width": 1024,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/save-failure-recovered-1440.png",
+        "bytes": 125500,
+        "sha256": "0ac5155aa932715394e91e2b18d78bc16777f96919e5f415c688b2361e1e96b9",
+        "width": 1440,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/save-failure-recovered-390.png",
+        "bytes": 74550,
+        "sha256": "868799de4c79c7907d14877c992eef04af900027157467cacda88dda57b9f1b0",
+        "width": 390,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/save-failure-recovered-768.png",
+        "bytes": 100092,
+        "sha256": "7548bdd8d3fdb65603c44953271247e4dd21e41e94145d92df76be51fbfc1170",
+        "width": 768,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/upload-notice-cleared-1024.png",
+        "bytes": 64487,
+        "sha256": "d67e3dd9e05c293563e3eec1419188af407041055096684af2fdca5ddd4766bf",
+        "width": 1024,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/upload-notice-cleared-1440.png",
+        "bytes": 65535,
+        "sha256": "4a1e44c13da6a8bf75a0746f521dc9673d5e4c8f11763eae69a185e0f91d6c3a",
+        "width": 1440,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/upload-notice-cleared-390.png",
+        "bytes": 45528,
+        "sha256": "72593097e3025db3acb62f937c38a1a728fbf0552a6ddd8490a61c5fd3dcb52e",
+        "width": 390,
+        "height": 1000
+      },
+      {
+        "path": "evidence/screenshots/upload-notice-cleared-768.png",
+        "bytes": 52741,
+        "sha256": "4fb16ec92f19a2c58d6987282c6dc259b1d6415bd7d907789da89446729ff105",
+        "width": 768,
+        "height": 1000
+      },
+      {
+        "path": "evidence/test-results/browser.json",
+        "bytes": 22714,
+        "sha256": "e755674ec4b52614fa2e3fae0c7bf399010c173d7cc210139649eec6f2d99739"
+      },
+      {
+        "path": "evidence/trace/issue506-1024.zip",
+        "bytes": 10530465,
+        "sha256": "96ca7621888d5d8fc0bef9f717d83b2de58801054543647221e3473f5f7e6fff"
+      },
+      {
+        "path": "evidence/trace/issue506-1440.zip",
+        "bytes": 9553604,
+        "sha256": "10a784d24eac6242771166880014d7ce69849461010b08843e0b0f90ab8aec46"
+      },
+      {
+        "path": "evidence/trace/issue506-390.zip",
+        "bytes": 6039966,
+        "sha256": "4209990364c0e85d93959c69d1a413d800e79f9a927521e8fb9b60e85cb82a9c"
+      },
+      {
+        "path": "evidence/trace/issue506-768.zip",
+        "bytes": 9571737,
+        "sha256": "abc05367cea9eab9605390793fb32296632bf04bdb48d6562fed7bb54411565c"
+      },
+      {
+        "path": "evidence/video/issue506-1024.webm",
+        "bytes": 3085911,
+        "sha256": "9a9f146d091867d85baa79cb80f98faf06120b83e454dcc190b06501796a17f7"
+      },
+      {
+        "path": "evidence/video/issue506-1440.webm",
+        "bytes": 4360601,
+        "sha256": "cd170450652007972668a90627b8966a7cf61e9d764ced66e72f852e6626644d"
+      },
+      {
+        "path": "evidence/video/issue506-390.webm",
+        "bytes": 1650732,
+        "sha256": "1d079cd1cbbd6422fcca97418c3e2a429f16702a5fa97e13505f50ae7f2a17fa"
+      },
+      {
+        "path": "evidence/video/issue506-768.webm",
+        "bytes": 2001955,
+        "sha256": "84e431bd8cb0746544578a317ac659f5095aa4167634163f55c9f1593efc09ae"
+      }
+    ]
+  },
+  "security": {
+    "secrets": "PASS source/distscan0",
+    "phi": "PASS syntheticfixturesonly",
+    "logging": "PASS no new payloadlogs",
+    "inputValidation": "PASS no changedendpoint;QA loopback/outbound guard",
+    "authorization": "PASS no changedrole/auth/API;no bypass",
+    "injection": "PASS no new rawHTML/SQL",
+    "dependencies": "PASS no dependencychange",
+    "config": "PASS productionentry unchanged;QA Vite envDirfalse/configfalse"
+  },
+  "scopeLimitations": [
+    "Local QA uses actual React components and production CSS with isolated synthetic HTTP fixtures; it does not certify real backend, database, OCR/provider or production deployment.",
+    "Initial sparse-checkout environmental failures are retained: frontend unit1504PASS/6ERR_MODULE_NOT_FOUND due to absent backend parser files; E2E loader missing pdf-lib before any browser assertion. Expanded immutable HEAD backend/prisma and reran npm ci from unchanged lock; subsequent full unit1560PASS and four-width E2E PASS.",
+    "Raw package-lock keeps existing CRLF checkout representation; canonical LF bytes equal HEAD, SHA256a2e80872c9085f8ec028c968ef0f6d0f6622235c649bf081f7289f5cde6593f6. No manifest or lock dependency changes.",
+    "Tracked git status may retain stat-only M entries from earlier LF normalization; git diff --numstat is empty and all12 changed source files are byte-exact with GitHEAD and frozen manifest before and after QA. Generated node_modules/dist and this new evidence are not part of approved appsource.",
+    "One intentionally injected503 perviewport is narrowly whitelisted and asserted exactlyonce, including corresponding browser resource error; all unexpected console/page/HTTP/outbound errors fail the unmodified harness.",
+    "The HTML is a generated companion report over the real runner JSON, not a fabricated Playwright Test reporter output.",
+    "Bundled FFmpeg lacks null muxer: initial decode probe failed environment-only. Full WebM decode to PNG image2 Windows NUL sink then passed for all four videos with -xerror.",
+    "Root retains protected merge/deploy and online acceptance/closure gate; this QA does not merge, deploy, close issues or request a fifth Claude round."
+  ],
+  "publicationNotice": "Sanitized copy: local paths redacted/relocated; original private report bytes and all failed attempts remain preserved. Its local fixture entry-point PASS does NOT establish complete issue resolution; actual online acceptance FAILED and closure is held.",
+  "originalPrivateReportSha256": "f17573267f5eafb24d20b0f73c4438c784d68da1935672d68203416fac972cf3"
+}

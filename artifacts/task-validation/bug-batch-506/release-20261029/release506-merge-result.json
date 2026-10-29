@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-29T22:50:24.406Z",
+  "ok": true,
+  "status": "merged",
+  "batchId": "bug-batch-506",
+  "reviewedSha": "8075cdb61bb329ea56943a0199edc64f67146981",
+  "mergeSha": "59f0a9ea60bd56d1823305da9b18fa0bca8db213",
+  "deployments": {
+    "frontend": true,
+    "backend": false,
+    "runtime": false
+  },
+  "issueStillOpen": true
+}

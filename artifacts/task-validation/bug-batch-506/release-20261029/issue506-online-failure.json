@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-29T22:55:58.875Z",
+  "status": "FAILED_VALIDATION_ONLINE",
+  "sourceSha": "59f0a9ea60bd56d1823305da9b18fa0bca8db213",
+  "reviewedSha": "8075cdb61bb329ea56943a0199edc64f67146981",
+  "deploymentId": "dpl_3KXmbe8VZ8UodnGdC92Mo6MRU5Kd",
+  "surface": "Authenticated demo Medico1, direct patient-list import button, no documents/no OCR/no patient writes",
+  "metrics": {
+    "dialogCount": 1,
+    "main": {
+      "bottom": 1000,
+      "height": 936,
+      "right": 1440,
+      "width": 1344,
+      "x": 96,
+      "y": 64
+    },
+    "moduleAssets": [
+      "/assets/index-BOMPi0cW.js"
+    ],
+    "nonmodal": false,
+    "sidebarControlHittable": false,
+    "topbar": {
+      "bottom": 64,
+      "height": 64,
+      "right": 1440,
+      "width": 1344,
+      "x": 96,
+      "y": 0
+    },
+    "topbarControlHittable": false,
+    "viewport": {
+      "height": 1000,
+      "width": 1440
+    },
+    "workspace": null
+  },
+  "reason": "Direct AIImportStatus entry still uses default dialog; PatientWorkspaceSurface not mounted; topbar/sidebar hit tests fail",
+  "screenshot": "issue506-online-after-still-modal.png"
+}

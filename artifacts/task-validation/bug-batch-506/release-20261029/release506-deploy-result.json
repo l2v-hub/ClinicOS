@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-29T22:53:02.447Z",
+  "status": "READY_PROVIDER_VERIFIED_ONLINE_ACCEPTANCE_PENDING",
+  "reviewedSha": "8075cdb61bb329ea56943a0199edc64f67146981",
+  "mergeSha": "59f0a9ea60bd56d1823305da9b18fa0bca8db213",
+  "projectId": "prj_6eDFTx8o4IoZhCXr4Sd7LX6dteo6",
+  "accountId": "team_P8yHboFntuOI9pT0zdgbJAqU",
+  "deploymentId": "dpl_3KXmbe8VZ8UodnGdC92Mo6MRU5Kd",
+  "vercelUrl": "https://clinicos-i1yqqgyza-lucalavia-2482s-projects.vercel.app",
+  "alias": "https://clinicos-eosin.vercel.app",
+  "aliasDeploymentId": "dpl_3KXmbe8VZ8UodnGdC92Mo6MRU5Kd",
+  "state": "READY",
+  "alreadyDeployed": true,
+  "checkoutClean": true,
+  "noBackendOrSql": true
+}

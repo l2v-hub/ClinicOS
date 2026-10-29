@@ -1,0 +1,910 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "bounds": {
+        "x": 96,
+        "y": 64,
+        "width": 1344,
+        "height": 936
+      },
+      "resumedDraft": true,
+      "reviewPhase": true,
+      "nestedConfirmationEscapePreserved": true,
+      "navigationClicks": 4,
+      "immediateNavigationFlushedPendingSave": true,
+      "browserBackFlushedPendingSave": true,
+      "confirmedNavigationReplayed": true,
+      "patches": 6,
+      "reloadPersistence": "synthetic fixture server state",
+      "saveFailureReleasedNavigation": true,
+      "laterHeaderCloseDidNotReplayRoute": true,
+      "successfulSaveNavigationCount": 1,
+      "failedSaveResponses": 1,
+      "expectedConsoleFailures": 1,
+      "uploadNoticeClearedWithoutInteraction": true,
+      "confirmationTitleAndBoundsVisible": true,
+      "confirmationUnoccluded": true,
+      "contrasts": {
+        "saveFailure": {
+          "ratio": 4.511813580771399,
+          "foreground": [
+            0.8509803921568627,
+            0.22745098039215686,
+            0.2901960784313726
+          ],
+          "background": [
+            1,
+            1,
+            1
+          ]
+        },
+        "uploadNotice": {
+          "ratio": 16.40406207106621,
+          "foreground": [
+            0.08627450980392157,
+            0.12549019607843137,
+            0.1803921568627451
+          ],
+          "background": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "errors": [],
+      "requests": [
+        {
+          "path": "/ai/extraction/jobs",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/files",
+          "method": "POST"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/files/document-upload/content",
+          "method": "GET"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "width": 1024,
+      "bounds": {
+        "x": 96,
+        "y": 64,
+        "width": 928,
+        "height": 936
+      },
+      "resumedDraft": true,
+      "reviewPhase": true,
+      "nestedConfirmationEscapePreserved": true,
+      "navigationClicks": 4,
+      "immediateNavigationFlushedPendingSave": true,
+      "browserBackFlushedPendingSave": true,
+      "confirmedNavigationReplayed": true,
+      "patches": 6,
+      "reloadPersistence": "synthetic fixture server state",
+      "saveFailureReleasedNavigation": true,
+      "laterHeaderCloseDidNotReplayRoute": true,
+      "successfulSaveNavigationCount": 1,
+      "failedSaveResponses": 1,
+      "expectedConsoleFailures": 1,
+      "uploadNoticeClearedWithoutInteraction": true,
+      "confirmationTitleAndBoundsVisible": true,
+      "confirmationUnoccluded": true,
+      "contrasts": {
+        "saveFailure": {
+          "ratio": 4.511813580771399,
+          "foreground": [
+            0.8509803921568627,
+            0.22745098039215686,
+            0.2901960784313726
+          ],
+          "background": [
+            1,
+            1,
+            1
+          ]
+        },
+        "uploadNotice": {
+          "ratio": 16.40406207106621,
+          "foreground": [
+            0.08627450980392157,
+            0.12549019607843137,
+            0.1803921568627451
+          ],
+          "background": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "errors": [],
+      "requests": [
+        {
+          "path": "/ai/extraction/jobs",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/files",
+          "method": "POST"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/files/document-upload/content",
+          "method": "GET"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "width": 768,
+      "bounds": {
+        "x": 0,
+        "y": 64,
+        "width": 768,
+        "height": 936
+      },
+      "resumedDraft": true,
+      "reviewPhase": true,
+      "nestedConfirmationEscapePreserved": true,
+      "navigationClicks": 4,
+      "immediateNavigationFlushedPendingSave": true,
+      "browserBackFlushedPendingSave": true,
+      "confirmedNavigationReplayed": true,
+      "patches": 7,
+      "reloadPersistence": "synthetic fixture server state",
+      "saveFailureReleasedNavigation": true,
+      "laterHeaderCloseDidNotReplayRoute": true,
+      "successfulSaveNavigationCount": 1,
+      "failedSaveResponses": 1,
+      "expectedConsoleFailures": 1,
+      "uploadNoticeClearedWithoutInteraction": true,
+      "confirmationTitleAndBoundsVisible": true,
+      "confirmationUnoccluded": true,
+      "contrasts": {
+        "saveFailure": {
+          "ratio": 4.511813580771399,
+          "foreground": [
+            0.8509803921568627,
+            0.22745098039215686,
+            0.2901960784313726
+          ],
+          "background": [
+            1,
+            1,
+            1
+          ]
+        },
+        "uploadNotice": {
+          "ratio": 16.40406207106621,
+          "foreground": [
+            0.08627450980392157,
+            0.12549019607843137,
+            0.1803921568627451
+          ],
+          "background": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "errors": [],
+      "requests": [
+        {
+          "path": "/ai/extraction/jobs",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/files",
+          "method": "POST"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/files/document-upload/content",
+          "method": "GET"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "width": 390,
+      "bounds": {
+        "x": 0,
+        "y": 64,
+        "width": 390,
+        "height": 936
+      },
+      "resumedDraft": true,
+      "reviewPhase": true,
+      "nestedConfirmationEscapePreserved": true,
+      "navigationClicks": 4,
+      "immediateNavigationFlushedPendingSave": true,
+      "browserBackFlushedPendingSave": true,
+      "confirmedNavigationReplayed": true,
+      "patches": 5,
+      "reloadPersistence": "synthetic fixture server state",
+      "saveFailureReleasedNavigation": true,
+      "laterHeaderCloseDidNotReplayRoute": true,
+      "successfulSaveNavigationCount": 1,
+      "failedSaveResponses": 1,
+      "expectedConsoleFailures": 1,
+      "uploadNoticeClearedWithoutInteraction": true,
+      "confirmationTitleAndBoundsVisible": true,
+      "confirmationUnoccluded": true,
+      "contrasts": {
+        "saveFailure": {
+          "ratio": 4.511813580771399,
+          "foreground": [
+            0.8509803921568627,
+            0.22745098039215686,
+            0.2901960784313726
+          ],
+          "background": [
+            1,
+            1,
+            1
+          ]
+        },
+        "uploadNotice": {
+          "ratio": 16.40406207106621,
+          "foreground": [
+            0.08627450980392157,
+            0.12549019607843137,
+            0.1803921568627451
+          ],
+          "background": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "errors": [],
+      "requests": [
+        {
+          "path": "/ai/extraction/jobs",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/files",
+          "method": "POST"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/files/document-upload/content",
+          "method": "GET"
+        }
+      ],
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS",
+  "scope": "Actual routed NewPatientFlow/DischargeImportModal/IntakeWorkspace, real production CSS and isolated synthetic HTTP fixtures; not real backend/OCR/provider validation"
+}
