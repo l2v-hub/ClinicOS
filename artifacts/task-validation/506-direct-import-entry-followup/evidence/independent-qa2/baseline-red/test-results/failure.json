@@ -1,0 +1,24 @@
+{
+  "width": 1440,
+  "status": "FAILED",
+  "message": "expect(locator).toBeVisible() failed\n\nLocator: locator('.patient-workspace')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"to.be.visible\" with timeout 5000ms\n  - waiting for locator('.patient-workspace')\n",
+  "errors": [],
+  "requests": [
+    {
+      "path": "/ai/extraction/status",
+      "method": "GET"
+    },
+    {
+      "path": "/patients/page",
+      "method": "GET"
+    },
+    {
+      "path": "/intake/drafts",
+      "method": "GET"
+    },
+    {
+      "path": "/patients/settings",
+      "method": "GET"
+    }
+  ]
+}
