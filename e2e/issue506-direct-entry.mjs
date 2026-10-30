@@ -109,8 +109,26 @@ try {
       const importBounds = await assertPage(page, width);
       if (width < 1024) {
         await page.getByRole('button', { name: 'Apri navigazione', exact: true }).click();
-        await expect(page.getByRole('button', { name: 'Pazienti QA', exact: true })).toBeVisible();
-        await page.getByRole('button', { name: 'Apri navigazione', exact: true }).click();
+        const drawer = page.locator('.teams-sidebar');
+        await expect.poll(async () => Math.abs((await drawer.boundingBox())?.x ?? -1000)).toBeLessThan(1);
+        const navButton = page.getByRole('button', { name: 'Pazienti QA', exact: true });
+        await expect(navButton).toBeVisible();
+        assert(await navButton.evaluate(element => {
+          const r = element.getBoundingClientRect();
+          const target = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+          return !!target && element.contains(target);
+        }), 'The fully opened mobile drawer must be above the workspace');
+        const scrim = page.locator('.mobile-nav-scrim');
+        await expect(scrim).toBeVisible();
+        const drawerBounds = await drawer.boundingBox();
+        assert(drawerBounds && drawerBounds.x + drawerBounds.width < width - 8);
+        // The real App dismisses through its scrim, not a hamburger hidden by the drawer.
+        await scrim.click({ position: { x: width - 8, y: 500 } });
+        await expect(scrim).toHaveCount(0);
+        await expect.poll(async () => {
+          const r = await drawer.boundingBox(); return r ? r.x + r.width : 1000;
+        }).toBeLessThan(1);
+        await assertPage(page, width);
       }
       await page.screenshot({ path: path.join(out, `screenshots/direct-import-${width}.png`), fullPage: true });
       await region.getByRole('button', { name: 'Chiudi e riprendi la sessione', exact: true }).click();

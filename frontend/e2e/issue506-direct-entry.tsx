@@ -30,6 +30,7 @@ function Fixture() {
     <aside className="teams-sidebar">
       <button className="teams-sidebar__item" onClick={() => { setShowList(true); setNavOpen(false); setNavigation(n => n + 1); }}>Pazienti QA</button>
     </aside>
+    {navOpen && <div className="mobile-nav-scrim" onClick={() => setNavOpen(false)} aria-hidden="true" />}
     <div className="main-area-clean">
       <header className="compact-topbar">
         <button aria-label="Apri navigazione" onClick={() => setNavOpen(x => !x)}>Menu</button>
