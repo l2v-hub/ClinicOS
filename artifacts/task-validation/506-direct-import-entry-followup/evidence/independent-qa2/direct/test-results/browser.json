@@ -1,0 +1,785 @@
+{
+  "source": "actual PatientList and AIImportStatus with synthetic localhost API fixtures",
+  "results": [
+    {
+      "width": 1440,
+      "status": "PASS",
+      "actualPatientListEntry": true,
+      "lazyBounds": {
+        "bounds": {
+          "x": 96,
+          "y": 64,
+          "width": 1344,
+          "height": 936
+        },
+        "topbar": {
+          "x": 96,
+          "y": 0,
+          "width": 1344,
+          "height": 64
+        },
+        "sidebar": {
+          "x": 0,
+          "y": 0,
+          "width": 96,
+          "height": 1000
+        },
+        "main": {
+          "x": 96,
+          "y": 64,
+          "width": 1344,
+          "height": 936
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "importBounds": {
+        "bounds": {
+          "x": 96,
+          "y": 64,
+          "width": 1344,
+          "height": 936
+        },
+        "topbar": {
+          "x": 96,
+          "y": 0,
+          "width": 1344,
+          "height": 64
+        },
+        "sidebar": {
+          "x": 0,
+          "y": 0,
+          "width": 96,
+          "height": 1000
+        },
+        "main": {
+          "x": 96,
+          "y": 64,
+          "width": 1344,
+          "height": 936
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "actualResume": true,
+      "draftId": "draft-qa-direct506",
+      "jobCreations": 1,
+      "draftCreations": 1,
+      "patches": 5,
+      "persistedAfterReload": true,
+      "defaultDialogPreserved": true,
+      "errors": [],
+      "requests": [
+        {
+          "path": "/ai/extraction/status",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/page",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/settings",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs",
+          "method": "POST"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/ai/extraction/status",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/page",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/settings",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/patients/page",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/status",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "status": "PASS",
+      "actualPatientListEntry": true,
+      "lazyBounds": {
+        "bounds": {
+          "x": 96,
+          "y": 64,
+          "width": 928,
+          "height": 936
+        },
+        "topbar": {
+          "x": 96,
+          "y": 0,
+          "width": 928,
+          "height": 64
+        },
+        "sidebar": {
+          "x": 0,
+          "y": 0,
+          "width": 96,
+          "height": 1000
+        },
+        "main": {
+          "x": 96,
+          "y": 64,
+          "width": 928,
+          "height": 936
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "importBounds": {
+        "bounds": {
+          "x": 96,
+          "y": 64,
+          "width": 928,
+          "height": 936
+        },
+        "topbar": {
+          "x": 96,
+          "y": 0,
+          "width": 928,
+          "height": 64
+        },
+        "sidebar": {
+          "x": 0,
+          "y": 0,
+          "width": 96,
+          "height": 1000
+        },
+        "main": {
+          "x": 96,
+          "y": 64,
+          "width": 928,
+          "height": 936
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "actualResume": true,
+      "draftId": "draft-qa-direct506",
+      "jobCreations": 1,
+      "draftCreations": 1,
+      "patches": 5,
+      "persistedAfterReload": true,
+      "defaultDialogPreserved": true,
+      "errors": [],
+      "requests": [
+        {
+          "path": "/ai/extraction/status",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/page",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/settings",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs",
+          "method": "POST"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/ai/extraction/status",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/page",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/settings",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/patients/page",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/status",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "status": "PASS",
+      "actualPatientListEntry": true,
+      "lazyBounds": {
+        "bounds": {
+          "x": 0,
+          "y": 64,
+          "width": 768,
+          "height": 936
+        },
+        "topbar": {
+          "x": 0,
+          "y": 0,
+          "width": 768,
+          "height": 64
+        },
+        "sidebar": {
+          "x": -100,
+          "y": 0,
+          "width": 100,
+          "height": 1000
+        },
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 768,
+          "height": 936
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "importBounds": {
+        "bounds": {
+          "x": 0,
+          "y": 64,
+          "width": 768,
+          "height": 936
+        },
+        "topbar": {
+          "x": 0,
+          "y": 0,
+          "width": 768,
+          "height": 64
+        },
+        "sidebar": {
+          "x": -100,
+          "y": 0,
+          "width": 100,
+          "height": 1000
+        },
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 768,
+          "height": 936
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "actualResume": true,
+      "draftId": "draft-qa-direct506",
+      "jobCreations": 1,
+      "draftCreations": 1,
+      "patches": 5,
+      "persistedAfterReload": true,
+      "defaultDialogPreserved": true,
+      "errors": [],
+      "requests": [
+        {
+          "path": "/ai/extraction/status",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/page",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/settings",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs",
+          "method": "POST"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/ai/extraction/status",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/page",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/settings",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/patients/page",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/status",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "status": "PASS",
+      "actualPatientListEntry": true,
+      "lazyBounds": {
+        "bounds": {
+          "x": 0,
+          "y": 64,
+          "width": 390,
+          "height": 936
+        },
+        "topbar": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 64
+        },
+        "sidebar": {
+          "x": -100,
+          "y": 0,
+          "width": 100,
+          "height": 1000
+        },
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 390,
+          "height": 1121.53125
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "importBounds": {
+        "bounds": {
+          "x": 0,
+          "y": 64,
+          "width": 390,
+          "height": 936
+        },
+        "topbar": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 64
+        },
+        "sidebar": {
+          "x": -100,
+          "y": 0,
+          "width": 100,
+          "height": 1000
+        },
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 390,
+          "height": 1121.53125
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "actualResume": true,
+      "draftId": "draft-qa-direct506",
+      "jobCreations": 1,
+      "draftCreations": 1,
+      "patches": 5,
+      "persistedAfterReload": true,
+      "defaultDialogPreserved": true,
+      "errors": [],
+      "requests": [
+        {
+          "path": "/ai/extraction/status",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/page",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/settings",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs",
+          "method": "POST"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one/result",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/from-import",
+          "method": "POST"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/ai/extraction/status",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/page",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/patients/settings",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/patients/page",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        },
+        {
+          "path": "/intake/drafts",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/status",
+          "method": "GET"
+        },
+        {
+          "path": "/ai/extraction/jobs/job-one",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "GET"
+        },
+        {
+          "path": "/intake/drafts/draft-qa-direct506",
+          "method": "PATCH"
+        }
+      ]
+    }
+  ]
+}

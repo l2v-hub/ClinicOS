@@ -1,0 +1,549 @@
+{
+  "verdict": "READY FOR CODEX QA",
+  "sourceSha": "9b420754687273a95f03bc05f39728a6b9f9186f",
+  "baselineSha": "59f0a9ea60bd56d1823305da9b18fa0bca8db213",
+  "qaAttempt": 2,
+  "nonce": "2dcf76fc-dd94-429c-93fd-f9c62fc26498",
+  "sourceManifest": [
+    {
+      "path": "frontend/src/components/shared/AIImportStatus.tsx",
+      "blob": "3b0a5e46558aa0d5ccb0a8803e258ff23e6c13fd",
+      "sha256": "6de28605420a183b17456abec3bf18dde0f94593f3422ca175dfcd9dd8dd02cf",
+      "bytes": 2686
+    },
+    {
+      "path": "frontend/src/components/operator/PatientList.tsx",
+      "blob": "c70ec0fbed15c33d301d020d4a47119803ff0f86",
+      "sha256": "d8e748f8a880061b00b9d559b9aeb4f49de99f27a66eca5a18899c57cffff5ae",
+      "bytes": 25485
+    },
+    {
+      "path": "frontend/src/components/shared/__tests__/aiImportPresentation506.test.ts",
+      "blob": "e3497b9818bbfd52646c8824ef04effaf756fa81",
+      "sha256": "394f89ca3e93a6803e48f34e7fd2f79b58aac4c6da07d9a49a2cd3a7a9abd4a0",
+      "bytes": 1901
+    },
+    {
+      "path": "frontend/e2e/issue506-direct-entry.html",
+      "blob": "d8f9229f2f398d751d83719ab6944e7923dc0284",
+      "sha256": "4f9ea6caeb73e1059258dfa8be9f80b3a6797a5df23b3c55c49bbaecd9dc0f6b",
+      "bytes": 290
+    },
+    {
+      "path": "frontend/e2e/issue506-direct-entry.tsx",
+      "blob": "8f1db58a53c967f1ac41911bf16b4f38646ba3dc",
+      "sha256": "64e3be67df71fda09b9ca4af820c3439a817083b35db2361fbd6a766fff07cb4",
+      "bytes": 3105
+    },
+    {
+      "path": "e2e/issue506-direct-entry.mjs",
+      "blob": "c15c4a37ba694c4a25cecf9b4d50df6fad1b67c0",
+      "sha256": "46c01193881403658ad075ba9e0fabadab876ed0820000b7c72b49d48075fd4a",
+      "bytes": 16007
+    }
+  ],
+  "contractSha256": "f8399ef1825ee40bbc9ad60251392572b0333adcd1c8adfc7e72e5e279f51207",
+  "sourceUnchanged": true,
+  "phases": {
+    "contract": "PASS",
+    "diff": "PASS",
+    "typesBuildUnit": "PASS",
+    "browser": "PASS: direct4+legacy4 widths",
+    "security": "PASS in bounded synthetic scope"
+  },
+  "tests": {
+    "frontend": {
+      "tests": 1581,
+      "pass": 1581,
+      "fail": 0,
+      "skipped": 0
+    },
+    "typesApp": "PASS",
+    "typesNode": "PASS",
+    "tscBuild": "PASS",
+    "viteBuild": "PASS",
+    "secretScanSourceDist": "PASS:0findings",
+    "focusProbes": [
+      {
+        "name": "body",
+        "status": "PASS",
+        "focusCalls": 1
+      },
+      {
+        "name": "other-control",
+        "status": "PASS",
+        "focusCalls": 0
+      },
+      {
+        "name": "disconnected",
+        "status": "PASS",
+        "focusCalls": 0
+      },
+      {
+        "name": "null-ref",
+        "status": "PASS",
+        "focusCalls": 0
+      },
+      {
+        "name": "already-trigger",
+        "status": "PASS",
+        "focusCalls": 1
+      },
+      {
+        "name": "unmounted-before-frame",
+        "status": "PASS",
+        "focusCalls": 0
+      }
+    ]
+  },
+  "direct": [
+    {
+      "width": 1440,
+      "status": "PASS",
+      "lazyBounds": {
+        "bounds": {
+          "x": 96,
+          "y": 64,
+          "width": 1344,
+          "height": 936
+        },
+        "topbar": {
+          "x": 96,
+          "y": 0,
+          "width": 1344,
+          "height": 64
+        },
+        "sidebar": {
+          "x": 0,
+          "y": 0,
+          "width": 96,
+          "height": 1000
+        },
+        "main": {
+          "x": 96,
+          "y": 64,
+          "width": 1344,
+          "height": 936
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "importBounds": {
+        "bounds": {
+          "x": 96,
+          "y": 64,
+          "width": 1344,
+          "height": 936
+        },
+        "topbar": {
+          "x": 96,
+          "y": 0,
+          "width": 1344,
+          "height": 64
+        },
+        "sidebar": {
+          "x": 0,
+          "y": 0,
+          "width": 96,
+          "height": 1000
+        },
+        "main": {
+          "x": 96,
+          "y": 64,
+          "width": 1344,
+          "height": 936
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "actualPatientListEntry": true,
+      "actualResume": true,
+      "persistedAfterReload": true,
+      "defaultDialogPreserved": true,
+      "jobCreations": 1,
+      "draftCreations": 1,
+      "patches": 5,
+      "errors": []
+    },
+    {
+      "width": 1024,
+      "status": "PASS",
+      "lazyBounds": {
+        "bounds": {
+          "x": 96,
+          "y": 64,
+          "width": 928,
+          "height": 936
+        },
+        "topbar": {
+          "x": 96,
+          "y": 0,
+          "width": 928,
+          "height": 64
+        },
+        "sidebar": {
+          "x": 0,
+          "y": 0,
+          "width": 96,
+          "height": 1000
+        },
+        "main": {
+          "x": 96,
+          "y": 64,
+          "width": 928,
+          "height": 936
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "importBounds": {
+        "bounds": {
+          "x": 96,
+          "y": 64,
+          "width": 928,
+          "height": 936
+        },
+        "topbar": {
+          "x": 96,
+          "y": 0,
+          "width": 928,
+          "height": 64
+        },
+        "sidebar": {
+          "x": 0,
+          "y": 0,
+          "width": 96,
+          "height": 1000
+        },
+        "main": {
+          "x": 96,
+          "y": 64,
+          "width": 928,
+          "height": 936
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "actualPatientListEntry": true,
+      "actualResume": true,
+      "persistedAfterReload": true,
+      "defaultDialogPreserved": true,
+      "jobCreations": 1,
+      "draftCreations": 1,
+      "patches": 5,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "status": "PASS",
+      "lazyBounds": {
+        "bounds": {
+          "x": 0,
+          "y": 64,
+          "width": 768,
+          "height": 936
+        },
+        "topbar": {
+          "x": 0,
+          "y": 0,
+          "width": 768,
+          "height": 64
+        },
+        "sidebar": {
+          "x": -100,
+          "y": 0,
+          "width": 100,
+          "height": 1000
+        },
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 768,
+          "height": 936
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "importBounds": {
+        "bounds": {
+          "x": 0,
+          "y": 64,
+          "width": 768,
+          "height": 936
+        },
+        "topbar": {
+          "x": 0,
+          "y": 0,
+          "width": 768,
+          "height": 64
+        },
+        "sidebar": {
+          "x": -100,
+          "y": 0,
+          "width": 100,
+          "height": 1000
+        },
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 768,
+          "height": 936
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "actualPatientListEntry": true,
+      "actualResume": true,
+      "persistedAfterReload": true,
+      "defaultDialogPreserved": true,
+      "jobCreations": 1,
+      "draftCreations": 1,
+      "patches": 5,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "status": "PASS",
+      "lazyBounds": {
+        "bounds": {
+          "x": 0,
+          "y": 64,
+          "width": 390,
+          "height": 936
+        },
+        "topbar": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 64
+        },
+        "sidebar": {
+          "x": -100,
+          "y": 0,
+          "width": 100,
+          "height": 1000
+        },
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 390,
+          "height": 1121.53125
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "importBounds": {
+        "bounds": {
+          "x": 0,
+          "y": 64,
+          "width": 390,
+          "height": 936
+        },
+        "topbar": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 64
+        },
+        "sidebar": {
+          "x": -100,
+          "y": 0,
+          "width": 100,
+          "height": 1000
+        },
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 390,
+          "height": 1121.53125
+        },
+        "topbarHittable": true,
+        "desktopNavHittable": true
+      },
+      "actualPatientListEntry": true,
+      "actualResume": true,
+      "persistedAfterReload": true,
+      "defaultDialogPreserved": true,
+      "jobCreations": 1,
+      "draftCreations": 1,
+      "patches": 5,
+      "errors": []
+    }
+  ],
+  "legacy": {
+    "status": "PASS",
+    "widths": [
+      1440,
+      1024,
+      768,
+      390
+    ],
+    "runnerUnchanged": true
+  },
+  "baseline": {
+    "expected": "RED",
+    "unit": {
+      "tests": 2,
+      "pass": 0,
+      "fail": 2,
+      "exitCode": 1
+    },
+    "browser": {
+      "firstFailedWidth": 1440,
+      "assertion": ".patient-workspace not found during real lazy entry",
+      "consolePageHttpErrors": [],
+      "processExitCode": -1073740791,
+      "secondaryFailure": "After the expected assertion, Windows Node26 also aborted with UV_HANDLE_CLOSING. Preserved; not used as a passing result."
+    },
+    "manifest": [
+      {
+        "path": "frontend/src/components/shared/AIImportStatus.tsx",
+        "kind": "unchanged original production",
+        "blob": "41be12b0500ae5d377f6b7b70b879a60a6f70e29"
+      },
+      {
+        "path": "frontend/src/components/operator/PatientList.tsx",
+        "kind": "unchanged original production",
+        "blob": "37d254bd3af862dae4ca604869f421447e47de76"
+      },
+      {
+        "path": "frontend/src/components/shared/__tests__/aiImportPresentation506.test.ts",
+        "blob": "e3497b9818bbfd52646c8824ef04effaf756fa81",
+        "sha256": "394f89ca3e93a6803e48f34e7fd2f79b58aac4c6da07d9a49a2cd3a7a9abd4a0",
+        "bytes": 1901,
+        "kind": "exact final frozen regression overlay"
+      },
+      {
+        "path": "frontend/e2e/issue506-direct-entry.html",
+        "blob": "d8f9229f2f398d751d83719ab6944e7923dc0284",
+        "sha256": "4f9ea6caeb73e1059258dfa8be9f80b3a6797a5df23b3c55c49bbaecd9dc0f6b",
+        "bytes": 290,
+        "kind": "exact final frozen regression overlay"
+      },
+      {
+        "path": "frontend/e2e/issue506-direct-entry.tsx",
+        "blob": "8f1db58a53c967f1ac41911bf16b4f38646ba3dc",
+        "sha256": "64e3be67df71fda09b9ca4af820c3439a817083b35db2361fbd6a766fff07cb4",
+        "bytes": 3105,
+        "kind": "exact final frozen regression overlay"
+      },
+      {
+        "path": "e2e/issue506-direct-entry.mjs",
+        "blob": "c15c4a37ba694c4a25cecf9b4d50df6fad1b67c0",
+        "sha256": "46c01193881403658ad075ba9e0fabadab876ed0820000b7c72b49d48075fd4a",
+        "bytes": 16007,
+        "kind": "exact final frozen regression overlay"
+      }
+    ]
+  },
+  "media": {
+    "pngDecoded": 45,
+    "tracesFullyRead": 9,
+    "videosFullyDecoded": 9,
+    "knownSensitivePatternMatches": 0
+  },
+  "preservedQa1": {
+    "verdict": "FAILED VALIDATION",
+    "sha256": "97b4cd8d51fd1f548aeb0125023fb295a6b28824334315e0eebec7947655aa0c",
+    "finding": "QA506-F1 fixture mobile drawer dismissal; revision2 models actual App scrim, settled open/hit test and closed state; no assertion removed"
+  },
+  "findings": [],
+  "warnings": [
+    "Existing Vite chunk-size/plugin-timing warnings retained.",
+    "Initial QA media decode command requested unsupported null muxer in Playwright bundled FFmpeg; retained error; full decode rerun through supported PNG/image2 output passed all9videos.",
+    "Baseline sparse initialization emitted missing-object warnings before checkout; subsequent exact HEAD/clean tracked tree and source hashes verified.",
+    "Mobile fullPage resume capture includes inert underlying-page overflow outside viewport; geometry/hit assertions use actual viewport. Prefer desktop resume and mobile direct-import image for public summary."
+  ],
+  "limitations": [
+    "Local browser API responses are strictly synthetic loopback fixtures, not production authentication/backend/OCR/provider verification.",
+    "Claude Max round5, required exact-head CI, final Codex, protected merge, deployment and authenticated online acceptance remain release-owner gates.",
+    "No candidate source edits, assertions disabled, GitHub writes, model/provider calls, canonical ledger changes or original-file mutations by QA."
+  ],
+  "ports": [
+    {
+      "port": 5297,
+      "state": "free",
+      "ownedQaServerReleased": true
+    },
+    {
+      "port": 5298,
+      "state": "free",
+      "ownedQaServerReleased": true
+    }
+  ],
+  "baselineCheckout": {
+    "head": "59f0a9ea60bd56d1823305da9b18fa0bca8db213",
+    "ownedRetained": true,
+    "activeProcesses": false,
+    "sourceOverlay": "only four exact frozen new regression files; original production unchanged"
+  },
+  "publishablePaths": [
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/playwright-report/index.html",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/actual-resume-1024.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/actual-resume-1440.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/actual-resume-390.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/actual-resume-768.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/default-dialog-1024.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/default-dialog-1440.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/default-dialog-390.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/default-dialog-768.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/direct-handoff-1024.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/direct-handoff-1440.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/direct-handoff-390.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/direct-handoff-768.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/direct-import-1024.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/direct-import-1440.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/direct-import-390.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/direct-import-768.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/direct-review-1024.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/direct-review-1440.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/direct-review-390.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/direct-review-768.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/loading-1024.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/loading-1440.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/loading-390.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/screenshots/loading-768.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/test-results/browser.json",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/trace/direct506-1024.zip",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/trace/direct506-1440.zip",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/trace/direct506-390.zip",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/trace/direct506-768.zip",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/video/direct506-1024.webm",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/video/direct506-1440.webm",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/video/direct506-390.webm",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/direct/video/direct506-768.webm",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/baseline-red/screenshots/failure-1440.png",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/baseline-red/test-results/failure.json",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/baseline-red/trace/direct506-1440.zip",
+    "artifacts/task-validation/506-direct-import-entry-followup/evidence/independent-qa2/baseline-red/video/direct506-1440.webm",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/import-1024.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/import-1440.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/import-390.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/import-768.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/resumed-draft-1024.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/resumed-draft-1440.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/resumed-draft-390.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/resumed-draft-768.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/review-1024.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/review-1440.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/review-390.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/review-768.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/save-failure-recovered-1024.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/save-failure-recovered-1440.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/save-failure-recovered-390.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/save-failure-recovered-768.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/upload-notice-cleared-1024.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/upload-notice-cleared-1440.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/upload-notice-cleared-390.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/screenshots/upload-notice-cleared-768.png",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/test-results/browser.json",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/trace/issue506-1024.zip",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/trace/issue506-1440.zip",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/trace/issue506-390.zip",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/trace/issue506-768.zip",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/video/issue506-1024.webm",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/video/issue506-1440.webm",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/video/issue506-390.webm",
+    "artifacts/task-validation/bug-batch-506/evidence/independent-followup-qa2/video/issue506-768.webm"
+  ]
+}

@@ -346,6 +346,7 @@ export function PatientList({
           <div className="plist-new__actions">
             <AIImportStatus
               onImported={handleImported}
+              presentation="page"
               operatorId={operatorId}
               operatorRole={operatorRole}
             />
