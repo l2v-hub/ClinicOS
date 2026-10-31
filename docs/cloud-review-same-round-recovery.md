@@ -68,7 +68,7 @@ inference, secret copy or production controller mutation is part of testing.
 
 ```powershell
 node --test agent-team/tests/bug-pipeline/cloud-review-recovery.test.mjs agent-team/tests/bug-pipeline/cloud-recovery-source.test.mjs agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs
-node node_modules/@playwright/test/cli.js test --config scripts/quality-gate/cloud-recovery.playwright.config.mjs
+node node_modules/playwright/cli.js test --config scripts/quality-gate/cloud-recovery.playwright.config.mjs
 ```
 
 The browser receipt labels all external effects as mock, preserves the original
