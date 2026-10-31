@@ -1,0 +1,15 @@
+{
+  "sourceSha": "2a90c6873b63ea55d866c8081a34c555b2e24d38",
+  "syntheticOnly": true,
+  "actualClaudeCalls": 0,
+  "originalConsumedRounds": 5,
+  "reviewLimit": 5,
+  "originalFailure": "failed-authentication-no-inference",
+  "executionStatus": "published",
+  "technicalExecutions": 1,
+  "mockReviewPosts": 1,
+  "accountingPreserved": true,
+  "reportPreserved": true,
+  "replayRejected": true,
+  "realMergeOrDeploy": false
+}

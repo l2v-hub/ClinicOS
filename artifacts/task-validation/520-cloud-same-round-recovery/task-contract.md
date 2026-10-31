@@ -70,4 +70,5 @@ Root is integration owner and sole writer in C:/w-rv/520-cloud-recovery-impl2026
 
 ## Gate Status
 
-READY FOR IMPLEMENTATION
+CONTRACT VALIDO — independent QA passed on 2a90c687; separate technical PR only.
+Recovery activation, actual Claude inference, merge and deployment are not authorized by this preparation.

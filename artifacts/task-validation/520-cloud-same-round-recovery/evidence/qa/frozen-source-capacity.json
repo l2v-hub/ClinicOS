@@ -1,0 +1,24 @@
+{
+  "status": "frozen-source-and-capacity-pass",
+  "infrastructureSha": "2a90c6873b63ea55d866c8081a34c555b2e24d38",
+  "subjectSha": "6b7055d773f4e36d85f149aecbf31059ed5bb00e",
+  "baseSha": "59f0a9ea60bd56d1823305da9b18fa0bca8db213",
+  "realControllerWrites": 0,
+  "actualClaudeCalls": 0,
+  "sourceFiles": 6,
+  "evidenceFiles": 4,
+  "inventoryFiles": 76,
+  "omittedTextEvidence": 0,
+  "generatedPlanCommitted": false,
+  "packetSha256": "44b18c20e9b7ca54f69ec16d7d8339f6c9317de9255d46ee1f85b2a900dfbda6",
+  "packetBytes": 147742,
+  "capacity": {
+    "model": "claude-opus-5-5",
+    "contextWindow": 1000000,
+    "maxOutputTokens": 128000,
+    "inputBytes": 149624,
+    "schemaBytes": 1658,
+    "nativeOverheadTokens": 65536,
+    "requiredTokensUpperBound": 344818
+  }
+}

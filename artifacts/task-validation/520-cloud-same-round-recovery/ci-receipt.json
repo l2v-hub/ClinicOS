@@ -1,0 +1,20 @@
+{
+  "sourceSha": "2a90c6873b63ea55d866c8081a34c555b2e24d38",
+  "runId": 41249496255,
+  "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/41249496255",
+  "event": "workflow_dispatch",
+  "workflow": "bug-pipeline-tests.yml",
+  "conclusion": "success",
+  "completedAt": "2026-10-31T22:49:22Z",
+  "windows": { "tests": 10, "pass": 10, "fail": 0, "skip": 0 },
+  "linux": { "tests": 1849, "pass": 1846, "fail": 0, "skip": 3 },
+  "isolatedSandbox": "pass",
+  "isolatedHttpPostgresAndDeniedEgress": "pass",
+  "providerAccessJob": "skipped",
+  "repositoryAdministrationJob": "skipped",
+  "actualClaudeInference": false,
+  "recoveryWorkflowDispatched": false,
+  "merge": false,
+  "deploy": false,
+  "supersededCi": { "runId": 41249319209, "sourceSha": "430afa979e50ed64d46c019c0e257e09d8f0b92e", "conclusion": "success", "notFinalSourceEvidence": true }
+}
