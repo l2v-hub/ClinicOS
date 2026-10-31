@@ -32,9 +32,15 @@ No schedule, label or automatic queue selection enables this route. Never
 dispatch a branch version of the workflow as a substitute for trusted main.
 
 The worker reads source as bounded GitHub API data, never executes the reviewed
-branch, and uses the existing subscription-only CLI qualification, empty runtime,
+branch, and reuses the already verified canonical probe profile, empty runtime,
 no-tools profile and credential isolation. No API fallback is added. The source
 and manifest must match the frozen SHA and every changed source file.
+
+Qualification is read-only: check the saved successful probe run's repository,
+event, workflow, main SHA and pinned CLI manifest, then check local `--version`.
+It never calls the live inference probe. The prior receipt's hash and profile
+are sealed by the execution capability; the only new `--print` call is the
+actual review, strictly after the one-shot CAS claim.
 
 The normal source reader still requires its committed implementation plan. Only
 this adapter can supply a missing plan from canonical accepted scope and exact

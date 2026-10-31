@@ -62,8 +62,8 @@ function fixture() {
       calls.push('retrieve');
       return { packet: { subject_sha: sha }, tracked: new Set(['src/layout.mjs']) };
     },
-    probe: async () => {
-      calls.push('probe');
+    qualify: async () => {
+      calls.push('qualify');
       return {
         profile: { model: 'claude-opus-4-7', contextWindow: 1000000, maxOutputTokens: 64000 },
       };
@@ -91,7 +91,7 @@ test('same-round transport uses qualified source before one claim and retains re
     'maintainer',
     'prepare',
     'retrieve',
-    'probe',
+    'qualify',
     'claim',
     'model',
     'retain',
@@ -99,7 +99,7 @@ test('same-round transport uses qualified source before one claim and retains re
   ]);
 });
 test('non-maintainer, missing capability, source failure, bad qualification and CAS loss invoke no review', async () => {
-  for (const failure of ['actor', 'prepare', 'retrieve', 'probe', 'claim']) {
+  for (const failure of ['actor', 'prepare', 'retrieve', 'qualify', 'claim']) {
     const f = fixture();
     if (failure === 'actor') f.options.github.authorizedMaintainer = async () => false;
     else if (['prepare', 'claim'].includes(failure))

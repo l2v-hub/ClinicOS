@@ -11,13 +11,13 @@ import { createGitHub } from './github.mjs';
 import { createCloudReviewRecovery } from './cloud-review-recovery.mjs';
 import {
   createReviewSourceReader,
-  probeCloudClaude,
   prepareCloudInference,
   CLOUD_REVIEW_REPO,
 } from './cloud-review-worker.mjs';
 import { claudeFailureCode } from './claude-review-cron.mjs';
 import { validateReview } from '../../../scripts/quality-gate/claude-bug-review.mjs';
 import { communicationText } from './issue-review-communication.mjs';
+import { qualifyRecoveryWithoutInference } from './cloud-recovery-qualification.mjs';
 
 export function recoverySelector(env) {
   const integer = (value) => {
@@ -46,7 +46,7 @@ export async function processRecovery({
   runId,
   controller = createCloudReviewRecovery({ github }),
   retrieve,
-  probe = probeCloudClaude,
+  qualify = qualifyRecoveryWithoutInference,
 }) {
   assert.equal(await github.authorizedMaintainer(actor), true, 'Maintainer dispatch required');
   assert.match(String(runId), /^[1-9][0-9]{0,19}$/);
@@ -62,7 +62,7 @@ export async function processRecovery({
       recoveryPlan: prepared.subject.canonicalRecoveryPlan,
     });
   const source = await reader(structuredClone(prepared.subject));
-  const qualified = await probe({ env, run, cwd });
+  const qualified = await qualify({ receipt: prepared.subject.recoveryQualification, run, cwd });
   const inference = prepareCloudInference({
     packet: source.packet,
     sha: selector.sha,

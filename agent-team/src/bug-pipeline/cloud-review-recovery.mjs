@@ -5,6 +5,7 @@ import { authorizationBinding, consumeOperatorAuthorization } from './operator-a
 import { handoffFeedbackFingerprint } from './comment-review-handoff.mjs';
 import { relativeFile, safeText } from './contracts.mjs';
 import { validateReview } from '../../../scripts/quality-gate/claude-bug-review.mjs';
+import { canonicalRecoveryQualification } from './cloud-recovery-qualification.mjs';
 
 const REPO = 'l2v-hub/ClinicOS';
 const SHA = /^[a-f0-9]{40}$/;
@@ -223,6 +224,7 @@ function packetSubject(value) {
     },
     recoveryRequestNonce: request.nonce,
     failedReviewNonce: review.nonce,
+    recoveryQualification: canonicalRecoveryQualification(request),
     canonicalRecoveryPlan: {
       text,
       sourceManifest: clone(f.sourceManifest),

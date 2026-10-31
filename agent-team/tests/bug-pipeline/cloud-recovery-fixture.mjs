@@ -134,6 +134,15 @@ function fixture({ verifier = true } = {}) {
       preservedAccounting: accounting,
       status: 'authorized-blocked-missing-trusted-same-round-route',
       authorization: { action: 'record-only' },
+      probe: {
+        status: 'probe-passed',
+        providerExecuted: true,
+        runId: 9000,
+        headSha: base,
+        receiptSha256: 'c'.repeat(64),
+        profile: { model: 'claude-opus-5-5', contextWindow: 1000000, maxOutputTokens: 128000 },
+      },
+      trustedWorkerSource: { sha: base },
     },
   ];
   batch.postMergeFollowups = [followup];
