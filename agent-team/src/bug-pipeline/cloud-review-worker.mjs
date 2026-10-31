@@ -61,7 +61,7 @@ function ownedIdentity(subject, pr) {
 }
 
 // Endpoints are constructed here from fixed repo + validated integers/SHAs only.
-export function createReviewSourceReader({ run, cwd, feedbackReader }) {
+export function createReviewSourceReader({ run, cwd, feedbackReader, recoveryPlan }) {
   async function api(suffix) {
     const result = await run({
       command: 'gh',
@@ -150,6 +150,48 @@ export function createReviewSourceReader({ run, cwd, feedbackReader }) {
       assert.deepEqual([...compared].sort(), [...changed].sort(), 'Compare omitted changed paths');
     const sourceChanges = changed.filter((file) => !file.startsWith(EVIDENCE_ROOT));
     assert.ok(sourceChanges.length <= MAX_FILES, 'Review exceeds source file bound');
+    // Only the separate trusted recovery adapter supplies this option. A missing
+    // document in an ordinary queued review still fails closed. Never represent
+    // generated canonical data as a file committed at the reviewed SHA.
+    let generatedPlan;
+    if (recoveryPlan !== undefined) {
+      assert.equal(subject.kind, 'post-merge-review-recovery');
+      assert.equal(recoveryPlan.provenance, 'canonical-recovery');
+      assert.equal(recoveryPlan.sourceSha, subject.sha);
+      assert.match(recoveryPlan.requestNonce ?? '', /^[A-Za-z0-9._:-]{1,200}$/);
+      assert.match(recoveryPlan.failedReviewNonce ?? '', /^[A-Za-z0-9._:-]{1,200}$/);
+      assert.equal(recoveryPlan.requestNonce, subject.recoveryRequestNonce);
+      assert.equal(recoveryPlan.failedReviewNonce, subject.failedReviewNonce);
+      assert.ok(typeof recoveryPlan.text === 'string' && recoveryPlan.text.trim());
+      assert.ok(Buffer.byteLength(recoveryPlan.text) <= 64 * 1024);
+      assert.ok(Array.isArray(recoveryPlan.sourceManifest));
+      assert.deepEqual(
+        recoveryPlan.sourceManifest.map((x) => sourcePath(x.path)).sort(),
+        [...sourceChanges].sort(),
+      );
+      for (const item of recoveryPlan.sourceManifest) {
+        const entry = head.get(item.path);
+        assert.ok(
+          entry?.type === 'blob' && entry.sha === item.blob,
+          'Recovery source manifest mismatch',
+        );
+        assert.match(item.sha256, /^[a-f0-9]{64}$/);
+        assert.equal(
+          hash(Buffer.from(await blob(entry))),
+          item.sha256,
+          'Recovery source digest mismatch',
+        );
+      }
+      generatedPlan = {
+        provenance: 'canonical-recovery',
+        committed: false,
+        subjectSha: subject.sha,
+        requestNonce: recoveryPlan.requestNonce,
+        failedReviewNonce: recoveryPlan.failedReviewNonce,
+        sha256: hash(recoveryPlan.text),
+        text: recoveryPlan.text,
+      };
+    }
     const packet = {
       repository: CLOUD_REVIEW_REPO,
       pr: subject.pr.number,
@@ -164,6 +206,7 @@ export function createReviewSourceReader({ run, cwd, feedbackReader }) {
       priorReports: subject.reviewReports ?? {},
       ledger: subject.reviewLedger ?? null,
       feedback: feedbackReader ? await feedbackReader(subject.pr.number) : null,
+      ...(generatedPlan ? { generatedEvidence: { implementationPlan: generatedPlan } } : {}),
     };
     const bounded = () =>
       assert.ok(bytes(packet) <= MAX_PACKET, 'Review packet exceeds byte bound');
@@ -210,6 +253,7 @@ export function createReviewSourceReader({ run, cwd, feedbackReader }) {
       const file = `${packetPath}/${name}`,
         entry = head.get(file);
       if (!entry) {
+        if (name === 'implementation-plan.md' && generatedPlan) continue;
         assert.ok(!requiredNames.includes(name), 'Required packet file missing');
         continue;
       }
@@ -231,9 +275,23 @@ export function createReviewSourceReader({ run, cwd, feedbackReader }) {
     }
     assert.ok(packet.evidence[`${packetPath}/task-contract.md`], 'Task contract missing');
     assert.ok(
-      packet.evidence[`${packetPath}/implementation-plan.md`],
+      packet.evidence[`${packetPath}/implementation-plan.md`] || generatedPlan,
       'Implementation plan missing',
     );
+    if (generatedPlan) {
+      // Optional bounded public evidence paths are controller data, not a path
+      // escape or a substitute for the required frozen contract/validation.
+      const extra = recoveryPlan.evidenceFiles ?? [];
+      assert.ok(Array.isArray(extra) && extra.length <= 8);
+      for (const file of extra) {
+        sourcePath(file);
+        assert.ok(file.startsWith(prefix) && /\.(?:md|json|txt)$/.test(file));
+        const entry = head.get(file);
+        assert.ok(entry && entry.size <= 64 * 1024, 'Recovery evidence missing or oversized');
+        if (!packet.evidence[file]) packet.evidence[file] = await blob(entry);
+        bounded();
+      }
+    }
     assert.ok(packet.evidence[`${packetPath}/validation-report.md`], 'Validation evidence missing');
     return {
       packet,
