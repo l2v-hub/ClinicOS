@@ -1,0 +1,99 @@
+{
+  "source": "2a90c6873b63ea55d866c8081a34c555b2e24d38",
+  "base": "59f0a9ea60bd56d1823305da9b18fa0bca8db213",
+  "sourceTreeUnchangedAfterQa": true,
+  "checkedFiles": [
+    {
+      "file": ".github/workflows/claude-cloud-review.yml",
+      "sourceSha256": "616c593b3a341831b61d4a08a8e95e5ada66ec73e424c1a04e7b51ec34793870",
+      "afterQaSha256": "616c593b3a341831b61d4a08a8e95e5ada66ec73e424c1a04e7b51ec34793870",
+      "bytes": 4452
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/cloud-recovery-qualification.mjs",
+      "sourceSha256": "ebd7ae15f6c15c81af4aee2a8b0ca355a987e114d3a6257296800cc8f287cfbd",
+      "afterQaSha256": "ebd7ae15f6c15c81af4aee2a8b0ca355a987e114d3a6257296800cc8f287cfbd",
+      "bytes": 3122
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs",
+      "sourceSha256": "2670e79fb61c0904f03b7350dc413ea8d22d825018598051b624967d3089849e",
+      "afterQaSha256": "2670e79fb61c0904f03b7350dc413ea8d22d825018598051b624967d3089849e",
+      "bytes": 7029
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/cloud-review-recovery.mjs",
+      "sourceSha256": "3c5285ca892e72ca3a4114fd602ec23b2a02913097f3ba31346d39ba02a62485",
+      "afterQaSha256": "3c5285ca892e72ca3a4114fd602ec23b2a02913097f3ba31346d39ba02a62485",
+      "bytes": 19531
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "sourceSha256": "68373567453da283564871ee60d8d8ca55b12510fe80abefcd3202890b0d4fa4",
+      "afterQaSha256": "68373567453da283564871ee60d8d8ca55b12510fe80abefcd3202890b0d4fa4",
+      "bytes": 30660
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/github.mjs",
+      "sourceSha256": "0c7b8a38f097ea6c6d0bb7f49b407ed08cbd75bd23fa3d372b75fb556d82c212",
+      "afterQaSha256": "0c7b8a38f097ea6c6d0bb7f49b407ed08cbd75bd23fa3d372b75fb556d82c212",
+      "bytes": 61068
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/cloud-recovery-fixture.mjs",
+      "sourceSha256": "4c31920bf33eee0e57d06c0fea90d7fbe47e08ecc7c35b5f93e93b99a95fe9c6",
+      "afterQaSha256": "4c31920bf33eee0e57d06c0fea90d7fbe47e08ecc7c35b5f93e93b99a95fe9c6",
+      "bytes": 8696
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/cloud-recovery-qualification.test.mjs",
+      "sourceSha256": "3493a64045b9848611eb41aeebcaaafb5039c39192e758db29863f2e9fa57b2d",
+      "afterQaSha256": "3493a64045b9848611eb41aeebcaaafb5039c39192e758db29863f2e9fa57b2d",
+      "bytes": 6123
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/cloud-recovery-source.test.mjs",
+      "sourceSha256": "35235186954b585419b8b4b17dfd14e87b3961b15a15d62aa8342ca93b26c510",
+      "afterQaSha256": "35235186954b585419b8b4b17dfd14e87b3961b15a15d62aa8342ca93b26c510",
+      "bytes": 8773
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs",
+      "sourceSha256": "e87e1e23b7b96b00b8d1ac4950f259c425320ff5cf38458e48bd63366c12061e",
+      "afterQaSha256": "e87e1e23b7b96b00b8d1ac4950f259c425320ff5cf38458e48bd63366c12061e",
+      "bytes": 8221
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/cloud-review-recovery.test.mjs",
+      "sourceSha256": "ac2c8dfb30cf91ce4e9a6c25129c574af16d2c60b563970be90e3407edfa9945",
+      "afterQaSha256": "ac2c8dfb30cf91ce4e9a6c25129c574af16d2c60b563970be90e3407edfa9945",
+      "bytes": 13499
+    },
+    {
+      "file": "docs/cloud-review-same-round-recovery.md",
+      "sourceSha256": "ae68cca700f0108604428db155c47df9bc31e167dadb1602547e25832a889c8e",
+      "afterQaSha256": "ae68cca700f0108604428db155c47df9bc31e167dadb1602547e25832a889c8e",
+      "bytes": 4862
+    },
+    {
+      "file": "scripts/quality-gate/cloud-recovery-evidence.mjs",
+      "sourceSha256": "dac4a4fdb1a7599c5b43cf7831205be25d8840db41db0a81ae073a19764e13ce",
+      "afterQaSha256": "dac4a4fdb1a7599c5b43cf7831205be25d8840db41db0a81ae073a19764e13ce",
+      "bytes": 4370
+    },
+    {
+      "file": "scripts/quality-gate/cloud-recovery-evidence.spec.mjs",
+      "sourceSha256": "8c68d5b688a18c2e74e0db73cceec88122c9454522bc285d801f3315bd1ce842",
+      "afterQaSha256": "8c68d5b688a18c2e74e0db73cceec88122c9454522bc285d801f3315bd1ce842",
+      "bytes": 2358
+    },
+    {
+      "file": "scripts/quality-gate/cloud-recovery.playwright.config.mjs",
+      "sourceSha256": "78d01537cbd7d205afb4cc647ec7d217f58c55f7944ff49f301a69a9b8ab90ca",
+      "afterQaSha256": "78d01537cbd7d205afb4cc647ec7d217f58c55f7944ff49f301a69a9b8ab90ca",
+      "bytes": 899
+    }
+  ],
+  "actualClaudeCalls": 0,
+  "realControllerWrites": 0
+}

@@ -1,0 +1,23 @@
+{
+  "initialSource": "fe35e6c6a01050220288ead3da036c1d0c4f900d",
+  "initialVerdict": "FAILED VALIDATION",
+  "initialFindings": [
+    { "priority": "P1", "kind": "unclaimed-live-probe-inference", "status": "corrected-and-independently-retested", "fixedSource": "2a90c6873b63ea55d866c8081a34c555b2e24d38" },
+    { "priority": "P2", "kind": "undeclared-browser-test-import", "status": "corrected-and-independently-retested", "fixedSource": "430afa979e50ed64d46c019c0e257e09d8f0b92e" }
+  ],
+  "initialBrowserFailure": { "error": "MODULE_NOT_FOUND: @playwright/test/cli.js", "assertionsDisabled": false, "privateLogSha256": "3f3cd6f86c20cd9ae7c8c59d2d4d5a762fae3201889bfb5389c815f9241be24d" },
+  "supersededBrowserPass": { "source": "430afa979e50ed64d46c019c0e257e09d8f0b92e", "passed": 1, "retainedLocallyNotFinalEvidence": true },
+  "finalSource": "2a90c6873b63ea55d866c8081a34c555b2e24d38",
+  "finalFocused": { "tests": 347, "passed": 347, "failed": 0, "skipped": 0 },
+  "finalBuild": { "exitCode": 0, "privateLogSha256": "fef16f1a8088c13234e8e710e58a09faeb8d2cad1ed887c38215bb37651a8802" },
+  "finalBrowser": { "passed": 1, "failed": 0, "privateLogSha256": "7dc39be1f0b1a072e1fe408fdfd5c006980f1b23b5b4e7204da292d4927c03aa" },
+  "finalCi": { "runId": 41249496255, "status": "success", "headSha": "2a90c6873b63ea55d866c8081a34c555b2e24d38", "linuxTests": 1849, "linuxPassed": 1846, "linuxFailed": 0, "linuxSkipped": 3, "windowsTests": 10, "windowsPassed": 10, "windowsFailed": 0, "windowsSkipped": 0 },
+  "originalGlobalRound": 5,
+  "originalRoundStillConsumed": true,
+  "originalFailurePreserved": true,
+  "newAllowance": false,
+  "actualClaudeCalls": 0,
+  "realControllerWrites": 0,
+  "mergeOrDeploy": false,
+  "verdict": "READY FOR CODEX QA"
+}

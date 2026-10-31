@@ -10,10 +10,26 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Subscription authentication probe or native queued review
+        description: Subscription probe, native review, or explicit same-round technical recovery
         type: choice
-        options: [probe, review]
+        options: [probe, review, recover]
         default: probe
+      recovery_pr:
+        description: Exact PR for an already authorized consumed-round recovery
+        type: string
+        default: ''
+      recovery_sha:
+        description: Exact reviewed head SHA (40 lowercase hexadecimal characters)
+        type: string
+        default: ''
+      recovery_round:
+        description: Existing consumed global round; never a new allowance
+        type: string
+        default: ''
+      recovery_request_nonce:
+        description: Exact canonical technical recovery request nonce
+        type: string
+        default: ''
   schedule:
     - cron: '*/10 * * * *'
 
@@ -61,9 +77,16 @@ jobs:
           # PAT events and explicit dispatch wake Codex; never forwarded to Claude.
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
           CLOUD_REVIEW_MODE: ${{ inputs.mode || 'review' }}
-        run: >-
-          node agent-team/src/bug-pipeline/cloud-review-worker.mjs "--${CLOUD_REVIEW_MODE}"
-          > "$RUNNER_TEMP/claude-cloud-review-receipt.json"
+          CLOUD_RECOVERY_PR: ${{ inputs.recovery_pr }}
+          CLOUD_RECOVERY_SHA: ${{ inputs.recovery_sha }}
+          CLOUD_RECOVERY_ROUND: ${{ inputs.recovery_round }}
+          CLOUD_RECOVERY_REQUEST_NONCE: ${{ inputs.recovery_request_nonce }}
+        run: |
+          if [ "$CLOUD_REVIEW_MODE" = recover ]; then
+            node agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs --recover > "$RUNNER_TEMP/claude-cloud-review-receipt.json"
+          else
+            node agent-team/src/bug-pipeline/cloud-review-worker.mjs "--${CLOUD_REVIEW_MODE}" > "$RUNNER_TEMP/claude-cloud-review-receipt.json"
+          fi
       - name: Upload finite sanitized receipt
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

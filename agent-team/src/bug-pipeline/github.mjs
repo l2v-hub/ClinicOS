@@ -1244,7 +1244,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
     ).value;
   }
 
-  async function publishExternalReview(number, sha, report, round, subject) {
+  async function publishExternalReview(number, sha, report, round, subject, { guard } = {}) {
     issueNumber({ number });
     if (
       !/^[a-f0-9]{40}$/.test(sha) ||
@@ -1260,12 +1260,14 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
         ? full
         : `${marker}\nClaude Code review ${round}/${subject ? attemptLimit(subject, 'reviews') : 4} on \`${sha}\`: **${report.verdict}**. Full hashed report is preserved in codex/bug-control, .codex-bug-state.json.`;
     const reviews = await apiList(`repos/${repo}/pulls/${number}/reviews?per_page=100`);
+    if (guard !== undefined) await checkMutationGuard(guard);
     const previous = reviews.find((review) => review.commit_id === sha && review.body === body);
     if (previous) return previous;
     return (
       await api(`repos/${repo}/pulls/${number}/reviews`, {
         method: 'POST',
         body: { event: 'COMMENT', commit_id: sha, body },
+        guard,
       })
     ).value;
   }
@@ -1357,6 +1359,7 @@ export function createGitHub({ cwd = process.cwd(), repo, run }) {
       isDraft: details.value.draft === true,
       mergeCommitSha: details.value.merge_commit_sha,
       head: details.value.head?.sha,
+      publisherLogin: ownLogin,
       headRef: details.value.head?.ref,
       headRepo: details.value.head?.repo?.full_name,
       headIsFork:

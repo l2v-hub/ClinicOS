@@ -1,0 +1,300 @@
+{
+  "repository": "l2v-hub/ClinicOS",
+  "schemaVersion": 1,
+  "batches": [
+    {
+      "id": "bug-batch-17",
+      "pr": {
+        "number": 81
+      },
+      "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "issues": [
+        17
+      ],
+      "phase": "blocked",
+      "implementation": [
+        {
+          "round": 1,
+          "status": "passed"
+        }
+      ],
+      "reviews": [
+        {
+          "round": 1,
+          "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "status": "changes-requested"
+        },
+        {
+          "round": 2,
+          "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "status": "changes-requested"
+        },
+        {
+          "round": 3,
+          "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "status": "changes-requested"
+        },
+        {
+          "round": 4,
+          "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "status": "approved"
+        }
+      ],
+      "operatorCoordination": {
+        "active": true,
+        "owner": "codex-owner",
+        "nonce": "original-owner"
+      },
+      "release": {
+        "status": "merged",
+        "mergeSha": "cccccccccccccccccccccccccccccccccccccccc"
+      },
+      "releaseHold": {
+        "code": "ONLINE_ACCEPTANCE_FAILED"
+      },
+      "budgetExtensions": [
+        {
+          "entityId": "bug-batch-17",
+          "pr": 81,
+          "kind": "reviews",
+          "actor": "maintainer",
+          "at": "2026-10-30T00:00:00Z",
+          "nonce": "existing-extension",
+          "reason": "Existing synthetic allowance",
+          "authorizationRef": "test:old",
+          "previousLimit": 4,
+          "limit": 5,
+          "historyLength": 4,
+          "historyDigest": "bfbedf595d190bedc4faf4775d5f1f79a2ffa21fea20f1f843bc7a6d20f30b6c",
+          "authorization": {
+            "provenance": "user-session",
+            "grantId": "old-grant",
+            "consumptionNonce": "old-consumption",
+            "sourceRef": "test:old",
+            "binding": {
+              "version": 1,
+              "repository": "l2v-hub/ClinicOS",
+              "collection": "batches",
+              "entityId": "bug-batch-17",
+              "pr": 81,
+              "reviewIssue": null,
+              "actor": "maintainer",
+              "action": "extend-budget",
+              "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "historyDigest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+              "reservation": null,
+              "budget": {
+                "kind": "reviews",
+                "previousLimit": 4,
+                "limit": 5
+              }
+            },
+            "bindingDigest": "18202a25b59937d0b3d4b552136efd12a42573d4d6e15ae4fc12bd6cc75b2ef5"
+          }
+        }
+      ],
+      "postMergeFollowups": [
+        {
+          "id": "direct-followup",
+          "pr": 82,
+          "prHead": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "baseSha": "cccccccccccccccccccccccccccccccccccccccc",
+          "branch": "codex/synthetic-followup",
+          "owner": "codex-owner",
+          "nonce": "followup-one",
+          "globalReviewRound": 5,
+          "maximumAdditionalReviews": 1,
+          "reviews": [
+            {
+              "round": 5,
+              "nonce": "failed-five",
+              "subjectSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "status": "failed-authentication-no-inference",
+              "maximumCalls": 1,
+              "authFailure": {
+                "pr": 82,
+                "subjectSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "attemptNonce": "failed-five",
+                "durationApiMs": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "modelUsageEmpty": true,
+                "noReviewProduced": true,
+                "rawPrivateSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+              }
+            }
+          ],
+          "sourceManifest": [
+            {
+              "path": "src/feature.ts",
+              "blob": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+              "bytes": 5
+            }
+          ],
+          "acceptance": "The synthetic value persists.",
+          "scope": [
+            "src/feature.ts"
+          ],
+          "codeSha": "dddddddddddddddddddddddddddddddddddddddd",
+          "ci": {
+            "status": "passed",
+            "sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "qa": {
+            "status": "passed",
+            "sourceSha": "dddddddddddddddddddddddddddddddddddddddd",
+            "reportSha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "evidence": "artifacts/task-validation/synthetic-followup/evidence/qa"
+          },
+          "technicalRecoveryRequests": [
+            {
+              "nonce": "request-one",
+              "pr": 82,
+              "subjectSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "existingGlobalRound": 5,
+              "existingReviewNonce": "failed-five",
+              "preservedAccounting": {
+                "originalReviews": "bfbedf595d190bedc4faf4775d5f1f79a2ffa21fea20f1f843bc7a6d20f30b6c",
+                "consumedFollowupReview": "0452fa0c2d5cb74d8a1940151136417e802d0a0fb218cf11623dd75ccd3797ad",
+                "budgetExtensions": "d55ea891256456cc1d15066ec78cb80635c235b6a88a8595d3c4f9d874babea3",
+                "implementation": "f9a01e65760f1b4683e3dcbd4edc15db0371699678c67eafd866cf6f4f9eda8f",
+                "release": "651432e61a84302dadee5f670ff031f62fd7ef9ff961adc3639b319aade083aa",
+                "reviewLimit": 5,
+                "totalConsumedRounds": 5
+              },
+              "status": "authorized-blocked-missing-trusted-same-round-route",
+              "authorization": {
+                "action": "record-only"
+              },
+              "probe": {
+                "status": "probe-passed",
+                "providerExecuted": true,
+                "runId": 9000,
+                "headSha": "cccccccccccccccccccccccccccccccccccccccc",
+                "receiptSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "profile": {
+                  "model": "claude-opus-5-5",
+                  "contextWindow": 1000000,
+                  "maxOutputTokens": 128000
+                }
+              },
+              "trustedWorkerSource": {
+                "sha": "cccccccccccccccccccccccccccccccccccccccc"
+              },
+              "executionAuthorization": {
+                "authorization": {
+                  "provenance": "user-session",
+                  "grantId": "technical-grant",
+                  "consumptionNonce": "technical-consumption",
+                  "sourceRef": "test:human",
+                  "binding": {
+                    "version": 1,
+                    "repository": "l2v-hub/ClinicOS",
+                    "collection": "batches",
+                    "entityId": "bug-batch-17",
+                    "pr": 81,
+                    "reviewIssue": null,
+                    "actor": "maintainer",
+                    "action": "execute-cloud-review-recovery",
+                    "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "historyDigest": "b1307b09804742ac13095f7d53bf6d698279335db29bbf816c72614dcd06a220",
+                    "reservation": {
+                      "kind": "same-round-cloud-review-recovery",
+                      "selector": {
+                        "pr": 82,
+                        "sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                        "round": 5,
+                        "requestNonce": "request-one"
+                      },
+                      "batchId": "bug-batch-17",
+                      "batchNonce": "original-owner",
+                      "followupId": "direct-followup",
+                      "followupNonce": "followup-one",
+                      "failedReviewNonce": "failed-five",
+                      "failedReviewDigest": "3b77ef8ab932232d45ffc122e71a8fb831fd315ea4cd9918be1563c0dc2109c0",
+                      "subjectFingerprint": "52ce20eaea5d3bddda2bfb7f3af3814564d15b9601eae81b9238dd2f31ec90ee"
+                    },
+                    "budget": null
+                  },
+                  "bindingDigest": "dfcd5646411dc48cca5136538eaad27a58a56a6d062c2ba579409c1ac86cea7e"
+                },
+                "subjectFingerprint": "52ce20eaea5d3bddda2bfb7f3af3814564d15b9601eae81b9238dd2f31ec90ee",
+                "previousHistoryLength": 0,
+                "previousHistoryDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                "auditNonce": "new-1",
+                "authorizedAt": "2026-10-31T12:00:00.000Z"
+              },
+              "execution": {
+                "nonce": "new-2",
+                "actor": "maintainer",
+                "runId": "123",
+                "status": "published",
+                "subjectSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "round": 5,
+                "fingerprint": "6089a761108a26b7bde79bf2d2dc2a533deba63d8204e754699b5f43c17b367e",
+                "startedAt": "2026-10-31T12:00:00.000Z",
+                "report": {
+                  "subject_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "verdict": "approved",
+                  "summary": "Synthetic source evidence supports criteria.",
+                  "findings": []
+                },
+                "reportSha256": "4a1fb6e6eb8ff1ee692424d491262559d485459e8d8691833a55656834a929bf",
+                "retainedAt": "2026-10-31T12:00:00.000Z",
+                "reviewId": 101,
+                "reviewUrl": "https://github.com/l2v-hub/ClinicOS/pull/82#synthetic",
+                "publishedAt": "2026-10-31T12:00:00.000Z"
+              }
+            }
+          ]
+        }
+      ],
+      "recoveryHistory": [
+        {
+          "action": "execute-cloud-review-recovery",
+          "at": "2026-10-31T12:00:00.000Z",
+          "requestNonce": "request-one",
+          "token": "new-1",
+          "authorization": {
+            "provenance": "user-session",
+            "grantId": "technical-grant",
+            "consumptionNonce": "technical-consumption",
+            "sourceRef": "test:human",
+            "binding": {
+              "version": 1,
+              "repository": "l2v-hub/ClinicOS",
+              "collection": "batches",
+              "entityId": "bug-batch-17",
+              "pr": 81,
+              "reviewIssue": null,
+              "actor": "maintainer",
+              "action": "execute-cloud-review-recovery",
+              "subjectSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "historyDigest": "b1307b09804742ac13095f7d53bf6d698279335db29bbf816c72614dcd06a220",
+              "reservation": {
+                "kind": "same-round-cloud-review-recovery",
+                "selector": {
+                  "pr": 82,
+                  "sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "round": 5,
+                  "requestNonce": "request-one"
+                },
+                "batchId": "bug-batch-17",
+                "batchNonce": "original-owner",
+                "followupId": "direct-followup",
+                "followupNonce": "followup-one",
+                "failedReviewNonce": "failed-five",
+                "failedReviewDigest": "3b77ef8ab932232d45ffc122e71a8fb831fd315ea4cd9918be1563c0dc2109c0",
+                "subjectFingerprint": "52ce20eaea5d3bddda2bfb7f3af3814564d15b9601eae81b9238dd2f31ec90ee"
+              },
+              "budget": null
+            },
+            "bindingDigest": "dfcd5646411dc48cca5136538eaad27a58a56a6d062c2ba579409c1ac86cea7e"
+          }
+        }
+      ]
+    }
+  ],
+  "updatedAt": "2026-10-31T12:00:00.000Z"
+}
