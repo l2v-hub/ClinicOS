@@ -150,8 +150,8 @@
     },
     {
       "file": "final-code/focused-tests.log",
-      "bytes": 30041,
-      "sha256": "c898f75bbf84ca9c0720b56d492c8e22eb4b4650955fb3b7b7d0b47eced5cf33"
+      "bytes": 29670,
+      "sha256": "3e5aa418e0f3dec5a0a9877c85f1b4f875622396c5ddd19658db21f44c9a67fb"
     },
     {
       "file": "frozen-source-capacity.json",
@@ -173,5 +173,19 @@
       "bytes": 7440,
       "sha256": "4b720eb9b9e296996838adc0caa27cb20268b306d58375ce8f84ec977b855eff"
     }
-  ]
+  ],
+  "publicationNormalization": {
+    "file": "final-code/focused-tests.log",
+    "kind": "CRLF-to-LF-only",
+    "reason": "Git .gitattributes text normalization",
+    "originalRawSha256": "c898f75bbf84ca9c0720b56d492c8e22eb4b4650955fb3b7b7d0b47eced5cf33",
+    "originalRawBytes": 30041,
+    "committedSha256": "3e5aa418e0f3dec5a0a9877c85f1b4f875622396c5ddd19658db21f44c9a67fb",
+    "committedBytes": 29670,
+    "comparedPublicationCommit": "4eae4317458948d1a7c0525ea992bf2501031437",
+    "originalRawRetainedPrivately": true,
+    "newTestRun": false,
+    "assertionsChanged": false,
+    "sourceShaUnchanged": "2a90c6873b63ea55d866c8081a34c555b2e24d38"
+  }
 }
