@@ -1,0 +1,101 @@
+✔ only one fixed demo expiry key; bounded strict request accepts seven-day maximum (2.7031ms)
+✔ request rejects expired new date (2.8563ms)
+✔ request rejects overlong renewal (0.2199ms)
+✔ request rejects invalid date normalizes (0.2627ms)
+✔ request rejects infinite date (1.0408ms)
+✔ request rejects noncanonical timezone (0.2993ms)
+✔ request rejects unknown field (0.6228ms)
+✔ request rejects future previous date (0.2477ms)
+✔ request rejects nonce injection (0.2046ms)
+✔ CLI requires exact trusted main/workflow and first run attempt (0.619ms)
+✔ no default authorizer accepts a workflow actor or self-declared receipt (1.5044ms)
+✔ actual host verifier produces append-only native action receipt, not a budget extension (0.8155ms)
+✔ native authorization rejects duplicate-subject ownership (0.2779ms)
+✔ native authorization rejects duplicate-operation ownership (0.1692ms)
+✔ native authorization rejects shared-issue ownership (0.2616ms)
+✔ native authorization rejects shared-pr ownership (0.7744ms)
+✔ consumed capability cannot be copied onto another issue or operation (0.9949ms)
+✔ a verifier consumption nonce is not reusable for another issue action (0.66ms)
+✔ a stored unauthenticated request cannot claim or stage (0.4ms)
+✔ single durable claim fences concurrent claimant and replay (1.5042ms)
+✔ concurrent claim attempts have one guarded durable winner (0.8512ms)
+✔ changed owner invalidates consumed capability before claim (0.4572ms)
+✔ changed source invalidates consumed capability before claim (0.8249ms)
+✔ changed expiry invalidates consumed capability before claim (0.4404ms)
+✔ changed review history invalidates consumed capability before claim (0.4434ms)
+✔ revoked actor cannot mark the mutation intent (0.7656ms)
+✔ execution change during final permission await cannot reach Railway (1.7482ms)
+✔ owner change during final permission await cannot reach Railway (1.387ms)
+✔ finish(staged) cannot leap over a durable write-intent (0.8839ms)
+✔ finish(uncertain) cannot leap over a durable write-intent (0.8821ms)
+✔ changed preflight fingerprint never reaches durable claim (0.536ms)
+✔ blocked or uncertain prior operation prevents a second staged update (0.8599ms)
+✔ preflight validates fixed demo, old expiry, health, idle rollout and source without variables query (0.8156ms)
+✖ preflight accepts the deployed backend canonical .000Z spelling of the exact strict previous instant (0.3303ms)
+✔ preflight rejects public expiry nonzero milliseconds (0.2546ms)
+✔ preflight rejects public expiry different instant (0.1537ms)
+✔ preflight rejects public expiry equivalent offset spelling (0.1599ms)
+✔ preflight rejects public expiry short fractional spelling (0.1215ms)
+✔ preflight rejects public expiry extra fractional spelling (0.1027ms)
+✔ preflight rejects public expiry malformed suffix (0.1278ms)
+✔ preflight rejects public expiry whitespace suffix (0.1336ms)
+✔ preflight rejects public expiry missing value (0.1652ms)
+✔ preflight rejects public expiry null (0.5919ms)
+✔ preflight rejects public expiry number (0.1144ms)
+✔ preflight rejects public expiry object (0.1024ms)
+✔ preflight rejects public expiry array (0.097ms)
+✔ preflight rejects production (0.2444ms)
+✔ preflight rejects foreign token (0.1048ms)
+✔ preflight rejects wrong domain (0.0726ms)
+✔ preflight rejects active rollout (0.171ms)
+✔ preflight rejects unknown source (0.1426ms)
+✔ preflight rejects old expiry drift (0.1153ms)
+✔ preflight rejects nonsynthetic data (0.1277ms)
+✔ stage uses a durable claim/intent and exactly one fixed-key no-deploy mutation (1.6029ms)
+✔ a completed expired staged renewal permits a separately authorized later stage without rewriting history (5.2209ms)
+✔ expired staged history without matching live previous expiry never reaches a second claim or write (2.5399ms)
+✔ prior claimed renewal still blocks a later action after expiry (1.7397ms)
+✔ prior write-intent renewal still blocks a later action after expiry (1.4575ms)
+✔ prior uncertain renewal still blocks a later action after expiry (1.3439ms)
+✔ expired prior stage is not a license to skip an unobserved expiry gap (2.0053ms)
+✔ a prior stage whose expiry is still live cannot authorize a parallel renewal (1.5969ms)
+✔ duplicate or parallel historical staged cutoffs remain ambiguous and blocked (1.824ms)
+✔ uncertain POST is retained, finite and never retried or blindly replayed (1.6404ms)
+✔ stage never accepts a missing native controller capability adapter (0.1829ms)
+✔ default inspect validates canonical request/target without authority consumption or mutation (0.2285ms)
+✔ source/main drift after durable intent still blocks before Railway mutation (1.7741ms)
+✔ async preflight callbacks cannot rewrite the canonical expiry through request aliases (1.4175ms)
+✔ receipt serialization refuses credentials and arbitrary error fields (11.9991ms)
+✔ actual CLI rejects untrusted context with only a finite private receipt on Windows and Linux (93.9769ms)
+✔ workflow pins trusted main, exact target environment, shared deployment queue and tests before secrets (0.7501ms)
+ℹ tests 70
+ℹ suites 0
+ℹ pass 69
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 254.4297
+
+✖ failing tests:
+
+test at scripts\automation\renew-demo-auth-expiry.test.mjs:198:1
+✖ preflight accepts the deployed backend canonical .000Z spelling of the exact strict previous instant (0.3303ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '2026-10-31T23:59:59.000Z'
+  - '2026-10-31T23:59:59Z'
+                        ^
+  
+      at inspectRenewalTarget (file:///C:/w-rv/auth-renewal-ops20261102/scripts/automation/renew-demo-auth-expiry.mjs:214:10)
+      at async TestContext.<anonymous> (file:///C:/w-rv/auth-renewal-ops20261102/scripts/automation/renew-demo-auth-expiry.test.mjs:200:20)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '2026-10-31T23:59:59.000Z',
+    expected: '2026-10-31T23:59:59Z',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

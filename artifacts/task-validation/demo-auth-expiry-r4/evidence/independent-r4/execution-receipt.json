@@ -1,0 +1,158 @@
+{
+  "sourceSha": "a5be73fa0d6d75abe216b67f99dbc754449f6315",
+  "tree": "ea1bbde80d13b28066dce6310e5de12a9bb61ed7",
+  "status": "all-executed-checks-passed",
+  "reviewType": "implementation-round4-independent-pre-Claude-QA",
+  "sourceUnchanged": true,
+  "node": "v26.3.0",
+  "browserRunnerUnmodified": true,
+  "browserRunnerSha256": "46e2662fe7a05671aa10e2237267789ff5f4b1bd7ad87898b9f97dbbb492c1f1",
+  "backendIdentityExpiryGatesUnchanged": true,
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/bug-pipeline-tests.yml",
+      "blob": "d510629db76b0e34e6a58ffb612568e32d1b0492",
+      "sha256": "5cc4d9e8315a06abf9957d43bed4368c969d3f5d4e7e7dc23c2a43e49f834596"
+    },
+    {
+      "path": ".github/workflows/renew-demo-auth-expiry.yml",
+      "blob": "3c0c1718b941d4b8c12b13af2888cb4eaadd643f",
+      "sha256": "4f7e6397f5ff9cdbc999610a2e2fa0d499bf0ddb0319ccff8118ee0c5004e35e"
+    },
+    {
+      "path": "e2e/auth-expiry.mjs",
+      "blob": "62e9d9f7b107424d84c5f81dad51583ee559ad3d",
+      "sha256": "46e2662fe7a05671aa10e2237267789ff5f4b1bd7ad87898b9f97dbbb492c1f1"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "blob": "a71fc8eb78ebea274551e157b75953dabb9477e3",
+      "sha256": "8632987cd5e05d5d62a39a81c3c08fb20e82f31b4bf2e1ed227e342fa14f29c0"
+    },
+    {
+      "path": "frontend/src/components/Login.css",
+      "blob": "589fb2d7070bb479c9057979dc65356cc7a9158a",
+      "sha256": "68a8affe5355df47c8a383adfaa208a88a2a9e702655a9cebefe50ecde012007"
+    },
+    {
+      "path": "frontend/src/components/Login.tsx",
+      "blob": "7ff91468b61308458100a0fbcae76c1333ff12ec",
+      "sha256": "9e74ff73276aa7b4ad4c5b55101c6ec9711512209c0d5a86776731be352c1783"
+    },
+    {
+      "path": "frontend/src/components/__tests__/loginAvailability.test.ts",
+      "blob": "ef0e25d4071db41af4df2f7ad739fcdff6c0516f",
+      "sha256": "b98b67a77f388383d4ef821b4ea5ba089e9c8625128298f1c8b610bf2d1b7deb"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/authAvailability.test.ts",
+      "blob": "94c17b14ae4b6ed564390ca8a84f044446839ae0",
+      "sha256": "ec6415215813ab328a64818eb0bdf8caf3f4ebe7b3386eb750584d9c05192c92"
+    },
+    {
+      "path": "frontend/src/lib/authAvailability.ts",
+      "blob": "f849e47a769aa4d9596c1c3826491206fd3490bd",
+      "sha256": "176da8946bc947cffbc1b92361747365e4fc43c840fcb16d6bd7293b996cc6f6"
+    },
+    {
+      "path": "scripts/automation/renew-demo-auth-expiry.mjs",
+      "blob": "526444974fe4ce08d4e55e57949c8b5f0c9d4f13",
+      "sha256": "e0be9b877e5b75729b6207b34a42226f48078138e2f72e7f19daf9358869dad7"
+    },
+    {
+      "path": "scripts/automation/renew-demo-auth-expiry.test.mjs",
+      "blob": "86f1649fd0c1b84bb8b3ea1622ec6b0e3dc9696f",
+      "sha256": "e3648d7374d2b60b73deb3d97721b4534f068d25b989a2378b69649ccd063f59"
+    }
+  ],
+  "results": [
+    {
+      "name": "build",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/s",
+        "/c",
+        "npm run build:frontend"
+      ],
+      "cwd": "C:/w-rv/auth-expiry20261102",
+      "startedAt": "2026-11-02T19:25:36.286Z",
+      "finishedAt": "2026-11-02T19:26:14.431Z",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "59fd759e8fa597bd124c9cad215bad44d02aeaa9f229ed75676abfc19b13a623",
+      "stderrSha256": "6b635d45753a05fb7c3d5f85a498b876c1e8bcd341dc4ac49229b6d8b7cbb830"
+    },
+    {
+      "name": "full-frontend-tests",
+      "command": [
+        "cmd.exe",
+        "/d",
+        "/s",
+        "/c",
+        "npm test -w frontend"
+      ],
+      "cwd": "C:/w-rv/auth-expiry20261102",
+      "startedAt": "2026-11-02T19:26:14.435Z",
+      "finishedAt": "2026-11-02T19:26:35.526Z",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "135698e32a5b2213bfa85e33fec6724d18c75df195bad7c8702dc96be1a08ab1",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "renewal-tests",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "--test",
+        "scripts/automation/renew-demo-auth-expiry.test.mjs"
+      ],
+      "cwd": "C:/w-rv/auth-expiry20261102",
+      "startedAt": "2026-11-02T19:26:35.529Z",
+      "finishedAt": "2026-11-02T19:26:35.975Z",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "4c9a50bc9c7a5ee923d1e08757190c45bd0de208daaee9ac6b025064089cda5f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "focused-ui-tests",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "--import",
+        "tsx",
+        "--import",
+        "file:///C:/w-rv/auth-expiry20261102/scripts/stub-css-loader.mjs",
+        "--test",
+        "src/lib/__tests__/authAvailability.test.ts",
+        "src/components/__tests__/loginAvailability.test.ts"
+      ],
+      "cwd": "C:/w-rv/auth-expiry20261102/frontend",
+      "startedAt": "2026-11-02T19:26:35.976Z",
+      "finishedAt": "2026-11-02T19:26:36.398Z",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "960bc025ef44381d0e627731b2b52530005140bcac55878a566b187b71c0db08",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "browser",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "e2e/auth-expiry.mjs"
+      ],
+      "cwd": "C:/w-rv/auth-expiry20261102",
+      "startedAt": "2026-11-02T19:26:36.400Z",
+      "finishedAt": "2026-11-02T19:26:48.773Z",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "850765bb9d9485335e3fb677c1527890fcc233214200f683f9e48cda27716715",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

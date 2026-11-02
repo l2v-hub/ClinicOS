@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "sourceSha": "03529a96c3a37e4ffb4989497ca3db9fe32a9968",
+  "sourceTree": "2f7da7847987983b221a0f27519dd868d03e7f03",
+  "reviewer": "/root/auth_expiry_qa",
+  "verdict": "pass",
+  "sourceScopeOnly": true,
+  "findings": [],
+  "reportSha256": "8cd3c86523be83903b30a6152e9075a1a9fe51036dcb7c6306dbbe2be6e1ad50",
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/bug-pipeline-tests.yml",
+      "blob": "d510629db76b0e34e6a58ffb612568e32d1b0492"
+    },
+    {
+      "path": ".github/workflows/renew-demo-auth-expiry.yml",
+      "blob": "3c0c1718b941d4b8c12b13af2888cb4eaadd643f"
+    },
+    {
+      "path": "e2e/auth-expiry.mjs",
+      "blob": "bfcdf8071f3ff3f58880bed546d8526d7f669380"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "blob": "a71fc8eb78ebea274551e157b75953dabb9477e3"
+    },
+    {
+      "path": "frontend/src/components/Login.css",
+      "blob": "589fb2d7070bb479c9057979dc65356cc7a9158a"
+    },
+    {
+      "path": "frontend/src/components/Login.tsx",
+      "blob": "7ff91468b61308458100a0fbcae76c1333ff12ec"
+    },
+    {
+      "path": "frontend/src/components/__tests__/loginAvailability.test.ts",
+      "blob": "ef0e25d4071db41af4df2f7ad739fcdff6c0516f"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/authAvailability.test.ts",
+      "blob": "84ba887ade2550d80e401e7951aea0d79ec11b0e"
+    },
+    {
+      "path": "frontend/src/lib/authAvailability.ts",
+      "blob": "cc4e71f09ed1e4cea15a1b3012710dae4039a1a7"
+    },
+    {
+      "path": "scripts/automation/renew-demo-auth-expiry.mjs",
+      "blob": "61ebf24b538047149ac2ce4155460b154098c5b8"
+    },
+    {
+      "path": "scripts/automation/renew-demo-auth-expiry.test.mjs",
+      "blob": "8fa81c8d5d318be2886c4545c5f27879da0935d8"
+    }
+  ],
+  "focusedTests": {
+    "renewal": {
+      "passed": 49,
+      "failed": 0,
+      "skipped": 0
+    },
+    "ui": {
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "reusedBrowserEvidence": {
+    "sourceSha": "b1d6d89c77ae1abe65a38d22e22c29b6a906f9bf",
+    "cases": 26,
+    "passed": 26,
+    "exactUiBlobEquivalence": [
+      {
+        "file": "e2e/auth-expiry.mjs",
+        "blob": "bfcdf8071f3ff3f58880bed546d8526d7f669380",
+        "previousBlob": "bfcdf8071f3ff3f58880bed546d8526d7f669380"
+      },
+      {
+        "file": "frontend/src/App.tsx",
+        "blob": "a71fc8eb78ebea274551e157b75953dabb9477e3",
+        "previousBlob": "a71fc8eb78ebea274551e157b75953dabb9477e3"
+      },
+      {
+        "file": "frontend/src/components/Login.css",
+        "blob": "589fb2d7070bb479c9057979dc65356cc7a9158a",
+        "previousBlob": "589fb2d7070bb479c9057979dc65356cc7a9158a"
+      },
+      {
+        "file": "frontend/src/components/Login.tsx",
+        "blob": "7ff91468b61308458100a0fbcae76c1333ff12ec",
+        "previousBlob": "7ff91468b61308458100a0fbcae76c1333ff12ec"
+      },
+      {
+        "file": "frontend/src/components/__tests__/loginAvailability.test.ts",
+        "blob": "ef0e25d4071db41af4df2f7ad739fcdff6c0516f",
+        "previousBlob": "ef0e25d4071db41af4df2f7ad739fcdff6c0516f"
+      },
+      {
+        "file": "frontend/src/lib/__tests__/authAvailability.test.ts",
+        "blob": "84ba887ade2550d80e401e7951aea0d79ec11b0e",
+        "previousBlob": "84ba887ade2550d80e401e7951aea0d79ec11b0e"
+      },
+      {
+        "file": "frontend/src/lib/authAvailability.ts",
+        "blob": "cc4e71f09ed1e4cea15a1b3012710dae4039a1a7",
+        "previousBlob": "cc4e71f09ed1e4cea15a1b3012710dae4039a1a7"
+      }
+    ]
+  },
+  "historicalOnly": {
+    "sourceSha": "c104d79ddc4047ca39bd8cfd0150d56ef4b503f1",
+    "fullFrontendPassed": 1586,
+    "previousP2": "late simulator expiry stale picker",
+    "resolvedBy": "b1d6d89c77ae1abe65a38d22e22c29b6a906f9bf"
+  },
+  "realExternalMutation": false,
+  "providerInvoked": false,
+  "clinicalAccess": false,
+  "sourceEdits": false,
+  "backendIdentityExpiryGatesUnchanged": true,
+  "pendingGates": [
+    "actual-Claude-review",
+    "exact-head-Linux-CI",
+    "protected-merge",
+    "typed-human-operation-capability-after-merge",
+    "read-only-demo-preflight",
+    "explicit-single-claimed-renewal-stage",
+    "verified-deployment",
+    "synthetic-online-login-verification"
+  ]
+}

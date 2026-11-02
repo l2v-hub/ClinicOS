@@ -1,0 +1,489 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "subjectSha": "c104d79ddc4047ca39bd8cfd0150d56ef4b503f1",
+      "evidence": "history/qa1-report.md"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "subjectSha": "03529a96c3a37e4ffb4989497ca3db9fe32a9968",
+      "evidence": "validation-report.md"
+    },
+    {
+      "round": 3,
+      "status": "passed",
+      "subjectSha": "ae9995f546d0adbbaa8033b3957e2fbd943723d9",
+      "evidence": "revision3-validation-report.md"
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "ed5686807ea4a358430563c7a488fde1bf478f81"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "changes-requested",
+        "subject_sha": "ed5686807ea4a358430563c7a488fde1bf478f81",
+        "review_sha256": "275dc4b08c1294740c85f3ea5d044e68c54fa1e7863a08ceebb04d3331384fd9"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"ed5686807ea4a358430563c7a488fde1bf478f81\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"I did a static review of the frozen head (the commit SHA bound to this review). I ran no tests or tools. The CI results come from the supplied evidence, which reports API-observed success for every required check on this exact head. The prior independent Codex QA covered source 03529a96 with byte-identical blobs.\\n\\nThe UI changes fit the acceptance criteria:\\n- While status is loading, unavailable, malformed or disabled, no usable role or profile cards render.\\n- An expired synthetic demo shows its own expired message.\\n- Retry clears stale status, and a late expiry reported by the simulator or by the identity check triggers a fresh status check.\\n- `handleLogin` denies login when auth is unverified.\\n- The demo and Entra paths are kept, and Entra no longer shows the credential-free wording.\\n\\nThe renewal operation is tightly fenced:\\n- It can only change the one fixed expiry key on the fixed demo target.\\n- The renewal window is at most seven days.\\n- It must find the expected prior expiry.\\n- It needs an authorization that was consumed through a native verifier.\\n- A durable claim and write-intent come before exactly one mutation. That mutation does not trigger a deploy, and an uncertain write is never retried.\\n\\nThere are two actionable findings:\\n1. Once any renewal reaches the 'staged' status, every later renewal fails in the controller. No reconciliation path exists in code, so after its first success the operation cannot be used again.\\n2. The new status parser rejects the whole status response when the expiry field is malformed, even when the mode is Entra. A stray deployment variable could then block all login.\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"scripts/automation/renew-demo-auth-expiry.mjs\",\n      \"line\": 75,\n      \"problem\": \"locate() rejects any request whenever another renewal record, in any subject, has an execution whose status is not 'blocked-before-write'. That includes a successfully completed 'staged' renewal. The error message asks for 'explicit operator reconciliation', but no reconciled or terminal status exists, and nothing in the controller or CLI can move a staged record into an allowed state. After the first successful stage, every later renewal fails at inspect, prepare, authorize and claim. Because each renewal is capped at seven days, this makes the operation single-use unless someone edits the canonical state by hand, which goes around the authorization and CAS guards this PR adds.\",\n      \"requested_change\": \"Treat a fully completed 'staged' renewal as terminal and do not let it block later renewals. One option: allow a new renewal when every other execution is 'staged' and has been superseded by a deployment plus a status observation. Only 'claimed', 'write-intent' and 'uncertain' should block. Alternatively, add an authorized, audited reconciliation transition that closes earlier operations. Keep 'uncertain' and in-flight records blocking.\",\n      \"test_expectation\": \"Add a controller test with three steps. First, a prior operation is staged. Second, a later, separately authorized operation with a new nonce and a later previousExpiry can authorize, claim and stage. Third, a prior 'uncertain', 'claimed' or 'write-intent' record still blocks the new operation.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"frontend/src/lib/authAvailability.ts\",\n      \"line\": 26,\n      \"problem\": \"parseAuthStatus throws, and the app then shows 'unavailable' and blocks all login, whenever the expiry field is present but not parseable or longer than 50 characters. It does this regardless of mode. The backend echoes the raw environment value with no validation. A leftover or badly formatted demo-expiry variable in an Entra or legacy-demo deployment would therefore lock out every user, even though the field only matters for the disabled-state explanation.\",\n      \"requested_change\": \"Validate the expiry field strictly only where it is used. One option: when mode is 'entra' or 'demo', ignore an unusable expiry and normalize it to null instead of rejecting the whole status. Keep strict rejection, or treat it as plain 'disabled', only for the disabled synthetic-demo explanation.\",\n      \"test_expectation\": \"Add a parse test: a status with mode entra and a malformed expiry string parses successfully, and canStartLogin returns true. Also add a test that a disabled synthetic status with a malformed expiry is never classified as 'expired' and still blocks login.\"\n    }\n  ]\n}\n"
+  },
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/bug-pipeline-tests.yml",
+      "blob": "d510629db76b0e34e6a58ffb612568e32d1b0492",
+      "mode": "100644",
+      "baseBlob": "f08b8aa6b4a0386bfc8c9f4009e5533cc0b6e4e7",
+      "baseMode": "100644"
+    },
+    {
+      "path": ".github/workflows/renew-demo-auth-expiry.yml",
+      "blob": "3c0c1718b941d4b8c12b13af2888cb4eaadd643f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/analysis.md",
+      "blob": "4dad083a1f4ba134e6fc64257d54f34da1759619",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/browser/browser.json",
+      "blob": "183af5f7e4c6118c16d8c01a692b294d0731ba99",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/browser/expired-1280.png",
+      "blob": "499fa1e4b154dd8b8e61542aa22be239ab9c8a97",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/browser/expired-390.png",
+      "blob": "e4d3c9b225f70ed56def89f6abc8219d495b2443",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/browser/late-expiry-1280.png",
+      "blob": "499fa1e4b154dd8b8e61542aa22be239ab9c8a97",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/browser/late-expiry-390.png",
+      "blob": "7cfa79204b6675a4d3c6bf98ac0d48131ad834be",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/browser/late-simulator-expiry-1280.png",
+      "blob": "499fa1e4b154dd8b8e61542aa22be239ab9c8a97",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/browser/late-simulator-expiry-390.png",
+      "blob": "e4d3c9b225f70ed56def89f6abc8219d495b2443",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/browser/retry-1280.png",
+      "blob": "30c4632d0eae7a779911111dfd6a30515656df23",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/browser/retry-390.png",
+      "blob": "28728e933f786163408aefdc5c97be1d743da91b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/browser/unavailable-1280.png",
+      "blob": "68e521ec5031ee05dcd8ed25fd57281f21faa617",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/browser/unavailable-390.png",
+      "blob": "930c6a082fd455e7929dc0f9382022db0fbafab7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/demo-preflight.json",
+      "blob": "42ec50163dc77e24d83467b8e6a756ea8712f36e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-final/command-results.json",
+      "blob": "fc68b6a324c458f897a13d8ebb267b80f6f74929",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-final/execution-receipt.json",
+      "blob": "9d972062049038eae04e206f2fa6b6b319224ced",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-final/focused-ui-tests.stderr.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-final/focused-ui-tests.stdout.log",
+      "blob": "596b6e91e6efbe5b3e06f032b65feed9b5c585f4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-final/qa-result.json",
+      "blob": "cf5beabb7c15dca0e391987335a6e8e089901731",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-final/renewal-tests.stderr.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-final/renewal-tests.stdout.log",
+      "blob": "b38e90574ccfafa827133bb23aa3db5dbb6cdf39",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-final/report.md",
+      "blob": "9afcd655a085dc8534bf3ca34a127683dfec7f91",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-ui-qa2/browser.json",
+      "blob": "183af5f7e4c6118c16d8c01a692b294d0731ba99",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-ui-qa2/expired-1280.png",
+      "blob": "499fa1e4b154dd8b8e61542aa22be239ab9c8a97",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-ui-qa2/expired-390.png",
+      "blob": "e4d3c9b225f70ed56def89f6abc8219d495b2443",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-ui-qa2/late-expiry-1280.png",
+      "blob": "499fa1e4b154dd8b8e61542aa22be239ab9c8a97",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-ui-qa2/late-expiry-390.png",
+      "blob": "b1f70ff110d8c60d2a87ed54a2383ca1cdd8f3d6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-ui-qa2/late-simulator-expiry-1280.png",
+      "blob": "499fa1e4b154dd8b8e61542aa22be239ab9c8a97",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-ui-qa2/late-simulator-expiry-390.png",
+      "blob": "e4d3c9b225f70ed56def89f6abc8219d495b2443",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-ui-qa2/retry-1280.png",
+      "blob": "10fd276d38cd0faef0d8356b71839a1e1269d017",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-ui-qa2/retry-390.png",
+      "blob": "28728e933f786163408aefdc5c97be1d743da91b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-ui-qa2/unavailable-1280.png",
+      "blob": "68e521ec5031ee05dcd8ed25fd57281f21faa617",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/evidence/independent-ui-qa2/unavailable-390.png",
+      "blob": "930c6a082fd455e7929dc0f9382022db0fbafab7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/history/qa1-report.md",
+      "blob": "7199884e25646adcdcc246b7e8df07306b5a6ee9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/history/qa1-reproduced-390.png",
+      "blob": "de33d8620eef5a9e18c1a7ee8160e1ce93757f1b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/history/qa1-reproduction.json",
+      "blob": "18290c188fac4616df2375e3cbd07557085146a4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/history/qa2-execution-receipt.json",
+      "blob": "ea9acf839519b9e0cedd9dc3224647d7d286251f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/history/qa2-report.md",
+      "blob": "bdf711dac9cf89871a6a8f4fcab3144538635744",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/implementation-plan.md",
+      "blob": "48423ada87af3f1b54d4e2d36a74477cb90b8e73",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/imported-history.json",
+      "blob": "d62e2a7ca2bc51553ab6a9428efda55f8d7eb3b4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/qa-seal.json",
+      "blob": "cf5beabb7c15dca0e391987335a6e8e089901731",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/review-auth-gates-report.md",
+      "blob": "1d9c185004e685e8927f10a43f4a570a602398c5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/review-capability-guards-report.md",
+      "blob": "11904b0b464e6e0329ec1bb1ddc1236a51a68bc4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/review-deployment-guards-report.md",
+      "blob": "475d94af2226663a9ebd18360bf42481c277e6d8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/review-target-guards-report.md",
+      "blob": "ce10485c542bde3a8e4b043174728a7d7628886f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/task-contract.md",
+      "blob": "df7a200ad97ab37bab28a3d676761f2fb0c37555",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-auth-expiry/validation-report.md",
+      "blob": "9a5ea3484b5953f0e0c63f48f23d6f5fbecb241b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "e2e/auth-expiry.mjs",
+      "blob": "de9760bb566c64353a706cde0187e45c087c2121",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "blob": "a71fc8eb78ebea274551e157b75953dabb9477e3",
+      "mode": "100644",
+      "baseBlob": "b17b4f6733ae9a47f30978a3159c828ddde8a632",
+      "baseMode": "100644"
+    },
+    {
+      "path": "frontend/src/components/Login.css",
+      "blob": "589fb2d7070bb479c9057979dc65356cc7a9158a",
+      "mode": "100644",
+      "baseBlob": "b9d3785e9b22e6a5f3d2b4ae7cc5c44cc73624d6",
+      "baseMode": "100644"
+    },
+    {
+      "path": "frontend/src/components/Login.tsx",
+      "blob": "7ff91468b61308458100a0fbcae76c1333ff12ec",
+      "mode": "100644",
+      "baseBlob": "6fc0c3d7c82a71a24d768e300bf4f3dda7636087",
+      "baseMode": "100644"
+    },
+    {
+      "path": "frontend/src/components/__tests__/loginAvailability.test.ts",
+      "blob": "ef0e25d4071db41af4df2f7ad739fcdff6c0516f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "frontend/src/lib/__tests__/authAvailability.test.ts",
+      "blob": "94c17b14ae4b6ed564390ca8a84f044446839ae0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "frontend/src/lib/authAvailability.ts",
+      "blob": "f849e47a769aa4d9596c1c3826491206fd3490bd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/renew-demo-auth-expiry.mjs",
+      "blob": "425163a33d719882ed485ab6cbaa461b0961184d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/renew-demo-auth-expiry.test.mjs",
+      "blob": "993bf20e2d094e4cbcfb80de5f0efd59e053fbe2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "c8a5ba772bf1a80174e499074379102969441e1370a79ebffafa217753e068c4",
+    "evidence/independent-r3/browser/browser.json": "8fc47f645874c07574b308e41e1d19f3d8191ada5255fcb5f0087718290599df",
+    "evidence/independent-r3/browser/expired-1280.png": "360ac6fd0af9620335645c03f40be22501f46aabbf55301e064438f829dd0bca",
+    "evidence/independent-r3/browser/expired-390.png": "23f3104ec22444ea299c05a5f8d6b1cd1529883e983e08f9657c1ee2d185f392",
+    "evidence/independent-r3/browser/late-expiry-1280.png": "360ac6fd0af9620335645c03f40be22501f46aabbf55301e064438f829dd0bca",
+    "evidence/independent-r3/browser/late-expiry-390.png": "4b1f4fd929fba58d8d7cb6d4c074781abd6374ac65041c30ec3592ac3c939925",
+    "evidence/independent-r3/browser/late-simulator-expiry-1280.png": "360ac6fd0af9620335645c03f40be22501f46aabbf55301e064438f829dd0bca",
+    "evidence/independent-r3/browser/late-simulator-expiry-390.png": "23f3104ec22444ea299c05a5f8d6b1cd1529883e983e08f9657c1ee2d185f392",
+    "evidence/independent-r3/browser/retry-1280.png": "729ba902970a2ac2143aa09129dc1839bb28f6264e78451beadb66cf8177dbee",
+    "evidence/independent-r3/browser/retry-390.png": "fbc12e926bcd1ab43d0b910801b315fe3668008a279c2af3cd9d086f9329c891",
+    "evidence/independent-r3/browser/unavailable-1280.png": "0d6e2bb48d2d795a4a3649dc8e413503d9198afab7180f895bfdf67fa75bac26",
+    "evidence/independent-r3/browser/unavailable-390.png": "25f6c3dbc71cd5504471455ab5da56ef7beb9b0e310bf86c8fd049ce0b2f3a5d",
+    "evidence/independent-r3/browser.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/independent-r3/browser.stdout.log": "850765bb9d9485335e3fb677c1527890fcc233214200f683f9e48cda27716715",
+    "evidence/independent-r3/build.stderr.log": "532115c3b244339bc0edba8192bd3a88a0dceef8efc50df62f793368f86c11db",
+    "evidence/independent-r3/build.stdout.log": "b1b471f81654c7e47e609b33c02c86726d605b846b617fdf06cc597566f5f078",
+    "evidence/independent-r3/command-results.json": "b6cce156c0ea939875e0e497f339722c2c5bd017ec4a5d294be9b8b047e13b61",
+    "evidence/independent-r3/execution-receipt.json": "b00416edefe4a7c34826c1617273b3e1e4360cf4e3d910c68cface63debc51b5",
+    "evidence/independent-r3/focused-ui-tests.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/independent-r3/focused-ui-tests.stdout.log": "bce0f56160727cac9ac4f0b83ab8e7836a44758c9ae46d8ffce7b6c7119eb2bd",
+    "evidence/independent-r3/full-frontend-tests.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/independent-r3/full-frontend-tests.stdout.log": "8d271760aec9bd300887da0c030229292068c3f3556154b2820ca7bb3cb3fc09",
+    "evidence/independent-r3/qa-result.json": "1a6f8a334144cd5bf44a71bd4bf10e1bd21f588b07757a4fae7a8e966a1373ed",
+    "evidence/independent-r3/renewal-tests.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/independent-r3/renewal-tests.stdout.log": "f1b261f84d9011b9871d255cd7b2a48dec8938363ff35f1e79016c177922df7b",
+    "evidence/independent-r3/report.md": "c5fd6d557607d9738e6d9480d5741bff39d6428a69f1b0cad440015eccdbb43a",
+    "history/qa1-report.md": "b574645db09f95ed175ad6d065555dd57557063388b4cac3d3526907dfa52dc7",
+    "history/review1-cloud-receipt.json": "fd9f00c21e6a7e56927d00990c758c89d7aea7f1d831977df84e42670330cde3",
+    "history/review1-native-receipt.json": "8713dd11b6c4a212527fb3801a6ace3c9e5363177db5f53f328baf44dbb9de34",
+    "history/review1-report.json": "275dc4b08c1294740c85f3ea5d044e68c54fa1e7863a08ceebb04d3331384fd9",
+    "history/root-parser-green.json": "c3706d54cf060721f097fec378032d72f27767e00c1086fb40720723785225d2",
+    "history/root-parser-red.json": "f07011a53684fad42c9e236ff3906440283583b40822a3b0641f88e87b4e4aaf",
+    "history/root-runner-setup-report.md": "5e03a31e9f48df627945f9f94a9495182c1ac39b88993d9b310eb58c025429ee",
+    "implementation-plan.md": "a544402c2b2c33484ffff114f0ca2ed24cfec67bc69e42addbe40afb94fa56f6",
+    "qa-seal.json": "0b8fc07c2d47c2de22ad08b49a64b41078808a8b7852477ddfc7b624b40a1707",
+    "review-auth-gates-report.md": "4c8582737e4f115afe318d5a30680ce83e924a8d21c37e0fe96544ffe2aabbb3",
+    "review-capability-guards-report.md": "fce36285567578e66778ffb8e20861037d756079df6fe04f7d573c645466cd43",
+    "review-deployment-guards-report.md": "bade74d528aba1426a583e45fc52d7fb88226c2cac1610250f13e18b3952bc2a",
+    "review-target-guards-report.md": "ca8cb76c5fcced3d99c508d09193f0315115fad3dc4eb6e60dd979a56d525d42",
+    "revision3-validation-report.md": "b51c85f8202dc9192b447e3f7471495c933f6e9c1974c49a11f6b36975e251b2",
+    "task-contract.md": "c143f4ce36111fc8d2365209c7e3be8b3bae9ad25da1b5dded900d9b6745e904",
+    "validation-report.md": "f1a399fcd3829e60ae8f921da14f8d377dbb9679de9c0accbfd7b21667a58734"
+  }
+}

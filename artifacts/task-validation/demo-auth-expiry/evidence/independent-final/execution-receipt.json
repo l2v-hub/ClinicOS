@@ -1,0 +1,73 @@
+{
+  "sourceSha": "03529a96c3a37e4ffb4989497ca3db9fe32a9968",
+  "tree": "2f7da7847987983b221a0f27519dd868d03e7f03",
+  "status": "executed-focused-checks-passed",
+  "sourceUnchanged": true,
+  "node": "v26.3.0",
+  "uiEquivalence": [
+    {
+      "file": "e2e/auth-expiry.mjs",
+      "blob": "bfcdf8071f3ff3f58880bed546d8526d7f669380",
+      "previousBlob": "bfcdf8071f3ff3f58880bed546d8526d7f669380"
+    },
+    {
+      "file": "frontend/src/App.tsx",
+      "blob": "a71fc8eb78ebea274551e157b75953dabb9477e3",
+      "previousBlob": "a71fc8eb78ebea274551e157b75953dabb9477e3"
+    },
+    {
+      "file": "frontend/src/components/Login.css",
+      "blob": "589fb2d7070bb479c9057979dc65356cc7a9158a",
+      "previousBlob": "589fb2d7070bb479c9057979dc65356cc7a9158a"
+    },
+    {
+      "file": "frontend/src/components/Login.tsx",
+      "blob": "7ff91468b61308458100a0fbcae76c1333ff12ec",
+      "previousBlob": "7ff91468b61308458100a0fbcae76c1333ff12ec"
+    },
+    {
+      "file": "frontend/src/components/__tests__/loginAvailability.test.ts",
+      "blob": "ef0e25d4071db41af4df2f7ad739fcdff6c0516f",
+      "previousBlob": "ef0e25d4071db41af4df2f7ad739fcdff6c0516f"
+    },
+    {
+      "file": "frontend/src/lib/__tests__/authAvailability.test.ts",
+      "blob": "84ba887ade2550d80e401e7951aea0d79ec11b0e",
+      "previousBlob": "84ba887ade2550d80e401e7951aea0d79ec11b0e"
+    },
+    {
+      "file": "frontend/src/lib/authAvailability.ts",
+      "blob": "cc4e71f09ed1e4cea15a1b3012710dae4039a1a7",
+      "previousBlob": "cc4e71f09ed1e4cea15a1b3012710dae4039a1a7"
+    }
+  ],
+  "backendIdentityAndExpiryGatesUnchanged": true,
+  "results": [
+    {
+      "name": "renewal-tests",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "6c9db767008d4d74713c96e7f560a1535410fb77370eef160ec2de0ce9180392",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "focused-ui-tests",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "15b788ee1865c94c4558915aca4f110fdcf55c0bca2ad3f1614ddbe047327898",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "pending": [
+    "actual-Claude-review",
+    "exact-head-Linux-CI",
+    "protected-merge",
+    "typed-human-operation-capability-after-merge",
+    "read-only-demo-preflight",
+    "explicit-single-claimed-renewal-stage",
+    "verified-deployment",
+    "synthetic-online-login-verification"
+  ]
+}

@@ -3,9 +3,13 @@ import type { SimulatorIdentity, UtenteApp } from '../types';
 import { UTENTE_ADMIN, UTENTE_OPERATORE } from '../mockData';
 import { IcoAdmin, IcoUser } from '../icons';
 import { API_URL } from '../config';
+import type { AuthAvailability, AuthStatus } from '../lib/authAvailability';
 import './Login.css';
 
 interface LoginProps {
+  availability: AuthAvailability;
+  authMode: AuthStatus['mode'] | null;
+  onRetryAuth: () => void;
   onLogin: (utente: UtenteApp) => void;
   demoMode?: boolean;
   loading?: boolean;
@@ -105,6 +109,9 @@ function SimulatorPicker({
 }
 
 export function Login({
+  availability,
+  authMode,
+  onRetryAuth,
   onLogin,
   demoMode = false,
   loading = false,
@@ -112,7 +119,25 @@ export function Login({
   simulator = false,
   onSimulatorLogin,
 }: LoginProps) {
-  const showSimulator = simulator && onSimulatorLogin != null;
+  const accessReady = availability === 'ready';
+  const showSimulator = accessReady && simulator && onSimulatorLogin != null;
+  const availabilityMessage = {
+    checking: { title: 'Verifica accesso…', detail: 'Controllo della disponibilità dei profili.' },
+    expired: {
+      title: 'Accesso demo scaduto',
+      detail:
+        'La finestra di accesso dimostrativo è terminata. L’amministratore deve rinnovarla sul servizio demo.',
+    },
+    disabled: {
+      title: 'Accesso non disponibile',
+      detail:
+        'Il servizio di autenticazione non è abilitato. Contatta l’amministratore della struttura.',
+    },
+    unavailable: {
+      title: 'Verifica accesso non riuscita',
+      detail: 'Non è stato possibile verificare il servizio di autenticazione. Riprova tra poco.',
+    },
+  };
   return (
     <div className="login-screen">
       <div className="login-box">
@@ -122,7 +147,7 @@ export function Login({
           <p className="login-brand-sub">Sistema di Gestione Clinica</p>
         </div>
 
-        {demoMode && (
+        {accessReady && demoMode && (
           <div className="login-demo-warning" role="status">
             <strong>Modalità demo temporanea</strong>
             <span>
@@ -131,7 +156,26 @@ export function Login({
           </div>
         )}
 
-        {showSimulator ? (
+        {!accessReady ? (
+          <section
+            className="login-availability"
+            aria-live="polite"
+            aria-busy={availability === 'checking'}
+          >
+            <h2>{availabilityMessage[availability].title}</h2>
+            <p>{availabilityMessage[availability].detail}</p>
+            {availability !== 'checking' && (
+              <button
+                className="btn-secondary"
+                type="button"
+                onClick={onRetryAuth}
+                disabled={loading}
+              >
+                Ricontrolla accesso
+              </button>
+            )}
+          </section>
+        ) : showSimulator ? (
           <>
             <p className="login-prompt">Scegli il profilo con cui accedere</p>
             <SimulatorPicker loading={loading} onPick={onSimulatorLogin} />
@@ -172,17 +216,21 @@ export function Login({
           </>
         )}
 
-        {error && (
+        {accessReady && error && (
           <p className="login-error" role="alert">
             {error}
           </p>
         )}
         <p className="login-note">
-          {loading
-            ? 'Verifica accesso…'
-            : showSimulator
-              ? 'Simulatore ruoli — nessuna credenziale reale'
-              : 'Accesso dimostrativo — nessuna credenziale richiesta'}
+          {!accessReady
+            ? 'Nessun accesso effettuato'
+            : loading
+              ? 'Verifica accesso…'
+              : showSimulator
+                ? 'Simulatore ruoli — nessuna credenziale reale'
+                : authMode === 'entra'
+                  ? 'Accesso con account della struttura'
+                  : 'Accesso dimostrativo — nessuna credenziale richiesta'}
         </p>
       </div>
     </div>

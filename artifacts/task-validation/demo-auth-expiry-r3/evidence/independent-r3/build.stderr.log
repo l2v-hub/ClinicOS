@@ -1,0 +1,13 @@
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[PLUGIN_TIMINGS] [0mYour build spent 98% of 21.4s inside plugin hooks (20.9s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - @rolldown/plugin-babel transform (95%, 20.5s, 504 calls)
+Those rows are 95% of the build; the rest of the 98% is below.
+Not measurable — 1 hook whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - vite:css transform (87 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
