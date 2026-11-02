@@ -67,3 +67,23 @@ test('malformed, unsupported and contradictory auth responses fail closed', () =
     assert.throws(() => parseAuthStatus(payload), /auth_status_invalid/);
   }
 });
+
+test('unusable demo expiry metadata never locks out a server-enabled Entra or demo login', () => {
+  for (const mode of ['entra', 'demo'] as const) {
+    for (const expiresAt of ['not-a-date', 'x'.repeat(51), {}, 1, false]) {
+      const status = parseAuthStatus({ ...expired, mode, expiresAt });
+      assert.equal(status.expiresAt, null);
+      assert.equal(canStartLogin('available', status), true);
+      assert.equal(authAvailability('available', status, now), 'ready');
+    }
+  }
+});
+
+test('unusable expiry metadata is not proof of expiry and never enables disabled auth', () => {
+  for (const expiresAt of ['not-a-date', 'x'.repeat(51), {}, 1, false]) {
+    const status = parseAuthStatus({ ...expired, expiresAt });
+    assert.equal(status.expiresAt, null);
+    assert.equal(canStartLogin('available', status), false);
+    assert.equal(authAvailability('available', status, now), 'disabled');
+  }
+});
