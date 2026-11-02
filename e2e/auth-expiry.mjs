@@ -7,7 +7,11 @@ import { preview } from 'vite';
 import { chromium, expect } from 'playwright/test';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const out = path.join(root, 'artifacts/task-validation/demo-auth-expiry/evidence/browser');
+const packet = path.join(root, 'artifacts/task-validation/demo-auth-expiry');
+const out = process.env.QA_EVIDENCE_DIR
+  ? path.resolve(process.env.QA_EVIDENCE_DIR)
+  : path.join(packet, 'evidence/browser');
+assert.ok(out.startsWith(packet + path.sep), 'Synthetic evidence stays inside this task packet');
 const origin = 'http://127.0.0.1:5317';
 const apiOrigins = new Set([
   'https://clinicos-backend-production-df88.up.railway.app',
@@ -58,18 +62,24 @@ try {
       'legacy',
       'entra',
       'late-expiry',
+      'late-simulator-expiry',
+      'server-error',
+      'bad-json',
+      'timeout',
     ]) {
       const context = await browser.newContext({
         viewport: { width, height: 1004 },
         serviceWorkers: 'block',
       });
       const page = await context.newPage();
+      if (scenario === 'timeout') await page.clock.install();
       const unexpected = [],
         errors = [];
       let statusPayload = { ...expired },
         statusReads = 0,
         identityReads = 0,
-        authMeReads = 0;
+        authMeReads = 0,
+        sessionPosts = 0;
       let releaseStatus, releaseIdentity;
       const statusGate = new Promise((resolve) => {
         releaseStatus = resolve;
@@ -82,6 +92,7 @@ try {
       if (scenario === 'entra')
         statusPayload = { ...expired, mode: 'entra', syntheticOnly: false, expiresAt: null };
       if (scenario === 'disabled') statusPayload = { ...expired, expiresAt: null };
+      if (scenario === 'late-simulator-expiry') statusPayload = { ...active };
       page.on('pageerror', (error) => errors.push(error.message));
       await context.route('**/*', async (route) => {
         const request = route.request(),
@@ -97,10 +108,31 @@ try {
           url.pathname === '/auth/status'
         ) {
           statusReads++;
-          if (scenario === 'pending') await statusGate;
+          if (scenario === 'pending' || scenario === 'timeout') await statusGate;
           if (scenario === 'unavailable') return route.abort('failed');
           if (scenario === 'malformed') return json({ ...statusPayload, mode: 'invalid' });
+          if (scenario === 'server-error')
+            return route.fulfill({ status: 503, contentType: 'application/json', body: '{}' });
+          if (scenario === 'bad-json')
+            return route.fulfill({ contentType: 'application/json', body: 'not-json' });
           return json(statusPayload);
+        }
+        if (
+          apiOrigins.has(url.origin) &&
+          request.method() === 'POST' &&
+          url.pathname === '/auth/simulator/session' &&
+          scenario === 'late-simulator-expiry'
+        ) {
+          sessionPosts++;
+          assert.equal(JSON.parse(request.postData()).identityId, identities[2].id);
+          return route.fulfill({
+            status: 404,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              code: 'simulator_disabled',
+              error: 'Simulatore ruoli non attivo',
+            }),
+          });
         }
         if (
           apiOrigins.has(url.origin) &&
@@ -134,6 +166,10 @@ try {
         await page.goto(origin, { waitUntil: 'domcontentloaded' });
         const roleCards = page.locator('.login-role-card');
         const profileCards = page.locator('.login-sim__item');
+        if (scenario === 'timeout') {
+          await expect(page.getByRole('heading', { name: 'Verifica accesso…' })).toBeVisible();
+          await page.clock.fastForward(15_001);
+        }
         if (scenario === 'pending') {
           await expect(page.getByRole('heading', { name: 'Verifica accesso…' })).toBeVisible();
           assert.equal(await roleCards.count(), 0);
@@ -159,6 +195,15 @@ try {
         } else if (scenario === 'legacy' || scenario === 'entra') {
           await expect(roleCards).toHaveCount(2);
           assert.equal(await profileCards.count(), 0);
+        } else if (scenario === 'late-simulator-expiry') {
+          await expect(profileCards).toHaveCount(5);
+          statusPayload = { ...expired };
+          await page.getByRole('button', { name: new RegExp(identities[2].name) }).click();
+          await expect(page.getByRole('heading', { name: 'Accesso demo scaduto' })).toBeVisible();
+          assert.equal(sessionPosts, 1);
+          assert.ok(statusReads >= 2);
+          assert.equal(await profileCards.count(), 0);
+          await expect(page.getByRole('button', { name: 'Ricontrolla accesso' })).toBeVisible();
         } else if (scenario === 'late-expiry') {
           await expect(roleCards).toHaveCount(2);
           statusPayload = { ...expired };
@@ -170,12 +215,17 @@ try {
           assert.equal(authMeReads, 1);
           assert.equal(await roleCards.count(), 0);
         } else {
-          const heading =
-            scenario === 'unavailable' || scenario === 'malformed'
-              ? 'Verifica accesso non riuscita'
-              : scenario === 'disabled'
-                ? 'Accesso non disponibile'
-                : 'Accesso demo scaduto';
+          const heading = [
+            'unavailable',
+            'malformed',
+            'server-error',
+            'bad-json',
+            'timeout',
+          ].includes(scenario)
+            ? 'Verifica accesso non riuscita'
+            : scenario === 'disabled'
+              ? 'Accesso non disponibile'
+              : 'Accesso demo scaduto';
           await expect(page.getByRole('heading', { name: heading })).toBeVisible();
           assert.equal(await roleCards.count(), 0);
           assert.equal(await profileCards.count(), 0);
@@ -188,14 +238,18 @@ try {
         assert.deepEqual(
           unexpected,
           [],
-          'No outbound requests, session creation, clinical access or clinical writes',
+          'No real outbound requests, real sessions, clinical access or clinical writes',
         );
         assert.deepEqual(errors, []);
         const overflow = await page.evaluate(
           () => document.documentElement.scrollWidth > innerWidth,
         );
         assert.equal(overflow, false);
-        if (['expired', 'retry', 'unavailable', 'late-expiry'].includes(scenario))
+        if (
+          ['expired', 'retry', 'unavailable', 'late-expiry', 'late-simulator-expiry'].includes(
+            scenario,
+          )
+        )
           await page.screenshot({
             path: path.join(out, `${scenario}-${width}.png`),
             fullPage: true,
@@ -207,6 +261,7 @@ try {
           statusReads,
           identityReads,
           authMeReads,
+          sessionPosts,
           outbound: 0,
           clinicalWrites: 0,
         });

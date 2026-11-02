@@ -2218,6 +2218,13 @@ export default function App() {
     );
   }
 
+  function retryAuthStatus() {
+    setAuthStatus(null);
+    setAuthCheck('checking');
+    setLoginError(null);
+    setAuthCheckAttempt((attempt) => attempt + 1);
+  }
+
   async function handleLogin(u: UtenteApp, simulatorIdentityId?: string) {
     if (loginPending || !canStartLogin(authCheck, authStatus)) return;
     setLoginPending(true);
@@ -2272,8 +2279,10 @@ export default function App() {
         const session = (await sessionResponse.json().catch(() => null)) as {
           token?: string;
           error?: string;
+          code?: string;
         } | null;
         if (!sessionResponse.ok || !session?.token) {
+          if (session?.code === 'simulator_disabled' || session?.code === 'auth_disabled') retryAuthStatus();
           setLoginError(session?.error ?? 'Profilo simulato non disponibile');
           return;
         }
@@ -2292,11 +2301,7 @@ export default function App() {
           error?: string;
           code?: string;
         } | null;
-        if (payload?.code === 'auth_disabled') {
-          setAuthStatus(null);
-          setAuthCheck('checking');
-          setAuthCheckAttempt((attempt) => attempt + 1);
-        }
+        if (payload?.code === 'auth_disabled') retryAuthStatus();
         setLoginError(payload?.error ?? 'Identità non autorizzata in ClinicOS');
         return;
       }
@@ -3394,12 +3399,7 @@ export default function App() {
       <Login
         availability={authAvailability(authCheck, authStatus)}
         authMode={authStatus?.mode ?? null}
-        onRetryAuth={() => {
-          setAuthStatus(null);
-          setAuthCheck('checking');
-          setLoginError(null);
-          setAuthCheckAttempt((attempt) => attempt + 1);
-        }}
+        onRetryAuth={retryAuthStatus}
         onLogin={handleLogin}
         demoMode={authStatus?.temporaryDemo === true}
         loading={loginPending}
