@@ -1,0 +1,145 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "subjectSha": "c104d79ddc4047ca39bd8cfd0150d56ef4b503f1",
+      "evidence": "history/qa1-report.md"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "subjectSha": "03529a96c3a37e4ffb4989497ca3db9fe32a9968",
+      "evidence": "validation-report.md"
+    }
+  ],
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {},
+  "sourceManifest": [
+    {
+      "path": ".github/workflows/bug-pipeline-tests.yml",
+      "blob": "d510629db76b0e34e6a58ffb612568e32d1b0492",
+      "mode": "100644",
+      "baseBlob": "f08b8aa6b4a0386bfc8c9f4009e5533cc0b6e4e7",
+      "baseMode": "100644"
+    },
+    {
+      "path": ".github/workflows/renew-demo-auth-expiry.yml",
+      "blob": "3c0c1718b941d4b8c12b13af2888cb4eaadd643f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "e2e/auth-expiry.mjs",
+      "blob": "bfcdf8071f3ff3f58880bed546d8526d7f669380",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "blob": "a71fc8eb78ebea274551e157b75953dabb9477e3",
+      "mode": "100644",
+      "baseBlob": "b17b4f6733ae9a47f30978a3159c828ddde8a632",
+      "baseMode": "100644"
+    },
+    {
+      "path": "frontend/src/components/Login.css",
+      "blob": "589fb2d7070bb479c9057979dc65356cc7a9158a",
+      "mode": "100644",
+      "baseBlob": "b9d3785e9b22e6a5f3d2b4ae7cc5c44cc73624d6",
+      "baseMode": "100644"
+    },
+    {
+      "path": "frontend/src/components/Login.tsx",
+      "blob": "7ff91468b61308458100a0fbcae76c1333ff12ec",
+      "mode": "100644",
+      "baseBlob": "6fc0c3d7c82a71a24d768e300bf4f3dda7636087",
+      "baseMode": "100644"
+    },
+    {
+      "path": "frontend/src/components/__tests__/loginAvailability.test.ts",
+      "blob": "ef0e25d4071db41af4df2f7ad739fcdff6c0516f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "frontend/src/lib/__tests__/authAvailability.test.ts",
+      "blob": "84ba887ade2550d80e401e7951aea0d79ec11b0e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "frontend/src/lib/authAvailability.ts",
+      "blob": "cc4e71f09ed1e4cea15a1b3012710dae4039a1a7",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/renew-demo-auth-expiry.mjs",
+      "blob": "61ebf24b538047149ac2ce4155460b154098c5b8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/renew-demo-auth-expiry.test.mjs",
+      "blob": "8fa81c8d5d318be2886c4545c5f27879da0935d8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "4ee3e43ebfd51a63adf502aab09f9d5194f410723771e54c65537420095b2665",
+    "evidence/browser/browser.json": "dc637e20a35f41200ab35e5185925c5e546b44431df9befacbdd12166932b38b",
+    "evidence/browser/expired-1280.png": "360ac6fd0af9620335645c03f40be22501f46aabbf55301e064438f829dd0bca",
+    "evidence/browser/expired-390.png": "23f3104ec22444ea299c05a5f8d6b1cd1529883e983e08f9657c1ee2d185f392",
+    "evidence/browser/late-expiry-1280.png": "360ac6fd0af9620335645c03f40be22501f46aabbf55301e064438f829dd0bca",
+    "evidence/browser/late-expiry-390.png": "c53318de6eee52065e718b8eeb0e2a4031b8e92dfb088fb9280e4262dccf4199",
+    "evidence/browser/late-simulator-expiry-1280.png": "360ac6fd0af9620335645c03f40be22501f46aabbf55301e064438f829dd0bca",
+    "evidence/browser/late-simulator-expiry-390.png": "23f3104ec22444ea299c05a5f8d6b1cd1529883e983e08f9657c1ee2d185f392",
+    "evidence/browser/retry-1280.png": "729ba902970a2ac2143aa09129dc1839bb28f6264e78451beadb66cf8177dbee",
+    "evidence/browser/retry-390.png": "fbc12e926bcd1ab43d0b910801b315fe3668008a279c2af3cd9d086f9329c891",
+    "evidence/browser/unavailable-1280.png": "0d6e2bb48d2d795a4a3649dc8e413503d9198afab7180f895bfdf67fa75bac26",
+    "evidence/browser/unavailable-390.png": "25f6c3dbc71cd5504471455ab5da56ef7beb9b0e310bf86c8fd049ce0b2f3a5d",
+    "evidence/demo-preflight.json": "8fedeac0b455e7a8a4bc6026d6ff6f5f1c0b685f1822cc24532d23b6cdac8582",
+    "evidence/independent-final/command-results.json": "114fc50fd0e4f9d406330171905d68905747e772a949e08d2d5b81efa51878db",
+    "evidence/independent-final/execution-receipt.json": "79a32f3093eb70271c84b39d116b49f98f4e29f6631f59974534c2f791263bfa",
+    "evidence/independent-final/focused-ui-tests.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/independent-final/focused-ui-tests.stdout.log": "15b788ee1865c94c4558915aca4f110fdcf55c0bca2ad3f1614ddbe047327898",
+    "evidence/independent-final/qa-result.json": "b03638f5c4abb588dfcec61d8dc80fa3aaac0256d85fa6a8cf3cef1e86d62b01",
+    "evidence/independent-final/renewal-tests.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/independent-final/renewal-tests.stdout.log": "6c9db767008d4d74713c96e7f560a1535410fb77370eef160ec2de0ce9180392",
+    "evidence/independent-final/report.md": "8cd3c86523be83903b30a6152e9075a1a9fe51036dcb7c6306dbbe2be6e1ad50",
+    "evidence/independent-ui-qa2/browser.json": "dc637e20a35f41200ab35e5185925c5e546b44431df9befacbdd12166932b38b",
+    "evidence/independent-ui-qa2/expired-1280.png": "360ac6fd0af9620335645c03f40be22501f46aabbf55301e064438f829dd0bca",
+    "evidence/independent-ui-qa2/expired-390.png": "23f3104ec22444ea299c05a5f8d6b1cd1529883e983e08f9657c1ee2d185f392",
+    "evidence/independent-ui-qa2/late-expiry-1280.png": "360ac6fd0af9620335645c03f40be22501f46aabbf55301e064438f829dd0bca",
+    "evidence/independent-ui-qa2/late-expiry-390.png": "4b1f4fd929fba58d8d7cb6d4c074781abd6374ac65041c30ec3592ac3c939925",
+    "evidence/independent-ui-qa2/late-simulator-expiry-1280.png": "360ac6fd0af9620335645c03f40be22501f46aabbf55301e064438f829dd0bca",
+    "evidence/independent-ui-qa2/late-simulator-expiry-390.png": "23f3104ec22444ea299c05a5f8d6b1cd1529883e983e08f9657c1ee2d185f392",
+    "evidence/independent-ui-qa2/retry-1280.png": "1719c74c313321443b89e1abf30ef225a90ee5fa219000b0bcc0a76ea51d0ab3",
+    "evidence/independent-ui-qa2/retry-390.png": "fbc12e926bcd1ab43d0b910801b315fe3668008a279c2af3cd9d086f9329c891",
+    "evidence/independent-ui-qa2/unavailable-1280.png": "0d6e2bb48d2d795a4a3649dc8e413503d9198afab7180f895bfdf67fa75bac26",
+    "evidence/independent-ui-qa2/unavailable-390.png": "25f6c3dbc71cd5504471455ab5da56ef7beb9b0e310bf86c8fd049ce0b2f3a5d",
+    "history/qa1-report.md": "b574645db09f95ed175ad6d065555dd57557063388b4cac3d3526907dfa52dc7",
+    "history/qa1-reproduced-390.png": "e82a274383414caf81c8ceea8c79e97c2582e439bb8d88d8b49a2c67ff39c3b5",
+    "history/qa1-reproduction.json": "db11f03ce7563ade954e5734bc2a5ed3049f8097aed0f816944950524ee1e40b",
+    "history/qa2-execution-receipt.json": "d85d002621a312b82070eba2e2914cf7e2dee80fbd2142bc130677b5b227488e",
+    "history/qa2-report.md": "6ac8d67cc7393cd760148956a4fabecccfa984fc1504cd52ffffb2c07457ee06",
+    "implementation-plan.md": "8a4df00c2423a3d47c0d07af5ec14c27ee2d4b926ab209b1bc3b7d05e5fa8572",
+    "qa-seal.json": "b03638f5c4abb588dfcec61d8dc80fa3aaac0256d85fa6a8cf3cef1e86d62b01",
+    "review-auth-gates-report.md": "4c8582737e4f115afe318d5a30680ce83e924a8d21c37e0fe96544ffe2aabbb3",
+    "review-capability-guards-report.md": "fce36285567578e66778ffb8e20861037d756079df6fe04f7d573c645466cd43",
+    "review-deployment-guards-report.md": "bade74d528aba1426a583e45fc52d7fb88226c2cac1610250f13e18b3952bc2a",
+    "review-target-guards-report.md": "ca8cb76c5fcced3d99c508d09193f0315115fad3dc4eb6e60dd979a56d525d42",
+    "task-contract.md": "c143f4ce36111fc8d2365209c7e3be8b3bae9ad25da1b5dded900d9b6745e904",
+    "validation-report.md": "f1a399fcd3829e60ae8f921da14f8d377dbb9679de9c0accbfd7b21667a58734"
+  }
+}

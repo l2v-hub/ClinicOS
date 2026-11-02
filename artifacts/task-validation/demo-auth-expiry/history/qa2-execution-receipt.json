@@ -1,0 +1,35 @@
+{
+  "sourceSha": "b1d6d89c77ae1abe65a38d22e22c29b6a906f9bf",
+  "tree": "5e73d6511a96612610684146c17cbd1226e09a42",
+  "status": "all-executed-checks-passed",
+  "sourceUnchanged": true,
+  "committedBrowserRunnerUnmodified": true,
+  "browserRunnerSha256": "e6a769f78eec6b3d69940599b840440a8b7397b71cc401cdd09681f85e087099",
+  "browserOutput": "C:/w-rv/auth-expiry20261102/artifacts/task-validation/demo-auth-expiry/evidence/independent-ui-qa2",
+  "results": [
+    {
+      "name": "build",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "463badea1706175e3c411ff0ae419edb06c939be26e0c20ca5dcccff69d2b390",
+      "stderrSha256": "1771d3b3c0e5f758fd6d5cca4d8b5fb2ff2f4f95da5be8806e85a876f32be40f"
+    },
+    {
+      "name": "focused-tests",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "6c42669f4624222af353225586605bd4d5272fea4bc1951c5099ecdbe9d16c42",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "browser",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdoutSha256": "6b87e4190a00d5a9d5bbba6fed2dafec8f5fac92223911e9a9e334f0e41da16e",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

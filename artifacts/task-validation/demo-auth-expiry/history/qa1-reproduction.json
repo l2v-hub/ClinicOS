@@ -1,0 +1,21 @@
+{
+  "sourceSha": "c104d79ddc4047ca39bd8cfd0150d56ef4b503f1",
+  "sourceTree": "3cd98ef45f4aec2e3b4d7e734e51ac114491279a",
+  "status": "finding-reproduced",
+  "finding": "P2: late simulator expiry does not recheck auth status; stale picker remains",
+  "facts": {
+    "statusReads": 1,
+    "identityReads": 1,
+    "sessionReads": 1,
+    "authMeReads": 0,
+    "profileCards": 5,
+    "expiredHeading": 0,
+    "globalRetry": 0,
+    "unexpected": [],
+    "errors": []
+  },
+  "syntheticOnly": true,
+  "actualBuiltApp": true,
+  "realOutboundRequests": 0,
+  "clinicalWrites": 0
+}

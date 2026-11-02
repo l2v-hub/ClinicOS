@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "kind": "clinicos-demo-preflight",
+  "repository": "l2v-hub/ClinicOS",
+  "sourceRef": "refs/heads/main",
+  "mergeSha": "bc880a6dccc40d8dbad73c718c8aa4256562d254",
+  "runId": 41494990323,
+  "runAttempt": 1,
+  "reviewedSha": "bc880a6dccc40d8dbad73c718c8aa4256562d254",
+  "sourcePolicy": "native-exact-commit-v1",
+  "target": {
+    "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+    "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+    "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+    "domain": "clinicos-backend-demo.up.railway.app"
+  },
+  "verifiedAt": "2026-11-02T17:52:06.629Z"
+}

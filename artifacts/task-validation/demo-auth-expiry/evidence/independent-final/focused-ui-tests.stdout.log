@@ -1,0 +1,23 @@
+(node:18948) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ unverified and disabled login states never render generic role cards or demo promises (11.0666ms)
+✔ only confirmed demo shows generic demo cards; Entra preserves account-login wording (1.9623ms)
+✔ confirmed simulator keeps the server profile picker and pending login disables cards (2.0146ms)
+(node:18948) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:17788) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ pending or unavailable auth never exposes an executable login, even with stale enabled status (0.7977ms)
+✔ expired synthetic demo is blocked and clearly distinguished from a configuration failure (0.2041ms)
+✔ the server mode controls access; client clock and expiry only affect a disabled-state explanation (0.1451ms)
+✔ malformed, unsupported and contradictory auth responses fail closed (0.4773ms)
+(node:17788) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 327.5577
