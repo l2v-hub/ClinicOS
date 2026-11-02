@@ -21,6 +21,7 @@ import './App.css';
 // Ultimo foglio: il design system canonico decide l'aspetto di ogni controllo.
 import './design-system.css';
 import { API_URL } from './config';
+import { authAvailability, canStartLogin, parseAuthStatus, type AuthCheckState, type AuthStatus } from './lib/authAvailability';
 import { useRosterOrder } from './lib/useRosterOrder';
 import { useBedsideTouchLayout } from './lib/useBedsideTouchLayout';
 import {
@@ -448,11 +449,9 @@ export default function App() {
     () => ({ ...rosterOptions, requestKey: rosterKey }),
     [rosterOptions, rosterKey],
   );
-  const [authStatus, setAuthStatus] = useState<{
-    mode: 'entra' | 'demo' | 'disabled';
-    temporaryDemo: boolean;
-    simulator?: boolean;
-  } | null>(null);
+  const [authStatus, setAuthStatus] = useState<AuthStatus | null>(null);
+  const [authCheck, setAuthCheck] = useState<AuthCheckState>('checking');
+  const [authCheckAttempt, setAuthCheckAttempt] = useState(0);
   // Ruolo, etichetta, shell e capability della sessione (GET /auth/me). Stato separato da
   // `utente`: aggiornarlo al focus non deve rilanciare i caricamenti legati all'utente.
   const [authz, setAuthz] = useState<AuthzContext | null>(null);
@@ -508,21 +507,32 @@ export default function App() {
 
   useEffect(() => {
     const controller = new AbortController();
+    const timeout = window.setTimeout(() => {
+      setAuthStatus(null);
+      setAuthCheck('unavailable');
+      controller.abort();
+    }, 15_000);
     fetch(`${API_URL}/auth/status`, { signal: controller.signal, cache: 'no-store' })
       .then(async (response) => {
         if (!response.ok) throw new Error('auth_status_unavailable');
-        return response.json() as Promise<{
-          mode: 'entra' | 'demo' | 'disabled';
-          temporaryDemo: boolean;
-          simulator?: boolean;
-        }>;
+        return parseAuthStatus(await response.json());
       })
-      .then(setAuthStatus)
+      .then((status) => {
+        if (controller.signal.aborted) return;
+        setAuthStatus(status);
+        setAuthCheck('available');
+      })
       .catch((error: unknown) => {
-        if (!(error instanceof DOMException && error.name === 'AbortError')) setAuthStatus(null);
-      });
-    return () => controller.abort();
-  }, []);
+        if (controller.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) return;
+        setAuthStatus(null);
+        setAuthCheck('unavailable');
+      })
+      .finally(() => window.clearTimeout(timeout));
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [authCheckAttempt]);
 
   // Navigation history tracking
   const prevNavKeyRef = useRef<NavKey | null>(null);
@@ -2209,7 +2219,7 @@ export default function App() {
   }
 
   async function handleLogin(u: UtenteApp, simulatorIdentityId?: string) {
-    if (loginPending) return;
+    if (loginPending || !canStartLogin(authCheck, authStatus)) return;
     setLoginPending(true);
     setLoginError(null);
     sessionEpochRef.current += 1;
@@ -2280,16 +2290,22 @@ export default function App() {
       if (!identityResponse.ok) {
         const payload = (await identityResponse.json().catch(() => null)) as {
           error?: string;
+          code?: string;
         } | null;
+        if (payload?.code === 'auth_disabled') {
+          setAuthStatus(null);
+          setAuthCheck('checking');
+          setAuthCheckAttempt((attempt) => attempt + 1);
+        }
         setLoginError(payload?.error ?? 'Identità non autorizzata in ClinicOS');
         return;
       }
       const identity = (await identityResponse.json()) as AuthMeResponse;
-      setAuthStatus((prev) => ({
+      setAuthStatus((prev) => prev ? ({
+        ...prev,
         mode: identity.authMode,
         temporaryDemo: identity.temporaryDemo,
-        simulator: prev?.simulator,
-      }));
+      }) : null);
       const nextAuthz = authzFromIdentity(identity, Boolean(simulatorIdentityId));
       setSessionCapabilities(nextAuthz.capabilities);
       setAuthz(nextAuthz);
@@ -3376,6 +3392,14 @@ export default function App() {
   if (!utente)
     return (
       <Login
+        availability={authAvailability(authCheck, authStatus)}
+        authMode={authStatus?.mode ?? null}
+        onRetryAuth={() => {
+          setAuthStatus(null);
+          setAuthCheck('checking');
+          setLoginError(null);
+          setAuthCheckAttempt((attempt) => attempt + 1);
+        }}
         onLogin={handleLogin}
         demoMode={authStatus?.temporaryDemo === true}
         loading={loginPending}

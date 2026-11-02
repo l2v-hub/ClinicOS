@@ -1,4 +1,26 @@
 /* Simulatore ruoli (solo sviluppo): elenco dei profili definiti dal server. */
+.login-availability {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+}
+
+.login-availability h2 {
+  margin: 0;
+  font-size: 18px;
+}
+.login-availability p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
 .login-sim {
   display: grid;
   gap: 12px;
