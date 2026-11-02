@@ -58,8 +58,6 @@ test('malformed, unsupported and contradictory auth responses fail closed', () =
     { ...expired, temporaryDemo: 'false' },
     { ...expired, simulator: 'true' },
     { ...expired, syntheticOnly: 'true' },
-    { ...expired, expiresAt: 'not-a-date' },
-    { ...expired, expiresAt: {} },
     { ...expired, simulator: true },
     { ...expired, mode: 'entra', temporaryDemo: true },
     { ...expired, mode: 'entra', simulator: true },

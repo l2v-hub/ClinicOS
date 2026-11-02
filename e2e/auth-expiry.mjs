@@ -7,7 +7,7 @@ import { preview } from 'vite';
 import { chromium, expect } from 'playwright/test';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const packet = path.join(root, 'artifacts/task-validation/demo-auth-expiry');
+const packet = path.join(root, 'artifacts/task-validation/demo-auth-expiry-r3');
 const out = process.env.QA_EVIDENCE_DIR
   ? path.resolve(process.env.QA_EVIDENCE_DIR)
   : path.join(packet, 'evidence/browser');
@@ -66,6 +66,9 @@ try {
       'server-error',
       'bad-json',
       'timeout',
+      'entra-invalid-expiry',
+      'legacy-invalid-expiry',
+      'disabled-invalid-expiry',
     ]) {
       const context = await browser.newContext({
         viewport: { width, height: 1004 },
@@ -87,10 +90,11 @@ try {
       const identityGate = new Promise((resolve) => {
         releaseIdentity = resolve;
       });
-      if (scenario === 'legacy' || scenario === 'late-expiry')
+      if (scenario === 'legacy' || scenario === 'legacy-invalid-expiry' || scenario === 'late-expiry')
         statusPayload = { ...active, simulator: false };
-      if (scenario === 'entra')
+      if (scenario === 'entra' || scenario === 'entra-invalid-expiry')
         statusPayload = { ...expired, mode: 'entra', syntheticOnly: false, expiresAt: null };
+      if (scenario.endsWith('-invalid-expiry')) statusPayload.expiresAt = 'not-a-date';
       if (scenario === 'disabled') statusPayload = { ...expired, expiresAt: null };
       if (scenario === 'late-simulator-expiry') statusPayload = { ...active };
       page.on('pageerror', (error) => errors.push(error.message));
@@ -192,7 +196,7 @@ try {
           assert.equal(await roleCards.count(), 0);
           assert.ok(statusReads >= 2);
           assert.equal(identityReads, 1);
-        } else if (scenario === 'legacy' || scenario === 'entra') {
+        } else if (['legacy', 'entra', 'legacy-invalid-expiry', 'entra-invalid-expiry'].includes(scenario)) {
           await expect(roleCards).toHaveCount(2);
           assert.equal(await profileCards.count(), 0);
         } else if (scenario === 'late-simulator-expiry') {
@@ -223,7 +227,7 @@ try {
             'timeout',
           ].includes(scenario)
             ? 'Verifica accesso non riuscita'
-            : scenario === 'disabled'
+            : scenario === 'disabled' || scenario === 'disabled-invalid-expiry'
               ? 'Accesso non disponibile'
               : 'Accesso demo scaduto';
           await expect(page.getByRole('heading', { name: heading })).toBeVisible();

@@ -22,14 +22,15 @@ export function parseAuthStatus(payload: unknown): AuthStatus {
   if (value.simulator !== undefined && typeof value.simulator !== 'boolean') return invalid();
   if (value.syntheticOnly !== undefined && typeof value.syntheticOnly !== 'boolean')
     return invalid();
-  const expiresAt = value.expiresAt ?? null;
-  if (
-    expiresAt !== null &&
-    (typeof expiresAt !== 'string' ||
-      expiresAt.length > 50 ||
-      !Number.isFinite(Date.parse(expiresAt)))
-  )
-    return invalid();
+  // Expiry is optional explanatory metadata, not an authentication gate.
+  // A stale demo variable must not override an enabled Entra/demo server mode.
+  // Unusable metadata cannot prove expiration of an already-disabled service.
+  const expiresAt =
+    typeof value.expiresAt === 'string' &&
+    value.expiresAt.length <= 50 &&
+    Number.isFinite(Date.parse(value.expiresAt))
+      ? value.expiresAt
+      : null;
   if (value.mode !== 'demo' && (value.simulator === true || value.temporaryDemo)) return invalid();
   return {
     mode: value.mode,
