@@ -28,12 +28,12 @@ function fixture() {
     operatorCoordination: { active: true, owner: request.owner, nonce: request.ownerNonce },
     demoAuthExpiryRenewals: [clone(request)],
   }] };
-  let mutates = 0, revoked = false, loaded = false, loadedRevision;
+  let mutates = 0, revoked = false, loaded = false, loadedRevision, permissionHook = () => {};
   const store = { load: async () => { loaded = true; loadedRevision = mutates; return clone(remote); }, observe: async () => clone(remote),
     save: async (state, options) => { assert.equal(loaded, true, 'load before optimistic save');
       const expected = loadedRevision; await options.guard(); assert.equal(mutates, expected, 'state-cas-conflict');
       remote = clone(state); mutates++; loadedRevision = mutates; } };
-  const github = { createStateStore: () => store, authorizedMaintainer: async () => !revoked };
+  const github = { createStateStore: () => store, authorizedMaintainer: async () => { permissionHook(remote); return !revoked; } };
   const verifier = async ({ binding, consume }) => {
     assert.equal(consume, true);
     return { provenance: 'user-session', grantId: 'actual-human-fixture', consumptionNonce: 'nonce-fixture',
@@ -42,7 +42,7 @@ function fixture() {
   const controller = createRenewalController({ github, authorizationVerifier: verifier, now: () => now,
     nonce: () => '33333333-3333-4333-8333-333333333333' });
   return { controller, github, verifier, state: () => remote, record: () => remote.manualBatches[0].demoAuthExpiryRenewals[0],
-    mutate: cb => cb(remote), revoke: () => { revoked = true; }, writes: () => mutates };
+    mutate: cb => cb(remote), onPermission: cb => { permissionHook = cb; }, revoke: () => { revoked = true; }, writes: () => mutates };
 }
 const fingerprint = 'c'.repeat(64);
 const fresh = async () => ({ fingerprint });
@@ -115,6 +115,26 @@ for (const [name, change] of [
 });
 test('revoked actor cannot mark the mutation intent', async () => {
   const x = fixture(); const c = await claimed(x); x.revoke(); await assert.rejects(() => x.controller.intent(c));
+});
+for (const [name, change] of [
+  ['execution', s => { s.manualBatches[0].demoAuthExpiryRenewals[0].execution.nonce = '44444444-4444-4444-8444-444444444444'; }],
+  ['owner', s => { s.manualBatches[0].operatorCoordination.nonce = '44444444-4444-4444-8444-444444444444'; }],
+]) test(`${name} change during final permission await cannot reach Railway`, async () => {
+  const x = fixture(); await authorized(x); let reads = 0, mutations = 0, changed = false;
+  x.onPermission(s => {
+    if (!changed && reads >= 5 && s.manualBatches[0].demoAuthExpiryRenewals[0].execution?.status === 'write-intent') {
+      change(s); changed = true;
+    }
+  });
+  const result = await stageRenewal({ selector, actor: 'worker-fixture', runId: '12345', controller: x.controller,
+    inspect: async () => { reads++; return { fingerprint }; },
+    client: async () => { mutations++; return { variableUpsert: true }; } });
+  assert.equal(changed, true); assert.equal(mutations, 0); assert.equal(result.mutationAttempted, false);
+});
+for (const status of ['staged', 'uncertain']) test(`finish(${status}) cannot leap over a durable write-intent`, async () => {
+  const x = fixture(); const c = await claimed(x);
+  await assert.rejects(() => x.controller.finish(c, status));
+  assert.equal(x.record().execution.status, 'claimed');
 });
 test('changed preflight fingerprint never reaches durable claim', async () => {
   const x = fixture(); await authorized(x);
