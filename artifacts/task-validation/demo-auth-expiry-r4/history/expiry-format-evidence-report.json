@@ -1,0 +1,31 @@
+{
+  "at": "2026-11-02T19:22:56.299Z",
+  "provenance": "actual-read-only-public-demo-metadata",
+  "apiOrigin": "https://clinicos-backend-demo.up.railway.app",
+  "authStatus": {
+    "mode": "disabled",
+    "simulator": false,
+    "syntheticOnly": true,
+    "expiresAt": "2026-10-31T23:59:59.000Z"
+  },
+  "ready": {
+    "status": "ready",
+    "tier": "demo",
+    "deploymentId": "a93cffdf-fd91-4a75-bc0d-a97154e0d888",
+    "checks": {
+      "database": "ok",
+      "policy": "ok"
+    }
+  },
+  "strictRequestPreviousExpiry": "2026-10-31T23:59:59Z",
+  "sameInstant": true,
+  "rawStringsEqual": false,
+  "observedDefect": "inspectRenewalTarget strict raw equality rejects the real backend canonical millisecond representation before claim/write",
+  "candidateHead": "528c7ecece5343fa81f7a35f32ea76e87ca92948",
+  "implementation4Required": true,
+  "nativeRevision3Adopted": false,
+  "review2Requested": false,
+  "renewalMutation": false,
+  "deployment": false,
+  "clinicalReadOrWrite": false
+}

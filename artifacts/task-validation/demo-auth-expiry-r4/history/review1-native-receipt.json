@@ -1,0 +1,54 @@
+{
+  "sha": "ed5686807ea4a358430563c7a488fde1bf478f81",
+  "adoption": {
+    "actor": "l2v-hub",
+    "at": "2026-11-02T18:51:26.844Z",
+    "subjectSha": "ed5686807ea4a358430563c7a488fde1bf478f81",
+    "importedReviewCount": 0,
+    "manifestSha256": "84b625dfc963a9de6a054de61d934c4decebd836557bea24eb980c7a81f8461e"
+  },
+  "externalReview": {
+    "channel": "github-comments",
+    "status": "published",
+    "subjectSha": "ed5686807ea4a358430563c7a488fde1bf478f81",
+    "requestId": "ea59b98b-ba67-4607-aefc-b95fe18170ea",
+    "requestedAt": "2026-11-02T18:54:34.519Z",
+    "requestedBy": "l2v-hub",
+    "owner": "l2v-hub",
+    "claimId": "d53b5a84-7506-4fcd-a8eb-4dead8f8d662",
+    "startedAt": "2026-11-02T18:58:04.895Z",
+    "feedbackFingerprint": "304a58ab48e4a669a0c162e7639a106266b549221169246bb7648def5e1a5d72",
+    "reportComment": 6585748408,
+    "reportBodySha256": "beddc661855ecc28fe343cca6ed0c7f07402036cb0865f19b7f2a23a4555c6c0",
+    "completedAt": "2026-11-02T19:01:50.478Z",
+    "feedbackChanged": false
+  },
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "ed5686807ea4a358430563c7a488fde1bf478f81"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "changes-requested",
+        "subject_sha": "ed5686807ea4a358430563c7a488fde1bf478f81",
+        "review_sha256": "275dc4b08c1294740c85f3ea5d044e68c54fa1e7863a08ceebb04d3331384fd9"
+      }
+    ]
+  },
+  "operatorCoordination": {
+    "active": true,
+    "owner": "codex-desktop-root-auth-expiry",
+    "nonce": "c9e4baf8-433e-42eb-ab52-e7858a3cc70a",
+    "reservedAt": "2026-11-02T18:29:38.476Z",
+    "stage": "awaiting-real-Claude-exact-head-review",
+    "sourceSha": "ed5686807ea4a358430563c7a488fde1bf478f81",
+    "issue": 522
+  }
+}

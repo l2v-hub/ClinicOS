@@ -1,0 +1,14 @@
+{
+  "at": "2026-11-02T19:23:43.038Z",
+  "sha": "74712e593b77f81062d0d71446387da12ebbaefd",
+  "node": "v26.3.0",
+  "command": "node --test scripts/automation/renew-demo-auth-expiry.test.mjs",
+  "exitCode": 0,
+  "summary": [
+    "ℹ tests 70",
+    "ℹ pass 70",
+    "ℹ fail 0",
+    "ℹ skipped 0"
+  ],
+  "providerInvoked": false
+}
