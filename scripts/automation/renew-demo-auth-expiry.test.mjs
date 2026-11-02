@@ -1,0 +1,243 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile, mkdtemp, rm } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import {
+  KEY, MAX_RENEWAL_MS, RENEW_MUTATION, validateRenewalRequest,
+  createRenewalController, inspectRenewalTarget, stageRenewal,
+  serializeRenewalReceipt, validateRenewalContext, runRenewalOperation,
+} from './renew-demo-auth-expiry.mjs';
+import { DEMO_TARGET } from '../../agent-team/src/bug-pipeline/demo-deployment.mjs';
+const clone = v => structuredClone(v);
+const now = Date.parse('2026-11-02T18:00:00Z');
+const reviewedSha = 'a'.repeat(40);
+const selector = { subjectId: 'auth-expiry-fixture', operationNonce: '11111111-1111-4111-8111-111111111111', reviewedSha };
+const request = { ...selector, previousExpiry: '2026-10-31T23:59:59Z', newExpiry: '2026-11-09T18:00:00Z',
+  owner: 'root-fixture', ownerNonce: '22222222-2222-4222-8222-222222222222' };
+const env = { GITHUB_REPOSITORY: 'l2v-hub/ClinicOS', GITHUB_REF: 'refs/heads/main',
+  GITHUB_EVENT_NAME: 'workflow_dispatch', GITHUB_SHA: reviewedSha, GITHUB_RUN_ID: '12345', GITHUB_RUN_ATTEMPT: '1',
+  GITHUB_WORKFLOW_REF: 'l2v-hub/ClinicOS/.github/workflows/renew-demo-auth-expiry.yml@refs/heads/main',
+  RENEW_REVIEWED_SHA: reviewedSha };
+function fixture() {
+  let remote = { repository: 'l2v-hub/ClinicOS', batches: [], standaloneReviews: [], manualBatches: [{
+    id: selector.subjectId, issues: [900], reviewIssue: 900, pr: { number: 901 }, sha: 'b'.repeat(40),
+    implementation: [], reviews: [], recoveryHistory: [], release: { status: 'merged', mergeSha: reviewedSha },
+    operatorCoordination: { active: true, owner: request.owner, nonce: request.ownerNonce },
+    demoAuthExpiryRenewals: [clone(request)],
+  }] };
+  let mutates = 0, revoked = false, loaded = false, loadedRevision;
+  const store = { load: async () => { loaded = true; loadedRevision = mutates; return clone(remote); }, observe: async () => clone(remote),
+    save: async (state, options) => { assert.equal(loaded, true, 'load before optimistic save');
+      const expected = loadedRevision; await options.guard(); assert.equal(mutates, expected, 'state-cas-conflict');
+      remote = clone(state); mutates++; loadedRevision = mutates; } };
+  const github = { createStateStore: () => store, authorizedMaintainer: async () => !revoked };
+  const verifier = async ({ binding, consume }) => {
+    assert.equal(consume, true);
+    return { provenance: 'user-session', grantId: 'actual-human-fixture', consumptionNonce: 'nonce-fixture',
+      sourceRef: 'user-session:fixture', binding };
+  };
+  const controller = createRenewalController({ github, authorizationVerifier: verifier, now: () => now,
+    nonce: () => '33333333-3333-4333-8333-333333333333' });
+  return { controller, github, verifier, state: () => remote, record: () => remote.manualBatches[0].demoAuthExpiryRenewals[0],
+    mutate: cb => cb(remote), revoke: () => { revoked = true; }, writes: () => mutates };
+}
+const fingerprint = 'c'.repeat(64);
+const fresh = async () => ({ fingerprint });
+async function authorized(x) { return x.controller.authorize(selector, { actor: 'human-fixture', reference: 'user-session:fixture' }); }
+async function claimed(x) { await authorized(x); return x.controller.claim(selector,
+  { actor: 'worker-fixture', runId: '12345', expectedFingerprint: fingerprint, fresh }); }
+test('only one fixed demo expiry key; bounded strict request accepts seven-day maximum', () => {
+  assert.equal(KEY, 'DEMO_AUTH_EXPIRES_AT'); assert.equal(MAX_RENEWAL_MS, 7 * 24 * 60 * 60 * 1000);
+  assert.equal(validateRenewalRequest(request, now).newExpiry, request.newExpiry);
+  assert.match(RENEW_MUTATION, /variableUpsert/); assert.doesNotMatch(RENEW_MUTATION, /variableCollectionUpsert/);
+});
+for (const [name, change] of [
+  ['expired new date', r => { r.newExpiry = '2026-11-01T00:00:00Z'; }],
+  ['overlong renewal', r => { r.newExpiry = '2026-11-10T00:00:00Z'; }],
+  ['invalid date normalizes', r => { r.newExpiry = '2026-11-32T00:00:00Z'; }],
+  ['infinite date', r => { r.newExpiry = ''; }],
+  ['noncanonical timezone', r => { r.newExpiry = '2026-11-03T00:00:00+00:00'; }],
+  ['unknown field', r => { r.name = 'AUTH_MODE'; }],
+  ['future previous date', r => { r.previousExpiry = '2026-11-03T00:00:00Z'; }],
+  ['nonce injection', r => { r.operationNonce += '\n'; }],
+]) test(`request rejects ${name}`, () => { const r = clone(request); change(r); assert.throws(() => validateRenewalRequest(r, now)); });
+test('CLI requires exact trusted main/workflow and first run attempt', () => {
+  assert.equal(validateRenewalContext(env).reviewedSha, reviewedSha);
+  for (const [k, v] of [['GITHUB_REF','refs/heads/evil'], ['GITHUB_EVENT_NAME','push'],
+    ['RENEW_REVIEWED_SHA','d'.repeat(40)], ['GITHUB_RUN_ATTEMPT','2'], ['GITHUB_WORKFLOW_REF','foreign']])
+    assert.throws(() => validateRenewalContext({ ...env, [k]: v }));
+});
+test('no default authorizer accepts a workflow actor or self-declared receipt', async () => {
+  const x = fixture();
+  const c = createRenewalController({ github: x.github, now: () => now });
+  await assert.rejects(() => c.authorize(selector, { actor: 'human-fixture', reference: 'made-up' }));
+  assert.equal(x.writes(), 0);
+});
+test('actual host verifier produces append-only native action receipt, not a budget extension', async () => {
+  const x = fixture(); const original = clone(x.state().manualBatches[0]); await authorized(x);
+  assert.equal(x.record().authorization.authorization.binding.action, 'renew-demo-auth-expiry');
+  assert.equal(x.record().authorization.authorization.binding.budget, null);
+  assert.equal(x.record().authorization.authorization.binding.reservation.key, KEY);
+  assert.deepEqual(x.state().manualBatches[0].reviews, original.reviews);
+  assert.equal(x.state().manualBatches[0].recoveryHistory.length, 1);
+});
+test('a stored unauthenticated request cannot claim or stage', async () => {
+  const x = fixture(); await assert.rejects(() => x.controller.claim(selector,
+    { actor: 'worker-fixture', runId: '12345', expectedFingerprint: fingerprint, fresh }));
+  assert.equal(x.record().execution, undefined);
+});
+test('single durable claim fences concurrent claimant and replay', async () => {
+  const x = fixture(); const claim = await claimed(x);
+  assert.equal(x.record().execution.status, 'claimed');
+  await assert.rejects(() => x.controller.claim(selector,
+    { actor: 'worker-fixture', runId: '12345', expectedFingerprint: fingerprint, fresh }));
+  await x.controller.intent(claim); assert.equal(x.record().execution.status, 'write-intent');
+  await assert.rejects(() => x.controller.intent(claim));
+});
+test('concurrent claim attempts have one guarded durable winner', async () => {
+  const x = fixture(); await authorized(x);
+  const args = { actor: 'worker-fixture', runId: '12345', expectedFingerprint: fingerprint, fresh };
+  const results = await Promise.allSettled([x.controller.claim(selector, args), x.controller.claim(selector, args)]);
+  assert.equal(results.filter(r => r.status === 'fulfilled').length, 1);
+});
+for (const [name, change] of [
+  ['owner', s => { s.manualBatches[0].operatorCoordination.nonce = 'other'; }],
+  ['source', s => { s.manualBatches[0].sha = 'd'.repeat(40); }],
+  ['expiry', s => { s.manualBatches[0].demoAuthExpiryRenewals[0].newExpiry = '2026-11-04T00:00:00Z'; }],
+  ['review history', s => { s.manualBatches[0].reviews.push({ status: 'changed' }); }],
+]) test(`changed ${name} invalidates consumed capability before claim`, async () => {
+  const x = fixture(); await authorized(x); x.mutate(change);
+  await assert.rejects(() => x.controller.claim(selector,
+    { actor: 'worker-fixture', runId: '12345', expectedFingerprint: fingerprint, fresh }));
+});
+test('revoked actor cannot mark the mutation intent', async () => {
+  const x = fixture(); const c = await claimed(x); x.revoke(); await assert.rejects(() => x.controller.intent(c));
+});
+test('changed preflight fingerprint never reaches durable claim', async () => {
+  const x = fixture(); await authorized(x);
+  await assert.rejects(() => x.controller.claim(selector, { actor: 'worker-fixture', runId: '12345',
+    expectedFingerprint: fingerprint, fresh: async () => ({ fingerprint: 'd'.repeat(64) }) }));
+  assert.equal(x.record().execution, undefined);
+});
+test('blocked or uncertain prior operation prevents a second staged update', async () => {
+  const x = fixture(); await claimed(x);
+  x.mutate(s => { s.manualBatches[0].demoAuthExpiryRenewals.push({ ...clone(request),
+    operationNonce: '44444444-4444-4444-8444-444444444444', execution: { status: 'uncertain' } }); });
+  await assert.rejects(() => x.controller.intent({ selector, nonce: '33333333-3333-4333-8333-333333333333', actor:'worker-fixture',runId:'12345',fingerprint }));
+});
+function targetFixture() {
+  const deploymentId = '55555555-5555-4555-8555-555555555555';
+  const data = { projectToken: { project: { id: DEMO_TARGET.projectId }, environment: { id: DEMO_TARGET.environmentId, name: 'demo' } },
+    serviceInstance: { serviceId: DEMO_TARGET.serviceId, environmentId: DEMO_TARGET.environmentId,
+      source: { repo: 'l2v-hub/ClinicOS' }, domains: { serviceDomains: [{ domain: DEMO_TARGET.domain }], customDomains: [] },
+      activeDeployments: [{ id: deploymentId, status: 'SUCCESS', meta: { commitHash: 'e'.repeat(40) } }],
+      latestDeployment: { id: deploymentId, status: 'SUCCESS' } },
+    deploymentTriggers: { edges: [], pageInfo: { hasNextPage: false } },
+    deployments: { edges: [], pageInfo: { hasNextPage: false } } };
+  const status = { mode: 'disabled', simulator: false, temporaryDemo: false, syntheticOnly: true, expiresAt: request.previousExpiry };
+  const ready = { status: 'ready', tier: 'demo', deploymentId, checks: { database: 'ok', policy: 'ok' } };
+  return { data, status, ready };
+}
+test('preflight validates fixed demo, old expiry, health, idle rollout and source without variables query', async () => {
+  const x = targetFixture(); let queries = [];
+  const snapshot = await inspectRenewalTarget({ request, client: async (query) => { queries.push(query); return x.data; },
+    readPublic: async url => url.endsWith('/ready') ? x.ready : x.status, assertFreshMain: async () => {}, now: () => now });
+  assert.match(snapshot.fingerprint, /^[a-f0-9]{64}$/); assert.equal(snapshot.target.domain, DEMO_TARGET.domain);
+  assert.ok(queries.every(q => !/\bvariables\s*\(/.test(q) && !q.startsWith('mutation')));
+});
+for (const [name, change] of [
+  ['production', x => { x.ready.tier = 'production'; }],
+  ['foreign token', x => { x.data.projectToken.environment.id = 'foreign'; }],
+  ['wrong domain', x => { x.data.serviceInstance.domains.serviceDomains[0].domain = 'production.example'; }],
+  ['active rollout', x => { x.data.deployments.edges.push({ node: { id: 'rolling' } }); }],
+  ['unknown source', x => { x.data.serviceInstance.activeDeployments[0].meta = {}; }],
+  ['old expiry drift', x => { x.status.expiresAt = '2026-11-01T00:00:00Z'; }],
+  ['nonsynthetic data', x => { x.status.syntheticOnly = false; }],
+]) test(`preflight rejects ${name}`, async () => {
+  const x = targetFixture(); change(x);
+  await assert.rejects(() => inspectRenewalTarget({ request, client: async () => x.data,
+    readPublic: async url => url.endsWith('/ready') ? x.ready : x.status, assertFreshMain: async () => {}, now: () => now }));
+});
+test('stage uses a durable claim/intent and exactly one fixed-key no-deploy mutation', async () => {
+  const x = fixture(); await authorized(x); const calls = [];
+  const receipt = await stageRenewal({ selector, actor: 'worker-fixture', runId: '12345', controller: x.controller,
+    inspect: fresh, client: async (query, vars) => { calls.push({ query, vars }); return { variableUpsert: true }; }, now: () => now });
+  assert.equal(receipt.status, 'staged-awaiting-explicit-deployment'); assert.equal(calls.length, 1);
+  assert.deepEqual(calls[0].vars.input, { projectId: DEMO_TARGET.projectId, environmentId: DEMO_TARGET.environmentId,
+    serviceId: DEMO_TARGET.serviceId, name: KEY, value: request.newExpiry, skipDeploys: true });
+  assert.equal(x.record().execution.status, 'staged');
+});
+test('uncertain POST is retained, finite and never retried or blindly replayed', async () => {
+  const x = fixture(); await authorized(x); let writes = 0;
+  const args = { selector, actor: 'worker-fixture', runId: '12345', controller: x.controller, inspect: fresh,
+    client: async () => { writes++; throw Error('private-provider-error secret-payload'); }, now: () => now };
+  const r = await stageRenewal(args);
+  assert.equal(r.status, 'mutation-uncertain-do-not-retry'); assert.equal(writes, 1);
+  assert.equal(x.record().execution.status, 'uncertain');
+  assert.ok(!JSON.stringify(r).includes('secret-payload')); await assert.rejects(() => stageRenewal(args)); assert.equal(writes, 1);
+});
+test('stage never accepts a missing native controller capability adapter', async () => {
+  let writes = 0; await assert.rejects(() => stageRenewal({ selector, inspect: fresh, client: async () => { writes++; } }));
+  assert.equal(writes, 0);
+});
+test('default inspect validates canonical request/target without authority consumption or mutation', async () => {
+  const x = fixture(); let mutations = 0;
+  const receipt = await runRenewalOperation({ selector, controller: x.controller, inspect: fresh,
+    client: async () => { mutations++; } });
+  assert.equal(receipt.status, 'inspection-passed-awaiting-explicit-stage');
+  assert.equal(receipt.mutationAttempted, false); assert.equal(mutations, 0); assert.equal(x.writes(), 0);
+  assert.equal(x.record().authorization, undefined);
+});
+test('source/main drift after durable intent still blocks before Railway mutation', async () => {
+  const x = fixture(); await authorized(x); let reads = 0, mutations = 0;
+  const result = await stageRenewal({ selector, actor: 'worker-fixture', runId: '12345', controller: x.controller,
+    inspect: async () => ({ fingerprint: ++reads >= 5 ? 'd'.repeat(64) : fingerprint }),
+    client: async () => { mutations++; return { variableUpsert: true }; } });
+  assert.equal(result.status, 'blocked-before-write'); assert.equal(mutations, 0);
+  assert.equal(x.record().execution.status, 'blocked-before-write');
+});
+test('async preflight callbacks cannot rewrite the canonical expiry through request aliases', async () => {
+  const x = fixture(); await authorized(x); let actual;
+  const result = await stageRenewal({ selector, actor: 'worker-fixture', runId: '12345', controller: x.controller,
+    inspect: async value => { value.newExpiry = '2099-01-01T00:00:00Z'; return { fingerprint }; },
+    client: async (_query, value) => { actual = value.input.value; return { variableUpsert: true }; } });
+  assert.equal(actual, request.newExpiry); assert.equal(result.newExpiry, request.newExpiry);
+});
+test('receipt serialization refuses credentials and arbitrary error fields', () => {
+  const valid = { schemaVersion: 1, status: 'blocked-before-write', code: 'RENEWAL_BLOCKED',
+    mutationAttempted: false, deploymentTriggered: false };
+  assert.equal(JSON.parse(serializeRenewalReceipt(valid)).code, valid.code);
+  assert.throws(() => serializeRenewalReceipt({ ...valid, detail: 'private error' }));
+  assert.throws(() => serializeRenewalReceipt({ ...valid, code: 'SECRET-value' }, ['SECRET-value']));
+  assert.throws(() => serializeRenewalReceipt(valid, [' RENEWAL_BLOCKED ']));
+  assert.throws(() => serializeRenewalReceipt(valid, ['RENEWAL_BLOCKED']));
+});
+test('actual CLI rejects untrusted context with only a finite private receipt on Windows and Linux', async () => {
+  const root = await mkdtemp(path.join(tmpdir(), 'clinicos-renewal-test-'));
+  assert.equal(path.dirname(root), path.resolve(tmpdir())); assert.ok(path.basename(root).startsWith('clinicos-renewal-test-'));
+  try {
+    const child = spawnSync(process.execPath, [fileURLToPath(new URL('./renew-demo-auth-expiry.mjs', import.meta.url))], {
+      cwd: root, encoding: 'utf8', timeout: 10000,
+      env: { PATH: process.env.PATH, SystemRoot: process.env.SystemRoot, TEMP: process.env.TEMP, TMP: process.env.TMP,
+        RAILWAY_TOKEN: 'synthetic-credential-must-not-appear', GITHUB_EVENT_NAME: 'push' },
+    });
+    assert.equal(child.status, 1); assert.equal(child.stderr, '');
+    const receipt = JSON.parse(await readFile(path.join(root, 'demo-auth-renewal-receipt.json'), 'utf8'));
+    assert.equal(receipt.status, 'blocked-before-write'); assert.equal(receipt.mutationAttempted, false);
+    assert.ok(!child.stdout.includes('synthetic-credential-must-not-appear'));
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+test('workflow pins trusted main, exact target environment, shared deployment queue and tests before secrets', async () => {
+  const yaml = await readFile(new URL('../../.github/workflows/renew-demo-auth-expiry.yml', import.meta.url), 'utf8');
+  assert.match(yaml, /group: railway-demo/); assert.match(yaml, /contents: read/);
+  assert.match(yaml, /environment: 'glistening-friendship \/ demo'/);
+  assert.match(yaml, /secrets\.RAILWAY_DEMO_TOKEN/); assert.doesNotMatch(yaml, /secrets\.RAILWAY_TOKEN[ }]/);
+  assert.match(yaml, /secrets\.CLINICOS_BOT_TOKEN/); assert.match(yaml, /if: always\(\)/);
+  assert.match(yaml, /options: \[inspect, stage\]/); assert.match(yaml, /default: inspect/);
+  assert.ok(yaml.indexOf('run: node --test') < yaml.indexOf('secrets.RAILWAY_DEMO_TOKEN'));
+  for (const line of yaml.split('\n').filter(l => /uses:/.test(l))) assert.match(line, /@[a-f0-9]{40}\s*$/);
+  assert.doesNotMatch(yaml, /\$\{\{\s*inputs\.[^}]+\}\}.*(?:curl|railway|node)/);
+});

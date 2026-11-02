@@ -1,0 +1,68 @@
+name: Stage authorized demo auth expiry
+run-name: demo-auth-renewal ${{ inputs.subject_id }} ${{ inputs.operation_nonce }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      reviewed_sha:
+        description: Exact reviewed current protected main SHA
+        type: string
+        required: true
+      subject_id:
+        description: Independently owned canonical auth-fix subject (not an authorization)
+        type: string
+        required: true
+      operation_nonce:
+        description: Already-authorized durable single-use renewal operation
+        type: string
+        required: true
+      operation:
+        description: Inspect only by default; stage requires an already-consumed native capability
+        type: choice
+        options: [inspect, stage]
+        default: inspect
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: railway-demo
+  cancel-in-progress: false
+
+jobs:
+  stage:
+    if: >-
+      github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' && inputs.reviewed_sha == github.sha && github.run_attempt == 1
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    environment: 'glistening-friendship / demo'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Test isolated renewal policy without credentials
+        run: node --test scripts/automation/renew-demo-auth-expiry.test.mjs
+      - name: Stage one previously authorized expiry only; never deploy or migrate
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+          RENEW_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+          RENEW_SUBJECT_ID: ${{ inputs.subject_id }}
+          RENEW_OPERATION_NONCE: ${{ inputs.operation_nonce }}
+          RENEW_OPERATION: ${{ inputs.operation }}
+        run: node scripts/automation/renew-demo-auth-expiry.mjs "$RENEW_OPERATION"
+      - name: Preserve finite staged or uncertain receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: demo-auth-renewal-${{ github.run_id }}-${{ github.run_attempt }}
+          path: demo-auth-renewal-receipt.json
+          if-no-files-found: warn
+          retention-days: 30
