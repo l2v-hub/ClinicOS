@@ -84,6 +84,32 @@ test('actual host verifier produces append-only native action receipt, not a bud
   assert.deepEqual(x.state().manualBatches[0].reviews, original.reviews);
   assert.equal(x.state().manualBatches[0].recoveryHistory.length, 1);
 });
+for (const kind of ['duplicate-subject', 'duplicate-operation', 'shared-issue', 'shared-pr']) test(`native authorization rejects ${kind} ownership`, async () => {
+  const x = fixture(); x.mutate(s => {
+    const other = clone(s.manualBatches[0]); other.id = kind === 'duplicate-subject' ? selector.subjectId : 'another-auth-owner';
+    other.issues = kind === 'shared-issue' ? [900] : [902]; other.pr = { number: kind === 'shared-pr' ? 901 : 903 };
+    other.demoAuthExpiryRenewals = kind === 'duplicate-operation' ? [{ ...clone(request), subjectId: other.id }] : [];
+    s.standaloneReviews.push(other);
+  });
+  await assert.rejects(() => authorized(x)); assert.equal(x.writes(), 0);
+});
+test('consumed capability cannot be copied onto another issue or operation', async () => {
+  const x = fixture(); await authorized(x); const foreign = { ...selector, subjectId: 'another-auth-owner', operationNonce: '44444444-4444-4444-8444-444444444444' };
+  x.mutate(s => {
+    const other = clone(s.manualBatches[0]); other.id = foreign.subjectId; other.issues = [902]; other.pr = { number: 903 };
+    other.demoAuthExpiryRenewals[0] = { ...other.demoAuthExpiryRenewals[0], ...foreign };
+    s.manualBatches.push(other);
+  });
+  await assert.rejects(() => x.controller.prepare(foreign));
+});
+test('a verifier consumption nonce is not reusable for another issue action', async () => {
+  const x = fixture(); await authorized(x); const foreign = { ...selector, subjectId: 'another-auth-owner', operationNonce: '44444444-4444-4444-8444-444444444444' };
+  x.mutate(s => {
+    const other = clone(s.manualBatches[0]); other.id = foreign.subjectId; other.issues = [902]; other.pr = { number: 903 };
+    other.recoveryHistory = []; other.demoAuthExpiryRenewals = [{ ...clone(request), ...foreign }]; s.manualBatches.push(other);
+  });
+  await assert.rejects(() => x.controller.authorize(foreign, { actor: 'human-fixture', reference: 'user-session:fixture' }));
+});
 test('a stored unauthenticated request cannot claim or stage', async () => {
   const x = fixture(); await assert.rejects(() => x.controller.claim(selector,
     { actor: 'worker-fixture', runId: '12345', expectedFingerprint: fingerprint, fresh }));

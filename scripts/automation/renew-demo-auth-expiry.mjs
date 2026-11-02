@@ -148,7 +148,9 @@ export function createRenewalController({ github, authorizationVerifier, now = D
   }
   async function owned(claim, status, mutable = false) {
     const value = mutable ? locate(await store.load(), claim.selector, now()) : await observe(claim.selector);
-    verify(value); await allowed(value, claim.actor);
+    verify(value); const before = historyDigest(value.b); await allowed(value, claim.actor);
+    const current = await observe(claim.selector); verify(current);
+    assert.equal(historyDigest(current.b), before, 'Renewal ownership changed during permission check');
     const execution = value.q.execution; assert.ok(execution && statuses.includes(execution.status));
     for (const field of ['nonce', 'actor', 'runId', 'fingerprint']) assert.equal(execution[field], claim[field]);
     if (status) assert.equal(execution.status, status);
@@ -162,7 +164,7 @@ export function createRenewalController({ github, authorizationVerifier, now = D
   async function finish(claim, status) {
     assert.ok(['staged', 'uncertain', 'blocked-before-write'].includes(status));
     const value = await owned(claim, undefined, true), before = JSON.stringify(value.b);
-    assert.ok(['claimed', 'write-intent'].includes(value.q.execution.status));
+    assert.ok((status === 'blocked-before-write' ? ['claimed', 'write-intent'] : ['write-intent']).includes(value.q.execution.status));
     value.q.execution.status = status; value.q.execution.finishedAt = new Date(now()).toISOString();
     await save(value, before, claim.actor);
   }
