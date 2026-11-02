@@ -211,7 +211,10 @@ export async function inspectRenewalTarget({ request: raw, client, readPublic, a
   const status = await readPublic(`https://${DEMO_TARGET.domain}/auth/status`);
   assert.equal(status.mode, 'disabled'); assert.equal(status.simulator, false);
   assert.equal(status.temporaryDemo, false); assert.equal(status.syntheticOnly, true);
-  assert.equal(status.expiresAt, request.previousExpiry);
+  // The strict request is UTC seconds; the deployed status endpoint may emit
+  // the same canonical instant with .000Z. Never parse or normalize public input.
+  assert.ok(typeof status.expiresAt === 'string' &&
+    [request.previousExpiry, new Date(expiry(request.previousExpiry)).toISOString()].includes(status.expiresAt));
   const ready = await readPublic(`https://${DEMO_TARGET.domain}/ready`);
   assert.equal(ready.status, 'ready'); assert.equal(ready.tier, 'demo');
   assert.equal(ready.deploymentId, active[0].id);
