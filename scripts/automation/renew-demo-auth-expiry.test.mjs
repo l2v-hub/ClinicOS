@@ -195,6 +195,28 @@ test('preflight validates fixed demo, old expiry, health, idle rollout and sourc
   assert.match(snapshot.fingerprint, /^[a-f0-9]{64}$/); assert.equal(snapshot.target.domain, DEMO_TARGET.domain);
   assert.ok(queries.every(q => !/\bvariables\s*\(/.test(q) && !q.startsWith('mutation')));
 });
+test('preflight accepts the deployed backend canonical .000Z spelling of the exact strict previous instant', async () => {
+  const x = targetFixture(); x.status.expiresAt = '2026-10-31T23:59:59.000Z';
+  const snapshot = await inspectRenewalTarget({ request, client: async () => x.data,
+    readPublic: async url => url.endsWith('/ready') ? x.ready : x.status,
+    assertFreshMain: async () => {}, now: () => now });
+  assert.equal(snapshot.previousExpiry, request.previousExpiry);
+});
+for (const [name, expiresAt] of [
+  ['nonzero milliseconds', '2026-10-31T23:59:59.001Z'],
+  ['different instant', '2026-11-01T00:00:00.000Z'],
+  ['equivalent offset spelling', '2026-11-01T00:59:59+01:00'],
+  ['short fractional spelling', '2026-10-31T23:59:59.00Z'],
+  ['extra fractional spelling', '2026-10-31T23:59:59.0000Z'],
+  ['malformed suffix', '2026-10-31T23:59:59.000Zextra'],
+  ['whitespace suffix', '2026-10-31T23:59:59.000Z\n'],
+  ['missing value', undefined], ['null', null], ['number', 1793481599000], ['object', {}], ['array', []],
+]) test(`preflight rejects public expiry ${name}`, async () => {
+  const x = targetFixture(); x.status.expiresAt = expiresAt;
+  await assert.rejects(() => inspectRenewalTarget({ request, client: async () => x.data,
+    readPublic: async url => url.endsWith('/ready') ? x.ready : x.status,
+    assertFreshMain: async () => {}, now: () => now }));
+});
 for (const [name, change] of [
   ['production', x => { x.ready.tier = 'production'; }],
   ['foreign token', x => { x.data.projectToken.environment.id = 'foreign'; }],
