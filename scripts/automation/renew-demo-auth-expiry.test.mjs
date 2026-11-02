@@ -28,7 +28,7 @@ function fixture() {
     operatorCoordination: { active: true, owner: request.owner, nonce: request.ownerNonce },
     demoAuthExpiryRenewals: [clone(request)],
   }] };
-  let mutates = 0, revoked = false, loaded = false, loadedRevision, permissionHook = () => {};
+  let mutates = 0, revoked = false, loaded = false, loadedRevision, permissionHook = () => {}, clock = now, authorizationNonce = 'nonce-fixture';
   const store = { load: async () => { loaded = true; loadedRevision = mutates; return clone(remote); }, observe: async () => clone(remote),
     save: async (state, options) => { assert.equal(loaded, true, 'load before optimistic save');
       const expected = loadedRevision; await options.guard(); assert.equal(mutates, expected, 'state-cas-conflict');
@@ -36,13 +36,14 @@ function fixture() {
   const github = { createStateStore: () => store, authorizedMaintainer: async () => { permissionHook(remote); return !revoked; } };
   const verifier = async ({ binding, consume }) => {
     assert.equal(consume, true);
-    return { provenance: 'user-session', grantId: 'actual-human-fixture', consumptionNonce: 'nonce-fixture',
+    return { provenance: 'user-session', grantId: 'actual-human-fixture', consumptionNonce: authorizationNonce,
       sourceRef: 'user-session:fixture', binding };
   };
-  const controller = createRenewalController({ github, authorizationVerifier: verifier, now: () => now,
+  const controller = createRenewalController({ github, authorizationVerifier: verifier, now: () => clock,
     nonce: () => '33333333-3333-4333-8333-333333333333' });
   return { controller, github, verifier, state: () => remote, record: () => remote.manualBatches[0].demoAuthExpiryRenewals[0],
-    mutate: cb => cb(remote), onPermission: cb => { permissionHook = cb; }, revoke: () => { revoked = true; }, writes: () => mutates };
+    mutate: cb => cb(remote), onPermission: cb => { permissionHook = cb; }, revoke: () => { revoked = true; }, writes: () => mutates,
+    setClock: value => { clock = value; }, setAuthorizationNonce: value => { authorizationNonce = value; } };
 }
 const fingerprint = 'c'.repeat(64);
 const fresh = async () => ({ fingerprint });
@@ -215,6 +216,51 @@ test('stage uses a durable claim/intent and exactly one fixed-key no-deploy muta
   assert.deepEqual(calls[0].vars.input, { projectId: DEMO_TARGET.projectId, environmentId: DEMO_TARGET.environmentId,
     serviceId: DEMO_TARGET.serviceId, name: KEY, value: request.newExpiry, skipDeploys: true });
   assert.equal(x.record().execution.status, 'staged');
+});
+async function firstStage(x) {
+  await authorized(x);
+  return stageRenewal({ selector, actor: 'worker-fixture', runId: '12345', controller: x.controller,
+    inspect: fresh, client: async () => ({ variableUpsert: true }) });
+}
+function addLaterRequest(x, { previousExpiry = request.newExpiry, clock = Date.parse(request.newExpiry) + 1000 } = {}) {
+  x.setClock(clock); x.setAuthorizationNonce('nonce-fixture-next');
+  const later = { ...request, operationNonce: '44444444-4444-4444-8444-444444444444', previousExpiry,
+    newExpiry: new Date(clock + 2 * 24 * 60 * 60 * 1000).toISOString().replace('.000Z', 'Z') };
+  x.mutate(s => s.manualBatches[0].demoAuthExpiryRenewals.push(later));
+  return { subjectId: later.subjectId, operationNonce: later.operationNonce, reviewedSha: later.reviewedSha };
+}
+test('a completed expired staged renewal permits a separately authorized later stage without rewriting history', async () => {
+  const x = fixture(); await firstStage(x);
+  const old = clone(x.record()); const later = addLaterRequest(x);
+  await x.controller.authorize(later, { actor: 'human-fixture', reference: 'user-session:later-renewal' });
+  let mutations = 0;
+  const result = await stageRenewal({ selector: later, actor: 'worker-fixture', runId: '12346', controller: x.controller,
+    inspect: fresh, client: async (_query, vars) => { mutations++; assert.equal(vars.input.value, '2026-11-11T18:00:01Z'); return { variableUpsert: true }; } });
+  assert.equal(result.status, 'staged-awaiting-explicit-deployment'); assert.equal(mutations, 1);
+  assert.deepEqual(x.record(), old); assert.equal(x.state().manualBatches[0].recoveryHistory.length, 2);
+  assert.equal(x.state().manualBatches[0].demoAuthExpiryRenewals[1].execution.status, 'staged');
+});
+for (const status of ['claimed', 'write-intent', 'uncertain']) test(`prior ${status} renewal still blocks a later action after expiry`, async () => {
+  const x = fixture(); await firstStage(x); x.mutate(s => { s.manualBatches[0].demoAuthExpiryRenewals[0].execution.status = status; });
+  const later = addLaterRequest(x);
+  await assert.rejects(() => x.controller.authorize(later, { actor: 'human-fixture', reference: 'user-session:later-renewal' }));
+});
+test('expired prior stage is not a license to skip an unobserved expiry gap', async () => {
+  const x = fixture(); await firstStage(x);
+  const later = addLaterRequest(x, { previousExpiry: '2026-11-10T18:00:00Z', clock: Date.parse('2026-11-12T18:00:00Z') });
+  await assert.rejects(() => x.controller.authorize(later, { actor: 'human-fixture', reference: 'user-session:later-renewal' }));
+});
+test('a prior stage whose expiry is still live cannot authorize a parallel renewal', async () => {
+  const x = fixture(); await firstStage(x);
+  const later = addLaterRequest(x, { previousExpiry: request.previousExpiry, clock: now + 1000 });
+  await assert.rejects(() => x.controller.authorize(later, { actor: 'human-fixture', reference: 'user-session:parallel-renewal' }));
+});
+test('duplicate or parallel historical staged cutoffs remain ambiguous and blocked', async () => {
+  const x = fixture(); await firstStage(x);
+  x.mutate(s => s.manualBatches[0].demoAuthExpiryRenewals.push({ ...clone(s.manualBatches[0].demoAuthExpiryRenewals[0]),
+    operationNonce: '55555555-5555-4555-8555-555555555555' }));
+  const later = addLaterRequest(x);
+  await assert.rejects(() => x.controller.authorize(later, { actor: 'human-fixture', reference: 'user-session:later-renewal' }));
 });
 test('uncertain POST is retained, finite and never retried or blindly replayed', async () => {
   const x = fixture(); await authorized(x); let writes = 0;
