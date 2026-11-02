@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "kind": "immutable-linked-child-history-bootstrap",
+  "repository": "l2v-hub/ClinicOS",
+  "parent": {
+    "id": "standalone-pr-523",
+    "pr": 523,
+    "issue": 522,
+    "reviewedSha": "3fdedec7305d86972b255a7f532d2028b9a0eabb",
+    "mergeSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+    "sourceTree": "3bd43c572a925a87426ed83b7915bc7cad881089",
+    "latestActualTestedSourceSha": "a5be73fa0d6d75abe216b67f99dbc754449f6315",
+    "snapshotSha256": "25df1c52f839f8b6ee57593fe5c90f9acfa9e9175b6083d1c2dd274087476048",
+    "mergeReceiptSha256": "f4a77e8764a741163b93d62db9b150afb826f3a2295a0875e8bc5c1c522ba5ec",
+    "originalReleaseSha256": "c8dfc7057ae600be7316b05113962e1ecf57d2f85a6f2d384b62df71287d4301",
+    "originalHoldSha256": "6921019176cc99ff90f9e1c1677cfb48f7ef7844e1c37d2e632dadd33a595c3f",
+    "implementationSha256": "b31e1ac720a82ec7f8ba53835ec956985cd91ee0d34678414a5515db55da90b8",
+    "reviewsSha256": "83fced8b9e3df4ac0eb6921d03af1a5e0a3431ed89567eeadefc77a7f9949dbd",
+    "reviewLedgerSha256": "e7ff47cdfbf83e8b5dbebc394dcd33ba77fdf25240a8623146435d6df8e1e6ec",
+    "reviewReportsSha256": "e8d14eab4f1c674c7c36d840d15ede85fecfc9cf36bd1d39e73a19ede48c9b1f",
+    "reviewProofSha256": "df7995494eb4b29134b60c595945a0d4e92082da767b5481e02aa9e9eb385c48"
+  },
+  "historicalUsage": {
+    "implementationUsed": 4,
+    "implementationLimit": 4,
+    "reviewsUsed": 2,
+    "reviewsLimit": 4
+  },
+  "fifthCycle": {
+    "status": "pending-actual-child-native-budget-extension",
+    "globalRound": 5,
+    "maximumAdditionalImplementation": 1,
+    "noParentSecondExtension": true,
+    "noCounterReset": true
+  },
+  "provenance": {
+    "parentPR": "https://github.com/l2v-hub/ClinicOS/pull/523",
+    "genuineReview1": "https://github.com/l2v-hub/ClinicOS/pull/523#pullrequestreview-5741807864",
+    "genuineReview2": "https://github.com/l2v-hub/ClinicOS/pull/523#pullrequestreview-5742776554",
+    "genuineReview2PublishedComment": "https://github.com/l2v-hub/ClinicOS/pull/523#issuecomment-6587467828"
+  },
+  "currentCodeOrReviewApproval": false,
+  "currentOnlineAcceptance": false,
+  "historySemantics": "The copied records remain evidence of original historical SHAs only; no test, model review, code change, allowance or online success is created by this bootstrap."
+}
