@@ -7,7 +7,7 @@ import { preview } from 'vite';
 import { chromium, expect } from 'playwright/test';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const packet = path.join(root, 'artifacts/task-validation/demo-auth-expiry-r3');
+const packet = path.join(root, 'artifacts/task-validation/demo-auth-expiry-r4');
 const out = process.env.QA_EVIDENCE_DIR
   ? path.resolve(process.env.QA_EVIDENCE_DIR)
   : path.join(packet, 'evidence/browser');
