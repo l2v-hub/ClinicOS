@@ -233,12 +233,27 @@ test('a completed expired staged renewal permits a separately authorized later s
   const x = fixture(); await firstStage(x);
   const old = clone(x.record()); const later = addLaterRequest(x);
   await x.controller.authorize(later, { actor: 'human-fixture', reference: 'user-session:later-renewal' });
-  let mutations = 0;
+  let mutations = 0, publicExpiryReads = 0; const live = targetFixture(); live.status.expiresAt = request.newExpiry;
   const result = await stageRenewal({ selector: later, actor: 'worker-fixture', runId: '12346', controller: x.controller,
-    inspect: fresh, client: async (_query, vars) => { mutations++; assert.equal(vars.input.value, '2026-11-11T18:00:01Z'); return { variableUpsert: true }; } });
+    inspect: q => inspectRenewalTarget({ request: q, client: async () => live.data,
+      readPublic: async url => { if (url.endsWith('/ready')) return live.ready; publicExpiryReads++; return live.status; },
+      assertFreshMain: async () => {}, now: () => Date.parse(request.newExpiry) + 1000 }),
+    client: async (_query, vars) => { mutations++; assert.equal(vars.input.value, '2026-11-11T18:00:01Z'); return { variableUpsert: true }; } });
   assert.equal(result.status, 'staged-awaiting-explicit-deployment'); assert.equal(mutations, 1);
+  assert.ok(publicExpiryReads >= 5, 'The later renewal still proves the exact public previous expiry at each write boundary');
   assert.deepEqual(x.record(), old); assert.equal(x.state().manualBatches[0].recoveryHistory.length, 2);
   assert.equal(x.state().manualBatches[0].demoAuthExpiryRenewals[1].execution.status, 'staged');
+});
+test('expired staged history without matching live previous expiry never reaches a second claim or write', async () => {
+  const x = fixture(); await firstStage(x); const later = addLaterRequest(x);
+  await x.controller.authorize(later, { actor: 'human-fixture', reference: 'user-session:later-renewal' });
+  let mutations = 0; const live = targetFixture();
+  await assert.rejects(() => stageRenewal({ selector: later, actor: 'worker-fixture', runId: '12346', controller: x.controller,
+    inspect: q => inspectRenewalTarget({ request: q, client: async () => live.data,
+      readPublic: async url => url.endsWith('/ready') ? live.ready : live.status,
+      assertFreshMain: async () => {}, now: () => Date.parse(request.newExpiry) + 1000 }),
+    client: async () => { mutations++; return { variableUpsert: true }; } }));
+  assert.equal(mutations, 0); assert.equal(x.state().manualBatches[0].demoAuthExpiryRenewals[1].execution, undefined);
 });
 for (const status of ['claimed', 'write-intent', 'uncertain']) test(`prior ${status} renewal still blocks a later action after expiry`, async () => {
   const x = fixture(); await firstStage(x); x.mutate(s => { s.manualBatches[0].demoAuthExpiryRenewals[0].execution.status = status; });

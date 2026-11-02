@@ -56,6 +56,35 @@ export function validateRenewalContext(env) {
   return { repository: REPO, reviewedSha: env.GITHUB_SHA, runId: env.GITHUB_RUN_ID, runAttempt: 1 };
 }
 function entries(state) { return collections.flatMap(k => (state[k] ?? []).map(subject => ({ collection: k, subject }))); }
+function assertPriorRenewals(all, current, request, clock) {
+  const stages = [];
+  for (const { subject, q } of all) {
+    if (q === current || !q.execution || q.execution.status === 'blocked-before-write') continue;
+    assert.equal(q.execution.status, 'staged', 'In-flight or uncertain renewal requires operator reconciliation');
+    const saved = q.authorization, auth = saved?.authorization, authorizedAt = Date.parse(saved?.authorizedAt);
+    assert.ok(Number.isFinite(authorizedAt) && authorizedAt <= clock && new Date(authorizedAt).toISOString() === saved.authorizedAt);
+    const prior = validateRenewalRequest(requestData(q), authorizedAt), end = expiry(prior.newExpiry);
+    assert.ok(end <= clock && end <= expiry(request.previousExpiry), 'A staged renewal is still live or overlaps this request');
+    assert.ok(['user-session', 'distinct-maintainer-comment'].includes(auth?.provenance));
+    assert.equal(auth.bindingDigest, historyDigest(auth.binding));
+    assert.equal(auth.binding.action, ACTION); assert.equal(auth.binding.entityId, subject.id);
+    const reserved = { ...prior, target: DEMO_TARGET, key: KEY, skipDeploys: true };
+    for (const [key, value] of Object.entries(reserved)) assert.deepEqual(auth.binding.reservation[key], value);
+    const history = subject.recoveryHistory ?? [], index = saved.historyBeforeLength;
+    assert.ok(Number.isSafeInteger(index) && index >= 0 && history.length > index);
+    assert.equal(historyDigest(history.slice(0, index)), saved.historyBeforeDigest);
+    assert.equal(history[index].action, ACTION); assert.equal(history[index].nonce, saved.auditNonce);
+    assert.deepEqual(history[index].authorization, auth);
+    stages.push(prior);
+  }
+  stages.sort((a, b) => expiry(a.newExpiry) - expiry(b.newExpiry));
+  for (let index = 1; index < stages.length; index++) {
+    assert.ok(expiry(stages[index - 1].newExpiry) < expiry(stages[index].newExpiry), 'Parallel staged cutoff is ambiguous');
+    assert.equal(stages[index].previousExpiry, stages[index - 1].newExpiry, 'Historical stages do not form one expiry chain');
+  }
+  if (stages.length) assert.equal(stages.at(-1).newExpiry, request.previousExpiry,
+    'The new previous expiry must exactly continue the latest completed staged cutoff');
+}
 function locate(state, input, clock) {
   const selector = select(input); assert.equal(state.repository, REPO);
   const owners = entries(state).filter(x => x.subject.id === selector.subjectId);
@@ -72,8 +101,7 @@ function locate(state, input, clock) {
   assert.equal(b.operatorCoordination.owner, request.owner); assert.equal(b.operatorCoordination.nonce, request.ownerNonce);
   assert.match(b.sha ?? '', SHA);
   assert.ok(['merged', 'deployed'].includes(b.release?.status)); assert.equal(b.release.mergeSha, request.reviewedSha);
-  assert.ok(!all.some(x => x.q !== q && x.q.execution && x.q.execution.status !== 'blocked-before-write'),
-    'Another staged/uncertain renewal needs explicit operator reconciliation');
+  assertPriorRenewals(all, q, request, clock);
   return { state, b, q, request, selector };
 }
 function reservation(value) {
