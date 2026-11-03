@@ -202,9 +202,10 @@
     "context-history/prepared-8a8-context-08.md": "99519d02c80d047c122df90644857c47b90918439c6e4a7b93e2ff92a62b7cf4",
     "current/task-contract.md": "4441f17a976f98ef36587b9ceecf13232c8ef24878e46366b50820073918c3dc",
     "current/validation-report.md": "f1b47129616f960931fdf72bd4479e92110d9a0f1c3cd1d8343cefbe729f2f98",
-    "evidence-execution-author-green-report.json": "82769aace141b7990295ad28b067deb675b8cfa5defdce7ea591bd8767427e21",
-    "evidence-execution-author-red-report.json": "9ba13760102e99de36ce525a2a17137af7178194f9a7477e7dd7b7f8980e8e4b",
-    "evidence-execution-root-report.json": "a9110949b9c63fd7049754c1ffbdb3632d52bb15a9f625e45fb54c5ea416708d",
+    "evidence-execution-00-root-report.json": "a9110949b9c63fd7049754c1ffbdb3632d52bb15a9f625e45fb54c5ea416708d",
+    "evidence-execution-01-author-red-report.json": "9ba13760102e99de36ce525a2a17137af7178194f9a7477e7dd7b7f8980e8e4b",
+    "evidence-execution-02-author-checks-report.json": "5d54b7bd112d1a34455eaea118cf82510b29b1d376774e51cfe8522232fafc6f",
+    "evidence-execution-03-author-handoff-report.json": "65586eaddc8a5a9028aedcb82f282ba2f8f80a39a9b09c4b851225ab7617c41a",
     "evidence-parent-finite-stage-report.json": "e4bb8c3423c3b63a7c594710ea03817b6247740be2df3a47668eb36436c8ec04",
     "history/claude-review-1.json": "275dc4b08c1294740c85f3ea5d044e68c54fa1e7863a08ceebb04d3331384fd9",
     "history/claude-review-2.json": "e8466e1092af650011938c9eaf07799398d10bbfd1007e9dab95dc8a129c4df5",
@@ -221,8 +222,9 @@
     "transport-originals/03.json": "ed82d9f7bf53cfc68e7f06d5ec7dd972015d6e9d4a3e23e24c0b90cdd7c9e664",
     "transport-originals/04.json": "af6c828d61fa6a20cb49066ec1304e3f08c5308bd172860541baeb51348805da",
     "transport-originals/05.json": "98183e5e167097d6d427877a32d73c747d1e5faa7a51d9b9b6130ce5b64daf31",
+    "transport-originals/compact-green.json": "82769aace141b7990295ad28b067deb675b8cfa5defdce7ea591bd8767427e21",
     "validation-report.md": "f1a399fcd3829e60ae8f921da14f8d377dbb9679de9c0accbfd7b21667a58734",
-    "transport-integrity.json": "5986d62961c8cb6fe6d57deff22756474661b523b84d1fe404948ae3f9badc57"
+    "transport-integrity.json": "78a6ecd13cb7b074a7fa54404e96460ba8f2fab79971477f8394a6084c493eb9"
   },
   "reviews": [
     {
