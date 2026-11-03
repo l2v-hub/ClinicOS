@@ -1,0 +1,60 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "subjectSha": "b4f460fc8f4fc361d99a1f1bae3de64a2b14a29a",
+      "status": "passed",
+      "evidence": "validation-report.md"
+    }
+  ],
+  "sourceManifest": [
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-capacity.mjs",
+      "blob": "4ad83f47ab57a51963fb96b708912473886f3b9b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "blob": "b6fe77bb0c686edcb4b35ababcbcb21c98bd8627",
+      "mode": "100644",
+      "baseBlob": "3be4ae535b51ab99e7038a66bd7f459ac0a4997f",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+      "blob": "f80f3072674031ee11ba4b966ded7e638f9da338",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "blob": "5cd7fec1f3869942c6eaf6651b003e7cf574748e",
+      "mode": "100644",
+      "baseBlob": "9d48a4d3e9ff6dc80fab9efe9793f73bd6c70148",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "task-contract.md": "420120cc06362b3c659c4cf87c6075088ad54ff159ee8e293c0ec17442f109f1",
+    "analysis.md": "fe41618b6ed7c8f4cffe948945044a01d0ca7d016be3883e4ae41814e55a236e",
+    "implementation-plan.md": "fe7875ea6f6c64f0536074d379132c94230c1327ece45a60ae952228b6761038",
+    "qa-report.md": "76b88a52170163a9dae40ea1268e269021bfa20a2bfd10844143174f6cb53b9e",
+    "qa-seal.json": "55947d59bfb57d2e36b4f9b505a94bacf21db40fd97f14fac49dbcbafd7db3fa",
+    "validation-report.md": "8c74fb47ffb5c13cf9b908c1f737a59ae08aaa0a3cffaa9b59b265e5f9118209",
+    "checks/red-complete-context-fixture-valid/receipt.json": "dc40a4df223144e0ed42a718a09d0c8a0e3df8b12185a9da7b609f2cd780955b",
+    "checks/red-complete-context-fixture-valid/stdout.log": "63b4ee42de41e01f0fa948cad49c8ec21f191b2efd13f88d601eeeeb7597bd2e",
+    "checks/red-complete-context-fixture-valid/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "checks/green-capacity-formatted/receipt.json": "314704b664d5fffe7191459bbcb873380d995f78a04e8fe14a0a2c43fdb42bf4",
+    "checks/green-capacity-formatted/stdout.log": "b67f4de2c03a627c86b349fc557cda50f894244a913998d6989504a927988642",
+    "checks/green-capacity-formatted/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "review-cloud-review-recovery-worker-context-report.json": "e63acb60012ddbcf7fafb5355965a29d1a42f839838c11332ec8446bfa4822ec",
+    "review-process-context-report.json": "bca3d364fb7c09c3615d672e3920a618615dc88d6a2d7a18c8b4c59222ae158b",
+    "review-comment-review-handoff-context-report.json": "b9299a7d2cef0bceec4377be1a441f738239023b6d0f47327364e606021e888b"
+  },
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {}
+}
