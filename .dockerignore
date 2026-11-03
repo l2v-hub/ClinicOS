@@ -1,0 +1,13 @@
+# Railpack forwards these exclusions to BuildKit BEFORE copying the source.
+# Keep QA evidence in Git/on disk; it is not backend runtime input.
+artifacts/
+docs/qa/
+mockup/
+design_handoff_restyle/
+.git/
+.swarm/
+.claude-flow/
+**/node_modules
+frontend/dist/
+backend/dist/
+
