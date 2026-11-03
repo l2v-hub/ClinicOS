@@ -239,8 +239,8 @@ test('deadline settles failed and escalates when inspected Docker child ignores 
   }
 });
 async function observeProbeLaunch(readCounters, launch) {
-  const id = await launch();
   const before = readCounters();
+  const id = await launch();
   return { id, before };
 }
 test('controlled probe snapshot precedes even immediate fixture completion', async () => {
