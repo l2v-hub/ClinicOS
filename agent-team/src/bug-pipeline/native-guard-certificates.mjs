@@ -9,7 +9,17 @@ import os from 'node:os';
 export function certificateCommands(serial, directory = '/tmp/native-public-certificate') {
   assert.match(serial, /^[a-f0-9]{32}$/);
   assert.ok(path.isAbsolute(directory) && !/[\x00-\x1f,]/.test(directory));
-  const common = ['req', '-new', '-sha256', '-config', '/dev/null', '-key', '-', '-out', '-'];
+  const common = [
+    'req',
+    '-new',
+    '-sha256',
+    '-config',
+    '/dev/null',
+    '-key',
+    '/dev/stdin',
+    '-out',
+    '-',
+  ];
   return [
     [
       ...common,
@@ -34,7 +44,7 @@ export function certificateCommands(serial, directory = '/tmp/native-public-cert
       '-CA',
       path.join(directory, 'ca-public.pem'),
       '-CAkey',
-      '-',
+      '/dev/stdin',
       '-set_serial',
       `0x${serial.slice(0, -1)}${(parseInt(serial.at(-1), 16) ^ 1).toString(16)}`,
       '-days',
@@ -61,17 +71,45 @@ export function collectOpenSSL(args, inputs, { spawnImpl = spawn } = {}) {
       settled = true;
       clearTimeout(timer);
       if (!ok) {
-        p?.kill('SIGKILL');
+        p?.stdin.destroy();
+        // Bash owns an isolated pipeline process group. Never leave a key-reading orphan.
+        if (spawnImpl === spawn && Number.isSafeInteger(p?.pid) && p.pid > 0) {
+          try {
+            process.kill(-p.pid, 'SIGKILL');
+          } catch {}
+        }
+        try {
+          p?.kill('SIGKILL');
+        } catch {}
+        for (const chunk of chunks) chunk.fill(0);
+        chunks.length = 0;
         reject(Error('native-certificate-generation-failed'));
       } else resolve(Buffer.concat(chunks));
     };
     const timer = setTimeout(() => done(false), 15000);
     timer.unref?.();
     try {
-      p = spawnImpl('/usr/bin/openssl', args, {
-        env: { PATH: '/usr/bin:/bin', LANG: 'C', OPENSSL_CONF: '/dev/null' },
-        stdio: ['pipe', 'pipe', 'pipe'],
-      });
+      // OpenSSL 3 treats key '-' as a filename. Reopening Node's socket-backed stdin
+      // through /dev/stdin also fails on Linux; cat supplies a real anonymous FIFO.
+      // This script is fixed; every argument is positional and quoted, never evaluated.
+      p = spawnImpl(
+        '/bin/bash',
+        [
+          '--noprofile',
+          '--norc',
+          '-o',
+          'pipefail',
+          '-c',
+          '/bin/cat | /usr/bin/openssl "$@"',
+          'native-guard-openssl',
+          ...args,
+        ],
+        {
+          env: { PATH: '/usr/bin:/bin', LANG: 'C', OPENSSL_CONF: '/dev/null' },
+          stdio: ['pipe', 'pipe', 'pipe'],
+          detached: true,
+        },
+      );
     } catch {
       return done(false);
     }
