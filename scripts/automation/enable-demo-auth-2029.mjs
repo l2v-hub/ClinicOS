@@ -66,30 +66,30 @@ export async function stageDemo2029({ selector, actor, runId, controller, inspec
     fingerprint: snapshot.fingerprint, activeDeploymentId: request.activeDeploymentId, activeSourceSha: request.activeSourceSha,
     previousExpiry: request.previousExpiry, newExpiry: EXPIRY_2029, failedDeploymentId: request.failedDeploymentId,
     mutationAttempted: attempted, deploymentTriggered: false });
-  onProgress(receipt('claimed-before-write', 'DEMO2029_DEMO_CLAIMED'));
+  onProgress(receipt('claimed-before-write', 'DEMO2029_CLAIMED'));
   try {
     await controller.assertOwned(claim, 'claimed'); assert.equal((await fresh()).fingerprint, snapshot.fingerprint);
     await controller.intent(claim); await controller.assertOwned(claim, 'write-intent');
     assert.equal((await fresh()).fingerprint, snapshot.fingerprint);
     await controller.assertOwned(claim, 'write-intent'); // LAST async source/ownership fence before mutation.
-    attempted = true; onProgress(receipt('mutation-uncertain-do-not-retry', 'DEMO2029_DEMO_WRITE_INTENT'));
+    attempted = true; onProgress(receipt('mutation-uncertain-do-not-retry', 'DEMO2029_WRITE_INTENT'));
     const result = await client(DEMO_2029_MUTATION, { input: {
       projectId: DEMO_TARGET.projectId, environmentId: DEMO_TARGET.environmentId, serviceId: DEMO_TARGET.serviceId,
       name: KEY, value: EXPIRY_2029, skipDeploys: true,
     } });
     assert.equal(result?.variableUpsert, true); acknowledged = true;
-    await controller.finish(claim, 'staged'); return receipt('staged-awaiting-explicit-deployment', 'DEMO2029_DEMO_STAGED');
+    await controller.finish(claim, 'staged'); return receipt('staged-awaiting-explicit-deployment', 'DEMO2029_STAGED');
   } catch {
     try { await controller.finish(claim, attempted ? 'uncertain' : 'blocked-before-write'); } catch { /* Durable intent remains; never retry. */ }
     return receipt(attempted ? 'mutation-uncertain-do-not-retry' : 'blocked-before-write',
-      acknowledged ? 'DEMO2029_DEMO_ACKNOWLEDGED_RECORD_UNCERTAIN' : attempted ? 'DEMO2029_DEMO_WRITE_UNCERTAIN' : 'DEMO2029_DEMO_BLOCKED');
+      acknowledged ? 'DEMO2029_ACKNOWLEDGED_RECORD_UNCERTAIN' : attempted ? 'DEMO2029_WRITE_UNCERTAIN' : 'DEMO2029_BLOCKED');
   }
 }
 export async function runDemo2029Operation({ mode = 'inspect', ...options }) {
   assert.ok(['inspect', 'stage'].includes(mode)); if (mode === 'stage') return stageDemo2029(options);
   const request = (await options.controller.inspectRequest(options.selector)).request;
   const snapshot = await options.inspect(clone(request));
-  return { schemaVersion: 1, status: 'inspection-passed-awaiting-stage', code: 'DEMO2029_DEMO_INSPECTED', ...options.selector,
+  return { schemaVersion: 1, status: 'inspection-passed-awaiting-stage', code: 'DEMO2029_INSPECTED', ...options.selector,
     fingerprint: snapshot.fingerprint, activeDeploymentId: request.activeDeploymentId, activeSourceSha: request.activeSourceSha,
     mutationAttempted: false, deploymentTriggered: false };
 }
@@ -97,8 +97,8 @@ const fields = new Set(['schemaVersion', 'status', 'code', 'subjectId', 'reviewe
   'priorOperationsDigest', 'fingerprint', 'activeDeploymentId', 'activeSourceSha', 'previousExpiry', 'newExpiry', 'failedDeploymentId', 'mutationAttempted', 'deploymentTriggered']);
 const statuses = new Set(['blocked-before-write', 'inspection-passed-awaiting-stage', 'claimed-before-write',
   'mutation-uncertain-do-not-retry', 'staged-awaiting-explicit-deployment']);
-const codes = new Set(['DEMO2029_DEMO_BLOCKED', 'DEMO2029_DEMO_INSPECTED', 'DEMO2029_DEMO_CLAIMED', 'DEMO2029_DEMO_WRITE_INTENT',
-  'DEMO2029_DEMO_STAGED', 'DEMO2029_DEMO_ACKNOWLEDGED_RECORD_UNCERTAIN', 'DEMO2029_DEMO_WRITE_UNCERTAIN']);
+const codes = new Set(['DEMO2029_BLOCKED', 'DEMO2029_INSPECTED', 'DEMO2029_CLAIMED', 'DEMO2029_WRITE_INTENT',
+  'DEMO2029_STAGED', 'DEMO2029_ACKNOWLEDGED_RECORD_UNCERTAIN', 'DEMO2029_WRITE_UNCERTAIN']);
 function reflected(text, values) {
   return values.filter(v => typeof v === 'string' && v).some(raw => {
     let effective = raw; try { effective = new Headers({ 'X-Credential': raw }).get('X-Credential'); } catch { /* raw checked */ }
@@ -115,7 +115,7 @@ export function serializeDemo2029Receipt(receipt, forbidden = []) {
   if (receipt.failedDeploymentId !== undefined) assert.match(receipt.failedDeploymentId, UUID);
   if (receipt.newExpiry !== undefined) assert.equal(receipt.newExpiry, EXPIRY_2029);
   if (receipt.previousExpiry !== undefined) {
-    assert.ok(typeof receipt.previousExpiry === 'string' && /^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$/.test(receipt.previousExpiry));
+    assert.ok(typeof receipt.previousExpiry === 'string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/.test(receipt.previousExpiry));
     assert.equal(new Date(receipt.previousExpiry).toISOString().replace('.000Z', 'Z'), receipt.previousExpiry);
   }
   for (const k of ['reviewedSha', 'activeSourceSha']) if (receipt[k] !== undefined) assert.match(receipt[k], SHA);
@@ -131,7 +131,7 @@ async function readPublic(url) {
 }
 async function main() {
   const env = process.env, forbidden = [env.RAILWAY_TOKEN, env.GH_TOKEN, env.GITHUB_TOKEN];
-  let result = { schemaVersion: 1, status: 'blocked-before-write', code: 'DEMO2029_DEMO_BLOCKED', mutationAttempted: false, deploymentTriggered: false };
+  let result = { schemaVersion: 1, status: 'blocked-before-write', code: 'DEMO2029_BLOCKED', mutationAttempted: false, deploymentTriggered: false };
   const output = text => { if (!reflected(text, forbidden)) console.log(text); };
   try {
     const context = validateDemo2029Context(env), selector = selectDemo2029({ subjectId: env.DEMO2029_SUBJECT_ID,
@@ -145,10 +145,10 @@ async function main() {
       controller, client, inspect: request => inspectDemo2029Target({ request, client, readPublic, assertFreshMain }), onProgress: v => { result = v; } });
   } catch { /* No provider/credential response crosses the boundary. */ }
   await writeFile('demo-auth-2029-receipt.json', serializeDemo2029Receipt(result, forbidden), { flag: 'wx', mode: 0o600 });
-  output(`DEMO2029_DEMO_STAGE ${result.status}`);
+  output(`DEMO2029_STAGE ${result.status}`);
   if (!['inspection-passed-awaiting-stage', 'staged-awaiting-explicit-deployment'].includes(result.status)) process.exitCode = 1;
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main().catch(() => {
-  if (!reflected('DEMO2029_DEMO_RECEIPT_FAILED_DO_NOT_RETRY', [process.env.RAILWAY_TOKEN, process.env.GH_TOKEN, process.env.GITHUB_TOKEN]))
-    console.error('DEMO2029_DEMO_RECEIPT_FAILED_DO_NOT_RETRY'); process.exitCode = 1;
+  if (!reflected('DEMO2029_RECEIPT_FAILED_DO_NOT_RETRY', [process.env.RAILWAY_TOKEN, process.env.GH_TOKEN, process.env.GITHUB_TOKEN]))
+    console.error('DEMO2029_RECEIPT_FAILED_DO_NOT_RETRY'); process.exitCode = 1;
 });

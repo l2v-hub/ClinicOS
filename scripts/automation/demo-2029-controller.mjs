@@ -25,7 +25,7 @@ const requestFields = ['subjectId', 'operationNonce', 'reviewedSha', 'owner', 'o
   'activeDeploymentId', 'activeSourceSha', 'previousExpiry', 'failedDeploymentId', 'failedSourceSha'];
 function requestData(q) { return Object.fromEntries(requestFields.map(k => [k, q[k]])); }
 function strictExpiry(value) {
-  assert.ok(typeof value === 'string' && /^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$/.test(value));
+  assert.ok(typeof value === 'string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/.test(value));
   const at = Date.parse(value); assert.ok(Number.isFinite(at));
   assert.equal(new Date(at).toISOString().replace('.000Z', 'Z'), value); return at;
 }
@@ -61,7 +61,7 @@ function priorOperations(state, current, request) {
       assert.ok(Number.isSafeInteger(index) && index >= 0 && h.length > index);
       assert.equal(historyDigest(h.slice(0, index)), saved.historyBeforeDigest);
       assert.equal(h[index].nonce, saved.auditNonce); assert.equal(h[index].action, 'renew-demo-auth-expiry');
-      assert.deepEqual(h[index].authorization, auth); assert.match(String(q.execution.runId), /^[1-9][0-9]{0,19}(?![\\s\\S])/);
+      assert.deepEqual(h[index].authorization, auth); assert.match(String(q.execution.runId), /^[1-9][0-9]{0,19}(?![\s\S])/);
       const p = b.exactDemoDispatches?.deploy, da = p?.operatorAuthorization;
       assert.equal(p?.phase, 'observed'); assert.equal(p.operation, 'deploy'); assert.equal(p.sha, old.reviewedSha);
       assert.match(p.dispatchId, UUID); assert.ok(Number.isSafeInteger(p.runId) && p.runId > 0);
@@ -71,7 +71,7 @@ function priorOperations(state, current, request) {
       for (const [k, v] of Object.entries({ operation: 'deploy', sourceSha: old.reviewedSha, target: DEMO_TARGET,
         key: KEY, newExpiry: old.newExpiry, stageRunId: Number(q.execution.runId), operationNonce: old.operationNonce,
         dispatchId: p.dispatchId, operatorSQLCleanup: false, issueClosure: false })) assert.deepEqual(da.binding.reservation[k], v);
-      assert.match(da.binding.reservation.stageReceiptSha256, HASH); assert.match(da.binding.reservation.stageArtifactDigest, /^sha256:[a-f0-9]{64}(?![\\s\\S])/);
+      assert.match(da.binding.reservation.stageReceiptSha256, HASH); assert.match(da.binding.reservation.stageArtifactDigest, /^sha256:[a-f0-9]{64}(?![\s\S])/);
       assert.ok(Number.isSafeInteger(da.binding.reservation.stageArtifactId) && da.binding.reservation.stageArtifactId > 0);
       assert.match(p.stageProofDigest, HASH);
       supersedesFinite.push({ subjectId: b.id, operationNonce: q.operationNonce, previousExpiry: old.previousExpiry,
