@@ -137,6 +137,47 @@ export function officialForwardOptions() {
     minVersion: 'TLSv1.2',
   };
 }
+export function stageNativeProxySource({
+  request,
+  validateRequest,
+  data,
+  forward,
+  isCapacityError = () => false,
+  onCapacity = () => {},
+}) {
+  try {
+    let seal;
+    try {
+      seal = validateRequest(request);
+    } catch (error) {
+      // Only the trusted protocol classifier may recognize its internally minted error.
+      if (isCapacityError(error) === true) {
+        const source = error.metadata,
+          safe = {};
+        for (const key of [
+          'requiredTokensUpperBound',
+          'contextBytes',
+          'inputBytes',
+          'schemaBytes',
+          'maxTokens',
+          'contextWindow',
+        ]) {
+          const value = source[key];
+          assert.ok(Number.isSafeInteger(value) && value >= 0);
+          safe[key] = value;
+        }
+        onCapacity(Object.freeze(safe));
+      }
+      throw error;
+    }
+    return data.stage({ seal, forward: () => forward(seal) });
+  } catch {
+    try {
+      data.fail('native-proxy-rejected');
+    } catch {}
+    throw Error('native-proxy-rejected');
+  }
+}
 export function createNativeGuardProxy({
   tlsOptions,
   oauthToken,
@@ -145,6 +186,8 @@ export function createNativeGuardProxy({
   validateRequest,
   onStage,
   observeResponse,
+  isCapacityError = () => false,
+  onCapacity = () => {},
   requestImpl = https.request,
 } = {}) {
   assert.ok(tlsOptions?.key && tlsOptions?.cert);
@@ -153,6 +196,7 @@ export function createNativeGuardProxy({
       typeof onStage === 'function' &&
       typeof observeResponse === 'function',
   );
+  assert.ok(typeof isCapacityError === 'function' && typeof onCapacity === 'function');
   assert.ok(
     typeof data?.stage === 'function' &&
       typeof data?.fail === 'function' &&
@@ -282,15 +326,21 @@ export function createNativeGuardProxy({
           await forward(req, res, body, null);
           return;
         }
-        const seal = validateRequest({
-          body,
-          rawHeaders: [...req.rawHeaders],
-          host: HOST,
-          method: req.method,
-          path: req.url,
-          expected,
+        const staged = stageNativeProxySource({
+          request: {
+            body,
+            rawHeaders: [...req.rawHeaders],
+            host: HOST,
+            method: req.method,
+            path: req.url,
+            expected,
+          },
+          validateRequest,
+          data,
+          isCapacityError,
+          onCapacity,
+          forward: (seal) => forward(req, res, body, seal),
         });
-        const staged = data.stage({ seal, forward: () => forward(req, res, body, seal) });
         // Root receives only the safe opaque handle/seal; release is NOT an egress operation.
         await onStage(staged);
         await staged.completion;
