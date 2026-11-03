@@ -117,6 +117,9 @@ test('protected workflow metadata choice preserves default inspect, guards and b
   const yaml = await readFile(new URL('../../.github/workflows/enable-demo-auth-2029.yml', import.meta.url), 'utf8');
   assert.match(yaml, /options: \[inspect, stage, metadata\]/); assert.match(yaml, /default: inspect/);
   assert.match(yaml, /github\.run_attempt == 1/); assert.match(yaml, /github\.sha == github\.workflow_sha/);
+  assert.match(yaml, /sparse-checkout: \|\r?\n\s+agent-team\r?\n\s+scripts\r?\n\s+\.github\r?\n\s+sparse-checkout-cone-mode: true/);
+  assert.match(yaml, /ref: \$\{\{ github\.sha \}\}/); assert.match(yaml, /persist-credentials: false/);
+  assert.match(yaml, /timeout-minutes: 10/);
   assert.match(yaml, /glistening-friendship \/ demo/); assert.match(yaml, /group: railway-demo/);
   assert.doesNotMatch(yaml, /secrets\.RAILWAY_TOKEN|pull_request_target|workflow_call/);
   const command = 'node --test scripts/automation/enable-demo-auth-2029.test.mjs scripts/automation/enable-demo-auth-2029.metadata.test.mjs';

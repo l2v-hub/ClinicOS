@@ -11,6 +11,9 @@ import { DEMO_TARGET, DEMO_SOURCE_POLICIES, inspectDemo, createRailwayClient, cr
 // One fixed finite expiry only; staging never triggers a rollout or changes flags.
 export const DEMO_2029_MUTATION = 'mutation($input:VariableUpsertInput!){variableUpsert(input:$input)}';
 const FAILED_DEPLOYMENT_QUERY = 'query($id:String!){deployment(id:$id){id status projectId environmentId serviceId meta}}';
+const FAILED_DEPLOYMENT_ID = 'f04e215c-2105-45ca-9b9f-766eabbff925';
+const FAILED_SOURCE_SHA = 'd2a08b4850dd954bb790e35f2ed350d5eeacd1c4';
+const PREVIOUS_EXPIRY = '2026-10-31T23:59:59Z';
 const REPO = 'l2v-hub/ClinicOS';
 const SHA = /^[a-f0-9]{40}(?![\s\S])/, HASH = /^[a-f0-9]{64}(?![\s\S])/;
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}(?![\s\S])/i;
@@ -24,6 +27,40 @@ export function validateDemo2029Context(env) {
   assert.equal(env.GITHUB_WORKFLOW_SHA, env.GITHUB_SHA); assert.equal(env.GITHUB_RUN_ATTEMPT, '1');
   assert.match(env.GITHUB_RUN_ID ?? '', /^[1-9][0-9]{0,19}(?![\s\S])/);
   return { reviewedSha: env.GITHUB_SHA, runId: env.GITHUB_RUN_ID, runAttempt: 1 };
+}
+// Read-only prerequisite: no canonical request, action, claim, intent or state client.
+export async function readDemo2029Metadata({ selector: raw, client, readPublic, assertFreshMain, now = Date.now }) {
+  try {
+    const selector = selectDemo2029(raw);
+    assert.equal(typeof assertFreshMain, 'function');
+    assert.ok(Number.isFinite(now()) && now() >= Date.parse(PREVIOUS_EXPIRY));
+    const read = async fn => { await assertFreshMain(); const value = await fn(); await assertFreshMain(); return value; };
+    const data = await read(() => inspectDemo(client, DEMO_SOURCE_POLICIES.exact)), instance = data.serviceInstance;
+    assert.equal(data.projectToken.environment.name, 'demo');
+    assert.equal(data.deployments?.pageInfo?.hasNextPage, false); assert.deepEqual(data.deployments.edges, []);
+    const active = instance.activeDeployments; assert.ok(Array.isArray(active) && active.length === 1);
+    assert.equal(active[0].status, 'SUCCESS'); assert.match(active[0].id, UUID);
+    assert.match(active[0].meta?.commitHash, SHA);
+    assert.notEqual(active[0].id, FAILED_DEPLOYMENT_ID);
+    assert.notEqual(active[0].meta.commitHash, selector.reviewedSha); assert.notEqual(active[0].meta.commitHash, FAILED_SOURCE_SHA);
+    assert.equal(instance.latestDeployment?.id, FAILED_DEPLOYMENT_ID); assert.equal(instance.latestDeployment.status, 'FAILED');
+    const failure = (await read(() => client(FAILED_DEPLOYMENT_QUERY, { id: FAILED_DEPLOYMENT_ID }))).deployment;
+    assert.equal(failure?.id, FAILED_DEPLOYMENT_ID); assert.equal(failure.status, 'FAILED');
+    assert.equal(failure.projectId, DEMO_TARGET.projectId); assert.equal(failure.environmentId, DEMO_TARGET.environmentId);
+    assert.equal(failure.serviceId, DEMO_TARGET.serviceId); assert.equal(failure.meta?.commitHash, FAILED_SOURCE_SHA);
+    const status = await read(() => readPublic(`https://${DEMO_TARGET.domain}/auth/status`));
+    assert.equal(status.mode, 'disabled'); assert.equal(status.simulator, false);
+    assert.equal(status.temporaryDemo, false); assert.equal(status.syntheticOnly, true);
+    assert.ok(status.permanentDemo === undefined || status.permanentDemo === false);
+    assert.ok([PREVIOUS_EXPIRY, new Date(PREVIOUS_EXPIRY).toISOString()].includes(status.expiresAt));
+    const ready = await read(() => readPublic(`https://${DEMO_TARGET.domain}/ready`));
+    assert.equal(ready.status, 'ready'); assert.equal(ready.tier, 'demo'); assert.equal(ready.deploymentId, active[0].id);
+    assert.equal(ready.checks?.database, 'ok'); assert.equal(ready.checks?.policy, 'ok');
+    const snapshot = { activeDeploymentId: active[0].id, activeSourceSha: active[0].meta.commitHash,
+      previousExpiry: PREVIOUS_EXPIRY, failedDeploymentId: FAILED_DEPLOYMENT_ID, failedSourceSha: FAILED_SOURCE_SHA };
+    return Object.freeze({ schemaVersion: 1, status: 'metadata-readonly-verified', code: 'DEMO2029_METADATA', ...selector,
+      ...snapshot, fingerprint: historyDigest({ ...selector, ...snapshot }), mutationAttempted: false, deploymentTriggered: false });
+  } catch { throw new Error('DEMO2029_METADATA_REJECTED'); }
 }
 export async function inspectDemo2029Target({ request: raw, client, readPublic, assertFreshMain }) {
   const request = validateDemo2029Request(raw); assert.equal(typeof assertFreshMain, 'function'); await assertFreshMain();
@@ -85,8 +122,12 @@ export async function stageDemo2029({ selector, actor, runId, controller, inspec
       acknowledged ? 'DEMO2029_ACKNOWLEDGED_RECORD_UNCERTAIN' : attempted ? 'DEMO2029_WRITE_UNCERTAIN' : 'DEMO2029_BLOCKED');
   }
 }
-export async function runDemo2029Operation({ mode = 'inspect', ...options }) {
-  assert.ok(['inspect', 'stage'].includes(mode)); if (mode === 'stage') return stageDemo2029(options);
+export async function runDemo2029Operation(options) {
+  const mode = options.mode ?? 'inspect';
+  assert.ok(['inspect', 'stage', 'metadata'].includes(mode));
+  if (mode === 'metadata') return readDemo2029Metadata({ selector: options.selector, client: options.client,
+    readPublic: options.readPublic, assertFreshMain: options.assertFreshMain, now: options.now });
+  if (mode === 'stage') return stageDemo2029(options);
   const request = (await options.controller.inspectRequest(options.selector)).request;
   const snapshot = await options.inspect(clone(request));
   return { schemaVersion: 1, status: 'inspection-passed-awaiting-stage', code: 'DEMO2029_INSPECTED', ...options.selector,
@@ -94,11 +135,11 @@ export async function runDemo2029Operation({ mode = 'inspect', ...options }) {
     mutationAttempted: false, deploymentTriggered: false };
 }
 const fields = new Set(['schemaVersion', 'status', 'code', 'subjectId', 'reviewedSha', 'operationNonce', 'authorizationDigest',
-  'priorOperationsDigest', 'fingerprint', 'activeDeploymentId', 'activeSourceSha', 'previousExpiry', 'newExpiry', 'failedDeploymentId', 'mutationAttempted', 'deploymentTriggered']);
+  'priorOperationsDigest', 'fingerprint', 'activeDeploymentId', 'activeSourceSha', 'previousExpiry', 'newExpiry', 'failedDeploymentId', 'failedSourceSha', 'mutationAttempted', 'deploymentTriggered']);
 const statuses = new Set(['blocked-before-write', 'inspection-passed-awaiting-stage', 'claimed-before-write',
-  'mutation-uncertain-do-not-retry', 'staged-awaiting-explicit-deployment']);
+  'mutation-uncertain-do-not-retry', 'staged-awaiting-explicit-deployment', 'metadata-readonly-verified']);
 const codes = new Set(['DEMO2029_BLOCKED', 'DEMO2029_INSPECTED', 'DEMO2029_CLAIMED', 'DEMO2029_WRITE_INTENT',
-  'DEMO2029_STAGED', 'DEMO2029_ACKNOWLEDGED_RECORD_UNCERTAIN', 'DEMO2029_WRITE_UNCERTAIN']);
+  'DEMO2029_STAGED', 'DEMO2029_ACKNOWLEDGED_RECORD_UNCERTAIN', 'DEMO2029_WRITE_UNCERTAIN', 'DEMO2029_METADATA']);
 function reflected(text, values) {
   return values.filter(v => typeof v === 'string' && v).some(raw => {
     let effective = raw; try { effective = new Headers({ 'X-Credential': raw }).get('X-Credential'); } catch { /* raw checked */ }
@@ -113,6 +154,13 @@ export function serializeDemo2029Receipt(receipt, forbidden = []) {
   if (receipt.operationNonce !== undefined) assert.match(receipt.operationNonce, UUID);
   if (receipt.activeDeploymentId !== undefined) assert.match(receipt.activeDeploymentId, UUID);
   if (receipt.failedDeploymentId !== undefined) assert.match(receipt.failedDeploymentId, UUID);
+  if (receipt.failedSourceSha !== undefined) assert.equal(receipt.failedSourceSha, FAILED_SOURCE_SHA);
+  if (receipt.status === 'metadata-readonly-verified') {
+    assert.equal(receipt.code, 'DEMO2029_METADATA'); assert.equal(receipt.mutationAttempted, false);
+    assert.equal(receipt.failedDeploymentId, FAILED_DEPLOYMENT_ID); assert.equal(receipt.failedSourceSha, FAILED_SOURCE_SHA);
+    assert.equal(receipt.previousExpiry, PREVIOUS_EXPIRY); assert.match(receipt.activeDeploymentId ?? '', UUID);
+    assert.match(receipt.activeSourceSha ?? '', SHA); assert.match(receipt.fingerprint ?? '', HASH);
+  }
   if (receipt.newExpiry !== undefined) assert.equal(receipt.newExpiry, EXPIRY_2029);
   if (receipt.previousExpiry !== undefined) {
     assert.ok(typeof receipt.previousExpiry === 'string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/.test(receipt.previousExpiry));
@@ -136,17 +184,21 @@ async function main() {
   try {
     const context = validateDemo2029Context(env), selector = selectDemo2029({ subjectId: env.DEMO2029_SUBJECT_ID,
       operationNonce: env.DEMO2029_OPERATION_NONCE, reviewedSha: context.reviewedSha });
-    const github = createGitHub({ repo: REPO, cwd: process.cwd(), run: createRunner({ runtimeRoot: '.demo-auth-2029-runtime' }) });
-    const reader = createProofReader({ token: env.GH_TOKEN });
+    const mode = process.argv[2] ?? 'inspect'; assert.ok(['inspect', 'stage', 'metadata'].includes(mode));
     const assertFreshMain = createMainVerifier({ token: env.GITHUB_TOKEN, reviewedSha: context.reviewedSha });
-    const controller = createDemo2029Controller({ github, readRun: id => reader.getJson(`actions/runs/${id}`), assertCurrentMain: assertFreshMain });
     const client = createRailwayClient({ token: env.RAILWAY_TOKEN });
-    result = await runDemo2029Operation({ mode: process.argv[2] ?? 'inspect', selector, actor: env.GITHUB_ACTOR, runId: context.runId,
-      controller, client, inspect: request => inspectDemo2029Target({ request, client, readPublic, assertFreshMain }), onProgress: v => { result = v; } });
+    if (mode === 'metadata') result = await runDemo2029Operation({ mode, selector, client, readPublic, assertFreshMain });
+    else {
+      const github = createGitHub({ repo: REPO, cwd: process.cwd(), run: createRunner({ runtimeRoot: '.demo-auth-2029-runtime' }) });
+      const reader = createProofReader({ token: env.GH_TOKEN });
+      const controller = createDemo2029Controller({ github, readRun: id => reader.getJson(`actions/runs/${id}`), assertCurrentMain: assertFreshMain });
+      result = await runDemo2029Operation({ mode, selector, actor: env.GITHUB_ACTOR, runId: context.runId,
+        controller, client, inspect: request => inspectDemo2029Target({ request, client, readPublic, assertFreshMain }), onProgress: v => { result = v; } });
+    }
   } catch { /* No provider/credential response crosses the boundary. */ }
   await writeFile('demo-auth-2029-receipt.json', serializeDemo2029Receipt(result, forbidden), { flag: 'wx', mode: 0o600 });
   output(`DEMO2029_STAGE ${result.status}`);
-  if (!['inspection-passed-awaiting-stage', 'staged-awaiting-explicit-deployment'].includes(result.status)) process.exitCode = 1;
+  if (!['inspection-passed-awaiting-stage', 'staged-awaiting-explicit-deployment', 'metadata-readonly-verified'].includes(result.status)) process.exitCode = 1;
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main().catch(() => {
   if (!reflected('DEMO2029_RECEIPT_FAILED_DO_NOT_RETRY', [process.env.RAILWAY_TOKEN, process.env.GH_TOKEN, process.env.GITHUB_TOKEN]))

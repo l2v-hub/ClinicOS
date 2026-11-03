@@ -18,7 +18,7 @@ on:
       operation:
         description: Inspect by default; stage requires the stored actual action capability
         type: choice
-        options: [inspect, stage]
+        options: [inspect, stage, metadata]
         default: inspect
         required: true
 permissions:
@@ -41,11 +41,16 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
+          sparse-checkout: |
+            agent-team
+            scripts
+            .github
+          sparse-checkout-cone-mode: true
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
       - name: Test without credentials
-        run: node --test scripts/automation/enable-demo-auth-2029.test.mjs
+        run: node --test scripts/automation/enable-demo-auth-2029.test.mjs scripts/automation/enable-demo-auth-2029.metadata.test.mjs
       - name: Stage only fixed 2029 expiry; no deploy or SQL
         env:
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
