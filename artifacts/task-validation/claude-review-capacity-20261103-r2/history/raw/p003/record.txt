@@ -1,0 +1,244 @@
+{
+  "independent": true,
+  "reviewer": "auth_expiry_final_qa",
+  "sourceSha": "bb9dd8ddb3894416d59cb4eb5c42596819f98892",
+  "tree": "c9a363a2c54812a3784c59959f7e0a8a39b945f6",
+  "baseSha": "fa6078769e1c390562a94cb89130338ae2a5e862",
+  "checkout": "C:/w-rv/review-capacity-runtime-qa-bb20261103",
+  "clean": true,
+  "manifest": [
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-certificates.mjs",
+      "gitBlob": "f6b75779ac4a0e83209e597372226c568996bd74",
+      "sha256": "152b128002abb916933befb5297723d9d54f333492ffc96bfe6ed993ee0eb38b",
+      "bytes": 5970,
+      "localByteEqual": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-container.mjs",
+      "gitBlob": "4482ad59cd1310909e15180754604dffd96dfb88",
+      "sha256": "b5a1879febfd27a5fde32c4e1d5effcefc741e8dca58d0c2c00fac549bc104bb",
+      "bytes": 13577,
+      "localByteEqual": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-launcher.mjs",
+      "gitBlob": "6adcd03dd560e29cbb2b346f652479de062625bd",
+      "sha256": "0df0f48cf981b885b90b566c4f811e8bc0234e7f5ab479ea0213afacc6a08c20",
+      "bytes": 6293,
+      "localByteEqual": true
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-proxy.mjs",
+      "gitBlob": "d04f78fe880c209c6fe0db36eaaac633f28b73d9",
+      "sha256": "8f369c6bf5b92eb3d483597381a15c50a7f7048e673e2f739f2751f2f7ab8cef",
+      "bytes": 12163,
+      "localByteEqual": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-certificates.test.mjs",
+      "gitBlob": "3d5371a8f0a0bc104a6938cda074627ed123b9fa",
+      "sha256": "05e98ec995eabc01f2fa25f3f719e39d88714ea1f051b3d8e6499589de9615cf",
+      "bytes": 2299,
+      "localByteEqual": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-container.test.mjs",
+      "gitBlob": "940f1423e24fed05d20cf6ac088c7151c6dc0f59",
+      "sha256": "81e9397b4448dd91fe95290d475891831a36271017c6a9669d0640ee33a9ce82",
+      "bytes": 10159,
+      "localByteEqual": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-launcher.test.mjs",
+      "gitBlob": "89c1b2ac090864c8e24e00d433e0d7eaca4cac1c",
+      "sha256": "4a64b0f4c322f1c60fff76171e85e8b7d89293c401c9840d41404d484ac99dc0",
+      "bytes": 2827,
+      "localByteEqual": true
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-proxy.test.mjs",
+      "gitBlob": "0ad183e9fc9959062c681cf83e1adadfb692439d",
+      "sha256": "ef33377f571ce1b0a60f8fba0242f7ef62cb8334c15ceb5978e4c2d502efe02f",
+      "bytes": 7303,
+      "localByteEqual": true
+    }
+  ],
+  "receipts": [
+    {
+      "receiptPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/existing-four/receipt.json",
+      "receiptSha256": "33fe64a19ffca36db45fa850678fa17e1fae35eb4f1e3a30cb5a8e5cf2409944",
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "existing-four",
+      "cwd": "C:/w-rv/review-capacity-native-runtime20261103",
+      "sourceSha": "bb9dd8ddb3894416d59cb4eb5c42596819f98892",
+      "tree": "c9a363a2c54812a3784c59959f7e0a8a39b945f6",
+      "startedAt": "2026-11-03T15:12:16.644Z",
+      "finishedAt": "2026-11-03T15:12:16.839Z",
+      "args": [
+        "--test",
+        "agent-team/tests/bug-pipeline/native-guard-container.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-launcher.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-certificates.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-proxy.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "stdoutSha256": "6d4fe5003b8d5db1a1020a3a6c325703dfce741ff3ce5dec517b4f8cd0fdf6bd",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trackedClean": true,
+      "headUnchanged": true
+    },
+    {
+      "receiptPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/adversarial-frozen-bb/receipt.json",
+      "receiptSha256": "9106794fabe191e3ddde804e116cc978dc27a50bc351971dd027d761f6799f71",
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "adversarial-frozen-bb",
+      "cwd": "C:/w-rv/review-capacity-runtime-qa-bb20261103",
+      "sourceSha": "bb9dd8ddb3894416d59cb4eb5c42596819f98892",
+      "tree": "c9a363a2c54812a3784c59959f7e0a8a39b945f6",
+      "startedAt": "2026-11-03T15:15:21.865Z",
+      "finishedAt": "2026-11-03T15:15:22.123Z",
+      "args": [
+        "--test",
+        "C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/adversarial.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": false,
+      "exitCode": 1,
+      "error": null,
+      "stdoutSha256": "3dd53917683681dc23b721e765b89af2874fdc1f5140b75eed8a1ef080101df8",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trackedClean": true,
+      "headUnchanged": true
+    },
+    {
+      "receiptPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/existing-four-frozen/receipt.json",
+      "receiptSha256": "2bb92cca71de8133598cee329d57c64e0822080b3fb0343c12f61918d9537c57",
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "existing-four-frozen",
+      "cwd": "C:/w-rv/review-capacity-runtime-qa-bb20261103",
+      "sourceSha": "bb9dd8ddb3894416d59cb4eb5c42596819f98892",
+      "tree": "c9a363a2c54812a3784c59959f7e0a8a39b945f6",
+      "startedAt": "2026-11-03T15:15:59.145Z",
+      "finishedAt": "2026-11-03T15:15:59.312Z",
+      "args": [
+        "--test",
+        "agent-team/tests/bug-pipeline/native-guard-container.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-launcher.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-certificates.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-proxy.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "stdoutSha256": "74932263c4f7979517161f9e739440af5a78c152299377077d27db16a1c71c14",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trackedClean": true,
+      "headUnchanged": true
+    }
+  ],
+  "authorEvidence": [
+    {
+      "receiptPath": "C:/w-rv/tmp/review-capacity-20261103/r2-native-runtime/red-imports/receipt.json",
+      "receiptSha256": "8fd94b34cbc85da117247067631d4ed6b058032ee30abf30aac363682a563332",
+      "head": "fa6078769e1c390562a94cb89130338ae2a5e862",
+      "cwd": "C:/w-rv/review-capacity-native-runtime20261103",
+      "args": [
+        "--test",
+        "agent-team/tests/bug-pipeline/native-guard-container.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-launcher.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-certificates.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-proxy.test.mjs"
+      ],
+      "ok": false,
+      "exitCode": 1,
+      "error": null,
+      "stdoutSha256": "be97b16f279cc1548a965773c9975c1e6446ab85afc61e42d2a0d35a92810c13",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "credentialsInherited": false,
+      "independent": false
+    },
+    {
+      "receiptPath": "C:/w-rv/tmp/review-capacity-20261103/r2-native-runtime/green-clean-bb9dd8dd/receipt.json",
+      "receiptSha256": "fc5faffa161e48864d1cbf63ac856186cface7c62cafe6e833710df87a4a9e1e",
+      "head": "bb9dd8ddb3894416d59cb4eb5c42596819f98892",
+      "cwd": "C:/w-rv/review-capacity-native-runtime20261103",
+      "args": [
+        "--test",
+        "agent-team/tests/bug-pipeline/native-guard-container.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-launcher.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-certificates.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-proxy.test.mjs"
+      ],
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "stdoutSha256": "2180760153f11dc7a9fe85c318217894af9ba2196fb685f55299aa3e14e49485",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "credentialsInherited": false,
+      "independent": false
+    },
+    {
+      "receiptPath": "C:/w-rv/tmp/review-capacity-20261103/r2-native-runtime/red-controlled-network-baseline/receipt.json",
+      "receiptSha256": "b89130dbaf3bc56725f858af29f80962d8da75b40f60131017f4b4e318c04a54",
+      "head": "bb9dd8ddb3894416d59cb4eb5c42596819f98892",
+      "cwd": "C:/w-rv/review-capacity-native-runtime20261103",
+      "args": [
+        "--test",
+        "agent-team/tests/bug-pipeline/native-guard-container.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-launcher.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-certificates.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-proxy.test.mjs"
+      ],
+      "ok": false,
+      "exitCode": 1,
+      "error": null,
+      "stdoutSha256": "bb395837d3cc665e308339aa171b6f2ab3957f5c75a11cf8284a919e3c8b4f38",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "credentialsInherited": false,
+      "independent": false
+    }
+  ],
+  "privateFiles": [
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/run-check.mjs",
+      "sha256": "5870ac4c5ccddedc416e45fae746062a750af9d68ff2ceb20ec0cbf400a4f677",
+      "bytes": 2049
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/adversarial.test.mjs",
+      "sha256": "6bacf7b4c2e1fe9aa7b2635a04e0e7b60de2d5da1619968bf31ab324f37de390",
+      "bytes": 7289
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/collect-evidence.mjs",
+      "sha256": "35ad7c973bca4298607fe92d39772c7819a3af7b518462e035342bc1494f860c",
+      "bytes": 2915
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/stopped-source-fence.json",
+      "sha256": "6e2e902817d45df316992e3d99b4465898a04c438769e043209c15a3330030b4",
+      "bytes": 863
+    }
+  ],
+  "scope": "Windows stripped pure/fake-process/local-loopback runtime QA; not actual Linux Docker/TLS/OpenSSL qualification",
+  "providerCalls": 0,
+  "realCredentialsRead": 0,
+  "sourceWrites": 0,
+  "githubOrCanonicalWrites": 0,
+  "qualification": false,
+  "approval": false
+}

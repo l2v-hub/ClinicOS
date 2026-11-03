@@ -1,0 +1,74 @@
+{
+  "jobId": 126042661037,
+  "runId": 41672033526,
+  "observedRawLogBytes": 7969,
+  "rawLogSha256": "b93ae0c07a6e50a8e6ce06550b6878a64ce6ed884e44ee299febce2a5225253b",
+  "rawLogPersisted": false,
+  "rawLogPrinted": false,
+  "phases": [
+    {
+      "time": "2026-11-03T16:14:02.3612978Z",
+      "command": "submodule"
+    },
+    {
+      "time": "2026-11-03T16:14:04.4131152Z",
+      "command": "submodule"
+    },
+    {
+      "time": "2026-11-03T16:14:05.0225349Z",
+      "category": "fetch-group"
+    },
+    {
+      "time": "2026-11-03T16:23:59.9222910Z",
+      "category": "cancelled"
+    },
+    {
+      "time": "2026-11-03T16:24:00.7092029Z",
+      "command": "submodule"
+    },
+    {
+      "time": "2026-11-03T16:24:01.3813350Z",
+      "command": "submodule"
+    }
+  ],
+  "dependencyFiles": [
+    {
+      "file": "agent-team/tests/bug-pipeline/windows-review.test.mjs",
+      "bytes": 21659,
+      "sha256": "082762f220976a73978ce5fb2deca9657eecaf7adb996552c9b5697b49f9cc1f"
+    },
+    {
+      "file": "scripts/automation/install-claude-review-windows.mjs",
+      "bytes": 13884,
+      "sha256": "7331d589994af57187bedee93bc90e67d919e71c235cf3d9bc1b7b8328c38bba"
+    },
+    {
+      "file": "scripts/automation/run-claude-review-windows.mjs",
+      "bytes": 3757,
+      "sha256": "204a3ddfcb3530961b96cb0afa1b29affbfdd742ab486203c0fe7d474f45debb"
+    },
+    {
+      "file": "scripts/automation/install-claude-review-cron.mjs",
+      "bytes": 13331,
+      "sha256": "1f02b680941ec5b44eebd0821a2008798261474472691a17a8822c859b137f36"
+    },
+    {
+      "file": "scripts/automation/setup-claude-review-windows.ps1",
+      "bytes": 3083,
+      "sha256": "716a6281632940c72fbb12650675e2fa96106e52056a281c2267244d89951f22"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/process.mjs",
+      "bytes": 10533,
+      "sha256": "2859598df0808313faed958604a173d066ffd1ad627992e37ef605be7dea9870"
+    },
+    {
+      "file": "agent-team/src/core/sanitize.mjs",
+      "bytes": 1012,
+      "sha256": "1a4d2b9565663b3ed5a593cdecf7cbadbd6f9cd6ef296a4b8c1c426b08ca042b"
+    }
+  ],
+  "excludesTestCreatedFixtures": true,
+  "providerCalls": false,
+  "remoteWrites": false
+}

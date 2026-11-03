@@ -1,0 +1,115 @@
+✖ a complete pinned before/after source packet above old700KiB retains every selected context (22.8956ms)
+✖ the old701KiB fixture is admissible only when full actual input fits the observed profile (9.1098ms)
+✖ exact serialized prompt/schema/output/native boundary passes and one added byte fails (2.1478ms)
+✖ Unicode and JSON escaping are counted after serialization, never by string length (3.1805ms)
+✔ below-static900000-byte input still fails dynamic allowance before native claim/model (8.9015ms)
+✔ derived finite transport ceiling is not an unbounded or caller-configurable allowance (4.0447ms)
+✔ individual source blob ceiling is unchanged despite larger aggregate transport (13.3897ms)
+✖ shared explicit recovery transport also rejects dynamic overflow before its existing claim (2.6119ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 3
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 253.8768
+
+✖ failing tests:
+
+test at agent-team\tests\bug-pipeline\cloud-review-capacity.test.mjs:75:1
+✖ a complete pinned before/after source packet above old700KiB retains every selected context (22.8956ms)
+  AssertionError [ERR_ASSERTION]: Review packet exceeds byte bound
+      at bounded (file:///C:/w-rv/review-capacity20261103/agent-team/src/bug-pipeline/cloud-review-worker.mjs:212:14)
+      at Object.retrieve (file:///C:/w-rv/review-capacity20261103/agent-team/src/bug-pipeline/cloud-review-worker.mjs:222:7)
+      at async TestContext.<anonymous> (file:///C:/w-rv/review-capacity20261103/agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs:76:33)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\cloud-review-capacity.test.mjs:92:1
+✖ the old701KiB fixture is admissible only when full actual input fits the observed profile (9.1098ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'queue-blocked'
+  - 'published'
+
+      at TestContext.<anonymous> (file:///C:/w-rv/review-capacity20261103/agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs:95:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'queue-blocked',
+    expected: 'published',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\cloud-review-capacity.test.mjs:100:1
+✖ exact serialized prompt/schema/output/native boundary passes and one added byte fails (2.1478ms)
+  AssertionError [ERR_ASSERTION]: Review packet exceeds static capacity bound
+      at prepareCloudInference (file:///C:/w-rv/review-capacity20261103/agent-team/src/bug-pipeline/cloud-review-worker.mjs:360:10)
+      at TestContext.<anonymous> (file:///C:/w-rv/review-capacity20261103/agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs:103:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\cloud-review-capacity.test.mjs:111:1
+✖ Unicode and JSON escaping are counted after serialization, never by string length (3.1805ms)
+  AssertionError [ERR_ASSERTION]: Review packet exceeds static capacity bound
+      at prepareCloudInference (file:///C:/w-rv/review-capacity20261103/agent-team/src/bug-pipeline/cloud-review-worker.mjs:360:10)
+      at TestContext.<anonymous> (file:///C:/w-rv/review-capacity20261103/agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs:113:46)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at agent-team\tests\bug-pipeline\cloud-review-capacity.test.mjs:141:1
+✖ shared explicit recovery transport also rejects dynamic overflow before its existing claim (2.6119ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /qualified context capacity/. Input:
+
+  'AssertionError [ERR_ASSERTION]: Review packet exceeds static capacity bound'
+
+      at async TestContext.<anonymous> (file:///C:/w-rv/review-capacity20261103/agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs:144:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: AssertionError [ERR_ASSERTION]: Review packet exceeds static capacity bound
+        at prepareCloudInference (file:///C:/w-rv/review-capacity20261103/agent-team/src/bug-pipeline/cloud-review-worker.mjs:360:10)
+        at processRecovery (file:///C:/w-rv/review-capacity20261103/agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs:66:21)
+        at async waitForActual (node:assert:615:5)
+        at async strict.rejects (node:assert:738:25)
+        at async TestContext.<anonymous> (file:///C:/w-rv/review-capacity20261103/agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs:144:2)
+        at async Test.run (node:internal/test_runner/test:1389:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:960:7),
+    expected: /qualified context capacity/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

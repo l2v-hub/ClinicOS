@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "status": "environment-output-cap-does-not-requalify-modelUsage-default-no-supported-shortcut",
+  "researchOnly": true,
+  "question": "Can explicit CLAUDE_CODE_MAX_OUTPUT_TOKENS=64000 both enforce request output64k and make pinned CLI2.1.301 genuinely report modelUsage.maxOutputTokens64k instead of the historically observed128000, without changing qualification/accounting?",
+  "answer": "No. Published pinned code separates the effective request override from the model default recorded in modelUsage. Setting this variable alone does not change the reported model default. A request cap cannot be substituted for the actual observed profile in the current qualified-capacity gate.",
+  "primaryDocumentation": [
+    {
+      "url": "https://code.claude.com/docs/en/env-vars#variables",
+      "relevantLinesAtObservation": [356, 358, 552],
+      "summary": "The output environment variable controls most requests and is bounded by model-specific defaults/caps; increasing it consumes input context. This does not document a change to modelUsage metadata. The context-window override is documented for gateway/custom IDs, not permission to enlarge the trusted native clamp."
+    },
+    {
+      "url": "https://code.claude.com/docs/en/agent-sdk/python#resultmessage",
+      "relevantLinesAtObservation": [2095, 2097, 2107, 2108],
+      "summary": "The SDK passes CLI per-model metadata through unchanged, describing contextWindow and maxOutputTokens as model limits, not proof of a per-request override."
+    },
+    {
+      "url": "https://code.claude.com/docs/en/settings",
+      "summary": "Current docs distinguish settings and environment precedence. No documented equivalent that safely changes this observed metadata under the current strict no-settings worker was established. Undocumented catalog/managed overrides are not a qualified route."
+    }
+  ],
+  "pinnedPackageIntegrity": {
+    "lockfile": "scripts/automation/claude-cloud-tools/package-lock.json",
+    "sourceCheckout": "C:/w-rv/auth-release-main20261102",
+    "sourceSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+    "wrapper": {
+      "name": "@anthropic-ai/claude-code",
+      "version": "2.1.301",
+      "publicTarball": "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.301.tgz",
+      "sha512Integrity": "sha512-sEqs0D9IIc6GwbdMvss5GHOjLjhaoqbrZWdickLRlG6v4kT946t4pq3zFAmQdUpRgdv1CvtSLyRrrdp+hDS9ww==",
+      "matchesActualLockfile": true,
+      "tarballSha256": "a6c33587bc5cab060f7eb6a9aa1dab1030f9fe5dd1bd73ffdfac4a6c71987e67",
+      "structure": "Seven files; executable wrapper/installer, package metadata/docs and SDK tool declarations. Native implementation resides in the pinned optional platform package. Neither wrapper nor installer executed."
+    },
+    "cloudLinuxX64": {
+      "name": "@anthropic-ai/claude-code-linux-x64",
+      "version": "2.1.301",
+      "publicTarball": "https://registry.npmjs.org/@anthropic-ai/claude-code-linux-x64/-/claude-code-linux-x64-2.1.301.tgz",
+      "sha512Integrity": "sha512-JNe0VzIuXdaBrtlh+fY2SX5AQLDf8BDfIKrylOWK528AZ/aAq2bJt4SBkPikZ0CvecUbL0YN22Xe7eltAWCJGg==",
+      "matchesActualLockfile": true,
+      "compressedBytes": 119872477,
+      "tarballSha256": "a7ffd61e7784e6dda864a31e934cececc050f106015201cb3db4abb59c781c57",
+      "binaryEntry": "package/claude",
+      "binaryBytes": 267955384,
+      "binarySha256": "bc1aad9982c7b59c7d889ff92595d61cf46e0a6eae074cb551d932a989bcd222",
+      "method": "Public registry fetch, bounded in-memory gzip/tar parsing, exact SHA512 lockfile verification and passive embedded JavaScript text inspection. No npm install/postinstall, CLI launch, binary execution, model/probe, auth or provider call. Public package bytes were not saved as executable files."
+    }
+  },
+  "passivePinnedCodeEvidence": [
+    {
+      "byteOffset": 219697858,
+      "role": "Model output defaults/cap resolver",
+      "summary": "Resolver derives default and upper limit from recognized model/catalog and existing model configuration; its own body does not read CLAUDE_CODE_MAX_OUTPUT_TOKENS."
+    },
+    {
+      "byteOffset": 219698291,
+      "role": "Effective output environment override",
+      "summary": "Separate effective-output function resolves that model default/cap, then validates the environment override against them. This is the request-facing override, not the reported model default."
+    },
+    {
+      "byteOffset": 226074296,
+      "role": "Resolved request model configuration",
+      "shortCode": "maxOutputTokens:agt(e)",
+      "summary": "Request-facing configuration uses the effective override path. Documentation says most requests; no stronger universal per-request guarantee was inferred or tested."
+    },
+    {
+      "byteOffset": 226081134,
+      "role": "Per-model usage accumulator",
+      "shortCode": "s.maxOutputTokens=Uae(r).default",
+      "summary": "The reported usage field takes the model default resolver, not the effective environment override."
+    },
+    {
+      "byteOffset": 226076487,
+      "role": "Session usage serialization",
+      "shortCode": "maxOutputTokens:Uae(s).default",
+      "summary": "Persistence also records model default, independently corroborating that the field is not the selected request cap."
+    }
+  ],
+  "existingClinicOSConstraints": {
+    "reviewChildEnvironment": "Trusted process.mjs review mode is credential-stripped and does not forward CLAUDE_CODE_MAX_OUTPUT_TOKENS. Setting it in the outer workflow currently has no effect on that child.",
+    "profileQualification": "qualifiedModelProfile requires one genuine resolved Opus entry, explicit context and actual maxOutputTokens; context remains clamped to1000000. It cannot be made64k by rewriting probe metadata.",
+    "capacityGate": "prepareCloudInference uses actual observed output allowance. With historical128000, exact current prompt/schema leave802924 packet bytes. The source31 planned selection lower bound830937 still does not fit.",
+    "modelContextOverrides": "No env/settings-based enlargement of contextWindow may replace genuine qualification or the existing1M clamp. Gateway/API/model selection changes are outside this task.",
+    "metadataCaveat": "Actual model defaults may independently change in a future genuine qualification. No fresh call was made; setting an output cap is not evidence that such a change occurred."
+  },
+  "decision": {
+    "safeExistingRouteForRequestedAndObserved64k": false,
+    "reason": "The proposed env-only method cannot meet its own requirement that actual pinned modelUsage report64k. Forwarding the variable would additionally require an explicitly reviewed environment-policy change and would still not fix the metadata distinction.",
+    "notAuthorizedByResearch": "No changes to527, private auth generator, provider settings, safety envelope, output accounting, model/API route, source/context selection, auth counters or review budgets.",
+    "nextBoundary": "Keep current observed-profile gate honest. Any different admission design requires explicit technical scope/authority and real independent review; do not implement a metadata rewrite or output discount as a workaround."
+  },
+  "preservation": {
+    "authHistoricalImplementationRecords": 4,
+    "authImplementationLimit": 5,
+    "authReviewsSpent": 2,
+    "authReviewLimit": 4,
+    "sourceOrCanonicalWrites": false,
+    "credentialReads": false,
+    "providerCalls": false,
+    "newPrivateResearchReportOnly": true
+  }
+}

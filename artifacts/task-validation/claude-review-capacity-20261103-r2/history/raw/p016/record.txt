@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "independent": true,
+  "reviewer": "auth_expiry_final_qa",
+  "agent": "/root/auth_expiry_final_qa",
+  "status": "passed",
+  "scope": "read-only adversarial QA of four pure native protocol modules and four tests; not post-Claude final approval or native qualification",
+  "sourceSha": "869ffe9611c14ee72c77d681f789bb3bb52acda6",
+  "tree": "71257c85936d2183b4d173dcde5f15253410341d",
+  "baseSha": "fa6078769e1c390562a94cb89130338ae2a5e862",
+  "reservationNonce": "3bee1059-1e8f-4448-8ae5-bfb1f8fbe9d9",
+  "findings": [],
+  "summary": "No concrete defect reproduced in exact clean frozen pure-protocol source. Independently replayed 121 existing tests and executed 50 separately written adversarial cases; all pass without skips. Integrated runtime, real owned-claim composition, authentic native qualification, final CI/Max/final QA and release remain pending. No final approval, provider invocation, source edit, external mutation or allowance reset.",
+  "reportPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-protocol/report.md",
+  "reportSha256": "dc77c305ae2430b217c4657c2b3bdb5f299e8b359c9137c58a10522e4934c21f",
+  "evidencePath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-protocol/execution-evidence.json",
+  "evidenceSha256": "cc89f816109d47e5021ca819e0158aa714a1425ab890be136797d5a1fc6a56b7",
+  "sourceManifest": {
+    "agent-team/src/bug-pipeline/native-guard-json.mjs": "09ba073b5700006957ecaa03b3ea4b9b12dc40cf",
+    "agent-team/src/bug-pipeline/native-guard-request.mjs": "9ab00c62f49620a6c896819fdfa782b9167eb372",
+    "agent-team/src/bug-pipeline/native-guard-response.mjs": "747a1c6db5d4e18e8e7a6786c03fbe93f8eefbc4",
+    "agent-team/src/bug-pipeline/native-guard-state.mjs": "119bc48473277bdb8babd7f24754506c76d6e21b",
+    "agent-team/tests/bug-pipeline/native-guard-json.test.mjs": "43ed0250093013b7a61075f8dde58033fde542d6",
+    "agent-team/tests/bug-pipeline/native-guard-request.test.mjs": "a2f9b3146bfd0e3b451d0c7e56ba4ba10694bfe5",
+    "agent-team/tests/bug-pipeline/native-guard-response.test.mjs": "61028adecd5ca3a4b2ae5dac6a8628c7cfe83fbf",
+    "agent-team/tests/bug-pipeline/native-guard-state.test.mjs": "9ecf63ceb57e5a5c37b851be724b875f08de1919"
+  },
+  "tests": [
+    {"receiptPath": "replay-twelve/receipt.json", "pass": 121, "fail": 0, "skip": 0, "cancelled": 0, "exitCode": 0, "independent": true},
+    {"receiptPath": "independent-adversarial-expanded/receipt.json", "pass": 50, "fail": 0, "skip": 0, "cancelled": 0, "exitCode": 0, "independent": true}
+  ],
+  "authorTddOnly": {"redSha": "8b7d5cd6aa7f791b215412db7d41d27e4fdaa21a", "retainedFailures": 12, "logHashesVerified": true, "independentlyReplayedRed": false, "originalReceiptHeadWasDirtyBase": true},
+  "trackedClean": true,
+  "sourceWrites": false,
+  "providerInvoked": false,
+  "credentialsRead": false,
+  "githubOrCanonicalMutation": false,
+  "nativeProfileQualified": false,
+  "combinedImplementationApproved": false,
+  "releaseAuthorized": false,
+  "remaining": ["integrated runtime and claim/policy/source fences", "actual Linux complete mediation and escape tests", "authentic native complete-context qualification", "exact final CI", "genuine Max review", "independent post-Claude final QA", "protected release authorization"],
+  "historyAndBudgetsUnchanged": true
+}

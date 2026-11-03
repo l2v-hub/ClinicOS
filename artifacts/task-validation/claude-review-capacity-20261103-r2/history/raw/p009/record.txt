@@ -1,0 +1,44 @@
+# Independent combined repair QA — blocked at 4c8beb83
+
+Actual reviewer: `/root/auth_expiry_final_qa`.
+Source: `4c8beb83c6ea11ba286f33372bf76ba1814c3770`.
+Tree: `31861014940e9bde315e3fe6a3a8bfcf3ecc8f11`.
+Checkout: `C:/w-rv/review-capacity-combined-qa2-20261103` (read-only and clean).
+
+## Finding — P2: liveness can become false before the actual forward after the claim wrapper already returned true
+
+Location: `agent-team/src/bug-pipeline/native-guard-session.mjs:118`, with the state await/send seam in `native-guard-state.mjs:54`.
+
+The prior policy race is repaired. A parallel process-liveness edge remains: the session claim wrapper checks runtime.isLive after awaiting its supplied validator, then its own Promise resolves. The state module awaits that result before calling the stored forward. If runtime liveness becomes false between those steps, no synchronous liveness-failure linkage poisons the data gate and the previously computed true result still permits the write. The actual container stop marks isLive false immediately, but its completion/cleanup can lag while the finite signal grace runs; waiting for completion alone does not establish a final pre-write liveness check.
+
+Actual private test `runtime liveness lost after claim wrapper result must prevent actual forward`, `extra-edges.test.mjs:19`, queues loss of liveness after the wrapper's boolean calculation but before the state's await continuation. It uses the real request/session/state modules, valid immutable synthetic body and isolation fixtures. Expected forwards 0, actual forwards 1. The eventual release fails, so this is not a false approval. It does not demonstrate an unauthorized claim/body, OAuth bypass, invalid policy, second inference, replay or refund. The narrower harm is spending the finite source inference after its source process became unusable, when a valid native result can no longer follow. Treat this as P2, not the previously fixed policy P1.
+
+`extra-adversarial-edges/receipt.json`: actual exit 1; 14 tests, 13 PASS/1 FAIL, zero skip/cancellation, exact source/index stable. Required repair is a synchronous immediately-before-send liveness fence (or equivalently immediate data-gate poisoning on runtime failure) across the final asynchronous claim seam, retaining one-attempt/no-replay behavior. Root was notified with the concrete fixture before any pass handoff. No source fix was made by this reviewer.
+
+## Actual independent runs
+
+- All eighteen explicitly existing suites: 173 cases, 170 PASS, 3 explicit Linux SKIP, zero failures/cancellations.
+- Unchanged private prior reproductions: 32/32 PASS, no skips/cancellations. This includes the original timeout, three session findings and the stronger nested-microtask policy assertion that failed at source10000045. Only assigned paths/SHA/output directories changed; original per-runtime isLive adapter is retained. Reverse transforms prove the assertion text is unchanged.
+- New adversarial edges: 13 PASS/1 FAIL. All nine invalid-policy/pending-diagnostic/invalid-UTF8 cases at microtask depths0/1/2 stop with zero forwards. Four OpenSSL argv/env/stdin/failure/overflow edge cases pass; the sole failure is the distinct liveness finding above.
+
+Every run used trusted D2 createRunner verification mode, stripped child credentials, exact test-file existence checks and clean HEAD/index checks before and after. Full receipts/log hashes and private test hashes are bound in `execution-evidence.json`. No npm/browser/app test was needed for this internal pipeline scope. All retained earlier failed QA reports remain unchanged; no failing assertion was removed, skipped or relaxed.
+
+## Inspected repair
+
+Reviewed the entire five-file delta from source10000045, full current certificate helper and relevant unchanged protocol/runtime/workflow composition already inspected in preceding source-bound QA.
+
+The policy barrier now exposes poisoned state. onDiagnostic synchronously fails the data gate on poison or on a settled barrier becoming unready; reject invokes runtime.close immediately rather than deferring it. The real runtime factory closes proxy requests/sockets before awaiting container cleanup. The original policy defect is independently closed at this source, including its previously failing exact private reproducer and the nine stronger variations. Startup/owned-forward deadlines and bounded container termination repros remain green.
+
+The certificate repair changes key input from an OpenSSL filename '-' to /dev/stdin behind a fixed Bash pipeline `/bin/cat | /usr/bin/openssl "$@"`. All command arguments remain positional and quoted, with a constant script, no profile/rc loading, pipefail, detached isolated process group, explicit finite environment and private stdin. Key values are absent from argv/env/public evidence. Failure destroys stdin, kills the isolated group/process and clears captured chunks; private errors remain fixed constants. Independent mock tests checked literal shell metacharacters, stdin-only synthetic key transport and bounded/sanitized failure paths. No Bash/OpenSSL process or private key generation actually ran in this Windows QA. Real FIFO/OpenSSL/TLS behavior for this SHA still requires actual Linux CI; pure tests are not substituted for it.
+
+nativeGuardBuildIdentity additionally requires the complete tracked tree clean before qualification fingerprinting. Full model-visible input/schema/wrapper byte accounting, private minted capacity classification, live mandatory holding during optional staging, canonical required evidence and explicit trusted-main/manual exact PR/SHA activation remain in place. No default or scheduled native activation, alternate provider, new app allowance or no-tools weakening is introduced by this five-file delta.
+
+## Retained external evidence and remaining gates
+
+The parent-supplied source-s-ci-failures.json describes actual older Linux run41667635035 attempt1 at source10000045: 2010 tests, 2005 pass, 2 certificate-related failures and 3 expected platform skips; controlled positive TCP/DNS Docker isolation passed there. The current container and escape-test blobs are unchanged, but that is not a current-SHA full Linux pass. This reviewer did not fetch GitHub or independently retrieve that raw cloud log; the supplied summary is hashed as reported evidence, not a new execution or independent live-CI verification. The two historical Linux failures are preserved, not relabeled green because a candidate fix exists.
+
+Independently checked the retained Windows baseline/source10000045 full-run log hashes and compared their actual failed-name sets. Their failures match, and neither full run is green. These were root executions, not independently executed full suites, and they are not bound to current4c8 as fresh full-run evidence. Baseline equality is not a failure waiver or proof that every failure is platform-only.
+
+All changed Git blobs against trusted D2 are individually hashed; present source/test files are byte-equal to Git. Historical packet artifacts omitted by sparse checkout are explicitly marked and bound to immutable Git rather than claimed present. HEAD/index remain stable; no files were written in the QA checkout. Reports/tests/results exist only in this private combined2 directory.
+
+No real provider/OAuth/credentials, native Claude, Docker/OpenSSL, GitHub/controller/canonical mutation, source edit, main-worktree write, merge/deploy, production action, clinical access or issue closure occurred. This is before-own-Max QA, not post-Claude approval. Exact current CI, full Linux proof, genuine old-worker Max review, subsequent final independent QA, authentic native qualification and protected release remain pending. Original auth/technical counters and histories, app source31 and no-automatic-release hold remain unchanged. This blocked result does not restore demo authentication or authorize a budget extension.

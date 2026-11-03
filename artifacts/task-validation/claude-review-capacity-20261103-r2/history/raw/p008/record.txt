@@ -1,0 +1,665 @@
+{
+  "independent": true,
+  "reviewer": "auth_expiry_final_qa",
+  "sourceSha": "10000045b9a7884ea970acba204459c5e2c4d889",
+  "tree": "1a2ba4aaa9d12efe110e75083a79f377c6d61f12",
+  "indexSha256": "4dc9073214003077d17b3df030e928644a104f39144f4c59f4792bd51a5a4788",
+  "baseSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+  "trackedAndUntrackedClean": true,
+  "manifest": [
+    {
+      "path": ".github/workflows/claude-cloud-review.yml",
+      "gitBlob": "7841948070e7cc8abb3da651e0af5b54e59df176",
+      "sha256": "df418849427d26f07b0c7f96b05f29e458ee4fabe32cad307e76859fe416dd31",
+      "bytes": 5109,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-capacity.mjs",
+      "gitBlob": "3bd23f7571d468c4080e3ac6d004fea53142ad71",
+      "sha256": "7551f184bdce36251a8617e91193b6d8d99900034bb1acf6b26523e1d62e1845",
+      "bytes": 2173,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs",
+      "gitBlob": "44882de8fc51e1aa8b79bdc837a9c84ac6e6535e",
+      "sha256": "90c762d2dd5c3a47ab183241548117ceee19b45b8f96f39c38e973a77bf67a4f",
+      "bytes": 7454,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "gitBlob": "4f09cd3577b16f137a51aef769fc36b6a571379a",
+      "sha256": "f014ef6f7e5620fe2320696592072f1b0b337b06df56e422730cb0641b763bb0",
+      "bytes": 40042,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-certificates.mjs",
+      "gitBlob": "f6b75779ac4a0e83209e597372226c568996bd74",
+      "sha256": "152b128002abb916933befb5297723d9d54f333492ffc96bfe6ed993ee0eb38b",
+      "bytes": 5970,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-container.mjs",
+      "gitBlob": "68bbfa935b3b36ff1cc639a4517bc9d9e6cd33eb",
+      "sha256": "402a030b7eaaf36d3851dbbcc7348db335fce5022ed3e4591505f4983a3e89d9",
+      "bytes": 14033,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-json.mjs",
+      "gitBlob": "09ba073b5700006957ecaa03b3ea4b9b12dc40cf",
+      "sha256": "b1aa5d5c4b01d2458f17a2b399c419eb33733219425bc5025638f5ef97bf7302",
+      "bytes": 4299,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-launcher.mjs",
+      "gitBlob": "6adcd03dd560e29cbb2b346f652479de062625bd",
+      "sha256": "0df0f48cf981b885b90b566c4f811e8bc0234e7f5ab479ea0213afacc6a08c20",
+      "bytes": 6293,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-proxy.mjs",
+      "gitBlob": "2f27849acb6e35506c268e212d534df695d7ee7f",
+      "sha256": "18d6c18b73e5df87b4ef86e24dc0df9adc3be9437d70ee9215776684554db7d5",
+      "bytes": 13473,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-qualification.mjs",
+      "gitBlob": "60ab162ae20f2cb4872c70f897c090bf9b268aea",
+      "sha256": "ba38ab4924d5130d6670082fb3d7033ec80209a0b6a9832155f2c99be4ff4a30",
+      "bytes": 12614,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-request.mjs",
+      "gitBlob": "67b8841c0c8c11156ed4fe6a26feac6a5bf5b70b",
+      "sha256": "89d6f4ede6756870f9769e469c69a772a4f3d0d6c7ae7355b72ffd9e5190aa07",
+      "bytes": 10478,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-response.mjs",
+      "gitBlob": "747a1c6db5d4e18e8e7a6786c03fbe93f8eefbc4",
+      "sha256": "8774a289af7aeee476aab35b1eab82c414985127a0dec695b69b734045fa68fe",
+      "bytes": 14145,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-session.mjs",
+      "gitBlob": "2b3a6e3e6244e415899853234d4b2c108dcac8dc",
+      "sha256": "d9d837719316a8c0b8b83f9dd264ab67dd7d2ab8289d8d804d35e085b1596ffd",
+      "bytes": 15283,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/native-guard-state.mjs",
+      "gitBlob": "119bc48473277bdb8babd7f24754506c76d6e21b",
+      "sha256": "08719cdb6645144f5a524e2e2ef48ee66be5b33a43cdf49e02ece033c436a7ce",
+      "bytes": 2367,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs",
+      "gitBlob": "816a772a9f6de1c071eed1a02a3d7a18465048a4",
+      "sha256": "17dc230486dc5ca9b5fa18d5caa2a9b1ebe2cca81b75cc3e05b9f41759613968",
+      "bytes": 9204,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-capacity-fixture.mjs",
+      "gitBlob": "fd08e0d2ab9c487f33cd34d682478289f4929bf2",
+      "sha256": "960810915d4db10991d78a40b2672457d91b33d3997c9665636ad4837e21ecb7",
+      "bytes": 7981,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+      "gitBlob": "f8c7d330f5d2221657dadead130bfb2f1ff8f284",
+      "sha256": "66091e19f6129ade28950f527521ca3f09e56d76eb3479ebe35545aae5072aac",
+      "bytes": 6794,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-evidence.test.mjs",
+      "gitBlob": "4840a83a20cfb9672ff05b24690d4b3d65e3291e",
+      "sha256": "1dbfa97d15da0988c78e0caf223432caccb31795a102345961a103cd12bd7179",
+      "bytes": 12718,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "gitBlob": "889359e9ac7f4da4eeb8b8978b57a935e7b9d843",
+      "sha256": "7d4a39e12f07347c5fdcf32441ade2095a9a3c4714ef362a5b0cdfa2fe4ccd4b",
+      "bytes": 42967,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-certificates.test.mjs",
+      "gitBlob": "3d5371a8f0a0bc104a6938cda074627ed123b9fa",
+      "sha256": "05e98ec995eabc01f2fa25f3f719e39d88714ea1f051b3d8e6499589de9615cf",
+      "bytes": 2299,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-container.test.mjs",
+      "gitBlob": "384138f62169efaead9ba293fcfa3791b385d39e",
+      "sha256": "b9c4ceffd4572fb1ffe2e89d52fe20f7f0f6097f010d70ab215e182acad95bb0",
+      "bytes": 17922,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-json.test.mjs",
+      "gitBlob": "43ed0250093013b7a61075f8dde58033fde542d6",
+      "sha256": "2de44609df603df43956abebad536af11ba0cd8b0934ee1f11ac4a745f00f145",
+      "bytes": 1960,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-launcher.test.mjs",
+      "gitBlob": "89c1b2ac090864c8e24e00d433e0d7eaca4cac1c",
+      "sha256": "4a64b0f4c322f1c60fff76171e85e8b7d89293c401c9840d41404d484ac99dc0",
+      "bytes": 2827,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-proxy.test.mjs",
+      "gitBlob": "74ec804386229cf3cfb049f8c31eb35674ce262a",
+      "sha256": "45c6bc61c93524b349ac18fe3315c2615d1d0aa488ee49c1f4c783531042b99b",
+      "bytes": 11709,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-qualification.test.mjs",
+      "gitBlob": "2759ac1d9b97c2cb335ca839a510c6a05a6be3fd",
+      "sha256": "f2b1b72842a9866aba5cc06f20c927d9faadd395efc092053f20d8cb0afaf768",
+      "bytes": 4699,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-request.test.mjs",
+      "gitBlob": "ec2d23069393329137083477fcb3959ec90fb438",
+      "sha256": "724bf33710638aab1097f66d8f3c085335667dd1dc5b48c9edba09a2d9bfa62c",
+      "bytes": 12621,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-response.test.mjs",
+      "gitBlob": "61028adecd5ca3a4b2ae5dac6a8628c7cfe83fbf",
+      "sha256": "e800753047f3f07891d4aa701a5c6b824041120fb547ef4233524489b9af5c77",
+      "bytes": 6516,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-session.test.mjs",
+      "gitBlob": "4317aad06507b73ff5a0027b3e84d323ad43767e",
+      "sha256": "8336cf86d7094a210ff68cfa9dd6ce7f0e60f966232be1224fbf2d9ebb615b2e",
+      "bytes": 15148,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/native-guard-state.test.mjs",
+      "gitBlob": "9ecf63ceb57e5a5c37b851be724b875f08de1919",
+      "sha256": "244d7d12bb8a0b81f32b0ea3e991d410cea720e9bf02546c16d1240688d264ce",
+      "bytes": 4478,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/analysis.md",
+      "gitBlob": "0da1bdd97e503a8239022ca5ed651e8c43a37794",
+      "sha256": "fe41618b6ed7c8f4cffe948945044a01d0ca7d016be3883e4ae41814e55a236e",
+      "bytes": 943,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/checks/green-capacity-formatted/receipt.json",
+      "gitBlob": "85907df4fe731693d364e37dba5f1ef8568ce10a",
+      "sha256": "314704b664d5fffe7191459bbcb873380d995f78a04e8fe14a0a2c43fdb42bf4",
+      "bytes": 997,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/checks/green-capacity-formatted/stderr.log",
+      "gitBlob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/checks/green-capacity-formatted/stdout.log",
+      "gitBlob": "5c2b3e409c39ac66aada6c90e466d11c4a67a01a",
+      "sha256": "b67f4de2c03a627c86b349fc557cda50f894244a913998d6989504a927988642",
+      "bytes": 8884,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/checks/red-complete-context-fixture-valid/receipt.json",
+      "gitBlob": "3a13b2dbed137eeb0fd67c48f1c48d027e602c73",
+      "sha256": "dc40a4df223144e0ed42a718a09d0c8a0e3df8b12185a9da7b609f2cd780955b",
+      "bytes": 660,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/checks/red-complete-context-fixture-valid/stderr.log",
+      "gitBlob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/checks/red-complete-context-fixture-valid/stdout.log",
+      "gitBlob": "43f309b3db76fa7ac6c0e49dc6fecc416289cbb7",
+      "sha256": "63b4ee42de41e01f0fa948cad49c8ec21f191b2efd13f88d601eeeeb7597bd2e",
+      "bytes": 6356,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/implementation-plan.md",
+      "gitBlob": "b212406e71835b73ff110b9125defd5c17bb7c32",
+      "sha256": "fe7875ea6f6c64f0536074d379132c94230c1327ece45a60ae952228b6761038",
+      "bytes": 1076,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/imported-history.json",
+      "gitBlob": "c2f21520aef9f59f90e808a0a15b1f3acc104447",
+      "sha256": "30dfe9b4651491775b6f136d82d219bb716c8870e92167cfd927c1c523deb488",
+      "bytes": 2907,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/qa-report.md",
+      "gitBlob": "d4dcd6c1c9766983a8c49bd38e00ca89fe474eaa",
+      "sha256": "76b88a52170163a9dae40ea1268e269021bfa20a2bfd10844143174f6cb53b9e",
+      "bytes": 8740,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/qa-seal.json",
+      "gitBlob": "dcb32496c820c261e1446fd504843aabfe3c9c5d",
+      "sha256": "55947d59bfb57d2e36b4f9b505a94bacf21db40fd97f14fac49dbcbafd7db3fa",
+      "bytes": 11481,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/review-cloud-review-recovery-worker-context-report.json",
+      "gitBlob": "212a9635742298d9f6c7a0bd46aed7c8b11e5fdc",
+      "sha256": "e63acb60012ddbcf7fafb5355965a29d1a42f839838c11332ec8446bfa4822ec",
+      "bytes": 7563,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/review-comment-review-handoff-context-report.json",
+      "gitBlob": "247ecb76574741734cc5b7df85375384c1762a5d",
+      "sha256": "b9299a7d2cef0bceec4377be1a441f738239023b6d0f47327364e606021e888b",
+      "bytes": 50506,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/review-process-context-report.json",
+      "gitBlob": "dc1c169977b717f1964b73c254ccf266503c34a9",
+      "sha256": "bca3d364fb7c09c3615d672e3920a618615dc88d6a2d7a18c8b4c59222ae158b",
+      "bytes": 11115,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/task-contract.md",
+      "gitBlob": "0a4519ac64b5bea6bd4f839884ca3f52f97622de",
+      "sha256": "420120cc06362b3c659c4cf87c6075088ad54ff159ee8e293c0ec17442f109f1",
+      "bytes": 3140,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/validation-report.md",
+      "gitBlob": "91d0b68db8e557b9b2d996b53cb9d81578d98a38",
+      "sha256": "8c74fb47ffb5c13cf9b908c1f737a59ae08aaa0a3cffaa9b59b265e5f9118209",
+      "bytes": 1425,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "path": "docs/architecture/native-guard-profile.md",
+      "gitBlob": "9d07bad6408193770896c6c4622515fac05c6010",
+      "sha256": "5b2d0dc187b9ab9acab5db9b627b37b8959e1a2a3cfb3705d7ce0026682fb030",
+      "bytes": 6828,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    }
+  ],
+  "receipts": [
+    {
+      "receiptPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/all-proper-eighteen/receipt.json",
+      "receiptSha256": "7817188055393e5c12a7a45d339b2a13499345f771c788ffcecac538dd56ed02",
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "all-proper-eighteen",
+      "cwd": "C:/w-rv/review-capacity-combined-qa-20261103",
+      "before": {
+        "sourceSha": "10000045b9a7884ea970acba204459c5e2c4d889",
+        "tree": "1a2ba4aaa9d12efe110e75083a79f377c6d61f12",
+        "indexSha256": "4dc9073214003077d17b3df030e928644a104f39144f4c59f4792bd51a5a4788"
+      },
+      "after": {
+        "sourceSha": "10000045b9a7884ea970acba204459c5e2c4d889",
+        "tree": "1a2ba4aaa9d12efe110e75083a79f377c6d61f12",
+        "indexSha256": "4dc9073214003077d17b3df030e928644a104f39144f4c59f4792bd51a5a4788"
+      },
+      "sourceStable": true,
+      "startedAt": "2026-11-03T15:47:36.588Z",
+      "finishedAt": "2026-11-03T15:47:39.329Z",
+      "args": [
+        "--test",
+        "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-review-recovery.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-recovery-source.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-recovery-qualification.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-review-evidence.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-json.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-request.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-response.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-state.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-container.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-launcher.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-certificates.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-proxy.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-session.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-qualification.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "stdoutSha256": "a45bdee9c9febc2a1c14523ba226bdeec0b3b53c4a2681b5429b4902b2cf8a6a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receiptPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/prior-behavioral-reproofs/receipt.json",
+      "receiptSha256": "91c36d6393b89d9a14b37c216194e3e03a7adf093e602066d6b9588d45af0372",
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "prior-behavioral-reproofs",
+      "cwd": "C:/w-rv/review-capacity-combined-qa-20261103",
+      "before": {
+        "sourceSha": "10000045b9a7884ea970acba204459c5e2c4d889",
+        "tree": "1a2ba4aaa9d12efe110e75083a79f377c6d61f12",
+        "indexSha256": "4dc9073214003077d17b3df030e928644a104f39144f4c59f4792bd51a5a4788"
+      },
+      "after": {
+        "sourceSha": "10000045b9a7884ea970acba204459c5e2c4d889",
+        "tree": "1a2ba4aaa9d12efe110e75083a79f377c6d61f12",
+        "indexSha256": "4dc9073214003077d17b3df030e928644a104f39144f4c59f4792bd51a5a4788"
+      },
+      "sourceStable": true,
+      "startedAt": "2026-11-03T15:48:07.193Z",
+      "finishedAt": "2026-11-03T15:48:08.767Z",
+      "args": [
+        "--test",
+        "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/runtime-reproofs.test.mjs",
+        "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/session-reproofs.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": false,
+      "exitCode": 1,
+      "error": null,
+      "stdoutSha256": "dc337b0c6260b028d3ed38b00cb872e542ecd02a0dde7f92d6cf0d5513ce3c45",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receiptPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/corrected-original-session-reproofs/receipt.json",
+      "receiptSha256": "da1759abf8291026a019e8213857004132210778de77171d20ccda2930d66b82",
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "corrected-original-session-reproofs",
+      "cwd": "C:/w-rv/review-capacity-combined-qa-20261103",
+      "before": {
+        "sourceSha": "10000045b9a7884ea970acba204459c5e2c4d889",
+        "tree": "1a2ba4aaa9d12efe110e75083a79f377c6d61f12",
+        "indexSha256": "4dc9073214003077d17b3df030e928644a104f39144f4c59f4792bd51a5a4788"
+      },
+      "after": {
+        "sourceSha": "10000045b9a7884ea970acba204459c5e2c4d889",
+        "tree": "1a2ba4aaa9d12efe110e75083a79f377c6d61f12",
+        "indexSha256": "4dc9073214003077d17b3df030e928644a104f39144f4c59f4792bd51a5a4788"
+      },
+      "sourceStable": true,
+      "startedAt": "2026-11-03T15:49:11.597Z",
+      "finishedAt": "2026-11-03T15:49:26.547Z",
+      "args": [
+        "--test",
+        "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/session-reproofs-per-runtime.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "stdoutSha256": "1adfe9064aca27826bd74b32de5856f76f2a924c9269cb1b34dca960be394751",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receiptPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/policy-after-await-microtask/receipt.json",
+      "receiptSha256": "a83679160dde0fd5857645c2f9bf68d3f668f83f582ff6d4ed8e7db5561f6089",
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "policy-after-await-microtask",
+      "cwd": "C:/w-rv/review-capacity-combined-qa-20261103",
+      "before": {
+        "sourceSha": "10000045b9a7884ea970acba204459c5e2c4d889",
+        "tree": "1a2ba4aaa9d12efe110e75083a79f377c6d61f12",
+        "indexSha256": "4dc9073214003077d17b3df030e928644a104f39144f4c59f4792bd51a5a4788"
+      },
+      "after": {
+        "sourceSha": "10000045b9a7884ea970acba204459c5e2c4d889",
+        "tree": "1a2ba4aaa9d12efe110e75083a79f377c6d61f12",
+        "indexSha256": "4dc9073214003077d17b3df030e928644a104f39144f4c59f4792bd51a5a4788"
+      },
+      "sourceStable": true,
+      "startedAt": "2026-11-03T15:49:36.581Z",
+      "finishedAt": "2026-11-03T15:49:44.773Z",
+      "args": [
+        "--test",
+        "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/policy-microtask-repro.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": false,
+      "exitCode": 1,
+      "error": null,
+      "stdoutSha256": "a9e80a4682dd1ed41b49b78a07c71a51c28216dca085fe85237890c5550df7b0",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "privateFiles": [
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/run-check.mjs",
+      "sha256": "208c795353135d0380f16ed251845c0bdffa9bde742c2231468c63e22bc647f4",
+      "bytes": 2282
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/prepare-reproofs.mjs",
+      "sha256": "b5c805449ca815b46033afed319a55c385da268967f23696d733d1e49462f5f2",
+      "bytes": 2591
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/prepare-session-adapter-correction.mjs",
+      "sha256": "012246b1551f7dba86500a47bcd11795b720d9fdb201f20de3d65a7dcfd503c5",
+      "bytes": 1662
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/runtime-reproofs.test.mjs",
+      "sha256": "00e34c4844a769da10e01e5a0365a69770694e5fd1c1dea804e141461bcdcf4f",
+      "bytes": 7288
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/session-reproofs.test.mjs",
+      "sha256": "cdf1e4222e530da69b7642a27862b38d341ae7dd22c68ec52a58a75083333fde",
+      "bytes": 4475
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/session-reproofs-per-runtime.test.mjs",
+      "sha256": "19ea67b00fce57af7dca937668b93e760613695ac404e93cdcf332b4a3e1600d",
+      "bytes": 4479
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/policy-microtask-repro.test.mjs",
+      "sha256": "19ec198abfc97da18dba67cbb368c03414ddaacb57c02078b2f31f8f38fa649d",
+      "bytes": 2121
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/fixture-transform-receipt.json",
+      "sha256": "d4a0b7d1e653c46be910f1c75a9115933f37d36c1954f97c76465e427a199c77",
+      "bytes": 1066
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/fixture-adapter-correction.json",
+      "sha256": "244b9a5bcbe632c74c2f5285d98c5f2b7e3f185825f30d209b65f8c1635ee707",
+      "bytes": 578
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/collect-evidence.mjs",
+      "sha256": "12121cfbf30505b4acce6fe4abbb3862b5e1223a5ad64a13b861006ec4237849",
+      "bytes": 3398
+    }
+  ],
+  "priorEvidence": [
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/report.md",
+      "sha256": "c62fddd7d7f400696aa320fa7ee0b51eecb8369929cb66ecf87b6df18ff46d26"
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/result.json",
+      "sha256": "b55256be7d1e036fb76235d9ffa17b6128ace259362b6a3c253a4dce4e5283ac"
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-session/report.md",
+      "sha256": "1707a7a3f29705e5db8d78e57d55b5857a547f3dc7e81ed1a64c7aa082c847e9"
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-session/qa-result.json",
+      "sha256": "667f4bd9e9a1a13acb266c4ba23915b9da8e8d2d6bd92b14b02ddaceec753fd6"
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/native-profile-round2-plan.json",
+      "sha256": "20623429f7b76daf606a24482e326af31f85881e591298cb4e6087b48a86d508"
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/native-r2-path-claims.json",
+      "sha256": "75165837ff340ffaa04d83217d1be252afbe03bfac50aa6b3f41d29ed00648b6"
+    }
+  ],
+  "remainingFinding": "Policy invalidation microtask before state await resumes still permits one forbidden forward.",
+  "limits": {
+    "actualLinuxTestsExecuted": false,
+    "explicitLinuxSkips": 3,
+    "realProviderInvoked": false,
+    "realCredentialsRead": false,
+    "sourceWrites": false,
+    "githubOrCanonicalWrites": false,
+    "postClaudeApproval": false
+  }
+}

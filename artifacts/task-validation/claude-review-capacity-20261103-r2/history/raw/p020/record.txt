@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "status": "architecture-conditionally-viable-not-implemented-qualified-or-approved",
+  "scope": "Read-only assessment of an external one-inference reference monitor around unchanged native Claude Code2.1.301, retaining genuine Max OAuth and official upstream endpoints. No provider, credentials, Docker, source, controller or GitHub mutation executed.",
+  "mainConclusion": "A genuine sole-egress guard that buffers the entire original native request and atomically allows only one inference forwarding attempt can close the native retry/managed-output-cap holes. This is a different, materially larger trusted computing base than an environment-only profile. Its safety depends on complete mediation, not trusting native max-turns, modelUsage output defaults, a model result, or a proxy environment variable alone.",
+  "primaryEvidence": [
+    {
+      "url": "https://code.claude.com/docs/en/network-config",
+      "observedLines": [82, 112, 133, 154, 264, 288],
+      "supports": "Claude Code documents standard HTTPS_PROXY and custom CA/TLS inspection. It separately documents provider/gateway rerouting; this design need not set ANTHROPIC_BASE_URL or construct SDK model calls. Keeping native OAuth/default endpoints is technically the same native authentication/provider route, not an API-key fallback.",
+      "limit": "Documentation supports network configuration, not an approval of this unbuilt security monitor, proof of its accounting, or a new subscription identity. Real qualifying account/provider metadata must remain native and authentic."
+    },
+    {
+      "url": "https://docs.docker.com/engine/network/drivers/none/",
+      "observedLines": [22, 35],
+      "supports": "network none leaves the container loopback only; ordinary external TCP/UDP/DNS cannot leave that namespace."
+    },
+    {
+      "url": "https://docs.docker.com/engine/containers/run/",
+      "observedLines": [53, 78],
+      "supports": "Docker isolates the process/filesystem/network and supports immutable digest references. Actual run flags, mounts and runtime escape tests still require independent qualification."
+    },
+    {
+      "url": "https://nodejs.org/api/http.html",
+      "observedLines": [306, 341, 2120, 2192, 2899],
+      "supports": "Node exposes CONNECT/raw header fields and Unix socket transport, but normal headers objects lowercase/discard some duplicates. Do not validate or promise raw-byte identity from normalized header objects."
+    },
+    {
+      "url": "https://nodejs.org/api/tls.html",
+      "observedLines": [1169, 1215],
+      "supports": "Node supports TLS on an existing stream/Unix transport; upstream must retain rejectUnauthorized and actual hostname validation. The interception CA must not become the upstream trust override."
+    },
+    {
+      "url": "https://docs.openssl.org/3.5/man1/openssl-req/",
+      "observedLines": [275, 287, 436, 440],
+      "supports": "Certificate/key outputs are configurable; new keys can be emitted to stdout. A pinned parent-side FD-pipe construction can keep private keys out of files, but must explicitly avoid configuration default_keyfile and prevent key-bearing stdout/errors reaching logs. No command was executed."
+    }
+  ],
+  "topology": {
+    "preferredShape": "Separate fresh health and source containers, each unchanged native CLI+trusted bootstrap/loopback bridge. Source has its own private Unix egress socket and one-inference gate. Parent owns official upstream TLS, canonical controller authority and a separate unmounted management channel.",
+    "container": [
+      "Linux --network none, --read-only, cap-drop ALL, no-new-privileges, nonroot, no privileged/PID-host/network-host/device/Docker socket mounts.",
+      "Digest-pinned base/runtime/CLI, exact verified CLI binary hash, audited trusted launcher/bridge, read-only public CA only; no checkout, credential store, repository, host HOME, source files or controller sockets mounted.",
+      "A bounded private tmpfs HOME/config/TMP is necessary because native initialization/policy caches can write. Read-only root without any writable private configuration is likely a functional failure, not proof of isolation.",
+      "No shared host IPC/PID namespace. Socket directory permissions and UID/GID must allow only this container bridge and parent guard; the egress socket is not an administration/claim RPC.",
+      "Fixed CPU/memory/PID/open-file/tmpfs limits, no image healthcheck/model-capable sidecar, bounded process deadline, log-driver none and captured attachment streams never echoed raw.",
+      "OAuth bootstrap arrives through private stdin, not argv/docker environment/inspectable env-file. Only the genuine OAuth token reaches native CLI. No GH/Railway/Vercel/API-key/provider-alternate credentials enter container."
+    ],
+    "completeMediationTests": [
+      "Attempt direct IPv4/IPv6 DNS/TCP/UDP, HTTPS_PROXY removal/NO_PROXY wildcard, alternate proxy settings and direct socket API: all external paths denied by namespace, not merely observed unused.",
+      "Attempt arbitrary CONNECT hostname/port, nested CONNECT, absolute URI, WebSocket/Upgrade, HTTP2 alternate stream, metadata path carrying source, model batch/complete/alternate endpoints: no upstream request.",
+      "Connect many sockets/requests concurrently: one shared guard budget transitions atomically before any upstream bytes, not one counter per connection or endpoint.",
+      "Verify actual Docker inspect runtime flags/mount inventory and pinned image/binary/source digests without dumping secrets; no app claim if qualification differs."
+    ]
+  },
+  "routeAndCredentials": {
+    "sameNativeRouteRequirements": [
+      "No ANTHROPIC_BASE_URL/custom provider/SDK/API-key call. Native requests target fixed approved official authorities; parent forwards original native request rather than generating a replacement model invocation.",
+      "Validate CONNECT authority, TLS SNI, HTTP Host/authority and actual upstream destination agree exactly; reject IP literals, suffix matches, arbitrary ports, userinfo, encoded host/path tricks and redirects.",
+      "No open TCP tunnel is ever passed through. Guard terminates local TLS and mediates every inner request. Unknown method/path/content schema fails closed.",
+      "Inference budget counts EVERY inference route/model/helper call, including a request that is not recognized as source. A helper before source is not a free additional request; source mode rejects it.",
+      "Non-inference startup traffic needs a finite exact host/method/path/query/header/body schema allowlist. Arbitrary POST telemetry/artifact bodies can otherwise exfiltrate source outside the inference gate.",
+      "Require genuine expected Bearer OAuth in memory and reject x-api-key/alternative auth; headers are never logged or placed in hashes that mix credential values into published evidence.",
+      "Parent upstream uses strict public trust + hostname verification and direct fixed official TLS connection; do not inherit the local interception CA, NO_PROXY or a caller-selected upstream proxy/agent.",
+      "Interception key is parent-memory only; public CA is container read-only. No key file, Docker secret env/config, certificate private-key artifact or raw debugging stdout."
+    ],
+    "byteIdentityCaveat": "A normal Node http.request forwarder reconstructs request framing/header casing/order. That is not literally byte-identical original headers. For the literal requirement, preserve validated original HTTP1 header/body bytes and write them to strict upstream TLS; alternatively explicitly state body bytes and end-to-end header values are unchanged while transport framing differs. Never claim both without proof.",
+    "simplestProtocol": "Qualify bounded HTTP1.1 with a complete Content-Length JSON body, no request gzip/transfer-encoding/trailers/upgrades. The documented native gzip-disable setting may select this format without rewriting a native body. If actual pinned CLI does not emit it, reject and revise the protocol explicitly; do not silently loosen parsing."
+  },
+  "requestAndContextSeal": {
+    "admissionStateMachine": [
+      "source gate starts CLOSED with immutable expected source packet/schema/model/nonce/build identity and remaining forwards1",
+      "fully buffer bounded native POST before opening/sending any upstream model HTTP request",
+      "strict parse and verify exact prepared prompt packet bytes/hash, expected nonce, fixed numeric qualified Opus, only native StructuredOutput tool+schema and allowed bounded native fields",
+      "compute actual decoded model-visible context bound and selected max_tokens; reject oversized or unknown input with NO claim and NO forward",
+      "seal original request bytes plus semantic body digest in memory; signal pending only on a separate trusted host management channel",
+      "native controller claim/CAS verifies expected subject/feedback/actor/owner and actual claim transition; failure cancels staged request with no inference",
+      "final owned-claim/source/body-hash fence then atomic source budget1→0 before upstream write; forward sealed original once",
+      "any second inference request, timeout, uncertain forwarding, response mismatch or native retry permanently poisons the operation; no replay/refund/new allowance"
+    ],
+    "jsonRequirements": [
+      "Fatal UTF8 decoding, integer/max_tokens finite positive validation, bounded object depth/count/string/body size, duplicate JSON keys detected BEFORE JSON.parse loses them, including escaped duplicate property names.",
+      "Reject prototype-related ambiguous keys, unpaired surrogates, nontext/binary/media/server tools, unknown context-changing fields, unsupported compression/framing and inconsistent content-length.",
+      "Inspect rawHeaders/headersDistinct; Node normalized headers alone may discard duplicate authorization/content-length/host. Reject CL/TE ambiguity, duplicate framing/auth/host headers and trailers.",
+      "The nonce and full prompt must match the trusted prepared bytes, not merely be found somewhere in a user-controlled message. Verify all additional system/user/tool context, not just the packet substring.",
+      "No source summary, context report trimming, native compaction/context_management edits, broad Read/MCP or replacing actual prior findings. Whole selected source/evidence stays required."
+    ],
+    "tokenAccounting": {
+      "notAnExactTokenCounter": true,
+      "policy": "Conservative decoded UTF8 byte upper bound for all model-visible system/message text plus full serialized tool/schema/nontext structures and bounded per-block framing, PLUS unchanged native65536 margin PLUS actual selected native body.max_tokens, must fit actual qualified1M clamped context.",
+      "decodeExactlyOnce": "The outer HTTP JSON string escaping is transport encoding; decode that once. The user text still contains JSON.stringify(packet) source/evidence escapes and those are model-visible bytes: do not decode embedded packet source strings again or undercount them.",
+      "allFields": "Count every allowed text block, system prompt, tool description/input_schema, previous message/tool-result/thinking block if allowed, and native wrappers. Prefer a fresh source container so health history is absent. Enforce small fixed block/message counts so token framing cannot grow independently of byte accounting.",
+      "observedDefaultUnchanged": 128000,
+      "enforcedCandidateCaps": [65536, 49152, 32768],
+      "actualCap": "max_tokens from the sealed native body, not an env intention or doctored modelUsage. Reject actual body values above selected fixed cap; use actual value in admission receipt.",
+      "knownProspectivePacketBytes": 843365,
+      "futureCiFeedbackStillUnknown": true,
+      "whyThisClosesRetries": "Only one admitted inference body can reach upstream, so internal output-limit/schema/refusal/helper retries cannot add another retained generation. This must be enforced across every connection, including after a network error or concurrent request.",
+      "qualificationChecks": "Use complete synthetic source/evidence of current843365 plus explicitly bounded real-CI headroom, assert full request content hashes, actual server usage/model metadata and unmodified CLI structured output. Do not call this exact native token counting or promise future final-head fit before observing its actual body."
+    }
+  },
+  "nativePolicyNotBypassed": {
+    "mustRemainEnabled": true,
+    "initialSettlementStillRequired": "A sealed body matching model/max_tokens does not prove late managed policy is absent or respected. Keep genuine native positive-empty settlement before any source forward, exact source settings snapshots, and fail closed on pending/timeout/error/nonempty managed policy; do not replace this with fake Max metadata.",
+    "whyBodyMonitorIsNotEnoughForPolicy": "A delayed policy could forbid source processing or restrict provider/model despite an already-constructed body fitting budget. Forwarding before policy settlement would evade that control even though no cap was exceeded.",
+    "previousPinnedEvidence": "native-streaming-policy-barrier-20261103.json SHA256 d61bb170b7494b6506b748b2c977d0579aee7cc44864a1bc2b3fe1d36c55d007",
+    "temporaryOverrides": "Actual body mismatch always rejects; the guard does not change or ignore policy to make the request fit."
+  },
+  "responseAndNativeReview": {
+    "requirements": [
+      "Forward upstream response bytes without creating a fake provider response; stream bounded copy in memory only, validate status/model/request identity, strict SSE ordering/size/count and one native StructuredOutput call.",
+      "Reconstruct the actual upstream StructuredOutput tool input and require semantic equality with the CLI structured_output and exact frozen SHA; reject retraction/duplicate/missing/malformed/schema-invalid outputs.",
+      "Require native exit0, no hidden second inference attempt, no compaction/tool/helper/fallback request, expected OAuth provider/model/default profile metadata and output-token usage within the sealed cap.",
+      "A blocked retry means the claimed source round failed even if one earlier partial response looked acceptable. Preserve actual attempt/failure and spend; never select a convenient earlier answer.",
+      "No raw response/debug/settings/OAuth body in artifacts; publish schema-validated sanitized review, fixed metadata enums, source/body-context hashes excluding credentials, actual request/response provenance and reviewed source/build identity."
+    ]
+  },
+  "integrationWithExistingController": {
+    "trustedBase": "C:/w-rv/auth-release-main20261102 at D2",
+    "actualPath": "agent-team/src/bug-pipeline/cloud-review-worker.mjs processCloudReview",
+    "existingSequence": "retrieve source/feedback → probe → prepareCloudInference → controller.claim(expectedSubject,expectedFeedbackFingerprint,expectedActor) → assertClaimTransition → run native → validate → submit/reconcile; failOwnedClaim only after owned claim",
+    "requiredSeam": "An explicit stageNativeRequest(prepared) before controller.claim and releaseExactStagedRequest(handle,actualOwnedClaim) after the actual transition. Preserve full source/feedback/owner fences. Do not insert an unrelated proxy-approved boolean as new canonical authority.",
+    "failureAccounting": "Stage/size-policy failure before claim consumes no source review, but is retained as a real planning/qualification failure. Any uncertainty or blocked retry after claim is owned source failure; no reset, refund or hidden rerun. Existing publication-uncertain reconciliation remains distinct from provider retry.",
+    "releaseGate": "Technical candidate itself must get old trusted worker Max review and separate final Codex before protected merge. Only trusted approved main can run new authentic qualification. No demo525 app claim from an unapproved candidate implementation, no parent history/budget edits and no production deployment."
+  },
+  "specificRemainingProofGaps": [
+    "No actual Linux Docker/Unix bridge/runtime isolation test yet; Docker availability/image digest/readonly+tmpfs native startup are not proven by this report.",
+    "No implemented complete-mediation router/parser/duplicate-key/raw-framing proof; arbitrary CONNECT or metadata exfiltration would invalidate the architecture.",
+    "No actual native Max TLS-inspection qualification with this exact pinned binary/account/model/protocol; official support does not prove this construction works.",
+    "No observed full native body with final actual CI/feedback; current843365 is prospective packet JSON, not final native HTTP body or exact token count.",
+    "No proven response equality/failure/claim race implementation. Need offline mocks and independent security review before any protected deployment.",
+    "No scope/counter allowance is inferred from this architecture report; root retains actual user-session authorization and all original auth/technical history."
+  ],
+  "performed": {
+    "primaryDocumentationRead": true,
+    "trustedWorkerReadOnlyInspection": true,
+    "newPrivateResearchReportOnly": true,
+    "providerCalls": 0,
+    "dockerExecutions": 0,
+    "credentialReads": 0,
+    "controllerOrGithubWrites": 0,
+    "sourceEdits": 0,
+    "approvalOrQualificationCreated": false
+  }
+}

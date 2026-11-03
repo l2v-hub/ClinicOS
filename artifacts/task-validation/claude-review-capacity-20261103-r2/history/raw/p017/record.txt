@@ -1,0 +1,115 @@
+# PR527 implementation round 2: optional-evidence correction (partial handoff)
+
+This is AUTHOR verification of the actual round-1 Claude finding only. It is not
+independent QA, a genuine Claude approval, a combined round-2 freeze/completion,
+native-profile qualification, CI, promotion, merge or deployment. The integration
+owner is still deciding the separately authorized native-profile work. No policy
+profile, output setting, model, route, tools or allowance was changed here.
+
+## Ownership and exact source
+
+- Canonical reservation nonce: 3bee1059-1e8f-4448-8ae5-bfb1f8fbe9d9.
+- Dedicated sole-writer checkout: C:/w-rv/review-capacity-r2-author20261103.
+- Base reviewed source: 7a53b9ccf323406f25acce676e3e64493523faf6.
+- Red commit: 92efd48e96e37c22192ef7749796be7d4b955812.
+- Partial correction commit: fa6078769e1c390562a94cb89130338ae2a5e862.
+- Correction tree: 056b2d77b029daac02166dcaf27d4ad5c84ce77f.
+- Clean status verified after commit. Seven paths match the original five-path
+  claim plus the actual nonce-bound two-test-path amendment. No other checkout,
+  shared manifest/lockfile, root packet, canonical state or remote was written.
+
+The original actual Claude changes-requested review5748685763 and canonical
+report digest907d75f20a77daf5833c5016d4a20f4a6ffe36245247f94c66ad08340a2befc2
+remain authoritative historical results. This code does not rewrite them or
+claim they were an approval. Technical default-four and historical auth budgets
+remain unchanged; author tests make no real review reservation or model call.
+
+## Implementation
+
+1. Separate the immutable finite transport ceiling from optional selection.
+   Default worker asks source reader for deferred optional evidence. The reader
+   verifies complete before/after changed source, pinned inventories, required
+   contract/plan/validation and mandatory canonical recovery extras BEFORE a
+   genuine qualification/probe. All optional omission names are reserved in the
+   minimal packet from the beginning.
+2. Source reader returns a detached immutable required snapshot and completion
+   closure. A direct reader without a qualified profile retains a conservative
+   700KiB optional-only budget; required data is never truncated to reach it.
+3. Shared normal/recovery preparation first measures actual prompt+schema with
+   the observed profile. The pure budget helper adds ONLY the exact remaining
+   allowance to minimal serialized packet bytes. Prefix, schema, native65536
+   margin and observed output allowance are counted once, not approximated.
+4. Completion tries optional reports under the exact prospective serialized JSON
+   size, including UTF-8/control escaping and removal of their omission name.
+   Oversized/over-count/over-budget optional reports stay explicitly omitted.
+   Selected text is still Git-blob verified and frozen-digest checked when present.
+5. Before claim, shared preparation rejects any changed immutable projection,
+   required text replacement, unknown evidence, invalid omission bookkeeping,
+   >64KiB optional entry, >24 total entries or budget overflow, then prepares the
+   final actual input again. Source/feedback/identity/plan/history/inventory and
+   tracked-path snapshots are not replaced by completion output. Normal native
+   claim and explicit existing-round recovery consume the same preparation path.
+
+No source80-file/256KiB-blob limit, required-document policy, no-tools CLI,
+subscription isolation, resolved model, actual output allowance,1M context,
+ownership/CAS/publication/controller or round accounting was relaxed.
+
+## Fresh clean-commit verification
+
+Trusted D2 createRunner was used in verification mode from a private bounded
+wrapper, with credentials stripped. All source API/probe/model interactions are
+synthetic injected fixtures; existing subprocess-isolation tests use test stubs.
+No actual provider/qualification, GitHub, network, clinical, secret, config,
+deployment or canonical action occurred.
+
+- clean-commit-cloud-regression: PASS99/99, zero skips/failures. Command explicitly
+  lists eight suites: original capacity/worker/recovery/transport/source/
+  qualification, new evidence suite and the additional activation suite. The
+  original85 tests remain covered. Test relocation does not create duplicate
+  registration: capacity helper contains no node:test import or test definitions.
+- clean-commit-format-check: PASS all seven owned files, using an already installed
+  local formatter, without dependency/network changes.
+- git diff --check: PASS; tracked/untracked status clean after commit.
+- Shared fixture251 lines; capacity tests174; evidence tests326. Each new/refactored
+  capacity test/helper file remains below500. Existing worker files were already
+  above500; no unrelated split was introduced.
+
+New coverage includes: real128k default worker source reader omits optional
+reports while preserving all source/required data; mandatory text verified before
+probe; required-only overflow is capacity-unavailable with no claim/model;
+bogus immutable source never probes; >700KiB positive retains all five selected
+contexts through actual qualified completion; direct-reader compatibility;
+escaped/control JSON exact-entry boundary/one-byte-short; >64KiB optional/no-fetch;
+24-entry omission bookkeeping; hostile completion cannot change critical context;
+shared explicit recovery completion and source alias preservation; recovery
+required-only overflow before completion/claim/model; native history preserved.
+
+## Preserved red and intermediate results
+
+All unique receipt/log directories remain under r2-author/; none was overwritten.
+
+- optional-selection-red initially had two fixture identity failures (durable
+  batch branch did not match its required native shape). Fixed fixture only.
+- optional-selection-red-valid-fixture: 9 pass/1 real failure, expected published
+  but actual queue-blocked. Same required-only oversize case already failed closed.
+  Red source remains committed independently.
+- optional-selection-green1: 86/87. The original >700KiB direct-reader expectation
+  no longer described the explicit deferred protocol; changed it to use actual
+  qualified completion while retaining all content/evidence assertions and added
+  a separate direct-reader conservative-behavior test. No assertion disabled.
+- optional-selection-green2: 91/92. A real intermediate implementation defect was
+  caught: returning the closure's own required snapshot allowed a probe alias to
+  change its feedback. Return value is now separately cloned; subsequent immutable
+  projection and explicit recovery alias tests pass. Failure log is retained.
+- optional-selection-green4: 93/94. Test mistakenly counted unique blob SHAs as
+  unique reads, although identical source bodies share hashes. Corrected to assert
+  seven actual blob-read calls while independently checking required IDs and no
+  optional reads before qualification. Full bodies remain asserted in model input.
+
+## Handoff limits
+
+This is a partial round-2 correction, paused after local commits for integration.
+Do not call the combined implementation round complete/frozen while the native
+profile selection remains undecided. Root must independently QA the eventual
+combined source and run real Max review round2, exact CI and any later protected
+release gates. No remote push, review, merge, deploy or issue closure was attempted.

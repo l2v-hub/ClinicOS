@@ -1,0 +1,49 @@
+# Independent runtime QA — blocked at bb9dd8dd
+
+Actual independent reviewer: `/root/auth_expiry_final_qa`.
+Source: `bb9dd8ddb3894416d59cb4eb5c42596819f98892`.
+Tree: `c9a363a2c54812a3784c59959f7e0a8a39b945f6`.
+Scope: four runtime modules and four tests, not mutable root integration or post-Claude final approval.
+
+## Findings
+
+### R1 — P2: runtime timeout does not guarantee terminal completion
+
+Location: `agent-team/src/bug-pipeline/native-guard-container.mjs:316` (also error/overflow rejection branches at 329, 336, 349).
+
+The deadline callback sets failure and calls `child.kill('SIGTERM')`, but never settles `completion`, escalates the signal, or invokes bounded owned-container removal. `completion` is resolved only by `end()`, normally reached on child close/error. A Docker client/container that does not terminate on SIGTERM can leave the operation awaiting completion indefinitely beyond the advertised finite deadline. This can strand an already-owned source attempt and its controller cleanup; killing a process is not evidence that it exited. This finding does not claim a second inference was forwarded.
+
+Actual independent repro: private test `container inspects before sending secret stdin, then timeout alone must settle completion`, in `adversarial.test.mjs:26`. Fake Docker process passes both valid inspections, then receives only the synthetic bootstrap via stdin. It records SIGTERM but emits no close/error. With timeout 20ms, the operation's completion is still pending after 70ms. Assertion fails: `configured runtime deadline must not wait forever for a child that ignores SIGTERM`. The fake child implements the documented signal-attempt interface; no real Docker/provider call was made. The test finally invokes close explicitly to avoid hanging the test runner, which illustrates the missing autonomous terminal path rather than fixing the source.
+
+Receipt: `adversarial-frozen-bb/receipt.json`, actual exit 1; 28 cases, 27 pass, 1 fail, zero skips/cancellations. Required remediation is a bounded failure/cleanup path that does not depend indefinitely on voluntary child close, with safe escalation/removal bound only to the actually owned container identity and no refund/replay. Failure detection should not leave active source forwarding or late-success authority behind. A corrected source needs a fresh test and source-bound replay.
+
+### R2 — P2: escape probes lack a reachable network positive control
+
+Location: `agent-team/tests/bug-pipeline/native-guard-container.test.mjs:197`.
+
+The Linux smoke test only checks failed connections to `192.0.2.1:443`, `2001:db8::1:443`, and failed resolution of `example.invalid`. It never establishes those exact targets were reachable in a non-isolated comparison. Its predicate treats any connection error or timeout as isolation success. Therefore a generally unreachable target, missing route, or unavailable resolver satisfies that portion of the test without demonstrating enforcement by network:none.
+
+The separate actual-inspection validator still rejects configured NetworkMode other than none; this report does not claim the entire test would pass a normal bridge inspection. Inspection establishes configured isolation, whereas these negative attempts do not provide the requested discriminating escape regression proof. Require a controlled synthetic TCP/DNS target reachable from a non-isolated baseline, same fixture/target identity and positive-control success, then failure under the isolated policy. Unavailable IPv6 baseline must remain explicitly unqualified, not counted as a demonstrated IPv6 block.
+
+The private local-loopback comparison case passes: this same fail-on-error predicate reports false for a live local server and true after that server closes. That test does not run Docker or prove external isolation; it demonstrates why target liveness must be established. The author has begun a later test-only RED commit `345ff73a...`; that is not part of the assigned frozen bb9 source and is not considered a verified fix here.
+
+## Actual independent execution and source fencing
+
+- Existing four suites at bb9: 18 cases, 15 PASS, 3 explicit Linux SKIP, zero failures/cancellations. Replayed again in the dedicated frozen QA checkout with the same result; repeats are not counted as additional distinct cases.
+- New independent adversarial suite: 28 cases, 27 PASS, 1 FAIL (R1), zero skips/cancellations. No failure was disabled or converted into a pass.
+- Both used trusted D2 `createRunner` in credential-stripped verification mode. Exact commands, timestamps, receipts and log hashes are in `execution-evidence.json`.
+- All eight local source/test files in the final dedicated QA checkout are byte-equal to bb9 immutable Git blobs; exact Git and SHA-256 identities are recorded. Tracked/untracked status remains clean. `git diff --check` passed. No source edits occurred.
+
+The initially assigned author checkout moved from bb9 to the author's intentional test-only RED 345ff73a during review. The new adversarial command failed its immutable HEAD assertion before running any tests. This was reported immediately and preserved in `stopped-source-fence.json`. Root then supplied `C:/w-rv/review-capacity-runtime-qa-bb20261103`, detached at exact bb9. All subsequent executions used that frozen checkout. No result was silently rebound to the moving author source.
+
+## What was checked, and what was not proved
+
+Read every line of the four runtime modules and their four tests, root plan/path claims and guarded proxy architecture, and actual author receipts/logs. The requested author Markdown report/result were absent in the private author directory at inspection time; no unavailable author conclusion is asserted. The author's retained initial RED evidence is four module-import failures before implementation, not four passing assertion-level security regressions. Its log hashes and the clean bb9 15/3 receipt hashes are verified separately from independent runs. No tracked AGENTS.md exists in this source; supplied project isolation/authority instructions were retained.
+
+The passing private checks cover exact CONNECT authority, SSRF-style authority variants, fixed official TLS hostname/SNI/options and no caller proxy inheritance, duplicate/framing/header guards, bounded metadata header/body exfiltration rejection, capture-buffer aliases/one-use output, fixed executable/argv/environment, secret absence from Docker argv/env, bootstrap only after actual inspection fixtures, and rejection of image/executable/argument/mount/healthcheck/PID/IPC/UTS/device/bind/tmpfs drift. These are Windows pure/fake-process checks, plus one synthetic local-loopback server with no external traffic.
+
+Actual Linux Docker namespace/escape behavior, Unix CONNECT+TLS wire parsing/SNI, genuine OpenSSL chain and private-key handling are three explicitly skipped tests. They did not run here. Source inspection shows original body buffers are captured for deferred forwarding, OAuth equality uses in-memory timing-safe comparison, official upstream options explicitly select roots instead of the interception CA, and a single proxy-wide sourceSeen plus shared data state is intended across connections. This is not an executed integrated concurrent-socket/response-equivalence proof. Root's mutable session/qualification seams were not reviewed or approved in this task.
+
+Certificate commands use private stdin and only public CSR/CA paths. The factory zeroes its private buffers and dispose zeroes the returned TLS key. However, dispose does not remove the public temporary directory, and the container helper creates a Docker-config directory without local removal; robust caller-owned cleanup (including certificate-generation failures before a handle is returned) is still an integration responsibility to demonstrate. No actual private keys, OAuth values or native raw diagnostics were obtained or printed in this QA. No fabricated cleanup or runtime qualification is claimed.
+
+All private files are under `C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime`. No source, provider, OAuth, GitHub, canonical state, main worktree, production, merge or deployment mutation occurred. No final-qa-agent-result approval was written. Original technical/auth histories and limits remain unchanged. Genuine Max/CI/final QA, protected release and actual demo restoration remain pending; this blocked runtime QA is not an app-resolution claim.

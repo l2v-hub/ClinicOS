@@ -1,0 +1,19 @@
+{
+  "label": "red-complete-context-fixture-valid",
+  "cwd": "C:/w-rv/review-capacity20261103",
+  "startedAt": "2026-11-03T06:49:13.274Z",
+  "finishedAt": "2026-11-03T06:49:13.615Z",
+  "head": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+  "headAloneNotDirtySourceIdentity": true,
+  "args": [
+    "--test",
+    "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs"
+  ],
+  "envMode": "verification",
+  "credentialsInherited": false,
+  "ok": false,
+  "exitCode": 1,
+  "error": null,
+  "stdoutSha256": "63b4ee42de41e01f0fa948cad49c8ec21f191b2efd13f88d601eeeeb7597bd2e",
+  "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

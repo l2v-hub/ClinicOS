@@ -1,0 +1,13 @@
+{
+  "sourceSha": "21cbfa5b90dcde75b076521278d1f1c6a95bbc08",
+  "baseSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+  "sourceChanges": 30,
+  "completeSourceJSONBytes": 430155,
+  "changesSha256": "657f33bfc1580f13450a844b5e6b3479d81fe7734194d60c0a1d3f90fadcc4b0",
+  "oldStaticLimitBytes": 716800,
+  "headroomBeforeAllRequiredEvidenceAndFeedback": 286645,
+  "providerExecuted": false,
+  "onlyLowerBoundNotFullPacketPreflight": true,
+  "qualified": false,
+  "priorWholeTreeSizeWalkTimedOutAndPreserved": true
+}

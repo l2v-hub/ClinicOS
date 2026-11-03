@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { mkdtemp, mkdir, writeFile, rm, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { sourceFixture as capacitySourceFixture } from './cloud-review-capacity-fixture.mjs';
 import { createRunner } from '../../src/bug-pipeline/process.mjs';
 import {
   processCloudReview,
@@ -187,6 +188,133 @@ test('source then actual auth probe precede the one native claim, validated repo
   assert.equal((await processCloudReview(f.options)).status, 'empty');
   assert.equal(f.calls.length, count, 'No second inference or claim for a published SHA');
 });
+
+test('explicit guarded route stages before claim and releases only after actual native transition', async () => {
+  const f = fixture();
+  f.options.stageNativeReview = async ({ source, sha, profile }) => {
+    f.calls.push('native-stage');
+    return {
+      source,
+      prepared: prepareCloudInference({ packet: source.packet, sha, profile }),
+      session: {
+        assertReady() {},
+        async close() {
+          f.calls.push('native-close');
+        },
+        async release(claim) {
+          assert.equal(claim.phase, 'reviewing');
+          assert.equal(claim.externalReview.status, 'comment-running');
+          f.calls.push('native-release');
+          return envelope(approved);
+        },
+      },
+    };
+  };
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'published');
+  assert.deepEqual(f.calls, [
+    'retrieve',
+    'probe',
+    'native-stage',
+    'claim',
+    'native-release',
+    'submit',
+    'reconcile',
+    'project',
+    'wake',
+  ]);
+  assert.equal(f.calls.includes('model'), false);
+});
+
+test('guarded preclaim conflict closes staged process with no release or source inference', async () => {
+  const f = fixture();
+  f.options.stageNativeReview = async ({ source, sha, profile }) => ({
+    source,
+    prepared: prepareCloudInference({ packet: source.packet, sha, profile }),
+    session: {
+      assertReady() {},
+      async close() {
+        f.calls.push('native-close');
+      },
+      async release() {
+        throw Error('must-not-release');
+      },
+    },
+  });
+  f.options.handoff.claim = async () => {
+    const error = Error('fixture');
+    error.code = 'preclaim-source-changed';
+    throw error;
+  };
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'preclaim-source-changed');
+  assert.deepEqual(f.calls, ['retrieve', 'probe', 'native-close']);
+});
+
+test('native-required subject never falls back to the classic capacity/transport route', async () => {
+  const f = fixture();
+  f.subject.operatorCoordination = { nativeReviewProfile: 'native-max-single-forward-v1' };
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'queue-blocked');
+  assert.equal(result.blockedSubjects[0].status, 'native-profile-required');
+  assert.deepEqual(f.calls, []);
+  f.options.onlySubject = { pr: 82, sha };
+  assert.equal((await processCloudReview(f.options)).status, 'empty');
+  assert.deepEqual(f.calls, []);
+});
+
+test('a staged process that expired before the claim never consumes a source round', async () => {
+  const f = fixture();
+  f.options.stageNativeReview = async ({ source, sha, profile }) => ({
+    source,
+    prepared: prepareCloudInference({ packet: source.packet, sha, profile }),
+    session: {
+      assertReady() {
+        assert.fail('expired-fixture');
+      },
+      async close() {
+        f.calls.push('native-close');
+      },
+      async release() {
+        throw Error('must-not-release');
+      },
+    },
+  });
+  assert.equal((await processCloudReview(f.options)).status, 'preclaim-source-changed');
+  assert.deepEqual(f.calls, ['retrieve', 'probe', 'native-close']);
+});
+
+test('canonical native critical context is hash-verified mandatory, not optional evidence', async () => {
+  const f = capacitySourceFixture();
+  const name = 'review-auth-context-report.md';
+  f.subject.operatorCoordination = {
+    nativeReviewProfile: 'native-max-single-forward-v1',
+    nativeRequiredEvidence: [name],
+  };
+  f.subject.packet = {
+    path: f.prefix.slice(0, -1),
+    files: Object.fromEntries(
+      [...f.head.keys()]
+        .filter((file) => file.startsWith(f.prefix))
+        .map((file) => [
+          file.slice(f.prefix.length),
+          createHash('sha256')
+            .update(f.texts.get('after:' + file))
+            .digest('hex'),
+        ]),
+    ),
+  };
+  const read = await f.retrieve(f.subject, { deferOptionalEvidence: true });
+  assert.equal(read.packet.evidence[f.prefix + name], f.texts.get('after:' + f.prefix + name));
+  assert.equal(read.packet.omittedTextEvidence.includes(f.prefix + name), false);
+  f.subject.packet.files[name] = '0'.repeat(64);
+  await assert.rejects(
+    f.retrieve(f.subject, { deferOptionalEvidence: true }),
+    /Frozen evidence changed/,
+  );
+  f.subject.operatorCoordination.nativeRequiredEvidence = ['../outside.md'];
+  await assert.rejects(f.retrieve(f.subject, { deferOptionalEvidence: true }));
+});
 test('missing/invalid subscription credentials and stale source stop before native claim', async () => {
   const f = fixture();
   f.options.probe = probeCloudClaude;
@@ -214,6 +342,65 @@ test('native CAS loser never invokes review inference', async () => {
   };
   await assert.rejects(processCloudReview(f.options), /CAS conflict/);
   assert.deepEqual(f.calls, ['retrieve', 'probe', 'claim-conflict']);
+});
+
+test('deferred optional completion cannot rewrite immutable source, feedback, plan or required evidence', async () => {
+  const mutations = [
+    (p) => {
+      p.subject_sha = base;
+    },
+    (p) => {
+      p.feedback.comments.push({ id: 999, body: 'synthetic injected feedback' });
+    },
+    (p) => {
+      p.plan.analysis = 'replacement plan';
+    },
+    (p) => {
+      p.changes[0].after.text = 'replacement source';
+    },
+    (p) => {
+      p.evidence.required = 'replacement required text';
+    },
+    (p) => {
+      p.evidence.unknown = 'not inventoried';
+    },
+    (p) => {
+      p.evidence.optional = 'x'.repeat(64 * 1024 + 1);
+      p.omittedTextEvidence = [];
+    },
+    (p) => {
+      p.omittedTextEvidence = [];
+    },
+  ];
+  for (const mutate of mutations) {
+    const f = fixture(),
+      originalSubject = clone(f.subject);
+    const packet = {
+      subject_sha: sha,
+      feedback: clone(feedback),
+      plan: clone(plan),
+      changes: [{ file: 'src/file.mjs', after: { text: 'verified source' } }],
+      evidence: { required: 'verified required text' },
+      omittedTextEvidence: ['optional'],
+    };
+    f.options.retrieve = async (_subject, options) => {
+      assert.equal(options.deferOptionalEvidence, true);
+      return {
+        packet,
+        tracked: new Set(['src/file.mjs']),
+        completeOptionalEvidence: async () => {
+          const changed = clone(packet);
+          mutate(changed);
+          return { packet: changed };
+        },
+      };
+    };
+    const result = await processCloudReview(f.options);
+    assert.equal(result.status, 'queue-blocked');
+    assert.equal(result.blockedSubjects[0].status, 'capacity-unavailable');
+    assert.deepEqual(f.subject, originalSubject);
+    assert.ok(!f.calls.includes('claim') && !f.calls.includes('model'));
+  }
 });
 
 test('original source and packet snapshots cannot be rewritten through reader aliases during qualification', async () => {
@@ -504,7 +691,7 @@ test('missing/small/ambiguous probe context and oversized complete inputs never 
   }
   const f = fixture();
   f.options.retrieve = async () => ({
-    packet: { source: 'x'.repeat(701 * 1024), feedback: clone(feedback) },
+    packet: { source: 'x'.repeat(1_000_000 - 64 * 1024 + 1), feedback: clone(feedback) },
     tracked: new Set(),
   });
   const result = await processCloudReview(f.options);

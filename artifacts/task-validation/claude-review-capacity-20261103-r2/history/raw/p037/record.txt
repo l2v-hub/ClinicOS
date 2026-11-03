@@ -1,0 +1,24 @@
+{
+  "label": "green-capacity-formatted",
+  "cwd": "C:/w-rv/review-capacity20261103",
+  "startedAt": "2026-11-03T06:55:03.531Z",
+  "finishedAt": "2026-11-03T06:55:07.407Z",
+  "head": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+  "headAloneNotDirtySourceIdentity": true,
+  "args": [
+    "--test",
+    "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+    "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+    "agent-team/tests/bug-pipeline/cloud-review-recovery.test.mjs",
+    "agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs",
+    "agent-team/tests/bug-pipeline/cloud-recovery-source.test.mjs",
+    "agent-team/tests/bug-pipeline/cloud-recovery-qualification.test.mjs"
+  ],
+  "envMode": "verification",
+  "credentialsInherited": false,
+  "ok": true,
+  "exitCode": 0,
+  "error": null,
+  "stdoutSha256": "b67f4de2c03a627c86b349fc557cda50f894244a913998d6989504a927988642",
+  "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

@@ -1,0 +1,117 @@
+# PR527 pending round2: pure guarded-native protocol author handoff
+
+AUTHOR checks only. Not independent QA, runtime isolation proof, genuine native
+Max/OAuth qualification, approval, combined-round freeze, CI, merge or deployment.
+
+## Exact scope/source
+
+Actual path claim: native-r2-path-claims.json, nonce
+3bee1059-1e8f-4448-8ae5-bfb1f8fbe9d9. Sole writer used only
+C:/w-rv/review-capacity-r2-author20261103 and the eight claimed protocol/test files.
+Base optional-selection correction fa6078769e1c390562a94cb89130338ae2a5e862
+is preserved. Native protocol red commit:
+8b7d5cd6aa7f791b215412db7d41d27e4fdaa21a.
+Green commit: 869ffe9611c14ee72c77d681f789bb3bb52acda6.
+Green tree: 71257c85936d2183b4d173dcde5f15253410341d.
+Tracked/untracked status clean after final commit and replay.
+
+No worker/profile/CLI-policy/runtime/manifest/lockfile/application source was
+changed in this continuation. Root owns composition, runtime owns transport.
+No OAuth/credentials, provider/Claude invocation, Docker, GitHub, canonical
+write, push, merge or deployment occurred. Public primary documentation was
+read-only; all protocol/model/controller behavior in tests is synthetic.
+
+## API contract
+
+- parseGuardJson(Buffer, {maxBytes,maxDepth,maxNodes,maxStringBytes}) provides
+  fatal UTF8, duplicate decoded-key detection, prototype-key/unpaired-surrogate
+  rejection, finite numeric/structural bounds and frozen JSON values.
+- validateNativeRequest({body,rawHeaders,host,method,path,expected}) checks the
+  exact trusted input and StructuredOutput schema/model, one fresh user message,
+  fixed official inference paths, bounded unique raw headers/framing, text-only
+  wrappers, actual max_tokens and complete decoded-context accounting. Returns
+  only frozen hashes/model/counts, no credential/header/source contents.
+  expected carries input/schema/model/outputCap/contextWindow; optional strict
+  pins are system/userBlocks/toolDescription. Additional user blocks require
+  exact expected.userBlocks. System text is bounded65,536 bytes and tool
+  description8,192. Known ephemeral cache/adaptive-thinking/effort fields are
+  finite; all other body/context/media/helper fields fail closed.
+- createNativeGuardState({validateClaim}) returns separate data and parent
+  closures. data.stage({seal,forward}) gives opaque identity handle, detached
+  frozen seal and held completion. parent.release(handle,actualClaim) irreversibly
+  marks RELEASED/spends its one shared attempt before awaiting validation or
+  forwarding. False/throwing claim, forged handle, duplicate request/release,
+  uncertainty and late retry permanently poison FAILED; no refund or replay.
+- createNativeResponseGuard({statusCode,requestId,model,maxTokens,subjectSha,
+  schema?}) accepts copied bounded SSE chunks through push(Buffer).
+  finish({cliReport}) checks strict event order/model/message/usage, one terminal
+  StructuredOutput, exact parsed CLI equality and optional finite trusted-schema
+  validation. Native thinking/signature blocks are bounded output under the
+  same actual max_tokens; no thinking content/signature is returned. Existing
+  validateReview remains final privacy/location/verdict authority.
+
+Root must strict-parse original CLI JSON before passing cliReport: an object
+already normalized by JSON.parse cannot reveal its original duplicate keys.
+Root must check final data.status after native process exit and late-policy
+settlement: a late retry poisons state even after an earlier completion resolved.
+The sealed forward closure must own immutable original request/header/body bytes;
+the state module deliberately receives no token/header material. Root accepted
+these composition requirements; pure guards alone do not supply them.
+
+## Actual accounting, not a fabricated model profile
+
+The request guard measures decoded UTF8 text once, full tool schema and remaining
+native request wrapper structures, then adds unchanged65,536 native margin and
+the actual body.max_tokens. Embedded packet JSON remains model-visible and is
+not decoded a second time. Complete synthetic843,365 plus40KiB input passes
+with its measured wrappers/schema and an actual32,768 request cap. A body
+requesting128,000 is rejected. This does NOT rewrite the genuine model default
+128,000 into a32k observed profile or prove eventual full native wrapper fit.
+
+## TDD and fresh clean verification
+
+- native-protocol-red retained12 failing contract tests against intentionally
+  unimplemented protocol skeletons (new functionality, not a fabricated live
+  regression). Red commit and original stdout/stderr/receipt retained.
+- native-protocol-green1:12/12; expanded native-protocol-green2/3:22/22.
+- native-clean-full-regression freshly replays22 native tests plus99 preceding
+  cloud/recovery/activation tests on clean869ffe96: PASS121/121, zero failures,
+  zero skips. All12 test files appear explicitly in the receipt command.
+- native-clean-format-check: PASS all8 scoped files; git diff --check PASS.
+- All modules under500 lines: JSON134, request228, response392, state68.
+
+Coverage includes decoded/escaped duplicate keys, prototype pollution names,
+UTF8/surrogates, depth/nodes/string/byte bounds; full current-size+headroom;
+exact context boundary and one byte over; outer/embedded escaping; all text
+blocks and wrapper/schema accounting; media/helper/schema/model mismatch;
+raw framing/auth/host duplicates and unknown fields; source held before claim;
+concurrent stage/release poisoning; identity-handle forgery; claim/seal aliases;
+uncertain upstream/no replay; SSE chunk aliases/limits/duplicates/fallback/
+truncation/model/usage/CLI mismatch; thinking signatures and actual review
+schema subset/unknown-key rejection. No assertion was removed or disabled.
+
+## Primary protocol evidence and limits
+
+Read the full local pinned-policy/output/guarded-architecture reports first.
+They establish native StructuredOutput termination and retry/policy risks, not
+the entire HTTP/SSE wire shape. Standard finite streaming and thinking shapes
+were checked against official primary documentation:
+
+- https://platform.claude.com/docs/en/build-with-claude/streaming
+- https://platform.claude.com/docs/en/build-with-claude/thinking
+- https://platform.claude.com/docs/en/api/messages
+
+These docs describe named SSE updates and cumulative output usage; thinking
+shares the output limit. This parser rejects extensions such as fallback,
+compaction, server tools or unknown fields. It does not silently generalize an
+unseen native request into success. Actual pinned CLI/header/body variants may
+still fail qualification and require a separately reviewed exact extension.
+
+Still mandatory: independently reviewed integrated transport/session/parser;
+Linux Docker/Unix-socket complete-mediation and escape tests; real managed-policy
+settlement/account eligibility; strict official upstream TLS/OAuth equality;
+exact one-attempt composition; actual HTTP/SSE and CLI equivalence; genuine
+current-size+headroom qualification only after trusted-main approval; exact CI,
+real old-worker Max review and protected release gates. Nothing here activates
+the guarded profile or claims the application/technical work is resolved online. All original
+auth/technical history, counters and no-automatic-release holds remain intact.

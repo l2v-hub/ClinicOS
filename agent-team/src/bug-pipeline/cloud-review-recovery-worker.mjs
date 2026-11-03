@@ -11,7 +11,7 @@ import { createGitHub } from './github.mjs';
 import { createCloudReviewRecovery } from './cloud-review-recovery.mjs';
 import {
   createReviewSourceReader,
-  prepareCloudInference,
+  prepareCloudReviewSource,
   CLOUD_REVIEW_REPO,
 } from './cloud-review-worker.mjs';
 import { claudeFailureCode } from './claude-review-cron.mjs';
@@ -53,6 +53,11 @@ export async function processRecovery({
   // Preparation verifies a separate consumed execution capability. The user's
   // earlier request record alone cannot enable a provider call.
   const prepared = await controller.prepare(selector);
+  assert.equal(
+    prepared.subject.operatorCoordination?.nativeReviewProfile,
+    undefined,
+    'Guarded-profile subjects cannot use the legacy recovery transport',
+  );
   const reader =
     retrieve ??
     createReviewSourceReader({
@@ -61,10 +66,17 @@ export async function processRecovery({
       feedbackReader: github.reviewFeedback,
       recoveryPlan: prepared.subject.canonicalRecoveryPlan,
     });
-  const source = await reader(structuredClone(prepared.subject));
+  const retrieved = await reader(structuredClone(prepared.subject), {
+    deferOptionalEvidence: true,
+  });
+  const snapshot = {
+    packet: structuredClone(retrieved.packet),
+    tracked: new Set(retrieved.tracked),
+  };
   const qualified = await qualify({ receipt: prepared.subject.recoveryQualification, run, cwd });
-  const inference = prepareCloudInference({
-    packet: source.packet,
+  const { source, prepared: inference } = await prepareCloudReviewSource({
+    source: snapshot,
+    completeOptionalEvidence: retrieved.completeOptionalEvidence,
     sha: selector.sha,
     profile: qualified.profile,
   });
