@@ -6,6 +6,7 @@ import {
   metadataRoute,
   officialForwardOptions,
   createNativeGuardProxy,
+  stageNativeProxySource,
 } from '../../src/bug-pipeline/native-guard-proxy.mjs';
 import { createNativeGuardCertificates } from '../../src/bug-pipeline/native-guard-certificates.mjs';
 import { mkdtemp, mkdir } from 'node:fs/promises';
@@ -25,6 +26,151 @@ const headers = [
   'Content-Length',
   '2',
 ];
+test('trusted capacity rejection emits only a frozen numeric snapshot and never stages or forwards', () => {
+  const error = new Error('untrusted-body-must-not-escape');
+  error.metadata = Object.freeze({
+    requiredTokensUpperBound: 1000001,
+    contextBytes: 900000,
+    inputBytes: 880000,
+    schemaBytes: 20000,
+    maxTokens: 49152,
+    contextWindow: 1000000,
+    body: 'synthetic-secret',
+    authorization: 'synthetic-token',
+  });
+  let staged = 0,
+    forwarded = 0,
+    failed = 0,
+    observed;
+  assert.throws(
+    () =>
+      stageNativeProxySource({
+        request: {},
+        validateRequest: () => {
+          throw error;
+        },
+        data: { stage: () => staged++, fail: () => failed++ },
+        forward: () => forwarded++,
+        isCapacityError: (e) => e === error,
+        onCapacity: (value) => {
+          observed = value;
+        },
+      }),
+    /^Error: native-proxy-rejected$/,
+  );
+  assert.deepEqual(observed, {
+    requiredTokensUpperBound: 1000001,
+    contextBytes: 900000,
+    inputBytes: 880000,
+    schemaBytes: 20000,
+    maxTokens: 49152,
+    contextWindow: 1000000,
+  });
+  assert.ok(Object.isFrozen(observed));
+  assert.notEqual(observed, error.metadata);
+  assert.equal(staged, 0);
+  assert.equal(forwarded, 0);
+  assert.equal(failed, 1);
+});
+test('forged codes, maps, default classifier and malformed capacity metadata never notify or admit', () => {
+  const numeric = {
+    requiredTokensUpperBound: 1000001,
+    contextBytes: 900000,
+    inputBytes: 880000,
+    schemaBytes: 20000,
+    maxTokens: 49152,
+    contextWindow: 1000000,
+  };
+  for (const [error, classifier] of [
+    [{ code: 'native-context-exceeded', metadata: numeric }, () => false],
+    [new Map([['code', 'native-context-exceeded']]), () => false],
+    [{ metadata: numeric }, undefined],
+    [{ metadata: { ...numeric, inputBytes: '880000' } }, () => true],
+    [{ metadata: { ...numeric, contextWindow: Infinity } }, () => true],
+    [{ metadata: { ...numeric, schemaBytes: -1 } }, () => true],
+    [{ metadata: { ...numeric, maxTokens: 1.5 } }, () => true],
+    [
+      {
+        get metadata() {
+          throw Error('synthetic-raw-error');
+        },
+      },
+      () => true,
+    ],
+  ]) {
+    let notified = 0,
+      staged = 0,
+      failed = 0;
+    assert.throws(
+      () =>
+        stageNativeProxySource({
+          request: {},
+          validateRequest: () => {
+            throw error;
+          },
+          data: { stage: () => staged++, fail: () => failed++ },
+          forward: () => assert.fail('no upstream'),
+          isCapacityError: classifier,
+          onCapacity: () => notified++,
+        }),
+      /^Error: native-proxy-rejected$/,
+    );
+    assert.equal(notified, 0);
+    assert.equal(staged, 0);
+    assert.equal(failed, 1);
+  }
+});
+test('normal source staging preserves the captured forward and capacity callback cannot admit failure', async () => {
+  const seal = Object.freeze({ model: 'synthetic-model' });
+  let forwards = 0,
+    failure = 0;
+  const staged = stageNativeProxySource({
+    request: { body: Buffer.from('{}') },
+    validateRequest: (request) => {
+      assert.equal(request.body.toString(), '{}');
+      return seal;
+    },
+    data: { stage: (value) => value, fail: () => failure++ },
+    forward: (value) => {
+      assert.equal(value, seal);
+      forwards++;
+    },
+    onCapacity: () => assert.fail('normal request is not capacity'),
+  });
+  assert.equal(staged.seal, seal);
+  assert.equal(forwards, 0);
+  await staged.forward();
+  assert.equal(forwards, 1);
+  assert.equal(failure, 0);
+  assert.throws(
+    () =>
+      stageNativeProxySource({
+        request: {},
+        validateRequest: () => {
+          throw {
+            metadata: Object.fromEntries(
+              [
+                'requiredTokensUpperBound',
+                'contextBytes',
+                'inputBytes',
+                'schemaBytes',
+                'maxTokens',
+                'contextWindow',
+              ].map((k) => [k, 1]),
+            ),
+          };
+        },
+        isCapacityError: () => true,
+        onCapacity: () => {
+          throw Error('callback failed');
+        },
+        data: { stage: () => assert.fail('must not stage'), fail: () => failure++ },
+        forward: () => assert.fail('must not forward'),
+      }),
+    /^Error: native-proxy-rejected$/,
+  );
+  assert.equal(failure, 1);
+});
 test('CONNECT authority is exact and never an open tunnel', () => {
   assert.equal(
     inspectConnect({
