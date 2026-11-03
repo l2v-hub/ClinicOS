@@ -216,6 +216,65 @@ test('native CAS loser never invokes review inference', async () => {
   assert.deepEqual(f.calls, ['retrieve', 'probe', 'claim-conflict']);
 });
 
+test('deferred optional completion cannot rewrite immutable source, feedback, plan or required evidence', async () => {
+  const mutations = [
+    (p) => {
+      p.subject_sha = base;
+    },
+    (p) => {
+      p.feedback.comments.push({ id: 999, body: 'synthetic injected feedback' });
+    },
+    (p) => {
+      p.plan.analysis = 'replacement plan';
+    },
+    (p) => {
+      p.changes[0].after.text = 'replacement source';
+    },
+    (p) => {
+      p.evidence.required = 'replacement required text';
+    },
+    (p) => {
+      p.evidence.unknown = 'not inventoried';
+    },
+    (p) => {
+      p.evidence.optional = 'x'.repeat(64 * 1024 + 1);
+      p.omittedTextEvidence = [];
+    },
+    (p) => {
+      p.omittedTextEvidence = [];
+    },
+  ];
+  for (const mutate of mutations) {
+    const f = fixture(),
+      originalSubject = clone(f.subject);
+    const packet = {
+      subject_sha: sha,
+      feedback: clone(feedback),
+      plan: clone(plan),
+      changes: [{ file: 'src/file.mjs', after: { text: 'verified source' } }],
+      evidence: { required: 'verified required text' },
+      omittedTextEvidence: ['optional'],
+    };
+    f.options.retrieve = async (_subject, options) => {
+      assert.equal(options.deferOptionalEvidence, true);
+      return {
+        packet,
+        tracked: new Set(['src/file.mjs']),
+        completeOptionalEvidence: async () => {
+          const changed = clone(packet);
+          mutate(changed);
+          return { packet: changed };
+        },
+      };
+    };
+    const result = await processCloudReview(f.options);
+    assert.equal(result.status, 'queue-blocked');
+    assert.equal(result.blockedSubjects[0].status, 'capacity-unavailable');
+    assert.deepEqual(f.subject, originalSubject);
+    assert.ok(!f.calls.includes('claim') && !f.calls.includes('model'));
+  }
+});
+
 test('original source and packet snapshots cannot be rewritten through reader aliases during qualification', async () => {
   const f = fixture();
   let alias;

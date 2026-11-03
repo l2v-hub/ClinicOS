@@ -6,6 +6,21 @@ export const NATIVE_OVERHEAD_TOKENS = 64 * 1024;
 // prompt/schema and observed output allowance to fit before any review claim.
 export const MAX_REVIEW_PACKET_BYTES = QUALIFIED_CONTEXT_TOKENS - NATIVE_OVERHEAD_TOKENS;
 
+// Derive only the remaining serialized JSON allowance from an already exact
+// minimal preparation; prefix/schema/output/native overhead are counted once.
+export function optionalEvidencePacketBudget({ packetBytes, capacity }) {
+  assert.ok(Number.isSafeInteger(packetBytes) && packetBytes >= 0);
+  const checked = reviewCapacity({
+    inputBytes: capacity?.inputBytes,
+    schemaBytes: capacity?.schemaBytes,
+    profile: capacity,
+  });
+  return Math.min(
+    MAX_REVIEW_PACKET_BYTES,
+    packetBytes + checked.contextWindow - checked.requiredTokensUpperBound,
+  );
+}
+
 export function reviewCapacity({ inputBytes, schemaBytes, profile }) {
   for (const value of [inputBytes, schemaBytes]) {
     assert.ok(Number.isSafeInteger(value) && value >= 0, 'Invalid serialized review size');

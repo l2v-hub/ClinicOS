@@ -10,6 +10,7 @@ import { createRunner } from './process.mjs';
 import { createGitHub } from './github.mjs';
 import {
   MAX_REVIEW_PACKET_BYTES,
+  optionalEvidencePacketBudget,
   QUALIFIED_CONTEXT_TOKENS,
   reviewCapacity,
 } from './cloud-review-capacity.mjs';
@@ -44,6 +45,7 @@ const SHA = /^[a-f0-9]{40}$/;
 const FILE = fileURLToPath(import.meta.url);
 const MAX_BLOB = 256 * 1024;
 const MAX_PACKET = MAX_REVIEW_PACKET_BYTES;
+const DIRECT_OPTIONAL_PACKET_BYTES = 700 * 1024;
 const MAX_FILES = 80;
 const EVIDENCE_ROOT = 'artifacts/task-validation/';
 const bytes = (value) => Buffer.byteLength(JSON.stringify(value));
@@ -115,7 +117,7 @@ export function createReviewSourceReader({ run, cwd, feedbackReader, recoveryPla
     assert.ok(!text.includes('\0'), 'Binary source cannot be reviewed as text');
     return text;
   }
-  return async function retrieve(subject) {
+  return async function retrieve(subject, { deferOptionalEvidence = false } = {}) {
     assert.ok(Number.isSafeInteger(subject.pr?.number) && subject.pr.number > 0);
     assert.match(subject.sha ?? '', SHA);
     assert.match(subject.baseSha ?? '', SHA);
@@ -251,24 +253,17 @@ export function createReviewSourceReader({ run, cwd, feedbackReader, recoveryPla
       )
       .filter((name) => !requiredNames.includes(name))
       .sort();
-    const evidenceNames = [...requiredNames, ...additionalNames];
-    for (const name of evidenceNames) {
+    // Reserve all omission names before dynamic qualification: adding omission
+    // metadata later must never make otherwise fitting required context overflow.
+    packet.omittedTextEvidence = additionalNames.map((name) => `${packetPath}/${name}`);
+    bounded();
+    for (const name of requiredNames) {
       sourcePath(name);
       const file = `${packetPath}/${name}`,
         entry = head.get(file);
       if (!entry) {
         if (name === 'implementation-plan.md' && generatedPlan) continue;
         assert.ok(!requiredNames.includes(name), 'Required packet file missing');
-        continue;
-      }
-      if (
-        !requiredNames.includes(name) &&
-        (Object.keys(packet.evidence).length >= 24 ||
-          !Number.isSafeInteger(entry.size) ||
-          entry.size > 64 * 1024 ||
-          bytes(packet) + entry.size * 2 > MAX_PACKET)
-      ) {
-        packet.omittedTextEvidence.push(file);
         continue;
       }
       const text = await blob(entry);
@@ -292,16 +287,65 @@ export function createReviewSourceReader({ run, cwd, feedbackReader, recoveryPla
         assert.ok(file.startsWith(prefix) && /\.(?:md|json|txt)$/.test(file));
         const entry = head.get(file);
         assert.ok(entry && entry.size <= 64 * 1024, 'Recovery evidence missing or oversized');
-        if (!packet.evidence[file]) packet.evidence[file] = await blob(entry);
+        if (!packet.evidence[file]) {
+          packet.evidence[file] = await blob(entry);
+        }
+        packet.omittedTextEvidence = packet.omittedTextEvidence.filter((name) => name !== file);
         bounded();
       }
     }
     assert.ok(packet.evidence[`${packetPath}/validation-report.md`], 'Validation evidence missing');
+    const requiredPacket = structuredClone(packet);
+    const frozenDigests = structuredClone(subject.packet?.files);
+    const tracked = new Set(
+      [...head.values()].filter((entry) => entry.type === 'blob').map((entry) => entry.path),
+    );
+    // The closure owns a detached snapshot. No later reader/probe alias may
+    // rewrite verified source, feedback, plan, identity, required text or inventory.
+    async function completeOptionalEvidence({ packetByteBudget }) {
+      assert.ok(Number.isSafeInteger(packetByteBudget) && packetByteBudget <= MAX_PACKET);
+      assert.ok(
+        bytes(requiredPacket) <= packetByteBudget,
+        'Required review context exceeds budget',
+      );
+      let completed = structuredClone(requiredPacket);
+      for (const file of requiredPacket.omittedTextEvidence) {
+        const entry = head.get(file);
+        if (
+          Object.keys(completed.evidence).length >= 24 ||
+          !Number.isSafeInteger(entry?.size) ||
+          entry.size > 64 * 1024
+        )
+          continue;
+        const text = await blob(entry);
+        const name = file.slice(prefix.length);
+        const prospective = {
+          ...completed,
+          evidence: { ...completed.evidence, [file]: text },
+          omittedTextEvidence: completed.omittedTextEvidence.filter((name) => name !== file),
+        };
+        // Count actual JSON escaping and UTF-8, not raw blob size or a multiplier.
+        if (bytes(prospective) <= packetByteBudget) {
+          if (frozenDigests)
+            assert.equal(hash(text), frozenDigests[name], 'Frozen evidence changed');
+          completed = prospective;
+        }
+      }
+      return { packet: completed };
+    }
+    if (deferOptionalEvidence)
+      return {
+        packet: structuredClone(requiredPacket),
+        tracked,
+        completeOptionalEvidence,
+      };
+    // Direct callers have no qualified output profile. Keep a conservative
+    // optional-only limit without truncating larger mandatory context.
     return {
-      packet,
-      tracked: new Set(
-        [...head.values()].filter((entry) => entry.type === 'blob').map((entry) => entry.path),
-      ),
+      ...(await completeOptionalEvidence({
+        packetByteBudget: Math.max(bytes(requiredPacket), DIRECT_OPTIONAL_PACKET_BYTES),
+      })),
+      tracked,
     };
   };
 }
@@ -374,6 +418,46 @@ export function prepareCloudInference({ packet, sha, profile }) {
     input,
     args,
     capacity: reviewCapacity({ inputBytes, schemaBytes, profile: qualified }),
+  };
+}
+
+export async function prepareCloudReviewSource({ source, completeOptionalEvidence, sha, profile }) {
+  const packet = structuredClone(source.packet),
+    tracked = new Set(source.tracked);
+  const minimal = prepareCloudInference({ packet, sha, profile });
+  if (!completeOptionalEvidence) return { source: { packet, tracked }, prepared: minimal };
+  assert.equal(typeof completeOptionalEvidence, 'function');
+  const packetByteBudget = optionalEvidencePacketBudget({
+    packetBytes: bytes(packet),
+    capacity: minimal.capacity,
+  });
+  const result = structuredClone((await completeOptionalEvidence({ packetByteBudget })).packet);
+  const { evidence: originalEvidence, omittedTextEvidence: originalOmitted, ...immutable } = packet;
+  const { evidence, omittedTextEvidence, ...completedImmutable } = result;
+  assert.deepEqual(
+    completedImmutable,
+    immutable,
+    'Optional completion changed immutable review context',
+  );
+  assert.ok(originalEvidence && evidence && Array.isArray(originalOmitted));
+  for (const [file, text] of Object.entries(originalEvidence))
+    assert.equal(evidence[file], text, 'Optional completion changed required evidence');
+  const added = Object.keys(evidence).filter((file) => !Object.hasOwn(originalEvidence, file));
+  assert.ok(Object.keys(evidence).length <= 24);
+  for (const file of added) {
+    assert.ok(originalOmitted.includes(file), 'Optional completion added unknown evidence');
+    assert.ok(typeof evidence[file] === 'string' && Buffer.byteLength(evidence[file]) <= 64 * 1024);
+  }
+  assert.deepEqual(
+    omittedTextEvidence,
+    originalOmitted.filter((file) => !added.includes(file)),
+    'Optional completion lost omission metadata',
+  );
+  assert.ok(bytes(result) <= packetByteBudget, 'Optional completion exceeds qualified budget');
+  const completed = { ...packet, evidence, omittedTextEvidence };
+  return {
+    source: { packet: completed, tracked },
+    prepared: prepareCloudInference({ packet: completed, sha, profile }),
   };
 }
 export async function probeCloudClaude({ env, run, cwd }) {
@@ -469,12 +553,16 @@ export async function processCloudReview({
     reviewActor;
   const blockedSubjects = [];
   for (const item of candidates) {
+    let completeOptionalEvidence;
     // Keep the original authorization/specification separate from every async
     // reader, provider callback and mutable durable-state or packet alias.
     expectedSubject = structuredClone(item.subject);
     try {
-      const retrieved = await retrieve(structuredClone(expectedSubject));
+      const retrieved = await retrieve(structuredClone(expectedSubject), {
+        deferOptionalEvidence: true,
+      });
       source = { packet: structuredClone(retrieved.packet), tracked: new Set(retrieved.tracked) };
+      completeOptionalEvidence = retrieved.completeOptionalEvidence;
       const controller = item.collection === 'batches' ? handoff : standalone;
       reviewActor = await controller.actor();
       assert.equal(source.packet.feedback.number, expectedSubject.pr.number);
@@ -503,11 +591,12 @@ export async function processCloudReview({
       }
     }
     try {
-      prepared = prepareCloudInference({
-        packet: source.packet,
+      ({ source, prepared } = await prepareCloudReviewSource({
+        source,
+        completeOptionalEvidence,
         sha: expectedSubject.sha,
         profile: qualification.profile,
-      });
+      }));
     } catch {
       blockedSubjects.push({
         pr: item.subject.pr.number,
