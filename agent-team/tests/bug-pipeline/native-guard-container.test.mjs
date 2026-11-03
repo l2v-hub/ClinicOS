@@ -5,14 +5,17 @@ import {
   NATIVE_GUARD_IMAGE,
   createPrivateCapture,
   validateNativeContainerInspection,
+  startNativeGuardContainer,NATIVE_CLI_SHA256,
 } from '../../src/bug-pipeline/native-guard-container.mjs';
 import { spawn } from 'node:child_process';
 import { mkdtemp, mkdir, writeFile } from 'node:fs/promises';
-import { createServer } from 'node:net';
+import { createServer, isIP } from 'node:net';
 import path from 'node:path';
 import os from 'node:os';
-import {createSocket} from 'node:dgram';
-import {createHash,randomUUID} from 'node:crypto';
+import { createSocket } from 'node:dgram';
+import { createHash, randomUUID } from 'node:crypto';
+import {EventEmitter} from 'node:events';
+import {PassThrough} from 'node:stream';
 const paths = {
   cli: '/safe/claude',
   launcher: '/safe/launcher.mjs',
@@ -130,16 +133,65 @@ test('actual inspection validator rejects isolation/image/env drift, not just bu
     assert.throws(() => validateNativeContainerInspection(g.container, g.image, options));
   }
 });
-test('escape comparison requires reachable controlled TCP and DNS bridge baseline',()=>{
- const base={fixtureSha256:'a'.repeat(64),target:{gateway:'172.17.0.1',tcpPort:30001,dnsPort:30002},unix:true,loopback:true,tcpReachable:true,dnsReachable:true,ipv6SemanticEscapeProof:'not-qualified-no-controlled-route',syntheticOnly:true};
- const candidate={...base,tcpReachable:false,dnsReachable:false};
- assertControlledNetworkComparison(base,candidate);
- for(const bad of [{...base,tcpReachable:false},{...base,dnsReachable:false}])assert.throws(()=>assertControlledNetworkComparison(bad,candidate));
- assert.throws(()=>assertControlledNetworkComparison(base,{...candidate,tcpReachable:true}));
- assert.throws(()=>assertControlledNetworkComparison(base,{...candidate,fixtureSha256:'b'.repeat(64)}));
+test('escape comparison requires reachable controlled TCP and DNS bridge baseline', () => {
+  const base = {
+    fixtureSha256: 'a'.repeat(64),
+    target: { gateway: '172.17.0.1', tcpPort: 30001, dnsPort: 30002 },
+    unix: true,
+    loopback: true,
+    tcpReachable: true,
+    dnsReachable: true,
+    ipv6SemanticEscapeProof: 'not-qualified-no-controlled-route',
+    syntheticOnly: true,
+  };
+  const candidate = { ...base, tcpReachable: false, dnsReachable: false };
+  assertControlledNetworkComparison(base, candidate);
+  for (const bad of [
+    { ...base, tcpReachable: false },
+    { ...base, dnsReachable: false },
+  ])
+    assert.throws(() => assertControlledNetworkComparison(bad, candidate));
+  assert.throws(() =>
+    assertControlledNetworkComparison(base, { ...candidate, tcpReachable: true }),
+  );
+  assert.throws(() =>
+    assertControlledNetworkComparison(base, { ...candidate, fixtureSha256: 'b'.repeat(64) }),
+  );
+});
+function assertControlledNetworkComparison(baseline, candidate) {
+  assert.equal(baseline.tcpReachable, true, 'TCP control must actually be reachable');
+  assert.equal(baseline.dnsReachable, true, 'DNS control must actually resolve');
+  assert.equal(candidate.tcpReachable, false);
+  assert.equal(candidate.dnsReachable, false);
+  assert.equal(baseline.fixtureSha256, candidate.fixtureSha256);
+  assert.deepEqual(baseline.target, candidate.target);
+  for (const result of [baseline, candidate]) {
+    assert.equal(result.unix, true);
+    assert.equal(result.loopback, true);
+    assert.equal(result.syntheticOnly, true);
+    assert.equal(result.ipv6SemanticEscapeProof, 'not-qualified-no-controlled-route');
+  }
+}
+test('deadline settles failed and escalates when inspected Docker child ignores SIGTERM',async()=>{
+ const dir=await mkdtemp(path.join(os.tmpdir(),'native-timeout-'));
+ const pth={...paths,socketDirectory:dir.replace(/^[A-Za-z]:/,'').replaceAll('\\','/')+'/socket'};
+ const boot={oauthToken:'synthetic-only-token',model:'claude-opus-4-6',schema:{type:'object'},input:'synthetic input',outputCap:32768};
+ let child,name;const removals=[];
+ const spawnImpl=(_cmd,args)=>{const p=new EventEmitter();p.stdin=new PassThrough();p.stdout=new PassThrough();p.stderr=new PassThrough();p.kills=[];p.kill=s=>{p.kills.push(s);return false;};
+  if(args.includes('run')){child=p;name=args[args.indexOf('--name')+1];return p;}
+  queueMicrotask(()=>{const f=fixture();f.container.Name='/'+name;f.container.Config.User=`${process.getuid?.()??1000}:${process.getgid?.()??1000}`;
+   f.container.Mounts.find(m=>m.Destination==='/guard/socket').Source=pth.socketDirectory;
+   if(args.includes('rm'))removals.push(args.at(-1));else p.stdout.end(JSON.stringify([args.includes('image')?f.image:f.container]));p.emit('close',0);
+  });return p;
+ };
+ const runtime=await startNativeGuardContainer({paths:pth,bootstrap:boot,spawnImpl,validateMounts:async()=>({binaryVerified:true,cliSha256:NATIVE_CLI_SHA256}),timeoutMs:20});
+ try{await runtime.isolation;const result=await Promise.race([runtime.completion,new Promise(r=>setTimeout(()=>r(null),100))]);
+  assert.ok(result,'deadline must not depend on eventual child close');assert.equal(result.ok,false);assert.equal(result.status,'native-container-timeout');
+  assert.ok(child.kills.includes('SIGTERM'));assert.ok(child.kills.includes('SIGKILL'));assert.deepEqual(removals,['a'.repeat(64)]);
+ }finally{await runtime.close();}
 });
 test(
-  'Linux actual Docker isolation and Unix/loopback route work; direct egress fails',
+  'Linux controlled bridge TCP/DNS baseline succeeds; identical network-none fixture cannot escape',
   { skip: process.platform !== 'linux', timeout: 240000 },
   async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), 'native-guard-isolation-'));
@@ -175,22 +227,89 @@ test(
       });
     await run(['version', '--format', '{{.Server.Version}}']);
     await run(['pull', '--platform', 'linux/amd64', NATIVE_GUARD_IMAGE]);
-    let resolveProbe, rejectProbe;
-    const probe = new Promise((r, j) => {
-      resolveProbe = r;
-      rejectProbe = j;
+    const [network] = JSON.parse(await run(['network', 'inspect', 'bridge']));
+    const gateway = network.IPAM?.Config?.find((c) => isIP(c.Gateway ?? '') === 4)?.Gateway;
+    assert.equal(isIP(gateway ?? ''), 4, 'A real observed bridge gateway is required');
+    let tcpAccepted = 0,
+      dnsAnswered = 0;
+    const nonce = 'SYNTHETIC-' + randomUUID(),
+      clients = new Set();
+    const host = createServer((s) => {
+      clients.add(s);
+      s.once('close', () => clients.delete(s));
+      s.setTimeout(1000, () => s.destroy());
+      let raw = '';
+      s.on('data', (b) => {
+        raw += b.toString('ascii');
+        if (raw === nonce) {
+          tcpAccepted++;
+          s.end('SYNTHETIC_TCP_PONG');
+        } else if (raw.length >= nonce.length) s.destroy();
+      });
     });
+    await new Promise((r, j) => {
+      host.once('error', j);
+      host.listen(0, '0.0.0.0', r);
+    });
+    const dns = createSocket('udp4'),
+      dnsName = 'native-guard-controlled.test';
+    const question = Buffer.concat([
+      ...dnsName.split('.').map((l) => Buffer.concat([Buffer.from([l.length]), Buffer.from(l)])),
+      Buffer.from([0, 0, 1, 0, 1]),
+    ]);
+    dns.on('message', (packet, peer) => {
+      if (
+        packet.length < 12 + question.length ||
+        packet.length > 512 ||
+        packet.readUInt16BE(4) !== 1 ||
+        !packet.subarray(12, 12 + question.length).equals(question)
+      )
+        return;
+      const h = Buffer.alloc(12);
+      packet.copy(h, 0, 0, 2);
+      h.writeUInt16BE(0x8180, 2);
+      h.writeUInt16BE(1, 4);
+      h.writeUInt16BE(1, 6);
+      const answer = Buffer.from([0xc0, 0x0c, 0, 1, 0, 1, 0, 0, 0, 60, 0, 4, 192, 0, 2, 5]);
+      dnsAnswered++;
+      dns.send(Buffer.concat([h, question, answer]), peer.port, peer.address);
+    });
+    await new Promise((r, j) => {
+      dns.once('error', j);
+      dns.bind(0, '0.0.0.0', r);
+    });
+    const reports = [],
+      waiters = [];
+    const receive = (result) => {
+      const waiter = waiters.shift();
+      if (waiter) waiter(result);
+      else reports.push(result);
+    };
+    const nextReport = () =>
+      new Promise((resolve, reject) => {
+        if (reports.length) return resolve(reports.shift());
+        const timer = setTimeout(() => reject(Error('synthetic-probe-timeout')), 15000);
+        waiters.push((result) => {
+          clearTimeout(timer);
+          resolve(result);
+        });
+      });
     const server = createServer((s) => {
-      s.once('data', (b) => {
+      clients.add(s);
+      s.once('close', () => clients.delete(s));
+      s.setTimeout(2000, () => s.destroy());
+      let raw = '';
+      s.on('data', (b) => {
+        raw += b.toString('utf8');
+        if (raw === 'SYNTHETIC_PING') s.end('SYNTHETIC_PONG');
+        if (raw.length > 4096) s.destroy();
+      });
+      s.on('end', () => {
+        if (raw === 'SYNTHETIC_PING') return;
         try {
-          if (b.toString() === 'SYNTHETIC_PING') s.end('SYNTHETIC_PONG');
-          else {
-            const result = JSON.parse(b.toString());
-            resolveProbe(result);
-            s.end('ACK');
-          }
+          receive(JSON.parse(raw));
+          s.end('ACK');
         } catch {
-          rejectProbe(Error('synthetic-probe-invalid'));
           s.destroy();
         }
       });
@@ -199,13 +318,18 @@ test(
       server.once('error', j);
       server.listen(root + '/socket/data.sock', r);
     });
-    const script = `import net from 'node:net';import dns from 'node:dns/promises';
- const check=(host,port)=>new Promise(r=>{const s=net.connect({host,port});s.setTimeout(300,()=>{s.destroy();r(true)});s.once('error',()=>r(true));s.once('connect',()=>{s.destroy();r(false)});});
- delete process.env.HTTPS_PROXY;delete process.env.HTTP_PROXY;process.env.RES_OPTIONS='attempts:1 timeout:1';
- const unix=await new Promise((r,j)=>{const s=net.connect('/guard/socket/data.sock',()=>s.write('SYNTHETIC_PING'));s.on('data',b=>r(b.toString()==='SYNTHETIC_PONG'));s.on('error',j)});
- const loop=net.createServer(s=>s.end('OK'));await new Promise(r=>loop.listen(0,'127.0.0.1',r));const loopback=await new Promise((r,j)=>{const s=net.connect(loop.address().port,'127.0.0.1');s.on('data',b=>r(b.toString()==='OK'));s.on('error',j)});loop.close();
- const ipv4=await check('192.0.2.1',443),ipv6=await check('2001:db8::1',443);let noDns=false;try{await dns.resolve4('example.invalid')}catch{noDns=true}
- const result=JSON.stringify({unix,loopback,ipv4,ipv6,noDns,syntheticOnly:true});const report=net.connect('/guard/socket/data.sock',()=>report.end(result));setTimeout(()=>{},30000);`;
+    const target = { gateway, tcpPort: host.address().port, dnsPort: dns.address().port };
+    const script = `import net from 'node:net';import {Resolver} from 'node:dns/promises';import{readFile}from'node:fs/promises';import{createHash}from'node:crypto';
+ const target=${JSON.stringify(target)},nonce=${JSON.stringify(nonce)};
+ delete process.env.HTTPS_PROXY;delete process.env.HTTP_PROXY;
+ const exchange=(options,input,expected)=>new Promise(r=>{let raw='';const s=net.connect(options,()=>s.write(input));s.setTimeout(800,()=>{s.destroy();r(false)});s.on('data',b=>{raw+=b.toString()});s.once('end',()=>r(raw===expected));s.once('error',()=>r(false));});
+ const unix=await exchange({path:'/guard/socket/data.sock'},'SYNTHETIC_PING','SYNTHETIC_PONG');
+ const loop=net.createServer(s=>s.end('OK'));await new Promise(r=>loop.listen(0,'127.0.0.1',r));const loopback=await exchange({port:loop.address().port,host:'127.0.0.1'},'','OK');loop.close();
+ const tcpReachable=await exchange({host:target.gateway,port:target.tcpPort},nonce,'SYNTHETIC_TCP_PONG');
+ const resolver=new Resolver({timeout:500,tries:1});resolver.setServers([target.gateway+':'+target.dnsPort]);let dnsReachable=false;try{dnsReachable=(await resolver.resolve4(${JSON.stringify(dnsName)})).join(',')==='192.0.2.5'}catch{}
+ const fixtureSha256=createHash('sha256').update(await readFile('/guard/launcher.mjs')).digest('hex');
+ const result=JSON.stringify({target,fixtureSha256,unix,loopback,tcpReachable,dnsReachable,ipv6SemanticEscapeProof:'not-qualified-no-controlled-route',syntheticOnly:true});
+ const report=net.connect('/guard/socket/data.sock',()=>report.end(result));setTimeout(()=>{},30000);`;
     await writeFile(root + '/launcher.mjs', script, { flag: 'wx', mode: 0o444 });
     await writeFile(root + '/unused-cli', 'PUBLIC_UNUSED_FIXTURE', { flag: 'wx', mode: 0o444 });
     await writeFile(root + '/public-ca.pem', 'PUBLIC_UNUSED_FIXTURE', { flag: 'wx', mode: 0o444 });
@@ -218,49 +342,58 @@ test(
     const uid = process.getuid(),
       gid = process.getgid();
     assert.ok(uid > 0 && gid > 0);
-    const name =
-      'native-guard-00000000-0000-0000-0000-' + Date.now().toString(16).padStart(12, '0');
-    let id;
+    const fixtureSha256 = createHash('sha256').update(script).digest('hex'),
+      ids = [];
     try {
-      const args = nativeContainerArguments(p, { uid, gid, name });
-      args.splice(args.indexOf('--interactive'), 1);
-      args.splice(args.indexOf('run') + 1, 0, '--detach');
-      const raw = await run(args.slice(2));
-      id = raw.trim();
-      assert.match(id, /^[a-f0-9]{64}$/);
-      const [container] = JSON.parse(await run(['inspect', id])),
-        [image] = JSON.parse(await run(['image', 'inspect', NATIVE_GUARD_IMAGE]));
-      const proof = validateNativeContainerInspection(container, image, {
-        paths: p,
-        uid,
-        gid,
-        name,
-      });
-      assert.equal(proof.runtimeIsolationVerified, true);
-      assert.equal(proof.cliSha256, undefined, 'Synthetic fixture is not binary qualification');
-      // log-driver none intentionally retains no output; read synthetic bounded Unix report, never docker logs.
-      let timer;
-      try {
-        const result = await Promise.race([
-          probe,
-          new Promise((_, j) => {
-            timer = setTimeout(() => j(Error('synthetic-probe-timeout')), 15000);
-          }),
-        ]);
-        assert.deepEqual(result, {
-          unix: true,
-          loopback: true,
-          ipv4: true,
-          ipv6: true,
-          noDns: true,
-          syntheticOnly: true,
-        });
-      } finally {
-        clearTimeout(timer);
+      const results = [];
+      for (const mode of ['bridge', 'none']) {
+        const name = 'native-guard-' + randomUUID(),
+          args = nativeContainerArguments(p, { uid, gid, name });
+        args[args.indexOf('--network') + 1] = mode;
+        args.splice(args.indexOf('--interactive'), 1);
+        args.splice(args.indexOf('run') + 1, 0, '--detach');
+        const id = (await run(args.slice(2))).trim();
+        assert.match(id, /^[a-f0-9]{64}$/);
+        const [container] = JSON.parse(await run(['inspect', id]));
+        assert.equal(container.Name, '/' + name);
+        ids.push(id);
+        assert.equal(container.HostConfig.NetworkMode, mode);
+        if (mode === 'bridge')
+          assert.equal(container.NetworkSettings.Networks.bridge.Gateway, gateway);
+        else {
+          const [image] = JSON.parse(await run(['image', 'inspect', NATIVE_GUARD_IMAGE]));
+          const proof = validateNativeContainerInspection(container, image, {
+            paths: p,
+            uid,
+            gid,
+            name,
+          });
+          assert.equal(proof.runtimeIsolationVerified, true);
+          assert.equal(proof.cliSha256, undefined, 'Synthetic fixture is not binary qualification');
+        }
+        const before = { tcpAccepted, dnsAnswered },
+          result = await nextReport();
+        assert.equal(result.fixtureSha256, fixtureSha256);
+        assert.deepEqual(result.target, target);
+        results.push(result);
+        if (mode === 'bridge') {
+          assert.equal(result.tcpReachable, true);
+          assert.equal(result.dnsReachable, true);
+          assert.ok(tcpAccepted > before.tcpAccepted && dnsAnswered > before.dnsAnswered);
+        } else {
+          assert.equal(tcpAccepted, before.tcpAccepted);
+          assert.equal(dnsAnswered, before.dnsAnswered);
+        }
+        await run(['rm', '--force', '--', id]);
+        ids.splice(ids.indexOf(id), 1);
       }
+      assertControlledNetworkComparison(results[0], results[1]);
     } finally {
-      if (id) await run(['rm', '--force', '--', id]);
+      for (const id of ids) await run(['rm', '--force', '--', id]);
+      for (const client of clients) client.destroy();
       await new Promise((r) => server.close(r));
+      await new Promise((r) => host.close(r));
+      await new Promise((r) => dns.close(r));
     }
   },
 );
