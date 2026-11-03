@@ -1,0 +1,66 @@
+name: Stage authorized fixed 2029 dedicated demo
+run-name: demo-auth-2029 ${{ inputs.subject_id }} ${{ inputs.operation_nonce }}
+on:
+  workflow_dispatch:
+    inputs:
+      reviewed_sha:
+        description: Exact reviewed merged current main source
+        type: string
+        required: true
+      subject_id:
+        description: Canonical linked auth follow-up owner; not an authorization
+        type: string
+        required: true
+      operation_nonce:
+        description: Already-consumed distinct fixed-2029 action
+        type: string
+        required: true
+      operation:
+        description: Inspect by default; stage requires the stored actual action capability
+        type: choice
+        options: [inspect, stage]
+        default: inspect
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: railway-demo
+  cancel-in-progress: false
+jobs:
+  stage:
+    if: >-
+      github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' && github.actor == 'l2v-hub' &&
+      github.triggering_actor == github.actor && github.sha == github.workflow_sha &&
+      inputs.reviewed_sha == github.sha && github.run_attempt == 1
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    environment: 'glistening-friendship / demo'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Test without credentials
+        run: node --test scripts/automation/enable-demo-auth-2029.test.mjs
+      - name: Stage only fixed 2029 expiry; no deploy or SQL
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+          DEMO2029_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+          DEMO2029_SUBJECT_ID: ${{ inputs.subject_id }}
+          DEMO2029_OPERATION_NONCE: ${{ inputs.operation_nonce }}
+          DEMO2029_OPERATION: ${{ inputs.operation }}
+        run: node scripts/automation/enable-demo-auth-2029.mjs "$DEMO2029_OPERATION"
+      - name: Retain finite staged or uncertain receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: demo-auth-2029-${{ github.run_id }}-${{ github.run_attempt }}
+          path: demo-auth-2029-receipt.json
+          if-no-files-found: warn
+          retention-days: 30
