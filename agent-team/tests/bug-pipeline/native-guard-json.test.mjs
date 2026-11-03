@@ -9,7 +9,19 @@ test('guard JSON decodes valid bounded UTF8 once and returns immutable values', 
   assert.ok(Object.isFrozen(value) && Object.isFrozen(value.array));
 });
 test('duplicate decoded/prototype keys and unpaired surrogates never survive parsing', () => {
-  for (const s of ['{"a":1,"a":2}', '{"a":1,"\\u0061":2}', '{"__proto__":0}', '{"constructor":0}', '{"x":"\\ud800"}', '{"x":"\\udfff"}', '[1,]', '{"x":01}', '1e999', '9007199254740993', 'null true'])
+  for (const s of [
+    '{"a":1,"a":2}',
+    '{"a":1,"\\u0061":2}',
+    '{"__proto__":0}',
+    '{"constructor":0}',
+    '{"x":"\\ud800"}',
+    '{"x":"\\udfff"}',
+    '[1,]',
+    '{"x":01}',
+    '1e999',
+    '9007199254740993',
+    'null true',
+  ])
     assert.throws(() => parse(s), /guard-json-rejected/);
   assert.throws(() => parseGuardJson(Buffer.from([0xc0, 0xaf])), /guard-json-rejected/);
 });
@@ -19,4 +31,19 @@ test('JSON byte/depth/node/string bounds apply before unbounded construction', (
   assert.throws(() => parse('[[[0]]]', { maxDepth: 2 }), /guard-json-rejected/);
   assert.throws(() => parse('[0,1,2]', { maxNodes: 3 }), /guard-json-rejected/);
   assert.throws(() => parse('"漢漢"', { maxStringBytes: 5 }), /guard-json-rejected/);
+});
+test('duplicate keys are rejected at every nesting and diagnostics never echo input', () => {
+  for (const s of [
+    '{"a":{"x":0,"\\u0078":1}}',
+    '[{"prototype":true}]',
+    '{"secret":"synthetic-private-marker", "secret":2}',
+    '\ufeff{}',
+  ]) {
+    assert.throws(
+      () => parse(s),
+      (error) =>
+        error.message === 'guard-json-rejected' &&
+        !error.message.includes('synthetic-private-marker'),
+    );
+  }
 });
