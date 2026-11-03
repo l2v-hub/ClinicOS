@@ -55,6 +55,48 @@ test('only one fixed demo expiry key; bounded strict request accepts seven-day m
   assert.equal(validateRenewalRequest(request, now).newExpiry, request.newExpiry);
   assert.match(RENEW_MUTATION, /variableUpsert/); assert.doesNotMatch(RENEW_MUTATION, /variableCollectionUpsert/);
 });
+const endOf2029 = '2029-12-31T23:59:59Z';
+test('explicit requested 2029 cutoff is eligible without widening the ordinary seven-day window', () => {
+  assert.equal(MAX_RENEWAL_MS, 7 * 24 * 60 * 60 * 1000);
+  assert.equal(validateRenewalRequest({ ...request, newExpiry: endOf2029 }, now).newExpiry, endOf2029);
+  for (const date of ['2026-11-10T00:00:00Z', '2029-01-01T00:00:00Z', '2029-12-31T23:59:58Z', '2030-01-01T00:00:00Z'])
+    assert.throws(() => validateRenewalRequest({ ...request, newExpiry: date }, now));
+  assert.throws(() => validateRenewalRequest({ ...request, newExpiry: '2029-12-31T23:59:59.000Z' }, now));
+  assert.throws(() => validateRenewalRequest({ ...request, newExpiry: endOf2029 }, Date.parse('2030-01-01T00:00:00Z')));
+});
+test('2029 cutoff still needs an authentic exact-operation capability before any mutation', async () => {
+  const x = fixture(); x.record().newExpiry = endOf2029; let mutations = 0;
+  await assert.rejects(() => stageRenewal({ selector, actor: 'worker-fixture', runId: '12345', controller: x.controller,
+    inspect: fresh, client: async () => { mutations++; return { variableUpsert: true }; } }));
+  const noAuthority = createRenewalController({ github: x.github, now: () => now });
+  await assert.rejects(() => noAuthority.authorize(selector, { actor: 'human-fixture', reference: 'made-up' }));
+  assert.equal(mutations, 0); assert.equal(x.writes(), 0);
+});
+test('2029 eligibility cannot reuse an authorization consumed for a short renewal', async () => {
+  const x = fixture(); await authorized(x); x.record().newExpiry = endOf2029;
+  await assert.rejects(() => x.controller.claim(selector,
+    { actor: 'worker-fixture', runId: '12345', expectedFingerprint: fingerprint, fresh }));
+  assert.equal(x.record().execution, undefined);
+});
+test('authorized 2029 staging changes only the fixed demo expiry once and never deploys', async () => {
+  const x = fixture(); x.record().newExpiry = endOf2029; await authorized(x); const calls = [];
+  assert.equal(x.record().authorization.authorization.binding.reservation.newExpiry, endOf2029);
+  const result = await stageRenewal({ selector, actor: 'worker-fixture', runId: '12345', controller: x.controller,
+    inspect: fresh, client: async (query, vars) => { calls.push({ query, vars }); return { variableUpsert: true }; } });
+  assert.equal(result.status, 'staged-awaiting-explicit-deployment'); assert.equal(result.deploymentTriggered, false);
+  assert.deepEqual(calls, [{ query: RENEW_MUTATION, vars: { input: { projectId: DEMO_TARGET.projectId,
+    environmentId: DEMO_TARGET.environmentId, serviceId: DEMO_TARGET.serviceId, name: KEY, value: endOf2029, skipDeploys: true } } }]);
+  await assert.rejects(() => stageRenewal({ selector, actor: 'worker-fixture', runId: '12345', controller: x.controller,
+    inspect: fresh, client: async () => { calls.push('unexpected-replay'); } }));
+  assert.equal(calls.length, 1);
+});
+test('the 2029 exception retains demo-only synthetic preflight and rejects production', async () => {
+  const x = targetFixture(), long = { ...request, newExpiry: endOf2029 };
+  const options = { request: long, client: async () => x.data, readPublic: async url => url.endsWith('/ready') ? x.ready : x.status,
+    assertFreshMain: async () => {}, now: () => now };
+  assert.equal((await inspectRenewalTarget(options)).target.domain, DEMO_TARGET.domain);
+  x.ready.tier = 'production'; await assert.rejects(() => inspectRenewalTarget(options));
+});
 for (const [name, change] of [
   ['expired new date', r => { r.newExpiry = '2026-11-01T00:00:00Z'; }],
   ['overlong renewal', r => { r.newExpiry = '2026-11-10T00:00:00Z'; }],
