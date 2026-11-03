@@ -32,7 +32,7 @@ const approved = {
 };
 const packet = (text = '') => ({ subject_sha: sha, source: text, feedback: clone(feedback) });
 
-function sourceFixture() {
+function sourceFixture({ sourceSize = 184_000, optionalReports = [], optionalText = 'x'.repeat(60_000) } = {}) {
   const before = new Map(),
     head = new Map(),
     blobs = new Map(),
@@ -51,8 +51,8 @@ function sourceFixture() {
     texts.set((map === head ? 'after:' : 'before:') + file, text);
   }
   for (const file of ['src/alpha.mjs', 'src/beta.mjs']) {
-    add(before, file, '// old synthetic source\n' + 'a'.repeat(184_000));
-    add(head, file, '// new synthetic source\n' + 'b'.repeat(184_000));
+    add(before, file, '// old synthetic source\n' + 'a'.repeat(sourceSize));
+    add(head, file, '// new synthetic source\n' + 'b'.repeat(sourceSize));
   }
   for (const name of [
     'task-contract.md',
@@ -62,12 +62,13 @@ function sourceFixture() {
     'review-ops-context-report.md',
   ])
     add(head, prefix + name, 'Synthetic selected context: ' + name + '\n' + 'c'.repeat(1200));
+  for (const name of optionalReports) add(head, prefix + name, optionalText);
   const subject = {
     id: 'bug-batch-17',
     pr: { number: 81 },
     sha,
     baseSha: base,
-    branch: 'codex/capacity-fixture',
+    branch: 'codex/bug-batch-17',
   };
   const pr = {
     number: 81,
@@ -108,9 +109,50 @@ function sourceFixture() {
     head,
     texts,
     calls,
-    retrieve: createReviewSourceReader({ run, cwd: '/private-empty' }),
+    run,
+    retrieve: createReviewSourceReader({ run, cwd: '/private-empty', feedbackReader: async () => clone(feedback) }),
   };
 }
+
+test('optional reports cannot block a real128k candidate whose immutable required context fits', async () => {
+  const s = sourceFixture({ optionalReports: ['review-one-report.md', 'review-two-report.md', 'review-three-report.md'] });
+  const f = nativeFixture(packet());
+  f.subject.branch = s.subject.branch;
+  f.options.retrieve = s.retrieve;
+  const prior = clone(f.subject.reviews), ledger = clone(f.subject.reviewLedger.rounds);
+  const model = f.options.run;
+  f.options.run = async (call) => {
+    const supplied = JSON.parse(call.input.slice(call.input.indexOf('{"repository"')));
+    assert.ok(supplied.omittedTextEvidence.length > 0, 'excess optional evidence is explicitly listed');
+    for (const change of supplied.changes) {
+      assert.equal(change.before.text, s.texts.get('before:' + change.file));
+      assert.equal(change.after.text, s.texts.get('after:' + change.file));
+    }
+    for (const name of ['task-contract.md', 'implementation-plan.md', 'validation-report.md'])
+      assert.equal(supplied.evidence[s.prefix + name], s.texts.get('after:' + s.prefix + name));
+    return model(call);
+  };
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'published');
+  assert.ok(result.capacity.requiredTokensUpperBound <= contextWindow);
+  assert.deepEqual(f.subject.reviews.slice(0, 2), prior);
+  assert.deepEqual(f.subject.reviewLedger.rounds.slice(0, 2), ledger);
+  assert.equal(f.calls.filter((x) => x === 'claim').length, 1);
+  assert.equal(f.calls.filter((x) => x === 'model').length, 1);
+});
+
+test('required source alone above real128k admission stays blocked before claim or model', async () => {
+  const s = sourceFixture({ sourceSize: 210_000, optionalReports: ['review-one-report.md'] });
+  const f = nativeFixture(packet());
+  f.subject.branch = s.subject.branch;
+  f.options.retrieve = s.retrieve;
+  const original = clone(f.subject);
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'queue-blocked');
+  assert.equal(result.blockedSubjects[0].status, 'capacity-unavailable');
+  assert.deepEqual(f.subject, original);
+  assert.ok(!f.calls.includes('claim') && !f.calls.includes('model'));
+});
 
 function nativeFixture(sourcePacket, observed = profile) {
   const plan = {
