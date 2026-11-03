@@ -288,11 +288,40 @@ export async function startNativeGuardContainer({
   const completion = new Promise((r) => {
     finish = r;
   });
-  let timer;
+  let timer, killTimer, cleanup;
+  const removeOwned = () => {
+    if (!ownedContainerId) return Promise.resolve();
+    return (cleanup ??= new Promise((resolve) => {
+      let p;
+      try {
+        p = spawnImpl('docker', [...HOST, 'rm', '--force', '--', ownedContainerId], {
+          env,
+          stdio: 'ignore',
+          windowsHide: true,
+        });
+      } catch {
+        return resolve();
+      }
+      const t = setTimeout(() => {
+        p.kill('SIGKILL');
+        resolve();
+      }, 10000);
+      t.unref?.();
+      p.once('error', () => {
+        clearTimeout(t);
+        resolve();
+      });
+      p.once('close', () => {
+        clearTimeout(t);
+        resolve();
+      });
+    }));
+  };
   const end = () => {
     if (closed) return;
     closed = true;
     clearTimeout(timer);
+    clearTimeout(killTimer);
     boot.fill(0);
     finish({
       ok: code === 0 && !failed && !capture.receipt().overflow,
@@ -306,16 +335,37 @@ export async function startNativeGuardContainer({
             : 'native-failed'),
     });
   };
+  const stop = (reason) => {
+    if (closed) return;
+    failed ??= reason;
+    boot.fill(0);
+    try {
+      child?.kill('SIGTERM');
+    } catch {
+      /* Terminal failure remains bounded. */
+    }
+    void removeOwned();
+    killTimer ??= setTimeout(() => {
+      try {
+        child?.kill('SIGKILL');
+      } catch {
+        /* Do not depend on a close event. */
+      } finally {
+        code = null;
+        end();
+      }
+    }, 25);
+    killTimer.unref?.();
+  };
   try {
     child = spawnImpl('docker', args, { env, stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true });
   } catch {
-    failed = 'native-container-spawn-failed';
+    failed ??= 'native-container-spawn-failed';
     end();
   }
   if (child) {
     timer = setTimeout(() => {
-      failed = 'native-container-timeout';
-      child.kill('SIGTERM');
+      stop('native-container-timeout');
     }, timeoutMs);
     timer.unref?.();
     for (const [stream, callback] of [
@@ -325,19 +375,17 @@ export async function startNativeGuardContainer({
       child[stream].on('data', (raw) => {
         const chunk = Buffer.from(raw);
         if (!capture.push(stream, chunk)) {
-          failed = 'native-output-too-large';
-          child.kill('SIGTERM');
+          stop('native-output-too-large');
           return;
         }
         try {
           callback(chunk);
         } catch {
-          failed = 'native-output-rejected';
-          child.kill('SIGTERM');
+          stop('native-output-rejected');
         }
       });
     child.once('error', () => {
-      failed = 'native-container-spawn-failed';
+      failed ??= 'native-container-spawn-failed';
       end();
     });
     child.once('close', (value) => {
@@ -345,8 +393,7 @@ export async function startNativeGuardContainer({
       end();
     });
     child.stdin.on('error', () => {
-      failed = 'native-bootstrap-write-failed';
-      child.kill('SIGTERM');
+      stop('native-bootstrap-write-failed');
     });
   }
   const isolation = (async () => {
@@ -366,55 +413,31 @@ export async function startNativeGuardContainer({
     assert.equal(observed.Name, '/' + name);
     assert.equal(observed.Config?.Image, NATIVE_GUARD_IMAGE);
     ownedContainerId = observed.Id;
+    if (failed) {
+      void removeOwned();
+      throw Error('native-container-stopped');
+    }
     const image = await inspectDocker(['image', 'inspect', NATIVE_GUARD_IMAGE], { env, spawnImpl });
     const proof = validateNativeContainerInspection(observed, image, { paths, uid, gid, name });
     assert.equal(closed, false);
+    assert.equal(failed, null);
     child.stdin.end(boot);
     return { ...proof, ...mountProof };
   })();
   isolation.catch(() => {
-    failed = 'native-isolation-not-verified';
-    child?.kill('SIGTERM');
+    stop('native-isolation-not-verified');
     if (!child) end();
   });
   return {
     completion,
     isolation,
+    isLive: () => !closed && failed === null,
     takePrivateOutput: () => capture.take(),
     async close() {
-      if (!closed) child?.kill('SIGTERM');
+      if (!closed) stop('native-container-closed');
       // Never remove by a speculative name: only the observed ID of our actual creation.
-      if (ownedContainerId)
-        await new Promise((resolve) => {
-          let p;
-          try {
-            p = spawnImpl('docker', [...HOST, 'rm', '--force', '--', ownedContainerId], {
-              env,
-              stdio: 'ignore',
-              windowsHide: true,
-            });
-          } catch {
-            return resolve();
-          }
-          const t = setTimeout(() => {
-            p.kill('SIGKILL');
-            resolve();
-          }, 10000);
-          t.unref?.();
-          p.once('error', () => {
-            clearTimeout(t);
-            resolve();
-          });
-          p.once('close', () => {
-            clearTimeout(t);
-            resolve();
-          });
-        });
-      if (!closed) {
-        code = null;
-        failed ??= 'native-container-closed';
-        end();
-      }
+      await removeOwned();
+      await completion;
     },
   };
 }

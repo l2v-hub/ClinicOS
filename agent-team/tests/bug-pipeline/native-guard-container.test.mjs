@@ -5,7 +5,8 @@ import {
   NATIVE_GUARD_IMAGE,
   createPrivateCapture,
   validateNativeContainerInspection,
-  startNativeGuardContainer,NATIVE_CLI_SHA256,
+  startNativeGuardContainer,
+  NATIVE_CLI_SHA256,
 } from '../../src/bug-pipeline/native-guard-container.mjs';
 import { spawn } from 'node:child_process';
 import { mkdtemp, mkdir, writeFile } from 'node:fs/promises';
@@ -14,8 +15,8 @@ import path from 'node:path';
 import os from 'node:os';
 import { createSocket } from 'node:dgram';
 import { createHash, randomUUID } from 'node:crypto';
-import {EventEmitter} from 'node:events';
-import {PassThrough} from 'node:stream';
+import { EventEmitter } from 'node:events';
+import { PassThrough } from 'node:stream';
 const paths = {
   cli: '/safe/claude',
   launcher: '/safe/launcher.mjs',
@@ -172,23 +173,70 @@ function assertControlledNetworkComparison(baseline, candidate) {
     assert.equal(result.ipv6SemanticEscapeProof, 'not-qualified-no-controlled-route');
   }
 }
-test('deadline settles failed and escalates when inspected Docker child ignores SIGTERM',async()=>{
- const dir=await mkdtemp(path.join(os.tmpdir(),'native-timeout-'));
- const pth={...paths,socketDirectory:dir.replace(/^[A-Za-z]:/,'').replaceAll('\\','/')+'/socket'};
- const boot={oauthToken:'synthetic-only-token',model:'claude-opus-4-6',schema:{type:'object'},input:'synthetic input',outputCap:32768};
- let child,name;const removals=[];
- const spawnImpl=(_cmd,args)=>{const p=new EventEmitter();p.stdin=new PassThrough();p.stdout=new PassThrough();p.stderr=new PassThrough();p.kills=[];p.kill=s=>{p.kills.push(s);return false;};
-  if(args.includes('run')){child=p;name=args[args.indexOf('--name')+1];return p;}
-  queueMicrotask(()=>{const f=fixture();f.container.Name='/'+name;f.container.Config.User=`${process.getuid?.()??1000}:${process.getgid?.()??1000}`;
-   f.container.Mounts.find(m=>m.Destination==='/guard/socket').Source=pth.socketDirectory;
-   if(args.includes('rm'))removals.push(args.at(-1));else p.stdout.end(JSON.stringify([args.includes('image')?f.image:f.container]));p.emit('close',0);
-  });return p;
- };
- const runtime=await startNativeGuardContainer({paths:pth,bootstrap:boot,spawnImpl,validateMounts:async()=>({binaryVerified:true,cliSha256:NATIVE_CLI_SHA256}),timeoutMs:20});
- try{await runtime.isolation;const result=await Promise.race([runtime.completion,new Promise(r=>setTimeout(()=>r(null),100))]);
-  assert.ok(result,'deadline must not depend on eventual child close');assert.equal(result.ok,false);assert.equal(result.status,'native-container-timeout');
-  assert.ok(child.kills.includes('SIGTERM'));assert.ok(child.kills.includes('SIGKILL'));assert.deepEqual(removals,['a'.repeat(64)]);
- }finally{await runtime.close();}
+test('deadline settles failed and escalates when inspected Docker child ignores SIGTERM', async () => {
+  const dir = await mkdtemp(path.join(os.tmpdir(), 'native-timeout-'));
+  const pth = {
+    ...paths,
+    socketDirectory: dir.replace(/^[A-Za-z]:/, '').replaceAll('\\', '/') + '/socket',
+  };
+  const boot = {
+    oauthToken: 'synthetic-only-token',
+    model: 'claude-opus-4-6',
+    schema: { type: 'object' },
+    input: 'synthetic input',
+    outputCap: 32768,
+  };
+  let child, name;
+  const removals = [];
+  const spawnImpl = (_cmd, args) => {
+    const p = new EventEmitter();
+    p.stdin = new PassThrough();
+    p.stdout = new PassThrough();
+    p.stderr = new PassThrough();
+    p.kills = [];
+    p.kill = (s) => {
+      p.kills.push(s);
+      return false;
+    };
+    if (args.includes('run')) {
+      child = p;
+      name = args[args.indexOf('--name') + 1];
+      return p;
+    }
+    queueMicrotask(() => {
+      const f = fixture();
+      f.container.Name = '/' + name;
+      f.container.Config.User = `${process.getuid?.() ?? 1000}:${process.getgid?.() ?? 1000}`;
+      f.container.Mounts.find((m) => m.Destination === '/guard/socket').Source =
+        pth.socketDirectory;
+      if (args.includes('rm')) removals.push(args.at(-1));
+      else p.stdout.end(JSON.stringify([args.includes('image') ? f.image : f.container]));
+      p.emit('close', 0);
+    });
+    return p;
+  };
+  const runtime = await startNativeGuardContainer({
+    paths: pth,
+    bootstrap: boot,
+    spawnImpl,
+    validateMounts: async () => ({ binaryVerified: true, cliSha256: NATIVE_CLI_SHA256 }),
+    timeoutMs: 20,
+  });
+  try {
+    await runtime.isolation;
+    const result = await Promise.race([
+      runtime.completion,
+      new Promise((r) => setTimeout(() => r(null), 100)),
+    ]);
+    assert.ok(result, 'deadline must not depend on eventual child close');
+    assert.equal(result.ok, false);
+    assert.equal(result.status, 'native-container-timeout');
+    assert.ok(child.kills.includes('SIGTERM'));
+    assert.ok(child.kills.includes('SIGKILL'));
+    assert.deepEqual(removals, ['a'.repeat(64)]);
+  } finally {
+    await runtime.close();
+  }
 });
 test(
   'Linux controlled bridge TCP/DNS baseline succeeds; identical network-none fixture cannot escape',
