@@ -1,0 +1,44 @@
+# Independent combined QA — blocked at 10000045
+
+Reviewer: actual independent agent `/root/auth_expiry_final_qa`.
+Source: `10000045b9a7884ea970acba204459c5e2c4d889`.
+Tree: `1a2ba4aaa9d12efe110e75083a79f377c6d61f12`.
+Dedicated checkout: `C:/w-rv/review-capacity-combined-qa-20261103`.
+
+## Remaining P1 finding: late policy invalidation still crosses the forwarding boundary
+
+Location: `agent-team/src/bug-pipeline/native-guard-session.mjs:151`; related claim wrapper at 116–117 and state await/send at `native-guard-state.mjs:54`.
+
+The original straightforward asynchronous-claim regression is repaired: the session rechecks policy/liveness after awaiting its supplied claim validator. However, that asynchronous wrapper itself resolves a Promise which the state module then awaits. A queued policy diagnostic can invalidate the barrier after the wrapper's true result is computed but before the state continuation resumes. `onDiagnostic` only pushes into the policy barrier and calls maybeReady; it does not synchronously poison the data state. State therefore still sees RELEASED and forwards even though policy became invalid before the write.
+
+Actual private reproducer: `policy-microtask-repro.test.mjs`, test `late invalid policy queued after awaited claim result still prevents forwarding`. It uses the real request validator, actual stage/session/state modules, valid synthetic body and isolation fixtures, and no provider. The claim validator queues two nested microtasks to deliver the late invalid-policy diagnostic and returns true. The session's post-await check runs first, the diagnostic invalidates policy next, and then the state await continuation sends. Expected forwards 0; actual forwards 1. The eventual release rejection does not undo that forbidden forward. This is a stronger interleaving of the prior policy finding, not an allowance to waive its original assertion.
+
+Receipt `policy-after-await-microtask/receipt.json`: actual exit 1, one test, zero pass/one fail, zero skip/cancellation, source/index stable. Required repair: synchronous data-gate cancellation when an already-authorized policy state becomes invalid/pending, plus any necessary final immediately-before-forward fence; retain irreversible spend and no replay/refund. Another post-inference outcome check is insufficient. Author/integration owner was notified before any QA-pass or Max handoff. No source was changed by this reviewer.
+
+## Actual independent executions
+
+All runs use trusted D2 createRunner verification mode and explicit existing test-file checks, with clean HEAD/index before and after. Commands, timestamps, source identities and exact log/receipt hashes are retained in `execution-evidence.json`.
+
+- `all-proper-eighteen`: 171 cases, 168 PASS, 3 explicit Linux SKIP, zero failures/cancellations. All eighteen requested suite files exist and are listed individually in the receipt. No old helper's silently omitted-file count is reused. Historical root-helper evidence described as 80 rather than 99 is not treated as a current 99-case execution; the author's separate actual evidence remains separate.
+- `prior-behavioral-reproofs`: 31 cases, 30 PASS/1 FAIL. The 28 unchanged runtime adversarial assertions all pass, including the original SIGTERM-ignoring-child deadline assertion. The first two session repro assertions also pass. The optional case failed because my first new-API fixture adapter incorrectly shared one isLive flag across separate fresh runtime invocations. That failure is preserved; it is not reported as a candidate defect.
+- `corrected-original-session-reproofs`: all 3 original session assertions PASS, zero failure/skip/cancellation. The only correction gives each startRuntime invocation its own live=true until that runtime's close. Every original assertion is unchanged; reverse transforms are checked and hashed. The original policy-during-await, startup-deadline, and optional-wrapper tests are genuinely green under this correct fixture.
+- `policy-after-await-microtask`: 1 FAIL, the genuine remaining finding above. No assertion was disabled or weakened to produce a pass.
+
+Fixture source hashes, original reproduction hashes, transformations and correction rationale are retained. The adapter failure and the genuine policy failure remain distinct logs/receipts. Repeated assertions are not summed into a misleading aggregate pass count.
+
+## Prior six findings: verified disposition at this exact source
+
+1. Runtime SIGTERM timeout: original private assertion now passes; source has bounded signal escalation, failed completion, immediate isLive=false on failure, and deduplicated observed-ID removal. This is synthetic Windows process testing, not real Docker termination qualification.
+2. Positive escape control: source now creates controlled host TCP and UDP DNS services, establishes an observed bridge gateway, checks a reachable bridge baseline, and compares identical script/target hashes against network:none with no host service hits. The pure comparison test passes. Actual Linux smoke remains skipped here; no actual semantic IPv6 escape proof is claimed.
+3. Policy after awaited claim: original repro passes, but the stronger adjacent await interleaving still fails. This finding is NOT closed.
+4. Startup deadline: original private never-resolving-startRuntime assertion passes. Startup is now raced against expiry, with late-return cleanup. That positive test is not proof every possible caller cleanup failure is resolved.
+5. Optional native wrappers: original private source215000/optional25000/system16000 fixture passes. The mandatory body stays live while an optional request is staged separately; final actual capacity remains enforced. Typed capacity is privately minted only after full request validation; public/forged/replayed errors and malformed bodies cannot mint fallback authority. Policy/auth/unknown failure does not authorize mandatory fallback. These properties are also covered by the actual eighteen-suite replay.
+6. Workflow exact-list assertion: the previously red regression now passes in the real cloud-recovery-transport suite. The expanded list retains main-only trusted checkout, constant recovery entrypoint, same concurrency and contents:read. Native qualification/review modes require explicit workflow_dispatch and exact workflow/main identity; native-review selects exact PR/SHA. Scheduled/default review does not activate the native profile.
+
+## Scope and source evidence
+
+Read both prior independent blocked reports, the current session/qualification orchestration, typed capacity classifier, current runtime deadline/escape changes, workflow fences and relevant worker/recovery source. Reviewed previous protocol/runtime inspections are retained rather than relabeled. All changed Git blobs are hashed in the manifest; present local source/test files are byte-compared. Historical packet artifacts intentionally omitted by sparse checkout are identified by their tracked skip-worktree flag and bound directly to immutable Git, not claimed present on disk. An initial collector ENOENT on the omitted analysis.md is retained as an evidence-collection correction, not a test or candidate failure. Hash binding is not a claim that old frozen round-one packet reports describe this new implementation. The current clean candidate is not a post-Claude approved or published source.
+
+No provider/OAuth/real Docker/OpenSSL invocation, credential access, GitHub/controller/canonical write, source edit, main-worktree modification, merge, deployment, issue closure or clinical access occurred. Tests use synthetic process/model/controller fixtures and a bounded local-loopback socket only. Linux certificate-chain, Unix CONNECT/TLS and controlled Docker escape tests are the three skipped cases and remain mandatory in actual Linux CI. Runtime namespaces, raw CONNECT/SNI/TLS, genuine account/policy/request/response equivalence and final current-packet qualification are not inferred from Windows fixture success.
+
+Canonical nativeRequiredEvidence remains frozen/mandatory before qualification; classic/native-required and legacy recovery fallback are blocked by source and passing tests. Parent-owned integration/release policy remains unchanged. This blocked QA cannot authorize publishing a passed packet, real Max round two, self-qualification, app-review claims, automatic merge/deploy, production or new allowances. Existing auth/technical history and all retained failures remain intact. The eighteen-suite result is not a full-controller green claim: root reports remaining failures in both its source and D2 full runs, whose precise identity comparison was not independently replayed here. Further exact-source repair and independent replay are required before a scoped pass; genuine Max review, exact CI, final QA, protected release and actual demo restoration are still separate pending gates.

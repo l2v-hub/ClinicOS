@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "independent": true,
+  "reviewer": "auth_expiry_final_qa",
+  "agent": "/root/auth_expiry_final_qa",
+  "status": "blocked",
+  "scope": "fresh offline combined repair QA before own Max; not post-Claude final approval",
+  "sourceSha": "4c8beb83c6ea11ba286f33372bf76ba1814c3770",
+  "tree": "31861014940e9bde315e3fe6a3a8bfcf3ecc8f11",
+  "indexSha256": "d84d3664883bc8a4665b0330b514eeb1ca6218e0753ab935e480fae807789583",
+  "findings": [
+    {
+      "id": "final-await-liveness-gap",
+      "priority": 2,
+      "file": "agent-team/src/bug-pipeline/native-guard-session.mjs",
+      "line": 118,
+      "relatedFile": "agent-team/src/bug-pipeline/native-guard-state.mjs",
+      "relatedLine": 54,
+      "title": "Liveness loss after the claim wrapper result still permits source forwarding",
+      "repro": "Actual synthetic test queues isLive=false after wrapper true calculation but before state await continuation. Expected0 forwards, actual1; final release fails. This demonstrates waste of an already finite authorized source attempt after process unavailability, not policy/OAuth bypass, second inference or false approval.",
+      "testPath": "extra-edges.test.mjs",
+      "testLine": 19,
+      "receiptPath": "extra-adversarial-edges/receipt.json",
+      "executed": true
+    }
+  ],
+  "summary": "Previous policy P1 repaired: exact private repro and9 stronger policy interleavings pass. Independent proper18 suites173 cases:170PASS/3explicitLinuxSKIP. Original32 private assertions pass unchanged. New14 edges13PASS/1FAIL expose separate P2 final-await liveness gap. Certificate fixed-script positional FIFO design and sanitized mocked failures pass; actual Linux for4c remains unclaimed. Root Windows full-log failure identities independently compare equal, but neither run is green or independently executed here.",
+  "reportPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined2/report.md",
+  "reportSha256": "61f27e501a92482eda6b144ed74c9ef2e00221585b27fccd3525a6896916d529",
+  "evidencePath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined2/execution-evidence.json",
+  "evidenceSha256": "242383aebe050d9e8f467b9b5d8573b2c0fd71340852d871c405cd8f15e688b6",
+  "sourceManifest": {"path": "execution-evidence.json", "field": "manifest", "paths": 46, "allGitBlobsAndSha256": true, "sparseHistoricalArtifactsExplicit": true},
+  "tests": [
+    {"receiptPath": "all-proper-eighteen/receipt.json", "pass": 170, "fail": 0, "skip": 3, "cancelled": 0, "exitCode": 0},
+    {"receiptPath": "unchanged-private-reproofs/receipt.json", "pass": 32, "fail": 0, "skip": 0, "cancelled": 0, "exitCode": 0},
+    {"receiptPath": "extra-adversarial-edges/receipt.json", "pass": 13, "fail": 1, "skip": 0, "cancelled": 0, "exitCode": 1}
+  ],
+  "previousPolicyFindingFixed": true,
+  "fixtureAssertionsUnchanged": true,
+  "sourceStable": true,
+  "trackedAndUntrackedClean": true,
+  "sourceWrites": false,
+  "realProviderInvoked": false,
+  "realCredentialsRead": false,
+  "realDockerOrOpenSSLInvoked": false,
+  "githubOrCanonicalMutation": false,
+  "actualCurrentLinuxCIClaimedPass": false,
+  "fullControllerGreenClaimed": false,
+  "postClaudeApproval": false,
+  "releaseAuthorized": false,
+  "historyAndBudgetsUnchanged": true
+}

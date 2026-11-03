@@ -1,0 +1,44 @@
+# Independent combined repair QA — scoped pass at 5139ddfc
+
+Actual independent reviewer: `/root/auth_expiry_final_qa`.
+Source: `5139ddfc623f4d9483d7616394e24357bb0a355d`.
+Tree: `5c947afd7f49ba0c71963d6b7f9c996e6436403d`.
+Index digest: `d3ee82d5ed6484fb0bfdb26e87d04e7e4fc508617800a612c66c54a55cb61a44`.
+Checkout: `C:/w-rv/review-capacity-combined-qa2-20261103`.
+
+## Verdict and source identity
+
+PASS for the requested offline combined repair QA. Findings: none. This is before-own-Max evidence, not post-Claude final approval, actual Linux/native qualification, exact-head CI approval, protected release authorization or demo restoration.
+
+Root sequentially reassigned the completed, idle QA2 checkout from4c8 to this new frozen commit, checking it clean before/after. This review began only after that explicit reassignment. All old4c8 reports, receipts, failure logs and immutable commit bytes remain unchanged. No result has been rebound to the newer source.
+
+The current source is fully clean before and after both independent executions, including untracked status and exact index digest. The complete46-path changed manifest against trusted D2 binds immutable Git blobs, SHA-256 and sizes. Present source/test files are byte-equal to those blobs; historical packet artifacts omitted by sparse checkout are explicitly recorded as Git-only, not claimed present locally. Only session.mjs and session.test.mjs differ from4c8; the other44 changed blobs, including the certificate FIFO repair, are byte-identical. Historical round-one packet reports remain historical, not current implementation claims.
+
+## Actual independent executions
+
+- `all-proper-eighteen`: 174 tests, 171 PASS, 3 explicit Linux SKIP, zero failures/cancellations. All eighteen exact suite paths exist and appear individually in the receipt.
+- `unchanged-private-reproofs`: 46/46 PASS, zero failures/skips/cancellations. These are the prior32 reproduction assertions plus the prior14 stronger edges, including the exact liveness assertion that failed at4c8. Only immutable expected SHA and private output paths were changed. Reverse transforms are exact; no assertion was weakened, deleted or skipped. The already-correct per-invocation isLive fixture is unchanged.
+
+All tests use trusted D2 createRunner in credential-stripped verification mode. Exact commands, timestamps, clean source/index before/after, stdout/stderr/receipt hashes, private fixture hashes and full source manifests are in `execution-evidence.json`. These are synthetic process/provider/controller fixtures and one bounded local-loopback server, not actual native Claude or external provider requests. No npm install, UI/browser/app execution was needed for this internal pipeline task.
+
+## Repair verification
+
+Read the entire two-file delta and checked the actual trusted forward path. startRuntime now receives a frozen data facade; its stage wrapper captures the original candidate forward and seal, and the actual state-owned forward first synchronously checks policy.ready, runtime.isLive and the deadline. This happens after state.release's asynchronous claim-validator await, not merely before that await. It then invokes the captured trusted proxy forward without an intervening await. The unchanged proxy forward creates its Promise with a synchronous executor, constructs fixed official HTTPS options and calls request.end(body) in that same synchronous path. Request framing is reconstructed by Node as previously disclosed; this does not claim byte-identical raw wire headers.
+
+The previously failing queued liveness change now yields zero forwards and terminal rejection. The previous nested-policy race remains zero-forward. All nine policy poison/pending/invalid-UTF8 variations at microtask depths0/1/2 still block before forward. Existing synchronous policy invalidation continues to fail the state gate and immediately invoke proxy cancellation. The one-shot state retains irreversible attempt spending and no retry/refund on failed admission after claim.
+
+The original SIGTERM-ignoring-child timeout, startup timeout and optional-evidence wrapper regressions remain green under unchanged private assertions. Runtime stop marks liveness false, signal escalation/failed completion remain bounded, observed-ID removal is deduplicated, and the new final guard rejects even during the completion grace window. Optional staging retains its live mandatory body, complete required source/context, actual wrapper accounting, final exact capacity gate and private-minted capacity-only fallback classification. Policy/auth/unknown failures do not authorize fallback. The canonical mandatory-evidence marker, classic/native-required refusal, recovery isolation, complete source/feedback/actor/claim fencing and explicit main/manual exact PR/SHA workflow assertions remain covered by the real eighteen-suite replay.
+
+The four certificate pipeline argv/env/stdin/failure/overflow edge tests still pass, without running Bash/OpenSSL. The certificate source is unchanged from4c8: fixed quoted positional Bash pipeline, explicit environment, detached process group, stdin-only key buffers, no private-key files/argv/env, fixed sanitized errors and bounded capture. No new certificate or egress policy loosening is introduced by this repair.
+
+## Evidence and release limits remain explicit
+
+This Windows run explicitly skips actual Linux OpenSSL chain, real Unix CONNECT/TLS and controlled Docker network escape tests. Parent reports older source10000045 Linux CI proved the controlled positive TCP/DNS comparison while failing the two certificate-dependent tests; that older run is not relabeled green. Parent reports4c8 Linux CI still running at assignment. This reviewer made no GitHub call and does not claim a later status, a current5139 Linux full pass or authentic native qualification. Certificate/runtime source equivalence permits precise evidence comparison, not a whole-head CI claim. Actual Linux proof and exact final CI remain required.
+
+Prior combined2 evidence independently verified root-retained Windows full baseline/source10000045 log hashes and equal195 distinct failed-name sets (194 failures each); both full runs remained non-green. Those root runs were not independently executed here and are not current5139 full-run evidence. A matching baseline is not a waiver or proof that every failure is Windows-only. Historical mixed-source/incorrect-selector evidence is not used for this pass.
+
+All prior blocked reports and the private fixture-adapter failure remain retained rather than rewritten. Public temporary-directory lifecycle and real process/TLS cleanup behavior are not newly established by synthetic tests; no broad cleanup or Linux proof is invented. The integrated real caller still must provide genuine policy/account/binary/image/source evidence and full current-packet/headroom admission before activation. The observed native128000 default is never renamed to the actual enforced32k request cap.
+
+No real provider/OAuth/credential access, native Claude, Docker/OpenSSL execution, GitHub/controller/canonical mutation, source edit, main-worktree write, commit/push/merge/deploy, production action, clinical access or issue closure occurred in this QA. All generated files are confined to `C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3`.
+
+This scoped pass may serve as offline independent QA evidence only. It does not authorize self-qualification, a new review/app allowance, automatic release, or closing the auth task. Genuine old-worker Max review, exact CI, post-Claude independent final QA, protected release and actual online restoration remain separate pending gates. Existing technical/auth history, implementation/review counters, app source31 and no-automatic-merge/deploy hold are unchanged. No final-qa-agent-result approval is emitted.

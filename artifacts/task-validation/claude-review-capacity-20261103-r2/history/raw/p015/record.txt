@@ -1,0 +1,51 @@
+# Independent protocol QA — scoped pass, not native qualification
+
+Reviewer: actual independent agent `/root/auth_expiry_final_qa`.
+Source: `869ffe9611c14ee72c77d681f789bb3bb52acda6`.
+Tree: `71257c85936d2183b4d173dcde5f15253410341d`.
+Base: optional-evidence correction `fa6078769e1c390562a94cb89130338ae2a5e862`.
+Checkout: `C:/w-rv/review-capacity-r2-author20261103` (read only).
+
+## Conclusion
+
+PASS for the four pure protocol modules and four associated test files at this exact source. No concrete defect was reproduced. This is not post-Claude final approval, a combined-round freeze, genuine Max qualification, or release authorization. The integration/runtime work is outside this verdict.
+
+The checkout was fully clean before and after execution. All eight changed local files were byte-compared to immutable Git blobs, matched the author's manifest, and are individually bound by SHA-256 in `execution-evidence.json`. No source or generated file was written inside the checkout. No tracked AGENTS.md exists in this source; the supplied project ownership and safety instructions were retained. Read-only internal QA did not require a source-changing skill or delegation.
+
+## Actual independent execution
+
+All runs used trusted D2 `createRunner`, `envMode: verification`, and built-in Node tests. The exact commands, timestamps, source/tree, exit status, stdout/stderr hashes, and clean-source checks are in each receipt.
+
+- `replay-twelve`: 121/121 PASS, zero failed/skipped/cancelled. This independently reran the twelve files explicitly listed in the author's clean-regression receipt: four native suites plus capacity, worker, recovery, recovery transport/source/qualification, evidence and activation suites.
+- `independent-adversarial-expanded`: 50/50 PASS, zero failed/skipped/cancelled. The separately written private adversarial test file is retained and hashed. The earlier 44-case run is also retained, but overlaps these 50 and is not counted again.
+- `git diff --check` against the optional-fix base: PASS.
+
+The 171 distinct current test cases are synthetic, not actual provider/CLI requests. No npm install, browser, Docker, network probe, provider call, OAuth access, GitHub mutation, canonical claim, main-worktree write, merge or deployment occurred.
+
+## Adversarial review and evidence
+
+Read all four complete modules and four native test files, the root round-two plan/path claims, guarded-proxy architecture, author report/result, retained TDD receipts/logs, and relevant optional-selection correction. The requested `canonical-native-r2-path-claims.json` filename was absent; the supplied directory contains `native-r2-path-claims.json` with the expected reservation nonce `3bee1059-1e8f-4448-8ae5-bfb1f8fbe9d9` and exact eight protocol/test paths. This filename discrepancy was reported, not silently treated as new authority.
+
+JSON checks cover decoded/escaped and nested duplicates, prototype/control names, fatal invalid UTF8, BOM, unpaired surrogates, unsafe/nonfinite numbers, raw controls, bounded nesting/nodes/strings/bytes, and recursively frozen output. Errors are fixed diagnostics rather than echoed source.
+
+Request checks cover exact complete input/schema/model, actual body max_tokens, unknown context/helper/media keys, unique raw header names, conflicting/encoded lengths, header controls, auth alternatives, unknown hosts/queries/absolute targets, and prohibited framing/compression. The independent accounting test reconstructs the wrapper and separately measures every admitted text/schema/wrapper byte, including system blocks, additional exactly pinned user blocks, tool description, cache metadata, user metadata, thinking and effort. Unicode exact-boundary and plus-one cases pass/reject respectively. Outer JSON is decoded once; embedded source-packet escapes stay model-visible. The 65,536 margin is unchanged. The admitted actual request cap is not represented as a changed observed native 128,000 default.
+
+Response checks cover byte-by-byte chunking, copied chunk aliases, strict JSON/SSE ordering and unknown fields, duplicate decoded usage keys, duplicate terminal/start events, post-stop data, tool/model/schema/CLI mismatch, missing/truncated output, cumulative/decreasing/over-cap usage, server tools, and bounded buffers. Independent nonempty-thinking tests verify signature ordering, missing/duplicate signatures, forbidden late thinking, and cap overflow. Thinking/signature content does not enter returned proof. A successful report must be the one reconstructed StructuredOutput with exact subject SHA and semantic CLI equality.
+
+State checks cover detached nested seals/claims, parent-only identity handles, spending before awaiting the claim fence, racing second staging/release, false/throwing claims, uncertain forwarding, and late retry poisoning. The private adversarial tests independently confirm zero forwards when a second request arrives during an awaiting claim fence and no refund/second forward after rejection or a completed first forward.
+
+The optional-selection fix is preserved, not reverted by this eight-file addition. Its existing tests were independently rerun: mandatory context is admitted before optional completion; actual qualified residual budget selects optional evidence; omission metadata and full required source remain intact; normal and recovery paths retain pre-claim checks and history. This does not establish final current-demo packet fit.
+
+## TDD provenance distinction
+
+The retained author red log is hash-consistent with its receipt: 12 tests, zero pass, 12 failures against intentionally unimplemented protocol skeletons. Its recorded HEAD is the dirty base `fa607876...`, explicitly not an immutable red-source identity. The subsequently preserved red commit `8b7d5cd6aa7f791b215412db7d41d27e4fdaa21a` contains the four `native-protocol-not-implemented` skeletons and initial tests; its eight blobs are separately inventoried here. This is author TDD evidence, not an independently rerun baseline or a demonstrated regression in previously released native behavior. The author's green 121-test log/receipt hashes also match; the independent clean replay above is the basis of this QA pass.
+
+## Mandatory composition and release limits
+
+The pure APIs deliberately do not establish complete mediation by themselves. In particular, the request API only exact-pins system/tool-description context when the trusted caller supplies those pins; unpinned system/description is bounded and counted, not independently authenticated. OAuth-value equality, official upstream TLS/destination, immutable captured original forwarding bytes, policy settlement, and the real owned-claim/source/actor fence are delegated to the integrated proxy/session. The CLI report's original bytes must be strictly parsed before normalization, the response guard must use the staged actual cap/model/schema, and final state must be checked after process exit/late attempts: an already resolved completion does not erase later FAILED state. No integrated guarantee is inferred from these modules passing.
+
+Still pending: independent review/tests of integrated runtime/session and complete-mediation router; actual Linux namespace/socket/escape/concurrency qualification; real managed-policy settlement and native account/profile metadata; actual complete current-size plus explicit future-CI-headroom body admission; genuine HTTP/SSE/CLI equivalence on approved trusted main; exact final CI; genuine old-worker Max review; subsequent independent final QA and protected release authority. No approval or final-qa-agent-result file is emitted here.
+
+The prior actual Max round-one changes-requested history and all technical/auth allowance history remain intact. The prior demo packet lower bound 830,937 bytes exceeded the historical 802,924 dynamic allowance; this protocol-only pass neither proves a later authentic guarded request will fit nor restores demo authentication. No automatic merge/deploy, issue closure, production action, or budget reset is authorized or claimed.
+
+Evidence: `execution-evidence.json`, the three private run directories and `adversarial.test.mjs` in this report's directory. Findings: none within this exact pure-protocol scope.

@@ -1,0 +1,124 @@
+# Independent read-only QA: root integration at2104432d
+
+Verdict: FAIL. Four actionable items remain on this exact frozen source. This is
+independent QA of the nine ROOT-AUTHORED integration files, not independent
+approval of the protocol modules I authored earlier, not post-Claude/final-native
+QA, and not proof of an actual Max/Linux/native qualification or online result.
+
+Source:2104432d52388c612c7dc8355f7d394367e50f47.
+Tree:e408631855dd48d630c682f6a0cd6276eced352e.
+Integration parent:72016415066b7bef9b63cc89293102ee13624022.
+Dedicated detached checkout:C:/w-rv/review-capacity-session-qa-20261103.
+Clean status checked before and after; no tracked or untracked source edits.
+Reports, runner and added reproduction tests exist only in this private QA folder.
+
+## Reproduced findings
+
+### P1: policy can become invalid during the asynchronous claim fence yet source forwards
+
+File:agent-team/src/bug-pipeline/native-guard-session.mjs, line111.
+
+The state validator checks policy.ready before awaiting the supplied claim
+validator, but not again after that await. onDiagnostic poisons the policy barrier
+without poisoning the state gate. A policy change received while claim validation
+is suspended therefore leaves the state RELEASED and permits its captured
+upstream forward. The final session policy check rejects the outcome only after
+the source has already crossed the forbidden boundary.
+
+Private test1 supplies a real staged request through validateNativeRequest and
+the actual state module. Its asynchronous claim validator yields, emits the late
+policy-change diagnostic, then returns true. Expected synthetic forwards:0;
+actual:1. The release eventually fails, but that does not undo the forward.
+
+Required repair: recheck policy/liveness immediately after each awaited claim
+fence and before forwarding, and synchronously poison/cancel the source gate on
+late invalid policy. Preserve the one-attempt/no-refund behavior. Root reported a
+later fix elsewhere; this QA has NOT verified that newer source.
+
+### P2: session deadline does not bound startup
+
+File:agent-team/src/bug-pipeline/native-guard-session.mjs, line141.
+
+runtime=await startRuntime is outside any expired race. If startup never resolves,
+the timer rejects the internal ready/expired promises, but the outer session
+remains suspended forever awaiting startup. Private test2 sets timeout20ms and a
+never-resolving synthetic startRuntime. After80ms the session is still pending,
+not rejected. No real runtime/container/provider was started.
+
+Required repair: bound startup itself with the same lifetime, cancel/close any
+late-arriving runtime, and make cleanup idempotent/awaited without discarding its
+failure. The claim/forward must remain unavailable after expiry.
+
+### P2: guarded optional selection repeats the original capacity regression
+
+File:agent-team/src/bug-pipeline/native-guard-session.mjs, line384.
+
+The new stager selects optional evidence against a budget that reserves prompt,
+schema, native margin and32k output, but no measured native wrapper context. Its
+subsequent complete native request can therefore exceed the gate solely because
+optional reports filled that unreserved space, blocking an otherwise fitting
+required review instead of recording bounded omissions.
+
+Private test3 uses the actual source reader with215,000-byte before/after bodies
+for two files, required documents, a25,000-byte optional report, and a bounded
+16KiB synthetic native system wrapper. Required-only staging succeeds and is
+closed with zero claims/forwards. Adding the deferred optional completion makes
+the same stager reject. The fixture is synthetic; the defect is the calculator,
+not a claim about actual native wrapper size.
+
+Required repair: use source-bound qualified/measured wrapper accounting when
+selecting optional reports, retain every required source/context byte, and keep
+the final exact native gate. No fake fit, default128k relabel, or guard weakening.
+
+### P2: expanded workflow leaves an existing required regression red
+
+Files:.github/workflows/claude-cloud-review.yml, line14;
+agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs, line221.
+
+The actual all18-suite replay fails the existing exact option-list assertion
+because the workflow now adds qualify-native/native-review. The additional modes
+are intentional, but the old assertion was not reconciled. Preserve its original
+trusted-main/manual-recovery/permission/concurrency fences while adding stronger
+assertions that native modes remain explicit and exact-PR/SHA bounded; do not
+delete or disable the assertion merely to make the suite green.
+
+## Actual independent execution
+
+Trusted D2 createRunner in verification mode, credential-stripped. Every requested
+test file was verified present in this exact checkout. All source/controller/
+model/request interactions are synthetic. The legacy isolation test launches a
+fake local CLI script, not native Claude. No real OAuth/credential read, Max,
+provider, Docker, OpenSSL, GitHub/canonical mutation, deploy or patient access.
+
+- independent-all18:156 total,152 PASS,1 FAIL,3 SKIP. The three skipped tests
+  require Linux: actual certificate chain generation, Docker isolation/escape,
+  and real CONNECT/TLS transport. Windows cannot establish these proofs.
+- independent-session-repros:3 total,0 PASS,3 FAIL. These are deliberately
+  failing regression assertions corresponding to the three behavioral findings
+  above, not harness/import failures. Full logs/receipts retained unmodified.
+- Reproduction file SHA256:
+  2d9eb3c7482501c3567144804a7e18efa34fd97bf073c56a8ebaf41a2ada2f7b.
+
+## Positive inspected properties (not an approval)
+
+Normal guarded source is staged before canonical claim; the actual returned claim
+transition is checked again before release. The native-required marker prevents
+legacy normal and explicit recovery fallback. Source completion validates fixed
+context and tracked-set identity. Final CLI JSON uses duplicate-aware parsing;
+successful result type/subtype and upstream StructuredOutput equality are checked.
+Final state requires RELEASED/one attempt/forwarded and genuine128k default
+metadata is not renamed32k. Qualification uses synthetic current-size+40KiB input,
+explicit trusted-main dispatch, reviewed source/binary/image fingerprints and
+genuine transport proofs in its real caller. Unit receipts remain fixtures.
+Workflow native activation is explicit/manual; scheduled/default review is still
+the old path. These positive properties do not cancel the reproduced defects.
+
+## Remaining limits
+
+Runtime modules in210 are the original dependency blobs listed in qa-result.json.
+Parent reported two separately owned runtime findings under correction; no claim
+that those are fixed is made here. No real native/header/body/policy eligibility
+or Linux escape qualification was authorized/executed. New frozen combined source,
+all real CI files, independent rerun, actual old-worker Claude review and protected
+final gates remain mandatory. Preserve this failed210 QA history rather than
+relabel it when later fixes pass. No counters, history or allowances changed.

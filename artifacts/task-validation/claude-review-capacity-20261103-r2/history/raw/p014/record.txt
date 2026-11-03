@@ -1,0 +1,601 @@
+{
+  "independent": true,
+  "reviewer": "auth_expiry_final_qa",
+  "before": {
+    "sourceSha": "5139ddfc623f4d9483d7616394e24357bb0a355d",
+    "tree": "5c947afd7f49ba0c71963d6b7f9c996e6436403d",
+    "indexSha256": "d3ee82d5ed6484fb0bfdb26e87d04e7e4fc508617800a612c66c54a55cb61a44"
+  },
+  "after": {
+    "sourceSha": "5139ddfc623f4d9483d7616394e24357bb0a355d",
+    "tree": "5c947afd7f49ba0c71963d6b7f9c996e6436403d",
+    "indexSha256": "d3ee82d5ed6484fb0bfdb26e87d04e7e4fc508617800a612c66c54a55cb61a44"
+  },
+  "sourceStable": true,
+  "baseSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+  "priorSha": "4c8beb83c6ea11ba286f33372bf76ba1814c3770",
+  "changedBlobsFromPrior": [
+    "agent-team/src/bug-pipeline/native-guard-session.mjs",
+    "agent-team/tests/bug-pipeline/native-guard-session.test.mjs"
+  ],
+  "otherChangedBlobsByteIdenticalToPrior": 44,
+  "manifest": [
+    {
+      "gitBlob": "7841948070e7cc8abb3da651e0af5b54e59df176",
+      "path": ".github/workflows/claude-cloud-review.yml",
+      "sha256": "df418849427d26f07b0c7f96b05f29e458ee4fabe32cad307e76859fe416dd31",
+      "bytes": 5109,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "3bd23f7571d468c4080e3ac6d004fea53142ad71",
+      "path": "agent-team/src/bug-pipeline/cloud-review-capacity.mjs",
+      "sha256": "7551f184bdce36251a8617e91193b6d8d99900034bb1acf6b26523e1d62e1845",
+      "bytes": 2173,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "44882de8fc51e1aa8b79bdc837a9c84ac6e6535e",
+      "path": "agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs",
+      "sha256": "90c762d2dd5c3a47ab183241548117ceee19b45b8f96f39c38e973a77bf67a4f",
+      "bytes": 7454,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "4f09cd3577b16f137a51aef769fc36b6a571379a",
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "sha256": "f014ef6f7e5620fe2320696592072f1b0b337b06df56e422730cb0641b763bb0",
+      "bytes": 40042,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "b93cabddd6ed1f2601cbd10e8c8d5337038c033f",
+      "path": "agent-team/src/bug-pipeline/native-guard-certificates.mjs",
+      "sha256": "e29ef98c80adbb078ad64b78d61fb98d4643724b2c66bb6135cd06a5c6ad0c33",
+      "bytes": 6956,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "68bbfa935b3b36ff1cc639a4517bc9d9e6cd33eb",
+      "path": "agent-team/src/bug-pipeline/native-guard-container.mjs",
+      "sha256": "402a030b7eaaf36d3851dbbcc7348db335fce5022ed3e4591505f4983a3e89d9",
+      "bytes": 14033,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "09ba073b5700006957ecaa03b3ea4b9b12dc40cf",
+      "path": "agent-team/src/bug-pipeline/native-guard-json.mjs",
+      "sha256": "b1aa5d5c4b01d2458f17a2b399c419eb33733219425bc5025638f5ef97bf7302",
+      "bytes": 4299,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "6adcd03dd560e29cbb2b346f652479de062625bd",
+      "path": "agent-team/src/bug-pipeline/native-guard-launcher.mjs",
+      "sha256": "0df0f48cf981b885b90b566c4f811e8bc0234e7f5ab479ea0213afacc6a08c20",
+      "bytes": 6293,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "2f27849acb6e35506c268e212d534df695d7ee7f",
+      "path": "agent-team/src/bug-pipeline/native-guard-proxy.mjs",
+      "sha256": "18d6c18b73e5df87b4ef86e24dc0df9adc3be9437d70ee9215776684554db7d5",
+      "bytes": 13473,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "78ba0bf4fcd87cbb76a41df5f093e73c7626d668",
+      "path": "agent-team/src/bug-pipeline/native-guard-qualification.mjs",
+      "sha256": "e73ffc7f05909d45eff38e42d2a0a114befe9138e64e2653b213dbcfd4c69690",
+      "bytes": 12869,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "67b8841c0c8c11156ed4fe6a26feac6a5bf5b70b",
+      "path": "agent-team/src/bug-pipeline/native-guard-request.mjs",
+      "sha256": "89d6f4ede6756870f9769e469c69a772a4f3d0d6c7ae7355b72ffd9e5190aa07",
+      "bytes": 10478,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "747a1c6db5d4e18e8e7a6786c03fbe93f8eefbc4",
+      "path": "agent-team/src/bug-pipeline/native-guard-response.mjs",
+      "sha256": "8774a289af7aeee476aab35b1eab82c414985127a0dec695b69b734045fa68fe",
+      "bytes": 14145,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "1bc3bed2ac42f2dc6552b216795e49d4ee8098fd",
+      "path": "agent-team/src/bug-pipeline/native-guard-session.mjs",
+      "sha256": "7a109419a1aef59c01a423ce32f4458e25730928bd7406dc230bfa515c89ff07",
+      "bytes": 16332,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "119bc48473277bdb8babd7f24754506c76d6e21b",
+      "path": "agent-team/src/bug-pipeline/native-guard-state.mjs",
+      "sha256": "08719cdb6645144f5a524e2e2ef48ee66be5b33a43cdf49e02ece033c436a7ce",
+      "bytes": 2367,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "816a772a9f6de1c071eed1a02a3d7a18465048a4",
+      "path": "agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs",
+      "sha256": "17dc230486dc5ca9b5fa18d5caa2a9b1ebe2cca81b75cc3e05b9f41759613968",
+      "bytes": 9204,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "fd08e0d2ab9c487f33cd34d682478289f4929bf2",
+      "path": "agent-team/tests/bug-pipeline/cloud-review-capacity-fixture.mjs",
+      "sha256": "960810915d4db10991d78a40b2672457d91b33d3997c9665636ad4837e21ecb7",
+      "bytes": 7981,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "f8c7d330f5d2221657dadead130bfb2f1ff8f284",
+      "path": "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+      "sha256": "66091e19f6129ade28950f527521ca3f09e56d76eb3479ebe35545aae5072aac",
+      "bytes": 6794,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "4840a83a20cfb9672ff05b24690d4b3d65e3291e",
+      "path": "agent-team/tests/bug-pipeline/cloud-review-evidence.test.mjs",
+      "sha256": "1dbfa97d15da0988c78e0caf223432caccb31795a102345961a103cd12bd7179",
+      "bytes": 12718,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "889359e9ac7f4da4eeb8b8978b57a935e7b9d843",
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "sha256": "7d4a39e12f07347c5fdcf32441ade2095a9a3c4714ef362a5b0cdfa2fe4ccd4b",
+      "bytes": 42967,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "d7738e59f6d6f6ab357122e2d79add98b2b9d5d8",
+      "path": "agent-team/tests/bug-pipeline/native-guard-certificates.test.mjs",
+      "sha256": "55de246a854bb6448a23c9ce7f777a4af70d7cd248aebf305324b438a98d6451",
+      "bytes": 3821,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "384138f62169efaead9ba293fcfa3791b385d39e",
+      "path": "agent-team/tests/bug-pipeline/native-guard-container.test.mjs",
+      "sha256": "b9c4ceffd4572fb1ffe2e89d52fe20f7f0f6097f010d70ab215e182acad95bb0",
+      "bytes": 17922,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "43ed0250093013b7a61075f8dde58033fde542d6",
+      "path": "agent-team/tests/bug-pipeline/native-guard-json.test.mjs",
+      "sha256": "2de44609df603df43956abebad536af11ba0cd8b0934ee1f11ac4a745f00f145",
+      "bytes": 1960,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "89c1b2ac090864c8e24e00d433e0d7eaca4cac1c",
+      "path": "agent-team/tests/bug-pipeline/native-guard-launcher.test.mjs",
+      "sha256": "4a64b0f4c322f1c60fff76171e85e8b7d89293c401c9840d41404d484ac99dc0",
+      "bytes": 2827,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "74ec804386229cf3cfb049f8c31eb35674ce262a",
+      "path": "agent-team/tests/bug-pipeline/native-guard-proxy.test.mjs",
+      "sha256": "45c6bc61c93524b349ac18fe3315c2615d1d0aa488ee49c1f4c783531042b99b",
+      "bytes": 11709,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "2759ac1d9b97c2cb335ca839a510c6a05a6be3fd",
+      "path": "agent-team/tests/bug-pipeline/native-guard-qualification.test.mjs",
+      "sha256": "f2b1b72842a9866aba5cc06f20c927d9faadd395efc092053f20d8cb0afaf768",
+      "bytes": 4699,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "ec2d23069393329137083477fcb3959ec90fb438",
+      "path": "agent-team/tests/bug-pipeline/native-guard-request.test.mjs",
+      "sha256": "724bf33710638aab1097f66d8f3c085335667dd1dc5b48c9edba09a2d9bfa62c",
+      "bytes": 12621,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "61028adecd5ca3a4b2ae5dac6a8628c7cfe83fbf",
+      "path": "agent-team/tests/bug-pipeline/native-guard-response.test.mjs",
+      "sha256": "e800753047f3f07891d4aa701a5c6b824041120fb547ef4233524489b9af5c77",
+      "bytes": 6516,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "f9f618513429a959400f5285ead670adb05e59d9",
+      "path": "agent-team/tests/bug-pipeline/native-guard-session.test.mjs",
+      "sha256": "fa1740e0d36fe070d10ceae9e8d41dcb42cf6940acc1be22f91842884856c094",
+      "bytes": 16277,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "9ecf63ceb57e5a5c37b851be724b875f08de1919",
+      "path": "agent-team/tests/bug-pipeline/native-guard-state.test.mjs",
+      "sha256": "244d7d12bb8a0b81f32b0ea3e991d410cea720e9bf02546c16d1240688d264ce",
+      "bytes": 4478,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    },
+    {
+      "gitBlob": "0da1bdd97e503a8239022ca5ed651e8c43a37794",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/analysis.md",
+      "sha256": "fe41618b6ed7c8f4cffe948945044a01d0ca7d016be3883e4ae41814e55a236e",
+      "bytes": 943,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "85907df4fe731693d364e37dba5f1ef8568ce10a",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/checks/green-capacity-formatted/receipt.json",
+      "sha256": "314704b664d5fffe7191459bbcb873380d995f78a04e8fe14a0a2c43fdb42bf4",
+      "bytes": 997,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/checks/green-capacity-formatted/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "5c2b3e409c39ac66aada6c90e466d11c4a67a01a",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/checks/green-capacity-formatted/stdout.log",
+      "sha256": "b67f4de2c03a627c86b349fc557cda50f894244a913998d6989504a927988642",
+      "bytes": 8884,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "3a13b2dbed137eeb0fd67c48f1c48d027e602c73",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/checks/red-complete-context-fixture-valid/receipt.json",
+      "sha256": "dc40a4df223144e0ed42a718a09d0c8a0e3df8b12185a9da7b609f2cd780955b",
+      "bytes": 660,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/checks/red-complete-context-fixture-valid/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "43f309b3db76fa7ac6c0e49dc6fecc416289cbb7",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/checks/red-complete-context-fixture-valid/stdout.log",
+      "sha256": "63b4ee42de41e01f0fa948cad49c8ec21f191b2efd13f88d601eeeeb7597bd2e",
+      "bytes": 6356,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "b212406e71835b73ff110b9125defd5c17bb7c32",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/implementation-plan.md",
+      "sha256": "fe7875ea6f6c64f0536074d379132c94230c1327ece45a60ae952228b6761038",
+      "bytes": 1076,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "c2f21520aef9f59f90e808a0a15b1f3acc104447",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/imported-history.json",
+      "sha256": "30dfe9b4651491775b6f136d82d219bb716c8870e92167cfd927c1c523deb488",
+      "bytes": 2907,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "d4dcd6c1c9766983a8c49bd38e00ca89fe474eaa",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/qa-report.md",
+      "sha256": "76b88a52170163a9dae40ea1268e269021bfa20a2bfd10844143174f6cb53b9e",
+      "bytes": 8740,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "dcb32496c820c261e1446fd504843aabfe3c9c5d",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/qa-seal.json",
+      "sha256": "55947d59bfb57d2e36b4f9b505a94bacf21db40fd97f14fac49dbcbafd7db3fa",
+      "bytes": 11481,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "212a9635742298d9f6c7a0bd46aed7c8b11e5fdc",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/review-cloud-review-recovery-worker-context-report.json",
+      "sha256": "e63acb60012ddbcf7fafb5355965a29d1a42f839838c11332ec8446bfa4822ec",
+      "bytes": 7563,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "247ecb76574741734cc5b7df85375384c1762a5d",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/review-comment-review-handoff-context-report.json",
+      "sha256": "b9299a7d2cef0bceec4377be1a441f738239023b6d0f47327364e606021e888b",
+      "bytes": 50506,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "dc1c169977b717f1964b73c254ccf266503c34a9",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/review-process-context-report.json",
+      "sha256": "bca3d364fb7c09c3615d672e3920a618615dc88d6a2d7a18c8b4c59222ae158b",
+      "bytes": 11115,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "0a4519ac64b5bea6bd4f839884ca3f52f97622de",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/task-contract.md",
+      "sha256": "420120cc06362b3c659c4cf87c6075088ad54ff159ee8e293c0ec17442f109f1",
+      "bytes": 3140,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "91d0b68db8e557b9b2d996b53cb9d81578d98a38",
+      "path": "artifacts/task-validation/claude-review-capacity-20261103/validation-report.md",
+      "sha256": "8c74fb47ffb5c13cf9b908c1f737a59ae08aaa0a3cffaa9b59b265e5f9118209",
+      "bytes": 1425,
+      "localByteEqual": false,
+      "sparseOmitted": true,
+      "historicalPacketArtifact": true
+    },
+    {
+      "gitBlob": "9d07bad6408193770896c6c4622515fac05c6010",
+      "path": "docs/architecture/native-guard-profile.md",
+      "sha256": "5b2d0dc187b9ab9acab5db9b627b37b8959e1a2a3cfb3705d7ce0026682fb030",
+      "bytes": 6828,
+      "localByteEqual": true,
+      "sparseOmitted": false,
+      "historicalPacketArtifact": false
+    }
+  ],
+  "receipts": [
+    {
+      "receiptPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/all-proper-eighteen/receipt.json",
+      "receiptSha256": "81a732e5a3317fe0d266bf4b148a2192811d9986804327aea4652fd332fb448c",
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "all-proper-eighteen",
+      "cwd": "C:/w-rv/review-capacity-combined-qa2-20261103",
+      "before": {
+        "sourceSha": "5139ddfc623f4d9483d7616394e24357bb0a355d",
+        "tree": "5c947afd7f49ba0c71963d6b7f9c996e6436403d",
+        "indexSha256": "d3ee82d5ed6484fb0bfdb26e87d04e7e4fc508617800a612c66c54a55cb61a44"
+      },
+      "after": {
+        "sourceSha": "5139ddfc623f4d9483d7616394e24357bb0a355d",
+        "tree": "5c947afd7f49ba0c71963d6b7f9c996e6436403d",
+        "indexSha256": "d3ee82d5ed6484fb0bfdb26e87d04e7e4fc508617800a612c66c54a55cb61a44"
+      },
+      "sourceStable": true,
+      "startedAt": "2026-11-03T16:12:42.181Z",
+      "finishedAt": "2026-11-03T16:12:43.716Z",
+      "args": [
+        "--test",
+        "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-review-recovery.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-recovery-source.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-recovery-qualification.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-review-evidence.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-review-activation.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-json.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-request.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-response.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-state.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-container.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-launcher.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-certificates.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-proxy.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-session.test.mjs",
+        "agent-team/tests/bug-pipeline/native-guard-qualification.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "stdoutSha256": "b88cd3a67158525e0c74d4ae919f397c7fa9b768af4b345172106d583e65cf9e",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "receiptPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/unchanged-private-reproofs/receipt.json",
+      "receiptSha256": "33d005b957c838d4743546258ca30461bb1ca5ec4f90f3727065ccbbb23a6212",
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "unchanged-private-reproofs",
+      "cwd": "C:/w-rv/review-capacity-combined-qa2-20261103",
+      "before": {
+        "sourceSha": "5139ddfc623f4d9483d7616394e24357bb0a355d",
+        "tree": "5c947afd7f49ba0c71963d6b7f9c996e6436403d",
+        "indexSha256": "d3ee82d5ed6484fb0bfdb26e87d04e7e4fc508617800a612c66c54a55cb61a44"
+      },
+      "after": {
+        "sourceSha": "5139ddfc623f4d9483d7616394e24357bb0a355d",
+        "tree": "5c947afd7f49ba0c71963d6b7f9c996e6436403d",
+        "indexSha256": "d3ee82d5ed6484fb0bfdb26e87d04e7e4fc508617800a612c66c54a55cb61a44"
+      },
+      "sourceStable": true,
+      "startedAt": "2026-11-03T16:12:44.135Z",
+      "finishedAt": "2026-11-03T16:12:44.916Z",
+      "args": [
+        "--test",
+        "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/runtime-reproofs.test.mjs",
+        "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/session-reproofs-per-runtime.test.mjs",
+        "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/policy-microtask-repro.test.mjs",
+        "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/extra-edges.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "stdoutSha256": "c7fab16c2ce59bcf91b6eaab884f1a6b8100e1107fb80a9e970851402bc8af65",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "privateFiles": [
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/run-check.mjs",
+      "sha256": "8cf3000dab0b09131c155dd8a49b6583d5cfe77ffb28eb572998ff4a9081819a",
+      "bytes": 2284
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/prepare-harness.mjs",
+      "sha256": "249c3c963edefcbf12f5b3170cf3d10cac132e522981cc2114a49ba88ff56c3c",
+      "bytes": 1445
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/runtime-reproofs.test.mjs",
+      "sha256": "dce8d994f0851d8347272a2082adb73bb5db485559ccd92d0e7a36bc693a635b",
+      "bytes": 7293
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/session-reproofs-per-runtime.test.mjs",
+      "sha256": "96b45625b24a6bd0e8a4e52e57186931e5d7ef4316c3d7cfb4e9f20b460c3809",
+      "bytes": 4482
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/policy-microtask-repro.test.mjs",
+      "sha256": "36c02a448a09d37990dbb2f7c634a0453e12cffcae1b20db95d56965ed69f60a",
+      "bytes": 2123
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/extra-edges.test.mjs",
+      "sha256": "514a336609b4e8f91560944f287d61b52e460dd1c96aa97a533884a00c22f999",
+      "bytes": 5787
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/fixture-transform-receipt.json",
+      "sha256": "665def49fb90a9fc5200ac1989e5b9b982cd7b2d1ff9078c7585e4d659befd37",
+      "bytes": 2945
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/collect-evidence.mjs",
+      "sha256": "75d50102129a03facee86d758350d9445d581682e0bd922ba68e01182aa5a471",
+      "bytes": 5270
+    }
+  ],
+  "references": [
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined2/report.md",
+      "sha256": "61f27e501a92482eda6b144ed74c9ef2e00221585b27fccd3525a6896916d529"
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined2/result.json",
+      "sha256": "6d4602a1b81c54f1cd6ecbf3b14fcea61b00c09ce0000fe51be969ae7625dfa7"
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined2/execution-evidence.json",
+      "sha256": "242383aebe050d9e8f467b9b5d8573b2c0fd71340852d871c405cd8f15e688b6"
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/source-s-ci-failures.json",
+      "sha256": "03b36bf7ff973f468b4d75f781745f40db8e8c4ab940ed3c0d0531363d146000"
+    },
+    {
+      "path": "C:/w-rv/tmp/review-capacity-20261103/full-local-source-bound-comparison.json",
+      "sha256": "a88ce4b41b68cf2307e778f71ae7b13a97438dcc26100d38134ebcd48fb0de0d"
+    }
+  ],
+  "fixtureReverseTransformsEqual": true,
+  "priorRetainedEvidenceSha256": "242383aebe050d9e8f467b9b5d8573b2c0fd71340852d871c405cd8f15e688b6",
+  "limitations": {
+    "actualCurrentLinuxCIClaimedPass": false,
+    "realProviderInvoked": false,
+    "realCredentialsRead": false,
+    "realDockerOrOpenSSLExecuted": false,
+    "githubOrCanonicalWrites": false,
+    "sourceWrites": false,
+    "postClaudeApproval": false
+  }
+}

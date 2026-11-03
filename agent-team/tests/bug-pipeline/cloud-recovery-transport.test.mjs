@@ -218,7 +218,27 @@ test('workflow recovery remains explicit and uses constant trusted entry with sa
     new URL('../../../.github/workflows/claude-cloud-review.yml', import.meta.url),
     'utf8',
   );
-  assert.ok(workflow.includes('options: [probe, review, recover]'));
+  const modes = /^\s*options:\s*\[([^\]]+)\]/m
+    .exec(workflow)?.[1]
+    .split(',')
+    .map((s) => s.trim());
+  assert.deepEqual(modes, ['probe', 'review', 'recover', 'qualify-native', 'native-review']);
+  for (const key of ['native_pr', 'native_sha']) assert.ok(workflow.includes(key + ':'));
+  const worker = await readFile(
+    new URL('../../src/bug-pipeline/cloud-review-worker.mjs', import.meta.url),
+    'utf8',
+  );
+  const qualification = await readFile(
+    new URL('../../src/bug-pipeline/native-guard-qualification.mjs', import.meta.url),
+    'utf8',
+  );
+  assert.ok(worker.includes('native.validateQualificationContext(isolatedEnv)'));
+  assert.ok(
+    worker.includes('onlySubject: { pr: Number(env.CLOUD_NATIVE_PR), sha: env.CLOUD_NATIVE_SHA }'),
+  );
+  assert.ok(qualification.includes("assert.equal(env.GITHUB_EVENT_NAME, 'workflow_dispatch')"));
+  assert.ok(qualification.includes("assert.equal(env.GITHUB_REF, 'refs/heads/main')"));
+  assert.ok(qualification.includes('assert.equal(env.GITHUB_WORKFLOW_SHA, env.GITHUB_SHA)'));
   for (const key of ['recovery_pr', 'recovery_sha', 'recovery_round', 'recovery_request_nonce'])
     assert.ok(workflow.includes(key + ':'));
   assert.ok(

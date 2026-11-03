@@ -1,0 +1,27 @@
+{
+  "readOnlyComparison": true,
+  "baselineSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+  "candidateSha": "10000045b9a7884ea970acba204459c5e2c4d889",
+  "baselineSummary": [
+    "ℹ tests 1797",
+    "ℹ pass 1602",
+    "ℹ fail 194",
+    "ℹ cancelled 0",
+    "ℹ skipped 1"
+  ],
+  "candidateSummary": [
+    "ℹ tests 1888",
+    "ℹ pass 1690",
+    "ℹ fail 194",
+    "ℹ cancelled 0",
+    "ℹ skipped 4"
+  ],
+  "baselineDistinctFailedNames": 195,
+  "candidateDistinctFailedNames": 195,
+  "candidateOnly": [],
+  "baselineOnly": [],
+  "noAssertionDisabled": true,
+  "localFullGreen": false,
+  "actualLinuxCIGreen": false,
+  "notes": "Compare real failed identities, not only counts. Original mixed-source run and wrong-selector subset are retained but not used as evidence."
+}

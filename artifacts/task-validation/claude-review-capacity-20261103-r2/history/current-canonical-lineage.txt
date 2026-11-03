@@ -1,0 +1,386 @@
+{
+  "at": "2026-11-03T16:45:13.267Z",
+  "provenance": "fresh authenticated canonical read; not review approval",
+  "sourceSha": "21cbfa5b90dcde75b076521278d1f1c6a95bbc08",
+  "baseSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+  "subject": {
+    "id": "standalone-pr-527",
+    "sha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+    "phase": "waiting-review",
+    "implementation": [
+      {
+        "round": 1,
+        "subjectSha": "b4f460fc8f4fc361d99a1f1bae3de64a2b14a29a",
+        "status": "passed",
+        "evidence": "validation-report.md"
+      }
+    ],
+    "reviews": [
+      {
+        "round": 1,
+        "status": "changes-requested",
+        "subjectSha": "7a53b9ccf323406f25acce676e3e64493523faf6"
+      }
+    ],
+    "reviewLedger": {
+      "schema_version": 1,
+      "max_rounds": 4,
+      "rounds": [
+        {
+          "round": 1,
+          "verdict": "changes-requested",
+          "subject_sha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+          "review_sha256": "907d75f20a77daf5833c5016d4a20f4a6ffe36245247f94c66ad08340a2befc2"
+        }
+      ]
+    },
+    "reviewReports": {
+      "claude-review-1.json": "{\n  \"subject_sha\": \"7a53b9ccf323406f25acce676e3e64493523faf6\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"This PR moves the dynamic capacity check into a pure `reviewCapacity` validator. The arithmetic is equivalent, the new safe-integer guards are stricter, and the check still runs before any claim on both the normal and recovery paths. Authentication, tool restrictions, source and blob bounds, ownership checks and round accounting are unchanged. The exact-boundary, one-byte-over, Unicode, recovery and pre-claim tests support most of the acceptance criteria.\\n\\nOne regression remains. The source reader uses the same `MAX_PACKET` value to decide whether to include optional evidence, and that value is now the static ceiling of 934,464 bytes. That ceiling can never be reached: any real prompt prefix, schema and output allowance push the actual admissible size well below it (about 806,464 bytes for prompt plus schema with a 128k output allowance). As a result, optional reports are now added until the packet passes the real limit, and the whole subject is blocked as capacity-unavailable. Before this change, those reports would have been omitted and the review would have proceeded. This contradicts the criterion that bounded evidence selection stays unchanged.\\n\\nI did not run any tests. The QA report and CI results come from the supplied evidence only.\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/cloud-review-worker.mjs\",\n      \"line\": 46,\n      \"problem\": \"`MAX_PACKET` now equals the static transport ceiling (qualified context minus native margin). The source reader also uses it in the optional-evidence check (current packet size plus twice the entry size compared with `MAX_PACKET`) and in its `bounded` assertion. Real admission also counts the trusted prompt prefix, the serialized schema and the observed output allowance, so any packet between the real limit and the static ceiling is always rejected. Optional analysis, review, QA and seal reports are now added until the packet is in that range, and then `prepareCloudInference` blocks the entire subject as capacity-unavailable. Before this change, the smaller cap caused those optional files to be listed in omittedTextEvidence and the review went ahead. So a candidate that used to be reviewable with documented omissions now cannot be reviewed at all, which contradicts acceptance criterion 3 (bounded evidence selection unchanged).\",\n      \"requested_change\": \"Keep the static transport ceiling only as the hard upper bound for assembling the packet. Use a separate, smaller budget for selecting optional evidence that leaves room for the prompt prefix, the schema and the output allowance, for example a conservative constant or a budget derived from the qualified profile, which would mean qualifying before retrieval. That way optional evidence is omitted (and recorded in omittedTextEvidence) before it can push an otherwise admissible packet over the real limit. Required contract, plan and validation files and source changes should still fail closed if they do not fit.\",\n      \"test_expectation\": \"Add a source-reader test with required source and contract content that fits the observed 128k-output profile, plus several optional report files whose combined size would exceed the real limit but stay under the static ceiling. Expected result: the reader omits the excess optional files, `prepareCloudInference` succeeds, and processCloudReview makes one claim and one model call. In the same fixture, if required content alone exceeds the real limit, the result must still be capacity-unavailable with no claim.\"\n    }\n  ]\n}\n"
+    },
+    "releaseHold": {
+      "code": "TECHNICAL_NO_AUTOMATIC_RELEASE",
+      "reason": "Separate technical PR requires real exact-head Max review and final Codex verification; no automatic merge or deployment from this subject. Original demo release remains separately gated."
+    },
+    "operatorCoordination": {
+      "schemaVersion": 1,
+      "active": true,
+      "owner": "codex-desktop-root-review-capacity",
+      "nonce": "d4f950b4-e7ad-4680-a7cf-e8f59415c84a",
+      "worktree": "C:/w-rv/review-capacity20261103",
+      "sourceSha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+      "stage": "technical-round2-authoring-real-Max-finding",
+      "startedAt": "2026-11-03T07:39:27.273Z",
+      "pendingImplementation": {
+        "round": 2,
+        "status": "reserved-authoring-not-yet-completed",
+        "budgetSource": "existing-default-four",
+        "defaultLimit": 4,
+        "baseSourceSha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+        "reviewRoundCorrected": 1,
+        "reviewReportSha256": "907d75f20a77daf5833c5016d4a20f4a6ffe36245247f94c66ad08340a2befc2",
+        "owner": "codex-desktop-root-review-capacity",
+        "delegate": "/root/auth_expiry_qa",
+        "nonce": "3bee1059-1e8f-4448-8ae5-bfb1f8fbe9d9",
+        "worktree": "C:/w-rv/review-capacity-r2-author20261103",
+        "branch": "codex/review-capacity-r2-author-20261103",
+        "paths": [
+          "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+          "agent-team/src/bug-pipeline/cloud-review-capacity.mjs",
+          "agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs",
+          "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+          "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+          "agent-team/tests/bug-pipeline/cloud-review-capacity-fixture.mjs",
+          "agent-team/tests/bug-pipeline/cloud-review-evidence.test.mjs"
+        ],
+        "reason": "Correct independently verified real Claude finding: optional evidence must not make otherwise admissible source/required evidence fail dynamic capacity. Preserve immutable-source retrieval-before-probe, required-content failure and shared normal/recovery preclaim gates.",
+        "actualUserAuthority": "Previously authorized separate technical repair with own tests, real Max review and iterative code corrections within default four; not authority for a new output/model/profile policy.",
+        "authBudgetsChanged": false,
+        "newAllowance": false,
+        "newNativeProfilePolicyAuthorized": false,
+        "merge": false,
+        "deploy": false,
+        "startedAt": "2026-11-03T07:58:25.217Z",
+        "pathClaimAmendment": {
+          "at": "2026-11-03T13:09:50.717Z",
+          "reason": "Keep each new/modified capacity test and fixture under500 lines without disabling assertions; explicit shared fixture and new regression suite.",
+          "newPaths": [
+            "agent-team/tests/bug-pipeline/cloud-review-capacity-fixture.mjs",
+            "agent-team/tests/bug-pipeline/cloud-review-evidence.test.mjs"
+          ],
+          "profilePolicyChange": false,
+          "additionalAllowance": false
+        },
+        "packetOutput": {
+          "at": "2026-11-03T16:26:30.890Z",
+          "path": "artifacts/task-validation/claude-review-capacity-20261103-r2",
+          "owner": "codex-desktop-root-review-capacity",
+          "ownerNonce": "d4f950b4-e7ad-4680-a7cf-e8f59415c84a",
+          "worktree": "C:/w-rv/review-capacity20261103",
+          "candidateSourceSha": "21cbfa5b90dcde75b076521278d1f1c6a95bbc08",
+          "round": 2,
+          "status": "reserved-not-frozen-or-adopted",
+          "previousPacket": "artifacts/task-validation/claude-review-capacity-20261103",
+          "historyImmutable": true,
+          "preservePriorImplementationEvidenceBytes": true,
+          "actualFinalHeadCIInCanonicalPlan": true,
+          "reviewSpent": 1,
+          "newAllowance": false,
+          "noAutomaticRelease": true
+        }
+      },
+      "nativeProfileQualificationAuthority": {
+        "at": "2026-11-03T13:02:24.846Z",
+        "reservation": {
+          "scope": "extend-527-to-qualify-complete-context-native-Max-profile",
+          "owner": "codex-desktop-root-review-capacity",
+          "ownerNonce": "d4f950b4-e7ad-4680-a7cf-e8f59415c84a",
+          "existingPendingTechnicalRound": 2,
+          "maximumQualifiedContextTokens": 1000000,
+          "nativeSafetyMarginPreserved": 65536,
+          "completeSourceAndCriticalContextRequired": true,
+          "authenticClaudeCodeMax": true,
+          "alternativeAPI": false,
+          "APIKeyFallback": false,
+          "trimProofs": false,
+          "newDemoAllowance": false,
+          "resetHistory": false,
+          "productionAuthorized": false,
+          "qualificationRequiredBeforeAppClaim": true,
+          "technicalOwnTestsCIRealMaxFinalReviewRequired": true,
+          "noAutomaticMerge": true,
+          "noAutomaticDeployment": true,
+          "note": "Actual bounded native-profile design and effective-limit proof still required. This grant is not approval of a 32k environment shortcut, a code version, model report, protected release or new app attempt."
+        },
+        "authorization": {
+          "provenance": "user-session",
+          "grantId": "desktop-527-native-profile-qualification-extension",
+          "consumptionNonce": "df8aee88-7d17-4fd3-8528-b07e886ad5e4",
+          "sourceRef": "user-session:20261103-authorize-native-full-context-profile-PR527",
+          "binding": {
+            "version": 1,
+            "repository": "l2v-hub/ClinicOS",
+            "collection": "standaloneReviews",
+            "entityId": "standalone-pr-527",
+            "pr": 527,
+            "reviewIssue": null,
+            "actor": "l2v-hub",
+            "action": "extend-technical-native-profile-scope",
+            "subjectSha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+            "historyDigest": "9d7a7d947247c82a7db85aa32c18207e259f56409fb65687ed781a5155e1c687",
+            "reservation": {
+              "scope": "extend-527-to-qualify-complete-context-native-Max-profile",
+              "owner": "codex-desktop-root-review-capacity",
+              "ownerNonce": "d4f950b4-e7ad-4680-a7cf-e8f59415c84a",
+              "existingPendingTechnicalRound": 2,
+              "maximumQualifiedContextTokens": 1000000,
+              "nativeSafetyMarginPreserved": 65536,
+              "completeSourceAndCriticalContextRequired": true,
+              "authenticClaudeCodeMax": true,
+              "alternativeAPI": false,
+              "APIKeyFallback": false,
+              "trimProofs": false,
+              "newDemoAllowance": false,
+              "resetHistory": false,
+              "productionAuthorized": false,
+              "qualificationRequiredBeforeAppClaim": true,
+              "technicalOwnTestsCIRealMaxFinalReviewRequired": true,
+              "noAutomaticMerge": true,
+              "noAutomaticDeployment": true,
+              "note": "Actual bounded native-profile design and effective-limit proof still required. This grant is not approval of a 32k environment shortcut, a code version, model report, protected release or new app attempt."
+            },
+            "budget": null
+          },
+          "bindingDigest": "a90244a34ebe757c19412524c4ca3b2ac42558e08f90fa0e6d433f56381d5b20"
+        },
+        "status": "authorized-design-and-qualification-not-yet-implemented-or-approved"
+      },
+      "nativePathClaims": {
+        "at": "2026-11-03T14:41:57.833Z",
+        "round": 2,
+        "nonce": "3bee1059-1e8f-4448-8ae5-bfb1f8fbe9d9",
+        "scopeGrant": "desktop-527-native-profile-qualification-extension",
+        "protocol": {
+          "owner": "/root/auth_expiry_qa",
+          "worktree": "C:/w-rv/review-capacity-r2-author20261103",
+          "paths": [
+            "agent-team/src/bug-pipeline/native-guard-json.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-json.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-request.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-request.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-response.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-response.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-state.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-state.test.mjs"
+          ]
+        },
+        "runtime": {
+          "owner": "/root/auth_expiry_ops",
+          "worktree": "C:/w-rv/review-capacity-native-runtime20261103",
+          "paths": [
+            "agent-team/src/bug-pipeline/native-guard-container.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-container.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-launcher.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-launcher.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-certificates.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-certificates.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-proxy.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-proxy.test.mjs"
+          ]
+        },
+        "integration": {
+          "owner": "codex-desktop-root-review-capacity",
+          "worktree": "C:/w-rv/review-capacity20261103",
+          "paths": [
+            "agent-team/src/bug-pipeline/native-guard-session.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-session.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-qualification.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-qualification.test.mjs",
+            "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+            "agent-team/src/bug-pipeline/cloud-review-capacity.mjs",
+            "agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs",
+            "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+            "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+            ".github/workflows/claude-cloud-review.yml",
+            "docs/architecture/native-guard-profile.md",
+            "agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs"
+          ]
+        },
+        "noRealOAuthOnCandidate": true,
+        "noNewAllowance": true,
+        "noAutomaticRelease": true
+      },
+      "nativeClaimAmendments": [
+        {
+          "at": "2026-11-03T15:26:23.295Z",
+          "subject": "standalone-pr-527",
+          "round": 2,
+          "nonce": "3bee1059-1e8f-4448-8ae5-bfb1f8fbe9d9",
+          "path": "agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs",
+          "reason": "Independent exact210 QA found genuine workflow option-list regression; preserve assertion and strengthen finite manual-only native-mode fences",
+          "budgetsChanged": false
+        }
+      ]
+    },
+    "adoption": {
+      "actor": "l2v-hub",
+      "at": "2026-11-03T07:38:31.967Z",
+      "subjectSha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+      "importedReviewCount": 0,
+      "manifestSha256": "98419bceb053cf2d99fe98f76f66250e434ef7bb723259987614b4766fe80669"
+    },
+    "reviewHandoffHistory": [
+      {
+        "at": "2026-11-03T07:40:44.050Z",
+        "actor": "l2v-hub",
+        "previous": null,
+        "recovery": false,
+        "spentReviews": 0
+      }
+    ],
+    "externalReview": {
+      "channel": "github-comments",
+      "status": "published",
+      "subjectSha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+      "requestId": "72fe42e2-3faa-4ca0-b22a-3c8b25c17581",
+      "requestedAt": "2026-11-03T07:40:44.050Z",
+      "requestedBy": "l2v-hub",
+      "owner": "l2v-hub",
+      "claimId": "f427a950-db9e-45c9-af92-6481a10c3bf9",
+      "startedAt": "2026-11-03T07:43:41.689Z",
+      "feedbackFingerprint": "6e8f30f064f3fa6a4d3751cd2d82e15137c7500b7bf8b3f4a1f581f2d19dc169",
+      "reportComment": 6598193824,
+      "reportBodySha256": "2e1f8d51fa324c947c34246f4ba7dfc6a32337ecfae4c28cd5cda3500f38068e",
+      "completedAt": "2026-11-03T07:46:07.751Z",
+      "feedbackChanged": false
+    }
+  },
+  "parent": {
+    "id": "standalone-pr-525",
+    "sha": "29b751eb87348f62aeb8e66b135e503abeb29ea0",
+    "implementation": [
+      {
+        "round": 1,
+        "status": "failed",
+        "subjectSha": "c104d79ddc4047ca39bd8cfd0150d56ef4b503f1",
+        "evidence": "history/qa1-report.md"
+      },
+      {
+        "round": 2,
+        "status": "passed",
+        "subjectSha": "03529a96c3a37e4ffb4989497ca3db9fe32a9968",
+        "evidence": "validation-report.md"
+      },
+      {
+        "round": 3,
+        "status": "passed",
+        "subjectSha": "ae9995f546d0adbbaa8033b3957e2fbd943723d9",
+        "evidence": "revision3-validation-report.md"
+      },
+      {
+        "round": 4,
+        "status": "passed",
+        "subjectSha": "a5be73fa0d6d75abe216b67f99dbc754449f6315",
+        "evidence": "revision4-validation-report.md"
+      }
+    ],
+    "reviews": [
+      {
+        "round": 1,
+        "status": "changes-requested",
+        "subjectSha": "ed5686807ea4a358430563c7a488fde1bf478f81"
+      },
+      {
+        "round": 2,
+        "status": "approved",
+        "subjectSha": "3fdedec7305d86972b255a7f532d2028b9a0eabb"
+      }
+    ],
+    "reviewLedger": {
+      "schema_version": 1,
+      "max_rounds": 4,
+      "rounds": [
+        {
+          "round": 1,
+          "verdict": "changes-requested",
+          "subject_sha": "ed5686807ea4a358430563c7a488fde1bf478f81",
+          "review_sha256": "275dc4b08c1294740c85f3ea5d044e68c54fa1e7863a08ceebb04d3331384fd9"
+        },
+        {
+          "round": 2,
+          "verdict": "approved",
+          "subject_sha": "3fdedec7305d86972b255a7f532d2028b9a0eabb",
+          "review_sha256": "e8466e1092af650011938c9eaf07799398d10bbfd1007e9dab95dc8a129c4df5"
+        }
+      ]
+    },
+    "releaseHold": {
+      "code": "PERMANENT_DEMO_ONLINE_ACCEPTANCE_REQUIRED",
+      "reason": "No automatic issue closure: independently reviewed permanent demo-only availability, protected merge, separately authorized exact configuration/deployment and actual five-profile online acceptance remain mandatory; production requires an explicit user request."
+    },
+    "budgetExtensions": [
+      {
+        "entityId": "standalone-pr-525",
+        "pr": 525,
+        "kind": "implementation",
+        "previousLimit": 4,
+        "limit": 5,
+        "actor": "l2v-hub",
+        "at": "2026-11-02T22:37:37.561Z",
+        "reason": "Actual owner explicitly authorized only cycle5 for permanent demo and verified deployment, preserving original4 attempts/2 real reviews from parent523; sole linked child525, no second parent allowance or reset.",
+        "authorizationRef": "user-session:20261102-permanent-demo-explicit-cycle5",
+        "authorization": {
+          "provenance": "user-session",
+          "grantId": "desktop-permanent-demo-single-global-cycle5",
+          "consumptionNonce": "d3bb91af-6f45-4fd1-8934-8996cc3523aa",
+          "sourceRef": "user-session:20261102-permanent-demo-explicit-cycle5",
+          "binding": {
+            "version": 1,
+            "repository": "l2v-hub/ClinicOS",
+            "collection": "standaloneReviews",
+            "entityId": "standalone-pr-525",
+            "pr": 525,
+            "reviewIssue": null,
+            "actor": "l2v-hub",
+            "action": "extend-budget",
+            "subjectSha": "29b751eb87348f62aeb8e66b135e503abeb29ea0",
+            "historyDigest": "9025dce4401d0f0054b2a13be168e80ca68201cb3b6105269d5d54d1d8cd133a",
+            "reservation": null,
+            "budget": {
+              "kind": "implementation",
+              "previousLimit": 4,
+              "limit": 5
+            }
+          },
+          "bindingDigest": "d057bac6cd0e67819a728a64edbef08d8c204c48e86a1da5e565b0315c539432"
+        },
+        "nonce": "b84a8f33-5e82-464b-81e6-d063eb58596e",
+        "historyLength": 4,
+        "historyDigest": "b31e1ac720a82ec7f8ba53835ec956985cd91ee0d34678414a5515db55da90b8"
+      }
+    ]
+  },
+  "unchangedParent": true,
+  "pendingFinalHeadCI": true,
+  "newAllowance": false,
+  "providerExecuted": false
+}

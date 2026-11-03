@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "independent": true,
+  "reviewer": "auth_expiry_final_qa",
+  "agent": "/root/auth_expiry_final_qa",
+  "status": "blocked",
+  "scope": "independent read-only runtime QA, not post-Claude final approval",
+  "sourceSha": "bb9dd8ddb3894416d59cb4eb5c42596819f98892",
+  "tree": "c9a363a2c54812a3784c59959f7e0a8a39b945f6",
+  "checkout": "C:/w-rv/review-capacity-runtime-qa-bb20261103",
+  "findings": [
+    {
+      "id": "R1",
+      "priority": 2,
+      "title": "Timeout does not guarantee terminal completion when the child ignores SIGTERM",
+      "file": "agent-team/src/bug-pipeline/native-guard-container.mjs",
+      "line": 316,
+      "repro": "Actual private adversarial test passes both valid inspections and receives synthetic bootstrap, sets timeout20ms, mocks child.kill without close/error, then observes completion still pending after70ms. Expected finite terminal result assertion fails. Explicit close is called only in test cleanup.",
+      "receiptPath": "adversarial-frozen-bb/receipt.json",
+      "executed": true
+    },
+    {
+      "id": "R2",
+      "priority": 2,
+      "title": "Negative network targets do not establish a discriminating escape probe",
+      "file": "agent-team/tests/bug-pipeline/native-guard-container.test.mjs",
+      "line": 197,
+      "repro": "Failed connections to reserved addresses and failed resolution of example.invalid have no demonstrated reachable non-isolated baseline. Independent local-loopback predicate test distinguishes a live server from the same closed target, demonstrating the need for controlled liveness. Configured NetworkMode inspection remains separately enforced; the entire Docker test is not claimed to pass with bridge inspection.",
+      "assessment": "source-backed qualification-test gap, not an actual executed Linux escape",
+      "actualLinuxExecuted": false
+    }
+  ],
+  "summary": "Blocked at frozen bb9. Existing suites independently replayed15PASS/3explicitLinuxSKIP; new private adversarial28 cases yielded27PASS/1FAIL on a concrete unbounded completion defect. Original moving-checkout preflight failure was preserved and executions resumed only in parent-provided frozen checkout. No claim of actual Linux qualification or later author fix verification.",
+  "reportPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/report.md",
+  "reportSha256": "c62fddd7d7f400696aa320fa7ee0b51eecb8369929cb66ecf87b6df18ff46d26",
+  "evidencePath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/execution-evidence.json",
+  "evidenceSha256": "32cb9a3811f42cda1b85ab387d6942a8ea46a12e0e7bb5c592232566cf77a98b",
+  "sourceManifest": "Eight exact Git blobs plus SHA256 and byte-equality checks in execution-evidence.json",
+  "tests": [
+    {"receiptPath": "existing-four-frozen/receipt.json", "pass": 15, "fail": 0, "skip": 3, "cancelled": 0, "exitCode": 0},
+    {"receiptPath": "adversarial-frozen-bb/receipt.json", "pass": 27, "fail": 1, "skip": 0, "cancelled": 0, "exitCode": 1}
+  ],
+  "trackedClean": true,
+  "sourceWrites": false,
+  "realProviderInvoked": false,
+  "realCredentialsRead": false,
+  "githubOrCanonicalMutation": false,
+  "actualLinuxQualified": false,
+  "postClaudeApproval": false,
+  "releaseAuthorized": false,
+  "historyAndBudgetsUnchanged": true
+}
