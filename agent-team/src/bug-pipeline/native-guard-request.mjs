@@ -5,6 +5,32 @@ import { parseGuardJson, freezeGuardValue } from './native-guard-json.mjs';
 const bytes = (s) => Buffer.byteLength(s);
 const hash = (s) => createHash('sha256').update(s).digest('hex');
 const object = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
+const mintedCapacityErrors = new WeakSet();
+const CAPACITY_FIELDS = ['requiredTokensUpperBound', 'contextBytes', 'inputBytes',
+  'schemaBytes', 'maxTokens', 'contextWindow'];
+
+export class NativeRequestCapacityError extends Error {
+  constructor(metadata) {
+    super('native-request-rejected');
+    const numeric = {};
+    for (const key of CAPACITY_FIELDS) {
+      if (!Number.isSafeInteger(metadata?.[key]) || metadata[key] < 0)
+        throw new Error('native-request-rejected');
+      numeric[key] = metadata[key];
+    }
+    Object.defineProperties(this, {
+      code: { value: 'native-context-exceeded', enumerable: true },
+      metadata: { value: Object.freeze(numeric), enumerable: true },
+    });
+    Object.freeze(this);
+  }
+}
+
+// The public class alone is NOT authority: only this module's final fully
+// validated capacity check can mint an error recognized by this classifier.
+export function isNativeRequestCapacityError(error) {
+  return error instanceof NativeRequestCapacityError && mintedCapacityErrors.has(error);
+}
 const HEADERS = new Set([
   'host',
   'authorization',
@@ -198,7 +224,13 @@ export function validateNativeRequest({ body, rawHeaders, host, method, path, ex
       wrapperBytes = bytes(JSON.stringify(wrapper));
     const contextBytes = textBytes + schemaBytes + wrapperBytes;
     const requiredTokensUpperBound = contextBytes + 65536 + value.max_tokens;
-    check(requiredTokensUpperBound <= expected.contextWindow);
+    if (requiredTokensUpperBound > expected.contextWindow) {
+      const error = new NativeRequestCapacityError({ requiredTokensUpperBound, contextBytes,
+        inputBytes: bytes(expected.input), schemaBytes, maxTokens: value.max_tokens,
+        contextWindow: expected.contextWindow });
+      mintedCapacityErrors.add(error);
+      throw error;
+    }
     return freezeGuardValue({
       version: 1,
       bodySha256: hash(body),
@@ -222,7 +254,8 @@ export function validateNativeRequest({ body, rawHeaders, host, method, path, ex
       requiredTokensUpperBound,
       blockCount,
     });
-  } catch {
+  } catch (error) {
+    if (isNativeRequestCapacityError(error)) throw error;
     throw new Error('native-request-rejected');
   }
 }

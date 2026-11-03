@@ -264,3 +264,14 @@ test('publicly constructed or prototype-forged errors from hostile getters are n
     assert.throws(() => validateNativeRequest(request), (caught) => caught.message === 'native-request-rejected' && !nativeGuard.isNativeRequestCapacityError(caught) && caught.metadata === undefined);
   }
 });
+
+test('a previously genuine capacity error cannot be replayed through a different request getter', () => {
+  const minimal = validateNativeRequest(fixture('').request());
+  let prior;
+  try { validateNativeRequest(fixture('x'.repeat(1000001 - minimal.requiredTokensUpperBound)).request()); }
+  catch (error) { prior = error; }
+  assert.equal(nativeGuard.isNativeRequestCapacityError(prior), true);
+  const request = fixture().request();
+  Object.defineProperty(request.expected, 'input', { get() { throw prior; } });
+  assert.throws(() => validateNativeRequest(request), (error) => error.message === 'native-request-rejected' && !nativeGuard.isNativeRequestCapacityError(error));
+});
