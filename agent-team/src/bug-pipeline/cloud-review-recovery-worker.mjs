@@ -53,6 +53,11 @@ export async function processRecovery({
   // Preparation verifies a separate consumed execution capability. The user's
   // earlier request record alone cannot enable a provider call.
   const prepared = await controller.prepare(selector);
+  assert.equal(
+    prepared.subject.operatorCoordination?.nativeReviewProfile,
+    undefined,
+    'Guarded-profile subjects cannot use the legacy recovery transport',
+  );
   const reader =
     retrieve ??
     createReviewSourceReader({

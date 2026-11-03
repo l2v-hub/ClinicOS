@@ -10,10 +10,18 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Subscription probe, native review, or explicit same-round technical recovery
+        description: Subscription probe, review, explicit native qualification/review, or same-round recovery
         type: choice
-        options: [probe, review, recover]
+        options: [probe, review, recover, qualify-native, native-review]
         default: probe
+      native_pr:
+        description: Exact already-authorized PR for explicit guarded review; no queue-wide dispatch
+        type: string
+        default: ''
+      native_sha:
+        description: Exact 40-character head SHA for explicit guarded review
+        type: string
+        default: ''
       recovery_pr:
         description: Exact PR for an already authorized consumed-round recovery
         type: string
@@ -51,7 +59,7 @@ jobs:
       group: clinicos-claude-cloud-review-${{ github.repository }}
       cancel-in-progress: false
     runs-on: ubuntu-22.04
-    timeout-minutes: 35
+    timeout-minutes: ${{ (inputs.mode == 'qualify-native' || inputs.mode == 'native-review') && 60 || 35 }}
     steps:
       # pull_request_target is privileged: never use its head/ref/SHA for checkout.
       - name: Checkout trusted main
@@ -72,6 +80,7 @@ jobs:
       - name: Probe subscription and process native review request
         env:
           CLAUDE_CLI_PATH: ${{ runner.temp }}/claude-cloud-tools/node_modules/.bin/claude
+          CLAUDE_NATIVE_BINARY_PATH: ${{ runner.temp }}/claude-cloud-tools/node_modules/@anthropic-ai/claude-code-linux-x64/claude
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           CLAUDE_REVIEW_AUTH_MODE: subscription
           # PAT events and explicit dispatch wake Codex; never forwarded to Claude.
@@ -81,6 +90,8 @@ jobs:
           CLOUD_RECOVERY_SHA: ${{ inputs.recovery_sha }}
           CLOUD_RECOVERY_ROUND: ${{ inputs.recovery_round }}
           CLOUD_RECOVERY_REQUEST_NONCE: ${{ inputs.recovery_request_nonce }}
+          CLOUD_NATIVE_PR: ${{ inputs.native_pr }}
+          CLOUD_NATIVE_SHA: ${{ inputs.native_sha }}
         run: |
           if [ "$CLOUD_REVIEW_MODE" = recover ]; then
             node agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs --recover > "$RUNNER_TEMP/claude-cloud-review-receipt.json"

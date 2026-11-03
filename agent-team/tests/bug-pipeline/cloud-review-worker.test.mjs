@@ -187,6 +187,101 @@ test('source then actual auth probe precede the one native claim, validated repo
   assert.equal((await processCloudReview(f.options)).status, 'empty');
   assert.equal(f.calls.length, count, 'No second inference or claim for a published SHA');
 });
+
+test('explicit guarded route stages before claim and releases only after actual native transition', async () => {
+  const f = fixture();
+  f.options.stageNativeReview = async ({ source, sha, profile }) => {
+    f.calls.push('native-stage');
+    return {
+      source,
+      prepared: prepareCloudInference({ packet: source.packet, sha, profile }),
+      session: {
+        assertReady() {},
+        async close() {
+          f.calls.push('native-close');
+        },
+        async release(claim) {
+          assert.equal(claim.phase, 'reviewing');
+          assert.equal(claim.externalReview.status, 'comment-running');
+          f.calls.push('native-release');
+          return envelope(approved);
+        },
+      },
+    };
+  };
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'published');
+  assert.deepEqual(f.calls, [
+    'retrieve',
+    'probe',
+    'native-stage',
+    'claim',
+    'native-release',
+    'submit',
+    'reconcile',
+    'project',
+    'wake',
+  ]);
+  assert.equal(f.calls.includes('model'), false);
+});
+
+test('guarded preclaim conflict closes staged process with no release or source inference', async () => {
+  const f = fixture();
+  f.options.stageNativeReview = async ({ source, sha, profile }) => ({
+    source,
+    prepared: prepareCloudInference({ packet: source.packet, sha, profile }),
+    session: {
+      assertReady() {},
+      async close() {
+        f.calls.push('native-close');
+      },
+      async release() {
+        throw Error('must-not-release');
+      },
+    },
+  });
+  f.options.handoff.claim = async () => {
+    const error = Error('fixture');
+    error.code = 'preclaim-source-changed';
+    throw error;
+  };
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'preclaim-source-changed');
+  assert.deepEqual(f.calls, ['retrieve', 'probe', 'native-close']);
+});
+
+test('native-required subject never falls back to the classic capacity/transport route', async () => {
+  const f = fixture();
+  f.subject.operatorCoordination = { nativeReviewProfile: 'native-max-single-forward-v1' };
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'queue-blocked');
+  assert.equal(result.blockedSubjects[0].status, 'native-profile-required');
+  assert.deepEqual(f.calls, []);
+  f.options.onlySubject = { pr: 82, sha };
+  assert.equal((await processCloudReview(f.options)).status, 'empty');
+  assert.deepEqual(f.calls, []);
+});
+
+test('a staged process that expired before the claim never consumes a source round', async () => {
+  const f = fixture();
+  f.options.stageNativeReview = async ({ source, sha, profile }) => ({
+    source,
+    prepared: prepareCloudInference({ packet: source.packet, sha, profile }),
+    session: {
+      assertReady() {
+        assert.fail('expired-fixture');
+      },
+      async close() {
+        f.calls.push('native-close');
+      },
+      async release() {
+        throw Error('must-not-release');
+      },
+    },
+  });
+  assert.equal((await processCloudReview(f.options)).status, 'preclaim-source-changed');
+  assert.deepEqual(f.calls, ['retrieve', 'probe', 'native-close']);
+});
 test('missing/invalid subscription credentials and stale source stop before native claim', async () => {
   const f = fixture();
   f.options.probe = probeCloudClaude;
