@@ -8,6 +8,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRunner } from './process.mjs';
 import { createGitHub } from './github.mjs';
+import {
+  MAX_REVIEW_PACKET_BYTES,
+  QUALIFIED_CONTEXT_TOKENS,
+  reviewCapacity,
+} from './cloud-review-capacity.mjs';
 import { validateState } from './contracts.mjs';
 import {
   createCommentReviewHandoff,
@@ -35,11 +40,10 @@ import {
 export const CLOUD_REVIEW_REPO = 'l2v-hub/ClinicOS';
 export const CLOUD_CLAUDE_VERSION = '2.1.301';
 export const CLOUD_CLAUDE_MODEL = 'opus[1m]';
-const NATIVE_OVERHEAD_TOKENS = 64 * 1024;
 const SHA = /^[a-f0-9]{40}$/;
 const FILE = fileURLToPath(import.meta.url);
 const MAX_BLOB = 256 * 1024;
-const MAX_PACKET = 700 * 1024;
+const MAX_PACKET = MAX_REVIEW_PACKET_BYTES;
 const MAX_FILES = 80;
 const EVIDENCE_ROOT = 'artifacts/task-validation/';
 const bytes = (value) => Buffer.byteLength(JSON.stringify(value));
@@ -338,7 +342,7 @@ export function qualifiedModelProfile(modelUsage) {
   assert.ok(key.length <= 96);
   assert.ok(
     Number.isSafeInteger(usage.contextWindow) &&
-      usage.contextWindow >= 1000000 &&
+      usage.contextWindow >= QUALIFIED_CONTEXT_TOKENS &&
       usage.contextWindow <= 2000000,
     'Explicit 1M context was not qualified',
   );
@@ -350,7 +354,7 @@ export function qualifiedModelProfile(modelUsage) {
   );
   return {
     model: key.replace(/\[1m\]$/, ''),
-    contextWindow: Math.min(usage.contextWindow, 1000000),
+    contextWindow: Math.min(usage.contextWindow, QUALIFIED_CONTEXT_TOKENS),
     maxOutputTokens: usage.maxOutputTokens,
   };
 }
@@ -366,24 +370,10 @@ export function prepareCloudInference({ packet, sha, profile }) {
   const args = cloudClaudeArgs(schema, `${qualified.model}[1m]`);
   const inputBytes = Buffer.byteLength(input),
     schemaBytes = Buffer.byteLength(args[args.indexOf('--json-schema') + 1]);
-  // Each UTF-8 byte is a conservative upper bound of one input token. Include
-  // the actual serialized schema, observed output allowance and fixed native margin.
-  const requiredTokensUpperBound =
-    inputBytes + schemaBytes + NATIVE_OVERHEAD_TOKENS + qualified.maxOutputTokens;
-  assert.ok(
-    requiredTokensUpperBound <= qualified.contextWindow,
-    'Review exceeds qualified context capacity',
-  );
   return {
     input,
     args,
-    capacity: {
-      ...qualified,
-      inputBytes,
-      schemaBytes,
-      nativeOverheadTokens: NATIVE_OVERHEAD_TOKENS,
-      requiredTokensUpperBound,
-    },
+    capacity: reviewCapacity({ inputBytes, schemaBytes, profile: qualified }),
   };
 }
 export async function probeCloudClaude({ env, run, cwd }) {

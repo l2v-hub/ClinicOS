@@ -504,7 +504,7 @@ test('missing/small/ambiguous probe context and oversized complete inputs never 
   }
   const f = fixture();
   f.options.retrieve = async () => ({
-    packet: { source: 'x'.repeat(701 * 1024), feedback: clone(feedback) },
+    packet: { source: 'x'.repeat(1_000_000 - 64 * 1024 + 1), feedback: clone(feedback) },
     tracked: new Set(),
   });
   const result = await processCloudReview(f.options);
