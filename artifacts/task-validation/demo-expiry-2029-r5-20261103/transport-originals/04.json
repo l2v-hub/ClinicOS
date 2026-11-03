@@ -1,0 +1,292 @@
+{
+  "at": "2026-11-03T18:11:40.092Z",
+  "readOnly": true,
+  "parent": {
+    "id": "standalone-pr-523",
+    "pr": {
+      "number": 523,
+      "url": "https://github.com/l2v-hub/ClinicOS/pull/523"
+    },
+    "issues": [
+      522
+    ],
+    "recoveryHistory": [
+      {
+        "action": "protected-manual-app-merge",
+        "nonce": "945f0b3f-27ba-4463-9251-666575e771aa",
+        "at": "2026-11-02T20:39:30.439Z",
+        "authorization": {
+          "provenance": "user-session",
+          "grantId": "desktop-auth-repair-20261102",
+          "consumptionNonce": "8565f2eb-cc10-4be5-80ee-8ad4a8d08225",
+          "sourceRef": "user-session:20261102-procedi-demo-auth-expiry-repair",
+          "binding": {
+            "version": 1,
+            "repository": "l2v-hub/ClinicOS",
+            "collection": "standaloneReviews",
+            "entityId": "standalone-pr-523",
+            "pr": 523,
+            "reviewIssue": null,
+            "actor": "l2v-hub",
+            "action": "protected-manual-app-merge",
+            "subjectSha": "3fdedec7305d86972b255a7f532d2028b9a0eabb",
+            "historyDigest": "db2bd1d6624774d71161f5b2c70c4b9cc66341ff1d40a1e265eb460bfc0da2ae",
+            "reservation": {
+              "pr": 523,
+              "sha": "3fdedec7305d86972b255a7f532d2028b9a0eabb",
+              "baseSha": "bc880a6dccc40d8dbad73c718c8aa4256562d254",
+              "reviewedTree": "3bd43c572a925a87426ed83b7915bc7cad881089",
+              "owner": "codex-desktop-root-auth-expiry",
+              "ownerNonce": "c9e4baf8-433e-42eb-ab52-e7858a3cc70a",
+              "nonce": "945f0b3f-27ba-4463-9251-666575e771aa",
+              "reviewProofSha256": "df7995494eb4b29134b60c595945a0d4e92082da767b5481e02aa9e9eb385c48",
+              "hold": {
+                "code": "AUTH_EXPIRY_ONLINE_ACCEPTANCE_REQUIRED",
+                "reason": "No automatic issue closure: finite authorized demo renewal and online verification remain mandatory after review/protected merge."
+              },
+              "holdMeaning": "Prevents automatic issue closure until real finite renewal, exact deploy, online five-profile acceptance and public source-bound proof; unchanged throughout manual merge.",
+              "operation": "ordinary-squash-match-head-no-admin-no-deploy-no-close"
+            },
+            "budget": null
+          },
+          "bindingDigest": "9fd559feca9b9f6e2c995f8f33dbd2bcdb6d47e9ad133447e1e5bb1a72bad5d1"
+        },
+        "outcome": "failed-before-durable-reservation-and-before-merge-command",
+        "observedAt": "2026-11-02T20:47:51.339Z",
+        "failureCode": "operator-main-reader-interface-mismatch",
+        "canonicalRefUpdated": false,
+        "actualMergeCommandInvoked": false,
+        "reason": "createGitHub does not expose currentReleaseMain; the optional CLI release entry attaches it separately. Actual guard threw before its state-ref update; original process exited1, canonical release absent and PR stillOPEN."
+      },
+      {
+        "action": "protected-manual-app-merge",
+        "nonce": "76447907-8b06-43b2-b24f-2136d4757938",
+        "at": "2026-11-02T20:54:09.679Z",
+        "authorization": {
+          "provenance": "user-session",
+          "grantId": "desktop-auth-repair-20261102",
+          "consumptionNonce": "b3d16990-6df2-4fb6-8d43-bb857bde0ed4",
+          "sourceRef": "user-session:20261102-procedi-demo-auth-expiry-repair",
+          "binding": {
+            "version": 1,
+            "repository": "l2v-hub/ClinicOS",
+            "collection": "standaloneReviews",
+            "entityId": "standalone-pr-523",
+            "pr": 523,
+            "reviewIssue": null,
+            "actor": "l2v-hub",
+            "action": "protected-manual-app-merge",
+            "subjectSha": "3fdedec7305d86972b255a7f532d2028b9a0eabb",
+            "historyDigest": "ddd743d6d42a67ee5a428c59781a173a80dace51cde62f3569e31e7ba363f1d4",
+            "reservation": {
+              "pr": 523,
+              "sha": "3fdedec7305d86972b255a7f532d2028b9a0eabb",
+              "baseSha": "bc880a6dccc40d8dbad73c718c8aa4256562d254",
+              "reviewedTree": "3bd43c572a925a87426ed83b7915bc7cad881089",
+              "owner": "codex-desktop-root-auth-expiry",
+              "ownerNonce": "c9e4baf8-433e-42eb-ab52-e7858a3cc70a",
+              "nonce": "76447907-8b06-43b2-b24f-2136d4757938",
+              "reviewProofSha256": "df7995494eb4b29134b60c595945a0d4e92082da767b5481e02aa9e9eb385c48",
+              "hold": {
+                "code": "AUTH_EXPIRY_ONLINE_ACCEPTANCE_REQUIRED",
+                "reason": "No automatic issue closure: finite authorized demo renewal and online verification remain mandatory after review/protected merge."
+              },
+              "holdMeaning": "Prevents automatic issue closure until real finite renewal, exact deploy, online five-profile acceptance and public source-bound proof; unchanged throughout manual merge.",
+              "operation": "ordinary-squash-match-head-no-admin-no-deploy-no-close"
+            },
+            "budget": null
+          },
+          "bindingDigest": "30998e2c4ad8bc4c663dd07e7b5eddbe45342f66c09c015643124f6e0e2861af"
+        },
+        "note": "One explicit manual operator action. Infrastructure-only boundary remains unchanged. Original online-acceptance hold remains active."
+      },
+      {
+        "action": "renew-demo-auth-expiry",
+        "nonce": "0c21e3c8-4dd2-4613-a380-50e9ad14ec65",
+        "at": "2026-11-02T21:02:23.114Z",
+        "operationNonce": "733f6410-99bf-4892-90a3-486ad5a45eab",
+        "authorization": {
+          "provenance": "user-session",
+          "grantId": "desktop-auth-repair-20261102",
+          "consumptionNonce": "7f815c66-43cf-4d75-899e-65344b924a11",
+          "sourceRef": "user-session:20261102-procedi-demo-auth-expiry-repair",
+          "binding": {
+            "version": 1,
+            "repository": "l2v-hub/ClinicOS",
+            "collection": "standaloneReviews",
+            "entityId": "standalone-pr-523",
+            "pr": 523,
+            "reviewIssue": null,
+            "actor": "l2v-hub",
+            "action": "renew-demo-auth-expiry",
+            "subjectSha": "3fdedec7305d86972b255a7f532d2028b9a0eabb",
+            "historyDigest": "c133e3b0b6ef0b82e805e355206d4994bf26c5e27018d850e2104ffba0d8bee0",
+            "reservation": {
+              "subjectId": "standalone-pr-523",
+              "operationNonce": "733f6410-99bf-4892-90a3-486ad5a45eab",
+              "reviewedSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+              "previousExpiry": "2026-10-31T23:59:59Z",
+              "newExpiry": "2026-11-09T18:00:00Z",
+              "owner": "codex-desktop-root-auth-expiry",
+              "ownerNonce": "c9e4baf8-433e-42eb-ab52-e7858a3cc70a",
+              "target": {
+                "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+                "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+                "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+                "domain": "clinicos-backend-demo.up.railway.app"
+              },
+              "key": "DEMO_AUTH_EXPIRES_AT",
+              "skipDeploys": true,
+              "releaseDigest": "c8dfc7057ae600be7316b05113962e1ecf57d2f85a6f2d384b62df71287d4301",
+              "ownerDigest": "0b2ea2bc7fc5f3926b670327bfabeba33e278130d20535974a947a15fa9bbcaf"
+            },
+            "budget": null
+          },
+          "bindingDigest": "006a1c67aaec6f7dd030a8a8b2b26418c236456cf90d80d9f7465742abbe157c"
+        }
+      }
+    ],
+    "demoAuthExpiryRenewals": [
+      {
+        "subjectId": "standalone-pr-523",
+        "operationNonce": "733f6410-99bf-4892-90a3-486ad5a45eab",
+        "reviewedSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+        "previousExpiry": "2026-10-31T23:59:59Z",
+        "newExpiry": "2026-11-09T18:00:00Z",
+        "owner": "codex-desktop-root-auth-expiry",
+        "ownerNonce": "c9e4baf8-433e-42eb-ab52-e7858a3cc70a",
+        "authorization": {
+          "authorization": {
+            "provenance": "user-session",
+            "grantId": "desktop-auth-repair-20261102",
+            "consumptionNonce": "7f815c66-43cf-4d75-899e-65344b924a11",
+            "sourceRef": "user-session:20261102-procedi-demo-auth-expiry-repair",
+            "binding": {
+              "version": 1,
+              "repository": "l2v-hub/ClinicOS",
+              "collection": "standaloneReviews",
+              "entityId": "standalone-pr-523",
+              "pr": 523,
+              "reviewIssue": null,
+              "actor": "l2v-hub",
+              "action": "renew-demo-auth-expiry",
+              "subjectSha": "3fdedec7305d86972b255a7f532d2028b9a0eabb",
+              "historyDigest": "c133e3b0b6ef0b82e805e355206d4994bf26c5e27018d850e2104ffba0d8bee0",
+              "reservation": {
+                "subjectId": "standalone-pr-523",
+                "operationNonce": "733f6410-99bf-4892-90a3-486ad5a45eab",
+                "reviewedSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+                "previousExpiry": "2026-10-31T23:59:59Z",
+                "newExpiry": "2026-11-09T18:00:00Z",
+                "owner": "codex-desktop-root-auth-expiry",
+                "ownerNonce": "c9e4baf8-433e-42eb-ab52-e7858a3cc70a",
+                "target": {
+                  "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+                  "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+                  "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+                  "domain": "clinicos-backend-demo.up.railway.app"
+                },
+                "key": "DEMO_AUTH_EXPIRES_AT",
+                "skipDeploys": true,
+                "releaseDigest": "c8dfc7057ae600be7316b05113962e1ecf57d2f85a6f2d384b62df71287d4301",
+                "ownerDigest": "0b2ea2bc7fc5f3926b670327bfabeba33e278130d20535974a947a15fa9bbcaf"
+              },
+              "budget": null
+            },
+            "bindingDigest": "006a1c67aaec6f7dd030a8a8b2b26418c236456cf90d80d9f7465742abbe157c"
+          },
+          "historyBeforeLength": 2,
+          "historyBeforeDigest": "8e5c2f09b11437450e49726872f785233ed6435de886f06812ba0cd541d492b5",
+          "auditNonce": "0c21e3c8-4dd2-4613-a380-50e9ad14ec65",
+          "authorizedAt": "2026-11-02T21:02:23.114Z"
+        },
+        "dispatch": {
+          "schemaVersion": 1,
+          "status": "intent",
+          "dispatchNonce": "01a51bce-7387-4811-92a9-878dd8224ad8",
+          "at": "2026-11-02T21:03:26.625Z",
+          "workflow": "renew-demo-auth-expiry.yml",
+          "runName": "demo-auth-renewal standalone-pr-523 733f6410-99bf-4892-90a3-486ad5a45eab",
+          "priorRunIds": [],
+          "selector": {
+            "subjectId": "standalone-pr-523",
+            "operationNonce": "733f6410-99bf-4892-90a3-486ad5a45eab",
+            "reviewedSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4"
+          },
+          "authorizationDigest": "006a1c67aaec6f7dd030a8a8b2b26418c236456cf90d80d9f7465742abbe157c",
+          "sourceTree": "3bd43c572a925a87426ed83b7915bc7cad881089"
+        },
+        "execution": {
+          "nonce": "0565e8bb-6db0-49c6-ae37-b9df4842cfaf",
+          "actor": "l2v-hub",
+          "runId": "41524928481",
+          "status": "staged",
+          "fingerprint": "14d8c26fd95444cb8bd9d484f7eddcbcc4d6032f5323bb2897f45a2e7fcf964b",
+          "startedAt": "2026-11-02T21:06:45.072Z",
+          "intentAt": "2026-11-02T21:06:58.145Z",
+          "finishedAt": "2026-11-02T21:07:13.375Z"
+        }
+      }
+    ],
+    "exactDemoDispatches": {
+      "deploy": {
+        "operation": "deploy",
+        "sha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+        "dispatchId": "04af5316-0b49-4001-b0d4-8c77d29500b1",
+        "phase": "observed",
+        "intentAt": "2026-11-02T21:17:32.843Z",
+        "priorRunIds": [],
+        "submittedAt": "2026-11-02T21:18:47.434Z",
+        "runId": 41527190689,
+        "operatorAuthorization": {
+          "provenance": "user-session",
+          "grantId": "desktop-auth-repair-20261102-exact-deploy",
+          "consumptionNonce": "ca579d25-070e-4e26-9b02-019db0603e46",
+          "sourceRef": "user-session:20261102-procedi-demo-auth-expiry-repair",
+          "binding": {
+            "version": 1,
+            "repository": "l2v-hub/ClinicOS",
+            "collection": "standaloneReviews",
+            "entityId": "standalone-pr-523",
+            "pr": 523,
+            "reviewIssue": null,
+            "actor": "l2v-hub",
+            "action": "protected-demo-deploy",
+            "subjectSha": "3fdedec7305d86972b255a7f532d2028b9a0eabb",
+            "historyDigest": "53c542fba9dc51f4b0cff5d6b52bdc972ce1e10727e3ee326a11ba9389763191",
+            "reservation": {
+              "operation": "deploy",
+              "reviewedSha": "3fdedec7305d86972b255a7f532d2028b9a0eabb",
+              "sourceSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+              "target": {
+                "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+                "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+                "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+                "domain": "clinicos-backend-demo.up.railway.app"
+              },
+              "key": "DEMO_AUTH_EXPIRES_AT",
+              "newExpiry": "2026-11-09T18:00:00Z",
+              "stageRunId": 41524928481,
+              "stageReceiptSha256": "269b9b65f7376e42c92b51c4f754a41ae0a5cdeb778622659ac75c066b14faf7",
+              "stageArtifactDigest": "sha256:1be32a72ce4d0944e47a08abafd8b2164cc10be8183d9cf3055f0f1d2a70d2c6",
+              "stageArtifactId": 13178968072,
+              "operationNonce": "733f6410-99bf-4892-90a3-486ad5a45eab",
+              "dispatchId": "04af5316-0b49-4001-b0d4-8c77d29500b1",
+              "ownerDigest": "0b2ea2bc7fc5f3926b670327bfabeba33e278130d20535974a947a15fa9bbcaf",
+              "reviewProofDigest": "df7995494eb4b29134b60c595945a0d4e92082da767b5481e02aa9e9eb385c48",
+              "releaseDigest": "c8dfc7057ae600be7316b05113962e1ecf57d2f85a6f2d384b62df71287d4301",
+              "holdDigest": "6921019176cc99ff90f9e1c1677cfb48f7ef7844e1c37d2e632dadd33a595c3f",
+              "route": "deploy-demo-exact-commit.yml",
+              "ref": "main",
+              "operatorSQLCleanup": false,
+              "issueClosure": false
+            },
+            "budget": null
+          },
+          "bindingDigest": "43b3e1cffd1a9830d8e16164abd74d7c03fbed153d68ac6108b58797d23d1bf8"
+        },
+        "stageProofDigest": "448db7c6e0ecb91b7ce2c7335238bc16dbf59244163f25ec94bbb7535c597379"
+      }
+    }
+  }
+}

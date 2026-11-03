@@ -1,0 +1,58 @@
+{
+  "provenance": "lossless-whitespace-only-outside-JSON-strings",
+  "publishedOriginalSource": "bec9a6f41ac04df4eee63a6f33bf19548688b942",
+  "codeSource": "f5835253b4a8a5ad5ac35e3abbdd28df13962d16",
+  "sourceUnchanged": true,
+  "records": [
+    {
+      "publishedOriginalPath": "evidence-execution-author-green-report.json",
+      "currentPath": "evidence-execution-author-green-report.json",
+      "preservedOriginalPath": "transport-originals/01.json",
+      "originalSha256": "4857e41463e7494fd8f542c121de2d4167a39ba55ef99b9f4539f477d09fb7e2",
+      "transportSha256": "82769aace141b7990295ad28b067deb675b8cfa5defdce7ea591bd8767427e21",
+      "originalBytes": 39311,
+      "transportBytes": 36664,
+      "allValuesAndStringBytesPreserved": true
+    },
+    {
+      "publishedOriginalPath": "evidence-execution-author-red-report.json",
+      "currentPath": "evidence-execution-author-red-report.json",
+      "preservedOriginalPath": "transport-originals/02.json",
+      "originalSha256": "78abff7c1f1efd7f08073ec9dd28a21c78d944aa5058d39161a8db3633540b77",
+      "transportSha256": "9ba13760102e99de36ce525a2a17137af7178194f9a7477e7dd7b7f8980e8e4b",
+      "originalBytes": 40498,
+      "transportBytes": 39927,
+      "allValuesAndStringBytesPreserved": true
+    },
+    {
+      "publishedOriginalPath": "evidence-execution-root-report.json",
+      "currentPath": "evidence-execution-root-report.json",
+      "preservedOriginalPath": "transport-originals/03.json",
+      "originalSha256": "ed82d9f7bf53cfc68e7f06d5ec7dd972015d6e9d4a3e23e24c0b90cdd7c9e664",
+      "transportSha256": "a9110949b9c63fd7049754c1ffbdb3632d52bb15a9f625e45fb54c5ea416708d",
+      "originalBytes": 42667,
+      "transportBytes": 41816,
+      "allValuesAndStringBytesPreserved": true
+    },
+    {
+      "publishedOriginalPath": "evidence-parent-finite-stage-report.json",
+      "currentPath": "evidence-parent-finite-stage-report.json",
+      "preservedOriginalPath": "transport-originals/04.json",
+      "originalSha256": "af6c828d61fa6a20cb49066ec1304e3f08c5308bd172860541baeb51348805da",
+      "transportSha256": "e4bb8c3423c3b63a7c594710ea03817b6247740be2df3a47668eb36436c8ec04",
+      "originalBytes": 14562,
+      "transportBytes": 10775,
+      "allValuesAndStringBytesPreserved": true
+    },
+    {
+      "publishedOriginalPath": "evidence-revocation-repair-report.json",
+      "currentPath": "aab-review-revocation-repair-report.json",
+      "preservedOriginalPath": "transport-originals/05.json",
+      "originalSha256": "98183e5e167097d6d427877a32d73c747d1e5faa7a51d9b9b6130ce5b64daf31",
+      "transportSha256": "ed8faa361e6553506d43b398cfa480ca2ad8fa59bdeb856f2f39c3a759011462",
+      "originalBytes": 48172,
+      "transportBytes": 45663,
+      "allValuesAndStringBytesPreserved": true
+    }
+  ]
+}

@@ -43,6 +43,14 @@ earlier Git history. This is not a whole-repository re-audit. No changed source,
 historical attempt, real Claude report, current critical proof or known finding is
 clipped or concealed. Both complete browser proof sets are lossless archives;
 binary inventory and native packet hashes bind all PNGs, traces, videos and logs.
+New execution/parent/repair JSON context copies are losslessly compacted by removing
+only whitespace OUTSIDE strings. All keys, values, string bytes and number spellings
+remain intact. Original byte-exact representations remain in transport-originals/
+and the earlier immutable published commitbec9a6f4. This changes presentation only,
+not tests, results, historical frozen reports or any source. Critical repair proof
+is supplied first as aab-review-revocation-repair-report.json; no omitted critical
+proof is acceptable. Actual final native capacity/zero-omission preflight remains
+mandatory before a model claim; estimates and local Git sizing are not approval.
 
 The pasted production-scoped Railway credential was not used for writes. Read-only
 failed-deployment metadata could not be qualified with that token; the already-
