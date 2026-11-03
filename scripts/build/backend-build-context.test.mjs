@@ -27,3 +27,24 @@ test('backend build source, migrations, locks and packaged PDF fonts stay in the
  assert.ok(!patterns.includes('prisma/')&&!patterns.includes('backend/')&&!patterns.includes('scripts/'));
 });
 
+test('native Windows CI uses a bounded sparse fetch without weakening its tests or deadline',async()=>{
+ const workflow=await readFile(root+'.github/workflows/bug-pipeline-tests.yml','utf8');
+ const job=workflow.split(/^  windows-review-setup:\s*$/m)[1];
+ assert.ok(job,'The real required Windows job must remain present');
+ assert.match(job,/runs-on: windows-latest/);
+ assert.match(job,/timeout-minutes: 10/,'Keep the existing deadline; fix source retrieval instead');
+ assert.match(job,/actions\/checkout@11bd71901bbe5b1630ceea73d27597364c9af683/);
+ assert.match(job,/persist-credentials: false/);
+ const sparse=/sparse-checkout:\s*\|\r?\n((?: {12}[^\r\n]+\r?\n)+)/.exec(job);
+ assert.ok(sparse,'Sparse input makes the pinned checkout request blob:none instead of all proof blobs');
+ assert.deepEqual(sparse[1].trim().split(/\r?\n/).map(x=>x.trim()),['agent-team','scripts','.github']);
+ assert.match(job,/sparse-checkout-cone-mode: true/,'Cone mode keeps tracked root manifests and bootstrap files');
+ assert.match(job,/run: node --test agent-team\/tests\/bug-pipeline\/windows-review\.test\.mjs/);
+ assert.equal(/continue-on-error:\s*true|if:\s*false|\.skip\(/.test(job),false);
+ await access(root+'agent-team/tests/bug-pipeline/windows-review.test.mjs');
+ // The Linux required check must still explicitly reject any non-success Windows result.
+ assert.match(workflow,/needs: windows-review-setup/);
+ assert.match(workflow,/WINDOWS_RESULT:/);
+ assert.match(workflow,/WINDOWS_RESULT.*success/);
+});
+
