@@ -232,3 +232,27 @@ for(const field of['owner','execution','prior-stage'])test(`stage final permissi
   f.permission(s=>{if(!armed||changed)return;changed=true;if(field==='owner')s.standaloneReviews[0].operatorCoordination.owner='foreign';if(field==='execution')s.standaloneReviews[0].demoAuth2029Stages[0].execution.nonce='foreign';if(field==='prior-stage')s.standaloneReviews[1].demoAuthExpiryRenewals[0].execution.runId='foreign';});
   const r=await stageDemo2029({selector,actor:'worker-fixture',runId:'77',controller:f.controller,inspect:async()=>{if(f.record().execution?.status==='write-intent')armed=true;return fresh();},client:async()=>writes++});assert.equal(changed,true);assert.equal(writes,0);assert.equal(r.mutationAttempted,false);
 });
+test('revocation during final awaited current-main verifier prevents provider mutation',async()=>{
+ const f=fixture();await authorized(f);let armed=false,revoked=false,writes=0;
+ const controller=createDemo2029Controller({...f.dependencies,assertCurrentMain:async expected=>{
+  await f.dependencies.assertCurrentMain(expected);
+  if(armed&&!revoked){revoked=true;f.revoke();}
+ }});
+ const result=await stageDemo2029({selector,actor:'worker-fixture',runId:'77',controller,
+  inspect:async()=>{if(f.record().execution?.status==='write-intent')armed=true;return fresh();},
+  client:async()=>{writes++;return{variableUpsert:true};}});
+ assert.equal(revoked,true,'the actor was revoked before final current-main await returned');
+ assert.equal(writes,0,'revocation before the final authorization path completes must prevent the write');
+ assert.equal(result.mutationAttempted,false);
+});
+test('author-only revocation inside final main verifier blocks a still-authorized worker',async()=>{
+ const f=fixture();await authorized(f);let armed=false,authorRevoked=false,writes=0;
+ const github={...f.github,authorizedMaintainer:async actor=>(await f.github.authorizedMaintainer(actor))&&!(authorRevoked&&actor==='root-fixture')};
+ const controller=createDemo2029Controller({...f.dependencies,github,assertCurrentMain:async expected=>{
+  await f.dependencies.assertCurrentMain(expected);if(armed)authorRevoked=true;
+ }});
+ const result=await stageDemo2029({selector,actor:'worker-fixture',runId:'77',controller,
+  inspect:async()=>{if(f.record().execution?.status==='write-intent')armed=true;return fresh();},client:async()=>{writes++;return{variableUpsert:true};}});
+ assert.equal(authorRevoked,true);assert.equal(await github.authorizedMaintainer('worker-fixture'),true);
+ assert.equal(writes,0,'revoking the distinct author must invalidate its consumed action before write');assert.equal(result.mutationAttempted,false);
+});
