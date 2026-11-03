@@ -1,0 +1,1017 @@
+# Exact preserved source/review lineage; current head has no final CI yet
+
+Original texts follow byte-for-byte. Historical outcomes are not current approvals or qualification.
+
+## p029
+Original: artifacts/task-validation/claude-review-capacity-20261103/imported-history.json
+Bytes: 2907; SHA-256: 30dfe9b4651491775b6f136d82d219bb716c8870e92167cfd927c1c523deb488
+BEGIN ORIGINAL
+{
+  "implementation": [
+    {
+      "round": 1,
+      "subjectSha": "b4f460fc8f4fc361d99a1f1bae3de64a2b14a29a",
+      "status": "passed",
+      "evidence": "validation-report.md"
+    }
+  ],
+  "sourceManifest": [
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-capacity.mjs",
+      "blob": "4ad83f47ab57a51963fb96b708912473886f3b9b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "blob": "b6fe77bb0c686edcb4b35ababcbcb21c98bd8627",
+      "mode": "100644",
+      "baseBlob": "3be4ae535b51ab99e7038a66bd7f459ac0a4997f",
+      "baseMode": "100644"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+      "blob": "f80f3072674031ee11ba4b966ded7e638f9da338",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "blob": "5cd7fec1f3869942c6eaf6651b003e7cf574748e",
+      "mode": "100644",
+      "baseBlob": "9d48a4d3e9ff6dc80fab9efe9793f73bd6c70148",
+      "baseMode": "100644"
+    }
+  ],
+  "packetFiles": {
+    "task-contract.md": "420120cc06362b3c659c4cf87c6075088ad54ff159ee8e293c0ec17442f109f1",
+    "analysis.md": "fe41618b6ed7c8f4cffe948945044a01d0ca7d016be3883e4ae41814e55a236e",
+    "implementation-plan.md": "fe7875ea6f6c64f0536074d379132c94230c1327ece45a60ae952228b6761038",
+    "qa-report.md": "76b88a52170163a9dae40ea1268e269021bfa20a2bfd10844143174f6cb53b9e",
+    "qa-seal.json": "55947d59bfb57d2e36b4f9b505a94bacf21db40fd97f14fac49dbcbafd7db3fa",
+    "validation-report.md": "8c74fb47ffb5c13cf9b908c1f737a59ae08aaa0a3cffaa9b59b265e5f9118209",
+    "checks/red-complete-context-fixture-valid/receipt.json": "dc40a4df223144e0ed42a718a09d0c8a0e3df8b12185a9da7b609f2cd780955b",
+    "checks/red-complete-context-fixture-valid/stdout.log": "63b4ee42de41e01f0fa948cad49c8ec21f191b2efd13f88d601eeeeb7597bd2e",
+    "checks/red-complete-context-fixture-valid/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "checks/green-capacity-formatted/receipt.json": "314704b664d5fffe7191459bbcb873380d995f78a04e8fe14a0a2c43fdb42bf4",
+    "checks/green-capacity-formatted/stdout.log": "b67f4de2c03a627c86b349fc557cda50f894244a913998d6989504a927988642",
+    "checks/green-capacity-formatted/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "review-cloud-review-recovery-worker-context-report.json": "e63acb60012ddbcf7fafb5355965a29d1a42f839838c11332ec8446bfa4822ec",
+    "review-process-context-report.json": "bca3d364fb7c09c3615d672e3920a618615dc88d6a2d7a18c8b4c59222ae158b",
+    "review-comment-review-handoff-context-report.json": "b9299a7d2cef0bceec4377be1a441f738239023b6d0f47327364e606021e888b"
+  },
+  "reviews": [],
+  "reviewLedger": null,
+  "reviewReports": {}
+}
+
+END ORIGINAL
+
+## p044
+Original: artifacts/task-validation/claude-review-capacity-20261103/qa-report.md
+Bytes: 8740; SHA-256: 76b88a52170163a9dae40ea1268e269021bfa20a2bfd10844143174f6cb53b9e
+BEGIN ORIGINAL
+# Independent QA — issue 526 qualified review capacity
+
+Verdict: PASSED for the frozen technical source and assigned internal-pipeline QA. No actionable findings. Reviewer: auth_expiry_final_qa (/root/auth_expiry_final_qa), independent of the implementation author. This is not Claude approval, exact-head CI, native post-Claude final verification, merge permission or authority to deploy/recover the demo.
+
+## Source and scope
+
+Source: b4f460fc8f4fc361d99a1f1bae3de64a2b14a29a. Tree: ed6cbca84e226a1224168a7c930cb038a148fef8. Baseline: d2a08b4850dd954bb790e35f2ed350d5eeacd1c4.
+
+I created the explicitly assigned detached QA checkout C:/w-rv/review-capacity-qa20261103 before execution. It was tracked-clean before and after all checks. Exactly four tracked paths differ: the new pure capacity module, its new tests, the worker's small integration change and one obsolete fixture-size update. The source manifest binds all four Git blobs and raw SHA256s. Seven unchanged trust/recovery/controller consumers are also bound.
+
+I read the project/skill instructions, technical issue contract and actual owner grant/scope reservation. The security skill excludes read-only internal tooling; no source-changing skill or swarm was invoked. This task is separate from issue 524/PR525's sole fifth implementation and existing 2/4 review history. Neither was reset or extended.
+
+No source was edited, staged or committed by this reviewer. No dependency install, UI/browser task, external API write, canonical claim, Claude auth/probe/inference, real recovery, deployment or clinical action was required or performed.
+
+## Real independent executions
+
+All runs used the trusted D2 createRunner with envMode=verification, private runtime homes and stripped credentials. The suites use injected synthetic providers/controller state; their mock model/probe calls are not real provider calls.
+
+| Execution | Result |
+| --- | --- |
+| Six requested cloud-capacity/worker/recovery/transport/source/qualification suites on b4f | 85 PASS; zero fail/skip/cancel |
+| Additional private arithmetic/invalid-size/profile edge tests on b4f | 27 PASS; zero fail/skip/cancel |
+| New eight-test capacity suite against exact D2 worker/recovery modules | Expected RED: 3 PASS, 5 capacity-related failures; zero skip/cancel |
+
+The independent baseline copied the new test file into the private report directory and changed ONLY two import module paths to verified, byte-identical D2 modules. Reverse transformation is byte-equal to the original tests; no assertion changed. Its nonzero exit, complete logs, transformation/hash record and module identities are retained. Thus the old-cap defect was reproduced independently, rather than borrowing the author's red evidence.
+
+The author retained earlier fixture/setup failures and the corrected genuine red receipt separately. Those are author evidence, not my executions. My current six-suite and edge runs passed without failed candidate assertions or waived checks.
+
+## Completeness, arithmetic and negative paths
+
+The positive source-reader test actually reconstructs two changed files with complete pinned before AND after contents, plus all five selected task/plan/validation/auth/ops context documents. Its serialized packet exceeds the old 700 KiB bound, omittedTextEvidence is empty, and every retrieved source/context string is compared against its exact synthetic blob. The reader uses mocked immutable GitHub metadata; reviewed source is data, never executed.
+
+The finite transport ceiling is 1,000,000 minus the unchanged 65,536 native margin: 934,464 serialized packet bytes. That ceiling only permits bounded assembly. It does not grant that amount of prompt input, raise a qualified context, reserve a review or discount output.
+
+Actual admission still measures the final UTF-8 prompt after JSON serialization and the actual serialized --json-schema argument. It adds the same 65,536 native margin and the profile's observed maxOutputTokens under the conservative one-byte-per-token upper bound. With the 128,000-output fixture, prompt PLUS schema must fit within 806,464 bytes; the packet itself has less room because the trusted prompt prefix is included. The fixture's 128k value is prior observed-profile test data, not a fresh live qualification performed by me.
+
+The exact dynamic sum of 1,000,000 is accepted and one added byte is rejected. Unicode and JSON escaping are measured after serialization, not JavaScript character count. A 900,000-byte source payload below the static ceiling still fails the actual 128k-output allowance before claim/model. Static ceiling+1, oversized individual source, absent/small/ambiguous qualification and malformed output/profile values remain rejected.
+
+My extra tests directly exercise negative, fractional, NaN, infinite, unsafe, string, missing and null input/schema byte values; wrong/unclamped context; invalid outputs; safe-integer overflow; and exact equality/+1 arithmetic. A separate case changes the observed output allowance from 128k to 16k and confirms the calculation uses that actual allowance rather than a hardcoded or discounted value.
+
+The recovery consumer shares the same preparation path. Its oversized dynamic case throws before its EXISTING claim and before a mock review-model call. No actual recovery action, new round or recovery authorization was consumed by QA.
+
+## Security and accounting assessment
+
+The worker diff changes aggregate packet assembly to the derived finite constant, reuses the existing qualification constant and extracts the same dynamic sum into a small pure validator. No authentication, tools, source-selection, ownership or publication branch was removed.
+
+The unique resolved Opus qualification remains mandatory; observed contexts are still clamped to one million. The profile is revalidated before preparing inference. The byte counts are nonnegative safe integers; the final sum must also remain a safe integer within the qualified window. Caller input cannot supply a new static ceiling or override the computed capacity result.
+
+Whole immutable before/after source retrieval, SHA/Git-blob checks, the 256 KiB individual blob bound, 80 source-file limit and existing bounded evidence selection/inventory remain unchanged. The positive test proves all selected context fits without omission; this does not falsely promise every optional file in any arbitrary future packet is selected.
+
+No-tools/restricted review arguments, empty MCP/settings sources, subscription-only credential isolation, resolved model pinning and no API fallback are unchanged. Normal preparation completes before controller.claim. Recovery preparation likewise completes before its separate claim. The current tests prove overflow leaves mock history unchanged and makes no review-model call. The existing bounded authentication qualification probe is a distinct pre-claim step in production; QA did not invoke it.
+
+The ordinary 701 KiB fixture is now admitted ONLY when its complete actual input fits, then appends exactly the existing next round in the mock flow. The first two review/history prefixes and maximum four-round ledger remain identical. The obsolete worker test merely changes its too-large payload from the no-longer-overflowing old threshold to derived-ceiling+1; its rejection/no-claim assertions are preserved.
+
+Publication uncertainty, native ownership/CAS transitions, recovery execution capability and round accounting are not modified. Existing suites covering those consumers passed. Increased transport assembly does not authorize a new provider lane, counter reset, recovery replay, merge or deployment.
+
+## Evidence, limitations and handoff
+
+execution-evidence.json binds the complete source manifest, unchanged consumers, three real command receipts, exact stdout/stderr hashes, baseline transform and verified baseline module hashes. The original command outputs and baseline failure remain intact. No screenshot or browser is appropriate for this internal numeric/control-flow change.
+
+This QA establishes synthetic correctness and the reviewed source contract, not current subscription validity or the fit of PR525's later actual full packet. A fresh exact serialized source/evidence/CI/schema/native/output calculation remains mandatory for each real observed qualified profile before a claim.
+
+Required exact technical-head CI, genuine exact-SHA Claude Max review under the CURRENT trusted worker, separate final verification and protected merge remain pending. Do not execute candidate review-worker code as the technical PR's trusted paid reviewer, or auto-merge this result. No demo stage/deployment/production action is authorized, and its existing budget/history/online holds remain unchanged.
+
+END ORIGINAL
+
+## p045
+Original: artifacts/task-validation/claude-review-capacity-20261103/qa-seal.json
+Bytes: 11481; SHA-256: 55947d59bfb57d2e36b4f9b505a94bacf21db40fd97f14fac49dbcbafd7db3fa
+BEGIN ORIGINAL
+{
+  "independent": true,
+  "reviewer": "auth_expiry_final_qa",
+  "agent": "/root/auth_expiry_final_qa",
+  "status": "passed",
+  "sourceSha": "b4f460fc8f4fc361d99a1f1bae3de64a2b14a29a",
+  "tree": "ed6cbca84e226a1224168a7c930cb038a148fef8",
+  "baseSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+  "trackedClean": true,
+  "findings": [],
+  "scope": "independent-source-bound-internal-review-capacity-QA",
+  "summary": "Frozen four-file technical change passed 85 independent requested suite cases and 27 additional primitive edge cases. Independently reproduced D2 red using the exact new eight-test assertions with only two module import redirects: 3 pass/5 expected capacity failures. Complete pinned before/after and all selected context above700KiB, exact/+1 dynamic boundary, Unicode/escaping, finite static overflow, malformed profile/byte sizes, observed output allowance and preclaim/recovery fences verified. No source/auth/tools/history/claim-order weakening found. No real Claude auth/probe/review, native claim/recovery, external write, UI/browser, merge or deployment was performed. CI and genuine exact-head Max/final verification remain required.",
+  "reportPath": "C:/w-rv/tmp/review-capacity-20261103/independent-qa/report.md",
+  "reportSha256": "76b88a52170163a9dae40ea1268e269021bfa20a2bfd10844143174f6cb53b9e",
+  "evidencePath": "C:/w-rv/tmp/review-capacity-20261103/independent-qa/execution-evidence.json",
+  "evidenceSha256": "c221e9cb383f28483cafe582cacc61c175253a698a93d7fb3e052c3f58f34823",
+  "sourceManifest": [
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-capacity.mjs",
+      "blob": "4ad83f47ab57a51963fb96b708912473886f3b9b",
+      "sha256": "563e14fcc9b9e416853d1cb6a0b94b004cf4d8c9370de2388f2ced8877d93919"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "blob": "b6fe77bb0c686edcb4b35ababcbcb21c98bd8627",
+      "sha256": "2ff76a9e0f3650dcc63e592dc4db3d1dedd488d696e9db6cb126a8abc2909e2d"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+      "blob": "f80f3072674031ee11ba4b966ded7e638f9da338",
+      "sha256": "d8c18a3a88abba20c888cb7651f72407759cd8600c4d26438ffe1b2ce75036ab"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "blob": "5cd7fec1f3869942c6eaf6651b003e7cf574748e",
+      "sha256": "e041c3a148cd9a1a4727c9b1215d405688a12a0a6b9196da312577b54b27e9b5"
+    }
+  ],
+  "unchangedContext": [
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs",
+      "blob": "977cca133c985aa2d0e0222a9eaad3825f52b851",
+      "sha256": "2670e79fb61c0904f03b7350dc413ea8d22d825018598051b624967d3089849e"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-recovery.mjs",
+      "blob": "d3c37cea8987b73ef6d0583990d652e66536122e",
+      "sha256": "3c5285ca892e72ca3a4114fd602ec23b2a02913097f3ba31346d39ba02a62485"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-recovery-qualification.mjs",
+      "blob": "18a247f580484ba98a317caba8216d9f01f1789f",
+      "sha256": "ebd7ae15f6c15c81af4aee2a8b0ca355a987e114d3a6257296800cc8f287cfbd"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "blob": "ea6cec8a0cace0dbb3876dce48e3efe8daf796be",
+      "sha256": "086ee18c81a07353d8dbc1d835b39e2338d4b7c1bed1a38e65ab6570dceea435"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "blob": "61deb6074d09ad83158644db33f88d8cb12ee2e5",
+      "sha256": "10f94026e6622b85ea80d0565c43e77ba1c56a22e93db94608678924a6382efd"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/process.mjs",
+      "blob": "58eb486c968ea9c1181c647609479d639478a713",
+      "sha256": "2859598df0808313faed958604a173d066ffd1ad627992e37ef605be7dea9870"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "blob": "b6f4829b1e1560b8b7af2a882399f442ce86451e",
+      "sha256": "0c7b8a38f097ea6c6d0bb7f49b407ed08cbd75bd23fa3d372b75fb556d82c212"
+    }
+  ],
+  "testReceipts": [
+    {
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "focused-six",
+      "cwd": "C:/w-rv/review-capacity-qa20261103",
+      "sourceSha": "b4f460fc8f4fc361d99a1f1bae3de64a2b14a29a",
+      "tree": "ed6cbca84e226a1224168a7c930cb038a148fef8",
+      "startedAt": "2026-11-03T06:59:40.708Z",
+      "finishedAt": "2026-11-03T06:59:41.215Z",
+      "args": [
+        "--test",
+        "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-review-recovery.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-recovery-source.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-recovery-qualification.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "stdoutSha256": "9be8ffda4d6ac57e0f703646e3b83d0485f214b5e81351d676e4bfcaacf1e42f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trackedClean": true,
+      "headUnchanged": true,
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-qa/focused-six/receipt.json",
+      "receiptSha256": "66ffeef7f3ab9ab4444a2c0b43e25cd8260560dbf2893c7b0199374b68eb64b8",
+      "counts": {
+        "tests": 85,
+        "pass": 85,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "expectedBaselineRed": false
+    },
+    {
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "independent-edges",
+      "cwd": "C:/w-rv/review-capacity-qa20261103",
+      "sourceSha": "b4f460fc8f4fc361d99a1f1bae3de64a2b14a29a",
+      "tree": "ed6cbca84e226a1224168a7c930cb038a148fef8",
+      "startedAt": "2026-11-03T07:02:38.765Z",
+      "finishedAt": "2026-11-03T07:02:38.930Z",
+      "args": [
+        "--test",
+        "C:/w-rv/tmp/review-capacity-20261103/independent-qa/primitive-edges.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "stdoutSha256": "977eaeca1b807ca06f8d1d1ed8d102d68e6f5ad60579a9ed2ccf57b7c8941e27",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trackedClean": true,
+      "headUnchanged": true,
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-qa/independent-edges/receipt.json",
+      "receiptSha256": "06dace35ccafb332a37cf8694614943324bb7bd1442185a700da9d8ea0adbf73",
+      "counts": {
+        "tests": 27,
+        "pass": 27,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "expectedBaselineRed": false
+    },
+    {
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "baseline-new-eight",
+      "cwd": "C:/w-rv/review-capacity-qa20261103",
+      "sourceSha": "b4f460fc8f4fc361d99a1f1bae3de64a2b14a29a",
+      "tree": "ed6cbca84e226a1224168a7c930cb038a148fef8",
+      "startedAt": "2026-11-03T07:01:29.530Z",
+      "finishedAt": "2026-11-03T07:01:29.742Z",
+      "args": [
+        "--test",
+        "C:/w-rv/tmp/review-capacity-20261103/independent-qa/capacity-baseline.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": false,
+      "exitCode": 1,
+      "error": null,
+      "stdoutSha256": "f865ca13a86d6c4fd443d1d7314d1ac817774a27b36b6064c1681f8d887deedf",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trackedClean": true,
+      "headUnchanged": true,
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-qa/baseline-new-eight/receipt.json",
+      "receiptSha256": "b8b6710e81deb89b96a0adac0ee4408fdded7410769448697ce1a016ce933224",
+      "counts": {
+        "tests": 8,
+        "pass": 3,
+        "fail": 5,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "expectedBaselineRed": true
+    }
+  ],
+  "currentCandidateChecks": {
+    "focusedSix": {
+      "tests": 85,
+      "pass": 85,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "independentPrimitiveEdges": {
+      "tests": 27,
+      "pass": 27,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0
+    }
+  },
+  "baselineRed": {
+    "sourceSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+    "originalTestPath": "C:/w-rv/review-capacity-qa20261103/agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+    "originalTestSha256": "d8c18a3a88abba20c888cb7651f72407759cd8600c4d26438ffe1b2ce75036ab",
+    "generatedCopyPath": "C:/w-rv/tmp/review-capacity-20261103/independent-qa/capacity-baseline.test.mjs",
+    "generatedCopySha256": "330a2bc10d8ed45560f537ca525644934b03ef24ec9eeedce9827265b2624e6b",
+    "transforms": [
+      [
+        "../../src/bug-pipeline/cloud-review-worker.mjs",
+        "file:///C:/w-rv/auth-release-main20261102/agent-team/src/bug-pipeline/cloud-review-worker.mjs"
+      ],
+      [
+        "../../src/bug-pipeline/cloud-review-recovery-worker.mjs",
+        "file:///C:/w-rv/auth-release-main20261102/agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs"
+      ]
+    ],
+    "onlyTwoImportPathsChanged": true,
+    "assertionsBytePreserved": true,
+    "baselineModules": [
+      {
+        "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+        "sourceSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+        "blob": "3be4ae535b51ab99e7038a66bd7f459ac0a4997f",
+        "sha256": "68373567453da283564871ee60d8d8ca55b12510fe80abefcd3202890b0d4fa4"
+      },
+      {
+        "path": "agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs",
+        "sourceSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+        "blob": "977cca133c985aa2d0e0222a9eaad3825f52b851",
+        "sha256": "2670e79fb61c0904f03b7350dc413ea8d22d825018598051b624967d3089849e"
+      }
+    ],
+    "tests": 8,
+    "pass": 3,
+    "expectedCapacityFailures": 5,
+    "exitCode": 1,
+    "isCurrentCandidateFailure": false,
+    "originalAssertionsUnchanged": true
+  },
+  "capacityContract": {
+    "qualifiedMaximum": 1000000,
+    "nativeMargin": 65536,
+    "finiteTransportBytes": 934464,
+    "fixtureObservedOutput": 128000,
+    "maxPromptPlusSchemaAtThatOutput": 806464,
+    "countsActualUtf8SerializedPromptAndSchema": true,
+    "claimBeforeCapacityAllowed": false,
+    "staticCeilingIsNotPromptAllowance": true
+  },
+  "baselineAndAuthorEvidenceDistinguished": true,
+  "realProviderInvoked": false,
+  "realProbeOrRecoveryInvoked": false,
+  "sourceEdited": false,
+  "uiBrowserRequired": false,
+  "externalOrCanonicalWritePerformed": false,
+  "modelApprovalClaimed": false,
+  "mergeOrDeploymentAuthorized": false,
+  "preservedParentDemoBudgetsAndHolds": true,
+  "remainingGates": [
+    "exact-technical-head CI",
+    "genuine exact-SHA Claude Max review under current trusted worker",
+    "separate final verification and protected merge; no automatic merge",
+    "fresh complete actual packet/model-capacity preflight before any future PR525 claim; no assumed fit or demo action authorization"
+  ],
+  "provenanceNote": "Root must establish independence through this actual agent/task; JSON fields alone are not approval or authorization."
+}
+
+END ORIGINAL
+
+## p012
+Original: C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/report.md
+Bytes: 7855; SHA-256: bb15c67447c3ace4277137301fbefb2598f793640c0bc5b2dd2bec45980f181d
+BEGIN ORIGINAL
+# Independent combined repair QA — scoped pass at 5139ddfc
+
+Actual independent reviewer: `/root/auth_expiry_final_qa`.
+Source: `5139ddfc623f4d9483d7616394e24357bb0a355d`.
+Tree: `5c947afd7f49ba0c71963d6b7f9c996e6436403d`.
+Index digest: `d3ee82d5ed6484fb0bfdb26e87d04e7e4fc508617800a612c66c54a55cb61a44`.
+Checkout: `C:/w-rv/review-capacity-combined-qa2-20261103`.
+
+## Verdict and source identity
+
+PASS for the requested offline combined repair QA. Findings: none. This is before-own-Max evidence, not post-Claude final approval, actual Linux/native qualification, exact-head CI approval, protected release authorization or demo restoration.
+
+Root sequentially reassigned the completed, idle QA2 checkout from4c8 to this new frozen commit, checking it clean before/after. This review began only after that explicit reassignment. All old4c8 reports, receipts, failure logs and immutable commit bytes remain unchanged. No result has been rebound to the newer source.
+
+The current source is fully clean before and after both independent executions, including untracked status and exact index digest. The complete46-path changed manifest against trusted D2 binds immutable Git blobs, SHA-256 and sizes. Present source/test files are byte-equal to those blobs; historical packet artifacts omitted by sparse checkout are explicitly recorded as Git-only, not claimed present locally. Only session.mjs and session.test.mjs differ from4c8; the other44 changed blobs, including the certificate FIFO repair, are byte-identical. Historical round-one packet reports remain historical, not current implementation claims.
+
+## Actual independent executions
+
+- `all-proper-eighteen`: 174 tests, 171 PASS, 3 explicit Linux SKIP, zero failures/cancellations. All eighteen exact suite paths exist and appear individually in the receipt.
+- `unchanged-private-reproofs`: 46/46 PASS, zero failures/skips/cancellations. These are the prior32 reproduction assertions plus the prior14 stronger edges, including the exact liveness assertion that failed at4c8. Only immutable expected SHA and private output paths were changed. Reverse transforms are exact; no assertion was weakened, deleted or skipped. The already-correct per-invocation isLive fixture is unchanged.
+
+All tests use trusted D2 createRunner in credential-stripped verification mode. Exact commands, timestamps, clean source/index before/after, stdout/stderr/receipt hashes, private fixture hashes and full source manifests are in `execution-evidence.json`. These are synthetic process/provider/controller fixtures and one bounded local-loopback server, not actual native Claude or external provider requests. No npm install, UI/browser/app execution was needed for this internal pipeline task.
+
+## Repair verification
+
+Read the entire two-file delta and checked the actual trusted forward path. startRuntime now receives a frozen data facade; its stage wrapper captures the original candidate forward and seal, and the actual state-owned forward first synchronously checks policy.ready, runtime.isLive and the deadline. This happens after state.release's asynchronous claim-validator await, not merely before that await. It then invokes the captured trusted proxy forward without an intervening await. The unchanged proxy forward creates its Promise with a synchronous executor, constructs fixed official HTTPS options and calls request.end(body) in that same synchronous path. Request framing is reconstructed by Node as previously disclosed; this does not claim byte-identical raw wire headers.
+
+The previously failing queued liveness change now yields zero forwards and terminal rejection. The previous nested-policy race remains zero-forward. All nine policy poison/pending/invalid-UTF8 variations at microtask depths0/1/2 still block before forward. Existing synchronous policy invalidation continues to fail the state gate and immediately invoke proxy cancellation. The one-shot state retains irreversible attempt spending and no retry/refund on failed admission after claim.
+
+The original SIGTERM-ignoring-child timeout, startup timeout and optional-evidence wrapper regressions remain green under unchanged private assertions. Runtime stop marks liveness false, signal escalation/failed completion remain bounded, observed-ID removal is deduplicated, and the new final guard rejects even during the completion grace window. Optional staging retains its live mandatory body, complete required source/context, actual wrapper accounting, final exact capacity gate and private-minted capacity-only fallback classification. Policy/auth/unknown failures do not authorize fallback. The canonical mandatory-evidence marker, classic/native-required refusal, recovery isolation, complete source/feedback/actor/claim fencing and explicit main/manual exact PR/SHA workflow assertions remain covered by the real eighteen-suite replay.
+
+The four certificate pipeline argv/env/stdin/failure/overflow edge tests still pass, without running Bash/OpenSSL. The certificate source is unchanged from4c8: fixed quoted positional Bash pipeline, explicit environment, detached process group, stdin-only key buffers, no private-key files/argv/env, fixed sanitized errors and bounded capture. No new certificate or egress policy loosening is introduced by this repair.
+
+## Evidence and release limits remain explicit
+
+This Windows run explicitly skips actual Linux OpenSSL chain, real Unix CONNECT/TLS and controlled Docker network escape tests. Parent reports older source10000045 Linux CI proved the controlled positive TCP/DNS comparison while failing the two certificate-dependent tests; that older run is not relabeled green. Parent reports4c8 Linux CI still running at assignment. This reviewer made no GitHub call and does not claim a later status, a current5139 Linux full pass or authentic native qualification. Certificate/runtime source equivalence permits precise evidence comparison, not a whole-head CI claim. Actual Linux proof and exact final CI remain required.
+
+Prior combined2 evidence independently verified root-retained Windows full baseline/source10000045 log hashes and equal195 distinct failed-name sets (194 failures each); both full runs remained non-green. Those root runs were not independently executed here and are not current5139 full-run evidence. A matching baseline is not a waiver or proof that every failure is Windows-only. Historical mixed-source/incorrect-selector evidence is not used for this pass.
+
+All prior blocked reports and the private fixture-adapter failure remain retained rather than rewritten. Public temporary-directory lifecycle and real process/TLS cleanup behavior are not newly established by synthetic tests; no broad cleanup or Linux proof is invented. The integrated real caller still must provide genuine policy/account/binary/image/source evidence and full current-packet/headroom admission before activation. The observed native128000 default is never renamed to the actual enforced32k request cap.
+
+No real provider/OAuth/credential access, native Claude, Docker/OpenSSL execution, GitHub/controller/canonical mutation, source edit, main-worktree write, commit/push/merge/deploy, production action, clinical access or issue closure occurred in this QA. All generated files are confined to `C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3`.
+
+This scoped pass may serve as offline independent QA evidence only. It does not authorize self-qualification, a new review/app allowance, automatic release, or closing the auth task. Genuine old-worker Max review, exact CI, post-Claude independent final QA, protected release and actual online restoration remain separate pending gates. Existing technical/auth history, implementation/review counters, app source31 and no-automatic-merge/deploy hold are unchanged. No final-qa-agent-result approval is emitted.
+
+END ORIGINAL
+
+## p013
+Original: C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/result.json
+Bytes: 2925; SHA-256: 420cfa6a0ec1d2226d6980e0fd3e04caa3dd93ccc2fb824583eb6e8ed44c72e7
+BEGIN ORIGINAL
+{
+  "schemaVersion": 1,
+  "independent": true,
+  "reviewer": "auth_expiry_final_qa",
+  "agent": "/root/auth_expiry_final_qa",
+  "status": "passed",
+  "scope": "offline independent combined repair QA before own genuine Max; not post-Claude final approval",
+  "sourceSha": "5139ddfc623f4d9483d7616394e24357bb0a355d",
+  "tree": "5c947afd7f49ba0c71963d6b7f9c996e6436403d",
+  "indexSha256": "d3ee82d5ed6484fb0bfdb26e87d04e7e4fc508617800a612c66c54a55cb61a44",
+  "findings": [],
+  "summary": "Scoped offline PASS at exact clean5139. Independent proper18 suites174 total171PASS/3explicitLinuxSKIP, plus46 unchanged private assertions PASS. Exact previously failing liveness and policy microtask assertions now prevent forwarding. Final synchronous policy/liveness/deadline fence inspected after state await and immediately before unchanged trusted proxy forward; only2 files changed from4c8. Full46blob manifest and unchanged fixture reverse transforms verified. No current Linux/full-controller green, genuine Max/native qualification or release approval inferred.",
+  "reportPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/report.md",
+  "reportSha256": "bb15c67447c3ace4277137301fbefb2598f793640c0bc5b2dd2bec45980f181d",
+  "evidencePath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined3/execution-evidence.json",
+  "evidenceSha256": "a3c4cc7183e74a75d999c5aeffb3c57654a3e8e2317cdcff884e4188fa8dee16",
+  "sourceManifest": {"path": "execution-evidence.json", "field": "manifest", "paths": 46, "allGitBlobsAndSha256": true, "sparseHistoricalArtifactsExplicit": true},
+  "previousSourceSha": "4c8beb83c6ea11ba286f33372bf76ba1814c3770",
+  "changedBlobsFromPrevious": ["agent-team/src/bug-pipeline/native-guard-session.mjs", "agent-team/tests/bug-pipeline/native-guard-session.test.mjs"],
+  "otherChangedBlobsByteIdenticalToPrevious": 44,
+  "tests": [
+    {"receiptPath": "all-proper-eighteen/receipt.json", "pass": 171, "fail": 0, "skip": 3, "cancelled": 0, "exitCode": 0},
+    {"receiptPath": "unchanged-private-reproofs/receipt.json", "pass": 46, "fail": 0, "skip": 0, "cancelled": 0, "exitCode": 0}
+  ],
+  "previousLivenessFindingFixed": true,
+  "previousPolicyFindingFixed": true,
+  "fixtureAssertionsUnchanged": true,
+  "sourceStable": true,
+  "trackedAndUntrackedClean": true,
+  "sourceWrites": false,
+  "realProviderInvoked": false,
+  "realCredentialsRead": false,
+  "realDockerOrOpenSSLInvoked": false,
+  "githubOrCanonicalMutation": false,
+  "actualCurrentLinuxCIClaimedPass": false,
+  "fullControllerGreenClaimed": false,
+  "postClaudeApproval": false,
+  "releaseAuthorized": false,
+  "historyAndBudgetsUnchanged": true,
+  "remaining": ["actual exact final CI and Linux runtime proof", "genuine old-worker Max review", "post-Claude independent final QA", "authentic native qualification on approved trusted main", "protected release authority", "actual online demo restoration"]
+}
+
+END ORIGINAL
+
+## p051
+Original: C:/w-rv/tmp/review-capacity-20261103/full-local-source-bound-comparison.json
+Bytes: 789; SHA-256: a88ce4b41b68cf2307e778f71ae7b13a97438dcc26100d38134ebcd48fb0de0d
+BEGIN ORIGINAL
+{
+  "readOnlyComparison": true,
+  "baselineSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+  "candidateSha": "10000045b9a7884ea970acba204459c5e2c4d889",
+  "baselineSummary": [
+    "ℹ tests 1797",
+    "ℹ pass 1602",
+    "ℹ fail 194",
+    "ℹ cancelled 0",
+    "ℹ skipped 1"
+  ],
+  "candidateSummary": [
+    "ℹ tests 1888",
+    "ℹ pass 1690",
+    "ℹ fail 194",
+    "ℹ cancelled 0",
+    "ℹ skipped 4"
+  ],
+  "baselineDistinctFailedNames": 195,
+  "candidateDistinctFailedNames": 195,
+  "candidateOnly": [],
+  "baselineOnly": [],
+  "noAssertionDisabled": true,
+  "localFullGreen": false,
+  "actualLinuxCIGreen": false,
+  "notes": "Compare real failed identities, not only counts. Original mixed-source run and wrong-selector subset are retained but not used as evidence."
+}
+END ORIGINAL
+
+## p052
+Original: C:/w-rv/tmp/review-capacity-20261103/r2-native-runtime/windows-checkout-diagnosis/readonly-findings.json
+Bytes: 2161; SHA-256: 844c4d55619bf5c079e74be591870f2e117231291a1fb68bd9e5e2838b4a67f3
+BEGIN ORIGINAL
+{
+  "jobId": 126042661037,
+  "runId": 41672033526,
+  "observedRawLogBytes": 7969,
+  "rawLogSha256": "b93ae0c07a6e50a8e6ce06550b6878a64ce6ed884e44ee299febce2a5225253b",
+  "rawLogPersisted": false,
+  "rawLogPrinted": false,
+  "phases": [
+    {
+      "time": "2026-11-03T16:14:02.3612978Z",
+      "command": "submodule"
+    },
+    {
+      "time": "2026-11-03T16:14:04.4131152Z",
+      "command": "submodule"
+    },
+    {
+      "time": "2026-11-03T16:14:05.0225349Z",
+      "category": "fetch-group"
+    },
+    {
+      "time": "2026-11-03T16:23:59.9222910Z",
+      "category": "cancelled"
+    },
+    {
+      "time": "2026-11-03T16:24:00.7092029Z",
+      "command": "submodule"
+    },
+    {
+      "time": "2026-11-03T16:24:01.3813350Z",
+      "command": "submodule"
+    }
+  ],
+  "dependencyFiles": [
+    {
+      "file": "agent-team/tests/bug-pipeline/windows-review.test.mjs",
+      "bytes": 21659,
+      "sha256": "082762f220976a73978ce5fb2deca9657eecaf7adb996552c9b5697b49f9cc1f"
+    },
+    {
+      "file": "scripts/automation/install-claude-review-windows.mjs",
+      "bytes": 13884,
+      "sha256": "7331d589994af57187bedee93bc90e67d919e71c235cf3d9bc1b7b8328c38bba"
+    },
+    {
+      "file": "scripts/automation/run-claude-review-windows.mjs",
+      "bytes": 3757,
+      "sha256": "204a3ddfcb3530961b96cb0afa1b29affbfdd742ab486203c0fe7d474f45debb"
+    },
+    {
+      "file": "scripts/automation/install-claude-review-cron.mjs",
+      "bytes": 13331,
+      "sha256": "1f02b680941ec5b44eebd0821a2008798261474472691a17a8822c859b137f36"
+    },
+    {
+      "file": "scripts/automation/setup-claude-review-windows.ps1",
+      "bytes": 3083,
+      "sha256": "716a6281632940c72fbb12650675e2fa96106e52056a281c2267244d89951f22"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/process.mjs",
+      "bytes": 10533,
+      "sha256": "2859598df0808313faed958604a173d066ffd1ad627992e37ef605be7dea9870"
+    },
+    {
+      "file": "agent-team/src/core/sanitize.mjs",
+      "bytes": 1012,
+      "sha256": "1a4d2b9565663b3ed5a593cdecf7cbadbd6f9cd6ef296a4b8c1c426b08ca042b"
+    }
+  ],
+  "excludesTestCreatedFixtures": true,
+  "providerCalls": false,
+  "remoteWrites": false
+}
+END ORIGINAL
+
+## Fresh root-supplied canonical lineage snapshot
+Bytes: 20962; SHA-256: 4ec678afd7ede032eacb50e2672f1d52bfd8d72557bdf51a743fa7eda7f6d8a9
+BEGIN ORIGINAL
+{
+  "at": "2026-11-03T16:45:13.267Z",
+  "provenance": "fresh authenticated canonical read; not review approval",
+  "sourceSha": "21cbfa5b90dcde75b076521278d1f1c6a95bbc08",
+  "baseSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+  "subject": {
+    "id": "standalone-pr-527",
+    "sha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+    "phase": "waiting-review",
+    "implementation": [
+      {
+        "round": 1,
+        "subjectSha": "b4f460fc8f4fc361d99a1f1bae3de64a2b14a29a",
+        "status": "passed",
+        "evidence": "validation-report.md"
+      }
+    ],
+    "reviews": [
+      {
+        "round": 1,
+        "status": "changes-requested",
+        "subjectSha": "7a53b9ccf323406f25acce676e3e64493523faf6"
+      }
+    ],
+    "reviewLedger": {
+      "schema_version": 1,
+      "max_rounds": 4,
+      "rounds": [
+        {
+          "round": 1,
+          "verdict": "changes-requested",
+          "subject_sha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+          "review_sha256": "907d75f20a77daf5833c5016d4a20f4a6ffe36245247f94c66ad08340a2befc2"
+        }
+      ]
+    },
+    "reviewReports": {
+      "claude-review-1.json": "{\n  \"subject_sha\": \"7a53b9ccf323406f25acce676e3e64493523faf6\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"This PR moves the dynamic capacity check into a pure `reviewCapacity` validator. The arithmetic is equivalent, the new safe-integer guards are stricter, and the check still runs before any claim on both the normal and recovery paths. Authentication, tool restrictions, source and blob bounds, ownership checks and round accounting are unchanged. The exact-boundary, one-byte-over, Unicode, recovery and pre-claim tests support most of the acceptance criteria.\\n\\nOne regression remains. The source reader uses the same `MAX_PACKET` value to decide whether to include optional evidence, and that value is now the static ceiling of 934,464 bytes. That ceiling can never be reached: any real prompt prefix, schema and output allowance push the actual admissible size well below it (about 806,464 bytes for prompt plus schema with a 128k output allowance). As a result, optional reports are now added until the packet passes the real limit, and the whole subject is blocked as capacity-unavailable. Before this change, those reports would have been omitted and the review would have proceeded. This contradicts the criterion that bounded evidence selection stays unchanged.\\n\\nI did not run any tests. The QA report and CI results come from the supplied evidence only.\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"agent-team/src/bug-pipeline/cloud-review-worker.mjs\",\n      \"line\": 46,\n      \"problem\": \"`MAX_PACKET` now equals the static transport ceiling (qualified context minus native margin). The source reader also uses it in the optional-evidence check (current packet size plus twice the entry size compared with `MAX_PACKET`) and in its `bounded` assertion. Real admission also counts the trusted prompt prefix, the serialized schema and the observed output allowance, so any packet between the real limit and the static ceiling is always rejected. Optional analysis, review, QA and seal reports are now added until the packet is in that range, and then `prepareCloudInference` blocks the entire subject as capacity-unavailable. Before this change, the smaller cap caused those optional files to be listed in omittedTextEvidence and the review went ahead. So a candidate that used to be reviewable with documented omissions now cannot be reviewed at all, which contradicts acceptance criterion 3 (bounded evidence selection unchanged).\",\n      \"requested_change\": \"Keep the static transport ceiling only as the hard upper bound for assembling the packet. Use a separate, smaller budget for selecting optional evidence that leaves room for the prompt prefix, the schema and the output allowance, for example a conservative constant or a budget derived from the qualified profile, which would mean qualifying before retrieval. That way optional evidence is omitted (and recorded in omittedTextEvidence) before it can push an otherwise admissible packet over the real limit. Required contract, plan and validation files and source changes should still fail closed if they do not fit.\",\n      \"test_expectation\": \"Add a source-reader test with required source and contract content that fits the observed 128k-output profile, plus several optional report files whose combined size would exceed the real limit but stay under the static ceiling. Expected result: the reader omits the excess optional files, `prepareCloudInference` succeeds, and processCloudReview makes one claim and one model call. In the same fixture, if required content alone exceeds the real limit, the result must still be capacity-unavailable with no claim.\"\n    }\n  ]\n}\n"
+    },
+    "releaseHold": {
+      "code": "TECHNICAL_NO_AUTOMATIC_RELEASE",
+      "reason": "Separate technical PR requires real exact-head Max review and final Codex verification; no automatic merge or deployment from this subject. Original demo release remains separately gated."
+    },
+    "operatorCoordination": {
+      "schemaVersion": 1,
+      "active": true,
+      "owner": "codex-desktop-root-review-capacity",
+      "nonce": "d4f950b4-e7ad-4680-a7cf-e8f59415c84a",
+      "worktree": "C:/w-rv/review-capacity20261103",
+      "sourceSha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+      "stage": "technical-round2-authoring-real-Max-finding",
+      "startedAt": "2026-11-03T07:39:27.273Z",
+      "pendingImplementation": {
+        "round": 2,
+        "status": "reserved-authoring-not-yet-completed",
+        "budgetSource": "existing-default-four",
+        "defaultLimit": 4,
+        "baseSourceSha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+        "reviewRoundCorrected": 1,
+        "reviewReportSha256": "907d75f20a77daf5833c5016d4a20f4a6ffe36245247f94c66ad08340a2befc2",
+        "owner": "codex-desktop-root-review-capacity",
+        "delegate": "/root/auth_expiry_qa",
+        "nonce": "3bee1059-1e8f-4448-8ae5-bfb1f8fbe9d9",
+        "worktree": "C:/w-rv/review-capacity-r2-author20261103",
+        "branch": "codex/review-capacity-r2-author-20261103",
+        "paths": [
+          "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+          "agent-team/src/bug-pipeline/cloud-review-capacity.mjs",
+          "agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs",
+          "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+          "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+          "agent-team/tests/bug-pipeline/cloud-review-capacity-fixture.mjs",
+          "agent-team/tests/bug-pipeline/cloud-review-evidence.test.mjs"
+        ],
+        "reason": "Correct independently verified real Claude finding: optional evidence must not make otherwise admissible source/required evidence fail dynamic capacity. Preserve immutable-source retrieval-before-probe, required-content failure and shared normal/recovery preclaim gates.",
+        "actualUserAuthority": "Previously authorized separate technical repair with own tests, real Max review and iterative code corrections within default four; not authority for a new output/model/profile policy.",
+        "authBudgetsChanged": false,
+        "newAllowance": false,
+        "newNativeProfilePolicyAuthorized": false,
+        "merge": false,
+        "deploy": false,
+        "startedAt": "2026-11-03T07:58:25.217Z",
+        "pathClaimAmendment": {
+          "at": "2026-11-03T13:09:50.717Z",
+          "reason": "Keep each new/modified capacity test and fixture under500 lines without disabling assertions; explicit shared fixture and new regression suite.",
+          "newPaths": [
+            "agent-team/tests/bug-pipeline/cloud-review-capacity-fixture.mjs",
+            "agent-team/tests/bug-pipeline/cloud-review-evidence.test.mjs"
+          ],
+          "profilePolicyChange": false,
+          "additionalAllowance": false
+        },
+        "packetOutput": {
+          "at": "2026-11-03T16:26:30.890Z",
+          "path": "artifacts/task-validation/claude-review-capacity-20261103-r2",
+          "owner": "codex-desktop-root-review-capacity",
+          "ownerNonce": "d4f950b4-e7ad-4680-a7cf-e8f59415c84a",
+          "worktree": "C:/w-rv/review-capacity20261103",
+          "candidateSourceSha": "21cbfa5b90dcde75b076521278d1f1c6a95bbc08",
+          "round": 2,
+          "status": "reserved-not-frozen-or-adopted",
+          "previousPacket": "artifacts/task-validation/claude-review-capacity-20261103",
+          "historyImmutable": true,
+          "preservePriorImplementationEvidenceBytes": true,
+          "actualFinalHeadCIInCanonicalPlan": true,
+          "reviewSpent": 1,
+          "newAllowance": false,
+          "noAutomaticRelease": true
+        }
+      },
+      "nativeProfileQualificationAuthority": {
+        "at": "2026-11-03T13:02:24.846Z",
+        "reservation": {
+          "scope": "extend-527-to-qualify-complete-context-native-Max-profile",
+          "owner": "codex-desktop-root-review-capacity",
+          "ownerNonce": "d4f950b4-e7ad-4680-a7cf-e8f59415c84a",
+          "existingPendingTechnicalRound": 2,
+          "maximumQualifiedContextTokens": 1000000,
+          "nativeSafetyMarginPreserved": 65536,
+          "completeSourceAndCriticalContextRequired": true,
+          "authenticClaudeCodeMax": true,
+          "alternativeAPI": false,
+          "APIKeyFallback": false,
+          "trimProofs": false,
+          "newDemoAllowance": false,
+          "resetHistory": false,
+          "productionAuthorized": false,
+          "qualificationRequiredBeforeAppClaim": true,
+          "technicalOwnTestsCIRealMaxFinalReviewRequired": true,
+          "noAutomaticMerge": true,
+          "noAutomaticDeployment": true,
+          "note": "Actual bounded native-profile design and effective-limit proof still required. This grant is not approval of a 32k environment shortcut, a code version, model report, protected release or new app attempt."
+        },
+        "authorization": {
+          "provenance": "user-session",
+          "grantId": "desktop-527-native-profile-qualification-extension",
+          "consumptionNonce": "df8aee88-7d17-4fd3-8528-b07e886ad5e4",
+          "sourceRef": "user-session:20261103-authorize-native-full-context-profile-PR527",
+          "binding": {
+            "version": 1,
+            "repository": "l2v-hub/ClinicOS",
+            "collection": "standaloneReviews",
+            "entityId": "standalone-pr-527",
+            "pr": 527,
+            "reviewIssue": null,
+            "actor": "l2v-hub",
+            "action": "extend-technical-native-profile-scope",
+            "subjectSha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+            "historyDigest": "9d7a7d947247c82a7db85aa32c18207e259f56409fb65687ed781a5155e1c687",
+            "reservation": {
+              "scope": "extend-527-to-qualify-complete-context-native-Max-profile",
+              "owner": "codex-desktop-root-review-capacity",
+              "ownerNonce": "d4f950b4-e7ad-4680-a7cf-e8f59415c84a",
+              "existingPendingTechnicalRound": 2,
+              "maximumQualifiedContextTokens": 1000000,
+              "nativeSafetyMarginPreserved": 65536,
+              "completeSourceAndCriticalContextRequired": true,
+              "authenticClaudeCodeMax": true,
+              "alternativeAPI": false,
+              "APIKeyFallback": false,
+              "trimProofs": false,
+              "newDemoAllowance": false,
+              "resetHistory": false,
+              "productionAuthorized": false,
+              "qualificationRequiredBeforeAppClaim": true,
+              "technicalOwnTestsCIRealMaxFinalReviewRequired": true,
+              "noAutomaticMerge": true,
+              "noAutomaticDeployment": true,
+              "note": "Actual bounded native-profile design and effective-limit proof still required. This grant is not approval of a 32k environment shortcut, a code version, model report, protected release or new app attempt."
+            },
+            "budget": null
+          },
+          "bindingDigest": "a90244a34ebe757c19412524c4ca3b2ac42558e08f90fa0e6d433f56381d5b20"
+        },
+        "status": "authorized-design-and-qualification-not-yet-implemented-or-approved"
+      },
+      "nativePathClaims": {
+        "at": "2026-11-03T14:41:57.833Z",
+        "round": 2,
+        "nonce": "3bee1059-1e8f-4448-8ae5-bfb1f8fbe9d9",
+        "scopeGrant": "desktop-527-native-profile-qualification-extension",
+        "protocol": {
+          "owner": "/root/auth_expiry_qa",
+          "worktree": "C:/w-rv/review-capacity-r2-author20261103",
+          "paths": [
+            "agent-team/src/bug-pipeline/native-guard-json.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-json.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-request.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-request.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-response.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-response.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-state.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-state.test.mjs"
+          ]
+        },
+        "runtime": {
+          "owner": "/root/auth_expiry_ops",
+          "worktree": "C:/w-rv/review-capacity-native-runtime20261103",
+          "paths": [
+            "agent-team/src/bug-pipeline/native-guard-container.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-container.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-launcher.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-launcher.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-certificates.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-certificates.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-proxy.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-proxy.test.mjs"
+          ]
+        },
+        "integration": {
+          "owner": "codex-desktop-root-review-capacity",
+          "worktree": "C:/w-rv/review-capacity20261103",
+          "paths": [
+            "agent-team/src/bug-pipeline/native-guard-session.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-session.test.mjs",
+            "agent-team/src/bug-pipeline/native-guard-qualification.mjs",
+            "agent-team/tests/bug-pipeline/native-guard-qualification.test.mjs",
+            "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+            "agent-team/src/bug-pipeline/cloud-review-capacity.mjs",
+            "agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs",
+            "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+            "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+            ".github/workflows/claude-cloud-review.yml",
+            "docs/architecture/native-guard-profile.md",
+            "agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs"
+          ]
+        },
+        "noRealOAuthOnCandidate": true,
+        "noNewAllowance": true,
+        "noAutomaticRelease": true
+      },
+      "nativeClaimAmendments": [
+        {
+          "at": "2026-11-03T15:26:23.295Z",
+          "subject": "standalone-pr-527",
+          "round": 2,
+          "nonce": "3bee1059-1e8f-4448-8ae5-bfb1f8fbe9d9",
+          "path": "agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs",
+          "reason": "Independent exact210 QA found genuine workflow option-list regression; preserve assertion and strengthen finite manual-only native-mode fences",
+          "budgetsChanged": false
+        }
+      ]
+    },
+    "adoption": {
+      "actor": "l2v-hub",
+      "at": "2026-11-03T07:38:31.967Z",
+      "subjectSha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+      "importedReviewCount": 0,
+      "manifestSha256": "98419bceb053cf2d99fe98f76f66250e434ef7bb723259987614b4766fe80669"
+    },
+    "reviewHandoffHistory": [
+      {
+        "at": "2026-11-03T07:40:44.050Z",
+        "actor": "l2v-hub",
+        "previous": null,
+        "recovery": false,
+        "spentReviews": 0
+      }
+    ],
+    "externalReview": {
+      "channel": "github-comments",
+      "status": "published",
+      "subjectSha": "7a53b9ccf323406f25acce676e3e64493523faf6",
+      "requestId": "72fe42e2-3faa-4ca0-b22a-3c8b25c17581",
+      "requestedAt": "2026-11-03T07:40:44.050Z",
+      "requestedBy": "l2v-hub",
+      "owner": "l2v-hub",
+      "claimId": "f427a950-db9e-45c9-af92-6481a10c3bf9",
+      "startedAt": "2026-11-03T07:43:41.689Z",
+      "feedbackFingerprint": "6e8f30f064f3fa6a4d3751cd2d82e15137c7500b7bf8b3f4a1f581f2d19dc169",
+      "reportComment": 6598193824,
+      "reportBodySha256": "2e1f8d51fa324c947c34246f4ba7dfc6a32337ecfae4c28cd5cda3500f38068e",
+      "completedAt": "2026-11-03T07:46:07.751Z",
+      "feedbackChanged": false
+    }
+  },
+  "parent": {
+    "id": "standalone-pr-525",
+    "sha": "29b751eb87348f62aeb8e66b135e503abeb29ea0",
+    "implementation": [
+      {
+        "round": 1,
+        "status": "failed",
+        "subjectSha": "c104d79ddc4047ca39bd8cfd0150d56ef4b503f1",
+        "evidence": "history/qa1-report.md"
+      },
+      {
+        "round": 2,
+        "status": "passed",
+        "subjectSha": "03529a96c3a37e4ffb4989497ca3db9fe32a9968",
+        "evidence": "validation-report.md"
+      },
+      {
+        "round": 3,
+        "status": "passed",
+        "subjectSha": "ae9995f546d0adbbaa8033b3957e2fbd943723d9",
+        "evidence": "revision3-validation-report.md"
+      },
+      {
+        "round": 4,
+        "status": "passed",
+        "subjectSha": "a5be73fa0d6d75abe216b67f99dbc754449f6315",
+        "evidence": "revision4-validation-report.md"
+      }
+    ],
+    "reviews": [
+      {
+        "round": 1,
+        "status": "changes-requested",
+        "subjectSha": "ed5686807ea4a358430563c7a488fde1bf478f81"
+      },
+      {
+        "round": 2,
+        "status": "approved",
+        "subjectSha": "3fdedec7305d86972b255a7f532d2028b9a0eabb"
+      }
+    ],
+    "reviewLedger": {
+      "schema_version": 1,
+      "max_rounds": 4,
+      "rounds": [
+        {
+          "round": 1,
+          "verdict": "changes-requested",
+          "subject_sha": "ed5686807ea4a358430563c7a488fde1bf478f81",
+          "review_sha256": "275dc4b08c1294740c85f3ea5d044e68c54fa1e7863a08ceebb04d3331384fd9"
+        },
+        {
+          "round": 2,
+          "verdict": "approved",
+          "subject_sha": "3fdedec7305d86972b255a7f532d2028b9a0eabb",
+          "review_sha256": "e8466e1092af650011938c9eaf07799398d10bbfd1007e9dab95dc8a129c4df5"
+        }
+      ]
+    },
+    "releaseHold": {
+      "code": "PERMANENT_DEMO_ONLINE_ACCEPTANCE_REQUIRED",
+      "reason": "No automatic issue closure: independently reviewed permanent demo-only availability, protected merge, separately authorized exact configuration/deployment and actual five-profile online acceptance remain mandatory; production requires an explicit user request."
+    },
+    "budgetExtensions": [
+      {
+        "entityId": "standalone-pr-525",
+        "pr": 525,
+        "kind": "implementation",
+        "previousLimit": 4,
+        "limit": 5,
+        "actor": "l2v-hub",
+        "at": "2026-11-02T22:37:37.561Z",
+        "reason": "Actual owner explicitly authorized only cycle5 for permanent demo and verified deployment, preserving original4 attempts/2 real reviews from parent523; sole linked child525, no second parent allowance or reset.",
+        "authorizationRef": "user-session:20261102-permanent-demo-explicit-cycle5",
+        "authorization": {
+          "provenance": "user-session",
+          "grantId": "desktop-permanent-demo-single-global-cycle5",
+          "consumptionNonce": "d3bb91af-6f45-4fd1-8934-8996cc3523aa",
+          "sourceRef": "user-session:20261102-permanent-demo-explicit-cycle5",
+          "binding": {
+            "version": 1,
+            "repository": "l2v-hub/ClinicOS",
+            "collection": "standaloneReviews",
+            "entityId": "standalone-pr-525",
+            "pr": 525,
+            "reviewIssue": null,
+            "actor": "l2v-hub",
+            "action": "extend-budget",
+            "subjectSha": "29b751eb87348f62aeb8e66b135e503abeb29ea0",
+            "historyDigest": "9025dce4401d0f0054b2a13be168e80ca68201cb3b6105269d5d54d1d8cd133a",
+            "reservation": null,
+            "budget": {
+              "kind": "implementation",
+              "previousLimit": 4,
+              "limit": 5
+            }
+          },
+          "bindingDigest": "d057bac6cd0e67819a728a64edbef08d8c204c48e86a1da5e565b0315c539432"
+        },
+        "nonce": "b84a8f33-5e82-464b-81e6-d063eb58596e",
+        "historyLength": 4,
+        "historyDigest": "b31e1ac720a82ec7f8ba53835ec956985cd91ee0d34678414a5515db55da90b8"
+      }
+    ]
+  },
+  "unchangedParent": true,
+  "pendingFinalHeadCI": true,
+  "newAllowance": false,
+  "providerExecuted": false
+}
+
+END ORIGINAL

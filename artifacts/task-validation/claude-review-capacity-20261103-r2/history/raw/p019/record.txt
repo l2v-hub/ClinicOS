@@ -1,0 +1,77 @@
+# Typed capacity-only signal: scoped author continuation, same pending round2
+
+AUTHOR verification only; not independent QA, combined freeze, native
+qualification, Claude approval, CI or a release. Sole writer used the original
+dedicated protocol checkout and ONLY native-guard-request.mjs and its test file.
+
+Base869ffe9611c14ee72c77d681f789bb3bb52acda6 retained. Initial red contract
+commit17240d68a9c67d36b73e8de85c53017c5894c3e7; intermediate replay-red
+commita4ccc54c364673aabdc0905d5025b04e013e0915 retained. Final scoped commit:
+39aea94ce38c08b0ef4c387e2c2d231cd2020b97.
+Tree0bf1dd073fff1a54769e06e0113eea54e21805d3. Source status clean.
+
+## Exact API and trust boundary
+
+NativeRequestCapacityError extends Error, with fixed sanitized message
+native-request-rejected, code native-context-exceeded, and frozen numeric-only
+metadata containing exactly:
+
+requiredTokensUpperBound, contextBytes, inputBytes, schemaBytes, maxTokens,
+contextWindow.
+
+Only the fully validated final context-overflow branch mints a recognized error.
+All framing/auth/header/body/schema/model/allowed-context checks still run first.
+No overflow returns an admissible seal. Every fitting request returns the same
+seal as before, and every other failure remains generic native-request-rejected.
+
+Exported isNativeRequestCapacityError checks private WeakSet mint provenance
+before instanceof. A public constructor/prototype copy is not authority. The
+validator catch additionally requires identity with the error minted by THIS
+invocation: replay of a prior genuine capacity error through an unrelated getter
+is normalized generic. Parameter extraction is inside that catch as well, so a
+top-level malicious getter cannot bypass normalization. No body/header/token or
+credential-derived hash appears in the error or metadata.
+
+Proxy/root must inject this exported classifier, not code-only or instance-only
+classification. The proxy copies only the six numeric fields, always poisons and
+closes the failed optional process with no staging/forward. Root decides whether
+its separately held mandatory-only process is still live/policy-ready and safe
+to use. This patch never implements generic fallback or creates another claim.
+
+## Actual TDD and fresh clean results
+
+Private receipt/log labels under this directory:
+
+- capacity-error-red:10 tests,8 PASS/2 FAIL, missing typed API on869. Independently
+  committed tests remain in17240d68.
+- capacity-error-green1:10/10 initially passed. Additional adversarial replay
+  coverage found a real intermediate bug: global mint provenance alone allowed a
+  genuine older error to be replayed into another request. capacity-error-replay-red
+  retains10 PASS/1 FAIL and the intermediate source is committed in a4ccc54c.
+- capacity-error-parameter-red retains11 PASS/1 FAIL for top-level destructuring
+  outside the catch. Fixed by extracting inside the existing validation boundary.
+- capacity-error-green3:12/12 focused PASS.
+- capacity-error-clean-full: fresh clean39aea94c replay of all12 selected suites:
+ 126/126 PASS, zero skips/failures (prior121 plus5 new contract/adversarial cases).
+- capacity-error-clean-format: both files PASS; git diff --check PASS. Runtime
+  source277 lines; matching test373 lines, both below500.
+
+Exact numeric test: a fully valid request one byte beyond the context boundary
+produces requiredTokensUpperBound1000001 and exact contextBytes+65536+actual
+maxTokens equality. Metadata/error are frozen and contain no fixture OAuth/native
+wrapper text. Oversize PLUS any invalid field, schema, role/content, cache shape,
+output cap or spoofed metadata remains generic and cannot trigger typed fallback.
+All old request tests retain their fail-closed assertions unchanged.
+
+Commands ran through trusted D2 createRunner verification with credentials
+stripped. No provider/actual Claude/OAuth/GitHub/canonical/Docker/deploy action,
+new allowance or counter/history reset. Existing independent failed210 QA and
+other source histories were not changed. An initial red Git commit completed
+as17240d68 while its tool session remained running without new output (background
+repository maintenance is suspected, not independently proven); no additional
+source writer was launched, and subsequent source identity/clean
+status and all final tests were verified explicitly. No process was killed.
+
+This is a two-path author handoff only. Root integration, independent new-source
+QA, exact CI, real Max and native qualification remain pending; no combined
+technical round completion or application resolution is claimed.

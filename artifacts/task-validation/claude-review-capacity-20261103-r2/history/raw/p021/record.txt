@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "status": "read-only-pinned-source-design-evidence-not-qualified-or-approved",
+  "source": {
+    "cliVersion": "2.1.301",
+    "linuxPackage": "@anthropic-ai/claude-code-linux-x64@2.1.301",
+    "lockVerifiedTarballSha256": "a7ffd61e7784e6dda864a31e934cececc050f106015201cb3db4abb59c781c57",
+    "passivelyInspectedBinarySha256": "bc1aad9982c7b59c7d889ff92595d61cf46e0a6eae074cb551d932a989bcd222",
+    "offsetUnit": "byte offset into passive package/claude bytes, not executed source",
+    "cliExecuted": false,
+    "providerOrAuthenticationCalled": false
+  },
+  "stderrRouting": {
+    "actualFlag": "--debug-to-stderr",
+    "alias": "-d2e",
+    "deprecatedButRegistered": true,
+    "flagRegistrationOffset": 235667937,
+    "launchParserOffset": 216576043,
+    "loggerEmitOffset": 216577800,
+    "loggerBehavior": "emit formats one timestamp/level line; if toStderr it invokes deps.writeToStderr and RETURNS before write/getWriter/file rotation/latest-symlink machinery",
+    "actualBackendOffset": 216586872,
+    "actualBackend": "writeToStderr => NW(message,{mayDrop:true})",
+    "recommendation": "Use actual stderr-only flag with bounded child stderr PIPE parsed only in memory. Do not use --debug-file /dev/stderr: that chooses the filesystem append/rotation/latest machinery unnecessarily.",
+    "limits": [
+      "Missing/dropped/truncated marker must fail closed; NW mayDrop is real.",
+      "This proves debug logger routing only, not an absence of ordinary native policy/auth cache files.",
+      "Unrelated stderr diagnostics can contain sensitive configuration or provider errors. Never inherit child stderr to GitHub logs, persist it, include it in thrown errors, or artifact raw bytes.",
+      "Parse exact complete timestamp/level/literal lines and retain only an enum, monotonic sequence and binary hash. Initial certificate must precede ANY source/model/user content."
+    ]
+  },
+  "initialPolicySettlement": {
+    "strongestActualEmptyMarker": "Remote settings: Saved empty sentinel (404 response)",
+    "offset": 234447419,
+    "actualMeaning": "Reached the empty-settings branch after Uyt(empty,{verified:true}), awaited environment reapplication when needed, consent handling, reset-epoch checks and awaited Ie cache save. The wording also covers HTTP204 or a validated HTTP200 with empty settings.",
+    "requiredPriorState": "Fresh private config, no old remote cache/policy, genuine firstParty injected OAuth, only fixed flag layer, no other config filesystem actors; reject all preceding failure/timeout/retry/override/cache/parse/salvage/save-error markers.",
+    "tooEarlyMarkers": [
+      {"literal": "Remote settings: No settings found (204)", "offset": 234433959, "why": "HTTP transport outcome before application"},
+      {"literal": "Remote settings: No settings found (404)", "offset": 234433959, "why": "HTTP transport outcome before application"},
+      {"literal": "Remote settings: Fetched successfully", "offset": 234434545, "why": "Validated transport body before application/consent"}
+    ],
+    "cacheRejected": [
+      "Remote settings: Using cached settings (304)",
+      "Remote settings: Cache still valid (304 Not Modified)",
+      "Remote settings: 304 to an unconditional request"
+    ],
+    "noIneligibleCertificate": "No explicit positive unsupported_subscription debug marker was found. Native init/account omits subscriptionType for CLAUDE_CODE_OAUTH_TOKEN by design. Do not synthesize a Max subscription field or infer unsupported_subscription from absent policy output.",
+    "saveCaveat": "Ie catches a cache write failure and returns; caller can still print the late empty marker. Therefore any earlier native Failed to save marker must poison the certificate; the marker alone is not proof of durable cache write.",
+    "barrierHole": {
+      "normalStartup": "Lqt is launched asynchronously in ordinary startup at235666143",
+      "watchdogOffset": 234422149,
+      "watchdogMilliseconds": 30000,
+      "literal": "Remote settings: Loading promise timed out, resolving anyway (load and fetch barriers)",
+      "whyHealthAloneFails": "The watchdog releases both promise barriers without canceling the fetch. A completed health answer and empty settings snapshots do not imply the initial fetch has finished."
+    }
+  },
+  "laterPolicyChanges": {
+    "normalPollIntervalMilliseconds": 3600000,
+    "intervalConstantOffset": 234421265,
+    "pollRegistrationOffset": 234456239,
+    "otherTriggers": [
+      "Auth-change refresh aAn at234450563 stops poller, resets settings eligibility/cache and starts another fetch.",
+      "Remote storage/cache change observers exist at217361287-217365390.",
+      "Settings source watchers can invalidate merged settings and reapply environment."
+    ],
+    "boundedProcessNecessaryNotSufficient": "Age below1h excludes the normal first periodic poll, not startup fetch tails/auth-change/other file writers. Reject subsequent policy/auth/config changes; guarantee no source writer, no host callback/token-rotation/control routes and private config before relying on a temporal proof.",
+    "environmentPriority": {
+      "orderOffset": 216980375,
+      "order": ["userSettings", "projectSettings", "localSettings", "flagSettings", "policySettings"],
+      "envApplicationOffset": 220435901,
+      "consequence": "Managed environment overwrites fixed --settings.env. Flag layer is not an organization-policy override; presence of any nonempty policy/source/error must reject rather than ignore it."
+    }
+  },
+  "nativeControlShapes": {
+    "getSettingsHandlerOffset": 243343154,
+    "settingsBuilderOffset": 217873019,
+    "response": {
+      "effective": "Merged settings, including env; inspect only in memory",
+      "sources": "Nonempty {source,settings} entries; only exact code-owned flagSettings expected",
+      "applied": ["model", "effort", "advisor", "ultracode", "ultracodeRequested", "ultracodeAvailable"],
+      "errors": "Non-warning parse/validation errors; do not treat this as full machine-source absence proof"
+    },
+    "noAppliedMaxOutputField": true,
+    "setModelHandlerOffset": 243284953,
+    "setModelOrder": "Enqueues native jVo; on ok refreshes engine state and awaits fi before matching successful control response. Still verify resolved applied.model after acknowledgement; do not trust an alias request alone.",
+    "initializeAccountOffset": 243379300,
+    "accountProjectionOriginOffset": 219785253,
+    "accountFields": ["subscriptionType", "tokenSource", "apiKeySource", "apiProvider"],
+    "injectedTokenPlanGap": "MOe uses if(tokenSource===CLAUDE_CODE_OAUTH_TOKEN or FD) set tokenSource; else-if stored login set subscription. Thus injected-token initialize account has no actual subscriptionType even after health.",
+    "getStatusNotPositiveSettlement": "K4o at245175265 reports remote policy only through fds; fds(ok)=false at226065031. Absence of error row cannot distinguish successful-empty from pending."
+  },
+  "twoSequentialMessages": {
+    "submitGeneratorOffset": 243021051,
+    "behavior": "submitMessage vr rejects overlapping turn; finally clears mr. Next serial user message invokes fresh Ys while preserving conversation in the same native process.",
+    "schemaCounterSnapshotOffset": 243032982,
+    "schemaLimitCheckOffset": 243043496,
+    "schemaAttemptFormula": "Duo(conversation,StructuredOutput)+retractions-Ju; Ju snapshots pre-query attempts, so health schema attempt is not charged again to next review query",
+    "correctEnvironmentVariable": "MAX_STRUCTURED_OUTPUT_RETRIES",
+    "terminalToolOffset": 223652719,
+    "terminalToolBehavior": "AJV-valid native StructuredOutput returns structured_output with endsTurn:true",
+    "completionBranchOffset": 234178480,
+    "completionBeforeNormalNextTurnGate": true,
+    "terminalPostprocessingOffset": 234109370,
+    "terminalPostprocessing": "Bm explicitly discards PostToolBatch continuation blocks with no model re-invoke; hooks/stop processing still exist and require proof of absence",
+    "numTurnsCaveat": "Some wrapper paths increment wo on user/tool-result rows. num_turns===1 is not a universal provider-request counter. Qualification must correlate actual assistant/stream request IDs and reject duplicate/model-fallback/compaction/helper calls."
+  },
+  "hardRemainingOutputBound": {
+    "status": "CURRENT_SINGLE_32768_RESERVE_NOT_PROVEN",
+    "maxOutputRecoveryLimit": 3,
+    "limitOffset": 234099422,
+    "recoveryTransitionOffset": 234170819,
+    "truncatedRecoveryOffset": 234171296,
+    "whyMaxTurnsOneIsInsufficient": "Output-limit/truncation recovery returns next-round transition carrying F+X+nudge without checking maxTurns or increasing ordinary turnCount. Up to3 recovery generations can follow the initial32k generation within the same agentic turn; missing/broken StructuredOutput need not consume schema attempt first.",
+    "additionalStateInteraction": "Malformed-tool retry at234171482 resets output-recovery guards via xr and retains previous F while retracting current X. A valid aggregate upper bound must account for this interaction rather than assume exactly4 total requests.",
+    "unsafeShortcut": "A host kill after receiving max_tokens/output event is asynchronous; without a proven synchronous pre-request fence it may race the next request. A successful synthetic qualification alone does not prove unreachable failure-path retries.",
+    "noNativeFlagFound": "Passive env/CLI scan found no exposed max-api-attempts flag or disable-output-limit-recovery environment switch. Internal apiAttemptsLeft exists but is not exposed on the standard main headless control path.",
+    "toolSummaryGate": "Optional native helper at234176832 invokes tool_use_summary_generation when CLAUDE_CODE_EMIT_TOOL_USE_SUMMARIES is true; md at234098670 reads only that env gate. Ensure absent/false in sanitized env and reject any settings override; maxTurns does not govern that helper."
+  },
+  "nextFalsifiableTests": [
+    "Mock exact stderr line protocol: no marker, watchdog, failures,304, save failure then apparent late-success, partial line, dropped marker, duplicated settlement and post-certificate change all reject with no source payload/claim.",
+    "Mock managed env overwriting flag cap: effective snapshot rejects; unknown layer/error rejected; no raw settings/debug in receipts/errors.",
+    "Real later authorized qualification on trusted approved main: initialize, positive native empty settlement before any model, settings snapshot, health, numeric model pin+snapshot, serial second synthetic schema query, exact output/counter/stream IDs, post-query snapshot.",
+    "Test automatic max_tokens/truncation/malformed response paths against pinned native protocol before using a reduced aggregate output reserve. No capacity approval merely because two normal responses succeeded."
+  ],
+  "authorityAndPreservation": {
+    "researchOnly": true,
+    "noSourceControllerClaimOrGitHubWrites": true,
+    "noRawNativeSettingsDebugCredentialsRead": true,
+    "noProviderOrCliExecution": true,
+    "originalBudgetAndHistoryUnchanged": true,
+    "noApprovalAllowanceOrReleaseCreated": true
+  }
+}

@@ -1,0 +1,266 @@
+{
+  "independent": true,
+  "reviewer": "auth_expiry_final_qa",
+  "agent": "/root/auth_expiry_final_qa",
+  "status": "passed",
+  "sourceSha": "b4f460fc8f4fc361d99a1f1bae3de64a2b14a29a",
+  "tree": "ed6cbca84e226a1224168a7c930cb038a148fef8",
+  "baseSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+  "trackedClean": true,
+  "findings": [],
+  "scope": "independent-source-bound-internal-review-capacity-QA",
+  "summary": "Frozen four-file technical change passed 85 independent requested suite cases and 27 additional primitive edge cases. Independently reproduced D2 red using the exact new eight-test assertions with only two module import redirects: 3 pass/5 expected capacity failures. Complete pinned before/after and all selected context above700KiB, exact/+1 dynamic boundary, Unicode/escaping, finite static overflow, malformed profile/byte sizes, observed output allowance and preclaim/recovery fences verified. No source/auth/tools/history/claim-order weakening found. No real Claude auth/probe/review, native claim/recovery, external write, UI/browser, merge or deployment was performed. CI and genuine exact-head Max/final verification remain required.",
+  "reportPath": "C:/w-rv/tmp/review-capacity-20261103/independent-qa/report.md",
+  "reportSha256": "76b88a52170163a9dae40ea1268e269021bfa20a2bfd10844143174f6cb53b9e",
+  "evidencePath": "C:/w-rv/tmp/review-capacity-20261103/independent-qa/execution-evidence.json",
+  "evidenceSha256": "c221e9cb383f28483cafe582cacc61c175253a698a93d7fb3e052c3f58f34823",
+  "sourceManifest": [
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-capacity.mjs",
+      "blob": "4ad83f47ab57a51963fb96b708912473886f3b9b",
+      "sha256": "563e14fcc9b9e416853d1cb6a0b94b004cf4d8c9370de2388f2ced8877d93919"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "blob": "b6fe77bb0c686edcb4b35ababcbcb21c98bd8627",
+      "sha256": "2ff76a9e0f3650dcc63e592dc4db3d1dedd488d696e9db6cb126a8abc2909e2d"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+      "blob": "f80f3072674031ee11ba4b966ded7e638f9da338",
+      "sha256": "d8c18a3a88abba20c888cb7651f72407759cd8600c4d26438ffe1b2ce75036ab"
+    },
+    {
+      "path": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "blob": "5cd7fec1f3869942c6eaf6651b003e7cf574748e",
+      "sha256": "e041c3a148cd9a1a4727c9b1215d405688a12a0a6b9196da312577b54b27e9b5"
+    }
+  ],
+  "unchangedContext": [
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs",
+      "blob": "977cca133c985aa2d0e0222a9eaad3825f52b851",
+      "sha256": "2670e79fb61c0904f03b7350dc413ea8d22d825018598051b624967d3089849e"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-review-recovery.mjs",
+      "blob": "d3c37cea8987b73ef6d0583990d652e66536122e",
+      "sha256": "3c5285ca892e72ca3a4114fd602ec23b2a02913097f3ba31346d39ba02a62485"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/cloud-recovery-qualification.mjs",
+      "blob": "18a247f580484ba98a317caba8216d9f01f1789f",
+      "sha256": "ebd7ae15f6c15c81af4aee2a8b0ca355a987e114d3a6257296800cc8f287cfbd"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "blob": "ea6cec8a0cace0dbb3876dce48e3efe8daf796be",
+      "sha256": "086ee18c81a07353d8dbc1d835b39e2338d4b7c1bed1a38e65ab6570dceea435"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "blob": "61deb6074d09ad83158644db33f88d8cb12ee2e5",
+      "sha256": "10f94026e6622b85ea80d0565c43e77ba1c56a22e93db94608678924a6382efd"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/process.mjs",
+      "blob": "58eb486c968ea9c1181c647609479d639478a713",
+      "sha256": "2859598df0808313faed958604a173d066ffd1ad627992e37ef605be7dea9870"
+    },
+    {
+      "path": "agent-team/src/bug-pipeline/github.mjs",
+      "blob": "b6f4829b1e1560b8b7af2a882399f442ce86451e",
+      "sha256": "0c7b8a38f097ea6c6d0bb7f49b407ed08cbd75bd23fa3d372b75fb556d82c212"
+    }
+  ],
+  "testReceipts": [
+    {
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "focused-six",
+      "cwd": "C:/w-rv/review-capacity-qa20261103",
+      "sourceSha": "b4f460fc8f4fc361d99a1f1bae3de64a2b14a29a",
+      "tree": "ed6cbca84e226a1224168a7c930cb038a148fef8",
+      "startedAt": "2026-11-03T06:59:40.708Z",
+      "finishedAt": "2026-11-03T06:59:41.215Z",
+      "args": [
+        "--test",
+        "agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-review-recovery.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-recovery-transport.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-recovery-source.test.mjs",
+        "agent-team/tests/bug-pipeline/cloud-recovery-qualification.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "stdoutSha256": "9be8ffda4d6ac57e0f703646e3b83d0485f214b5e81351d676e4bfcaacf1e42f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trackedClean": true,
+      "headUnchanged": true,
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-qa/focused-six/receipt.json",
+      "receiptSha256": "66ffeef7f3ab9ab4444a2c0b43e25cd8260560dbf2893c7b0199374b68eb64b8",
+      "counts": {
+        "tests": 85,
+        "pass": 85,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "expectedBaselineRed": false
+    },
+    {
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "independent-edges",
+      "cwd": "C:/w-rv/review-capacity-qa20261103",
+      "sourceSha": "b4f460fc8f4fc361d99a1f1bae3de64a2b14a29a",
+      "tree": "ed6cbca84e226a1224168a7c930cb038a148fef8",
+      "startedAt": "2026-11-03T07:02:38.765Z",
+      "finishedAt": "2026-11-03T07:02:38.930Z",
+      "args": [
+        "--test",
+        "C:/w-rv/tmp/review-capacity-20261103/independent-qa/primitive-edges.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": true,
+      "exitCode": 0,
+      "error": null,
+      "stdoutSha256": "977eaeca1b807ca06f8d1d1ed8d102d68e6f5ad60579a9ed2ccf57b7c8941e27",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trackedClean": true,
+      "headUnchanged": true,
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-qa/independent-edges/receipt.json",
+      "receiptSha256": "06dace35ccafb332a37cf8694614943324bb7bd1442185a700da9d8ea0adbf73",
+      "counts": {
+        "tests": 27,
+        "pass": 27,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "expectedBaselineRed": false
+    },
+    {
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "baseline-new-eight",
+      "cwd": "C:/w-rv/review-capacity-qa20261103",
+      "sourceSha": "b4f460fc8f4fc361d99a1f1bae3de64a2b14a29a",
+      "tree": "ed6cbca84e226a1224168a7c930cb038a148fef8",
+      "startedAt": "2026-11-03T07:01:29.530Z",
+      "finishedAt": "2026-11-03T07:01:29.742Z",
+      "args": [
+        "--test",
+        "C:/w-rv/tmp/review-capacity-20261103/independent-qa/capacity-baseline.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": false,
+      "exitCode": 1,
+      "error": null,
+      "stdoutSha256": "f865ca13a86d6c4fd443d1d7314d1ac817774a27b36b6064c1681f8d887deedf",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trackedClean": true,
+      "headUnchanged": true,
+      "path": "C:/w-rv/tmp/review-capacity-20261103/independent-qa/baseline-new-eight/receipt.json",
+      "receiptSha256": "b8b6710e81deb89b96a0adac0ee4408fdded7410769448697ce1a016ce933224",
+      "counts": {
+        "tests": 8,
+        "pass": 3,
+        "fail": 5,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "expectedBaselineRed": true
+    }
+  ],
+  "currentCandidateChecks": {
+    "focusedSix": {
+      "tests": 85,
+      "pass": 85,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "independentPrimitiveEdges": {
+      "tests": 27,
+      "pass": 27,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0
+    }
+  },
+  "baselineRed": {
+    "sourceSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+    "originalTestPath": "C:/w-rv/review-capacity-qa20261103/agent-team/tests/bug-pipeline/cloud-review-capacity.test.mjs",
+    "originalTestSha256": "d8c18a3a88abba20c888cb7651f72407759cd8600c4d26438ffe1b2ce75036ab",
+    "generatedCopyPath": "C:/w-rv/tmp/review-capacity-20261103/independent-qa/capacity-baseline.test.mjs",
+    "generatedCopySha256": "330a2bc10d8ed45560f537ca525644934b03ef24ec9eeedce9827265b2624e6b",
+    "transforms": [
+      [
+        "../../src/bug-pipeline/cloud-review-worker.mjs",
+        "file:///C:/w-rv/auth-release-main20261102/agent-team/src/bug-pipeline/cloud-review-worker.mjs"
+      ],
+      [
+        "../../src/bug-pipeline/cloud-review-recovery-worker.mjs",
+        "file:///C:/w-rv/auth-release-main20261102/agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs"
+      ]
+    ],
+    "onlyTwoImportPathsChanged": true,
+    "assertionsBytePreserved": true,
+    "baselineModules": [
+      {
+        "path": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+        "sourceSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+        "blob": "3be4ae535b51ab99e7038a66bd7f459ac0a4997f",
+        "sha256": "68373567453da283564871ee60d8d8ca55b12510fe80abefcd3202890b0d4fa4"
+      },
+      {
+        "path": "agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs",
+        "sourceSha": "d2a08b4850dd954bb790e35f2ed350d5eeacd1c4",
+        "blob": "977cca133c985aa2d0e0222a9eaad3825f52b851",
+        "sha256": "2670e79fb61c0904f03b7350dc413ea8d22d825018598051b624967d3089849e"
+      }
+    ],
+    "tests": 8,
+    "pass": 3,
+    "expectedCapacityFailures": 5,
+    "exitCode": 1,
+    "isCurrentCandidateFailure": false,
+    "originalAssertionsUnchanged": true
+  },
+  "capacityContract": {
+    "qualifiedMaximum": 1000000,
+    "nativeMargin": 65536,
+    "finiteTransportBytes": 934464,
+    "fixtureObservedOutput": 128000,
+    "maxPromptPlusSchemaAtThatOutput": 806464,
+    "countsActualUtf8SerializedPromptAndSchema": true,
+    "claimBeforeCapacityAllowed": false,
+    "staticCeilingIsNotPromptAllowance": true
+  },
+  "baselineAndAuthorEvidenceDistinguished": true,
+  "realProviderInvoked": false,
+  "realProbeOrRecoveryInvoked": false,
+  "sourceEdited": false,
+  "uiBrowserRequired": false,
+  "externalOrCanonicalWritePerformed": false,
+  "modelApprovalClaimed": false,
+  "mergeOrDeploymentAuthorized": false,
+  "preservedParentDemoBudgetsAndHolds": true,
+  "remainingGates": [
+    "exact-technical-head CI",
+    "genuine exact-SHA Claude Max review under current trusted worker",
+    "separate final verification and protected merge; no automatic merge",
+    "fresh complete actual packet/model-capacity preflight before any future PR525 claim; no assumed fit or demo action authorization"
+  ],
+  "provenanceNote": "Root must establish independence through this actual agent/task; JSON fields alone are not approval or authorization."
+}

@@ -1,0 +1,18 @@
+{
+  "runId": 41670288154,
+  "sha": "4c8beb83c6ea11ba286f33372bf76ba1814c3770",
+  "actualLogSha256": "3463a01eab1d3a21393940e22ebd40ad63545899173b0492a436022c5dbf8010",
+  "failures": [
+    {
+      "line": 6002,
+      "context": "  ...\n# Subtest: Linux controlled bridge TCP/DNS baseline succeeds; identical network-none fixture cannot escape\nnot ok 530 - Linux controlled bridge TCP/DNS baseline succeeds; identical network-none fixture cannot escape\n  ---\n  duration_ms: 3961.738604\n  type: 'test'\n  location: '/home/runner/work/ClinicOS/ClinicOS/agent-team/tests/bug-pipeline/native-guard-container.test.mjs:241:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    The expression evaluated to a falsy value:\n\n      assert.ok(tcpAccepted > before.tcpAccepted && dnsAnswered > before.dnsAnswered)\n\n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: true\n  actual: false\n  operator: '=='\n  stack: |-\n    TestContext.<anonymous> (file:///home/runner/work/ClinicOS/ClinicOS/agent-team/tests/bug-pipeline/native-guard-container.test.mjs:430:18)\n    process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    async Test.run (node:internal/test_runner/test:1054:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: guard JSON decodes valid bounded UTF8 once and returns immutable values\nok 531 - guard JSON decodes valid bounded UTF8 once and returns immutable values\n  ---\n  duration_ms: 1.324351\n  type: 'test'\n  ...\n# Subtest: duplicate decoded/prototype keys and unpaired surrogates never survive parsing\nok 532 - duplicate decoded/prototype keys and unpaired surrogates never survive parsing\n  ---\n  duration_ms: 1.291962\n  type: 'test'\n  ...\n# Subtest: JSON byte/depth/node/string bounds apply before unbounded construction\nok 533 - JSON byte/depth/node/string bounds apply before unbounded construction\n  ---\n  duration_ms: 0.31067\n  type: 'test'\n  ...\n# Subtest: duplicate keys are rejected at every nesting and diagnostics never echo input\nok 534 - duplicate keys are rejected at every nesting and diagnostics never echo input"
+    }
+  ],
+  "summary": [
+    "# tests 2012",
+    "# pass 2008",
+    "# fail 1",
+    "# cancelled 0",
+    "# skipped 3"
+  ]
+}

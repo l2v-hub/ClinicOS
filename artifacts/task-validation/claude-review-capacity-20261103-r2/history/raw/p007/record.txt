@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "independent": true,
+  "reviewer": "auth_expiry_final_qa",
+  "agent": "/root/auth_expiry_final_qa",
+  "status": "blocked",
+  "scope": "offline combined independent QA before genuine Max; not post-Claude approval",
+  "sourceSha": "10000045b9a7884ea970acba204459c5e2c4d889",
+  "tree": "1a2ba4aaa9d12efe110e75083a79f377c6d61f12",
+  "indexSha256": "4dc9073214003077d17b3df030e928644a104f39144f4c59f4792bd51a5a4788",
+  "findings": [
+    {
+      "id": "combined-policy-await-gap",
+      "priority": 1,
+      "file": "agent-team/src/bug-pipeline/native-guard-session.mjs",
+      "line": 151,
+      "relatedFile": "agent-team/src/bug-pipeline/native-guard-state.mjs",
+      "relatedLine": 54,
+      "title": "Late policy invalidation before the write does not synchronously poison the data gate",
+      "repro": "Actual private nested-microtask diagnostic invalidates policy after the session claim wrapper computes true but before the state await resumes. State remains RELEASED and forwards once. Expected0, actual1. Final release rejection does not undo the forbidden forward.",
+      "receiptPath": "policy-after-await-microtask/receipt.json",
+      "testPath": "policy-microtask-repro.test.mjs",
+      "executed": true,
+      "assertionsWeakened": false
+    }
+  ],
+  "summary": "Blocked exact frozen source. Independent all18 replay171 cases:168PASS/3explicitLinuxSKIP. Original runtime deadline and original3 session regression assertions pass after required per-runtime isLive fixture adaptation only; initial adapter failure preserved. Stronger late-policy await interleaving genuinely fails with1 forbidden synthetic forward. Network control repair is source/pure-test checked, not Linux executed. No qualification, full-controller-green, Max or release approval inferred.",
+  "reportPath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/report.md",
+  "reportSha256": "5886eebd7edacc0989bde3c8e3ac9abd26b178e4f4d7baa483ae9d36bdd8d8c3",
+  "evidencePath": "C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/execution-evidence.json",
+  "evidenceSha256": "57c302d13f90dec5a861320c4cb761fe54640b0849175e21d45a188d2e677fb8",
+  "sourceManifest": {"path": "execution-evidence.json", "field": "manifest", "paths": 46, "includesImmutableGitBlobAndSha256": true, "sparseHistoricalArtifactsIdentified": true},
+  "tests": [
+    {"receiptPath": "all-proper-eighteen/receipt.json", "pass": 168, "fail": 0, "skip": 3, "cancelled": 0, "exitCode": 0},
+    {"receiptPath": "prior-behavioral-reproofs/receipt.json", "pass": 30, "fail": 1, "skip": 0, "cancelled": 0, "exitCode": 1, "failureClassification": "private isLive adapter shared across fresh runtimes; retained, then corrected without assertion changes"},
+    {"receiptPath": "corrected-original-session-reproofs/receipt.json", "pass": 3, "fail": 0, "skip": 0, "cancelled": 0, "exitCode": 0},
+    {"receiptPath": "policy-after-await-microtask/receipt.json", "pass": 0, "fail": 1, "skip": 0, "cancelled": 0, "exitCode": 1, "failureClassification": "genuine remaining policy/data-gate defect"}
+  ],
+  "sourceStable": true,
+  "trackedAndUntrackedClean": true,
+  "sourceWrites": false,
+  "realProviderInvoked": false,
+  "realCredentialsRead": false,
+  "realDockerInvoked": false,
+  "githubOrCanonicalMutation": false,
+  "actualLinuxQualified": false,
+  "fullControllerGreenClaimed": false,
+  "postClaudeApproval": false,
+  "releaseAuthorized": false,
+  "historyAndBudgetsUnchanged": true
+}
