@@ -11,6 +11,8 @@ import { mkdtemp, mkdir, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:net';
 import path from 'node:path';
 import os from 'node:os';
+import {createSocket} from 'node:dgram';
+import {createHash,randomUUID} from 'node:crypto';
 const paths = {
   cli: '/safe/claude',
   launcher: '/safe/launcher.mjs',
@@ -127,6 +129,14 @@ test('actual inspection validator rejects isolation/image/env drift, not just bu
     mutate(g.container);
     assert.throws(() => validateNativeContainerInspection(g.container, g.image, options));
   }
+});
+test('escape comparison requires reachable controlled TCP and DNS bridge baseline',()=>{
+ const base={fixtureSha256:'a'.repeat(64),target:{gateway:'172.17.0.1',tcpPort:30001,dnsPort:30002},unix:true,loopback:true,tcpReachable:true,dnsReachable:true,ipv6SemanticEscapeProof:'not-qualified-no-controlled-route',syntheticOnly:true};
+ const candidate={...base,tcpReachable:false,dnsReachable:false};
+ assertControlledNetworkComparison(base,candidate);
+ for(const bad of [{...base,tcpReachable:false},{...base,dnsReachable:false}])assert.throws(()=>assertControlledNetworkComparison(bad,candidate));
+ assert.throws(()=>assertControlledNetworkComparison(base,{...candidate,tcpReachable:true}));
+ assert.throws(()=>assertControlledNetworkComparison(base,{...candidate,fixtureSha256:'b'.repeat(64)}));
 });
 test(
   'Linux actual Docker isolation and Unix/loopback route work; direct egress fails',
