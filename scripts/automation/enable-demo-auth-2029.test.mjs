@@ -48,7 +48,7 @@ function fixture() {
   dispatch.operatorAuthorization = { provenance: 'user-session', grantId: 'old-deploy-grant', consumptionNonce: 'old-deploy-consumption',
     sourceRef: 'user-session:old-deploy', binding: deployBinding, bindingDigest: historyDigest(deployBinding) };
   dispatch.stageProofDigest = '7'.repeat(64); parent.exactDemoDispatches = { deploy: dispatch };
-  let revision = 0, loadedRevision, revoked = false, permission = () => {}, sourceCheck = () => {}, main = selector.reviewedSha;
+  let revision = 0, loadedRevision, revoked = false, permission = () => {}, sourceCheck = () => {}, main = selector.reviewedSha, clock = now;
   let provenance = 'user-session', consumption = 'new-2029-consumption', runHook = x => x;
   const store = { load: async () => { loadedRevision = revision; return clone(remote); }, observe: async () => clone(remote),
     save: async (s, { guard }) => { const expected = loadedRevision; await guard(); assert.equal(revision, expected, 'CAS conflict'); remote = clone(s); revision++; loadedRevision = revision; } };
@@ -57,16 +57,17 @@ function fixture() {
       head: b.sha, headRef: b.branch, headRepo: 'l2v-hub/ClinicOS', headIsFork: false, baseRef: 'main', mergeCommitSha: b.release.mergeSha }; } };
   const verifier = async ({ binding, consume }) => { assert.equal(consume, true); return { provenance, grantId: 'actual-2029-fixture',
     consumptionNonce: consumption, sourceRef: 'user-session:fixed-2029', binding }; };
-  const controller = createDemo2029Controller({ github, authorizationVerifier: verifier, now: () => now,
+  const dependencies = { github, now: () => clock,
     assertCurrentMain: async expected => assert.equal(main, expected), nonce: () => '33333333-3333-4333-8333-333333333333',
     readRun: async id => runHook({ id, run_attempt: 1, status: 'completed', conclusion: 'failure', head_sha: request.failedSourceSha,
       repository: { full_name: 'l2v-hub/ClinicOS' }, head_repository: { full_name: 'l2v-hub/ClinicOS' },
       path: '.github/workflows/deploy-demo-exact-commit.yml', event: 'workflow_dispatch', head_branch: 'main',
-      display_title: `demo-exact deploy ${request.failedSourceSha} ${dispatch.dispatchId}` }) });
+      display_title: `demo-exact deploy ${request.failedSourceSha} ${dispatch.dispatchId}` }) };
+  const controller = createDemo2029Controller({ ...dependencies, authorizationVerifier: verifier });
   return { controller, github, state: () => remote, record: () => remote.standaloneReviews[0].demoAuth2029Stages[0],
     old: () => remote.standaloneReviews[1], mutate: fn => fn(remote), writes: () => revision,
     permission: fn => { permission = fn; }, sourceCheck: fn => { sourceCheck = fn; }, revoke: () => { revoked = true; },
-    setMain: v => { main = v; }, setProvenance: v => { provenance = v; }, setConsumption: v => { consumption = v; }, run: fn => { runHook = fn; } };
+    dependencies, setClock: v => { clock = v; }, setMain: v => { main = v; }, setProvenance: v => { provenance = v; }, setConsumption: v => { consumption = v; }, run: fn => { runHook = fn; } };
 }
 const authorized = f => f.controller.authorize(selector, { actor: 'root-fixture', reference: 'user-session:fixed-2029' });
 const claimed = async f => { await authorized(f); return f.controller.claim(selector, { actor: 'worker-fixture', runId: '77', fingerprint, fresh }); };
@@ -95,7 +96,7 @@ test('one exact fixed2029 key/action while ordinary seven-day route remains unch
   assert.throws(() => validateDemo2029Request({ ...request, activeSourceSha: request.reviewedSha }, now));
 });
 test('new action requires an authentic user-session capability; inspection alone does not authorize', async () => {
-  const f = fixture(), c = createDemo2029Controller({ github: f.github });
+  const f = fixture(), c = createDemo2029Controller(f.dependencies);
   await assert.rejects(c.authorize(selector, { actor: 'root-fixture', reference: 'made-up' }));
   await assert.rejects(f.controller.prepare(selector)); assert.equal(f.writes(), 0);
 });
@@ -206,4 +207,28 @@ test('workflow/CLI manual trusted main only, first attempt, tests before dedicat
 });
 test('receipt has fixed cutoff and finite fields only; credential aliases never reflected',()=>{
   const r={schemaVersion:1,status:'blocked-before-write',code:'DEMO2029_BLOCKED',mutationAttempted:false,deploymentTriggered:false};assert.ok(serializeDemo2029Receipt(r));assert.throws(()=>serializeDemo2029Receipt({...r,providerError:'private'}));assert.throws(()=>serializeDemo2029Receipt(r,['\r\nblocked-before-write\t']));assert.throws(()=>serializeDemo2029Receipt({...r,newExpiry:'2099-01-01T00:00:00Z'}));
+});
+test('server clock reaching fixed cutoff blocks prepared and final-intent operations',async()=>{
+  const f=fixture();await authorized(f);f.setClock(Date.parse(EXPIRY_2029));await assert.rejects(f.controller.prepare(selector));
+  const g=fixture();await authorized(g);let writes=0;const r=await stageDemo2029({selector,actor:'worker-fixture',runId:'77',controller:g.controller,
+    inspect:async()=>{if(g.record().execution?.status==='write-intent')g.setClock(Date.parse(EXPIRY_2029));return fresh();},client:async()=>writes++});assert.equal(writes,0);assert.equal(r.mutationAttempted,false);
+});
+test('copied authorization and consumed nonce cannot authorize a different2029 operation',async()=>{
+  const f=fixture();await authorized(f);f.record().operationNonce='55555555-5555-4555-8555-555555555555';await assert.rejects(f.controller.prepare({...selector,operationNonce:f.record().operationNonce}));
+  const g=fixture();await authorized(g);delete g.record().authorization;await assert.rejects(authorized(g));
+});
+for(const status of['staged','uncertain','claimed','write-intent',undefined])test(`prior permanent ${status} is not permission for2029`,async()=>{
+  const f=fixture();f.state().standaloneReviews[0].permanentDemoStages=[{...clone(request),operationNonce:'88888888-8888-4888-8888-888888888888',execution:status?{status}:undefined}];await assert.rejects(authorized(f));assert.equal(f.writes(),0);
+});
+for(const value of[null,undefined,123,{},[],'2026-10-31T23:59:59.0000Z','2026-10-31T23:59:59Z\n'])test(`public old expiry rejects type/spelling ${JSON.stringify(value)}`,async()=>{
+  await assert.rejects(inspectDemo2029Target({request,client:async()=>targetData(),assertFreshMain:async()=>{},readPublic:async u=>{const v=publicData(u);if(u.endsWith('/auth/status'))v.expiresAt=value;return v;}}));
+});
+test('no native prior-run reader and missing genuine run both fail before new authorization',async()=>{
+  const f=fixture();const c=createDemo2029Controller({...f.dependencies,readRun:undefined,authorizationVerifier:async()=>{throw Error('must not consume');}});await assert.rejects(c.authorize(selector,{actor:'root-fixture',reference:'user-session:fixed-2029'}));
+  const g=fixture();g.run(()=>undefined);await assert.rejects(authorized(g));assert.equal(g.writes(),0);
+});
+for(const field of['owner','execution','prior-stage'])test(`stage final permission-await ${field} change produces zero provider writes`,async()=>{
+  const f=fixture();await authorized(f);let armed=false,changed=false,writes=0;
+  f.permission(s=>{if(!armed||changed)return;changed=true;if(field==='owner')s.standaloneReviews[0].operatorCoordination.owner='foreign';if(field==='execution')s.standaloneReviews[0].demoAuth2029Stages[0].execution.nonce='foreign';if(field==='prior-stage')s.standaloneReviews[1].demoAuthExpiryRenewals[0].execution.runId='foreign';});
+  const r=await stageDemo2029({selector,actor:'worker-fixture',runId:'77',controller:f.controller,inspect:async()=>{if(f.record().execution?.status==='write-intent')armed=true;return fresh();},client:async()=>writes++});assert.equal(changed,true);assert.equal(writes,0);assert.equal(r.mutationAttempted,false);
 });
