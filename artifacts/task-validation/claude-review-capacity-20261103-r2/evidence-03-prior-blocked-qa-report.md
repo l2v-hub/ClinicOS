@@ -1,11 +1,6 @@
 # Full prior failed independent QA reports
-
-Original texts follow byte-for-byte. Historical outcomes are not current approvals or qualification.
-
-## p001
-Original: C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/report.md
-Bytes: 8455; SHA-256: c62fddd7d7f400696aa320fa7ee0b51eecb8369929cb66ecf87b6df18ff46d26
-BEGIN ORIGINAL
+@=[id,path,originalBytes,originalSHA256,viewBytes]
+@["p001","C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime/report.md",8455,"c62fddd7d7f400696aa320fa7ee0b51eecb8369929cb66ecf87b6df18ff46d26",8455]
 # Independent runtime QA — blocked at bb9dd8dd
 
 Actual independent reviewer: `/root/auth_expiry_final_qa`.
@@ -56,12 +51,7 @@ Certificate commands use private stdin and only public CSR/CA paths. The factory
 
 All private files are under `C:/w-rv/tmp/review-capacity-20261103/independent-native-runtime`. No source, provider, OAuth, GitHub, canonical state, main worktree, production, merge or deployment mutation occurred. No final-qa-agent-result approval was written. Original technical/auth histories and limits remain unchanged. Genuine Max/CI/final QA, protected release and actual demo restoration remain pending; this blocked runtime QA is not an app-resolution claim.
 
-END ORIGINAL
-
-## p004
-Original: C:/w-rv/tmp/review-capacity-20261103/independent-native-session/report.md
-Bytes: 7128; SHA-256: 1707a7a3f29705e5db8d78e57d55b5857a547f3dc7e81ed1a64c7aa082c847e9
-BEGIN ORIGINAL
+@["p004","C:/w-rv/tmp/review-capacity-20261103/independent-native-session/report.md",7128,"1707a7a3f29705e5db8d78e57d55b5857a547f3dc7e81ed1a64c7aa082c847e9",7128]
 # Independent read-only QA: root integration at2104432d
 
 Verdict: FAIL. Four actionable items remain on this exact frozen source. This is
@@ -187,12 +177,7 @@ all real CI files, independent rerun, actual old-worker Claude review and protec
 final gates remain mandatory. Preserve this failed210 QA history rather than
 relabel it when later fixes pass. No counters, history or allowances changed.
 
-END ORIGINAL
-
-## p006
-Original: C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/report.md
-Bytes: 8896; SHA-256: 5886eebd7edacc0989bde3c8e3ac9abd26b178e4f4d7baa483ae9d36bdd8d8c3
-BEGIN ORIGINAL
+@["p006","C:/w-rv/tmp/review-capacity-20261103/independent-native-combined/report.md",8896,"5886eebd7edacc0989bde3c8e3ac9abd26b178e4f4d7baa483ae9d36bdd8d8c3",8896]
 # Independent combined QA — blocked at 10000045
 
 Reviewer: actual independent agent `/root/auth_expiry_final_qa`.
@@ -238,12 +223,7 @@ No provider/OAuth/real Docker/OpenSSL invocation, credential access, GitHub/cont
 
 Canonical nativeRequiredEvidence remains frozen/mandatory before qualification; classic/native-required and legacy recovery fallback are blocked by source and passing tests. Parent-owned integration/release policy remains unchanged. This blocked QA cannot authorize publishing a passed packet, real Max round two, self-qualification, app-review claims, automatic merge/deploy, production or new allowances. Existing auth/technical history and all retained failures remain intact. The eighteen-suite result is not a full-controller green claim: root reports remaining failures in both its source and D2 full runs, whose precise identity comparison was not independently replayed here. Further exact-source repair and independent replay are required before a scoped pass; genuine Max review, exact CI, final QA, protected release and actual demo restoration are still separate pending gates.
 
-END ORIGINAL
-
-## p009
-Original: C:/w-rv/tmp/review-capacity-20261103/independent-native-combined2/report.md
-Bytes: 7920; SHA-256: 61f27e501a92482eda6b144ed74c9ef2e00221585b27fccd3525a6896916d529
-BEGIN ORIGINAL
+@["p009","C:/w-rv/tmp/review-capacity-20261103/independent-native-combined2/report.md",7920,"61f27e501a92482eda6b144ed74c9ef2e00221585b27fccd3525a6896916d529",7920]
 # Independent combined repair QA — blocked at 4c8beb83
 
 Actual reviewer: `/root/auth_expiry_final_qa`.
@@ -289,4 +269,3 @@ All changed Git blobs against trusted D2 are individually hashed; present source
 
 No real provider/OAuth/credentials, native Claude, Docker/OpenSSL, GitHub/controller/canonical mutation, source edit, main-worktree write, merge/deploy, production action, clinical access or issue closure occurred. This is before-own-Max QA, not post-Claude approval. Exact current CI, full Linux proof, genuine old-worker Max review, subsequent final independent QA, authentic native qualification and protected release remain pending. Original auth/technical counters and histories, app source31 and no-automatic-release hold remain unchanged. This blocked result does not restore demo authentication or authorize a budget extension.
 
-END ORIGINAL

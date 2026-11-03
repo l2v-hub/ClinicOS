@@ -40,3 +40,5 @@ controlled TCP/DNS positive/negative comparisons are separately verified.
 
 The live demo still returns disabled/expired. This packet contains no online
 restoration, native qualification, new Max review, merge or deployment receipt.
+
+@=[original heading/id,original path/null,original bytes,original SHA256,view bytes]. JSON lexical whitespace only; all token lexemes/metadata retained; non-JSON exact. Originals remain byte-exact in raw history; immutable T retains original wrappers.
