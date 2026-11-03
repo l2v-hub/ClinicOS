@@ -27,7 +27,7 @@
     {
       "round": 5,
       "status": "passed",
-      "subjectSha": "45b178b7ea93ade254d5cd0ea68340bd09cdd838",
+      "subjectSha": "0052ad4780998772ded9c6cde9e52b7400f845cf",
       "evidence": "revision5-validation-report.md"
     }
   ],
@@ -41,14 +41,14 @@
     },
     {
       "path": ".github/workflows/bug-pipeline-tests.yml",
-      "blob": "1ab7430885c1038c141f9cd41ec0d66ad2c9942d",
+      "blob": "15a1612b260e4349031165d8ae36103436189ccd",
       "mode": "100644",
       "baseBlob": "d510629db76b0e34e6a58ffb612568e32d1b0492",
       "baseMode": "100644"
     },
     {
       "path": ".github/workflows/enable-demo-auth-2029.yml",
-      "blob": "50dbb5acf574d38383b81962dc4665fe760178a5",
+      "blob": "77e60c86bb067389e28bf8d80946bafca43d4599",
       "mode": "100644",
       "baseBlob": null,
       "baseMode": null
@@ -152,8 +152,15 @@
       "baseMode": null
     },
     {
+      "path": "scripts/automation/enable-demo-auth-2029.metadata.test.mjs",
+      "blob": "a9b144c36661bd987e94c2852e32880e0d6b4108",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
       "path": "scripts/automation/enable-demo-auth-2029.mjs",
-      "blob": "38db25c2f1025d612651463cbb48a801d1a91a8c",
+      "blob": "e2c8ef44b3936b4a11b29a82a9878d3efbcccdca",
       "mode": "100644",
       "baseBlob": null,
       "baseMode": null
@@ -193,9 +200,14 @@
     "browser/future-2029-mobile.png": "fbc12e926bcd1ab43d0b910801b315fe3668008a279c2af3cd9d086f9329c891",
     "browser/independent-qa3-complete-evidence.zip": "151253f11fe1380618240cedc9bdcd35cd527638bbe40419a3efd193f0a39f85",
     "browser/independent-qa4-complete-evidence.zip": "49cc8e47e67fa26c04b85050aed6e0d3b14f9d940fbca3fa5bc738614faa32ee",
+    "browser/independent-qa5-complete-evidence.zip": "846895c55585d3a3a5ddebdcec859a9bf88d04201464ac391766a18f91319c1f",
     "browser/qa2-complete-evidence.zip": "889e211a2e4bfd7cc4669d500b1f5ac852bf90437b5009201494397337e5ea85",
+    "browser/qa5-future-2029-desktop.png": "815073646cc5b510ef0070f55455609da6f0a51597114b945ab54b9631c3bede",
+    "browser/qa5-future-2029-mobile.png": "fbc12e926bcd1ab43d0b910801b315fe3668008a279c2af3cd9d086f9329c891",
+    "browser/qa5-readonly-metadata-result.png": "4e24f6c1d38615f20ea321d99c88fa2227bcc9e08f3e9d938c40214d998ef1a2",
     "context-history/f583-current.md": "f1b47129616f960931fdf72bd4479e92110d9a0f1c3cd1d8343cefbe729f2f98",
     "context-history/f583-revision5.md": "207fba20613f2f34c7b52333c1786381b5d99c88194d0fd8e8e27db502599f4e",
+    "context-history/pre-metadata-plan.md": "3c4ff54a76235a087bbb16d18679161e9b8721ce5d12badc8dc6992beebea8cd",
     "context-history/prepared-8a8-context-01.md": "f741fad6a0eca90d9745d8391d0e427b64b78005e18cf8821cd4f924f496c2fa",
     "context-history/prepared-8a8-context-02.md": "3344ae45da24210f46fa739bd7f06727b849bec77a6ad0ae7770fc2d3d7a7e4e",
     "context-history/prepared-8a8-context-03.md": "9c2529880990faaed13a565daf8c22b62ccb758ec9b5a78cefb9b099ef017108",
@@ -204,9 +216,11 @@
     "context-history/prepared-8a8-context-06.md": "7889f728223f17353feb1f6b7c9d630c80aaac36c4d0b8e29487f44f5981c132",
     "context-history/prepared-8a8-context-07.md": "36f84eae758e4eee5cd8d4a0ee030bb9ee4bf1fc1f7e57758673654dec073a44",
     "context-history/prepared-8a8-context-08.md": "99519d02c80d047c122df90644857c47b90918439c6e4a7b93e2ff92a62b7cf4",
+    "context-history/qa4-current.md": "32b6e3fc11bbc56e17973e673b5e69fa6cb4eefbad3da1f4a84681ec46d0a205",
+    "context-history/qa4-fifth.md": "af9993b9e7c7fd5add9475f640df48480fffabf16616a1997cad95e0737412d0",
     "current/qa-reconciliation-report.json": "2a73ec2a50a2f3b6c4b6b22129a90fdbe0347d34e6d53a38d9223b76f4d83b32",
     "current/task-contract.md": "4441f17a976f98ef36587b9ceecf13232c8ef24878e46366b50820073918c3dc",
-    "current/validation-report.md": "32b6e3fc11bbc56e17973e673b5e69fa6cb4eefbad3da1f4a84681ec46d0a205",
+    "current/validation-report.md": "5f5b9f08b23eeb15ac7a948d597136fc25913118a3596a4bad802da07b8666c6",
     "evidence-execution-00-root-report.json": "a9110949b9c63fd7049754c1ffbdb3632d52bb15a9f625e45fb54c5ea416708d",
     "evidence-execution-01-author-red-report.json": "9ba13760102e99de36ce525a2a17137af7178194f9a7477e7dd7b7f8980e8e4b",
     "evidence-execution-02-author-checks-report.json": "5d54b7bd112d1a34455eaea118cf82510b29b1d376774e51cfe8522232fafc6f",
@@ -214,13 +228,15 @@
     "evidence-parent-finite-stage-report.json": "e4bb8c3423c3b63a7c594710ea03817b6247740be2df3a47668eb36436c8ec04",
     "history/claude-review-1.json": "275dc4b08c1294740c85f3ea5d044e68c54fa1e7863a08ceebb04d3331384fd9",
     "history/claude-review-2.json": "e8466e1092af650011938c9eaf07799398d10bbfd1007e9dab95dc8a129c4df5",
+    "history/metadata-author-complete-evidence.zip": "c8e3abefbe5ef44acf320aa2f67ef11ba3706b5ad5d60cf700a3fcd3ffb55166",
     "history/qa1-8a8-complete-browser.zip": "debc233352484cbfa2b6b76754dda1018deda489cbff347dfd64aa2490a4f49e",
     "history/qa1-report.md": "b574645db09f95ed175ad6d065555dd57557063388b4cac3d3526907dfa52dc7",
-    "implementation-plan.md": "3c4ff54a76235a087bbb16d18679161e9b8721ce5d12badc8dc6992beebea8cd",
+    "implementation-plan.md": "c5bdb7e81a5d50579dd1ebaf27244e5e79daf0fb7d1cf464b30bf94c0844d7a6",
+    "metadata-readonly-qa-report.json": "4da69d36ca7cc44d0a9286150054dc9c62179003ab12a12008cd148101a9b10a",
     "qa2-validation-report.md": "24d68310bce16c6e9c0aa4e0e456e9ab89b6619017d356f6459330d3e0a261f9",
     "revision3-validation-report.md": "b51c85f8202dc9192b447e3f7471495c933f6e9c1974c49a11f6b36975e251b2",
     "revision4-validation-report.md": "c0ea895b9868a827c055286716f1bbbca6ef3f0e7df10a9c4eaf85e336502bba",
-    "revision5-validation-report.md": "af9993b9e7c7fd5add9475f640df48480fffabf16616a1997cad95e0737412d0",
+    "revision5-validation-report.md": "b68bd8faad3619cb4106b1b76b5b91f91256a1105c7adede8f8fe39028cf1917",
     "task-contract.md": "bbebaced53dbaffe00b268e64e6081465bd1b7ef539da5a6664ec40b175437f0",
     "transport-integrity.json": "78a6ecd13cb7b074a7fa54404e96460ba8f2fab79971477f8394a6084c493eb9",
     "transport-originals/01.json": "4857e41463e7494fd8f542c121de2d4167a39ba55ef99b9f4539f477d09fb7e2",
