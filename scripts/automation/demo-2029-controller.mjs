@@ -154,12 +154,12 @@ export function createDemo2029Controller({ github, authorizationVerifier, readRu
       assert.equal(run.path, '.github/workflows/deploy-demo-exact-commit.yml'); assert.equal(run.event, 'workflow_dispatch');
       assert.equal(run.head_branch, 'main'); assert.equal(run.display_title, `demo-exact ${p.operation} ${p.sha} ${p.dispatchId}`);
     }
-    // Source/prior-run reads are asynchronous too: recheck revocation after them,
-    // then current main, then the caller's final canonical ownership observation.
-    assert.equal(await github.authorizedMaintainer(actor), true);
-    if (author && author !== actor) assert.equal(await github.authorizedMaintainer(author), true);
+    // Complete every asynchronous source/run/main read before final revocation
+    // checks; the caller still re-observes canonical ownership/history afterwards.
     assert.equal(typeof assertCurrentMain, 'function', 'Authenticated current-main verifier required');
     await assertCurrentMain(v.request.reviewedSha);
+    assert.equal(await github.authorizedMaintainer(actor), true);
+    if (author && author !== actor) assert.equal(await github.authorizedMaintainer(author), true);
   }
   async function save(v, before, actor, guard = async () => {}) {
     v.state.updatedAt = new Date(now()).toISOString();
