@@ -26,8 +26,23 @@ Independent QA subsequently found a real revocation race at that source: revokin
 the actor during the final awaited current-main check still reached one synthetic
 provider mutation (expected zero). No live write occurred. The source is BLOCKED;
 the author is repairing it within the same unpublished fifth, preserving the actual
-failing repro. Exact-head CI, real Max3, final Codex QA, protected merge and real
-online proof remain required before availability/restoration can be claimed.
+failing repro. The exact original failing assertion was then copied unchanged into
+tracked tests, reproduced RED and fixed in source. Integrated repaired sourcef583
+passed fresh independent QA2:157 focused,13 actual-parent/policy,1 original repro,
+full build/typecheck and34 intercepted built-App browser cases, no current findings.
+Exact-head CI, real Max3, final Codex QA, protected merge and real online proof
+remain required before availability/restoration can be claimed.
+
+Current complete selected context is in six aaa-prefixed reports: all operational
+call-path modules and pure finite-demo policy modules are supplied WHOLE with exact
+base/source blobs and contiguous range hashes. Unchanged App and four unchanged
+UI/route wiring files are explicitly outside this operational-code review, not
+partially substituted. Actual built-App/policy QA2 covers that unchanged integration.
+The original broader context is preserved byte-exact under context-history/ and in
+earlier Git history. This is not a whole-repository re-audit. No changed source,
+historical attempt, real Claude report, current critical proof or known finding is
+clipped or concealed. Both complete browser proof sets are lossless archives;
+binary inventory and native packet hashes bind all PNGs, traces, videos and logs.
 
 The pasted production-scoped Railway credential was not used for writes. Read-only
 failed-deployment metadata could not be qualified with that token; the already-

@@ -1,0 +1,273 @@
+{
+  "historicalBlockedSource": "8a8d5a50be8197b95605567d7b3cfd7815f266a8",
+  "originalIndependentBlockedReport": "# Independent QA — BLOCKED at 8a8d5a50\n\nReviewer: actual independent agent `/root/auth_expiry_final_qa`.\nSource: `8a8d5a50be8197b95605567d7b3cfd7815f266a8`.\nTree: `d7b89a913d429b7ca3aee1b8cab6f7682044bd51`.\nDedicated checkout: `C:/w-rv/auth-expiry-2029-qa-20261103`.\n\n## Security finding — revocation can precede the provider write\n\nPriority P1. Location: `scripts/automation/demo-2029-controller.mjs:162` (allowed/owned), with final mutation boundary `scripts/automation/enable-demo-auth-2029.mjs:74`.\n\nallowed rechecks the actor/author's maintainer permission, then awaits assertCurrentMain. owned subsequently checks canonical identity but does not refresh permission after that awaited source check. If permission is revoked while the final main verifier is pending, the last authorization path returns successfully and stageDemo2029 invokes its provider mutation once. A later failed finish conservatively leaves uncertainty but cannot undo that unauthorized write.\n\nActual private test `final-main-revocation.test.mjs`: authorize through the existing fully synthetic capability fixture; arm revocation only in the last inspect after durable write-intent; await the real fixture main verifier and revoke before it returns. Expected provider calls0; actual1. The callback returns `{variableUpsert:true}` only in memory; no live provider was contacted. This is a demonstrated missing post-await revocation fence, not a claim of a real live2029 mutation, secret exposure or clinical write. The negative assertion is preserved unchanged in final-main-revocation/receipt.json and stdout.log (exit1, one genuine failure, source/index stable).\n\nRequired repair: check revocation after asynchronous main/source/run verification, while retaining the caller's final canonical owner/prior-history/claim observation and finite cutoff. Do not waive the assertion, replay uncertainty or rewrite old stages. Root accepted the finding and will assign any source repair to the original author under the same unpublished fifth attempt. This reviewer changed no source.\n\n## QA Gate phases and actual independent evidence\n\n| Phase | Result | Evidence |\n|---|---|---|\n| Contract | Read full frozen118-line contract, AC1–AC9; live acceptance not claimed | current/task-contract.md Git blob/hash in execution-evidence.json |\n| Diff | Eight nonartifact paths reviewed; no unrelated app/schema/production changes | Complete25-path immutable manifest and unchanged-blob proof |\n| Tests |155/155 focused PASS;13/13 new parent-shape/pure-policy PASS; new revocation regression FAIL | focused-155, actual-parent-and-policy, final-main-revocation receipts/logs |\n| Build/typecheck | Full production frontend+backend/Prisma/fonts PASS; standalone frontend tsc noEmit PASS | full-isolated-build and frontend-typecheck receipts/logs |\n| Synthetic browser |34/34 actual-built-App cases PASS at1280/390, five future2029 roles persist after reload | browser/browser.json, future2029 PNGs, per-case trace.zip and WebM |\n| Security | BLOCKED by concrete revocation defect above | unchanged failing private fixture; no real external side effects |\n\nAll runs used trusted D2 createRunner in verification mode, with no inherited provider/controller credentials and exact HEAD/index checked before/after. The private build entry asserts the QA checkout, explicitly sets NODE_ENV=production, synthetic loopback DATABASE_URL and fixed public-demo VITE_API_URL inside that credential-free process, and invokes the actual root build. It does not reuse the author's hardcoded ROOT entry. Prisma generation and backend/frontend compilation actually ran; no migration/seed/DB suite was claimed. Build warnings about chunk/plugin timing are retained; exit was0. The standalone frontend noEmit check produced no errors.\n\nParent supplied npm ci --ignore-scripts against the exact lock; its receipt/log and unchanged lock hashes are verified. This installation is not falsely called an independent rerun. Original exploratory ordinary-route red, missing-module red, actual candidate1 failures, and subsequent author greens remain in unique directories with verified log hashes; none were relabeled independent executions.\n\n## Synthetic/parent proof boundaries\n\nThe parent compatibility fixture uses the actual captured parent523 record shape: Nov9 was STAGED in run41524928481; its authorized exact D2 deploy41527190689 subsequently failed. A separately synthetic new capability can bind that captured history without changing the parent. Five history/run/auth/source drift cases deny it. This is schema/compatibility evidence, not fresh authenticated Railway failure qualification.\n\nPure policy tests execute actual freshly built backend modules: future2029 works with explicit synthetic/demo opt-ins; production, missing opt-in, wrong dataset, expired and malformed values are denied; five server-owned roles are unchanged. No session token is issued or identity provisioned. The normal seven-day helper is byte-identical to D2 and its added2029-negative assertion passes. Backend/frontend/Prisma and production/exact-deploy workflows, railway.json, .railwayignore, manifests/lock remain unchanged. Dockerignore excludes evidence/generated archives, not required code/migrations/fonts; structural context tests and local build pass, not a claimed real Railpack deployment.\n\nThe browser uses a private adaptation of the committed D2 harness, the actual production build and expiry2029, not a substitute UI. Every non-loopback request is intercepted; positive cases assert the actual API origin is the public demo URL, all five profiles visible, reload persistence, zero console errors/relevant failed HTTP responses, no horizontal overflow and no session POST. Original negative cases preserve expected synthetic errors, including a mocked failed simulator request; no actual session is provisioned. All34 cases assert no unexpected request/page error, outbound0 and clinicalWrites0. Desktop/mobile screenshots were visually inspected. Trace/video cover the same isolated runs. Port5317 was verified unused, bound with strictPort, and closed in finally; no shared database/server was started.\n\nBrowser evidence paths (relative to this report): `browser/future-2029-1280.png`, `browser/future-2029-390.png`, `browser/future-2029-1280-trace.zip`, `browser/future-2029-390-trace.zip`, per-case video directories and browser.json. Every file/hash is in execution-evidence.json. These show synthetic future availability only; no live login, public deployment restoration or clinical data was accessed.\n\n## Scope, instructions and remaining gates\n\nUsed the repository QA Gate skill and fully read its linked evidence/run guidance. Its objective-evidence/security requirements drove the independent build/typecheck, synthetic browser traces/video/result screenshots and explicit BLOCKED verdict. Higher-priority task boundaries prohibit source edits, public evidence attachment, source commits, provider dispatch or shared DB/session provisioning; all reports/generated artifacts therefore stay in this private independent-qa directory for root integration. The initially supplied root contract path was sparse-missing; frozen Git contained it, and the QA checkout physical contract is verified byte-equal. Sparse omissions are not called absent Git evidence.\n\nSecurity inspection found no new package, token/credential/PHI fixture, SQL, generic variable/target/date input, permanent-mode or production-secret path. New logs/receipts use finite whitelisted metadata and synthetic evidence. Fresh user-session capability, exact source/owner/history binding, prior staged/deploy proof, one CAS claim/intent, skipDeploys=true and no uncertain-write retry remain intended boundaries, but the reproduced revocation defect blocks approval.\n\nNo new authenticated Railway failed-deployment metadata was available to this reviewer: root's read-only production-token attempt was denied. Do not invent proof or rewrite the acknowledged Nov9 stage. No source edit/commit/push, provider/model call, GitHub/canonical mutation, deployment, issue closure or real clinical write occurred. All prior implementation/review budgets, parent state and old permanent/profile candidates remain intact. Exact repaired-source CI, genuine Max round3, final independent QA, actual authorized stage/deploy and online five-profile desktop/mobile acceptance remain mandatory. AC8/AC9 resolution is pending; issue must remain open/unverified.\n\nFinal verdict: **BLOCKED**. Codex must now re-run the QA Gate after a separately frozen author repair. No old approval transfers to that future source.\n",
+  "originalIndependentRepro": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport {fixture,selector,authorized,fresh} from './controller-fixture.mjs';\nimport {createDemo2029Controller} from 'file:///C:/w-rv/auth-expiry-2029-qa-20261103/scripts/automation/demo-2029-controller.mjs';\nimport {stageDemo2029} from 'file:///C:/w-rv/auth-expiry-2029-qa-20261103/scripts/automation/enable-demo-auth-2029.mjs';\ntest('revocation during final awaited current-main verifier prevents provider mutation',async()=>{\n const f=fixture();await authorized(f);let armed=false,revoked=false,writes=0;\n const controller=createDemo2029Controller({...f.dependencies,assertCurrentMain:async expected=>{\n  await f.dependencies.assertCurrentMain(expected);\n  if(armed&&!revoked){revoked=true;f.revoke();}\n }});\n const result=await stageDemo2029({selector,actor:'worker-fixture',runId:'77',controller,\n  inspect:async()=>{if(f.record().execution?.status==='write-intent')armed=true;return fresh();},\n  client:async()=>{writes++;return{variableUpsert:true};}});\n assert.equal(revoked,true,'the actor was revoked before final current-main await returned');\n assert.equal(writes,0,'revocation before the final authorization path completes must prevent the write');\n assert.equal(result.mutationAttempted,false);\n});\n",
+  "originalIndependentFailure": {
+    "receipt": {
+      "independent": true,
+      "reviewer": "auth_expiry_final_qa",
+      "label": "final-main-revocation",
+      "cwd": "C:/w-rv/auth-expiry-2029-qa-20261103",
+      "before": {
+        "sourceSha": "8a8d5a50be8197b95605567d7b3cfd7815f266a8",
+        "tree": "d7b89a913d429b7ca3aee1b8cab6f7682044bd51",
+        "indexSha256": "4c02819cf6802cd57821d0fc837b9f2d30a5e7397926f0e22c57fd61288a3473"
+      },
+      "after": {
+        "sourceSha": "8a8d5a50be8197b95605567d7b3cfd7815f266a8",
+        "tree": "d7b89a913d429b7ca3aee1b8cab6f7682044bd51",
+        "indexSha256": "4c02819cf6802cd57821d0fc837b9f2d30a5e7397926f0e22c57fd61288a3473"
+      },
+      "sourceStable": true,
+      "startedAt": "2026-11-03T18:30:46.156Z",
+      "finishedAt": "2026-11-03T18:30:47.676Z",
+      "args": [
+        "--test",
+        "C:/w-rv/tmp/auth-expiry-2029-20261103/independent-qa/final-main-revocation.test.mjs"
+      ],
+      "envMode": "verification",
+      "credentialsInherited": false,
+      "realProviderInvoked": false,
+      "ok": false,
+      "exitCode": 1,
+      "error": null,
+      "stdoutSha256": "b926fbb6bd3ec8e468bf2fc7328bbfef9b87cf377b4f3beb27f739e295574de7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": "✖ revocation during final awaited current-main verifier prevents provider mutation (36.2931ms)\nℹ tests 1\nℹ suites 0\nℹ pass 0\nℹ fail 1\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 239.5153\n\n✖ failing tests:\n\ntest at ..\\tmp\\auth-expiry-2029-20261103\\independent-qa\\final-main-revocation.test.mjs:6:1\n✖ revocation during final awaited current-main verifier prevents provider mutation (36.2931ms)\n  AssertionError [ERR_ASSERTION]: revocation before the final authorization path completes must prevent the write\n\n  1 !== 0\n\n      at TestContext.<anonymous> (file:///C:/w-rv/tmp/auth-expiry-2029-20261103/independent-qa/final-main-revocation.test.mjs:16:9)\n      at async Test.run (node:internal/test_runner/test:1389:7)\n      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {\n    generatedMessage: false,\n    code: 'ERR_ASSERTION',\n    actual: 1,\n    expected: 0,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n",
+    "stderr": ""
+  },
+  "authorReport": "# Same-fifth-attempt final-main revocation repair — author handoff\n\nFinal source f95334911578608eac6b8e0035c9fc0c71ab8c12, tree c4222f3af78208b2f269ba8cb9db985a2816193b; clean assigned author checkout. Only reactivated controller and dedicated-test paths differ from original932c28a9. Controller215lines/test258lines remain under500. Original932, integrated blocked8a8d5a50 and every independent failed receipt/repro remain unchanged.\n\nIndependent QA's genuine finding was correct: allowed() checked final maintainer status, then awaited assertCurrentMain(); revocation inside that final main verifier was never rechecked and a synthetic provider mutation occurred. This was not an actual provider write.\n\nRED d0919267838d5c0e1b2495306bc9835f74ca7755 copies the independent repro body verbatim into the enabled tracked suite (original full repro SHA2568933579816408dcdc64da3f1fc063ddc2dcf223e41dbf05bd17134101d1c1364). Only original external imports are unnecessary inside the existing tracked fixture scope; its assertion body is byte-identical. Added a separate author-only revocation variant while the distinct worker remains authorized. Actual trusted source-bound RED:154 total,152PASS/2FAIL, both expected0 versus actual1 synthetic provider calls. The test command returned1 in its receipt; a later log-read command made the enclosing diagnostic shell status0, which is not a green-test claim.\n\nGREEN f95334911578608eac6b8e0035c9fc0c71ab8c12 moves current-main verification before final actor/author permission checks. All async release/source/run/main observations now precede those final revocation checks. Existing caller re-observation of exact canonical owner, request, execution and prior-history identity remains AFTER permission awaits. No check was removed, relaxed or replaced by a cached boolean.\n\nFresh trusted final-main-revocation-green run:154/154PASS,0 fail/skip/cancel, clean source HEAD/index before/after. This includes the genuine independent repro, distinct-author variant, true no-default-authorizer case and the entire original dedicated+ordinary suites. Normal seven-day module remains D2 byte-exact. Receipt/log hashes and source blobs are in the separate repair evidence JSON; no old report/log was overwritten.\n\nNo helper/workflow, backend/frontend, primary/root checkout, policy budget, actual auth grant, controller/GitHub/provider/model state or clinical data changed. Two local commits only, no push. Same implementation5 and existing limits/history remain; no new review requested. Parent must integrate and obtain fresh independent QA/exact-head CI/review before release. Author local green is not independent or online verification.\n",
+  "authorSourceEvidence": {
+    "sourceSha": "f95334911578608eac6b8e0035c9fc0c71ab8c12",
+    "tree": "c4222f3af78208b2f269ba8cb9db985a2816193b",
+    "originalAuthorSource": "932c28a92fea8ce9c7d96fbecf136f457e8851e1",
+    "independentBlockedSource": "8a8d5a50be8197b95605567d7b3cfd7815f266a8",
+    "redSha": "d0919267838d5c0e1b2495306bc9835f74ca7755",
+    "scope": [
+      "scripts/automation/demo-2029-controller.mjs",
+      "scripts/automation/enable-demo-auth-2029.test.mjs"
+    ],
+    "status": "",
+    "independentReproSha256": "8933579816408dcdc64da3f1fc063ddc2dcf223e41dbf05bd17134101d1c1364",
+    "independentReproBodyCopiedExactly": true,
+    "checks": [
+      {
+        "label": "final-main-revocation-red",
+        "receipt": {
+          "startedAt": "2026-11-03T18:34:07.903Z",
+          "finishedAt": "2026-11-03T18:34:09.272Z",
+          "cwd": "C:/w-rv/auth-expiry-2029-author-20261103",
+          "sha": "d0919267838d5c0e1b2495306bc9835f74ca7755",
+          "args": [
+            "--test",
+            "scripts/automation/enable-demo-auth-2029.test.mjs",
+            "scripts/automation/renew-demo-auth-expiry.test.mjs"
+          ],
+          "before": {
+            "head": "d0919267838d5c0e1b2495306bc9835f74ca7755",
+            "index": "30f97bcb46a3bc835eb360662f4047ad04ea5ed3698fccd470b4d1015b18af80"
+          },
+          "after": {
+            "head": "d0919267838d5c0e1b2495306bc9835f74ca7755",
+            "index": "30f97bcb46a3bc835eb360662f4047ad04ea5ed3698fccd470b4d1015b18af80"
+          },
+          "sourceStable": true,
+          "credentialsInherited": false,
+          "ok": false,
+          "exitCode": 1,
+          "stdoutSha256": "2564d05c3b45d06800795fbca1366b98925846d26f4c3b77b9a065a9f7d0cc1f",
+          "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "receiptSha256": "d3214d1ba973029f5f366d0f964d1726677ab9ed096c9ba0d7d3c6bf4f6b3e2b",
+        "summary": [
+          "ℹ tests 154",
+          "ℹ pass 152",
+          "ℹ fail 2",
+          "ℹ cancelled 0",
+          "ℹ skipped 0"
+        ]
+      },
+      {
+        "label": "final-main-revocation-green",
+        "receipt": {
+          "startedAt": "2026-11-03T18:34:38.664Z",
+          "finishedAt": "2026-11-03T18:34:39.701Z",
+          "cwd": "C:/w-rv/auth-expiry-2029-author-20261103",
+          "sha": "f95334911578608eac6b8e0035c9fc0c71ab8c12",
+          "args": [
+            "--test",
+            "scripts/automation/enable-demo-auth-2029.test.mjs",
+            "scripts/automation/renew-demo-auth-expiry.test.mjs"
+          ],
+          "before": {
+            "head": "f95334911578608eac6b8e0035c9fc0c71ab8c12",
+            "index": "cb3914d181ac2aab0439c1d26713883add3ec782498ef6e44946b6fc221a050d"
+          },
+          "after": {
+            "head": "f95334911578608eac6b8e0035c9fc0c71ab8c12",
+            "index": "cb3914d181ac2aab0439c1d26713883add3ec782498ef6e44946b6fc221a050d"
+          },
+          "sourceStable": true,
+          "credentialsInherited": false,
+          "ok": true,
+          "exitCode": 0,
+          "stdoutSha256": "608cbd82e097eaa21c0a3f7ce386c8dd8cb9831ec112488e85d1f0202bbe6c77",
+          "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "receiptSha256": "908ea0bb443a3b44b07a4b887603a607d6c7ce556491976b4235c073db527da5",
+        "summary": [
+          "ℹ tests 154",
+          "ℹ pass 154",
+          "ℹ fail 0",
+          "ℹ cancelled 0",
+          "ℹ skipped 0"
+        ]
+      }
+    ],
+    "source": [
+      {
+        "path": "scripts/automation/demo-2029-controller.mjs",
+        "bytes": 17910,
+        "lines": 215,
+        "sha256": "48f31145dcd75da71af30dba0e4da55233d41d26b9264627564be97e083f6f19",
+        "blob": "3c5944718d2d3d3a58b10da29513c3349a4d16ba"
+      },
+      {
+        "path": "scripts/automation/enable-demo-auth-2029.test.mjs",
+        "bytes": 29989,
+        "lines": 258,
+        "sha256": "9bc199f18de7eb27b9f008704056ea8c8b53d002ea24a85391864d7391694078",
+        "blob": "5557bac929805891259f29b3652e5c9402b1a43b"
+      }
+    ],
+    "normalRenewalByteIdentical": true,
+    "newAuthorizerAllowed": false,
+    "providerExecuted": false,
+    "canonicalWritten": false,
+    "reviewInvoked": false,
+    "budgetChanged": false
+  },
+  "actualAuthorChecks": [
+    {
+      "label": "final-main-revocation-red",
+      "receipt": {
+        "startedAt": "2026-11-03T18:34:07.903Z",
+        "finishedAt": "2026-11-03T18:34:09.272Z",
+        "cwd": "C:/w-rv/auth-expiry-2029-author-20261103",
+        "sha": "d0919267838d5c0e1b2495306bc9835f74ca7755",
+        "args": [
+          "--test",
+          "scripts/automation/enable-demo-auth-2029.test.mjs",
+          "scripts/automation/renew-demo-auth-expiry.test.mjs"
+        ],
+        "before": {
+          "head": "d0919267838d5c0e1b2495306bc9835f74ca7755",
+          "index": "30f97bcb46a3bc835eb360662f4047ad04ea5ed3698fccd470b4d1015b18af80"
+        },
+        "after": {
+          "head": "d0919267838d5c0e1b2495306bc9835f74ca7755",
+          "index": "30f97bcb46a3bc835eb360662f4047ad04ea5ed3698fccd470b4d1015b18af80"
+        },
+        "sourceStable": true,
+        "credentialsInherited": false,
+        "ok": false,
+        "exitCode": 1,
+        "stdoutSha256": "2564d05c3b45d06800795fbca1366b98925846d26f4c3b77b9a065a9f7d0cc1f",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": "✔ one exact fixed2029 key/action while ordinary seven-day route remains unchanged (21.7155ms)\n✔ new action requires an authentic user-session capability; inspection alone does not authorize (9.634ms)\n✔ maintainer-comment provenance cannot authorize the long fixed window (2.4133ms)\n✔ current fixed action binds all superseded data append-only with no review/budget mutation (4.6138ms)\n✔ old renew-demo-auth-expiry cannot replace the2029 action (5.1439ms)\n✔ old enable-permanent-demo-auth cannot replace the2029 action (6.0942ms)\n✔ one CAS claim, durable intent and no replay or false finish (21.6889ms)\n✔ concurrent claim has one winner (8.0065ms)\n✔ unresolved old finite claimed blocks new operation (1.2638ms)\n✔ unresolved old finite write-intent blocks new operation (1.1157ms)\n✔ unresolved old finite uncertain blocks new operation (0.9511ms)\n✔ unresolved old finite undefined blocks new operation (0.7102ms)\n✔ supersession rejects missing (0.9674ms)\n✔ supersession rejects parallel (1.1006ms)\n✔ supersession rejects receipt (0.9673ms)\n✔ supersession rejects request (0.8152ms)\n✔ supersession rejects digest (1.0945ms)\n✔ supersession rejects dispatch-source (0.9241ms)\n✔ supersession rejects dispatch-stage (0.8479ms)\n✔ supersession rejects dispatch-auth (1.04ms)\n✔ supersession rejects dispatch-unresolved (1.0122ms)\n✔ terminal failed run rejects status=in_progress (1.2625ms)\n✔ terminal failed run rejects conclusion=success (1.0424ms)\n✔ terminal failed run rejects conclusion=cancelled (0.9626ms)\n✔ terminal failed run rejects run_attempt=2 (0.9376ms)\n✔ terminal failed run rejects head_sha=0000000000000000000000000000000000000000 (0.9512ms)\n✔ terminal failed run rejects id=123 (0.9268ms)\n✔ terminal failed run rejects path=.github/workflows/other.yml (0.9467ms)\n✔ terminal failed run rejects event=push (0.9727ms)\n✔ terminal failed run rejects head_branch=foreign (1.0218ms)\n✔ terminal failed run rejects display_title=foreign (1.0079ms)\n✔ final-await owner drift cannot survive ownership fence (9.0124ms)\n✔ final-await release drift cannot survive ownership fence (6.037ms)\n✔ final-await history drift cannot survive ownership fence (7.1255ms)\n✔ final-await authorization drift cannot survive ownership fence (8.6618ms)\n✔ final-await execution drift cannot survive ownership fence (8.0264ms)\n✔ final-await other-stage drift cannot survive ownership fence (8.8416ms)\n✔ exact target inspection proves active old cutoff and failed source, without variable inventory (3.1915ms)\n✔ preflight rejects production (0.5694ms)\n✔ preflight rejects rollout (0.662ms)\n✔ preflight rejects active-source (0.4288ms)\n✔ preflight rejects same-source (0.3548ms)\n✔ preflight rejects latest-id (0.3232ms)\n✔ preflight rejects latest-status (0.4108ms)\n✔ preflight rejects failed-missing (0.3839ms)\n✔ preflight rejects failed-source (0.5479ms)\n✔ preflight rejects failed-status (0.4735ms)\n✔ preflight rejects failed-target (0.4181ms)\n✔ preflight rejects failed-id (0.3245ms)\n✔ public status rejects Entra (0.5616ms)\n✔ public status rejects nonsynthetic (0.3544ms)\n✔ public status rejects permanent (0.5442ms)\n✔ public status rejects oldexpiry (0.5532ms)\n✔ public status rejects expiry-offset (0.5502ms)\n✔ public status rejects expiry-ms (0.4228ms)\n✔ public status rejects enabled (0.3836ms)\n✔ public old expiry accepts only exact seconds or .000Z spelling (0.6894ms)\n✔ one fixed-key2029 upsert, no deployment or generic flags; replay denied (19.8458ms)\n✔ uncertain write is retained and never replayed; acknowledgment persistence failure stays uncertain (37.7247ms)\n✔ wrong provider response is uncertainty not staged (12.6332ms)\n✔ main drift, revocation and request aliases cannot bypass final write fences (30.6341ms)\n✔ foreign selector, inherited approval and copied action are rejected (6.9533ms)\n✔ workflow/CLI manual trusted main only, first attempt, tests before dedicated secret (28.2075ms)\n✔ receipt has fixed cutoff and finite fields only; credential aliases never reflected (28.9713ms)\n✔ server clock reaching fixed cutoff blocks prepared and final-intent operations (16.8003ms)\n✔ copied authorization and consumed nonce cannot authorize a different2029 operation (6.4318ms)\n✔ prior permanent staged is not permission for2029 (1.2407ms)\n✔ prior permanent uncertain is not permission for2029 (2.3015ms)\n✔ prior permanent claimed is not permission for2029 (0.905ms)\n✔ prior permanent write-intent is not permission for2029 (0.9211ms)\n✔ prior permanent undefined is not permission for2029 (0.7029ms)\n✔ public old expiry rejects type/spelling null (0.6568ms)\n✔ public old expiry rejects type/spelling undefined (0.3678ms)\n✔ public old expiry rejects type/spelling 123 (0.3105ms)\n✔ public old expiry rejects type/spelling {} (0.407ms)\n✔ public old expiry rejects type/spelling [] (0.3092ms)\n✔ public old expiry rejects type/spelling \"2026-10-31T23:59:59.0000Z\" (0.2843ms)\n✔ public old expiry rejects type/spelling \"2026-10-31T23:59:59Z\\n\" (0.2617ms)\n✔ no native prior-run reader and missing genuine run both fail before new authorization (1.9027ms)\n✔ stage final permission-await owner change produces zero provider writes (9.6749ms)\n✔ stage final permission-await execution change produces zero provider writes (11.3354ms)\n✔ stage final permission-await prior-stage change produces zero provider writes (8.8593ms)\n✖ revocation during final awaited current-main verifier prevents provider mutation (14.3208ms)\n✖ author-only revocation inside final main verifier blocks a still-authorized worker (13.9228ms)\n✔ only one fixed demo expiry key; bounded strict request accepts seven-day maximum (7.4896ms)\n✔ request rejects expired new date (7.7101ms)\n✔ request rejects overlong renewal (0.5876ms)\n✔ request rejects invalid date normalizes (0.7737ms)\n✔ request rejects infinite date (2.744ms)\n✔ request rejects noncanonical timezone (0.7402ms)\n✔ request rejects unknown field (1.5916ms)\n✔ request rejects future previous date (0.6032ms)\n✔ request rejects nonce injection (0.5878ms)\n✔ CLI requires exact trusted main/workflow and first run attempt (1.589ms)\n✔ no default authorizer accepts a workflow actor or self-declared receipt (3.4958ms)\n✔ actual host verifier produces append-only native action receipt, not a budget extension (1.9851ms)\n✔ native authorization rejects duplicate-subject ownership (0.7178ms)\n✔ native authorization rejects duplicate-operation ownership (0.4644ms)\n✔ native authorization rejects shared-issue ownership (0.7216ms)\n✔ native authorization rejects shared-pr ownership (1.8037ms)\n✔ consumed capability cannot be copied onto another issue or operation (2.6054ms)\n✔ a verifier consumption nonce is not reusable for another issue action (1.7181ms)\n✔ a stored unauthenticated request cannot claim or stage (1.0997ms)\n✔ single durable claim fences concurrent claimant and replay (4.3069ms)\n✔ concurrent claim attempts have one guarded durable winner (2.3663ms)\n✔ changed owner invalidates consumed capability before claim (1.3753ms)\n✔ changed source invalidates consumed capability before claim (2.513ms)\n✔ changed expiry invalidates consumed capability before claim (1.3694ms)\n✔ changed review history invalidates consumed capability before claim (1.3033ms)\n✔ revoked actor cannot mark the mutation intent (2.3283ms)\n✔ execution change during final permission await cannot reach Railway (6.4245ms)\n✔ owner change during final permission await cannot reach Railway (4.8542ms)\n✔ finish(staged) cannot leap over a durable write-intent (2.579ms)\n✔ finish(uncertain) cannot leap over a durable write-intent (3.0121ms)\n✔ changed preflight fingerprint never reaches durable claim (1.3621ms)\n✔ blocked or uncertain prior operation prevents a second staged update (3.0267ms)\n✔ preflight validates fixed demo, old expiry, health, idle rollout and source without variables query (2.4572ms)\n✔ preflight accepts the deployed backend canonical .000Z spelling of the exact strict previous instant (0.779ms)\n✔ preflight rejects public expiry nonzero milliseconds (1.1843ms)\n✔ preflight rejects public expiry different instant (0.7569ms)\n✔ preflight rejects public expiry equivalent offset spelling (0.8044ms)\n✔ preflight rejects public expiry short fractional spelling (0.7753ms)\n✔ preflight rejects public expiry extra fractional spelling (0.7339ms)\n✔ preflight rejects public expiry malformed suffix (0.748ms)\n✔ preflight rejects public expiry whitespace suffix (0.9092ms)\n✔ preflight rejects public expiry missing value (1.7529ms)\n✔ preflight rejects public expiry null (0.509ms)\n✔ preflight rejects public expiry number (0.3599ms)\n✔ preflight rejects public expiry object (0.3972ms)\n✔ preflight rejects public expiry array (0.2888ms)\n✔ preflight rejects production (0.7305ms)\n✔ preflight rejects foreign token (0.2912ms)\n✔ preflight rejects wrong domain (0.1783ms)\n✔ preflight rejects active rollout (0.4143ms)\n✔ preflight rejects unknown source (0.3383ms)\n✔ preflight rejects old expiry drift (0.4201ms)\n✔ preflight rejects nonsynthetic data (0.3089ms)\n✔ stage uses a durable claim/intent and exactly one fixed-key no-deploy mutation (3.841ms)\n✔ a completed expired staged renewal permits a separately authorized later stage without rewriting history (12.2102ms)\n✔ expired staged history without matching live previous expiry never reaches a second claim or write (6.4719ms)\n✔ prior claimed renewal still blocks a later action after expiry (3.6273ms)\n✔ prior write-intent renewal still blocks a later action after expiry (4.0691ms)\n✔ prior uncertain renewal still blocks a later action after expiry (3.3409ms)\n✔ expired prior stage is not a license to skip an unobserved expiry gap (5.412ms)\n✔ a prior stage whose expiry is still live cannot authorize a parallel renewal (4.1641ms)\n✔ duplicate or parallel historical staged cutoffs remain ambiguous and blocked (4.5279ms)\n✔ uncertain POST is retained, finite and never retried or blindly replayed (4.2796ms)\n✔ stage never accepts a missing native controller capability adapter (0.5286ms)\n✔ default inspect validates canonical request/target without authority consumption or mutation (0.603ms)\n✔ source/main drift after durable intent still blocks before Railway mutation (4.8834ms)\n✔ async preflight callbacks cannot rewrite the canonical expiry through request aliases (3.6681ms)\n✔ receipt serialization refuses credentials and arbitrary error fields (34.253ms)\n✔ actual CLI rejects untrusted context with only a finite private receipt on Windows and Linux (253.4893ms)\n✔ workflow pins trusted main, exact target environment, shared deployment queue and tests before secrets (4.9881ms)\nℹ tests 154\nℹ suites 0\nℹ pass 152\nℹ fail 2\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 692.8681\n\n✖ failing tests:\n\ntest at scripts\\automation\\enable-demo-auth-2029.test.mjs:235:1\n✖ revocation during final awaited current-main verifier prevents provider mutation (14.3208ms)\n  AssertionError [ERR_ASSERTION]: revocation before the final authorization path completes must prevent the write\n\n  1 !== 0\n\n      at TestContext.<anonymous> (file:///C:/w-rv/auth-expiry-2029-author-20261103/scripts/automation/enable-demo-auth-2029.test.mjs:245:9)\n      at async Test.run (node:internal/test_runner/test:1389:7)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {\n    generatedMessage: false,\n    code: 'ERR_ASSERTION',\n    actual: 1,\n    expected: 0,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at scripts\\automation\\enable-demo-auth-2029.test.mjs:248:1\n✖ author-only revocation inside final main verifier blocks a still-authorized worker (13.9228ms)\n  AssertionError [ERR_ASSERTION]: revoking the distinct author must invalidate its consumed action before write\n\n  1 !== 0\n\n      at TestContext.<anonymous> (file:///C:/w-rv/auth-expiry-2029-author-20261103/scripts/automation/enable-demo-auth-2029.test.mjs:257:9)\n      at async Test.run (node:internal/test_runner/test:1389:7)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {\n    generatedMessage: false,\n    code: 'ERR_ASSERTION',\n    actual: 1,\n    expected: 0,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n",
+      "stderr": ""
+    },
+    {
+      "label": "final-main-revocation-green",
+      "receipt": {
+        "startedAt": "2026-11-03T18:34:38.664Z",
+        "finishedAt": "2026-11-03T18:34:39.701Z",
+        "cwd": "C:/w-rv/auth-expiry-2029-author-20261103",
+        "sha": "f95334911578608eac6b8e0035c9fc0c71ab8c12",
+        "args": [
+          "--test",
+          "scripts/automation/enable-demo-auth-2029.test.mjs",
+          "scripts/automation/renew-demo-auth-expiry.test.mjs"
+        ],
+        "before": {
+          "head": "f95334911578608eac6b8e0035c9fc0c71ab8c12",
+          "index": "cb3914d181ac2aab0439c1d26713883add3ec782498ef6e44946b6fc221a050d"
+        },
+        "after": {
+          "head": "f95334911578608eac6b8e0035c9fc0c71ab8c12",
+          "index": "cb3914d181ac2aab0439c1d26713883add3ec782498ef6e44946b6fc221a050d"
+        },
+        "sourceStable": true,
+        "credentialsInherited": false,
+        "ok": true,
+        "exitCode": 0,
+        "stdoutSha256": "608cbd82e097eaa21c0a3f7ce386c8dd8cb9831ec112488e85d1f0202bbe6c77",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": "✔ one exact fixed2029 key/action while ordinary seven-day route remains unchanged (15.4585ms)\n✔ new action requires an authentic user-session capability; inspection alone does not authorize (8.129ms)\n✔ maintainer-comment provenance cannot authorize the long fixed window (2.0598ms)\n✔ current fixed action binds all superseded data append-only with no review/budget mutation (3.5996ms)\n✔ old renew-demo-auth-expiry cannot replace the2029 action (4.2535ms)\n✔ old enable-permanent-demo-auth cannot replace the2029 action (4.2723ms)\n✔ one CAS claim, durable intent and no replay or false finish (17.1679ms)\n✔ concurrent claim has one winner (6.1359ms)\n✔ unresolved old finite claimed blocks new operation (1.1143ms)\n✔ unresolved old finite write-intent blocks new operation (0.9046ms)\n✔ unresolved old finite uncertain blocks new operation (0.8204ms)\n✔ unresolved old finite undefined blocks new operation (0.6305ms)\n✔ supersession rejects missing (0.7464ms)\n✔ supersession rejects parallel (0.8994ms)\n✔ supersession rejects receipt (0.7362ms)\n✔ supersession rejects request (0.6056ms)\n✔ supersession rejects digest (0.5606ms)\n✔ supersession rejects dispatch-source (0.7032ms)\n✔ supersession rejects dispatch-stage (0.6063ms)\n✔ supersession rejects dispatch-auth (0.8424ms)\n✔ supersession rejects dispatch-unresolved (0.7117ms)\n✔ terminal failed run rejects status=in_progress (0.9348ms)\n✔ terminal failed run rejects conclusion=success (0.8729ms)\n✔ terminal failed run rejects conclusion=cancelled (0.7828ms)\n✔ terminal failed run rejects run_attempt=2 (0.7926ms)\n✔ terminal failed run rejects head_sha=0000000000000000000000000000000000000000 (0.7509ms)\n✔ terminal failed run rejects id=123 (0.8484ms)\n✔ terminal failed run rejects path=.github/workflows/other.yml (1.3961ms)\n✔ terminal failed run rejects event=push (0.8653ms)\n✔ terminal failed run rejects head_branch=foreign (0.8954ms)\n✔ terminal failed run rejects display_title=foreign (0.8978ms)\n✔ final-await owner drift cannot survive ownership fence (7.7735ms)\n✔ final-await release drift cannot survive ownership fence (5.7573ms)\n✔ final-await history drift cannot survive ownership fence (5.7504ms)\n✔ final-await authorization drift cannot survive ownership fence (6.0116ms)\n✔ final-await execution drift cannot survive ownership fence (5.4292ms)\n✔ final-await other-stage drift cannot survive ownership fence (9.0318ms)\n✔ exact target inspection proves active old cutoff and failed source, without variable inventory (2.2221ms)\n✔ preflight rejects production (0.6273ms)\n✔ preflight rejects rollout (0.5109ms)\n✔ preflight rejects active-source (0.3147ms)\n✔ preflight rejects same-source (0.2397ms)\n✔ preflight rejects latest-id (0.2214ms)\n✔ preflight rejects latest-status (0.2619ms)\n✔ preflight rejects failed-missing (0.2324ms)\n✔ preflight rejects failed-source (0.2853ms)\n✔ preflight rejects failed-status (0.2687ms)\n✔ preflight rejects failed-target (0.2361ms)\n✔ preflight rejects failed-id (0.2084ms)\n✔ public status rejects Entra (0.3438ms)\n✔ public status rejects nonsynthetic (0.2524ms)\n✔ public status rejects permanent (0.359ms)\n✔ public status rejects oldexpiry (0.4035ms)\n✔ public status rejects expiry-offset (0.3757ms)\n✔ public status rejects expiry-ms (0.2975ms)\n✔ public status rejects enabled (0.4565ms)\n✔ public old expiry accepts only exact seconds or .000Z spelling (0.46ms)\n✔ one fixed-key2029 upsert, no deployment or generic flags; replay denied (11.6694ms)\n✔ uncertain write is retained and never replayed; acknowledgment persistence failure stays uncertain (29.1468ms)\n✔ wrong provider response is uncertainty not staged (11.3273ms)\n✔ main drift, revocation and request aliases cannot bypass final write fences (34.6039ms)\n✔ foreign selector, inherited approval and copied action are rejected (6.5102ms)\n✔ workflow/CLI manual trusted main only, first attempt, tests before dedicated secret (24.756ms)\n✔ receipt has fixed cutoff and finite fields only; credential aliases never reflected (24.5469ms)\n✔ server clock reaching fixed cutoff blocks prepared and final-intent operations (12.7453ms)\n✔ copied authorization and consumed nonce cannot authorize a different2029 operation (4.5262ms)\n✔ prior permanent staged is not permission for2029 (0.9603ms)\n✔ prior permanent uncertain is not permission for2029 (0.8062ms)\n✔ prior permanent claimed is not permission for2029 (0.74ms)\n✔ prior permanent write-intent is not permission for2029 (0.7429ms)\n✔ prior permanent undefined is not permission for2029 (0.4949ms)\n✔ public old expiry rejects type/spelling null (0.54ms)\n✔ public old expiry rejects type/spelling undefined (0.2943ms)\n✔ public old expiry rejects type/spelling 123 (0.2478ms)\n✔ public old expiry rejects type/spelling {} (0.3019ms)\n✔ public old expiry rejects type/spelling [] (0.2363ms)\n✔ public old expiry rejects type/spelling \"2026-10-31T23:59:59.0000Z\" (0.2202ms)\n✔ public old expiry rejects type/spelling \"2026-10-31T23:59:59Z\\n\" (0.2107ms)\n✔ no native prior-run reader and missing genuine run both fail before new authorization (1.5141ms)\n✔ stage final permission-await owner change produces zero provider writes (7.751ms)\n✔ stage final permission-await execution change produces zero provider writes (11.0128ms)\n✔ stage final permission-await prior-stage change produces zero provider writes (8.1362ms)\n✔ revocation during final awaited current-main verifier prevents provider mutation (9.4482ms)\n✔ author-only revocation inside final main verifier blocks a still-authorized worker (10.3943ms)\n✔ only one fixed demo expiry key; bounded strict request accepts seven-day maximum (5.0224ms)\n✔ request rejects expired new date (5.286ms)\n✔ request rejects overlong renewal (0.3926ms)\n✔ request rejects invalid date normalizes (0.5973ms)\n✔ request rejects infinite date (2.022ms)\n✔ request rejects noncanonical timezone (0.652ms)\n✔ request rejects unknown field (1.2428ms)\n✔ request rejects future previous date (0.519ms)\n✔ request rejects nonce injection (0.4182ms)\n✔ CLI requires exact trusted main/workflow and first run attempt (1.3391ms)\n✔ no default authorizer accepts a workflow actor or self-declared receipt (3.1222ms)\n✔ actual host verifier produces append-only native action receipt, not a budget extension (1.7059ms)\n✔ native authorization rejects duplicate-subject ownership (0.6224ms)\n✔ native authorization rejects duplicate-operation ownership (0.3961ms)\n✔ native authorization rejects shared-issue ownership (0.5636ms)\n✔ native authorization rejects shared-pr ownership (0.4531ms)\n✔ consumed capability cannot be copied onto another issue or operation (2.1857ms)\n✔ a verifier consumption nonce is not reusable for another issue action (1.4834ms)\n✔ a stored unauthenticated request cannot claim or stage (0.929ms)\n✔ single durable claim fences concurrent claimant and replay (3.8277ms)\n✔ concurrent claim attempts have one guarded durable winner (2.7931ms)\n✔ changed owner invalidates consumed capability before claim (1.4912ms)\n✔ changed source invalidates consumed capability before claim (1.5009ms)\n✔ changed expiry invalidates consumed capability before claim (1.8685ms)\n✔ changed review history invalidates consumed capability before claim (1.2491ms)\n✔ revoked actor cannot mark the mutation intent (2.0956ms)\n✔ execution change during final permission await cannot reach Railway (4.3161ms)\n✔ owner change during final permission await cannot reach Railway (3.9845ms)\n✔ finish(staged) cannot leap over a durable write-intent (1.7854ms)\n✔ finish(uncertain) cannot leap over a durable write-intent (1.518ms)\n✔ changed preflight fingerprint never reaches durable claim (1.0301ms)\n✔ blocked or uncertain prior operation prevents a second staged update (1.2849ms)\n✔ preflight validates fixed demo, old expiry, health, idle rollout and source without variables query (1.732ms)\n✔ preflight accepts the deployed backend canonical .000Z spelling of the exact strict previous instant (0.456ms)\n✔ preflight rejects public expiry nonzero milliseconds (0.8685ms)\n✔ preflight rejects public expiry different instant (0.4469ms)\n✔ preflight rejects public expiry equivalent offset spelling (0.3705ms)\n✔ preflight rejects public expiry short fractional spelling (0.3973ms)\n✔ preflight rejects public expiry extra fractional spelling (0.329ms)\n✔ preflight rejects public expiry malformed suffix (0.7112ms)\n✔ preflight rejects public expiry whitespace suffix (0.4615ms)\n✔ preflight rejects public expiry missing value (0.4126ms)\n✔ preflight rejects public expiry null (0.2992ms)\n✔ preflight rejects public expiry number (0.3051ms)\n✔ preflight rejects public expiry object (0.294ms)\n✔ preflight rejects public expiry array (0.2743ms)\n✔ preflight rejects production (0.5506ms)\n✔ preflight rejects foreign token (0.2486ms)\n✔ preflight rejects wrong domain (0.1752ms)\n✔ preflight rejects active rollout (0.3866ms)\n✔ preflight rejects unknown source (0.2812ms)\n✔ preflight rejects old expiry drift (0.3414ms)\n✔ preflight rejects nonsynthetic data (0.406ms)\n✔ stage uses a durable claim/intent and exactly one fixed-key no-deploy mutation (3.6346ms)\n✔ a completed expired staged renewal permits a separately authorized later stage without rewriting history (10.3102ms)\n✔ expired staged history without matching live previous expiry never reaches a second claim or write (4.9532ms)\n✔ prior claimed renewal still blocks a later action after expiry (5.2385ms)\n✔ prior write-intent renewal still blocks a later action after expiry (3.3535ms)\n✔ prior uncertain renewal still blocks a later action after expiry (3.1414ms)\n✔ expired prior stage is not a license to skip an unobserved expiry gap (3.3596ms)\n✔ a prior stage whose expiry is still live cannot authorize a parallel renewal (3.0995ms)\n✔ duplicate or parallel historical staged cutoffs remain ambiguous and blocked (4.2817ms)\n✔ uncertain POST is retained, finite and never retried or blindly replayed (3.1192ms)\n✔ stage never accepts a missing native controller capability adapter (0.3738ms)\n✔ default inspect validates canonical request/target without authority consumption or mutation (0.4142ms)\n✔ source/main drift after durable intent still blocks before Railway mutation (2.3599ms)\n✔ async preflight callbacks cannot rewrite the canonical expiry through request aliases (2.4429ms)\n✔ receipt serialization refuses credentials and arbitrary error fields (28.412ms)\n✔ actual CLI rejects untrusted context with only a finite private receipt on Windows and Linux (240.0136ms)\n✔ workflow pins trusted main, exact target environment, shared deployment queue and tests before secrets (2.7362ms)\nℹ tests 154\nℹ suites 0\nℹ pass 154\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 554.3284\n",
+      "stderr": ""
+    }
+  ],
+  "integratedSource": "f5835253b4a8a5ad5ac35e3abbdd28df13962d16",
+  "rootIntegratedChecks": [
+    {
+      "label": "integrated-repair-unit",
+      "receipt": {
+        "startedAt": "2026-11-03T18:38:04.124Z",
+        "finishedAt": "2026-11-03T18:38:05.073Z",
+        "cwd": "C:/w-rv/auth-expiry-2029-20261103",
+        "sha": "f5835253b4a8a5ad5ac35e3abbdd28df13962d16",
+        "args": [
+          "--test",
+          "scripts/automation/enable-demo-auth-2029.test.mjs",
+          "scripts/automation/renew-demo-auth-expiry.test.mjs",
+          "scripts/build/backend-build-context.test.mjs"
+        ],
+        "before": {
+          "head": "f5835253b4a8a5ad5ac35e3abbdd28df13962d16",
+          "index": "905e83469746a7c06fd64d1fbad27d50f592a694a9260c6e342eca0411fecb12"
+        },
+        "after": {
+          "head": "f5835253b4a8a5ad5ac35e3abbdd28df13962d16",
+          "index": "905e83469746a7c06fd64d1fbad27d50f592a694a9260c6e342eca0411fecb12"
+        },
+        "sourceStable": true,
+        "credentialsInherited": false,
+        "ok": true,
+        "exitCode": 0,
+        "stdoutSha256": "16b74f29bf9727461b6cbc08b01b4fffc3ee6fc2b8c235d6e1fda716c9f89720",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "integrated-repair-build",
+      "receipt": {
+        "startedAt": "2026-11-03T18:38:06.114Z",
+        "finishedAt": "2026-11-03T18:41:12.621Z",
+        "cwd": "C:/w-rv/auth-expiry-2029-20261103",
+        "sha": "f5835253b4a8a5ad5ac35e3abbdd28df13962d16",
+        "args": [
+          "C:/w-rv/tmp/auth-expiry-2029-20261103/isolated-build-entry.mjs"
+        ],
+        "before": {
+          "head": "f5835253b4a8a5ad5ac35e3abbdd28df13962d16",
+          "index": "905e83469746a7c06fd64d1fbad27d50f592a694a9260c6e342eca0411fecb12"
+        },
+        "after": {
+          "head": "f5835253b4a8a5ad5ac35e3abbdd28df13962d16",
+          "index": "905e83469746a7c06fd64d1fbad27d50f592a694a9260c6e342eca0411fecb12"
+        },
+        "sourceStable": true,
+        "credentialsInherited": false,
+        "ok": true,
+        "exitCode": 0,
+        "stdoutSha256": "754ffd30f91f2256f89b0c17c5ba1752ba4dd4d9b7e8a1ee8f037dcd83803b36",
+        "stderrSha256": "ea458fef61f563e920055d43ded2c70202a2babb0b2cf8be5e225ce0bdfffd09"
+      }
+    }
+  ],
+  "independentQa2AtPreparation": "Pending when this historical repair bundle was prepared; see later exact-source qa2-validation-report.md and complete QA2 archive for actual PASS, not approval transfer.",
+  "onlineProof": false
+}
