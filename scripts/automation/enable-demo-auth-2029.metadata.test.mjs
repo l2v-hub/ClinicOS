@@ -129,5 +129,7 @@ test('protected workflow metadata choice preserves default inspect, guards and b
 });
 test('CLI metadata branches before constructing GitHub/controller state clients', async () => {
   const source = await readFile(new URL('./enable-demo-auth-2029.mjs', import.meta.url), 'utf8');
-  assert.ok(source.indexOf("mode === 'metadata'", source.indexOf('async function main()')) < source.indexOf('const github = createGitHub', source.indexOf('async function main()')));
+  const branch = source.indexOf("mode === 'metadata'", source.indexOf('async function main()'));
+  const stateClient = source.indexOf('const github = createGitHub', source.indexOf('async function main()'));
+  assert.ok(branch >= 0); assert.ok(stateClient > branch);
 });
