@@ -6,8 +6,14 @@ const bytes = (s) => Buffer.byteLength(s);
 const hash = (s) => createHash('sha256').update(s).digest('hex');
 const object = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
 const mintedCapacityErrors = new WeakSet();
-const CAPACITY_FIELDS = ['requiredTokensUpperBound', 'contextBytes', 'inputBytes',
-  'schemaBytes', 'maxTokens', 'contextWindow'];
+const CAPACITY_FIELDS = [
+  'requiredTokensUpperBound',
+  'contextBytes',
+  'inputBytes',
+  'schemaBytes',
+  'maxTokens',
+  'contextWindow',
+];
 
 export class NativeRequestCapacityError extends Error {
   constructor(metadata) {
@@ -29,7 +35,7 @@ export class NativeRequestCapacityError extends Error {
 // The public class alone is NOT authority: only this module's final fully
 // validated capacity check can mint an error recognized by this classifier.
 export function isNativeRequestCapacityError(error) {
-  return error instanceof NativeRequestCapacityError && mintedCapacityErrors.has(error);
+  return mintedCapacityErrors.has(error) && error instanceof NativeRequestCapacityError;
 }
 const HEADERS = new Set([
   'host',
@@ -54,8 +60,10 @@ const HEADERS = new Set([
   'x-stainless-timeout',
 ]);
 
-export function validateNativeRequest({ body, rawHeaders, host, method, path, expected } = {}) {
+export function validateNativeRequest(request = {}) {
+  let currentCapacityError;
   try {
+    const { body, rawHeaders, host, method, path, expected } = request;
     const check = (ok) => {
       if (!ok) throw new Error();
     };
@@ -225,10 +233,16 @@ export function validateNativeRequest({ body, rawHeaders, host, method, path, ex
     const contextBytes = textBytes + schemaBytes + wrapperBytes;
     const requiredTokensUpperBound = contextBytes + 65536 + value.max_tokens;
     if (requiredTokensUpperBound > expected.contextWindow) {
-      const error = new NativeRequestCapacityError({ requiredTokensUpperBound, contextBytes,
-        inputBytes: bytes(expected.input), schemaBytes, maxTokens: value.max_tokens,
-        contextWindow: expected.contextWindow });
+      const error = new NativeRequestCapacityError({
+        requiredTokensUpperBound,
+        contextBytes,
+        inputBytes: bytes(expected.input),
+        schemaBytes,
+        maxTokens: value.max_tokens,
+        contextWindow: expected.contextWindow,
+      });
       mintedCapacityErrors.add(error);
+      currentCapacityError = error;
       throw error;
     }
     return freezeGuardValue({
@@ -255,7 +269,9 @@ export function validateNativeRequest({ body, rawHeaders, host, method, path, ex
       blockCount,
     });
   } catch (error) {
-    if (isNativeRequestCapacityError(error)) throw error;
+    // A genuine error from a DIFFERENT invocation is not a capacity result for
+    // this request (e.g. a hostile expected-value getter replaying an old error).
+    if (currentCapacityError && error === currentCapacityError) throw error;
     throw new Error('native-request-rejected');
   }
 }

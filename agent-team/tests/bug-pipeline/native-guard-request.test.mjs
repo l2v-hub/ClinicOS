@@ -211,12 +211,26 @@ test('only a fully valid one-byte context overflow produces a private-minted num
   const minimal = validateNativeRequest(fixture('').request());
   const f = fixture('x'.repeat(1000001 - minimal.requiredTokensUpperBound));
   let error;
-  try { validateNativeRequest(f.request()); } catch (value) { error = value; }
+  try {
+    validateNativeRequest(f.request());
+  } catch (value) {
+    error = value;
+  }
   assert.ok(error instanceof nativeGuard.NativeRequestCapacityError);
   assert.equal(nativeGuard.isNativeRequestCapacityError(error), true);
   assert.equal(error.code, 'native-context-exceeded');
   assert.equal(error.message, 'native-request-rejected');
-  assert.deepEqual(Object.keys(error.metadata).sort(), ['requiredTokensUpperBound', 'contextBytes', 'inputBytes', 'schemaBytes', 'maxTokens', 'contextWindow'].sort());
+  assert.deepEqual(
+    Object.keys(error.metadata).sort(),
+    [
+      'requiredTokensUpperBound',
+      'contextBytes',
+      'inputBytes',
+      'schemaBytes',
+      'maxTokens',
+      'contextWindow',
+    ].sort(),
+  );
   assert.ok(Object.values(error.metadata).every(Number.isSafeInteger));
   assert.equal(error.metadata.requiredTokensUpperBound, 1000001);
   assert.equal(error.metadata.contextBytes + 65536 + error.metadata.maxTokens, 1000001);
@@ -224,7 +238,9 @@ test('only a fully valid one-byte context overflow produces a private-minted num
   assert.equal(error.metadata.maxTokens, 32768);
   assert.equal(error.metadata.contextWindow, 1000000);
   assert.ok(Object.isFrozen(error) && Object.isFrozen(error.metadata));
-  assert.throws(() => { error.metadata.maxTokens = 1; }, TypeError);
+  assert.throws(() => {
+    error.metadata.maxTokens = 1;
+  }, TypeError);
   assert.equal(JSON.stringify(error).includes('synthetic-not-credential'), false);
   assert.equal(JSON.stringify(error).includes('Trusted synthetic native wrapper'), false);
 });
@@ -232,46 +248,126 @@ test('only a fully valid one-byte context overflow produces a private-minted num
 test('malformed and oversized requests cannot launder a capacity-only fallback hint', () => {
   const minimal = validateNativeRequest(fixture('').request());
   for (const change of [
-    (f) => { f.value.model = 'wrong-model'; },
-    (f) => { f.value.tools[0].input_schema = {}; },
-    (f) => { f.value.unknown = true; },
-    (f) => { f.value.system[0].cache_control = { type: 'unknown' }; },
-    (f) => { f.value.messages[0].content.push({ type: 'text', text: 'untrusted extra' }); },
-    (f) => { f.value.max_tokens = 128000; },
-    (f) => { f.value.metadata = { user_id: 'x', code: 'native-context-exceeded' }; },
+    (f) => {
+      f.value.model = 'wrong-model';
+    },
+    (f) => {
+      f.value.tools[0].input_schema = {};
+    },
+    (f) => {
+      f.value.unknown = true;
+    },
+    (f) => {
+      f.value.system[0].cache_control = { type: 'unknown' };
+    },
+    (f) => {
+      f.value.messages[0].content.push({ type: 'text', text: 'untrusted extra' });
+    },
+    (f) => {
+      f.value.max_tokens = 128000;
+    },
+    (f) => {
+      f.value.metadata = { user_id: 'x', code: 'native-context-exceeded' };
+    },
   ]) {
     const f = fixture('x'.repeat(1000001 - minimal.requiredTokensUpperBound));
     change(f);
-    assert.throws(() => validateNativeRequest(f.request()), (error) => {
-      assert.equal(typeof nativeGuard.isNativeRequestCapacityError === 'function' && nativeGuard.isNativeRequestCapacityError(error), false);
-      assert.equal(error.message, 'native-request-rejected');
-      assert.equal(error.metadata, undefined);
-      assert.equal(error.code, undefined);
-      return true;
-    });
+    assert.throws(
+      () => validateNativeRequest(f.request()),
+      (error) => {
+        assert.equal(
+          typeof nativeGuard.isNativeRequestCapacityError === 'function' &&
+            nativeGuard.isNativeRequestCapacityError(error),
+          false,
+        );
+        assert.equal(error.message, 'native-request-rejected');
+        assert.equal(error.metadata, undefined);
+        assert.equal(error.code, undefined);
+        return true;
+      },
+    );
   }
 });
 
 test('publicly constructed or prototype-forged errors from hostile getters are not trusted capacity signals', () => {
   assert.equal(typeof nativeGuard.NativeRequestCapacityError, 'function');
-  const metadata = { requiredTokensUpperBound: 1000001, contextBytes: 901697, inputBytes: 900000, schemaBytes: 1000, maxTokens: 32768, contextWindow: 1000000 };
-  const fake = Object.assign(Object.create(nativeGuard.NativeRequestCapacityError.prototype), { code: 'native-context-exceeded', metadata });
+  const metadata = {
+    requiredTokensUpperBound: 1000001,
+    contextBytes: 901697,
+    inputBytes: 900000,
+    schemaBytes: 1000,
+    maxTokens: 32768,
+    contextWindow: 1000000,
+  };
+  const fake = Object.assign(Object.create(nativeGuard.NativeRequestCapacityError.prototype), {
+    code: 'native-context-exceeded',
+    metadata,
+  });
   const publicError = new nativeGuard.NativeRequestCapacityError(metadata);
   for (const error of [fake, publicError]) {
     assert.equal(nativeGuard.isNativeRequestCapacityError(error), false);
     const request = fixture().request();
-    Object.defineProperty(request.expected, 'input', { get() { throw error; } });
-    assert.throws(() => validateNativeRequest(request), (caught) => caught.message === 'native-request-rejected' && !nativeGuard.isNativeRequestCapacityError(caught) && caught.metadata === undefined);
+    Object.defineProperty(request.expected, 'input', {
+      get() {
+        throw error;
+      },
+    });
+    assert.throws(
+      () => validateNativeRequest(request),
+      (caught) =>
+        caught.message === 'native-request-rejected' &&
+        !nativeGuard.isNativeRequestCapacityError(caught) &&
+        caught.metadata === undefined,
+    );
   }
 });
 
 test('a previously genuine capacity error cannot be replayed through a different request getter', () => {
   const minimal = validateNativeRequest(fixture('').request());
   let prior;
-  try { validateNativeRequest(fixture('x'.repeat(1000001 - minimal.requiredTokensUpperBound)).request()); }
-  catch (error) { prior = error; }
+  try {
+    validateNativeRequest(
+      fixture('x'.repeat(1000001 - minimal.requiredTokensUpperBound)).request(),
+    );
+  } catch (error) {
+    prior = error;
+  }
   assert.equal(nativeGuard.isNativeRequestCapacityError(prior), true);
   const request = fixture().request();
-  Object.defineProperty(request.expected, 'input', { get() { throw prior; } });
-  assert.throws(() => validateNativeRequest(request), (error) => error.message === 'native-request-rejected' && !nativeGuard.isNativeRequestCapacityError(error));
+  Object.defineProperty(request.expected, 'input', {
+    get() {
+      throw prior;
+    },
+  });
+  assert.throws(
+    () => validateNativeRequest(request),
+    (error) =>
+      error.message === 'native-request-rejected' &&
+      !nativeGuard.isNativeRequestCapacityError(error),
+  );
+});
+
+test('top-level request getters cannot escape capacity-only error normalization', () => {
+  const minimal = validateNativeRequest(fixture('').request());
+  let prior;
+  try {
+    validateNativeRequest(
+      fixture('x'.repeat(1000001 - minimal.requiredTokensUpperBound)).request(),
+    );
+  } catch (error) {
+    prior = error;
+  }
+  assert.equal(nativeGuard.isNativeRequestCapacityError(prior), true);
+  const request = fixture().request();
+  Object.defineProperty(request, 'body', {
+    get() {
+      throw prior;
+    },
+  });
+  assert.throws(
+    () => validateNativeRequest(request),
+    (error) =>
+      error.message === 'native-request-rejected' &&
+      !nativeGuard.isNativeRequestCapacityError(error),
+  );
 });
