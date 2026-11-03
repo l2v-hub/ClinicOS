@@ -238,6 +238,26 @@ test('deadline settles failed and escalates when inspected Docker child ignores 
     await runtime.close();
   }
 });
+async function observeProbeLaunch(readCounters, launch) {
+  const id = await launch();
+  const before = readCounters();
+  return { id, before };
+}
+test('controlled probe snapshot precedes even immediate fixture completion', async () => {
+  let tcpAccepted = 0,
+    dnsAnswered = 0;
+  const { before, id } = await observeProbeLaunch(
+    () => ({ tcpAccepted, dnsAnswered }),
+    async () => {
+      tcpAccepted++;
+      dnsAnswered++;
+      return 'synthetic-owned-container';
+    },
+  );
+  assert.equal(id, 'synthetic-owned-container');
+  assert.deepEqual(before, { tcpAccepted: 0, dnsAnswered: 0 });
+  assert.ok(tcpAccepted > before.tcpAccepted && dnsAnswered > before.dnsAnswered);
+});
 test(
   'Linux controlled bridge TCP/DNS baseline succeeds; identical network-none fixture cannot escape',
   { skip: process.platform !== 'linux', timeout: 240000 },
@@ -400,7 +420,10 @@ test(
         args[args.indexOf('--network') + 1] = mode;
         args.splice(args.indexOf('--interactive'), 1);
         args.splice(args.indexOf('run') + 1, 0, '--detach');
-        const id = (await run(args.slice(2))).trim();
+        const { id, before } = await observeProbeLaunch(
+          () => ({ tcpAccepted, dnsAnswered }),
+          async () => (await run(args.slice(2))).trim(),
+        );
         assert.match(id, /^[a-f0-9]{64}$/);
         const [container] = JSON.parse(await run(['inspect', id]));
         assert.equal(container.Name, '/' + name);
@@ -419,8 +442,7 @@ test(
           assert.equal(proof.runtimeIsolationVerified, true);
           assert.equal(proof.cliSha256, undefined, 'Synthetic fixture is not binary qualification');
         }
-        const before = { tcpAccepted, dnsAnswered },
-          result = await nextReport();
+        const result = await nextReport();
         assert.equal(result.fixtureSha256, fixtureSha256);
         assert.deepEqual(result.target, target);
         results.push(result);
