@@ -68,6 +68,7 @@ export function createPolicyBarrier() {
       }
     },
     ready,
+    invalid: () => poisoned,
     receipt: () => ({ status: ready() ? 'settled-empty' : 'policy-unproven', settlements }),
   };
 }
@@ -120,9 +121,11 @@ export async function stageGuardedSession({
   const reject = () => {
     state.data.fail();
     readyReject(new Error('native-session-rejected'));
-    Promise.resolve()
-      .then(() => runtime?.close())
-      .catch(() => {});
+    // Cancel the parent transport synchronously; a queued microtask must not
+    // resume the release gate after a late policy event invalidated its fence.
+    try {
+      Promise.resolve(runtime?.close()).catch(() => {});
+    } catch {}
   };
   const maybeReady = () => {
     if (staged && policy.ready()) readyResolve(staged);
@@ -150,6 +153,10 @@ export async function stageGuardedSession({
         data: state.data,
         onDiagnostic(chunk) {
           policy.push(chunk);
+          if (policy.invalid() || (policy.receipt().settlements > 0 && !policy.ready())) {
+            reject();
+            return;
+          }
           maybeReady();
         },
         onStage(candidate) {
@@ -351,12 +358,12 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
       disposed = true;
       let failed = false;
       try {
-        await container?.close();
+        await proxy?.close();
       } catch {
         failed = true;
       }
       try {
-        await proxy?.close();
+        await container?.close();
       } catch {
         failed = true;
       }

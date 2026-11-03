@@ -153,6 +153,15 @@ export async function nativeGuardBuildIdentity({ env, cliPath }) {
     }).trim(),
     workerSourceSha,
   );
+  assert.equal(
+    execFileSync('git', ['status', '--porcelain', '--untracked-files=no'], {
+      cwd: root,
+      encoding: 'utf8',
+      windowsHide: true,
+    }).trim(),
+    '',
+    'Native worker requires a clean complete tracked source state',
+  );
   const modules = [
     'json',
     'request',

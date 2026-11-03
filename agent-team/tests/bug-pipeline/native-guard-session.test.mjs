@@ -271,6 +271,20 @@ test('policy invalidated during awaited claim validation prevents the upstream w
   assert.equal(f.calls.includes('forward'), false);
 });
 
+test('late policy microtask irreversibly poisons the gate before its await continuation forwards', async () => {
+  const f = sessionFixture();
+  const session = await stageGuardedSession({
+    expected,
+    startRuntime: f.startRuntime,
+    validateClaim: async () => {
+      queueMicrotask(() => queueMicrotask(() => f.poisonPolicy()));
+      return true;
+    },
+  });
+  await assert.rejects(session.release({ nonce: 'owned-fixture' }), /native-session-rejected/);
+  assert.equal(f.calls.includes('forward'), false);
+});
+
 test('startup promise is bounded even when the native runtime never returns', async () => {
   const outcome = stageGuardedSession({
     expected,
