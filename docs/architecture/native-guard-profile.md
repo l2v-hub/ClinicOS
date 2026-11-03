@@ -41,16 +41,21 @@ request/response/debug/settings/token values are never public artifacts.
 ## Admission and ownership
 
 1. Verify immutable source, feedback, inventory and required evidence as before.
-2. Prepare all selected context without discounting the observed128000 default.
-   A bounded32k request-output plan is provisional, not admission or a new model
-   profile. It is effective only when the real native request has been sealed.
-3. Launch a fresh source container and stage its entire bounded inference body
-   in parent memory without forwarding any source inference upstream.
+2. Keep the observed128000 default unchanged. Canonical `nativeRequiredEvidence`
+   names identify critical selected reports and their frozen digests; these are
+   mandatory before qualification and cannot become optional omissions.
+3. Hold the verified mandatory request in a fresh isolated container, without
+   inference or claim. Select optional reports under the measured native-wrapper
+   allowance. Stage additions separately and close the unused capability. Only
+   a privately minted, fully validated, positively policy-settled capacity signal
+   permits retaining the first live mandatory body. Authentication, policy,
+   malformed input, timeout and unknown errors never permit fallback.
 4. Strictly reject duplicate/ambiguous JSON and HTTP fields, unknown context,
    unsupported media/tools, mismatched complete prompt/schema/model and oversize.
    Count every model-visible text/block/schema, retaining embedded packet JSON
    escaping, plus native65536 safety margin and the actual body max_tokens. The
-   upper bound must fit the genuine qualified context clamped to1000000.
+   upper bound must fit the genuine qualified context clamped to1000000. The
+   effective32k request cap is separate from the observed model default.
 5. Require positive genuine native managed-policy settlement. A transport marker
    or timeout is insufficient. Pending, failed, nonempty or unknown managed policy
    fails closed; no organization policy is skipped to make a request fit.
@@ -75,7 +80,9 @@ Pure and transport tests include duplicate escaped keys, invalid UTF-8, exact
 capacity boundaries, additional context, concurrent requests, before-claim hold,
 foreign claim, alias mutation, unknown endpoints, retry denial, response mismatch
 and synthetic complete-context input. Actual Linux runtime tests must prove direct
-IPv4/IPv6/DNS/proxy-bypass isolation and inspect the real container flags/mounts.
+controlled positive TCP/DNS baselines and proxy-bypass isolation, and inspect
+actual container flags/mounts. IPv6 network:none configuration is checked; semantic
+IPv6 escape qualification is not claimed without a controlled reachable route.
 A Windows-only test run cannot establish those facts.
 
 The candidate receives independent QA, exact CI and genuine Claude Max review
@@ -91,3 +98,11 @@ source, required CI and feedback still require full admission and their own exis
 review allowance. The technical no-automatic-merge/no-automatic-deploy hold remains
 in force. Demo restore and production promotion are separate; production is not
 authorized.
+
+New routes are explicit trusted-main `workflow_dispatch` modes only.
+`qualify-native` uses synthetic context plus40960 bytes future-CI headroom and no
+application claim. `native-review` requires an exact PR/SHA selector, genuine
+qualification and the existing source/feedback/actor/round controller. Scheduled
+native-profile activation is not added. Native-required subjects cannot silently
+fall back to classic review or legacy recovery. Qualification does not mint an
+allowance, application approval, merge or deployment permission.

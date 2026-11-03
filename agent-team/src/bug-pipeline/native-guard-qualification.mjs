@@ -244,3 +244,87 @@ export async function qualifyNativeGuardOnHost({ env, run, cwd }) {
     },
   });
 }
+
+export function createNativeReviewStager({ startRuntime, qualification }) {
+  return async ({ source, completeOptionalEvidence, sha, profile, validateClaim }) => {
+    source = { packet: structuredClone(source.packet), tracked: new Set(source.tracked) };
+    profile = structuredClone(profile);
+    const receipt = qualification();
+    assert.equal(receipt?.status, 'native-profile-qualified');
+    assert.equal(receipt.applicationReviewClaimed, false);
+    assert.deepEqual(profile, receipt.profile);
+    assert.equal(receipt.requestOutputCap, 32768);
+    const { cloudReviewPayload, completeCloudReviewEvidence } =
+      await import('./cloud-review-worker.mjs');
+    const { stageGuardedSession, isNativeStagingCapacityError } =
+      await import('./native-guard-session.mjs');
+    const minimal = cloudReviewPayload({ packet: source.packet, sha, model: profile.model });
+    const stage = (payload) =>
+      stageGuardedSession({
+        expected: {
+          input: payload.input,
+          schema: payload.schema,
+          model: profile.model,
+          contextWindow: 1000000,
+          outputCap: 32768,
+          subjectSha: sha,
+        },
+        startRuntime,
+        validateClaim,
+      });
+    // First hold real, verified mandatory context WITHOUT inference or claim.
+    // Keep that live capability until optional selection is actually admitted.
+    const mandatory = await stage(minimal);
+    let session = mandatory,
+      payload = minimal,
+      completed = source;
+    try {
+      const packetBytes = Buffer.byteLength(JSON.stringify(source.packet));
+      const packetByteBudget = Math.min(
+        1000000 - 65536,
+        packetBytes + mandatory.seal.contextWindow - mandatory.seal.requiredTokensUpperBound,
+      );
+      completed = await completeCloudReviewEvidence({
+        source,
+        completeOptionalEvidence,
+        packetByteBudget,
+      });
+      payload = cloudReviewPayload({ packet: completed.packet, sha, model: profile.model });
+      if (payload.input !== minimal.input) {
+        try {
+          session = await stage(payload);
+        } catch (error) {
+          // Capacity-only, fully validated and positively policy-settled signal;
+          // never fall back on an authentication, policy, parse or unknown error.
+          if (!isNativeStagingCapacityError(error)) throw error;
+          mandatory.assertReady();
+          completed = source;
+          payload = minimal;
+          session = mandatory;
+        }
+        if (session !== mandatory) await mandatory.close();
+      }
+      session.assertReady();
+      return {
+        source: completed,
+        session,
+        prepared: {
+          ...payload,
+          capacity: {
+            ...profile,
+            inputBytes: session.seal.inputBytes,
+            schemaBytes: session.seal.schemaBytes,
+            nativeOverheadTokens: 65536,
+            enforcedMaxOutputTokens: session.seal.maxTokens,
+            requiredTokensUpperBound: session.seal.requiredTokensUpperBound,
+            guardProfile: NATIVE_GUARD_PROFILE,
+          },
+        },
+      };
+    } catch (error) {
+      await session.close();
+      if (session !== mandatory) await mandatory.close();
+      throw error;
+    }
+  };
+}

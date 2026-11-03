@@ -242,7 +242,34 @@ export function createReviewSourceReader({ run, cwd, feedbackReader, recoveryPla
       )
       .map(({ path: file, sha, mode, size }) => ({ file, sha, mode, size }));
     bounded();
-    const requiredNames = ['task-contract.md', 'implementation-plan.md', 'validation-report.md'];
+    const nativeRequired = subject.operatorCoordination?.nativeRequiredEvidence ?? [];
+    assert.ok(Array.isArray(nativeRequired) && nativeRequired.length <= 21);
+    if (nativeRequired.length)
+      assert.equal(
+        subject.operatorCoordination.nativeReviewProfile,
+        'native-max-single-forward-v1',
+      );
+    for (const name of nativeRequired) {
+      sourcePath(name);
+      assert.ok(/\.(?:md|json|txt)$/.test(name) && !name.startsWith(EVIDENCE_ROOT));
+      assert.ok(
+        head.get(prefix + name)?.size <= 64 * 1024,
+        'Mandatory native context is missing or oversized',
+      );
+      assert.equal(
+        typeof subject.packet?.files?.[name],
+        'string',
+        'Mandatory native context must have its frozen digest',
+      );
+    }
+    const requiredNames = [
+      ...new Set([
+        'task-contract.md',
+        'implementation-plan.md',
+        'validation-report.md',
+        ...nativeRequired,
+      ]),
+    ];
     const additionalNames = [...head.keys()]
       .filter((file) => file.startsWith(prefix))
       .map((file) => file.slice(prefix.length))

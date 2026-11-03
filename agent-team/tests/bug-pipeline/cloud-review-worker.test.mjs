@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { mkdtemp, mkdir, writeFile, rm, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { sourceFixture as capacitySourceFixture } from './cloud-review-capacity-fixture.mjs';
 import { createRunner } from '../../src/bug-pipeline/process.mjs';
 import {
   processCloudReview,
@@ -281,6 +282,38 @@ test('a staged process that expired before the claim never consumes a source rou
   });
   assert.equal((await processCloudReview(f.options)).status, 'preclaim-source-changed');
   assert.deepEqual(f.calls, ['retrieve', 'probe', 'native-close']);
+});
+
+test('canonical native critical context is hash-verified mandatory, not optional evidence', async () => {
+  const f = capacitySourceFixture();
+  const name = 'review-auth-context-report.md';
+  f.subject.operatorCoordination = {
+    nativeReviewProfile: 'native-max-single-forward-v1',
+    nativeRequiredEvidence: [name],
+  };
+  f.subject.packet = {
+    path: f.prefix.slice(0, -1),
+    files: Object.fromEntries(
+      [...f.head.keys()]
+        .filter((file) => file.startsWith(f.prefix))
+        .map((file) => [
+          file.slice(f.prefix.length),
+          createHash('sha256')
+            .update(f.texts.get('after:' + file))
+            .digest('hex'),
+        ]),
+    ),
+  };
+  const read = await f.retrieve(f.subject, { deferOptionalEvidence: true });
+  assert.equal(read.packet.evidence[f.prefix + name], f.texts.get('after:' + f.prefix + name));
+  assert.equal(read.packet.omittedTextEvidence.includes(f.prefix + name), false);
+  f.subject.packet.files[name] = '0'.repeat(64);
+  await assert.rejects(
+    f.retrieve(f.subject, { deferOptionalEvidence: true }),
+    /Frozen evidence changed/,
+  );
+  f.subject.operatorCoordination.nativeRequiredEvidence = ['../outside.md'];
+  await assert.rejects(f.retrieve(f.subject, { deferOptionalEvidence: true }));
 });
 test('missing/invalid subscription credentials and stale source stop before native claim', async () => {
   const f = fixture();

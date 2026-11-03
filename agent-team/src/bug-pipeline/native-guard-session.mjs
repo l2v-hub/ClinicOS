@@ -1,6 +1,10 @@
 // Native guarded-profile orchestration. No default activation or provider fallback.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+const capacityFailures = new WeakSet();
+export const isNativeStagingCapacityError = (error) =>
+  typeof error === 'object' && error !== null && capacityFailures.has(error);
+export { createNativeReviewStager } from './native-guard-qualification.mjs';
 const EMPTY_POLICY = 'Remote settings: Saved empty sentinel (404 response)';
 const PRE_SETTLEMENT = new Set([
   'Remote settings: No settings found (204)',
@@ -108,7 +112,9 @@ export async function stageGuardedSession({
   const state = createNativeGuardState({
     validateClaim: async (claim, seal) => {
       assert.equal(policy.ready(), true, 'native-policy-unproven');
-      return (await validateClaim(claim, seal)) === true;
+      assert.equal(runtime?.isLive(), true, 'native-process-unavailable');
+      const owned = await validateClaim(claim, seal);
+      return owned === true && policy.ready() && runtime.isLive();
     },
   });
   const reject = () => {
@@ -138,46 +144,89 @@ export async function stageGuardedSession({
     }
   };
   try {
-    runtime = await startRuntime({
-      expected: structuredClone(pinned),
-      data: state.data,
-      onDiagnostic(chunk) {
-        policy.push(chunk);
-        maybeReady();
-      },
-      onStage(candidate) {
-        if (staged) {
-          reject();
-          throw new Error('native-session-rejected');
-        }
-        staged = candidate;
-        candidate.completion.catch(() => {});
-        maybeReady();
-      },
-      observeResponse({ statusCode, requestId, seal }) {
-        if (response || seal.bodySha256 !== staged?.seal.bodySha256) {
-          reject();
-          throw new Error('native-session-rejected');
-        }
-        response = createNativeResponseGuard({
-          statusCode,
-          requestId,
-          model: pinned.model,
-          maxTokens: seal.maxTokens,
-          subjectSha: pinned.subjectSha,
-          schema: pinned.schema,
-        });
-        return response;
-      },
-    });
+    const startup = Promise.resolve().then(() =>
+      startRuntime({
+        expected: structuredClone(pinned),
+        data: state.data,
+        onDiagnostic(chunk) {
+          policy.push(chunk);
+          maybeReady();
+        },
+        onStage(candidate) {
+          if (staged) {
+            reject();
+            throw new Error('native-session-rejected');
+          }
+          staged = candidate;
+          candidate.completion.catch(() => {});
+          maybeReady();
+        },
+        onCapacity(metadata) {
+          if (!policy.ready() || !runtime?.isLive()) {
+            reject();
+            return;
+          }
+          const names = [
+            'requiredTokensUpperBound',
+            'contextBytes',
+            'inputBytes',
+            'schemaBytes',
+            'maxTokens',
+            'contextWindow',
+          ];
+          if (
+            !metadata ||
+            Object.keys(metadata).length !== names.length ||
+            !names.every((name) => Number.isSafeInteger(metadata[name]) && metadata[name] >= 0) ||
+            metadata.contextWindow !== 1000000 ||
+            metadata.requiredTokensUpperBound <= 1000000
+          ) {
+            reject();
+            return;
+          }
+          const failure = new Error('native-session-capacity-exceeded');
+          capacityFailures.add(failure);
+          state.data.fail();
+          readyReject(failure);
+          Promise.resolve()
+            .then(() => runtime.close())
+            .catch(() => {});
+        },
+        observeResponse({ statusCode, requestId, seal }) {
+          if (response || seal.bodySha256 !== staged?.seal.bodySha256) {
+            reject();
+            throw new Error('native-session-rejected');
+          }
+          response = createNativeResponseGuard({
+            statusCode,
+            requestId,
+            model: pinned.model,
+            maxTokens: seal.maxTokens,
+            subjectSha: pinned.subjectSha,
+            schema: pinned.schema,
+          });
+          return response;
+        },
+      }),
+    );
+    // A late startup can never restore a timed-out capability. Close its own
+    // resources when it eventually returns, without keeping this wait unbounded.
+    startup
+      .then((late) => {
+        if (closed || Date.now() >= deadline) return late.close();
+      })
+      .catch(() => {});
+    runtime = await Promise.race([startup, expired]);
     // An exit before the source/policy barrier must not leave a hung claim wait.
-    runtime.completion.then(() => {
-      if (!released) reject();
+    runtime.completion.then((result) => {
+      if (!released || result.ok !== true || !state.data.status().forwarded) reject();
     }, reject);
     await Promise.race([ready, expired]);
     const verifiedIsolation = await Promise.race([runtime.isolation, expired]);
     assert.equal(verifiedIsolation?.runtimeIsolationVerified, true, 'native-isolation-unproven');
     assert.equal(verifiedIsolation.binaryVerified, true, 'native-binary-unproven');
+    assert.equal(runtime.isLive(), true, 'native-process-unavailable');
+    assert.ok(Date.now() < deadline);
     assert.equal(state.data.status().phase, 'STAGED');
     assert.equal(policy.ready(), true);
     return Object.freeze({
@@ -188,6 +237,7 @@ export async function stageGuardedSession({
         assert.equal(released, false);
         assert.equal(policy.ready(), true);
         assert.equal(state.data.status().phase, 'STAGED');
+        assert.equal(runtime.isLive(), true);
         assert.ok(Date.now() < deadline);
       },
       close,
@@ -195,6 +245,7 @@ export async function stageGuardedSession({
         try {
           assert.equal(released, false);
           assert.equal(policy.ready(), true);
+          assert.equal(runtime.isLive(), true);
           released = true;
           assert.ok(Date.now() < deadline);
           await Promise.race([state.parent.release(staged.handle, actualClaim), expired]);
@@ -259,8 +310,9 @@ export async function stageGuardedSession({
         }
       },
     });
-  } catch {
+  } catch (error) {
     await close();
+    if (isNativeStagingCapacityError(error)) throw error;
     throw new Error('native-session-rejected');
   }
 }
@@ -269,7 +321,7 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
   assert.equal(process.platform, 'linux', 'native-linux-required');
   assert.ok(typeof oauthToken === 'string' && oauthToken.length > 0 && oauthToken.length <= 8192);
   assert.ok(typeof cliPath === 'string' && cliPath.startsWith('/'));
-  return async ({ expected, data, onDiagnostic, onStage, observeResponse }) => {
+  return async ({ expected, data, onDiagnostic, onStage, onCapacity, observeResponse }) => {
     const [
       { mkdtemp, mkdir, realpath, rm },
       path,
@@ -285,7 +337,8 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
       import('./native-guard-proxy.mjs'),
       import('./native-guard-container.mjs'),
     ]);
-    const { validateNativeRequest } = await import('./native-guard-request.mjs');
+    const { validateNativeRequest, isNativeRequestCapacityError } =
+      await import('./native-guard-request.mjs');
     const { fileURLToPath } = await import('node:url');
     const root = await mkdtemp(path.join(os.tmpdir(), 'clinicos-native-guard-'));
     const resolvedRoot = await realpath(root);
@@ -333,6 +386,8 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
         data,
         validateRequest: validateNativeRequest,
         onStage,
+        isCapacityError: isNativeRequestCapacityError,
+        onCapacity,
         observeResponse,
       });
       await proxy.listen(socketDirectory);
@@ -355,6 +410,7 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
       return {
         completion: container.completion,
         isolation: container.isolation,
+        isLive: () => container.isLive(),
         takePrivateOutput: () => container.takePrivateOutput(),
         close,
       };
@@ -362,59 +418,5 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
       await close();
       throw new Error('native-runtime-rejected');
     }
-  };
-}
-
-export function createNativeReviewStager({ startRuntime, qualification }) {
-  return async ({ source, completeOptionalEvidence, sha, profile, validateClaim }) => {
-    const receipt = qualification();
-    assert.equal(receipt?.status, 'native-profile-qualified');
-    assert.equal(receipt.applicationReviewClaimed, false);
-    assert.deepEqual(profile, receipt.profile);
-    assert.equal(receipt.requestOutputCap, 32768);
-    const { cloudReviewPayload, completeCloudReviewEvidence } =
-      await import('./cloud-review-worker.mjs');
-    const minimal = cloudReviewPayload({ packet: source.packet, sha, model: profile.model });
-    const packetBytes = Buffer.byteLength(JSON.stringify(source.packet));
-    const inputPrefixBytes = Buffer.byteLength(minimal.input) - packetBytes;
-    const schemaBytes = Buffer.byteLength(JSON.stringify(minimal.schema));
-    // Planning only, NOT admission and NOT a re-labelled observed model default.
-    // The actual complete native request, including all additional wrappers,
-    // must be staged and checked before the caller is allowed to claim.
-    const packetByteBudget = 1000000 - 65536 - 32768 - inputPrefixBytes - schemaBytes;
-    const completed = await completeCloudReviewEvidence({
-      source,
-      completeOptionalEvidence,
-      packetByteBudget,
-    });
-    const payload = cloudReviewPayload({ packet: completed.packet, sha, model: profile.model });
-    const session = await stageGuardedSession({
-      expected: {
-        input: payload.input,
-        schema: payload.schema,
-        model: profile.model,
-        contextWindow: 1000000,
-        outputCap: 32768,
-        subjectSha: sha,
-      },
-      startRuntime,
-      validateClaim,
-    });
-    return {
-      source: completed,
-      session,
-      prepared: {
-        ...payload,
-        capacity: {
-          ...profile,
-          inputBytes: session.seal.inputBytes,
-          schemaBytes: session.seal.schemaBytes,
-          nativeOverheadTokens: 65536,
-          enforcedMaxOutputTokens: session.seal.maxTokens,
-          requiredTokensUpperBound: session.seal.requiredTokensUpperBound,
-          guardProfile: 'native-max-single-forward-v1',
-        },
-      },
-    };
   };
 }
