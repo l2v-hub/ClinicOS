@@ -1,68 +1,47 @@
-# Revision 5 validation — finite2029 demo source
+# Revision5 current source and validation
 
-This is the single already-authorized unpublished fifth implementation for PR525 /
-issue524, superseding indefinite availability with an explicit finite2029 cutoff.
-Four historical implementation attempts and two genuine reviews remain unchanged.
-No new allowance, reset, transferred approval or sixth implementation is recorded.
+# Current finite2029 task validation
 
-## Actual local source and results
+Exact independently tested source: 45b178b7ea93ade254d5cd0ea68340bd09cdd838. Base: 6e3d880921653465ca0527b40f9fc09f6486ada2.
 
-Final integrated code source: f5835253b4a8a5ad5ac35e3abbdd28df13962d16.
-Earlier integrated source8a8d5a50 is retained as the genuinely BLOCKED intermediate.
-Eight source/config/test paths differ from protected mainD2. No backend/frontend,
-database schema, Railway config, production workflow, role permission or session-TTL
-source changes. Source31 indefinite candidate remains a preserved separate branch.
+Same authorized fifth implementation, four historical attempts and two real
+reviews preserved. The owner externally merged PR527 into main; no missing
+technical review approval or experimental native qualification is transferred.
 
-- Earlier8a focused tests:155 PASS,0 FAIL,0 cancelled/skipped. Dedicated action82 + ordinary
-  renewal71 + build-context2, source/index stable before and after.
-- Complete frontend/backend npm builds: PASS at8a and repairedf583; source/
-  index stable. Existing bundle-size and plugin-timing warnings are preserved in
-  full output; they are not test failures or suppressed assertions.
-- Actual initial exploratory ordinary-route RED at26ba86a9:75 tests,72 PASS/3 FAIL,
-  all failing on the genuine seven-day ceiling. Final design retains that ceiling,
-  adds a distinct route and a further explicit ordinary2029-rejection assertion.
-- Dedicated test-first sourcec197a060: missing-feature import failure, not82
-  behavioral assertions executing. Candidateb347f1aa:134 tests/20 FAIL due author
-  escaping/prefix defects. Source9282afb5 repairs source only and passes134; expanded
-  author932c28a9 passes152. All commits and complete failure transcripts preserved.
+Fresh independent QA4:158 focused,13 actual-parent/pure-policy, original
+revocation regression, production build, frontend noEmit and34 synthetic
+actual-App browser cases pass. All source/index checks remain stable.
+Hosted exact-source Windows run41713328027/job126186786689 executes all10
+unchanged native tests:10pass,0fail,0skip. Earlier QA3 local9/1 in full AND
+sparse trees is preserved as a host limitation, NOT relabeled localPASS.
 
-Full receipts, commands, logs, hashes and author handoff are in the evidence execution
-reports. No provider credential/model inference/actual clinical write was used by
-these checks. Native review/merge/deploy proof is not simulated by test fixtures.
+The checkout repair is bounded to the original Windows suite's complete
+three-directory inputs; unchanged10-minute deadline, pinned action, all
+assertions and required downstream gate remain. Its real RED3/2pass1fail
+and GREEN158/158 transcripts/receipts are preserved.
 
-## Gate status at preparation
+Whole QA3/QA4 reports, actual hosted read-only log proof, root check receipts,
+diagnostic limitations and complete archive hashes are in
+current/qa-reconciliation-report.json. All original reports/archives and the
+real actor-revocation RED remain. Source9ed->45b Auth8/backend/frontend
+blob parity is independently verified against new main. No backend, frontend,
+Prisma, VITE_API_URL, production, seven-day ordinary renewer or RBAC changes.
 
-Independent source/security/build/UI QA ran in the reserved separate exactsource8a8
-checkout. Focused155, full build+tsc, actual-parent/policy13 and synthetic real-App
-34 cases passed. However a further real security repro FAILED: actor revocation
-during the final awaited main verifier still reached one synthetic provider write
-(expected zero). Source8a8 is BLOCKED and is NOT publishable/adoptable as passed.
-The author repaired that precise race in the same unpublished fifth, preserving
-the failing source/repro/log. Tracked REDd091 reproduces both expected0/actual1
-worker/author failures; GREENf953 completes source/run/main awaits before final
-actor/author permission checks, retaining the final canonical ownership fence.
+Acceptance:AC1/2/4 local independentPASS; AC3 syntheticPASS/live metadata
+pending; AC5 source/buildPASS/Railway build pending; AC6 independent QA4
+PASS/final-head CI, genuine Max3 and final Codex pending; AC7 synthetic five
+profilesPASS; AC8 actual live2029/profile acceptance PENDING; AC9 history,
+production isolation and truthful evidence preserved.
 
-Root finalf583 focused tests157/157 and full build passed source-stable. Fresh
-independent QA2 at final sourcef583:157/157 focused,13/13 actual-parent/pure-
-policy tests, unchanged original revocation repro1/1, full production frontend/
-backend build, frontend noEmit and34/34 actual-built-App browser cases PASS. Five
-profiles persist after reload at1280/390; outbound0/clinicalWrites0. Verdict READY
-FOR CODEX QA, current findings[]. This is independent local proof, not real Max,
-release or online approval. The exact report is qa2-validation-report.md and full
-receipts/logs/82 browser artifacts are preserved in browser/qa2-complete-evidence.zip.
-Prior BLOCKED QA/browser proof is retained in history/qa1-8a8-complete-browser.zip
-and the complete revocation-repair report. No self-certification substitutes.
-
-QA2 sourcef583 also records four harmless blank-EOF diff diagnostics; it did not
-claim git diff --check passed. No assertion was disabled or source edited by QA.
-
-Exact publication SHA CI, genuine Claude Max3, final Codex QA, protected merge,
-fixed-target live preflight/stage, separate exact deployment and actual online
-five-profile proof are pending. The old running demo still reports disabled with
-October31 expiry. The original November9 stage exists and was not rewritten.
-
-No resolution/issue closure, production change or online restoration is claimed.
+Public demo is not restored by this artifact commit. The old active runtime
+remains October31/disabled until separately reviewed merge, fixed-date2029
+stage and exact-source deployment. No model round, provider mutation, merge,
+production deploy, SQL, clinical write or issue closure is claimed here.
 
 ## Final Decision
 
 IMPLEMENTED — NOT VERIFIED
+
+Historical f583 revision5 text remains byte-exact at context-history/f583-revision5.md
+and Git20034. This unadopted fifth evidence now binds exact tested45b; no
+attempt, review, budget, prior failure or original parent stage is reset.
