@@ -150,7 +150,25 @@ export async function stageGuardedSession({
     const startup = Promise.resolve().then(() =>
       startRuntime({
         expected: structuredClone(pinned),
-        data: state.data,
+        data: Object.freeze({
+          fail: state.data.fail,
+          status: state.data.status,
+          stage(candidate) {
+            const forward = candidate.forward;
+            assert.equal(typeof forward, 'function');
+            return state.data.stage({
+              seal: candidate.seal,
+              forward() {
+                // This is the synchronous commit point AFTER the state's await.
+                // No async liveness/policy assertion may stand in for this fence.
+                assert.equal(policy.ready(), true);
+                assert.equal(runtime?.isLive(), true);
+                assert.ok(Date.now() < deadline);
+                return forward();
+              },
+            });
+          },
+        }),
         onDiagnostic(chunk) {
           policy.push(chunk);
           if (policy.invalid() || (policy.receipt().settlements > 0 && !policy.ready())) {

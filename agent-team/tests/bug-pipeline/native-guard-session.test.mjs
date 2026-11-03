@@ -144,6 +144,7 @@ function sessionFixture({
   const calls = [];
   let privateRead = false;
   let diagnostic;
+  let invalidateLive;
   let starts = 0;
   const startRuntime = async ({
     expected: pinned,
@@ -155,6 +156,9 @@ function sessionFixture({
   }) => {
     diagnostic = onDiagnostic;
     let live = true;
+    invalidateLive = () => {
+      live = false;
+    };
     let done;
     const completion = new Promise((resolve) => {
       done = resolve;
@@ -253,6 +257,7 @@ function sessionFixture({
     calls,
     startRuntime,
     poisonPolicy: () => diagnostic(line('Remote settings: Unexpected policy change')),
+    die: () => invalidateLive(),
   };
 }
 
@@ -278,6 +283,20 @@ test('late policy microtask irreversibly poisons the gate before its await conti
     startRuntime: f.startRuntime,
     validateClaim: async () => {
       queueMicrotask(() => queueMicrotask(() => f.poisonPolicy()));
+      return true;
+    },
+  });
+  await assert.rejects(session.release({ nonce: 'owned-fixture' }), /native-session-rejected/);
+  assert.equal(f.calls.includes('forward'), false);
+});
+
+test('liveness is synchronously fenced after every awaited claim continuation', async () => {
+  const f = sessionFixture();
+  const session = await stageGuardedSession({
+    expected,
+    startRuntime: f.startRuntime,
+    validateClaim: async () => {
+      queueMicrotask(() => queueMicrotask(() => f.die()));
       return true;
     },
   });
