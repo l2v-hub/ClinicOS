@@ -256,3 +256,45 @@ test('author-only revocation inside final main verifier blocks a still-authorize
  assert.equal(authorRevoked,true);assert.equal(await github.authorizedMaintainer('worker-fixture'),true);
  assert.equal(writes,0,'revoking the distinct author must invalidate its consumed action before write');assert.equal(result.mutationAttempted,false);
 });
+
+// Revision 7: the superseded actuator must respect every no-expiry operation across subjects.
+for (const status of ['claimed','write-intent','uncertain','staged',undefined,'invalid']) {
+ for (const owner of [0,1]) test(`no-expiry ${String(status)} on subject ${owner} blocks before capability consumption`,async()=>{
+  const f=fixture();f.state().standaloneReviews[owner].demoAuthNoExpiryStages=[{operationNonce:'88888888-8888-4888-8888-888888888888',
+   ...(status===undefined?{}:{execution:{status}})}];let consumed=0;
+  const c=createDemo2029Controller({...f.dependencies,authorizationVerifier:async()=>{consumed++;throw Error('unexpected consumption');}});
+  await assert.rejects(c.authorize(selector,{actor:'root-fixture',reference:'fixture'}));
+  assert.equal(consumed,0);assert.equal(f.writes(),0);
+ });
+}
+test('absent and explicitly blocked no-expiry records permit normal authorization',async()=>{
+ for(const blocked of [false,true]){const f=fixture();if(blocked)f.old().demoAuthNoExpiryStages=[{operationNonce:'88888888-8888-4888-8888-888888888888',execution:{status:'blocked-before-write'}}];
+  await authorized(f);assert.equal(f.writes(),1);assert.ok((await f.controller.prepare(selector)).authorizationDigest);}
+});
+for(const owner of [0,1]) test(`cross-kind duplicate nonce on subject ${owner} is rejected`,async()=>{
+ const f=fixture();f.state().standaloneReviews[owner].demoAuthNoExpiryStages=[{operationNonce:selector.operationNonce,execution:{status:'blocked-before-write'}}];
+ let consumed=0;const c=createDemo2029Controller({...f.dependencies,authorizationVerifier:async()=>{consumed++;throw Error('unexpected consumption');}});
+ await assert.rejects(c.authorize(selector,{actor:'root-fixture',reference:'fixture'}));assert.equal(consumed,0);assert.equal(f.writes(),0);
+});
+for(const nonceValue of [undefined,'invalid','66666666-6666-4666-8666-666666666666']) test(`invalid or historical duplicate no-expiry nonce ${String(nonceValue)} is rejected`,async()=>{
+ const f=fixture();f.old().demoAuthNoExpiryStages=[{operationNonce:nonceValue,execution:{status:'blocked-before-write'}}];
+ let consumed=0;const c=createDemo2029Controller({...f.dependencies,authorizationVerifier:async()=>{consumed++;throw Error('unexpected consumption');}});
+ await assert.rejects(c.authorize(selector,{actor:'root-fixture',reference:'fixture'}));assert.equal(consumed,0);assert.equal(f.writes(),0);
+});
+test('blocked no-expiry history is bound and later mutation invalidates authorization',async()=>{
+ const f=fixture();f.old().demoAuthNoExpiryStages=[{operationNonce:'88888888-8888-4888-8888-888888888888',execution:{status:'blocked-before-write'},note:'original'}];
+ await authorized(f);f.old().demoAuthNoExpiryStages[0].note='changed';await assert.rejects(f.controller.prepare(selector));assert.equal(f.writes(),1);
+});
+for(const drift of ['nonce','remove','add']) test(`blocked no-expiry history ${drift} after authorization is rejected`,async()=>{
+ const f=fixture();f.old().demoAuthNoExpiryStages=[{operationNonce:'88888888-8888-4888-8888-888888888888',execution:{status:'blocked-before-write'}}];
+ await authorized(f);const stages=f.old().demoAuthNoExpiryStages;
+ if(drift==='nonce')stages[0].operationNonce='99999999-9999-4999-8999-999999999999';
+ if(drift==='remove')stages.pop();if(drift==='add')stages.push({operationNonce:'99999999-9999-4999-8999-999999999999',execution:{status:'blocked-before-write'}});
+ await assert.rejects(f.controller.prepare(selector));assert.equal(f.writes(),1);
+});
+test('no-expiry history changing during async authorization cannot persist a stale claim',async()=>{
+ const f=fixture();await authorized(f);let changed=false;
+ f.permission(s=>{if(!changed){changed=true;s.standaloneReviews[1].demoAuthNoExpiryStages=[{operationNonce:'88888888-8888-4888-8888-888888888888',execution:{status:'claimed'}}];}});
+ await assert.rejects(f.controller.claim(selector,{actor:'worker-fixture',runId:'77',fingerprint,fresh}));
+ assert.equal(changed,true);assert.equal(f.writes(),1);assert.equal(f.record().execution,undefined);
+});

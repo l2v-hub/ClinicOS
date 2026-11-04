@@ -12,6 +12,7 @@ export const ACTION = 'enable-demo-auth-2029';
 const REPO = 'l2v-hub/ClinicOS', SUBJECT = 'standalone-pr-525';
 const SHA = /^[a-f0-9]{40}(?![\s\S])/, HASH = /^[a-f0-9]{64}(?![\s\S])/;
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}(?![\s\S])/;
+const NO_EXPIRY_UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}(?![\s\S])/i;
 const ID = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,199}(?![\s\S])/;
 const clone = structuredClone;
 const collections = ['batches', 'manualBatches', 'standaloneReviews'];
@@ -83,6 +84,10 @@ function priorOperations(state, current, request) {
       records.push({ subjectId: b.id, kind: 'other-fixed-stage', record: q });
       assert.equal(q.execution?.status, 'blocked-before-write', 'Other fixed operation needs reconciliation');
     }
+    for (const q of b.demoAuthNoExpiryStages ?? []) {
+      records.push({ subjectId: b.id, kind: 'no-expiry-stage', record: q });
+      assert.equal(q.execution?.status, 'blocked-before-write', 'No-expiry operation needs reconciliation');
+    }
     for (const [operation, progress] of Object.entries(b.exactDemoDispatches ?? {})) {
       assert.ok(['preflight', 'deploy'].includes(operation)); assert.equal(progress.operation, operation);
       assert.match(progress.sha, SHA); assert.match(progress.dispatchId, UUID);
@@ -102,7 +107,12 @@ function locate(state, input, clock = Date.now()) {
   const owners = entries(state).filter(x => x.subject.id === selector.subjectId || x.subject.pr?.number === 525 || x.subject.issues?.includes(524));
   assert.equal(owners.length, 1); assert.equal(owners[0].collection, 'standaloneReviews'); const b = owners[0].subject;
   assert.equal(b.id, SUBJECT); assert.equal(b.pr?.number, 525); assert.deepEqual(b.issues, [524]);
-  const all = entries(state).flatMap(({ subject }) => [...(subject.demoAuth2029Stages ?? []), ...(subject.demoAuthExpiryRenewals ?? []), ...(subject.permanentDemoStages ?? [])].map(q => ({ b: subject, q })));
+  const all = entries(state).flatMap(({ subject }) => [...(subject.demoAuth2029Stages ?? []), ...(subject.demoAuthExpiryRenewals ?? []), ...(subject.permanentDemoStages ?? []), ...(subject.demoAuthNoExpiryStages ?? [])].map(q => ({ b: subject, q })));
+  for (const { subject } of entries(state)) for (const q of subject.demoAuthNoExpiryStages ?? []) {
+    assert.match(q?.operationNonce ?? '', NO_EXPIRY_UUID);
+    assert.equal(all.filter(x => x.q?.operationNonce?.toLowerCase() === q.operationNonce.toLowerCase()).length, 1,
+      'No-expiry nonce must uniquely identify one operation');
+  }
   const matches = all.filter(x => x.q.operationNonce === selector.operationNonce);
   assert.equal(matches.length, 1); assert.equal(matches[0].b, b); const q = matches[0].q;
   assert.ok(b.demoAuth2029Stages.includes(q)); const request = validateDemo2029Request(requestData(q), clock);
