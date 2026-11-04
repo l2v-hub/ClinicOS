@@ -47,4 +47,3 @@ test('native Windows CI uses a bounded sparse fetch without weakening its tests 
  assert.match(workflow,/WINDOWS_RESULT:/);
  assert.match(workflow,/WINDOWS_RESULT.*success/);
 });
-
