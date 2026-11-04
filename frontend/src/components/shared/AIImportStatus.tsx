@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useCallback, useRef, useState } from 'react';
 import { DialogLoading } from './DialogLoading';
 import { useAiImportStatus } from './useAiImportStatus';
 
@@ -11,15 +11,31 @@ const DischargeImportModal = lazy(() =>
 // entry point for the "Importa lettera di dimissione" flow (REQ-014).
 
 interface Props {
+  presentation?: 'dialog' | 'page';
   onStart?: () => void;
   onImported?: (patientId?: string, moduleTabId?: string) => void;
   operatorId?: string;
   operatorRole?: string;
 }
 
-export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }: Props) {
+export function AIImportStatus({
+  onStart, onImported, operatorId, operatorRole, presentation = 'dialog',
+}: Props) {
   const { loading, available, reason } = useAiImportStatus();
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const closeImport = useCallback(() => {
+    setOpen(false);
+    // Lazy loading and draft handoff replace temporary dialogs. Their removed
+    // close buttons are not a stable return-focus target; this entry owns one.
+    requestAnimationFrame(() => {
+      const trigger = triggerRef.current;
+      if (
+        trigger?.isConnected &&
+        (document.activeElement === document.body || document.activeElement === trigger)
+      ) trigger.focus();
+    });
+  }, []);
   const title = loading
     ? 'Importa lettera di dimissione · Verifica disponibilità in corso'
     : available
@@ -29,6 +45,7 @@ export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }
   return (
     <>
       <button
+        ref={triggerRef}
         type="button"
         className={`btn-secondary ai-import-btn${available ? '' : ' ai-import-btn--disabled'}`}
         disabled={!available}
@@ -48,10 +65,11 @@ export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }
         Importa dimissione
       </button>
       {open && (
-        <Suspense fallback={<DialogLoading onClose={() => setOpen(false)} />}>
+        <Suspense fallback={<DialogLoading onClose={closeImport} presentation={presentation} />}>
           <DischargeImportModal
+            presentation={presentation}
             open={open}
-            onClose={() => setOpen(false)}
+            onClose={closeImport}
             onImported={onImported}
             operatorId={operatorId}
             operatorRole={operatorRole}
