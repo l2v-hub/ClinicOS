@@ -1,0 +1,1064 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "subjectSha": "c104d79ddc4047ca39bd8cfd0150d56ef4b503f1",
+      "evidence": "history/qa1-report.md"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "subjectSha": "03529a96c3a37e4ffb4989497ca3db9fe32a9968",
+      "evidence": "validation-report.md"
+    },
+    {
+      "round": 3,
+      "status": "passed",
+      "subjectSha": "ae9995f546d0adbbaa8033b3957e2fbd943723d9",
+      "evidence": "revision3-validation-report.md"
+    },
+    {
+      "round": 4,
+      "status": "passed",
+      "subjectSha": "a5be73fa0d6d75abe216b67f99dbc754449f6315",
+      "evidence": "revision4-validation-report.md"
+    },
+    {
+      "round": 5,
+      "status": "passed",
+      "subjectSha": "0052ad4780998772ded9c6cde9e52b7400f845cf",
+      "evidence": "revision5-validation-report.md"
+    },
+    {
+      "round": 6,
+      "status": "passed",
+      "subjectSha": "6872ad02b78a9cfd147a4a9cb78f335e8d9f177f",
+      "evidence": "revision6-validation-report.md"
+    },
+    {
+      "round": 7,
+      "status": "passed",
+      "subjectSha": "bdbea1e43b9c1b6b6fd5a1a2c59a94834d300608",
+      "evidence": "revision7-validation-report.md"
+    }
+  ],
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "ed5686807ea4a358430563c7a488fde1bf478f81"
+    },
+    {
+      "round": 2,
+      "status": "approved",
+      "subjectSha": "3fdedec7305d86972b255a7f532d2028b9a0eabb"
+    },
+    {
+      "round": 3,
+      "status": "changes-requested",
+      "subjectSha": "ca42860980bc5df5a2718cb47806d48b6d886e75"
+    },
+    {
+      "round": 4,
+      "status": "changes-requested",
+      "subjectSha": "4436239a003a44972eb3d80bdcf33c6c292bfab3"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "changes-requested",
+        "subject_sha": "ed5686807ea4a358430563c7a488fde1bf478f81",
+        "review_sha256": "275dc4b08c1294740c85f3ea5d044e68c54fa1e7863a08ceebb04d3331384fd9"
+      },
+      {
+        "round": 2,
+        "verdict": "approved",
+        "subject_sha": "3fdedec7305d86972b255a7f532d2028b9a0eabb",
+        "review_sha256": "e8466e1092af650011938c9eaf07799398d10bbfd1007e9dab95dc8a129c4df5"
+      },
+      {
+        "round": 3,
+        "verdict": "changes-requested",
+        "subject_sha": "ca42860980bc5df5a2718cb47806d48b6d886e75",
+        "review_sha256": "0277833b027186c7a6968327ab8f5dbbde3a03f48323b41c4c7b42f676f0f05f"
+      },
+      {
+        "round": 4,
+        "verdict": "changes-requested",
+        "subject_sha": "4436239a003a44972eb3d80bdcf33c6c292bfab3",
+        "review_sha256": "ebfa55b69e7940d880ad8552f5b432fddebf9b0e7445dc19adf7f4f0efd406bf"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"ed5686807ea4a358430563c7a488fde1bf478f81\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"I did a static review of the frozen head (the commit SHA bound to this review). I ran no tests or tools. The CI results come from the supplied evidence, which reports API-observed success for every required check on this exact head. The prior independent Codex QA covered source 03529a96 with byte-identical blobs.\\n\\nThe UI changes fit the acceptance criteria:\\n- While status is loading, unavailable, malformed or disabled, no usable role or profile cards render.\\n- An expired synthetic demo shows its own expired message.\\n- Retry clears stale status, and a late expiry reported by the simulator or by the identity check triggers a fresh status check.\\n- `handleLogin` denies login when auth is unverified.\\n- The demo and Entra paths are kept, and Entra no longer shows the credential-free wording.\\n\\nThe renewal operation is tightly fenced:\\n- It can only change the one fixed expiry key on the fixed demo target.\\n- The renewal window is at most seven days.\\n- It must find the expected prior expiry.\\n- It needs an authorization that was consumed through a native verifier.\\n- A durable claim and write-intent come before exactly one mutation. That mutation does not trigger a deploy, and an uncertain write is never retried.\\n\\nThere are two actionable findings:\\n1. Once any renewal reaches the 'staged' status, every later renewal fails in the controller. No reconciliation path exists in code, so after its first success the operation cannot be used again.\\n2. The new status parser rejects the whole status response when the expiry field is malformed, even when the mode is Entra. A stray deployment variable could then block all login.\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"scripts/automation/renew-demo-auth-expiry.mjs\",\n      \"line\": 75,\n      \"problem\": \"locate() rejects any request whenever another renewal record, in any subject, has an execution whose status is not 'blocked-before-write'. That includes a successfully completed 'staged' renewal. The error message asks for 'explicit operator reconciliation', but no reconciled or terminal status exists, and nothing in the controller or CLI can move a staged record into an allowed state. After the first successful stage, every later renewal fails at inspect, prepare, authorize and claim. Because each renewal is capped at seven days, this makes the operation single-use unless someone edits the canonical state by hand, which goes around the authorization and CAS guards this PR adds.\",\n      \"requested_change\": \"Treat a fully completed 'staged' renewal as terminal and do not let it block later renewals. One option: allow a new renewal when every other execution is 'staged' and has been superseded by a deployment plus a status observation. Only 'claimed', 'write-intent' and 'uncertain' should block. Alternatively, add an authorized, audited reconciliation transition that closes earlier operations. Keep 'uncertain' and in-flight records blocking.\",\n      \"test_expectation\": \"Add a controller test with three steps. First, a prior operation is staged. Second, a later, separately authorized operation with a new nonce and a later previousExpiry can authorize, claim and stage. Third, a prior 'uncertain', 'claimed' or 'write-intent' record still blocks the new operation.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"frontend/src/lib/authAvailability.ts\",\n      \"line\": 26,\n      \"problem\": \"parseAuthStatus throws, and the app then shows 'unavailable' and blocks all login, whenever the expiry field is present but not parseable or longer than 50 characters. It does this regardless of mode. The backend echoes the raw environment value with no validation. A leftover or badly formatted demo-expiry variable in an Entra or legacy-demo deployment would therefore lock out every user, even though the field only matters for the disabled-state explanation.\",\n      \"requested_change\": \"Validate the expiry field strictly only where it is used. One option: when mode is 'entra' or 'demo', ignore an unusable expiry and normalize it to null instead of rejecting the whole status. Keep strict rejection, or treat it as plain 'disabled', only for the disabled synthetic-demo explanation.\",\n      \"test_expectation\": \"Add a parse test: a status with mode entra and a malformed expiry string parses successfully, and canStartLogin returns true. Also add a test that a disabled synthetic status with a malformed expiry is never classified as 'expired' and still blocks login.\"\n    }\n  ]\n}\n",
+    "claude-review-2.json": "{\n  \"subject_sha\": \"3fdedec7305d86972b255a7f532d2028b9a0eabb\",\n  \"verdict\": \"approved\",\n  \"summary\": \"I reviewed the frozen head statically. I ran no tests or tools. I found no actionable defects.\\n\\n**Evidence**\\n- CI results come from the supplied, API-observed exact-head data. All required checks succeeded. The orchestration run's cancelled first attempt was rerun once, and the rerun succeeded.\\n- All eleven changed source blobs in this diff match the manifest of the independent round-4 QA seal on source a5be73fa, which passed with no findings.\\n\\n**Prior Claude round-1 findings: both resolved**\\n- **Renewal could only run once.** `assertPriorRenewals` now treats a completed staged renewal as terminal. Records that are claimed, write-intent or uncertain still block a later renewal. So do stages that are still live, run in parallel, duplicate another, or leave a gap in the expiry chain. A later renewal must exactly continue the latest expired staged cutoff, and its stored authorization and audit history are re-verified. A fresh read of the live public previous expiry is still required before each claim and write. Regression tests cover each of these cases.\\n- **Malformed expiry locked out login.** `parseAuthStatus` now turns unusable expiry metadata into null, so the server mode alone decides availability. A disabled mode with unusable metadata is never shown as expired and still blocks login.\\n\\n**Acceptance criteria**\\n1. While status is checking, unavailable, malformed, timed out or server-disabled, no usable role or profile buttons render, and no demo-access promise is shown.\\n2. A disabled synthetic demo whose expiry has passed shows its own expired message. Browser time only chooses the wording.\\n3. Retry clears stale state and restores the server-owned profiles. A pending login disables the cards. `handleLogin` refuses to start when auth is unverified. A late `auth_disabled` from the identity check, or `simulator_disabled` from the simulator session, forces a fresh status check.\\n4. Confirmed demo and Entra paths remain, and Entra uses account-login wording. Backend auth gates are unchanged.\\n5. The renewal writes only the fixed expiry key on the fixed demo target. It requires a canonical expiry of at most seven days, the expected prior expiry read from public status, a consumed native authorization bound to owner and history, a single-use claim, and a durable write-intent. It makes exactly one mutation, with deploys skipped, and never retries an uncertain write.\\n6. The workflow runs only on the first attempt of a trusted main dispatch, defaults to inspect, uses actions pinned by SHA, runs its tests before the job loads secrets, and shares the demo deployment queue.\\n\\n**Still pending (outside this review)**\\nLive staging, deployment and online five-profile proof remain gated after merge, as the plan states.\",\n  \"findings\": []\n}\n",
+    "claude-review-3.json": "{\n  \"subject_sha\": \"ca42860980bc5df5a2718cb47806d48b6d886e75\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"Static review of frozen head ca428609. I ran no tests or tools. The CI results come from the supplied evidence, which reports API-observed success for all required checks on this exact head.\\n\\n**What was reviewed**\\n- The dedicated 2029 route:\\n  - `demo-2029-controller.mjs` and `enable-demo-auth-2029.mjs`.\\n  - The new protected workflow.\\n  - The added read-only metadata mode.\\n- The `.dockerignore` build-context exclusions.\\n- The sparse Windows checkout and the extended bug-pipeline test selectors.\\n\\n**What holds up**\\n- **Fixed values only.** The single action, key and value are fixed (expiry `2029-12-31T23:59:59Z`, deploys skipped). Callers cannot supply a date, key, target or allowLong flag.\\n- **Seven-day helper untouched.** The ordinary seven-day renewal helper is unchanged, and its new test asserts it still rejects 2029.\\n- **Strict authorization.** Only a user-session authorization can approve the action. It is bound to:\\n  - the exact request and the merged, reviewed release;\\n  - the owner, the parent-source digests and the prior-operations digest.\\n- **Supersession is checked closely.**\\n  - The parent's staged Nov 9 receipt is not rewritten.\\n  - It is validated against its original authorization time, audit index and deploy authorization.\\n  - The terminal FAILED exact-deploy run is verified natively.\\n- **Revocation repair is correct.** In `allowed()`, all release, run and current-main reads now finish before the final maintainer checks on actor and author. `owned()` then re-observes the canonical identity before the single upsert, and the cutoff clock is re-checked there.\\n- **Write safety.** There is one CAS claim and one durable write-intent, and an uncertain write is never retried.\\n- **Receipts are bounded.** They use a whitelist, a size limit and credential-reflection checks.\\n- **Metadata mode is read-only.**\\n  - It branches before any GitHub or state client is built.\\n  - It checks current main before and after each of its four reads.\\n  - It hides provider errors behind a fixed code and returns only whitelisted fields.\\n- **Workflow guards.**\\n  - The workflow keeps the exact trusted-main, actor and first-attempt guards.\\n  - Actions are pinned, the job uses the protected demo environment and the shared `railway-demo` queue, and tests run before secrets load.\\n- **Build context.** `.dockerignore` keeps backend source, migrations, lockfiles, build scripts and fonts in the build context.\\n\\n**Acceptance criteria**\\n- AC1–AC7 look supported at code level.\\n- AC8 and AC9 are online-acceptance steps that come after merge, by design. They stay pending and the issue must remain open.\\n\\n**One low-severity finding**\\nTwo new files end with an extra blank line, so `git diff --check` exits 2. The independent QA disclosed this and did not call it green; it is still unresolved.\",\n  \"findings\": [\n    {\n      \"severity\": \"low\",\n      \"file\": \".dockerignore\",\n      \"line\": 13,\n      \"problem\": \"The new file ends with an extra blank line, and the same happens at the end of scripts/build/backend-build-context.test.mjs (around line 50). Both introduce new blank-at-EOF whitespace errors, so git diff --check exits non-zero for this change. The independent QA reports explicitly kept this as an unresolved diagnostic, not a pass.\",\n      \"requested_change\": \"Remove the trailing blank line at the end of .dockerignore and at the end of scripts/build/backend-build-context.test.mjs, so each file ends with exactly one newline. Keep the exclusion list and the test assertions unchanged.\",\n      \"test_expectation\": \"git diff --check over the base..head range exits 0 for these files. backend-build-context.test.mjs still passes, with the parsed .dockerignore pattern list exactly equal to the expected ten entries.\"\n    }\n  ]\n}\n",
+    "claude-review-4.json": "{\n  \"subject_sha\": \"4436239a003a44972eb3d80bdcf33c6c292bfab3\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"Static review of frozen head 4436239a. I ran no tests or tools. CI status comes from the supplied evidence, which reports API-observed success for all required checks on this exact head.\\n\\n**Backend: no-expiry mode**\\n- The new predicate in `deployment.ts` (`unlimitedSyntheticSimulator`) requires all of the following:\\n  - explicit demo tier;\\n  - production `NODE_ENV`;\\n  - demo auth mode;\\n  - the synthetic dataset;\\n  - the allow flag and both simulator flags;\\n  - a signing secret of at least 32 characters.\\n- `operatorAuthMode` only falls back to the finite or legacy-header path when the opt-in is absent or exactly false. Any malformed or incomplete opt-in fails closed.\\n- Startup validation rejects malformed values and enabled-but-incomplete configurations.\\n- Status and identity responses report no expiry and no temporary demo only when the mode is valid.\\n- The session TTL, logout and revocation logic is unchanged.\\n- HTTP tests cover the five policy-resolved identities, forged, expired and revoked tokens, and refused spoofed headers.\\n\\n**No-expiry configuration action**\\n- It writes exactly the two non-secret values, with replace=false and skipDeploys=true.\\n- It is bound to a consumed user-session capability tied to merged release, owner, parent and prior-operation digests.\\n- It uses a CAS claim and a durable write-intent, and never retries an uncertain write.\\n- Its preflight erases the provider variable map in all paths.\\n- The CI and the protected workflow both run all four new suites before credentials load.\\n\\n**Prior finding resolved**\\nThe round-3 low finding (blank lines at end of file) is fixed: `.dockerignore` and the build-context test now each end with a single newline, and the ten patterns are unchanged.\\n\\n**Remaining finding (one, actionable)**\\nThe superseded fixed-2029 actuator still ships. Its controller does not treat no-expiry stages as prior operations that must be settled first. This leaves an asymmetric cross-controller gap on the same demo variable surface.\\n\\n**Acceptance criteria**\\n- Online steps AC8 and AC9 remain pending by design after merge.\\n- The issue must stay open until public proof exists.\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"scripts/automation/demo-2029-controller.mjs\",\n      \"line\": 80,\n      \"problem\": \"priorOperations only checks demoAuth2029Stages and permanentDemoStages, plus finite renewals and exact dispatches. It ignores demoAuthNoExpiryStages. The new no-expiry controller does the opposite: it blocks on any 2029 stage that is not staged or blocked-before-write. As a result, the still-shipped 2029 workflow could authorize, claim and stage its fixed-expiry upsert while a no-expiry stage on the same dedicated demo service is claimed, in write-intent or uncertain. That violates the 'unresolved operation blocks' invariant both controllers otherwise enforce. The task contract also says the new no-expiry plan supersedes the finite 2029 plan, yet the 2029 actuator remains dispatchable.\",\n      \"requested_change\": \"Do one of two things. Option A: include demoAuthNoExpiryStages in the 2029 controller's prior-operation scan, and require every such record to be blocked-before-write (or reject 2029 outright once any no-expiry stage exists), so the two actuators mutually exclude. Option B: if 2029 is truly superseded, remove or disable the enable-demo-auth-2029 workflow and controller.\",\n      \"test_expectation\": \"Add a demo-2029 controller test whose fixture contains a no-expiry stage with execution status claimed, write-intent, uncertain, staged, or missing. For each, authorize (and prepare/claim, where reachable) must reject, and the state store must record zero writes. Existing 2029 tests must still pass when no no-expiry stage is present.\"\n    }\n  ]\n}\n"
+  },
+  "sourceManifest": [
+    {
+      "path": ".dockerignore",
+      "blob": "83e3b13e45a55e9a1a2243d9013feac7e458e7e9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".github/workflows/bug-pipeline-tests.yml",
+      "blob": "f2f935025b0d19341bf3272f289c7b959cf9dc22",
+      "mode": "100644",
+      "baseBlob": "d510629db76b0e34e6a58ffb612568e32d1b0492",
+      "baseMode": "100644"
+    },
+    {
+      "path": ".github/workflows/enable-demo-auth-2029.yml",
+      "blob": "77e60c86bb067389e28bf8d80946bafca43d4599",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": ".github/workflows/enable-demo-auth-no-expiry.yml",
+      "blob": "c3e0d171601cdfedbd7fb54b9752eb4b5f7d7214",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/aaa-review-context-base-01-report.md",
+      "blob": "4acec8465deab1fd5ce8475188b884a3c90d21b9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/aaa-review-context-base-02-report.md",
+      "blob": "e1be12f5cf267f6fc59840d4452d0e7f1b63332d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/aaa-review-context-base-03-report.md",
+      "blob": "c46c0d87b01d184d500b296451c07d6fc1da3fe8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/aaa-review-context-base-04-report.md",
+      "blob": "32652b0975a52ad5d3c6bd2e1fe898168e0c568a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/aaa-review-context-base-05-report.md",
+      "blob": "0a95017ba42648510bee663009931fa0859aa37f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/aaa-review-context-base-06-report.md",
+      "blob": "4ac0388109f2e1f71b0baa83ba0bf1806ee4b6bc",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/aab-review-revocation-repair-report.json",
+      "blob": "4ce05f13fbad3ab1a67e198347bcf8fe748886a2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/analysis.md",
+      "blob": "17bd698b945989d10404c2b5e63998bed6b5f128",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/browser/future-2029-desktop.png",
+      "blob": "1f2c1235438da90a3904b581fd6a8709af3bf8f2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/browser/future-2029-mobile.png",
+      "blob": "28728e933f786163408aefdc5c97be1d743da91b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/browser/independent-qa3-complete-evidence.zip",
+      "blob": "1d4c0a30e963eae55e022c3f0dd38973e606a471",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/browser/independent-qa4-complete-evidence.zip",
+      "blob": "ea362d19ac50691b7b88840954bfac267d5de91d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/browser/independent-qa5-complete-evidence.zip",
+      "blob": "95bd12eda51e1a5d42be221577b2cfb0077edfdb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/browser/qa2-complete-evidence.zip",
+      "blob": "cd2e838e3e87751972b30e1f59dce6921f0afc58",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/browser/qa5-future-2029-desktop.png",
+      "blob": "1f2c1235438da90a3904b581fd6a8709af3bf8f2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/browser/qa5-future-2029-mobile.png",
+      "blob": "28728e933f786163408aefdc5c97be1d743da91b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/browser/qa5-readonly-metadata-result.png",
+      "blob": "37e53c201f1c071d121c80ba453b12e0a5e10c0c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/context-history/f583-current.md",
+      "blob": "fe46817dba193aa5884f100852b888d3c4f0c7fb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/context-history/f583-revision5.md",
+      "blob": "6b6cd4da9a9c93b46460edb054a2515b9c8bcc03",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/context-history/pre-metadata-plan.md",
+      "blob": "da287c816d3b6d4a2eb88474c06628db83947ea8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/context-history/prepared-8a8-context-01.md",
+      "blob": "b80c77d363adb9154f494d85c812d97cd737b1c6",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/context-history/prepared-8a8-context-02.md",
+      "blob": "e1be12f5cf267f6fc59840d4452d0e7f1b63332d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/context-history/prepared-8a8-context-03.md",
+      "blob": "c46c0d87b01d184d500b296451c07d6fc1da3fe8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/context-history/prepared-8a8-context-04.md",
+      "blob": "32652b0975a52ad5d3c6bd2e1fe898168e0c568a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/context-history/prepared-8a8-context-05.md",
+      "blob": "0a95017ba42648510bee663009931fa0859aa37f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/context-history/prepared-8a8-context-06.md",
+      "blob": "5df53cc3cd4cf6ec40bb7186033d40147755b47a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/context-history/prepared-8a8-context-07.md",
+      "blob": "a46fe382e22bfaa9644d943e517786ee79eaac33",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/context-history/prepared-8a8-context-08.md",
+      "blob": "ad8fbf4eb0324d28dbd61767258fd06c131b64ff",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/context-history/qa4-current.md",
+      "blob": "c706f6cb3074c14cb453c318c6f12cc94433e427",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/context-history/qa4-fifth.md",
+      "blob": "b1053036139be0bacbe53a20dc29fd100ef98a6e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/current/qa-reconciliation-report.json",
+      "blob": "af85bc60099bc27584a05daeb888ab2e6ba2ef97",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/current/task-contract.md",
+      "blob": "2fd556b528184503f6d45fe109367210f34a95c8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/current/validation-report.md",
+      "blob": "5860d429d7d642cc105a4cbb676b23bae9a71696",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/evidence-execution-00-root-report.json",
+      "blob": "c3ee100b5f0a957511e9553cb6b25f047370691b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/evidence-execution-01-author-red-report.json",
+      "blob": "f4797a96bcab8de12ede1329b31c8646f1493d75",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/evidence-execution-02-author-checks-report.json",
+      "blob": "6f063f1f45aa954bb258a7ab418bed8b32d272e2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/evidence-execution-03-author-handoff-report.json",
+      "blob": "43dd474330caa0513de3cc4a18fe77be6fa731bf",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/evidence-parent-finite-stage-report.json",
+      "blob": "cfd0ba1dcce497906817641c7e65f2a778a5766d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/history/claude-review-1.json",
+      "blob": "12e1bd5c0fc377bc84f9072d6e8f7655c39cedea",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/history/claude-review-2.json",
+      "blob": "5d395225d11474272f489bdc983ea30953b418d8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/history/metadata-author-complete-evidence.zip",
+      "blob": "97bdaae7a7f3f79c7603352c7f1c95a41b4395aa",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/history/qa1-8a8-complete-browser.zip",
+      "blob": "3beba3916cdcbf845226f46708a2ece588d79e2a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/history/qa1-report.md",
+      "blob": "7199884e25646adcdcc246b7e8df07306b5a6ee9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/implementation-plan.md",
+      "blob": "5169d2f17a4a574fee8e65797a98977e84835ba9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/imported-history.json",
+      "blob": "720657ef4e70756752edd6da024247da8420ba8d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/metadata-readonly-qa-report.json",
+      "blob": "13ce620eb64d86b91380f469080e29ed135ed2a0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/qa2-validation-report.md",
+      "blob": "1410c263ae39b0790c3ca161c0f6627548056224",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/revision3-validation-report.md",
+      "blob": "e4de489e204b421f9208aa427e1ee349210503d1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/revision4-validation-report.md",
+      "blob": "f2979d4d77c955336c6959df7af9fe5f321b0706",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/revision5-validation-report.md",
+      "blob": "773ae1ed7d33975948669876988c04db610bc484",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/task-contract.md",
+      "blob": "6cdfc1e4ddbee786fa59035e79875ce3a90e0aec",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/transport-integrity.json",
+      "blob": "2e77e68099ddca755ae1b942b2478e1a56cfa197",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/transport-originals/01.json",
+      "blob": "a81a3a052c3955890ad8430f8c3736790464dce4",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/transport-originals/02.json",
+      "blob": "5cd6b33be5a8551e6950150cc6d19e2575522671",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/transport-originals/03.json",
+      "blob": "39fa7d3d0dc0ba44610571e140bea0e62df1460e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/transport-originals/04.json",
+      "blob": "6dea3ab6808b4974d5201c070c6943f7707952e2",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/transport-originals/05.json",
+      "blob": "c83e6ed35bfde1579ca0bab0ef9cd11f2e912e02",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/transport-originals/compact-green.json",
+      "blob": "9f845a8be6a125dbcda89ad9007bb6c12d1e6790",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-expiry-2029-r5-20261103/validation-report.md",
+      "blob": "9a5ea3484b5953f0e0c63f48f23d6f5fbecb241b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-permanent-bootstrap-20261102/analysis.md",
+      "blob": "fbab938c17e5169f49656bc6e27443bfcf502495",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-permanent-bootstrap-20261102/bootstrap-validation-report.md",
+      "blob": "d6f8207821a46ea2114e56484bc69e69453de62e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-permanent-bootstrap-20261102/history/claude-review-1.json",
+      "blob": "12e1bd5c0fc377bc84f9072d6e8f7655c39cedea",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-permanent-bootstrap-20261102/history/claude-review-2.json",
+      "blob": "5d395225d11474272f489bdc983ea30953b418d8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-permanent-bootstrap-20261102/history/qa1-report.md",
+      "blob": "7199884e25646adcdcc246b7e8df07306b5a6ee9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-permanent-bootstrap-20261102/implementation-plan.md",
+      "blob": "abb7cc524d400f35ad524fee936b3906bfe254df",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-permanent-bootstrap-20261102/imported-history.json",
+      "blob": "236d2842f36fb1587c657f7e0c713fb2298e1860",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-permanent-bootstrap-20261102/parent-link.json",
+      "blob": "b9d48c1573b38050b99777adff3a946da728ec9f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-permanent-bootstrap-20261102/revision3-validation-report.md",
+      "blob": "e4de489e204b421f9208aa427e1ee349210503d1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-permanent-bootstrap-20261102/revision4-validation-report.md",
+      "blob": "f2979d4d77c955336c6959df7af9fe5f321b0706",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-permanent-bootstrap-20261102/task-contract.md",
+      "blob": "f5ca03a1c5f93e2d95dd05065225edb02f94879b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-permanent-bootstrap-20261102/validation-report.md",
+      "blob": "9a5ea3484b5953f0e0c63f48f23d6f5fbecb241b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/demo-permanent-lineage-20261102.json",
+      "blob": "b9d48c1573b38050b99777adff3a946da728ec9f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/analysis.md",
+      "blob": "baf57d3702795b4e447d3f9c4478d0e070013a02",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/author-ops-report.md",
+      "blob": "25c7d1024b2aee8ab3a21ea6402b730ff40c9c0e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/author-ops-review-report.md",
+      "blob": "25c7d1024b2aee8ab3a21ea6402b730ff40c9c0e",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/base-frontend-auth-report.md",
+      "blob": "dbd2f0033b6e6145120e827ebde0b8612df15d91",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/base-native-authorization-report.md",
+      "blob": "50500e88e8cf47543424def6c6859c62124c5603",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/base-review-frontend-auth-report.md",
+      "blob": "dbd2f0033b6e6145120e827ebde0b8612df15d91",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/base-review-native-authorization-report.md",
+      "blob": "50500e88e8cf47543424def6c6859c62124c5603",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/base-review-server-policy-report.md",
+      "blob": "976e5f2a05bd886a2cfef1143f0f50d9d501ff61",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/base-server-policy-report.md",
+      "blob": "976e5f2a05bd886a2cfef1143f0f50d9d501ff61",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/browser/evidence-inventory.json",
+      "blob": "d42540c65118e1925bac4a0b8a830b98e494d137",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/browser/independent-local-browser-sanitized.zip",
+      "blob": "803bd7e0154cb59e1c8177c1788f46d469cea514",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/history/claude-review-1.json",
+      "blob": "12e1bd5c0fc377bc84f9072d6e8f7655c39cedea",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/history/claude-review-2.json",
+      "blob": "5d395225d11474272f489bdc983ea30953b418d8",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/history/claude-review-3.json",
+      "blob": "1b6600ae57ddd9b46d751215ea87f2cceda3b4ff",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/history/qa1-report.md",
+      "blob": "7199884e25646adcdcc246b7e8df07306b5a6ee9",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/implementation-plan.md",
+      "blob": "b8b8ce950c0d60bcc84e201d0809c2da2e49d226",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/imported-history.json",
+      "blob": "c83909b043e230aca2df36e412c6f56659b2dacd",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/independent-auth-qa-report.md",
+      "blob": "2025c17020842ac05e3b0edf9d7ef2e667cd458a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/independent-integrated-qa-report.md",
+      "blob": "b32966389aefcde9491cd5ba804bc38adf9aeece",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/independent-trace-privacy-qa-report.md",
+      "blob": "24d8dc3202fc95407bb8b1ebedb70244362a1750",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/local-qa-seal-report.json",
+      "blob": "8834261e6a30bbd4db208484c3bc8924e652ef84",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/railway-public-schema-report.json",
+      "blob": "472806fabb56c94e121f06341921fb0bdee388cb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/railway-schema-evidence-report.json",
+      "blob": "472806fabb56c94e121f06341921fb0bdee388cb",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/review-context-selection-report.md",
+      "blob": "8d73df15b9561a406dbd3e896ea5920f60096f0a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/revision3-validation-report.md",
+      "blob": "e4de489e204b421f9208aa427e1ee349210503d1",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/revision4-validation-report.md",
+      "blob": "f2979d4d77c955336c6959df7af9fe5f321b0706",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/revision5-validation-report.md",
+      "blob": "773ae1ed7d33975948669876988c04db610bc484",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/revision6-validation-report.md",
+      "blob": "35c02a161e6b5cbe9563416d8386b21c2fa3179c",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/screenshots/desktop-administrator-Agenda-verified.png",
+      "blob": "0505a9a1634f07c75c469c1aebc4114b9c7020c3",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/screenshots/desktop-doctor-Pazienti-verified.png",
+      "blob": "78bd171d3fe64c355d33f2f919e2a3512f761ab0",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/screenshots/mobile-nurse-Pazienti-verified.png",
+      "blob": "bef7c26dd141fe96c40ef37d3f2ef39c58c6fb40",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/task-contract.md",
+      "blob": "49007ca22098034affc88c4be3f29d6988c42ae5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/trace-entry-manifest.json",
+      "blob": "a7974fedd69544229e33d9fab8729bae96a5d633",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/trace-sanitization-evidence-report.json",
+      "blob": "4b64176e7f9741027d7d44da93880ce0cd6f187b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/trace-sanitization-report.json",
+      "blob": "4b64176e7f9741027d7d44da93880ce0cd6f187b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/validation-report.md",
+      "blob": "9a5ea3484b5953f0e0c63f48f23d6f5fbecb241b",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "backend/src/__tests__/phase9-production.test.ts",
+      "blob": "40c348e43d146d28abceb867a488a1b8c11be13f",
+      "mode": "100644",
+      "baseBlob": "bf238c82aef13283369ca47da648b57dad35fe2e",
+      "baseMode": "100644"
+    },
+    {
+      "path": "backend/src/ai/__tests__/no-expiry-http.test.ts",
+      "blob": "8cd603f0c6e98dfb2e5c9bbae484a0bad46a822a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "backend/src/ai/__tests__/security.test.ts",
+      "blob": "552609574aca95f4cd79deb20c9df9f1c08dcba2",
+      "mode": "100644",
+      "baseBlob": "7c4dbb17ead03a344da07f00a8ec96a12f64fe89",
+      "baseMode": "100644"
+    },
+    {
+      "path": "backend/src/ai/auth.ts",
+      "blob": "515cac066997ec09ed3e528702e58d777c649e42",
+      "mode": "100644",
+      "baseBlob": "3de884c7f60d7dfdcc22dd703fbaca11b55c2174",
+      "baseMode": "100644"
+    },
+    {
+      "path": "backend/src/app.ts",
+      "blob": "3feaecf080ff0bc921e98af3d6699c62976e6848",
+      "mode": "100644",
+      "baseBlob": "c337c6c8e3a778228746c9699f9ed4b78e1f835b",
+      "baseMode": "100644"
+    },
+    {
+      "path": "backend/src/lib/deployment.ts",
+      "blob": "d8fee7c1c9ce0e5eb8c3fb8845df1a09d702c16f",
+      "mode": "100644",
+      "baseBlob": "4d388c6d4a7bdf7399d157b9e8104d9b79edc1e2",
+      "baseMode": "100644"
+    },
+    {
+      "path": "scripts/automation/demo-2029-controller.mjs",
+      "blob": "018036052e106843de3cd4cd3d5de4d60108065d",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/demo-no-expiry-controller.mjs",
+      "blob": "4a4758ac37b5d1a5ecc8e98e794185a45705bb2a",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/demo-no-expiry-controller.test.mjs",
+      "blob": "8bac788ab619a7a3e365e8e52368bc7a58b2838f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/demo-no-expiry.integration.test.mjs",
+      "blob": "af31c4356d2e7a3ee86e319146a404dabd41c241",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/demo-no-expiry.metadata.integration.test.mjs",
+      "blob": "de3ce8bbc81897c25bb331291689692761fe3bde",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/enable-demo-auth-2029.metadata.test.mjs",
+      "blob": "a9b144c36661bd987e94c2852e32880e0d6b4108",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/enable-demo-auth-2029.mjs",
+      "blob": "e2c8ef44b3936b4a11b29a82a9878d3efbcccdca",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/enable-demo-auth-2029.test.mjs",
+      "blob": "4ab39e929289d10e150a8b1566e97373ad51ed64",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/enable-demo-auth-no-expiry.mjs",
+      "blob": "7c89a2b6dc36df3e0d7fc07306bfe034211bb208",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/enable-demo-auth-no-expiry.test.mjs",
+      "blob": "951ce32d6b969ddfb49914547845b4605a0f43f5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    },
+    {
+      "path": "scripts/automation/renew-demo-auth-expiry.test.mjs",
+      "blob": "8fd7c06c0f26ecb4281340c9137d0e4651762da2",
+      "mode": "100644",
+      "baseBlob": "86f1649fd0c1b84bb8b3ea1622ec6b0e3dc9696f",
+      "baseMode": "100644"
+    },
+    {
+      "path": "scripts/build/backend-build-context.test.mjs",
+      "blob": "633271387cbce21eed28d8802a992389f4d345d5",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "analysis.md": "b5d151e5c73664c37546d7d46affe9427128caf3c8dc5d20242a0aacfc3930b4",
+    "author-green-final.log": "d3f90f629826361e55f1c884df9e6ad77acb3d7628d95e7e846a9d460418aa9a",
+    "author-green.log": "ac86e45d482812dedec9d954ff1b289ff0bc36e73fa62e5ac0e741f2a3666f06",
+    "author-nonce-red.log": "bf51a047374d513876c730477a96b0baf18b9549cb6dd154111d1388415ff008",
+    "author-r7-review-report.md": "73fb4577e9e52a65114ba52f6c6f6e79361f963dd8d4d91bfeb0d03cdfa322f5",
+    "author-red.log": "b32eccba1df6b182188e5247e43d167fae55afd0518cadd405eaa1d6148814cf",
+    "base-review-frontend-auth-report.md": "826a8674ad8f739927f15cc72148cc22753dcdbddab95e0a4fcf4862ab295f39",
+    "base-review-native-authorization-report.md": "ef09636e8c0a9b635fe5e7d9e7aac5adb1ca2ff3f08e10615dd55638ddf7cb9e",
+    "base-review-server-policy-report.md": "38eb961c9c51f407ab36d2134bbb9f54d77f5e12d8f80c63b975f01d9b7cf918",
+    "browser-source-equivalence-evidence-report.json": "6d55f8f5eefaaa0d52001a6810c4ffa33e9d3136f6a7fb706566e2e20712b493",
+    "e2-independent-repro-red.log": "846cd29be4ee388a4d5bcb905963e8e32d1e27316c084689287a9665598412cb",
+    "e2-independent-repro.test.txt": "5f5e2f5f195eb1e027a875a7548a3bfa3c28f9107f8b975cf51c7823bcfac358",
+    "history/claude-review-1.json": "275dc4b08c1294740c85f3ea5d044e68c54fa1e7863a08ceebb04d3331384fd9",
+    "history/claude-review-2.json": "e8466e1092af650011938c9eaf07799398d10bbfd1007e9dab95dc8a129c4df5",
+    "history/claude-review-3.json": "0277833b027186c7a6968327ab8f5dbbde3a03f48323b41c4c7b42f676f0f05f",
+    "history/claude-review-4.json": "ebfa55b69e7940d880ad8552f5b432fddebf9b0e7445dc19adf7f4f0efd406bf",
+    "history/qa1-report.md": "b574645db09f95ed175ad6d065555dd57557063388b4cac3d3526907dfa52dc7",
+    "implementation-plan.md": "148d45e6214c650530472f023697822eb131c6d47f2fd068e321a48640ea7d64",
+    "independent-auth-qa-report.md": "2622b735f5ef6e3b18dbe6b3c5459952e1da2bbc935baee319cd26cc7f76f2cd",
+    "independent-guard-evidence/guard-results-trace.zip": "54e86fc4c2bfc58564107a11be97bc7ca1f154cbda34c1cf447525328de871ac",
+    "independent-guard-evidence/guard-results.html": "5b4019d54736d3077279e3422f53d411bca568cc86cdd629463d44da670781be",
+    "independent-guard-evidence/guard-results.png": "66c778452fed9c704adce7593aece443bb0d8be5c857d9d5447821de8b514fe9",
+    "independent-guard-evidence/independent-guard-v2.log": "efab89acb58dc27d9ef7e3dea19c908dc40ec6113701349fb8a5fd0d26809376",
+    "independent-guard-evidence/independent-guard-v2.test.mjs": "31891d6c924dd343d18ace76f7e50f787d4e32e367e097ba419377b69cd73ade",
+    "independent-guard-evidence/independent-guard.log": "826324cd4b2edcd2995539352624f9217f6ad7c2150f6258a96f61af3dae3fe3",
+    "independent-guard-evidence/independent-guard.test.mjs": "f8701822e619fa82b8008e7d293ed1cf9ca0daef5980bd410bf4805ea346a153",
+    "independent-guard-evidence/regression.log": "4996791cb4a6fdd9bdefb1757c8069bde21270ea7f4bef1c259d86a2b83aef9f",
+    "independent-guard-evidence/run-independent.mjs": "80acd5ae7edae4e9abbbabdf02f3d4ca7389461786d804e0cadebe0fc172f5b4",
+    "independent-guard-evidence/run-regression.mjs": "f780e041a359580e36a43059305f603cb568236a4199c277ba6ca95a02454e4e",
+    "independent-guard-evidence/screenshot.mjs": "d0c84710b0051d2689f444c5190ada72da3f3f5ca122625778a39cc175d2d062",
+    "independent-integrated-qa-report.md": "269fa52b671e46d0002247a0fabf1649b1b3334227138b60889cf4ba33532042",
+    "independent-r7-qa-report.md": "4b6592c423f5eb416fc188ffac07edd3490f0e0fef84c77040ca83b332ddf6bb",
+    "independent-r7-qa-seal.json": "e415f8107751eb94a347ccfa281752b5dbfaeb59007512ada1651d577515e163",
+    "independent-trace-privacy-qa-report.md": "0bdaf782eaefb3f1cb950af7d77a396d7ec906e464ac0e70899291a385f4ffa4",
+    "local-qa-seal-report.json": "9dee0cc924d017b24f421af1e9e2f9092b9616dabc292d19b0331431043c4d70",
+    "max4-cross-operation-review-report.md": "202af139bb0b516029a5c7558dc70bbf22eb34301bd016059c29f94e55e01169",
+    "r7-independent-repro-green.log": "82e70bc748cb82c4b89f58b9a340a9015ce15131b647cdb3ab31fc231e0f2357",
+    "railway-schema-evidence-report.json": "72c244a412f6a61a13713c298d97c7ff0e4f5a74e309391cc1435d7400249ec1",
+    "revision3-validation-report.md": "b51c85f8202dc9192b447e3f7471495c933f6e9c1974c49a11f6b36975e251b2",
+    "revision4-validation-report.md": "c0ea895b9868a827c055286716f1bbbca6ef3f0e7df10a9c4eaf85e336502bba",
+    "revision5-validation-report.md": "b68bd8faad3619cb4106b1b76b5b91f91256a1105c7adede8f8fe39028cf1917",
+    "revision6-validation-report.md": "567ecb58a76f0ac3132163d3842471bc2390c028c42fb1fb97fb3b8c0550fba3",
+    "revision7-validation-report.md": "b660d7aac565da78f61e08c15acfb6a616836e6414a05c52eee6b72ec6c2e4b0",
+    "task-contract.md": "ce154cf60fc76a294cca3326a8d7e03b58b8a06baa08b57b1852d0cd3a5256a7",
+    "trace-sanitization-evidence-report.json": "09043d6ac48f67e0800537eee37de995920f49716ef453682e1e95c3c4cdce9c",
+    "validation-report.md": "f1a399fcd3829e60ae8f921da14f8d377dbb9679de9c0accbfd7b21667a58734"
+  }
+}

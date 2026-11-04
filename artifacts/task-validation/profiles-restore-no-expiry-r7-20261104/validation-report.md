@@ -1,20 +1,14 @@
-# Revision 7 author validation
+# Source-bound validation — PR523 / issue522
 
-Final Decision: IMPLEMENTED — NOT VERIFIED
+Code source: 03529a96c3a37e4ffb4989497ca3db9fe32a9968; base: bc880a6dccc40d8dbad73c718c8aa4256562d254. Independent integrated Codex QA passed with report hash 8cd3c86523be83903b30a6152e9075a1a9fe51036dcb7c6306dbbe2be6e1ad50, findings empty. This is not Claude approval or live acceptance.
 
-The superseded 2029 controller now includes no-expiry stages from every subject in its prior-operation digest and nonce inventory. It permits only explicitly blocked-before-write records, validates and uniquely identifies their nonces, and refuses unresolved or staged records before authorizing. Existing no-expiry and finite history is not changed.
+- Fresh integrated49 renewal and7 UI tests pass, no skips. Eleven changed source blobs match the independent manifest.
+- Seven UI blobs equal b1d6d89c77ae1abe65a38d22e22c29b6a906f9bf, independently built and exercised in26 actual-App synthetic browser cases at1280/390. No real outbound or clinical writes. This is reuse by exact source equivalence, not a falsely claimed integrated rerun.
+- Historical c104 frontend1586/1586 pass and18 browsercases pass; QA found a real late-simulator-expiry P2, preserved in history/qa1-report.md and fixed in b1.
+- Operational checkpoints f4edbf24 / 1fee9e7b / 02bda58b preserve initial implementation, four actually failing race/transition tests, then the fix. Root integration equivalents018263e4 / 2ca25994 / 65eee06c remain in Git history.
+- Baseline Windows-only existing harness failures remain: configure-demo-source106/108 and demo-deployment278/365. They reproduce on clean unchangedBC due existing URL/ESM CLI paths. No assertion was skipped, disabled or rewritten. Linux exact-head CI is still mandatory.
+- Fixed-demo read-only preflight41494990323 succeeded atBC. No expiry mutation/deployment/clinical test was done.
 
-## Source and evidence
+This report is frozen BEFORE evidence-only publication. Exact final-head CI will be separately read and bound in canonical review context before requesting Claude. Do not confuse pending-at-writing with the eventual API-observed results. The immutable packet cannot include its own later CI without self-reference.
 
-- Baseline: E2 `4436239a003a44972eb3d80bdcf33c6c292bfab3`. Genuine Max4 was changes-requested, with one medium finding; original report SHA-256 `ebfa55b69e7940d880ad8552f5b432fddebf9b0e7445dc19adf7f4f0efd406bf`.
-- Tested controller Git blob: `018036052e106843de3cd4cd3d5de4d60108065d`.
-- Tested 2029 test-file Git blob: `4ab39e929289d10e150a8b1566e97373ad51ed64`.
-- Independent E2 reproduction: 5 expected failures and 2 passing controls, zero skipped. Its original private RED log SHA-256 is `d6023552c1648285d82cd61bf6881205c2b45954654bfac06f68f48e5b584e46`; the original generated fixture SHA-256 is `6b293399221d71ca3f0173130895e8793dd794638c78fed50a8c92b7009b9ac1`. The packet retains readable copies; originals remain untouched in the independent QA directory.
-- The same seven-case fixture, with only absolute imports redirected to this author checkout, passed 7/7 after the fix. Private generated test SHA-256 `a4a118c044458d8d027053c5c9bfb4d7de09b6a526ccd83c8a4bd81ba56dd674`; its private GREEN log SHA-256 `9c60012f5f7e2baa6c32e5e6f7cde46bee04eeb322ed8d58eb71e7e2ccdcebdd`.
-- Author behavioral RED: 101 tests, 85 passed, 16 failed, zero skipped; private original log SHA-256 `38a1bc87fee5cfb4baba72b610c19caed63e6a785ca0bf2092101e0ecf1c40d0`. A further nonce-specific RED is retained separately, private original SHA-256 `cf59d147fbc8d8f9827234f0df9ff86399d219247167446f8206a94c0722018d`.
-- Final combined author GREEN: 255/255 passed, zero failed or skipped; private original log SHA-256 `6dad560063db6f69b5f1bd72ce8bf13017baac73d2a69cca192b612d5e5aa690`. Command: `node --test scripts/automation/enable-demo-auth-2029.test.mjs scripts/automation/renew-demo-auth-expiry.test.mjs scripts/automation/demo-no-expiry-controller.test.mjs scripts/automation/enable-demo-auth-no-expiry.test.mjs scripts/automation/demo-no-expiry.integration.test.mjs scripts/automation/demo-no-expiry.metadata.integration.test.mjs`.
-- `node --check` passed for both changed scripts; `git diff --check` passed before staging. Packet log copies normalize line endings and trailing whitespace; the private originals and their hashes above remain authoritative.
-
-Tests exercise no-expiry state and nonce conflicts across subjects, consumption and write denial, allowed absent/blocked controls, mutation and asynchronous history drift, and existing 2029, finite and no-expiry behavior. In-memory authorization verifiers, stores and provider fixtures are synthetic; no real capability, provider mutation, database, user data, state reset, deploy or online acceptance was involved.
-
-Independent QA, exact integrated-head CI, real Max5, final Codex QA, protected merge, separate staging/deploy authorization and public five-profile verification remain pending. The original hold and historical attempts must remain intact.
+Pending gates: exact-head CI, genuine Claude Max review (new independent subject default4; PR520 grant6 untouched), final Codex, protected merge, one consumed typed human operation capability, fresh demo preflight, explicit single stage, separate exact-source deployment and live five-profile/login checks. Keep522 open until live proof.

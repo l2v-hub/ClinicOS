@@ -1,0 +1,13 @@
+{
+  "codeSource": "bdbea1e43b9c1b6b6fd5a1a2c59a94834d300608",
+  "priorReviewedSource": "4436239a003a44972eb3d80bdcf33c6c292bfab3",
+  "originalArchive": {
+    "path": "artifacts/task-validation/profiles-restore-no-expiry-20261104/browser/independent-local-browser-sanitized.zip",
+    "sha256": "1c771d1f6f37ba39de938219a3d9b9cf0e5ee2e794825d01d75d03d9fb2be59e"
+  },
+  "authFrontendBackendPrismaLocksUnchangedFromPriorSource": true,
+  "actualUiCases": 10,
+  "newUiRun": false,
+  "synthetic": true,
+  "sourceProjectionDiff": ""
+}

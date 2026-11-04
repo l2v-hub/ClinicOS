@@ -1,0 +1,11 @@
+{
+  "sourceSha": "bdbea1e43b9c1b6b6fd5a1a2c59a94834d300608",
+  "sourceTree": "e8a8f57c39c12b9895d33aafa30c693ca6b188c3",
+  "status": "passed",
+  "scope": "independent local synthetic implementation-7 QA; not release approval",
+  "testCounts": { "independentGuard": { "passed": 32, "failed": 0, "skipped": 0 }, "existingRegression": { "passed": 325, "failed": 0, "skipped": 0 } },
+  "commands": ["node C:/w-rv/tmp/profiles-restore-20261104/independent-qa/r7/run-independent.mjs", "node C:/w-rv/tmp/profiles-restore-20261104/independent-qa/r7/run-regression.mjs"],
+  "equivalence": { "baseline": "4436239a003a44972eb3d80bdcf33c6c292bfab3", "backend": "2967a2f7d6eaeff050451d3f7f98fb7f6f79a184", "frontend": "b48c7e28f4a1085d3ad2ae8a3cabb7eca3717f6a", "prisma": "6b0e362cd2c9342d3eb0757b01283ce4b0ee0e96", "packageLockSha256": "a2e80872c9085f8ec028c968ef0f6d0f6622235c649bf081f7289f5cde6593f6", "schemaSha256": "f73f82133948fadc7e289baccd630fb490df2a25e43ace3dd7ef3085ad96b210", "priorPacketTree": "beb56bf95cb81f8e69df85b3e41b1d51a26773a9" },
+  "artifacts": { "independent-guard-v2.test.mjs": "31891d6c924dd343d18ace76f7e50f787d4e32e367e097ba419377b69cd73ade", "independent-guard-v2.log": "efab89acb58dc27d9ef7e3dea19c908dc40ec6113701349fb8a5fd0d26809376", "regression.log": "4996791cb4a6fdd9bdefb1757c8069bde21270ea7f4bef1c259d86a2b83aef9f", "guard-results.html": "5b4019d54736d3077279e3422f53d411bca568cc86cdd629463d44da670781be", "guard-results.png": "66c778452fed9c704adce7593aece443bb0d8be5c857d9d5447821de8b514fe9", "guard-results-trace.zip": "54e86fc4c2bfc58564107a11be97bc7ca1f154cbda34c1cf447525328de871ac" },
+  "limitations": ["Fixture tests and static synthetic report only; no real provider or grant", "Existing application/browser proof reused by exact source equality; no fresh full app build", "Cross-system read-before-provider-write race remains", "Exact-head CI, genuine Max5, post-Claude final QA and public deployment proof pending"]
+}

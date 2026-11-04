@@ -1,0 +1,23 @@
+{
+  "subject_sha": "ed5686807ea4a358430563c7a488fde1bf478f81",
+  "verdict": "changes-requested",
+  "summary": "I did a static review of the frozen head (the commit SHA bound to this review). I ran no tests or tools. The CI results come from the supplied evidence, which reports API-observed success for every required check on this exact head. The prior independent Codex QA covered source 03529a96 with byte-identical blobs.\n\nThe UI changes fit the acceptance criteria:\n- While status is loading, unavailable, malformed or disabled, no usable role or profile cards render.\n- An expired synthetic demo shows its own expired message.\n- Retry clears stale status, and a late expiry reported by the simulator or by the identity check triggers a fresh status check.\n- `handleLogin` denies login when auth is unverified.\n- The demo and Entra paths are kept, and Entra no longer shows the credential-free wording.\n\nThe renewal operation is tightly fenced:\n- It can only change the one fixed expiry key on the fixed demo target.\n- The renewal window is at most seven days.\n- It must find the expected prior expiry.\n- It needs an authorization that was consumed through a native verifier.\n- A durable claim and write-intent come before exactly one mutation. That mutation does not trigger a deploy, and an uncertain write is never retried.\n\nThere are two actionable findings:\n1. Once any renewal reaches the 'staged' status, every later renewal fails in the controller. No reconciliation path exists in code, so after its first success the operation cannot be used again.\n2. The new status parser rejects the whole status response when the expiry field is malformed, even when the mode is Entra. A stray deployment variable could then block all login.",
+  "findings": [
+    {
+      "severity": "medium",
+      "file": "scripts/automation/renew-demo-auth-expiry.mjs",
+      "line": 75,
+      "problem": "locate() rejects any request whenever another renewal record, in any subject, has an execution whose status is not 'blocked-before-write'. That includes a successfully completed 'staged' renewal. The error message asks for 'explicit operator reconciliation', but no reconciled or terminal status exists, and nothing in the controller or CLI can move a staged record into an allowed state. After the first successful stage, every later renewal fails at inspect, prepare, authorize and claim. Because each renewal is capped at seven days, this makes the operation single-use unless someone edits the canonical state by hand, which goes around the authorization and CAS guards this PR adds.",
+      "requested_change": "Treat a fully completed 'staged' renewal as terminal and do not let it block later renewals. One option: allow a new renewal when every other execution is 'staged' and has been superseded by a deployment plus a status observation. Only 'claimed', 'write-intent' and 'uncertain' should block. Alternatively, add an authorized, audited reconciliation transition that closes earlier operations. Keep 'uncertain' and in-flight records blocking.",
+      "test_expectation": "Add a controller test with three steps. First, a prior operation is staged. Second, a later, separately authorized operation with a new nonce and a later previousExpiry can authorize, claim and stage. Third, a prior 'uncertain', 'claimed' or 'write-intent' record still blocks the new operation."
+    },
+    {
+      "severity": "low",
+      "file": "frontend/src/lib/authAvailability.ts",
+      "line": 26,
+      "problem": "parseAuthStatus throws, and the app then shows 'unavailable' and blocks all login, whenever the expiry field is present but not parseable or longer than 50 characters. It does this regardless of mode. The backend echoes the raw environment value with no validation. A leftover or badly formatted demo-expiry variable in an Entra or legacy-demo deployment would therefore lock out every user, even though the field only matters for the disabled-state explanation.",
+      "requested_change": "Validate the expiry field strictly only where it is used. One option: when mode is 'entra' or 'demo', ignore an unusable expiry and normalize it to null instead of rejecting the whole status. Keep strict rejection, or treat it as plain 'disabled', only for the disabled synthetic-demo explanation.",
+      "test_expectation": "Add a parse test: a status with mode entra and a malformed expiry string parses successfully, and canStartLogin returns true. Also add a test that a disabled synthetic status with a malformed expiry is never classified as 'expired' and still blocks login."
+    }
+  ]
+}
