@@ -771,6 +771,13 @@
     "task-contract.md": "6c5448a3f3835dc445260dffa0673fc89315c6f5469ce8b7cf49111dd9924cec",
     "trace-entry-manifest.json": "22deb5abfd9045bee831029c0712aa48d7ad4d381e9cd4d0d6501aed60af20f6",
     "trace-sanitization-report.json": "09043d6ac48f67e0800537eee37de995920f49716ef453682e1e95c3c4cdce9c",
-    "validation-report.md": "f1a399fcd3829e60ae8f921da14f8d377dbb9679de9c0accbfd7b21667a58734"
+    "validation-report.md": "f1a399fcd3829e60ae8f921da14f8d377dbb9679de9c0accbfd7b21667a58734",
+    "base-review-frontend-auth-report.md": "826a8674ad8f739927f15cc72148cc22753dcdbddab95e0a4fcf4862ab295f39",
+    "base-review-native-authorization-report.md": "ef09636e8c0a9b635fe5e7d9e7aac5adb1ca2ff3f08e10615dd55638ddf7cb9e",
+    "base-review-server-policy-report.md": "38eb961c9c51f407ab36d2134bbb9f54d77f5e12d8f80c63b975f01d9b7cf918",
+    "author-ops-review-report.md": "4981b3722071f1dd2814a55a852cabcff37cd0d3adb68b76fa7a12141cbd48b7",
+    "railway-schema-evidence-report.json": "72c244a412f6a61a13713c298d97c7ff0e4f5a74e309391cc1435d7400249ec1",
+    "trace-sanitization-evidence-report.json": "09043d6ac48f67e0800537eee37de995920f49716ef453682e1e95c3c4cdce9c",
+    "review-context-selection-report.md": "ed78339e7811742225c5f1009a4fd8324eb769aa7f4584797a65ac45003180f5"
   }
 }

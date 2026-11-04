@@ -1,0 +1,147 @@
+{
+  "status": "verified-sanitized-derivatives",
+  "archiveCount": 10,
+  "sourceFixtureSecretFound": true,
+  "derivatives": [
+    {
+      "source": "desktop-administrator-verified-trace.zip",
+      "derivative": "desktop-administrator-verified-trace.sanitized.zip",
+      "sourceSha256": "37dc295207954a61c9e4ca9ba8c7ac4b452d6242a895f3e42331a2306268e164",
+      "derivativeSha256": "88fa3e04ba408c6818d1cfe48e3a93a78a0d7bf9cad649088fde36d0abea52ea",
+      "entries": 136,
+      "redactions": {
+        "authorization": 20,
+        "cookie": 0,
+        "token": 2,
+        "genericJwt": 0,
+        "knownSyntheticSecret": 0
+      }
+    },
+    {
+      "source": "desktop-doctor-verified-trace.zip",
+      "derivative": "desktop-doctor-verified-trace.sanitized.zip",
+      "sourceSha256": "79463709cbb40e48bc4f01ad3e66844558c4ad9024771cb38994ebfa94a06593",
+      "derivativeSha256": "724761e5c5fdcd22d3e878a459add08c4222a7406049506c60d6fc29ebcc2c00",
+      "entries": 158,
+      "redactions": {
+        "authorization": 33,
+        "cookie": 0,
+        "token": 2,
+        "genericJwt": 0,
+        "knownSyntheticSecret": 0
+      }
+    },
+    {
+      "source": "desktop-nurse-verified-trace.zip",
+      "derivative": "desktop-nurse-verified-trace.sanitized.zip",
+      "sourceSha256": "8a574eefd2adffae7219c552dcdc165a346b601cce99b97563bc3c648061ad68",
+      "derivativeSha256": "680637fc088b98f241a0e6ffc7de6f2457ff2701532177f1f9033cc2153378fe",
+      "entries": 154,
+      "redactions": {
+        "authorization": 37,
+        "cookie": 0,
+        "token": 2,
+        "genericJwt": 0,
+        "knownSyntheticSecret": 0
+      }
+    },
+    {
+      "source": "desktop-oss-verified-trace.zip",
+      "derivative": "desktop-oss-verified-trace.sanitized.zip",
+      "sourceSha256": "a0d1123f9b842983876d39d50c3d96201e41a2b1bd152f17f2f4468376180006",
+      "derivativeSha256": "8bea95e2f23708fcd470ba52326ad4a105a834eebf06980b852c65e6af5774c7",
+      "entries": 143,
+      "redactions": {
+        "authorization": 33,
+        "cookie": 0,
+        "token": 2,
+        "genericJwt": 0,
+        "knownSyntheticSecret": 0
+      }
+    },
+    {
+      "source": "desktop-supervisor-verified-trace.zip",
+      "derivative": "desktop-supervisor-verified-trace.sanitized.zip",
+      "sourceSha256": "4c6ec32837b30f258e3d53746dbf73b56ab7522c8baeaf22d3b1c94ba1508c1c",
+      "derivativeSha256": "6288ddbbc96722c02e40c7702064152a54580880ec419a40fcf1cbeb1ae7814f",
+      "entries": 167,
+      "redactions": {
+        "authorization": 28,
+        "cookie": 0,
+        "token": 2,
+        "genericJwt": 0,
+        "knownSyntheticSecret": 0
+      }
+    },
+    {
+      "source": "mobile-administrator-verified-trace.zip",
+      "derivative": "mobile-administrator-verified-trace.sanitized.zip",
+      "sourceSha256": "2312d1db34f68c430cefbbfc637605b6099254b1da5b042f15cf379566f44367",
+      "derivativeSha256": "7ca672b2412c847c470bcba0f5048169c3e0c3c20e4b99d353a1f6333a109ef4",
+      "entries": 152,
+      "redactions": {
+        "authorization": 19,
+        "cookie": 0,
+        "token": 2,
+        "genericJwt": 0,
+        "knownSyntheticSecret": 0
+      }
+    },
+    {
+      "source": "mobile-doctor-verified-trace.zip",
+      "derivative": "mobile-doctor-verified-trace.sanitized.zip",
+      "sourceSha256": "da898a0557fd087ddd9bf246560ddf84416d5fe061ecfca1fba1f15210cfbe8f",
+      "derivativeSha256": "1989f5071ba3a92cd5d16f05f4563f886add9364946dd9312c5ccc3b82187f11",
+      "entries": 210,
+      "redactions": {
+        "authorization": 33,
+        "cookie": 0,
+        "token": 2,
+        "genericJwt": 0,
+        "knownSyntheticSecret": 0
+      }
+    },
+    {
+      "source": "mobile-nurse-verified-trace.zip",
+      "derivative": "mobile-nurse-verified-trace.sanitized.zip",
+      "sourceSha256": "46fc22e2f6518c515a997df7534e5ddc8f1124e561e2fa2e577ecec8c8ef0c60",
+      "derivativeSha256": "1a0d648a2933e1067c7c9bb0b28fe8d692ee10d56c0b54fc21453ab3187a0cd3",
+      "entries": 213,
+      "redactions": {
+        "authorization": 31,
+        "cookie": 0,
+        "token": 2,
+        "genericJwt": 0,
+        "knownSyntheticSecret": 0
+      }
+    },
+    {
+      "source": "mobile-oss-verified-trace.zip",
+      "derivative": "mobile-oss-verified-trace.sanitized.zip",
+      "sourceSha256": "3bfbe1c987bf61939279bd738693c95255928b2cf12699e32cacac61ad1cb58a",
+      "derivativeSha256": "61aa9c6ed6b142975fc61564f03e30f89318937585ad8c8d0f3559959f459380",
+      "entries": 204,
+      "redactions": {
+        "authorization": 29,
+        "cookie": 0,
+        "token": 2,
+        "genericJwt": 0,
+        "knownSyntheticSecret": 0
+      }
+    },
+    {
+      "source": "mobile-supervisor-verified-trace.zip",
+      "derivative": "mobile-supervisor-verified-trace.sanitized.zip",
+      "sourceSha256": "40dda255d327b2e6f8a73cc35e301516e95776a3fd6d169431e5cd7e57d06092",
+      "derivativeSha256": "7687b6ac874bae1655bfdf2ed71195198f2b621408872e53cad9570206631bd9",
+      "entries": 213,
+      "redactions": {
+        "authorization": 30,
+        "cookie": 0,
+        "token": 2,
+        "genericJwt": 0,
+        "knownSyntheticSecret": 0
+      }
+    }
+  ]
+}
