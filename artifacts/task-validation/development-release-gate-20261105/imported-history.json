@@ -4,7 +4,7 @@
       "round": 1,
       "status": "passed",
       "subjectSha": "8b5095ad89a3327a4998b11f05c0806706ff072e",
-      "evidence": "artifacts/task-validation/development-release-gate-20261105/validation-report.md"
+      "evidence": "validation-report.md"
     }
   ],
   "reviews": [],
@@ -76,20 +76,20 @@
     }
   ],
   "packetFiles": {
-    "artifacts/task-validation/development-release-gate-20261105/advisory-review1.md": "839fc7eb1ac2188eed7a2982f6ec98523c0840a007ba63bfbcd7f3b54e33087e",
-    "artifacts/task-validation/development-release-gate-20261105/analysis.md": "7ff2d2f1762d643bb2ec8f16504ceaa8c1c798f2f1012f464d4648c464a47075",
-    "artifacts/task-validation/development-release-gate-20261105/base-native-contracts.mjs.txt": "084599442394406bd89ee5ae7c4a25417c48da47adbfbc281dc533ad511d1482",
-    "artifacts/task-validation/development-release-gate-20261105/base-native-demo-deployment.mjs.txt": "873f90f8885652f0533b1a5983f9f15fb61b5b578103bcbdc6ee7f9f0cd850cf",
-    "artifacts/task-validation/development-release-gate-20261105/base-native-github.mjs.txt": "0c7b8a38f097ea6c6d0bb7f49b407ed08cbd75bd23fa3d372b75fb556d82c212",
-    "artifacts/task-validation/development-release-gate-20261105/base-native-process.mjs.txt": "2859598df0808313faed958604a173d066ffd1ad627992e37ef605be7dea9870",
-    "artifacts/task-validation/development-release-gate-20261105/base-native-release.mjs.txt": "774fab99bf5c7c88c74c42a894d08e217c1859fee97be918e144b78ecd5ee2c1",
-    "artifacts/task-validation/development-release-gate-20261105/base-review-protocol.md": "6d9b828976113e2f3a5afedf1044af7b2f5ce42f87039510cd47218db7e97ef8",
-    "artifacts/task-validation/development-release-gate-20261105/base-standalone-protocol.md": "043d7f4f93a8201782b4f7d20b5b7eb03feb18d00ba7ec147a89efb890118ba4",
-    "artifacts/task-validation/development-release-gate-20261105/implementation-plan.md": "ffe5bf0da31d2b1909a5189a8550cf2286ec654ecbdab135062542fb445fb619",
-    "artifacts/task-validation/development-release-gate-20261105/independent-design-review.md": "7a86acf5a45590061dbd1c16205d6645f0305590c3134eb1aa5d0391fbd34908",
-    "artifacts/task-validation/development-release-gate-20261105/task-contract.md": "2087613081841eaf55635f77f0376b122d40bd6eb75c03e6079ae06fb2a95bd5",
-    "artifacts/task-validation/development-release-gate-20261105/test-results/gate-tests.txt": "10d16cded8cb591d86c5058503cb6031b45600552a756c923001f512bb6b9cdc",
-    "artifacts/task-validation/development-release-gate-20261105/test-results/native-reader-diagnostic.json": "bf68e42c53d6fc370f95993e8ba5233a525033e6f8e4c7c5523658b62cafb00a",
-    "artifacts/task-validation/development-release-gate-20261105/validation-report.md": "2897fd378b3a933ff6ba657b556577d2f12a579982115b58adb9e809d48e5f00"
+    "advisory-review1.md": "839fc7eb1ac2188eed7a2982f6ec98523c0840a007ba63bfbcd7f3b54e33087e",
+    "analysis.md": "7ff2d2f1762d643bb2ec8f16504ceaa8c1c798f2f1012f464d4648c464a47075",
+    "base-native-contracts.mjs.txt": "084599442394406bd89ee5ae7c4a25417c48da47adbfbc281dc533ad511d1482",
+    "base-native-demo-deployment.mjs.txt": "873f90f8885652f0533b1a5983f9f15fb61b5b578103bcbdc6ee7f9f0cd850cf",
+    "base-native-github.mjs.txt": "0c7b8a38f097ea6c6d0bb7f49b407ed08cbd75bd23fa3d372b75fb556d82c212",
+    "base-native-process.mjs.txt": "2859598df0808313faed958604a173d066ffd1ad627992e37ef605be7dea9870",
+    "base-native-release.mjs.txt": "774fab99bf5c7c88c74c42a894d08e217c1859fee97be918e144b78ecd5ee2c1",
+    "base-review-protocol.md": "6d9b828976113e2f3a5afedf1044af7b2f5ce42f87039510cd47218db7e97ef8",
+    "base-standalone-protocol.md": "043d7f4f93a8201782b4f7d20b5b7eb03feb18d00ba7ec147a89efb890118ba4",
+    "implementation-plan.md": "ffe5bf0da31d2b1909a5189a8550cf2286ec654ecbdab135062542fb445fb619",
+    "independent-design-review.md": "7a86acf5a45590061dbd1c16205d6645f0305590c3134eb1aa5d0391fbd34908",
+    "task-contract.md": "2087613081841eaf55635f77f0376b122d40bd6eb75c03e6079ae06fb2a95bd5",
+    "test-results/gate-tests.txt": "10d16cded8cb591d86c5058503cb6031b45600552a756c923001f512bb6b9cdc",
+    "test-results/native-reader-diagnostic.json": "bf68e42c53d6fc370f95993e8ba5233a525033e6f8e4c7c5523658b62cafb00a",
+    "validation-report.md": "2897fd378b3a933ff6ba657b556577d2f12a579982115b58adb9e809d48e5f00"
   }
 }
