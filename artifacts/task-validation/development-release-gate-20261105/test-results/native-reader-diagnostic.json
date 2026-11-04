@@ -1,0 +1,11 @@
+{
+  "kind": "historical-app-native-reader-diagnostic",
+  "sourceSha": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "pr": 525,
+  "result": "PASS",
+  "transport": "existing authenticated gh credential held in memory; read-only command wrapper",
+  "nativeStateWritten": false,
+  "gateApproval": false,
+  "deployment": false,
+  "history": "Prior diagnostic failed before network read with Windows PATH loss in copied environment; preserved privately and corrected. No model round or provider write."
+}
