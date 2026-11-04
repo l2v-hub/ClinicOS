@@ -84,3 +84,17 @@ test('secret-bearing variable map is erased when either bounded public read fail
     assert.deepEqual(Object.keys(variables),[],'all fetched resolved values, including secret, must be deleted on errors');
   }
 });
+
+test('CI and the protected pre-credential step execute every no-expiry guard suite',async()=>{
+  const names=['demo-no-expiry-controller.test.mjs','enable-demo-auth-no-expiry.test.mjs',
+    'demo-no-expiry.integration.test.mjs','demo-no-expiry.metadata.integration.test.mjs'];
+  for(const name of ['bug-pipeline-tests.yml','enable-demo-auth-no-expiry.yml']){
+    const workflow=await readFile(new URL('../../.github/workflows/'+name,import.meta.url),'utf8');
+    const command=workflow.split(/\r?\n/).find(line=>line.includes('run: node --test')&&line.includes(names[0]));
+    assert.ok(command,`${name}: missing no-expiry test command`);
+    for(const suite of names)assert.ok(command.includes('scripts/automation/'+suite),`${name}: missing ${suite}`);
+    assert.doesNotMatch(command,/\.skip|continue-on-error|\|\|\s*true/);
+    if(name==='enable-demo-auth-no-expiry.yml')
+      assert.ok(workflow.indexOf(command)<workflow.indexOf('secrets.RAILWAY_DEMO_TOKEN'));
+  }
+});

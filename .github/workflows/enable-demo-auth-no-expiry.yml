@@ -54,7 +54,7 @@ jobs:
         with:
           node-version: 22
       - name: Test guards without credentials
-        run: node --test scripts/automation/demo-no-expiry-controller.test.mjs scripts/automation/enable-demo-auth-no-expiry.test.mjs
+        run: node --test scripts/automation/demo-no-expiry-controller.test.mjs scripts/automation/enable-demo-auth-no-expiry.test.mjs scripts/automation/demo-no-expiry.integration.test.mjs scripts/automation/demo-no-expiry.metadata.integration.test.mjs
       - name: Validate fixed demo target and stage explicit demo tier plus no-expiry flag
         env:
           GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
