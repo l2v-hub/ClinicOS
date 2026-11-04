@@ -13,7 +13,7 @@ import {
   verifySimulatorToken,
 } from '../authz/simulator.js';
 import type { ResolvedIdentity } from '../authz/types.js';
-import { isRealProduction } from '../lib/deployment.js';
+import { isRealProduction, unlimitedSyntheticSimulator } from '../lib/deployment.js';
 
 export interface Operator {
   id: string;
@@ -87,6 +87,12 @@ export function operatorAuthMode(env: NodeJS.ProcessEnv = process.env): Operator
   const configured = (env.AUTH_MODE || '').trim().toLowerCase();
   if (configured === 'entra') return 'entra';
   if (configured === 'demo') {
+    // A malformed or incompletely configured unlimited opt-in must not fall back to the
+    // finite demo path (which also allows legacy identity headers).
+    const unlimited = env.DEMO_AUTH_NO_EXPIRY?.trim().toLowerCase();
+    if (unlimited !== undefined && unlimited !== 'false') {
+      return unlimitedSyntheticSimulator(env) ? 'demo' : 'disabled';
+    }
     // Phase 9: demo identities never exist on a real production deployment (fail closed).
     if (isRealProduction(env)) return 'disabled';
     return env.NODE_ENV === 'development' ||

@@ -288,6 +288,112 @@ test('simulator: no flag combination enables it (or demo headers) on a real prod
   assert.equal(simulatorEnabled('demo', DEMO_LIKE), true);
 });
 
+test('unlimited synthetic mode serves five policy-resolved identities over real HTTP', async () => {
+  const env = {
+    NODE_ENV: 'production',
+    CLINICOS_ENV: 'demo',
+    AUTH_MODE: 'demo',
+    DEMO_DATASET_ID: 'synthetic-v1',
+    ALLOW_PRODUCTION_DEMO_AUTH: 'true',
+    DEMO_AUTH_NO_EXPIRY: 'true',
+    ROLE_SIMULATOR_ENABLED: 'true',
+    ROLE_SIMULATOR_ALLOW_PRODUCTION: 'true',
+    ROLE_SIMULATOR_SECRET: 's'.repeat(64),
+    DEMO_AUTH_EXPIRES_AT: '2000-01-01T00:00:00Z',
+  };
+  const snapshot = Object.fromEntries(Object.keys(env).map((k) => [k, process.env[k]]));
+  Object.assign(process.env, env);
+  try {
+    const status = await raw('/auth/status');
+    assert.equal(status.status, 200);
+    assert.deepEqual(status.body, {
+      mode: 'demo',
+      simulator: true,
+      temporaryDemo: false,
+      syntheticOnly: true,
+      expiresAt: null,
+    });
+    const identities = await raw('/auth/simulator/identities');
+    assert.equal(identities.status, 200);
+    const roles = {
+      'SIM-ADMIN': 'administrator',
+      'SIM-SUPERVISOR-1': 'supervisor',
+      'SIM-DOCTOR-1': 'doctor',
+      'SIM-NURSE-1': 'nurse',
+      'SIM-OSS-1': 'oss',
+    };
+    assert.deepEqual(
+      identities.body.identities.map((i: { id: string }) => i.id).sort(),
+      Object.keys(roles).sort(),
+    );
+    for (const [id, role] of Object.entries(roles)) {
+      const session = await login(base, id);
+      const headers = { Authorization: `Bearer ${session.token}` };
+      const me = await raw('/auth/me', { headers });
+      assert.equal(me.status, 200, id);
+      assert.equal(me.body.id, id);
+      assert.equal(me.body.appRole, role);
+      assert.equal(me.body.identitySource, 'simulator');
+      assert.equal(me.body.temporaryDemo, false);
+      assert.equal(me.body.expiresAt, null);
+      assert.ok(Object.keys(me.body.capabilities).length > 0);
+      assert.equal(
+        me.body.capabilities['authz.view_policy'].allowed,
+        ['administrator', 'supervisor'].includes(role),
+      );
+      assert.equal(
+        (await raw('/authz/policy', { headers })).status,
+        ['administrator', 'supervisor'].includes(role) ? 200 : 403,
+      );
+      const logout = await raw('/auth/simulator/logout', { method: 'POST', headers });
+      assert.equal(logout.status, 204);
+      assert.equal((await raw('/auth/me', { headers })).status, 401);
+    }
+    assert.equal(
+      (
+        await raw('/auth/me', {
+          headers: {
+            'X-Operator-Id': 'SIM-ADMIN',
+            'X-Operator-Role': 'admin',
+          },
+        })
+      ).status,
+      401,
+    );
+    const expired = issueSimulatorToken('SIM-ADMIN', Date.now() - 13 * 3_600_000).token;
+    assert.equal(
+      (await raw('/auth/me', { headers: { Authorization: `Bearer ${expired}` } })).status,
+      401,
+    );
+    const valid = issueSimulatorToken('SIM-NURSE-1').token;
+    const [prefix, signature] = valid.split('.').slice(1);
+    const payload = JSON.parse(Buffer.from(prefix, 'base64url').toString('utf8'));
+    const forged = `sim.${Buffer.from(JSON.stringify({ ...payload, sub: 'SIM-ADMIN' })).toString('base64url')}.${signature}`;
+    assert.equal(
+      (await raw('/auth/me', { headers: { Authorization: `Bearer ${forged}` } })).status,
+      401,
+    );
+    process.env.ROLE_SIMULATOR_ENABLED = 'false';
+    assert.equal(
+      (
+        await raw('/auth/me', {
+          headers: {
+            'X-Operator-Id': 'SEED-OP-004',
+            'X-Operator-Role': 'admin',
+          },
+        })
+      ).status,
+      503,
+    );
+    assert.equal((await raw('/auth/simulator/identities')).status, 404);
+  } finally {
+    for (const [key, value] of Object.entries(snapshot)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+});
+
 test('simulator: production config → endpoints unreachable, headers/body identity refused (HTTP)', async () => {
   const names = Object.keys(DEMO_LIKE).concat('CLINICOS_ENV');
   const snapshot = Object.fromEntries(names.map((k) => [k, process.env[k]]));

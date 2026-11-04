@@ -35,6 +35,7 @@ import { createSkillRouter } from './skills/http.js';
 import { defaultProactiveDeps, defaultSkillDeps } from './skills/index.js';
 import { metricsHandler, requestObservability } from './lib/observability.js';
 import { readinessHandler } from './lib/readiness.js';
+import { unlimitedSyntheticSimulator } from './lib/deployment.js';
 import {
   operatorAuthMode,
   productionDemoAuthEnabled,
@@ -167,17 +168,19 @@ app.get('/ready', readinessHandler);
 app.get('/metrics', metricsHandler);
 
 app.get('/auth/status', (_req, res) => {
+  const unlimited = unlimitedSyntheticSimulator();
   res.setHeader('Cache-Control', 'no-store');
   res.status(200).json({
     mode: operatorAuthMode(),
     simulator: simulatorEnabled(operatorAuthMode()),
-    temporaryDemo: productionDemoAuthEnabled(),
+    temporaryDemo: !unlimited && productionDemoAuthEnabled(),
     syntheticOnly: process.env.DEMO_DATASET_ID === 'synthetic-v1',
-    expiresAt: process.env.DEMO_AUTH_EXPIRES_AT || null,
+    expiresAt: unlimited ? null : process.env.DEMO_AUTH_EXPIRES_AT || null,
   });
 });
 
 app.get('/auth/me', requireOperator, requireAuthorizationContext, (req, res) => {
+  const unlimited = unlimitedSyntheticSimulator();
   const operator = (req as AuthedRequest).operator;
   const authz = authzOf(req)!;
   const role = roleDefinition(authz.policy.document, authz.identity.roleId);
@@ -206,9 +209,9 @@ app.get('/auth/me', requireOperator, requireAuthorizationContext, (req, res) => 
       ]),
     ),
     authMode: operatorAuthMode(),
-    temporaryDemo: productionDemoAuthEnabled(),
+    temporaryDemo: !unlimited && productionDemoAuthEnabled(),
     syntheticOnly: process.env.DEMO_DATASET_ID === 'synthetic-v1',
-    expiresAt: process.env.DEMO_AUTH_EXPIRES_AT || null,
+    expiresAt: unlimited ? null : process.env.DEMO_AUTH_EXPIRES_AT || null,
   });
 });
 
