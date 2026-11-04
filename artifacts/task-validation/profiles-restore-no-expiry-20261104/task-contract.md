@@ -49,6 +49,8 @@ The public URL must serve the real complete app and five actual server identitie
 - AC9: Exact reviewed source deployed; actual public ready/auth and real chooser/profile/session tests prove restored online access. Safe screenshots pinned to source/evidence commit; issue stays open until proven.
 - AC10: Dirty primary/unrelated files/branches/claims preserved; no broad issue processing or phase2 cutover substitutes AC9.
 
+Configuration action design: one fixed-target, separately capability-bound atomic collection merge sets ONLY `CLINICOS_ENV=demo` and `DEMO_AUTH_NO_EXPIRY=true`, with `replace=false` and `skipDeploys=true`. The prior explicit tier may be absent or demo only; all other auth/dataset/simulator/signing prerequisites must already validate in worker memory. No secret values, full variable inventory, database settings or deployment are emitted or changed by this action. The historical date may remain stored but is inactive and suppressed by the effective enabled-mode metadata. This replaces neither real session TTL nor any historical finite-stage record.
+
 ## Test Plan
 
 | Test type | Required | Reason |

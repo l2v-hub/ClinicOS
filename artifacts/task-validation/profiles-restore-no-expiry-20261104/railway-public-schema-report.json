@@ -1,0 +1,14 @@
+{
+  "at": "2026-11-04T07:06:55.169Z",
+  "query": "public schema only; no credentials, resource ids or mutations",
+  "http": 200,
+  "fields": [
+    "environmentId",
+    "projectId",
+    "replace",
+    "serviceId",
+    "skipDeploys",
+    "variables"
+  ],
+  "errorsPresent": false
+}
