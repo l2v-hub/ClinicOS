@@ -79,3 +79,21 @@ test('the exact native review-thread query remains read-only and usable', async 
   });
   assert.equal(calls, 1);
 });
+for (const tail of [
+  ['--method', 'POST'],
+  ['-f', 'x=y'],
+  ['-F', 'x=true'],
+  ['-X', 'GET', '-X', 'POST'],
+  ['--input', '-'],
+]) {
+  test(`REST read-only boundary rejects ${tail.join(' ')}`, async () => {
+    let calls = 0;
+    const run = readOnlyRunner(async () => {
+      calls++;
+    });
+    await assert.rejects(
+      run({ command: 'gh', args: ['api', 'repos/l2v-hub/ClinicOS/git/refs', ...tail] }),
+    );
+    assert.equal(calls, 0);
+  });
+}

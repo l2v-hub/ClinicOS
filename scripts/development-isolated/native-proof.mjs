@@ -13,7 +13,8 @@ export function readOnlyRunner(run) {
   return async (call) => {
     assert.equal(call.command, 'gh');
     const args = call.args ?? [];
-    if (args[0] === 'api') {
+    assert.equal(args[0], 'api');
+    {
       if (args[1] === 'graphql') {
         assert.equal(call.input, undefined);
         assert.deepEqual(args.slice(0, 9), [
@@ -31,14 +32,18 @@ export function readOnlyRunner(run) {
         assert.match(args[9], /^number=[1-9][0-9]*$/);
         return run(call);
       }
-      const method = args.includes('-X') ? args[args.indexOf('-X') + 1] : 'GET';
-      assert.equal(method, 'GET', 'Native proof reader cannot mutate GitHub');
       assert.equal(call.input, undefined);
-      assert.ok(!args.includes('--input') && args[1] !== 'graphql');
-    } else {
-      assert.equal(args[0], 'pr');
-      assert.equal(args[1], 'view');
-      assert.equal(call.input, undefined);
+      assert.ok(
+        args[1] === 'user' || /^repos\/l2v-hub\/ClinicOS\/[A-Za-z0-9._/?=&%+-]+$/.test(args[1]),
+      );
+      assert.ok(!args[1].includes('..'));
+      const tail = args.slice(2);
+      assert.ok(
+        tail.length === 0 ||
+          JSON.stringify(tail) === JSON.stringify(['--paginate', '--slurp']) ||
+          JSON.stringify(tail) === JSON.stringify(['-X', 'GET']),
+        'Only exact read-only REST argument forms are admitted',
+      );
     }
     return run(call);
   };
