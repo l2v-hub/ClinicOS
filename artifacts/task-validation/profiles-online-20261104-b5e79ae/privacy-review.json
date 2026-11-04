@@ -1,0 +1,89 @@
+{
+  "schema": "clinicos.public-evidence-privacy-review.v1",
+  "provenance": "actual-independent-review",
+  "reviewerId": "/root/profiles_no_expiry_independent_qa",
+  "reviewedAt": "2026-11-04T12:33:05Z",
+  "sourceSha": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "publicVerificationSha256": "e1dcbed0b189cea06b40d149ef9536e14a0ab0944e83cab8c917233cecc450f8",
+  "screenshots": {
+    "desktop-chooser.png": {
+      "sha256": "c1b2dd5258f3f727ad9d4071865edb279d8efdf1e0246cb86931bb1ffb4e16a1",
+      "pngMetadataReviewed": true,
+      "visualReviewed": true,
+      "sensitiveContentAbsent": true
+    },
+    "mobile-chooser.png": {
+      "sha256": "4261ceb450a204ada4d67f4ed681554cd1de43f70e7c3920ab1dc7b50f520fc6",
+      "pngMetadataReviewed": true,
+      "visualReviewed": true,
+      "sensitiveContentAbsent": true
+    },
+    "desktop-administrator-avatar.png": {
+      "sha256": "df8335159676e12f8e9ba8f51a125ddbbe0961cb36fd55f151ab35cb7e372f82",
+      "pngMetadataReviewed": true,
+      "visualReviewed": true,
+      "sensitiveContentAbsent": true
+    },
+    "desktop-supervisor-avatar.png": {
+      "sha256": "2371510c5e3fa0433f432b748dcbcaece821b8a97ca0600cfd097fd4bfdb8afa",
+      "pngMetadataReviewed": true,
+      "visualReviewed": true,
+      "sensitiveContentAbsent": true
+    },
+    "desktop-doctor-avatar.png": {
+      "sha256": "e657a99c415ae8f3669d16acacbb9fc7117fd356f83ac80e25187101595dd2b0",
+      "pngMetadataReviewed": true,
+      "visualReviewed": true,
+      "sensitiveContentAbsent": true
+    },
+    "desktop-nurse-avatar.png": {
+      "sha256": "a0dc9b3467f2ba71421dee3b04521c8a45c04b448da2b4e9fda1919ec285ce78",
+      "pngMetadataReviewed": true,
+      "visualReviewed": true,
+      "sensitiveContentAbsent": true
+    },
+    "desktop-oss-avatar.png": {
+      "sha256": "5a73193dbf7a66be58f634854927299774fc35027e687fcca66cf6ccfa0e9345",
+      "pngMetadataReviewed": true,
+      "visualReviewed": true,
+      "sensitiveContentAbsent": true
+    },
+    "mobile-administrator-avatar.png": {
+      "sha256": "d78a5e8079c7e3eae2835ea96018dad332e2e215d6a090bc16c4b126ad13f0b9",
+      "pngMetadataReviewed": true,
+      "visualReviewed": true,
+      "sensitiveContentAbsent": true
+    },
+    "mobile-supervisor-avatar.png": {
+      "sha256": "a8a478385bcfcb3d10292a76ff0199130f29eebc487f7d6c9a9cb73116cad8cc",
+      "pngMetadataReviewed": true,
+      "visualReviewed": true,
+      "sensitiveContentAbsent": true
+    },
+    "mobile-doctor-avatar.png": {
+      "sha256": "13964fbff48173586bb49f4283e0bfd6e02314ba8d7ced7576944548dc5dd046",
+      "pngMetadataReviewed": true,
+      "visualReviewed": true,
+      "sensitiveContentAbsent": true
+    },
+    "mobile-nurse-avatar.png": {
+      "sha256": "0cfbc10675673aa108bf39847272a2631e8f8ef89272e2a74ada81e92c1c5797",
+      "pngMetadataReviewed": true,
+      "visualReviewed": true,
+      "sensitiveContentAbsent": true
+    },
+    "mobile-oss-avatar.png": {
+      "sha256": "4d58d1eddd55c0a1b36f02617ae3353a1cc8c62f1662390cffccbdc30f2df0a6",
+      "pngMetadataReviewed": true,
+      "visualReviewed": true,
+      "sensitiveContentAbsent": true
+    }
+  },
+  "allPngMetadataReviewed": true,
+  "allScreenshotsVisuallyReviewed": true,
+  "sensitiveContentAbsent": true,
+  "clinicalDataAbsent": true,
+  "patientIdentifiersAbsent": true,
+  "sessionTokensAbsent": true,
+  "rawNetworkDataAbsent": true
+}

@@ -1,0 +1,179 @@
+{
+  "status": "actual-public-profiles-verified",
+  "reviewedSha": "7a654c18bd1da77c82c100b3f12ce1e5f12e3ff6",
+  "deployedSha": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "deploymentId": "6a6b5d5a-edad-434a-a074-db19b2051dbe",
+  "runId": 41826195990,
+  "api": [
+    {
+      "id": "SIM-ADMIN",
+      "role": "administrator",
+      "policyVersion": 0,
+      "capabilityCount": 145
+    },
+    {
+      "id": "SIM-SUPERVISOR-1",
+      "role": "supervisor",
+      "policyVersion": 0,
+      "capabilityCount": 145
+    },
+    {
+      "id": "SIM-DOCTOR-1",
+      "role": "doctor",
+      "policyVersion": 0,
+      "capabilityCount": 145
+    },
+    {
+      "id": "SIM-NURSE-1",
+      "role": "nurse",
+      "policyVersion": 0,
+      "capabilityCount": 145
+    },
+    {
+      "id": "SIM-OSS-1",
+      "role": "oss",
+      "policyVersion": 0,
+      "capabilityCount": 145
+    }
+  ],
+  "browser": [
+    {
+      "view": "desktop",
+      "id": "SIM-ADMIN",
+      "role": "administrator",
+      "routes": [
+        "Agenda",
+        "Operatori"
+      ],
+      "hiddenDeniedRoutes": [
+        "Consegne"
+      ],
+      "reloadPicker": true
+    },
+    {
+      "view": "desktop",
+      "id": "SIM-SUPERVISOR-1",
+      "role": "supervisor",
+      "routes": [
+        "Agenda",
+        "Operatori",
+        "Consegne"
+      ],
+      "hiddenDeniedRoutes": [],
+      "reloadPicker": true
+    },
+    {
+      "view": "desktop",
+      "id": "SIM-DOCTOR-1",
+      "role": "doctor",
+      "routes": [
+        "Pazienti",
+        "Agenda",
+        "Consegne"
+      ],
+      "hiddenDeniedRoutes": [],
+      "reloadPicker": true
+    },
+    {
+      "view": "desktop",
+      "id": "SIM-NURSE-1",
+      "role": "nurse",
+      "routes": [
+        "Pazienti",
+        "Agenda",
+        "Consegne"
+      ],
+      "hiddenDeniedRoutes": [],
+      "reloadPicker": true
+    },
+    {
+      "view": "desktop",
+      "id": "SIM-OSS-1",
+      "role": "oss",
+      "routes": [
+        "Pazienti",
+        "Agenda",
+        "Consegne"
+      ],
+      "hiddenDeniedRoutes": [],
+      "reloadPicker": true
+    },
+    {
+      "view": "mobile",
+      "id": "SIM-ADMIN",
+      "role": "administrator",
+      "routes": [
+        "Agenda",
+        "Operatori"
+      ],
+      "hiddenDeniedRoutes": [
+        "Consegne"
+      ],
+      "reloadPicker": true
+    },
+    {
+      "view": "mobile",
+      "id": "SIM-SUPERVISOR-1",
+      "role": "supervisor",
+      "routes": [
+        "Agenda",
+        "Operatori",
+        "Consegne"
+      ],
+      "hiddenDeniedRoutes": [],
+      "reloadPicker": true
+    },
+    {
+      "view": "mobile",
+      "id": "SIM-DOCTOR-1",
+      "role": "doctor",
+      "routes": [
+        "Pazienti",
+        "Agenda",
+        "Consegne"
+      ],
+      "hiddenDeniedRoutes": [],
+      "reloadPicker": true
+    },
+    {
+      "view": "mobile",
+      "id": "SIM-NURSE-1",
+      "role": "nurse",
+      "routes": [
+        "Pazienti",
+        "Agenda",
+        "Consegne"
+      ],
+      "hiddenDeniedRoutes": [],
+      "reloadPicker": true
+    },
+    {
+      "view": "mobile",
+      "id": "SIM-OSS-1",
+      "role": "oss",
+      "routes": [
+        "Pazienti",
+        "Agenda",
+        "Consegne"
+      ],
+      "hiddenDeniedRoutes": [],
+      "reloadPicker": true
+    }
+  ],
+  "screenshots": {
+    "desktop-chooser.png": "c1b2dd5258f3f727ad9d4071865edb279d8efdf1e0246cb86931bb1ffb4e16a1",
+    "desktop-administrator-avatar.png": "df8335159676e12f8e9ba8f51a125ddbbe0961cb36fd55f151ab35cb7e372f82",
+    "desktop-supervisor-avatar.png": "2371510c5e3fa0433f432b748dcbcaece821b8a97ca0600cfd097fd4bfdb8afa",
+    "desktop-doctor-avatar.png": "e657a99c415ae8f3669d16acacbb9fc7117fd356f83ac80e25187101595dd2b0",
+    "desktop-nurse-avatar.png": "a0dc9b3467f2ba71421dee3b04521c8a45c04b448da2b4e9fda1919ec285ce78",
+    "desktop-oss-avatar.png": "5a73193dbf7a66be58f634854927299774fc35027e687fcca66cf6ccfa0e9345",
+    "mobile-chooser.png": "4261ceb450a204ada4d67f4ed681554cd1de43f70e7c3920ab1dc7b50f520fc6",
+    "mobile-administrator-avatar.png": "d78a5e8079c7e3eae2835ea96018dad332e2e215d6a090bc16c4b126ad13f0b9",
+    "mobile-supervisor-avatar.png": "a8a478385bcfcb3d10292a76ff0199130f29eebc487f7d6c9a9cb73116cad8cc",
+    "mobile-doctor-avatar.png": "13964fbff48173586bb49f4283e0bfd6e02314ba8d7ced7576944548dc5dd046",
+    "mobile-nurse-avatar.png": "0cfbc10675673aa108bf39847272a2631e8f8ef89272e2a74ada81e92c1c5797",
+    "mobile-oss-avatar.png": "4d58d1eddd55c0a1b36f02617ae3353a1cc8c62f1662390cffccbdc30f2df0a6"
+  },
+  "clinicalWrites": 0,
+  "rawTracesRecorded": false
+}

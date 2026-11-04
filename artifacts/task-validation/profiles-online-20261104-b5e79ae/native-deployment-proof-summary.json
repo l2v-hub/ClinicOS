@@ -1,0 +1,17 @@
+{
+  "reviewedSha": "7a654c18bd1da77c82c100b3f12ce1e5f12e3ff6",
+  "sourceSha": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "runId": 41826195990,
+  "runAttempt": 1,
+  "deploymentId": "6a6b5d5a-edad-434a-a074-db19b2051dbe",
+  "artifactId": 13319454844,
+  "artifactDigest": "sha256:1865ff4742a8ffec9180d75bb0eb68bb6f79594566c63c8357765df5a58a640b",
+  "receiptSha256": "c6bcc467ece9e222811c6320eccb79f3af5f7747884a60f44642e3f6d374ccc9",
+  "workflowConclusion": "success",
+  "target": {
+    "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+    "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+    "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+    "domain": "clinicos-backend-demo.up.railway.app"
+  }
+}
