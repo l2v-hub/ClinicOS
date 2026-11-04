@@ -1,0 +1,377 @@
+✔ one exact fixed2029 key/action while ordinary seven-day route remains unchanged (7.9602ms)
+✔ new action requires an authentic user-session capability; inspection alone does not authorize (3.7645ms)
+✔ maintainer-comment provenance cannot authorize the long fixed window (0.8659ms)
+✔ current fixed action binds all superseded data append-only with no review/budget mutation (1.3592ms)
+✔ old renew-demo-auth-expiry cannot replace the2029 action (1.6197ms)
+✔ old enable-permanent-demo-auth cannot replace the2029 action (1.683ms)
+✔ one CAS claim, durable intent and no replay or false finish (7.7676ms)
+✔ concurrent claim has one winner (2.8999ms)
+✔ unresolved old finite claimed blocks new operation (0.484ms)
+✔ unresolved old finite write-intent blocks new operation (0.4354ms)
+✔ unresolved old finite uncertain blocks new operation (0.3601ms)
+✔ unresolved old finite undefined blocks new operation (0.2639ms)
+✔ supersession rejects missing (0.3868ms)
+✔ supersession rejects parallel (0.4218ms)
+✔ supersession rejects receipt (0.3508ms)
+✔ supersession rejects request (0.3275ms)
+✔ supersession rejects digest (0.2767ms)
+✔ supersession rejects dispatch-source (0.2775ms)
+✔ supersession rejects dispatch-stage (0.3312ms)
+✔ supersession rejects dispatch-auth (0.3845ms)
+✔ supersession rejects dispatch-unresolved (0.4022ms)
+✔ terminal failed run rejects status=in_progress (0.4405ms)
+✔ terminal failed run rejects conclusion=success (0.4082ms)
+✔ terminal failed run rejects conclusion=cancelled (0.3413ms)
+✔ terminal failed run rejects run_attempt=2 (0.413ms)
+✔ terminal failed run rejects head_sha=0000000000000000000000000000000000000000 (0.4006ms)
+✔ terminal failed run rejects id=123 (0.373ms)
+✔ terminal failed run rejects path=.github/workflows/other.yml (0.3965ms)
+✔ terminal failed run rejects event=push (0.3531ms)
+✔ terminal failed run rejects head_branch=foreign (0.3887ms)
+✔ terminal failed run rejects display_title=foreign (0.4598ms)
+✔ final-await owner drift cannot survive ownership fence (3.5577ms)
+✔ final-await release drift cannot survive ownership fence (2.55ms)
+✔ final-await history drift cannot survive ownership fence (3.2519ms)
+✔ final-await authorization drift cannot survive ownership fence (2.6014ms)
+✔ final-await execution drift cannot survive ownership fence (3.0745ms)
+✔ final-await other-stage drift cannot survive ownership fence (3.4562ms)
+✔ exact target inspection proves active old cutoff and failed source, without variable inventory (1.0496ms)
+✔ preflight rejects production (0.1717ms)
+✔ preflight rejects rollout (0.213ms)
+✔ preflight rejects active-source (0.1512ms)
+✔ preflight rejects same-source (0.1327ms)
+✔ preflight rejects latest-id (0.1203ms)
+✔ preflight rejects latest-status (0.1212ms)
+✔ preflight rejects failed-missing (0.1193ms)
+✔ preflight rejects failed-source (0.144ms)
+✔ preflight rejects failed-status (0.1364ms)
+✔ preflight rejects failed-target (0.1164ms)
+✔ preflight rejects failed-id (0.0994ms)
+✔ public status rejects Entra (0.1871ms)
+✔ public status rejects nonsynthetic (0.1156ms)
+✔ public status rejects permanent (0.176ms)
+✔ public status rejects oldexpiry (0.1814ms)
+✔ public status rejects expiry-offset (0.2027ms)
+✔ public status rejects expiry-ms (0.1513ms)
+✔ public status rejects enabled (0.111ms)
+✔ public old expiry accepts only exact seconds or .000Z spelling (0.1562ms)
+✔ one fixed-key2029 upsert, no deployment or generic flags; replay denied (5.6425ms)
+✔ uncertain write is retained and never replayed; acknowledgment persistence failure stays uncertain (10.0809ms)
+✔ wrong provider response is uncertainty not staged (5.571ms)
+✔ main drift, revocation and request aliases cannot bypass final write fences (14.0014ms)
+✔ foreign selector, inherited approval and copied action are rejected (1.9431ms)
+✔ workflow/CLI manual trusted main only, first attempt, tests before dedicated secret (13.9411ms)
+✔ receipt has fixed cutoff and finite fields only; credential aliases never reflected (24.381ms)
+✔ server clock reaching fixed cutoff blocks prepared and final-intent operations (5.61ms)
+✔ copied authorization and consumed nonce cannot authorize a different2029 operation (3.3568ms)
+✔ prior permanent staged is not permission for2029 (0.5978ms)
+✔ prior permanent uncertain is not permission for2029 (0.4066ms)
+✔ prior permanent claimed is not permission for2029 (0.4053ms)
+✔ prior permanent write-intent is not permission for2029 (0.4174ms)
+✔ prior permanent undefined is not permission for2029 (0.291ms)
+✔ public old expiry rejects type/spelling null (0.319ms)
+✔ public old expiry rejects type/spelling undefined (0.2661ms)
+✔ public old expiry rejects type/spelling 123 (0.1657ms)
+✔ public old expiry rejects type/spelling {} (0.1352ms)
+✔ public old expiry rejects type/spelling [] (0.1257ms)
+✔ public old expiry rejects type/spelling "2026-10-31T23:59:59.0000Z" (0.1547ms)
+✔ public old expiry rejects type/spelling "2026-10-31T23:59:59Z\n" (0.144ms)
+✔ no native prior-run reader and missing genuine run both fail before new authorization (0.8612ms)
+✔ stage final permission-await owner change produces zero provider writes (4.1993ms)
+✔ stage final permission-await execution change produces zero provider writes (5.3995ms)
+✔ stage final permission-await prior-stage change produces zero provider writes (4.5399ms)
+✔ revocation during final awaited current-main verifier prevents provider mutation (4.3716ms)
+✔ author-only revocation inside final main verifier blocks a still-authorized worker (4.8424ms)
+✖ no-expiry claimed on subject 0 blocks before capability consumption (0.8117ms)
+✖ no-expiry claimed on subject 1 blocks before capability consumption (0.5814ms)
+✖ no-expiry write-intent on subject 0 blocks before capability consumption (0.5062ms)
+✖ no-expiry write-intent on subject 1 blocks before capability consumption (0.5099ms)
+✖ no-expiry uncertain on subject 0 blocks before capability consumption (0.4419ms)
+✖ no-expiry uncertain on subject 1 blocks before capability consumption (0.413ms)
+✖ no-expiry staged on subject 0 blocks before capability consumption (0.4036ms)
+✖ no-expiry staged on subject 1 blocks before capability consumption (0.408ms)
+✖ no-expiry undefined on subject 0 blocks before capability consumption (0.41ms)
+✖ no-expiry undefined on subject 1 blocks before capability consumption (0.4861ms)
+✖ no-expiry invalid on subject 0 blocks before capability consumption (0.4131ms)
+✖ no-expiry invalid on subject 1 blocks before capability consumption (0.4042ms)
+✔ absent and explicitly blocked no-expiry records permit normal authorization (1.9365ms)
+✖ cross-kind duplicate nonce on subject 0 is rejected (0.6036ms)
+✖ cross-kind duplicate nonce on subject 1 is rejected (0.456ms)
+✖ blocked no-expiry history is bound and later mutation invalidates authorization (1.1186ms)
+✖ no-expiry history changing during async authorization cannot persist a stale claim (1.5418ms)
+ℹ tests 101
+ℹ suites 0
+ℹ pass 85
+ℹ fail 16
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 302.8607
+
+✖ failing tests:
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:262:29
+✖ no-expiry claimed on subject 0 blocks before capability consumption (0.8117ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:267:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:262:29
+✖ no-expiry claimed on subject 1 blocks before capability consumption (0.5814ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:267:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:262:29
+✖ no-expiry write-intent on subject 0 blocks before capability consumption (0.5062ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:267:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:262:29
+✖ no-expiry write-intent on subject 1 blocks before capability consumption (0.5099ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:267:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:262:29
+✖ no-expiry uncertain on subject 0 blocks before capability consumption (0.4419ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:267:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:262:29
+✖ no-expiry uncertain on subject 1 blocks before capability consumption (0.413ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:267:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:262:29
+✖ no-expiry staged on subject 0 blocks before capability consumption (0.4036ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:267:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:262:29
+✖ no-expiry staged on subject 1 blocks before capability consumption (0.408ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:267:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:262:29
+✖ no-expiry undefined on subject 0 blocks before capability consumption (0.41ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:267:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:262:29
+✖ no-expiry undefined on subject 1 blocks before capability consumption (0.4861ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:267:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:262:29
+✖ no-expiry invalid on subject 0 blocks before capability consumption (0.4131ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:267:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:262:29
+✖ no-expiry invalid on subject 1 blocks before capability consumption (0.4042ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:267:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:274:27
+✖ cross-kind duplicate nonce on subject 0 is rejected (0.6036ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:277:96)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:274:27
+✖ cross-kind duplicate nonce on subject 1 is rejected (0.456ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:277:96)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:279:1
+✖ blocked no-expiry history is bound and later mutation invalidates authorization (1.1186ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:281:71)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:283:1
+✖ no-expiry history changing during async authorization cannot persist a stale claim (1.5418ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:286:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }

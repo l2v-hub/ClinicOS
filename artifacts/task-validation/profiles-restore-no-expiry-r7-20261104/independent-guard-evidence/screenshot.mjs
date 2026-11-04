@@ -1,0 +1,3 @@
+import {chromium} from 'file:///C:/w-rv/auth-expiry-2029-qa3-20261103/node_modules/playwright/index.mjs';
+const dir='C:/w-rv/tmp/profiles-restore-20261104/independent-qa/r7';
+const browser=await chromium.launch();const context=await browser.newContext({viewport:{width:1280,height:900}});await context.tracing.start({screenshots:true,snapshots:true});const page=await context.newPage();await page.goto('file:///C:/w-rv/tmp/profiles-restore-20261104/independent-qa/r7/guard-results.html');await page.screenshot({path:dir+'/guard-results.png',fullPage:true});await context.tracing.stop({path:dir+'/guard-results-trace.zip'});await browser.close();

@@ -1,0 +1,15 @@
+✔ must reject no-expiry claimed before authorization write (6.0489ms)
+✔ must reject no-expiry write-intent before authorization write (1.3868ms)
+✔ must reject no-expiry uncertain before authorization write (1.7747ms)
+✔ must reject no-expiry staged before authorization write (0.5759ms)
+✔ must reject no-expiry missing before authorization write (0.5809ms)
+✔ safe control absent remains accepted (3.0835ms)
+✔ safe control blocked-before-write remains accepted (1.6357ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 133.9912

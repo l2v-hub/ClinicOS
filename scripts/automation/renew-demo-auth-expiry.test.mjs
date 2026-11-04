@@ -55,6 +55,10 @@ test('only one fixed demo expiry key; bounded strict request accepts seven-day m
   assert.equal(validateRenewalRequest(request, now).newExpiry, request.newExpiry);
   assert.match(RENEW_MUTATION, /variableUpsert/); assert.doesNotMatch(RENEW_MUTATION, /variableCollectionUpsert/);
 });
+test('ordinary seven-day route still rejects the separately authorized 2029 action', () => {
+  assert.equal(MAX_RENEWAL_MS, 7 * 24 * 60 * 60 * 1000);
+  assert.throws(() => validateRenewalRequest({ ...request, newExpiry: '2029-12-31T23:59:59Z' }, now));
+});
 for (const [name, change] of [
   ['expired new date', r => { r.newExpiry = '2026-11-01T00:00:00Z'; }],
   ['overlong renewal', r => { r.newExpiry = '2026-11-10T00:00:00Z'; }],

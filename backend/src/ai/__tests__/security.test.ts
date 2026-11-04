@@ -4,9 +4,57 @@ import { operatorAuthMode, requireOperator, requireRole } from '../auth.js';
 import { importRateLimit, makeLimiter, medicationSearchRateLimit } from '../rate-limit.js';
 import { canCrossPatientSearch } from '../gateway/context.js';
 import { ctxFromOperator } from '../../routes/ai-assistant-public.js';
+import { validateDeploymentConfig } from '../../lib/deployment.js';
 
 process.env.NODE_ENV = 'test';
 process.env.AUTH_MODE = 'demo';
+
+test('unlimited hosted simulator requires every explicit synthetic safety prerequisite', () => {
+  const safe: NodeJS.ProcessEnv = {
+    NODE_ENV: 'production',
+    CLINICOS_ENV: 'demo',
+    AUTH_MODE: 'demo',
+    DATABASE_URL: 'postgresql://x@127.0.0.1:1/db',
+    DEMO_DATASET_ID: 'synthetic-v1',
+    ALLOW_PRODUCTION_DEMO_AUTH: 'true',
+    DEMO_AUTH_NO_EXPIRY: 'true',
+    ROLE_SIMULATOR_ENABLED: 'true',
+    ROLE_SIMULATOR_ALLOW_PRODUCTION: 'true',
+    ROLE_SIMULATOR_SECRET: 's'.repeat(32),
+    DEMO_AUTH_EXPIRES_AT: '2000-01-01T00:00:00Z',
+  };
+  assert.equal(operatorAuthMode(safe), 'demo');
+  assert.deepEqual(validateDeploymentConfig(safe).errors, []);
+  for (const [key, value] of Object.entries({
+    NODE_ENV: 'development',
+    CLINICOS_ENV: 'production',
+    AUTH_MODE: 'disabled',
+    DEMO_DATASET_ID: 'other',
+    ALLOW_PRODUCTION_DEMO_AUTH: 'false',
+    DEMO_AUTH_NO_EXPIRY: 'maybe',
+    ROLE_SIMULATOR_ENABLED: 'false',
+    ROLE_SIMULATOR_ALLOW_PRODUCTION: 'false',
+    ROLE_SIMULATOR_SECRET: 'short',
+  })) {
+    const invalid = { ...safe, [key]: value, DEMO_AUTH_EXPIRES_AT: '2099-01-01T00:00:00Z' };
+    assert.equal(operatorAuthMode(invalid), 'disabled', key);
+    assert.ok(validateDeploymentConfig(invalid).errors.length, key);
+  }
+  for (const key of [
+    'CLINICOS_ENV',
+    'DEMO_DATASET_ID',
+    'ALLOW_PRODUCTION_DEMO_AUTH',
+    'ROLE_SIMULATOR_ENABLED',
+    'ROLE_SIMULATOR_ALLOW_PRODUCTION',
+    'ROLE_SIMULATOR_SECRET',
+  ]) {
+    const invalid = { ...safe, [key]: undefined, DEMO_AUTH_EXPIRES_AT: '2099-01-01T00:00:00Z' };
+    assert.equal(operatorAuthMode(invalid), 'disabled', key);
+    assert.ok(validateDeploymentConfig(invalid).errors.length, key);
+  }
+  assert.equal(operatorAuthMode({ ...safe, AUTH_MODE: 'entra' }), 'entra');
+  assert.ok(validateDeploymentConfig({ ...safe, AUTH_MODE: 'entra' }).errors.length);
+});
 
 function mockReq(headers: Record<string, string>, ip = '1.2.3.4') {
   return {

@@ -1,0 +1,79 @@
+{
+  "provenance": "lossless whitespace transport and complete top-level-key grouping; no string/case truncation",
+  "originalSource": "bec9a6f41ac04df4eee63a6f33bf19548688b942",
+  "previousPresentationSource": "5fc58d109c6918dde82cdeded86acd42d9a2dfdf",
+  "codeSource": "f5835253b4a8a5ad5ac35e3abbdd28df13962d16",
+  "sourceUnchanged": true,
+  "records": [
+    {
+      "originalPath": "evidence-execution-author-green-report.json",
+      "preservedOriginalPath": "transport-originals/01.json",
+      "originalSha256": "4857e41463e7494fd8f542c121de2d4167a39ba55ef99b9f4539f477d09fb7e2",
+      "completeValueGroups": [
+        {
+          "path": "evidence-execution-03-author-handoff-report.json",
+          "sha256": "65586eaddc8a5a9028aedcb82f282ba2f8f80a39a9b09c4b851225ab7617c41a",
+          "bytes": 14402
+        },
+        {
+          "path": "evidence-execution-02-author-checks-report.json",
+          "sha256": "5d54b7bd112d1a34455eaea118cf82510b29b1d376774e51cfe8522232fafc6f",
+          "bytes": 22264
+        }
+      ],
+      "allKeysValuesCasesAndStringBytesPreserved": true
+    },
+    {
+      "originalPath": "evidence-execution-author-red-report.json",
+      "preservedOriginalPath": "transport-originals/02.json",
+      "originalSha256": "78abff7c1f1efd7f08073ec9dd28a21c78d944aa5058d39161a8db3633540b77",
+      "completeValueGroups": [
+        {
+          "path": "evidence-execution-01-author-red-report.json",
+          "sha256": "9ba13760102e99de36ce525a2a17137af7178194f9a7477e7dd7b7f8980e8e4b",
+          "bytes": 39927
+        }
+      ],
+      "allKeysValuesCasesAndStringBytesPreserved": true
+    },
+    {
+      "originalPath": "evidence-execution-root-report.json",
+      "preservedOriginalPath": "transport-originals/03.json",
+      "originalSha256": "ed82d9f7bf53cfc68e7f06d5ec7dd972015d6e9d4a3e23e24c0b90cdd7c9e664",
+      "completeValueGroups": [
+        {
+          "path": "evidence-execution-00-root-report.json",
+          "sha256": "a9110949b9c63fd7049754c1ffbdb3632d52bb15a9f625e45fb54c5ea416708d",
+          "bytes": 41816
+        }
+      ],
+      "allKeysValuesCasesAndStringBytesPreserved": true
+    },
+    {
+      "originalPath": "evidence-parent-finite-stage-report.json",
+      "preservedOriginalPath": "transport-originals/04.json",
+      "originalSha256": "af6c828d61fa6a20cb49066ec1304e3f08c5308bd172860541baeb51348805da",
+      "completeValueGroups": [
+        {
+          "path": "evidence-parent-finite-stage-report.json",
+          "sha256": "e4bb8c3423c3b63a7c594710ea03817b6247740be2df3a47668eb36436c8ec04",
+          "bytes": 10775
+        }
+      ],
+      "allKeysValuesCasesAndStringBytesPreserved": true
+    },
+    {
+      "originalPath": "evidence-revocation-repair-report.json",
+      "preservedOriginalPath": "transport-originals/05.json",
+      "originalSha256": "98183e5e167097d6d427877a32d73c747d1e5faa7a51d9b9b6130ce5b64daf31",
+      "completeValueGroups": [
+        {
+          "path": "aab-review-revocation-repair-report.json",
+          "sha256": "ed8faa361e6553506d43b398cfa480ca2ad8fa59bdeb856f2f39c3a759011462",
+          "bytes": 45663
+        }
+      ],
+      "allKeysValuesCasesAndStringBytesPreserved": true
+    }
+  ]
+}

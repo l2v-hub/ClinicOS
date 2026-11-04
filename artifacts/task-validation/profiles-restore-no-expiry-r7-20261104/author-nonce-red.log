@@ -1,0 +1,165 @@
+✔ one exact fixed2029 key/action while ordinary seven-day route remains unchanged (8.005ms)
+✔ new action requires an authentic user-session capability; inspection alone does not authorize (3.9763ms)
+✔ maintainer-comment provenance cannot authorize the long fixed window (1.0294ms)
+✔ current fixed action binds all superseded data append-only with no review/budget mutation (1.5975ms)
+✔ old renew-demo-auth-expiry cannot replace the2029 action (1.9356ms)
+✔ old enable-permanent-demo-auth cannot replace the2029 action (1.609ms)
+✔ one CAS claim, durable intent and no replay or false finish (9.0766ms)
+✔ concurrent claim has one winner (2.9411ms)
+✔ unresolved old finite claimed blocks new operation (0.5069ms)
+✔ unresolved old finite write-intent blocks new operation (0.3971ms)
+✔ unresolved old finite uncertain blocks new operation (0.3703ms)
+✔ unresolved old finite undefined blocks new operation (0.2833ms)
+✔ supersession rejects missing (0.347ms)
+✔ supersession rejects parallel (0.4095ms)
+✔ supersession rejects receipt (0.3463ms)
+✔ supersession rejects request (0.2927ms)
+✔ supersession rejects digest (0.2647ms)
+✔ supersession rejects dispatch-source (0.2697ms)
+✔ supersession rejects dispatch-stage (0.2949ms)
+✔ supersession rejects dispatch-auth (0.4071ms)
+✔ supersession rejects dispatch-unresolved (0.3571ms)
+✔ terminal failed run rejects status=in_progress (0.4282ms)
+✔ terminal failed run rejects conclusion=success (0.4146ms)
+✔ terminal failed run rejects conclusion=cancelled (0.3328ms)
+✔ terminal failed run rejects run_attempt=2 (0.3585ms)
+✔ terminal failed run rejects head_sha=0000000000000000000000000000000000000000 (0.3273ms)
+✔ terminal failed run rejects id=123 (0.359ms)
+✔ terminal failed run rejects path=.github/workflows/other.yml (0.3738ms)
+✔ terminal failed run rejects event=push (0.363ms)
+✔ terminal failed run rejects head_branch=foreign (0.41ms)
+✔ terminal failed run rejects display_title=foreign (0.4606ms)
+✔ final-await owner drift cannot survive ownership fence (3.9169ms)
+✔ final-await release drift cannot survive ownership fence (2.5141ms)
+✔ final-await history drift cannot survive ownership fence (3.6015ms)
+✔ final-await authorization drift cannot survive ownership fence (2.5194ms)
+✔ final-await execution drift cannot survive ownership fence (2.4218ms)
+✔ final-await other-stage drift cannot survive ownership fence (3.5552ms)
+✔ exact target inspection proves active old cutoff and failed source, without variable inventory (1.3923ms)
+✔ preflight rejects production (0.2303ms)
+✔ preflight rejects rollout (0.2444ms)
+✔ preflight rejects active-source (0.1512ms)
+✔ preflight rejects same-source (0.1287ms)
+✔ preflight rejects latest-id (0.1748ms)
+✔ preflight rejects latest-status (0.1345ms)
+✔ preflight rejects failed-missing (0.1296ms)
+✔ preflight rejects failed-source (0.1567ms)
+✔ preflight rejects failed-status (0.138ms)
+✔ preflight rejects failed-target (0.1122ms)
+✔ preflight rejects failed-id (0.0942ms)
+✔ public status rejects Entra (0.1923ms)
+✔ public status rejects nonsynthetic (0.1177ms)
+✔ public status rejects permanent (0.1906ms)
+✔ public status rejects oldexpiry (0.1945ms)
+✔ public status rejects expiry-offset (0.1835ms)
+✔ public status rejects expiry-ms (0.1449ms)
+✔ public status rejects enabled (0.1305ms)
+✔ public old expiry accepts only exact seconds or .000Z spelling (0.173ms)
+✔ one fixed-key2029 upsert, no deployment or generic flags; replay denied (6.9816ms)
+✔ uncertain write is retained and never replayed; acknowledgment persistence failure stays uncertain (12.783ms)
+✔ wrong provider response is uncertainty not staged (4.8584ms)
+✔ main drift, revocation and request aliases cannot bypass final write fences (14.3965ms)
+✔ foreign selector, inherited approval and copied action are rejected (2.1254ms)
+✔ workflow/CLI manual trusted main only, first attempt, tests before dedicated secret (13.5812ms)
+✔ receipt has fixed cutoff and finite fields only; credential aliases never reflected (17.8735ms)
+✔ server clock reaching fixed cutoff blocks prepared and final-intent operations (5.3235ms)
+✔ copied authorization and consumed nonce cannot authorize a different2029 operation (3.4989ms)
+✔ prior permanent staged is not permission for2029 (0.567ms)
+✔ prior permanent uncertain is not permission for2029 (0.4032ms)
+✔ prior permanent claimed is not permission for2029 (0.4143ms)
+✔ prior permanent write-intent is not permission for2029 (0.4323ms)
+✔ prior permanent undefined is not permission for2029 (0.283ms)
+✔ public old expiry rejects type/spelling null (0.2927ms)
+✔ public old expiry rejects type/spelling undefined (0.1964ms)
+✔ public old expiry rejects type/spelling 123 (0.1491ms)
+✔ public old expiry rejects type/spelling {} (0.1302ms)
+✔ public old expiry rejects type/spelling [] (0.1218ms)
+✔ public old expiry rejects type/spelling "2026-10-31T23:59:59.0000Z" (0.1198ms)
+✔ public old expiry rejects type/spelling "2026-10-31T23:59:59Z\n" (0.1215ms)
+✔ no native prior-run reader and missing genuine run both fail before new authorization (0.8358ms)
+✔ stage final permission-await owner change produces zero provider writes (4.0302ms)
+✔ stage final permission-await execution change produces zero provider writes (4.8765ms)
+✔ stage final permission-await prior-stage change produces zero provider writes (4.5034ms)
+✔ revocation during final awaited current-main verifier prevents provider mutation (4.5775ms)
+✔ author-only revocation inside final main verifier blocks a still-authorized worker (5.0897ms)
+✔ no-expiry claimed on subject 0 blocks before capability consumption (0.5636ms)
+✔ no-expiry claimed on subject 1 blocks before capability consumption (0.4172ms)
+✔ no-expiry write-intent on subject 0 blocks before capability consumption (0.3381ms)
+✔ no-expiry write-intent on subject 1 blocks before capability consumption (0.3631ms)
+✔ no-expiry uncertain on subject 0 blocks before capability consumption (0.2838ms)
+✔ no-expiry uncertain on subject 1 blocks before capability consumption (0.3466ms)
+✔ no-expiry staged on subject 0 blocks before capability consumption (0.3195ms)
+✔ no-expiry staged on subject 1 blocks before capability consumption (0.3577ms)
+✔ no-expiry undefined on subject 0 blocks before capability consumption (0.2765ms)
+✔ no-expiry undefined on subject 1 blocks before capability consumption (0.3246ms)
+✔ no-expiry invalid on subject 0 blocks before capability consumption (0.2597ms)
+✔ no-expiry invalid on subject 1 blocks before capability consumption (0.3395ms)
+✔ absent and explicitly blocked no-expiry records permit normal authorization (1.762ms)
+✔ cross-kind duplicate nonce on subject 0 is rejected (0.3085ms)
+✔ cross-kind duplicate nonce on subject 1 is rejected (0.2089ms)
+✖ invalid or historical duplicate no-expiry nonce undefined is rejected (0.5785ms)
+✖ invalid or historical duplicate no-expiry nonce invalid is rejected (0.4467ms)
+✖ invalid or historical duplicate no-expiry nonce 66666666-6666-4666-8666-666666666666 is rejected (0.4134ms)
+✔ blocked no-expiry history is bound and later mutation invalidates authorization (1.1755ms)
+✔ no-expiry history changing during async authorization cannot persist a stale claim (1.892ms)
+ℹ tests 104
+ℹ suites 0
+ℹ pass 101
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 302.1518
+
+✖ failing tests:
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:279:87
+✖ invalid or historical duplicate no-expiry nonce undefined is rejected (0.5785ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:282:96)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:279:87
+✖ invalid or historical duplicate no-expiry nonce invalid is rejected (0.4467ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:282:96)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\automation\enable-demo-auth-2029.test.mjs:279:87
+✖ invalid or historical duplicate no-expiry nonce 66666666-6666-4666-8666-666666666666 is rejected (0.4134ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///C:/w-rv/profiles-no-expiry-r7-author-20261104/scripts/automation/enable-demo-auth-2029.test.mjs:282:96)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

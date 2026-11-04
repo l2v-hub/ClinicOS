@@ -1,0 +1,41 @@
+✔ batches claimed rejects before consume/write/provider (8.8022ms)
+✔ batches write-intent rejects before consume/write/provider (1.1042ms)
+✔ batches uncertain rejects before consume/write/provider (1.0789ms)
+✔ batches staged rejects before consume/write/provider (0.8336ms)
+✔ batches missing rejects before consume/write/provider (0.8816ms)
+✔ batches invalid rejects before consume/write/provider (0.7322ms)
+✔ manualBatches claimed rejects before consume/write/provider (0.7024ms)
+✔ manualBatches write-intent rejects before consume/write/provider (0.7071ms)
+✔ manualBatches uncertain rejects before consume/write/provider (0.7129ms)
+✔ manualBatches staged rejects before consume/write/provider (0.8939ms)
+✔ manualBatches missing rejects before consume/write/provider (1.1505ms)
+✔ manualBatches invalid rejects before consume/write/provider (0.4673ms)
+✔ standaloneReviews claimed rejects before consume/write/provider (0.984ms)
+✔ standaloneReviews write-intent rejects before consume/write/provider (0.6656ms)
+✔ standaloneReviews uncertain rejects before consume/write/provider (0.6673ms)
+✔ standaloneReviews staged rejects before consume/write/provider (0.6009ms)
+✔ standaloneReviews missing rejects before consume/write/provider (0.5624ms)
+✔ standaloneReviews invalid rejects before consume/write/provider (0.5487ms)
+✔ safe absent remains functional (2.7965ms)
+✔ safe blocked-before-write remains functional (1.9203ms)
+✔ cross-kind nonce 11111111-1111-4111-8111-111111111111 rejects (0.3934ms)
+✔ cross-kind nonce 11111111-1111-4111-8111-111111111111 rejects (0.2946ms)
+✔ cross-kind nonce 66666666-6666-4666-8666-666666666666 rejects (0.2696ms)
+✔ blocked history note drift invalidates bound authorization (2.3481ms)
+✔ blocked history nonce drift invalidates bound authorization (1.6634ms)
+✔ blocked history remove drift invalidates bound authorization (2.5366ms)
+✔ blocked history add drift invalidates bound authorization (1.6068ms)
+✔ blocked history status drift invalidates bound authorization (1.6845ms)
+✔ async permission drift blocks stale claim before store write (2.5066ms)
+✔ drift after claim blocks durable intent (2.5266ms)
+✔ conflicting history before stage prevents synthetic provider call (1.5536ms)
+✔ history drift after write intent prevents synthetic provider call (5.737ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 203.3167
+

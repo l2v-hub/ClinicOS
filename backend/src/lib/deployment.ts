@@ -20,6 +20,21 @@ function flag(value: string | undefined): boolean {
   return value?.trim().toLowerCase() === 'true';
 }
 
+/** Explicit, hosted synthetic simulator only. This is not a clinical identity source. */
+export function unlimitedSyntheticSimulator(env: NodeJS.ProcessEnv = process.env): boolean {
+  return (
+    env.NODE_ENV === 'production' &&
+    env.CLINICOS_ENV === 'demo' &&
+    env.AUTH_MODE === 'demo' &&
+    env.DEMO_DATASET_ID === SYNTHETIC_DATASET &&
+    flag(env.DEMO_AUTH_NO_EXPIRY) &&
+    flag(env.ALLOW_PRODUCTION_DEMO_AUTH) &&
+    flag(env.ROLE_SIMULATOR_ENABLED) &&
+    flag(env.ROLE_SIMULATOR_ALLOW_PRODUCTION) &&
+    (env.ROLE_SIMULATOR_SECRET || '').length >= 32
+  );
+}
+
 export function deploymentTier(env: NodeJS.ProcessEnv = process.env): DeploymentTier {
   const explicit = (env.CLINICOS_ENV || '').trim().toLowerCase();
   if (explicit) {
@@ -78,6 +93,13 @@ export function validateDeploymentConfig(env: NodeJS.ProcessEnv = process.env): 
   const warnings: string[] = [];
   const authMode = (env.AUTH_MODE || '').trim().toLowerCase();
   const hosted = tier === 'production' || tier === 'staging' || tier === 'demo';
+
+  const unlimited = env.DEMO_AUTH_NO_EXPIRY?.trim().toLowerCase();
+  if (unlimited !== undefined && unlimited !== 'true' && unlimited !== 'false') {
+    errors.push('DEMO_AUTH_NO_EXPIRY non valido');
+  } else if (unlimited === 'true' && !unlimitedSyntheticSimulator(env)) {
+    errors.push('DEMO_AUTH_NO_EXPIRY richiede configurazione simulatore sintetico esplicita');
+  }
 
   const explicitTier = (env.CLINICOS_ENV || '').trim().toLowerCase();
   if (explicitTier && !(TIERS as readonly string[]).includes(explicitTier)) {

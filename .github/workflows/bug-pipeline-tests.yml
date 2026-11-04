@@ -155,7 +155,7 @@ jobs:
           JS
       # Built-in Node tests, synthetic repositories and mock providers; no app install or secrets.
       - name: Test queue, sessions, evidence, budgets and release guards
-        run: node --test --test-concurrency=1 agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs scripts/automation/protect-demo-secret.test.mjs scripts/automation/renew-demo-auth-expiry.test.mjs
+        run: node --test --test-concurrency=1 agent-team/tests/bug-pipeline/*.test.mjs scripts/quality-gate/claude-bug-review.test.mjs scripts/automation/protect-demo-secret.test.mjs scripts/automation/renew-demo-auth-expiry.test.mjs scripts/automation/enable-demo-auth-2029.test.mjs scripts/automation/enable-demo-auth-2029.metadata.test.mjs scripts/build/backend-build-context.test.mjs scripts/automation/demo-no-expiry-controller.test.mjs scripts/automation/enable-demo-auth-no-expiry.test.mjs scripts/automation/demo-no-expiry.integration.test.mjs scripts/automation/demo-no-expiry.metadata.integration.test.mjs
 
       # Exercise the actual sandbox on a clean runner; no model call or secrets are needed.
       - name: Install pinned Codex CLI for runner readiness
@@ -233,6 +233,13 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+          # The native Windows suite needs these sources and cone-mode root files,
+          # not archived QA blobs. The pinned action requests blob:none for sparse inputs.
+          sparse-checkout: |
+            agent-team
+            scripts
+            .github
+          sparse-checkout-cone-mode: true
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22

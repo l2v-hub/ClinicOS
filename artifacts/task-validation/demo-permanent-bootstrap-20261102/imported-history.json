@@ -1,0 +1,84 @@
+{
+  "implementation": [
+    {
+      "round": 1,
+      "status": "failed",
+      "subjectSha": "c104d79ddc4047ca39bd8cfd0150d56ef4b503f1",
+      "evidence": "history/qa1-report.md"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "subjectSha": "03529a96c3a37e4ffb4989497ca3db9fe32a9968",
+      "evidence": "validation-report.md"
+    },
+    {
+      "round": 3,
+      "status": "passed",
+      "subjectSha": "ae9995f546d0adbbaa8033b3957e2fbd943723d9",
+      "evidence": "revision3-validation-report.md"
+    },
+    {
+      "round": 4,
+      "status": "passed",
+      "subjectSha": "a5be73fa0d6d75abe216b67f99dbc754449f6315",
+      "evidence": "revision4-validation-report.md"
+    }
+  ],
+  "sourceManifest": [
+    {
+      "path": "artifacts/task-validation/demo-permanent-lineage-20261102.json",
+      "blob": "b9d48c1573b38050b99777adff3a946da728ec9f",
+      "mode": "100644",
+      "baseBlob": null,
+      "baseMode": null
+    }
+  ],
+  "packetFiles": {
+    "history/qa1-report.md": "b574645db09f95ed175ad6d065555dd57557063388b4cac3d3526907dfa52dc7",
+    "validation-report.md": "f1a399fcd3829e60ae8f921da14f8d377dbb9679de9c0accbfd7b21667a58734",
+    "revision3-validation-report.md": "b51c85f8202dc9192b447e3f7471495c933f6e9c1974c49a11f6b36975e251b2",
+    "revision4-validation-report.md": "c0ea895b9868a827c055286716f1bbbca6ef3f0e7df10a9c4eaf85e336502bba",
+    "history/claude-review-1.json": "275dc4b08c1294740c85f3ea5d044e68c54fa1e7863a08ceebb04d3331384fd9",
+    "history/claude-review-2.json": "e8466e1092af650011938c9eaf07799398d10bbfd1007e9dab95dc8a129c4df5",
+    "parent-link.json": "0e21eb7fdbb5a573169fff955ad6ce4be45ceda101be3b7cbd6b3a756c6c9cea",
+    "task-contract.md": "15cd034f16dc335fbfef344e59f2c560fe626ede68dc9350adef37d2465447ff",
+    "analysis.md": "80d278d33666f2fba998a40733873c754b79c314ed095e43038fe73fab9353cc",
+    "implementation-plan.md": "091a4e05b77ae6a8cc41a2cb29fe321921a3e25a32b9e84bc96711d28ad690ff",
+    "bootstrap-validation-report.md": "ad7f10f135d7841cf90aafe38a363d54a320915eb07e92088ff32f338892192d"
+  },
+  "reviews": [
+    {
+      "round": 1,
+      "status": "changes-requested",
+      "subjectSha": "ed5686807ea4a358430563c7a488fde1bf478f81"
+    },
+    {
+      "round": 2,
+      "status": "approved",
+      "subjectSha": "3fdedec7305d86972b255a7f532d2028b9a0eabb"
+    }
+  ],
+  "reviewLedger": {
+    "schema_version": 1,
+    "max_rounds": 4,
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "changes-requested",
+        "subject_sha": "ed5686807ea4a358430563c7a488fde1bf478f81",
+        "review_sha256": "275dc4b08c1294740c85f3ea5d044e68c54fa1e7863a08ceebb04d3331384fd9"
+      },
+      {
+        "round": 2,
+        "verdict": "approved",
+        "subject_sha": "3fdedec7305d86972b255a7f532d2028b9a0eabb",
+        "review_sha256": "e8466e1092af650011938c9eaf07799398d10bbfd1007e9dab95dc8a129c4df5"
+      }
+    ]
+  },
+  "reviewReports": {
+    "claude-review-1.json": "{\n  \"subject_sha\": \"ed5686807ea4a358430563c7a488fde1bf478f81\",\n  \"verdict\": \"changes-requested\",\n  \"summary\": \"I did a static review of the frozen head (the commit SHA bound to this review). I ran no tests or tools. The CI results come from the supplied evidence, which reports API-observed success for every required check on this exact head. The prior independent Codex QA covered source 03529a96 with byte-identical blobs.\\n\\nThe UI changes fit the acceptance criteria:\\n- While status is loading, unavailable, malformed or disabled, no usable role or profile cards render.\\n- An expired synthetic demo shows its own expired message.\\n- Retry clears stale status, and a late expiry reported by the simulator or by the identity check triggers a fresh status check.\\n- `handleLogin` denies login when auth is unverified.\\n- The demo and Entra paths are kept, and Entra no longer shows the credential-free wording.\\n\\nThe renewal operation is tightly fenced:\\n- It can only change the one fixed expiry key on the fixed demo target.\\n- The renewal window is at most seven days.\\n- It must find the expected prior expiry.\\n- It needs an authorization that was consumed through a native verifier.\\n- A durable claim and write-intent come before exactly one mutation. That mutation does not trigger a deploy, and an uncertain write is never retried.\\n\\nThere are two actionable findings:\\n1. Once any renewal reaches the 'staged' status, every later renewal fails in the controller. No reconciliation path exists in code, so after its first success the operation cannot be used again.\\n2. The new status parser rejects the whole status response when the expiry field is malformed, even when the mode is Entra. A stray deployment variable could then block all login.\",\n  \"findings\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"scripts/automation/renew-demo-auth-expiry.mjs\",\n      \"line\": 75,\n      \"problem\": \"locate() rejects any request whenever another renewal record, in any subject, has an execution whose status is not 'blocked-before-write'. That includes a successfully completed 'staged' renewal. The error message asks for 'explicit operator reconciliation', but no reconciled or terminal status exists, and nothing in the controller or CLI can move a staged record into an allowed state. After the first successful stage, every later renewal fails at inspect, prepare, authorize and claim. Because each renewal is capped at seven days, this makes the operation single-use unless someone edits the canonical state by hand, which goes around the authorization and CAS guards this PR adds.\",\n      \"requested_change\": \"Treat a fully completed 'staged' renewal as terminal and do not let it block later renewals. One option: allow a new renewal when every other execution is 'staged' and has been superseded by a deployment plus a status observation. Only 'claimed', 'write-intent' and 'uncertain' should block. Alternatively, add an authorized, audited reconciliation transition that closes earlier operations. Keep 'uncertain' and in-flight records blocking.\",\n      \"test_expectation\": \"Add a controller test with three steps. First, a prior operation is staged. Second, a later, separately authorized operation with a new nonce and a later previousExpiry can authorize, claim and stage. Third, a prior 'uncertain', 'claimed' or 'write-intent' record still blocks the new operation.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"frontend/src/lib/authAvailability.ts\",\n      \"line\": 26,\n      \"problem\": \"parseAuthStatus throws, and the app then shows 'unavailable' and blocks all login, whenever the expiry field is present but not parseable or longer than 50 characters. It does this regardless of mode. The backend echoes the raw environment value with no validation. A leftover or badly formatted demo-expiry variable in an Entra or legacy-demo deployment would therefore lock out every user, even though the field only matters for the disabled-state explanation.\",\n      \"requested_change\": \"Validate the expiry field strictly only where it is used. One option: when mode is 'entra' or 'demo', ignore an unusable expiry and normalize it to null instead of rejecting the whole status. Keep strict rejection, or treat it as plain 'disabled', only for the disabled synthetic-demo explanation.\",\n      \"test_expectation\": \"Add a parse test: a status with mode entra and a malformed expiry string parses successfully, and canStartLogin returns true. Also add a test that a disabled synthetic status with a malformed expiry is never classified as 'expired' and still blocks login.\"\n    }\n  ]\n}\n",
+    "claude-review-2.json": "{\n  \"subject_sha\": \"3fdedec7305d86972b255a7f532d2028b9a0eabb\",\n  \"verdict\": \"approved\",\n  \"summary\": \"I reviewed the frozen head statically. I ran no tests or tools. I found no actionable defects.\\n\\n**Evidence**\\n- CI results come from the supplied, API-observed exact-head data. All required checks succeeded. The orchestration run's cancelled first attempt was rerun once, and the rerun succeeded.\\n- All eleven changed source blobs in this diff match the manifest of the independent round-4 QA seal on source a5be73fa, which passed with no findings.\\n\\n**Prior Claude round-1 findings: both resolved**\\n- **Renewal could only run once.** `assertPriorRenewals` now treats a completed staged renewal as terminal. Records that are claimed, write-intent or uncertain still block a later renewal. So do stages that are still live, run in parallel, duplicate another, or leave a gap in the expiry chain. A later renewal must exactly continue the latest expired staged cutoff, and its stored authorization and audit history are re-verified. A fresh read of the live public previous expiry is still required before each claim and write. Regression tests cover each of these cases.\\n- **Malformed expiry locked out login.** `parseAuthStatus` now turns unusable expiry metadata into null, so the server mode alone decides availability. A disabled mode with unusable metadata is never shown as expired and still blocks login.\\n\\n**Acceptance criteria**\\n1. While status is checking, unavailable, malformed, timed out or server-disabled, no usable role or profile buttons render, and no demo-access promise is shown.\\n2. A disabled synthetic demo whose expiry has passed shows its own expired message. Browser time only chooses the wording.\\n3. Retry clears stale state and restores the server-owned profiles. A pending login disables the cards. `handleLogin` refuses to start when auth is unverified. A late `auth_disabled` from the identity check, or `simulator_disabled` from the simulator session, forces a fresh status check.\\n4. Confirmed demo and Entra paths remain, and Entra uses account-login wording. Backend auth gates are unchanged.\\n5. The renewal writes only the fixed expiry key on the fixed demo target. It requires a canonical expiry of at most seven days, the expected prior expiry read from public status, a consumed native authorization bound to owner and history, a single-use claim, and a durable write-intent. It makes exactly one mutation, with deploys skipped, and never retries an uncertain write.\\n6. The workflow runs only on the first attempt of a trusted main dispatch, defaults to inspect, uses actions pinned by SHA, runs its tests before the job loads secrets, and shares the demo deployment queue.\\n\\n**Still pending (outside this review)**\\nLive staging, deployment and online five-profile proof remain gated after merge, as the plan states.\",\n  \"findings\": []\n}\n"
+  }
+}

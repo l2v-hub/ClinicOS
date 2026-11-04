@@ -1,0 +1,21 @@
+{
+  "source": "6872ad02b78a9cfd147a4a9cb78f335e8d9f177f",
+  "base": "6e3d880921653465ca0527b40f9fc09f6486ada2",
+  "tree": "97b2921209283785c34c246fb6f6c342145d23de",
+  "authSource": "f52979d1a1d8c37d2caf6003e057950adafee678",
+  "authReportSha256": "2622b735f5ef6e3b18dbe6b3c5459952e1da2bbc935baee319cd26cc7f76f2cd",
+  "integratedReportSha256": "269fa52b671e46d0002247a0fabf1649b1b3334227138b60889cf4ba33532042",
+  "privacyReportSha256": "0bdaf782eaefb3f1cb950af7d77a396d7ec906e464ac0e70899291a385f4ffa4",
+  "authTests": 47,
+  "opsRegressionTests": 161,
+  "browserCases": 10,
+  "actualCI": false,
+  "actualMax": false,
+  "actualDeploy": false,
+  "browserArchive": {
+    "path": "browser/independent-local-browser-sanitized.zip",
+    "sha256": "1c771d1f6f37ba39de938219a3d9b9cf0e5ee2e794825d01d75d03d9fb2be59e",
+    "bytes": 26898038
+  },
+  "historicalPrefixPreserved": true
+}

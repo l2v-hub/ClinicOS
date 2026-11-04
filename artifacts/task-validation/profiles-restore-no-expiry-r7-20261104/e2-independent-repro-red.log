@@ -1,0 +1,132 @@
+✖ must reject no-expiry claimed before authorization write (8.6734ms)
+✖ must reject no-expiry write-intent before authorization write (1.7397ms)
+✖ must reject no-expiry uncertain before authorization write (1.5479ms)
+✖ must reject no-expiry staged before authorization write (1.9712ms)
+✖ must reject no-expiry missing before authorization write (1.3797ms)
+✔ safe control absent remains accepted (1.6374ms)
+✔ safe control blocked-before-write remains accepted (1.1134ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 2
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 121.1336
+
+✖ failing tests:
+
+test at ..\tmp\profiles-restore-20261104\independent-qa\repro-2029-generated-v2.test.mjs:73:81
+✖ must reject no-expiry claimed before authorization write (8.6734ms)
+  AssertionError [ERR_ASSERTION]: must reject without store write
+  + actual - expected
+
+    {
+  +   accepted: true,
+  +   writes: 1
+  -   accepted: false,
+  -   writes: 0
+    }
+
+      at TestContext.<anonymous> (file:///C:/w-rv/tmp/profiles-restore-20261104/independent-qa/repro-2029-generated-v2.test.mjs:76:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { accepted: true, writes: 1 },
+    expected: { accepted: false, writes: 0 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at ..\tmp\profiles-restore-20261104\independent-qa\repro-2029-generated-v2.test.mjs:73:81
+✖ must reject no-expiry write-intent before authorization write (1.7397ms)
+  AssertionError [ERR_ASSERTION]: must reject without store write
+  + actual - expected
+
+    {
+  +   accepted: true,
+  +   writes: 1
+  -   accepted: false,
+  -   writes: 0
+    }
+
+      at TestContext.<anonymous> (file:///C:/w-rv/tmp/profiles-restore-20261104/independent-qa/repro-2029-generated-v2.test.mjs:76:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { accepted: true, writes: 1 },
+    expected: { accepted: false, writes: 0 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at ..\tmp\profiles-restore-20261104\independent-qa\repro-2029-generated-v2.test.mjs:73:81
+✖ must reject no-expiry uncertain before authorization write (1.5479ms)
+  AssertionError [ERR_ASSERTION]: must reject without store write
+  + actual - expected
+
+    {
+  +   accepted: true,
+  +   writes: 1
+  -   accepted: false,
+  -   writes: 0
+    }
+
+      at TestContext.<anonymous> (file:///C:/w-rv/tmp/profiles-restore-20261104/independent-qa/repro-2029-generated-v2.test.mjs:76:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { accepted: true, writes: 1 },
+    expected: { accepted: false, writes: 0 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at ..\tmp\profiles-restore-20261104\independent-qa\repro-2029-generated-v2.test.mjs:73:81
+✖ must reject no-expiry staged before authorization write (1.9712ms)
+  AssertionError [ERR_ASSERTION]: must reject without store write
+  + actual - expected
+
+    {
+  +   accepted: true,
+  +   writes: 1
+  -   accepted: false,
+  -   writes: 0
+    }
+
+      at TestContext.<anonymous> (file:///C:/w-rv/tmp/profiles-restore-20261104/independent-qa/repro-2029-generated-v2.test.mjs:76:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { accepted: true, writes: 1 },
+    expected: { accepted: false, writes: 0 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at ..\tmp\profiles-restore-20261104\independent-qa\repro-2029-generated-v2.test.mjs:73:81
+✖ must reject no-expiry missing before authorization write (1.3797ms)
+  AssertionError [ERR_ASSERTION]: must reject without store write
+  + actual - expected
+
+    {
+  +   accepted: true,
+  +   writes: 1
+  -   accepted: false,
+  -   writes: 0
+    }
+
+      at TestContext.<anonymous> (file:///C:/w-rv/tmp/profiles-restore-20261104/independent-qa/repro-2029-generated-v2.test.mjs:76:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { accepted: true, writes: 1 },
+    expected: { accepted: false, writes: 0 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

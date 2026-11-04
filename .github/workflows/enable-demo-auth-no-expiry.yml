@@ -1,0 +1,75 @@
+name: Enable no-expiry auth for synthetic demo
+run-name: demo-auth-no-expiry ${{ inputs.subject_id }} ${{ inputs.operation_nonce }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      reviewed_sha:
+        description: Exact reviewed merged current-main source SHA
+        type: string
+        required: true
+      subject_id:
+        description: Canonical linked operations owner (not authorization)
+        type: string
+        required: true
+      operation_nonce:
+        description: Unique one-time operation nonce already bound in canonical state
+        type: string
+        required: true
+      operation:
+        description: Read-only metadata/inspection or separately authorized stage
+        type: choice
+        options: [metadata, inspect, stage]
+        default: metadata
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: railway-demo
+  cancel-in-progress: false
+
+jobs:
+  stage:
+    if: >-
+      github.repository == 'l2v-hub/ClinicOS' && github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' && github.actor == 'l2v-hub' &&
+      github.triggering_actor == github.actor && github.sha == github.workflow_sha &&
+      inputs.reviewed_sha == github.sha && github.run_attempt == 1
+    runs-on: ubuntu-22.04
+    timeout-minutes: 12
+    environment: 'glistening-friendship / demo'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            agent-team
+            scripts
+            .github
+          sparse-checkout-cone-mode: true
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Test guards without credentials
+        run: node --test scripts/automation/demo-no-expiry-controller.test.mjs scripts/automation/enable-demo-auth-no-expiry.test.mjs scripts/automation/demo-no-expiry.integration.test.mjs scripts/automation/demo-no-expiry.metadata.integration.test.mjs
+      - name: Validate fixed demo target and stage explicit demo tier plus no-expiry flag
+        env:
+          GH_TOKEN: ${{ secrets.CLINICOS_BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_DEMO_TOKEN }}
+          NO_EXPIRY_REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+          NO_EXPIRY_SUBJECT_ID: ${{ inputs.subject_id }}
+          NO_EXPIRY_OPERATION_NONCE: ${{ inputs.operation_nonce }}
+          NO_EXPIRY_OPERATION: ${{ inputs.operation }}
+        run: node scripts/automation/enable-demo-auth-no-expiry.mjs "$NO_EXPIRY_OPERATION"
+      - name: Retain sanitized no-expiry receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: demo-auth-no-expiry-${{ github.run_id }}-${{ github.run_attempt }}
+          path: demo-auth-no-expiry-receipt.json
+          if-no-files-found: warn
+          retention-days: 30

@@ -1,0 +1,265 @@
+{
+  "source": "6872ad02b78a9cfd147a4a9cb78f335e8d9f177f",
+  "synthetic": true,
+  "online": false,
+  "rawTracesPublished": false,
+  "privacyDerivative": true,
+  "archiveSha256": "1c771d1f6f37ba39de938219a3d9b9cf0e5ee2e794825d01d75d03d9fb2be59e",
+  "files": [
+    {
+      "name": "screenshots/desktop-administrator-Agenda-verified.png",
+      "bytes": 81490,
+      "sha256": "31f5877c15cb2b2d5d2a7858d08f36e8f6b25a639c3477b9da67a85c96630ae7"
+    },
+    {
+      "name": "screenshots/desktop-doctor-Agenda-verified.png",
+      "bytes": 70295,
+      "sha256": "3d427d68973884af13c74a6fa83684d4649ec929e789c2652a80df57bc505e83"
+    },
+    {
+      "name": "screenshots/desktop-doctor-Consegne-verified.png",
+      "bytes": 72904,
+      "sha256": "539c0c5e4bc26a8464015e301bad69e422c14b26c2fd9cb673267ae382928f77"
+    },
+    {
+      "name": "screenshots/desktop-doctor-Pazienti-verified.png",
+      "bytes": 82742,
+      "sha256": "87e59244dd6f6f261428d17a89ee66a42862d01bd28f010247c34aece3080d26"
+    },
+    {
+      "name": "screenshots/desktop-nurse-Agenda-verified.png",
+      "bytes": 70033,
+      "sha256": "ac7dda24c553bf19f1fc6cf822956601cd946c815572e7ae31fb05be56fbd0e1"
+    },
+    {
+      "name": "screenshots/desktop-nurse-Consegne-verified.png",
+      "bytes": 72729,
+      "sha256": "a6bf1374485b2e36da151150ab0c1aece0abd0d1b2d771f6911bd5d1a40972e6"
+    },
+    {
+      "name": "screenshots/desktop-nurse-Pazienti-verified.png",
+      "bytes": 82548,
+      "sha256": "cc9d5e1e97a9cfb2454611e299861aa1eb91f196e96f1b6d4bea6d1b65ffcc28"
+    },
+    {
+      "name": "screenshots/desktop-oss-Agenda-verified.png",
+      "bytes": 66141,
+      "sha256": "8fe16a7068b1b4be918352ca4ea576ec545ae95cad2c40d2180c320e5f8e156b"
+    },
+    {
+      "name": "screenshots/desktop-oss-Consegne-verified.png",
+      "bytes": 71068,
+      "sha256": "6b0827f8a5967a509da0e600cf1f7856a073fd361f147bc4f4a7b5762f413a0d"
+    },
+    {
+      "name": "screenshots/desktop-oss-Pazienti-verified.png",
+      "bytes": 61237,
+      "sha256": "34986777fe7c62557d2d37fde44c268bafe373dfadc6f4643c5774942e0f185b"
+    },
+    {
+      "name": "screenshots/desktop-supervisor-Agenda-verified.png",
+      "bytes": 87099,
+      "sha256": "edbd4b1d143bb024bae0a60d74bd41224fd5c15e9629efdbf6fb0c7cc4395714"
+    },
+    {
+      "name": "screenshots/desktop-supervisor-Consegne-verified.png",
+      "bytes": 75951,
+      "sha256": "ef10bd19a94000764a7001ad952ce42ffa5e724f321f34017c16f64e326b0036"
+    },
+    {
+      "name": "screenshots/mobile-administrator-Agenda-verified.png",
+      "bytes": 47697,
+      "sha256": "c1fd57bb682e75657d3f1d35f79ef4f515a65bd3b7a873792c6955c37f3e217d"
+    },
+    {
+      "name": "screenshots/mobile-doctor-Agenda-verified.png",
+      "bytes": 52958,
+      "sha256": "9a5fefc76622bef1a77c204d357d050bdb6b88a9aa44f000d6d17236cef1fd5a"
+    },
+    {
+      "name": "screenshots/mobile-doctor-Consegne-verified.png",
+      "bytes": 44869,
+      "sha256": "6c6a5dea6f4827d43ab72baaaf06739bfbba7eaf89a2a1908481353713473914"
+    },
+    {
+      "name": "screenshots/mobile-doctor-Pazienti-verified.png",
+      "bytes": 39160,
+      "sha256": "960fbcbcf0b4dd6edf1d148c6a093dec2dcd3b1bd6e8b5d66b94a35e6bdd1bd4"
+    },
+    {
+      "name": "screenshots/mobile-nurse-Agenda-verified.png",
+      "bytes": 49453,
+      "sha256": "4b5d058fe1d8eb2225fe4cc409b66a0473bd07f2af5f8d7b0d8944ea8893ded1"
+    },
+    {
+      "name": "screenshots/mobile-nurse-Consegne-verified.png",
+      "bytes": 31502,
+      "sha256": "42abcc3db50a4ec4b65653684d8a2bac6ccec54f352f50e460e2b5f26c685941"
+    },
+    {
+      "name": "screenshots/mobile-nurse-Pazienti-verified.png",
+      "bytes": 38955,
+      "sha256": "f0b9f5a1a97b55dc2b824fbeda085f2534616e1063d04c5c0d6584f5968fe5ba"
+    },
+    {
+      "name": "screenshots/mobile-oss-Agenda-verified.png",
+      "bytes": 48519,
+      "sha256": "b753a165146be37e4b326f3461162ec36f95415b1072e55f48c8eba515b3228b"
+    },
+    {
+      "name": "screenshots/mobile-oss-Consegne-verified.png",
+      "bytes": 29741,
+      "sha256": "c7994f5adac6c584263a1a90dfab242b36711b8b2b1bec33899e409e0672a858"
+    },
+    {
+      "name": "screenshots/mobile-oss-Pazienti-verified.png",
+      "bytes": 35387,
+      "sha256": "2feaec070593b7a6f549a774fb802b17bacce9fc880746a20a86fc7da73d8fc7"
+    },
+    {
+      "name": "screenshots/mobile-supervisor-Agenda-verified.png",
+      "bytes": 47782,
+      "sha256": "5c104917925eb260800e090db0b3cac9d5918378360febd56739f500ffedbe2e"
+    },
+    {
+      "name": "screenshots/mobile-supervisor-Consegne-verified.png",
+      "bytes": 44910,
+      "sha256": "6a5f03a4bf68b1f3b05cc5ccf3edbe4eecee030e7cb9fb8a9e1510a7a30250ba"
+    },
+    {
+      "name": "trace/desktop-administrator-verified-trace.sanitized.zip",
+      "bytes": 1267652,
+      "sha256": "88fa3e04ba408c6818d1cfe48e3a93a78a0d7bf9cad649088fde36d0abea52ea"
+    },
+    {
+      "name": "trace/desktop-doctor-verified-trace.sanitized.zip",
+      "bytes": 1703850,
+      "sha256": "724761e5c5fdcd22d3e878a459add08c4222a7406049506c60d6fc29ebcc2c00"
+    },
+    {
+      "name": "trace/desktop-nurse-verified-trace.sanitized.zip",
+      "bytes": 1624860,
+      "sha256": "680637fc088b98f241a0e6ffc7de6f2457ff2701532177f1f9033cc2153378fe"
+    },
+    {
+      "name": "trace/desktop-oss-verified-trace.sanitized.zip",
+      "bytes": 1474241,
+      "sha256": "8bea95e2f23708fcd470ba52326ad4a105a834eebf06980b852c65e6af5774c7"
+    },
+    {
+      "name": "trace/desktop-supervisor-verified-trace.sanitized.zip",
+      "bytes": 1748545,
+      "sha256": "6288ddbbc96722c02e40c7702064152a54580880ec419a40fcf1cbeb1ae7814f"
+    },
+    {
+      "name": "trace/mobile-administrator-verified-trace.sanitized.zip",
+      "bytes": 1809055,
+      "sha256": "7ca672b2412c847c470bcba0f5048169c3e0c3c20e4b99d353a1f6333a109ef4"
+    },
+    {
+      "name": "trace/mobile-doctor-verified-trace.sanitized.zip",
+      "bytes": 3209794,
+      "sha256": "1989f5071ba3a92cd5d16f05f4563f886add9364946dd9312c5ccc3b82187f11"
+    },
+    {
+      "name": "trace/mobile-nurse-verified-trace.sanitized.zip",
+      "bytes": 3563067,
+      "sha256": "1a0d648a2933e1067c7c9bb0b28fe8d692ee10d56c0b54fc21453ab3187a0cd3"
+    },
+    {
+      "name": "trace/mobile-oss-verified-trace.sanitized.zip",
+      "bytes": 3242007,
+      "sha256": "61aa9c6ed6b142975fc61564f03e30f89318937585ad8c8d0f3559959f459380"
+    },
+    {
+      "name": "trace/mobile-supervisor-verified-trace.sanitized.zip",
+      "bytes": 2931024,
+      "sha256": "7687b6ac874bae1655bfdf2ed71195198f2b621408872e53cad9570206631bd9"
+    },
+    {
+      "name": "video/page@6adc1df84db7e8d376370f682daae423.webm",
+      "bytes": 293091,
+      "sha256": "3e871e790ba5384c4a113322bcd49b8906ae1bf433f628210e6771fe2e5dcd66"
+    },
+    {
+      "name": "video/page@26db03edd5ca15e2d28068884e84bf5c.webm",
+      "bytes": 243464,
+      "sha256": "557526aa4879555a595d353b981e336a8bfebfa40c5721eca151cb67867ac76c"
+    },
+    {
+      "name": "video/page@0ec9f2072d5cc21bdd0db675b3a73454.webm",
+      "bytes": 322081,
+      "sha256": "6c2d4a955ecffe89942b7b05047a1f481790cad783dc9a1db1bd2506f9d3811c"
+    },
+    {
+      "name": "video/page@b371592fd1d349a239bc667325988a5b.webm",
+      "bytes": 327860,
+      "sha256": "3b0e9cf63df120904181c31f6b32daa509d1fddff027b64a5cdf5c10410ec10a"
+    },
+    {
+      "name": "video/page@7c868e80993450b1dad4002854958952.webm",
+      "bytes": 392375,
+      "sha256": "18b3744800a4601acee45564931d2e2bcb7b28ec704fcadb8fee23697fe8fc69"
+    },
+    {
+      "name": "video/page@19406596747d3a9d9adc4d6fd44816b1.webm",
+      "bytes": 355726,
+      "sha256": "dfac7010539e3b99820066230c62de2cf8e530d4d00d017912fc7d7ea40f5ec4"
+    },
+    {
+      "name": "video/page@c15e198e6aca1fadf072bb506063b631.webm",
+      "bytes": 593206,
+      "sha256": "b53152e5d4b7481e0baa9d746e81994297f8b11a8a74fea4cb9ee896417e7e7d"
+    },
+    {
+      "name": "video/page@291816b2aff6fe8a43a3aec61570cf5c.webm",
+      "bytes": 515686,
+      "sha256": "d62ca27ed23b078aeaa9beaecde71f700b11cd3b72f0a314b78ebbace417d14b"
+    },
+    {
+      "name": "video/page@a95fe1fe7fd667f6058389a111014cd3.webm",
+      "bytes": 522953,
+      "sha256": "cc0cc7607753ab543c9eddb67b5699e8041093d61fefac52ed88eab4eded3626"
+    },
+    {
+      "name": "video/page@d86cc58985eebc3c7a11b493b985db49.webm",
+      "bytes": 525775,
+      "sha256": "c3771d1b3a3773018117489c009f53a2bb0d8012567e50024d409305931f7300"
+    },
+    {
+      "name": "test-results/run.mjs",
+      "bytes": 9847,
+      "sha256": "ed6d58f727b77f6fe87cb1a541fa0985d19feae4e3ed6eb063cb9ddd3aeccaaf"
+    },
+    {
+      "name": "test-results/auth-policy-tests.log",
+      "bytes": 11936,
+      "sha256": "31aa0779abecb93d568573aecc8e73471d735e70285a26f996b92835d8736161"
+    },
+    {
+      "name": "test-results/backend-build-tsc.log",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "name": "test-results/backend-build-assets.log",
+      "bytes": 61,
+      "sha256": "40cfb0346fdd99dbe9a87d921337b2020c763a8bf3fc9c1cb13238627207c4a3"
+    },
+    {
+      "name": "test-results/frontend-typecheck.log",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "name": "test-results/frontend-build.log",
+      "bytes": 18670,
+      "sha256": "8235cfb197b82faa7b2529f63b644bba861d558fd93aa62c13eebd36f1324613"
+    },
+    {
+      "name": "test-results/validation-report.md",
+      "bytes": 3381,
+      "sha256": "2622b735f5ef6e3b18dbe6b3c5459952e1da2bbc935baee319cd26cc7f76f2cd"
+    }
+  ]
+}
