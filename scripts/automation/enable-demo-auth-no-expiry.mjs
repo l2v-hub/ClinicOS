@@ -29,7 +29,7 @@ async function publicJson(path) {
 }
 const VARIABLE_QUERY = `query($projectId:String!,$environmentId:String!,$serviceId:String){variables(projectId:$projectId,environmentId:$environmentId,serviceId:$serviceId)}`;
 const FAILED_QUERY = 'query($id:String!){deployment(id:$id){id status projectId environmentId serviceId meta}}';
-export async function inspectNoExpiryTarget({ client, readPublic, assertFreshMain }) {
+export async function inspectNoExpiryTarget({ client, readPublic, assertFreshMain, request }) {
   await assertFreshMain();
   const target = await inspectDemo(client, DEMO_SOURCE_POLICIES.exact);
   if (target.projectToken?.project?.id !== DEMO_TARGET.projectId || target.projectToken?.environment?.id !== DEMO_TARGET.environmentId ||
@@ -60,6 +60,11 @@ export async function inspectNoExpiryTarget({ client, readPublic, assertFreshMai
         active[0].meta.commitHash === failure.meta.commitHash ||
         active[0].id === FAILED_DEPLOYMENT.id || target.serviceInstance.latestDeployment?.id === active[0].id ||
         ready.deploymentId !== active[0].id || ready.checks?.database !== 'ok' || ready.checks?.policy !== 'ok') throw Error('active');
+    if (request !== undefined && (!request || typeof request !== 'object' || Array.isArray(request) ||
+        request.activeDeploymentId !== active[0].id || request.activeSourceSha !== active[0].meta.commitHash ||
+        request.failedDeploymentId !== failure.id || request.failedSourceSha !== failure.meta.commitHash ||
+        !/^[a-f0-9]{40}$/.test(request.reviewedSha ?? '') || request.reviewedSha === active[0].meta.commitHash))
+      throw Error('REQUEST_BINDING');
     await assertFreshMain();
     return { activeSourceSha: active[0].meta.commitHash, activeDeploymentId: active[0].id,
       failedDeploymentId: failure.id, failedSourceSha: failure.meta.commitHash, prerequisitesVerified: true,
