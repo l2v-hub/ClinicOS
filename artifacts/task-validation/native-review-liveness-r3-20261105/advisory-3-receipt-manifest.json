@@ -1,0 +1,40 @@
+{
+  "scope": "native-review-liveness-r3-20261105",
+  "advisoryOrdinal": 3,
+  "advisoryCeiling": 4,
+  "nativeReview": false,
+  "sourceSubject": "153540e5a50046d0e46c3184f1bf221a9f857bd2",
+  "privateDirectory": "C:/w-rv/tmp/development-isolated-20261104",
+  "files": [
+    {
+      "name": "review529-r2-Max-input.txt",
+      "bytes": 578599,
+      "sha256": "013d7d2f978003aa540592f93cadb74be58a9ed47e83abed486a9a187707cd71"
+    },
+    {
+      "name": "review529-r2-Max-preflight.json",
+      "bytes": 12827,
+      "sha256": "537cfac4667b24e90a27cdfbea0b536bf943930c0daf63427b9edd8ca4ede0ee"
+    },
+    {
+      "name": "review529-r2-Max-started.json",
+      "bytes": 1445,
+      "sha256": "45ee9fe99937f6cee33a473ed603a12f42cc94440fecf10d700f08451270fc50"
+    },
+    {
+      "name": "review529-r2-Max-process.json",
+      "bytes": 468,
+      "sha256": "2bca52800a724c0ac855d49a6c6b254330bb6c61ed1da8e065636e87dee974c5"
+    },
+    {
+      "name": "review529-r2-Max-result.json",
+      "bytes": 10486,
+      "sha256": "85de4906816077894450758196da8c2eecd23b736834d7a6fe9d917650cf7e11"
+    },
+    {
+      "name": "review529-r2-Max-report.json",
+      "bytes": 9003,
+      "sha256": "0a4f61e178d8d7ef6f3a2b222066dc195102624ccaa3939b530949efb907f284"
+    }
+  ]
+}
