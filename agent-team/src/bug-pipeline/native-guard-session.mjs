@@ -1,4 +1,3 @@
-// Native guarded-profile orchestration. No default activation or provider fallback.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { boundedCleanup, isCleanupFailure } from './native-guard-outcome.mjs';
@@ -116,6 +115,7 @@ export async function stageGuardedSession({
   validateClaim,
   timeoutMs = 20 * 60000,
   cleanupTimeoutMs = 10000,
+  reviewTracked,
 }) {
   const { createNativeGuardState } = await import('./native-guard-state.mjs');
   const { createNativeResponseGuard } = await import('./native-guard-response.mjs');
@@ -127,6 +127,7 @@ export async function stageGuardedSession({
     Number.isSafeInteger(cleanupTimeoutMs) && cleanupTimeoutMs > 0 && cleanupTimeoutMs <= 10000,
   );
   const pinned = structuredClone(expected);
+  const tracked = reviewTracked === undefined ? null : new Set(reviewTracked);
   assert.equal(pinned.contextWindow, 1000000);
   assert.equal(pinned.outputCap, 32768);
   assert.match(pinned.subjectSha ?? '', /^[a-f0-9]{40}$/);
@@ -150,19 +151,21 @@ export async function stageGuardedSession({
     readyReject = reject;
   });
   ready.catch(() => {});
+  let claimSha256;
   const state = createNativeGuardState({
     validateClaim: async (claim, seal) => {
       assert.equal(policy.ready(), true, 'native-policy-unproven');
       assert.equal(runtime?.isLive(), true, 'native-process-unavailable');
       const owned = await validateClaim(claim, seal);
-      return owned === true && policy.ready() && runtime.isLive();
+      if (owned !== true || !policy.ready() || !runtime.isLive()) return false;
+      claimSha256 = createHash('sha256').update(JSON.stringify(claim)).digest('hex');
+      return true;
     },
   });
   const reject = () => {
     state.data.fail();
     readyReject(new Error('native-session-rejected'));
-    // Cancel the parent transport synchronously; a queued microtask must not
-    // resume the release gate after a late policy event invalidated its fence.
+    // Synchronously fence late policy events before a queued release resumes.
     void close().catch(() => {});
   };
   const maybeReady = () => {
@@ -304,7 +307,7 @@ export async function stageGuardedSession({
       },
       close,
       async release(actualClaim) {
-        let completed, sanitizeEvidence;
+        let completed, projectEvidence;
         try {
           assert.equal(released, false);
           assert.equal(policy.ready(), true);
@@ -327,9 +330,9 @@ export async function stageGuardedSession({
           assert.equal(envelope.type, 'result');
           assert.equal(envelope.subtype, 'success');
           const network = response.finish({ cliReport: envelope.structured_output });
-          const { qualifiedModelProfile, sanitizeNativeEvidence } =
+          const { qualifiedModelProfile, projectNativeEvidence } =
             await import('./cloud-review-worker.mjs');
-          sanitizeEvidence = sanitizeNativeEvidence;
+          projectEvidence = projectNativeEvidence;
           const profile = qualifiedModelProfile(envelope.modelUsage);
           assert.equal(profile.model, pinned.model);
           const isolation = await runtime.isolation;
@@ -338,6 +341,8 @@ export async function stageGuardedSession({
           const hash = (value) => createHash('sha256').update(value).digest('hex');
           const proof = {
             inputSha256: hash(pinned.input),
+            subjectSha: pinned.subjectSha,
+            claimSha256,
             schemaSha256: hash(JSON.stringify(pinned.schema)),
             bodySha256: seal.bodySha256,
             contextSha256: seal.contextSha256,
@@ -375,11 +380,15 @@ export async function stageGuardedSession({
           try {
             await close();
           } catch (error) {
-            if (completed && isCleanupFailure(error)) {
+            if (completed && tracked && isCleanupFailure(error)) {
               try {
+                const report = projectEvidence(completed.report, pinned.subjectSha, tracked);
                 retainedEvidence.set(error, {
-                  report: sanitizeEvidence(completed.report),
-                  proof: completed.proof,
+                  report,
+                  proof: {
+                    ...completed.proof,
+                    reportSha256: createHash('sha256').update(JSON.stringify(report)).digest('hex'),
+                  },
                 });
               } catch {
                 /* Cleanup failure remains authoritative; omit unsafe evidence. */
@@ -396,7 +405,6 @@ export async function stageGuardedSession({
     throw new Error('native-session-rejected');
   }
 }
-
 export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
   assert.equal(process.platform, 'linux', 'native-linux-required');
   assert.ok(typeof oauthToken === 'string' && oauthToken.length > 0 && oauthToken.length <= 8192);
@@ -426,8 +434,8 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
     let close;
     const cleanup = () =>
       (close ??= runtimeCleanup(certificates, proxy, container, async () => {
-        // Only the exact private mkdtemp created by this invocation. Never prune
-        // Docker, images/volumes, a checkout, user HOME or a caller-selected path.
+        await certificates?.cleanup();
+        // Remove only this invocation's private mkdtemp.
         assert.equal(await realpath(root), resolvedRoot);
         assert.equal(path.dirname(resolvedRoot), await realpath(os.tmpdir()));
         assert.match(path.basename(resolvedRoot), /^clinicos-native-guard-[A-Za-z0-9]+$/);
@@ -438,7 +446,9 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
       const publicDirectory = path.join(root, 'public');
       await mkdir(socketDirectory, { mode: 0o700 });
       await mkdir(publicDirectory, { mode: 0o700 });
-      certificates = await certificatesModule.createNativeGuardCertificates();
+      certificates = await certificatesModule.createNativeGuardCertificates({
+        parentDirectory: resolvedRoot,
+      });
       const ca = await certificatesModule.writeNativePublicCA(
         publicDirectory,
         certificates.publicCA,

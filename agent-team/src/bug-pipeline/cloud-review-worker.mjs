@@ -41,14 +41,25 @@ import {
 } from '../../../scripts/quality-gate/claude-bug-review.mjs';
 
 export const CLOUD_REVIEW_REPO = 'l2v-hub/ClinicOS';
-export function sanitizeNativeEvidence(value) {
-  if (typeof value === 'string') return communicationText(value);
-  if (Array.isArray(value)) return value.map(sanitizeNativeEvidence);
-  if (value && typeof value === 'object')
-    return Object.fromEntries(
-      Object.entries(value).map(([key, item]) => [key, sanitizeNativeEvidence(item)]),
-    );
-  return value;
+export function projectNativeEvidence(report, sha, tracked) {
+  const validated = validateReview(report, sha, tracked);
+  return validateReview(
+    {
+      ...validated,
+      summary: communicationText(validated.summary),
+      findings: validated.findings.map((finding) => ({
+        ...finding,
+        ...Object.fromEntries(
+          ['problem', 'requested_change', 'test_expectation'].map((field) => [
+            field,
+            communicationText(finding[field]),
+          ]),
+        ),
+      })),
+    },
+    sha,
+    tracked,
+  );
 }
 export const workerFailureReceipt = (error) => ({
   status: 'worker-failed',
@@ -68,6 +79,19 @@ const MAX_FILES = 80;
 const EVIDENCE_ROOT = 'artifacts/task-validation/';
 const bytes = (value) => Buffer.byteLength(JSON.stringify(value));
 const hash = (data) => createHash('sha256').update(data).digest('hex');
+export function verifyNativeEvidenceBinding(proof, report, input, subjectSha, model, claimed) {
+  assert.equal(proof.inputSha256, hash(input));
+  assert.equal(proof.subjectSha, subjectSha);
+  assert.equal(proof.claimSha256, hash(JSON.stringify(claimed)));
+  assert.equal(proof.model, model);
+  assert.equal(proof.forwardAttempts, 1);
+  assert.equal(proof.forwarded, true);
+  assert.equal(proof.policyStatus, 'settled-empty');
+  assert.equal(proof.responseMatchesNative, true);
+  assert.equal(proof.runtimeIsolationVerified, true);
+  assert.equal(proof.binaryVerified, true);
+  assert.equal(proof.reportSha256, hash(JSON.stringify(report)));
+}
 function sourcePath(value) {
   assert.ok(typeof value === 'string' && value.length <= 500 && value.length > 0);
   assert.ok(!path.posix.isAbsolute(value) && !/[\\\x00-\x1f\x7f]/.test(value));
@@ -814,7 +838,7 @@ export async function processCloudReview({
   // Bind the already prepared data to the actual native reservation, even across a request race.
   let review,
     cleanupFailed = false,
-    evidenceProofSha256,
+    evidenceProof,
     failureCode = 'review-validation-failed',
     validationDiagnostic = reviewRunnerThrewDiagnostic();
   const retainedReport = () =>
@@ -822,8 +846,13 @@ export async function processCloudReview({
       ? {
           report: structuredClone(review),
           reportSha256: hash(JSON.stringify(review)),
-          ...(evidenceProofSha256
-            ? { evidenceProofSha256, reportEvidenceOnly: true, approval: false }
+          ...(evidenceProof
+            ? {
+                evidenceProof,
+                evidenceProofSha256: hash(JSON.stringify(evidenceProof)),
+                reportEvidenceOnly: true,
+                approval: false,
+              }
             : {}),
         }
       : {};
@@ -838,26 +867,7 @@ export async function processCloudReview({
     ...(cleanupFailed ? { cleanupFailed: true } : {}),
     ...retainedReport(),
   });
-  const validateEvidence = (report) => {
-    const validated = validateReview(report, claimed.sha, source.tracked);
-    return validateReview(
-      {
-        ...validated,
-        summary: communicationText(validated.summary),
-        findings: validated.findings.map((finding) => ({
-          ...finding,
-          ...Object.fromEntries(
-            ['problem', 'requested_change', 'test_expectation'].map((field) => [
-              field,
-              communicationText(finding[field]),
-            ]),
-          ),
-        })),
-      },
-      claimed.sha,
-      source.tracked,
-    );
-  };
+  const validateEvidence = (report) => projectNativeEvidence(report, claimed.sha, source.tracked);
   try {
     const result = nativeSession
       ? await nativeSession.release(claimed)
@@ -882,10 +892,20 @@ export async function processCloudReview({
       const evidence = readCleanupEvidence(error);
       if (evidence) {
         try {
+          const proof = evidence.proof;
           review = validateEvidence(evidence.report);
-          evidenceProofSha256 = hash(JSON.stringify(evidence.proof));
+          verifyNativeEvidenceBinding(
+            proof,
+            review,
+            prepared.input,
+            claimed.sha,
+            qualification.profile.model,
+            claimed,
+          );
+          evidenceProof = proof;
         } catch {
           review = undefined;
+          evidenceProof = undefined;
         }
       }
     }
@@ -894,6 +914,18 @@ export async function processCloudReview({
       failed = await controller.failOwnedClaim(subject.pr.number, claimed, failureCode);
     } catch (error) {
       if (error?.code === 'review-ownership-changed') return ownershipChanged();
+      if (cleanupFailed)
+        return {
+          status: 'claim-failure-unknown',
+          pr: subject.pr.number,
+          sha: claimed.sha,
+          claimed: 'unknown',
+          providerExecuted: true,
+          cleanupFailed: true,
+          retryAllowed: false,
+          validationDiagnostic,
+          ...retainedReport(),
+        };
       throw error;
     }
     let projected = false,
@@ -1080,7 +1112,7 @@ export async function main({ env = process.env, mode = 'review' } = {}) {
     await rm(runtime, { recursive: true, force: true });
   }
 }
-if (process.argv[1] && path.resolve(process.argv[1]) === FILE) {
+async function runCli() {
   try {
     assert.ok(
       process.argv.length <= 3 &&
@@ -1101,3 +1133,4 @@ if (process.argv[1] && path.resolve(process.argv[1]) === FILE) {
     process.exitCode = 1;
   }
 }
+if (process.argv[1] && path.resolve(process.argv[1]) === FILE) void runCli();

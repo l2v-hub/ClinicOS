@@ -14,6 +14,7 @@ import {
   prepareCloudInference,
   qualifiedModelProfile,
   workerFailureReceipt,
+  verifyNativeEvidenceBinding,
 } from '../../src/bug-pipeline/cloud-review-worker.mjs';
 import { cleanupFailure } from '../../src/bug-pipeline/native-guard-outcome.mjs';
 import {
@@ -41,11 +42,16 @@ const approved = {
   summary: 'Supplied evidence supports the criteria.',
   findings: [],
 };
-async function actualFailingSession(report) {
+async function actualFailingSession(
+  report,
+  input = 'Synthetic source only',
+  tracked = new Set(['src/file.mjs']),
+  validateClaim = async () => true,
+) {
   const f = sessionFixture({ closeFailure: true, suppliedReport: report });
   return stageGuardedSession({
     expected: {
-      input: 'Synthetic source only',
+      input,
       schema: reviewSchema,
       subjectSha: sha,
       model: 'claude-opus-5-5',
@@ -53,7 +59,8 @@ async function actualFailingSession(report) {
       outputCap: 32768,
     },
     startRuntime: f.startRuntime,
-    validateClaim: async () => true,
+    validateClaim,
+    reviewTracked: tracked,
   });
 }
 test('untrusted cleanup error cannot inject session evidence', () => {
@@ -69,6 +76,74 @@ test('verified session sanitizes sensitive text before private evidence storage'
   const evidence = readCleanupEvidence(error);
   assert.ok(evidence);
   assert.ok(!JSON.stringify(evidence).includes(privateText));
+});
+test('evidence rejects unsafe raw token and preserves a tracked @ path', async () => {
+  const token = 'sk-ant-syntheticfixture1234567890';
+  const unsafe = await actualFailingSession({ ...approved, summary: `Token ${token}` });
+  const rejected = await unsafe.release({ nonce: 'fixture' }).then(
+    () => null,
+    (e) => e,
+  );
+  assert.equal(readCleanupEvidence(rejected), undefined);
+  const file = 'src/@fixture/file.mjs';
+  const report = {
+    ...approved,
+    verdict: 'changes-requested',
+    summary: 'mail x@y.example',
+    findings: [
+      {
+        severity: 'low',
+        file,
+        line: 1,
+        problem: 'Problem',
+        requested_change: 'Fix',
+        test_expectation: 'Verify',
+      },
+    ],
+  };
+  const session = await actualFailingSession(report, 'Synthetic source only', new Set([file]));
+  const error = await session.release({ nonce: 'fixture' }).then(
+    () => null,
+    (e) => e,
+  );
+  const evidence = readCleanupEvidence(error);
+  assert.equal(evidence.report.findings[0].file, file);
+  assert.ok(!JSON.stringify(evidence).includes('x@y.example'));
+  assert.equal(
+    evidence.proof.reportSha256,
+    createHash('sha256').update(JSON.stringify(evidence.report)).digest('hex'),
+  );
+});
+
+test('claim proof binds the immutable snapshot across asynchronous claim validation', async () => {
+  let continueValidation, validationStarted;
+  const started = new Promise((resolve) => {
+    validationStarted = resolve;
+  });
+  const session = await actualFailingSession(
+    approved,
+    'Synthetic source only',
+    new Set(['src/file.mjs']),
+    async () => {
+      validationStarted();
+      await new Promise((resolve) => {
+        continueValidation = resolve;
+      });
+      return true;
+    },
+  );
+  const claim = { identity: 'original' };
+  const originalHash = createHash('sha256').update(JSON.stringify(claim)).digest('hex');
+  const pending = session.release(claim).then(
+    () => null,
+    (error) => error,
+  );
+  await started;
+  claim.identity = 'modified';
+  continueValidation();
+  const error = await pending;
+  assert.equal(readCleanupEvidence(error).proof.claimSha256, originalHash);
+  assert.notEqual(originalHash, createHash('sha256').update(JSON.stringify(claim)).digest('hex'));
 });
 
 test('qualification cleanup failure remains distinct from ordinary probe failure', async () => {
@@ -93,17 +168,26 @@ test('qualification cleanup failure remains distinct from ordinary probe failure
 for (const ownershipChanged of [false, true])
   test(`post-forward cleanup failure retains evidence only, ownershipChanged=${ownershipChanged}`, async () => {
     const f = fixture();
-    let observedEvidence;
+    f.options.probe = async () => {
+      f.calls.push('probe');
+      return {
+        profile: { model: 'claude-opus-5-5', contextWindow: 1000000, maxOutputTokens: 128000 },
+      };
+    };
+    let observedEvidence, preparedInput, observedClaim;
     f.options.stageNativeReview = async ({ source, sha, profile }) => {
-      const actual = await actualFailingSession(approved);
+      const prepared = prepareCloudInference({ packet: source.packet, sha, profile });
+      preparedInput = prepared.input;
+      const actual = await actualFailingSession(approved, prepared.input, source.tracked);
       return {
         source,
-        prepared: prepareCloudInference({ packet: source.packet, sha, profile }),
+        prepared,
         session: {
           assertReady: actual.assertReady,
           close: actual.close,
           release: async (claim) => {
             f.calls.push('native-release');
+            observedClaim = structuredClone(claim);
             try {
               return await actual.release(claim);
             } catch (error) {
@@ -134,6 +218,25 @@ for (const ownershipChanged of [false, true])
       result.evidenceProofSha256,
       createHash('sha256').update(JSON.stringify(observedEvidence.proof)).digest('hex'),
     );
+    assert.deepEqual(result.evidenceProof, observedEvidence.proof);
+    for (const [field, value] of [
+      ['inputSha256', '0'.repeat(64)],
+      ['subjectSha', 'f'.repeat(40)],
+      ['claimSha256', '0'.repeat(64)],
+      ['model', 'claude-opus-4-7'],
+      ['forwardAttempts', 2],
+      ['reportSha256', '0'.repeat(64)],
+    ])
+      assert.throws(() =>
+        verifyNativeEvidenceBinding(
+          { ...result.evidenceProof, [field]: value },
+          result.report,
+          preparedInput,
+          sha,
+          'claude-opus-5-5',
+          observedClaim,
+        ),
+      );
     assert.equal(f.calls.filter((x) => x === 'claim').length, 1);
     assert.equal(f.calls.filter((x) => x === 'native-release').length, 1);
     assert.equal(
@@ -144,6 +247,39 @@ for (const ownershipChanged of [false, true])
     assert.equal(f.calls.includes('submit'), false);
     assert.ok(!JSON.stringify(result).includes('private'));
   });
+
+test('cleanup failure plus uncertain claim update preserves evidence without a second claim', async () => {
+  const f = fixture();
+  f.options.probe = async () => {
+    f.calls.push('probe');
+    return {
+      profile: { model: 'claude-opus-5-5', contextWindow: 1000000, maxOutputTokens: 128000 },
+    };
+  };
+  f.options.stageNativeReview = async ({ source, sha, profile }) => {
+    const prepared = prepareCloudInference({ packet: source.packet, sha, profile });
+    return {
+      source,
+      prepared,
+      session: await actualFailingSession(approved, prepared.input, source.tracked),
+    };
+  };
+  f.options.handoff.failOwnedClaim = async () => {
+    f.calls.push('fail-owned');
+    throw Error('private transient');
+  };
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'claim-failure-unknown');
+  assert.equal(result.cleanupFailed, true);
+  assert.equal(result.retryAllowed, false);
+  assert.equal(result.claimed, 'unknown');
+  assert.equal(result.reportEvidenceOnly, true);
+  assert.equal(result.approval, false);
+  assert.equal(f.calls.filter((x) => x === 'claim').length, 1);
+  assert.equal(f.calls.filter((x) => x === 'fail-owned').length, 1);
+  assert.equal(f.calls.includes('submit'), false);
+  assert.ok(!JSON.stringify(result).includes('private'));
+});
 
 test('cleanup evidence with wrong subject is never retained or published', async () => {
   const f = fixture();
@@ -157,6 +293,50 @@ test('cleanup evidence with wrong subject is never retained or published', async
   assert.equal(result.cleanupFailed, true);
   assert.equal(result.report, undefined);
   assert.equal(result.reportSha256, undefined);
+  assert.equal(f.calls.includes('submit'), false);
+});
+
+test('worker rejects valid cleanup evidence for a different prepared input', async () => {
+  const f = fixture();
+  f.options.probe = async () => ({
+    profile: { model: 'claude-opus-5-5', contextWindow: 1000000, maxOutputTokens: 128000 },
+  });
+  f.options.stageNativeReview = async ({ source, sha, profile }) => ({
+    source,
+    prepared: prepareCloudInference({ packet: source.packet, sha, profile }),
+    session: await actualFailingSession(approved, 'different synthetic input', source.tracked),
+  });
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'provider-failed');
+  assert.equal(result.cleanupFailed, true);
+  assert.equal(result.report, undefined);
+  assert.equal(result.evidenceProof, undefined);
+  assert.equal(f.calls.includes('submit'), false);
+});
+
+test('worker rejects cleanup evidence for a different actual claim', async () => {
+  const f = fixture();
+  f.options.probe = async () => ({
+    profile: { model: 'claude-opus-5-5', contextWindow: 1000000, maxOutputTokens: 128000 },
+  });
+  f.options.stageNativeReview = async ({ source, sha, profile }) => {
+    const prepared = prepareCloudInference({ packet: source.packet, sha, profile });
+    const actual = await actualFailingSession(approved, prepared.input, source.tracked);
+    return {
+      source,
+      prepared,
+      session: {
+        assertReady: actual.assertReady,
+        close: actual.close,
+        release: (claim) => actual.release({ ...claim, syntheticDifferentClaim: true }),
+      },
+    };
+  };
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'provider-failed');
+  assert.equal(result.cleanupFailed, true);
+  assert.equal(result.report, undefined);
+  assert.equal(result.evidenceProof, undefined);
   assert.equal(f.calls.includes('submit'), false);
 });
 const envelope = (structured_output) => ({

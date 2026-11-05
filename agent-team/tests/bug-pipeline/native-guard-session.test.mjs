@@ -284,10 +284,7 @@ test('a valid forward cannot succeed when cleanup fails', async () => {
     (error) => error,
   );
   assert.equal(isCleanupFailure(failure), true);
-  const evidence = readCleanupEvidence(failure);
-  assert.deepEqual(evidence.report, { subject_sha: sha });
-  assert.equal(evidence.proof.forwardAttempts, 1);
-  assert.equal(evidence.proof.responseMatchesNative, true);
+  assert.equal(readCleanupEvidence(failure), undefined);
   assert.equal(f.calls.filter((call) => call === 'forward').length, 1);
   await assert.rejects(session.close(), { message: 'native-session-cleanup-failed' });
 });

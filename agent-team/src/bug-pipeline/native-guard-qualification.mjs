@@ -283,6 +283,7 @@ export function createNativeReviewStager({ startRuntime, qualification }) {
         },
         startRuntime,
         validateClaim,
+        reviewTracked: source.tracked,
       });
     // First hold real, verified mandatory context WITHOUT inference or claim.
     // Keep that live capability until optional selection is actually admitted.
