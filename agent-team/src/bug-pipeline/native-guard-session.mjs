@@ -1,43 +1,13 @@
 // Native guarded-profile orchestration. No default activation or provider fallback.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-// A timeout is an unknown outcome, never proof that owned resources were removed.
-// Concurrent callers share the original operation, including a sanitized failure.
-export function boundedCleanup(cleanup, timeoutMs = 10000) {
-  if (
-    typeof cleanup !== 'function' ||
-    !Number.isSafeInteger(timeoutMs) ||
-    timeoutMs <= 0 ||
-    timeoutMs > 10000
-  )
-    throw new TypeError('native-cleanup-configuration-invalid');
-  let operation;
-  return () => {
-    if (operation) return operation;
-    let resolveOperation, rejectOperation;
-    operation = new Promise((resolve, reject) => {
-      resolveOperation = resolve;
-      rejectOperation = reject;
-    });
-    const timer = setTimeout(
-      () => rejectOperation(new Error('native-session-cleanup-failed')),
-      timeoutMs,
-    );
-    const finish = (ok) => {
-      clearTimeout(timer);
-      if (ok) resolveOperation();
-      else rejectOperation(new Error('native-session-cleanup-failed'));
-    };
-    try {
-      Promise.resolve(cleanup()).then(
-        () => finish(true),
-        () => finish(false),
-      );
-    } catch {
-      finish(false);
-    }
-    return operation;
-  };
+import { boundedCleanup, isCleanupFailure } from './native-guard-outcome.mjs';
+export { boundedCleanup } from './native-guard-outcome.mjs';
+const provenClean = new WeakSet();
+const retainedEvidence = new WeakMap();
+export function readCleanupEvidence(error) {
+  const value = isCleanupFailure(error) ? retainedEvidence.get(error) : undefined;
+  return value === undefined ? undefined : structuredClone(value);
 }
 export async function stopNativeResources(proxy, container) {
   const start = (resource) => {
@@ -203,7 +173,15 @@ export async function stageGuardedSession({
     reject();
   }, timeoutMs);
   const cleanup = boundedCleanup(async () => {
-    const owned = runtime ?? (await startup);
+    let owned = runtime;
+    if (!owned) {
+      try {
+        owned = await startup;
+      } catch (error) {
+        if (provenClean.has(error)) return;
+        throw error;
+      }
+    }
     await owned.close();
   }, cleanupTimeoutMs);
   const close = (reason = new Error('native-session-rejected')) => {
@@ -326,6 +304,7 @@ export async function stageGuardedSession({
       },
       close,
       async release(actualClaim) {
+        let completed, sanitizeEvidence;
         try {
           assert.equal(released, false);
           assert.equal(policy.ready(), true);
@@ -348,7 +327,9 @@ export async function stageGuardedSession({
           assert.equal(envelope.type, 'result');
           assert.equal(envelope.subtype, 'success');
           const network = response.finish({ cliReport: envelope.structured_output });
-          const { qualifiedModelProfile } = await import('./cloud-review-worker.mjs');
+          const { qualifiedModelProfile, sanitizeNativeEvidence } =
+            await import('./cloud-review-worker.mjs');
+          sanitizeEvidence = sanitizeNativeEvidence;
           const profile = qualifiedModelProfile(envelope.modelUsage);
           assert.equal(profile.model, pinned.model);
           const isolation = await runtime.isolation;
@@ -374,7 +355,7 @@ export async function stageGuardedSession({
             imageDigest: isolation.imageDigest,
             cliSha256: isolation.cliSha256,
           };
-          return {
+          completed = {
             ok: true,
             code: 0,
             stdout: JSON.stringify({
@@ -387,10 +368,25 @@ export async function stageGuardedSession({
             profile,
             proof,
           };
+          return completed;
         } catch {
           throw new Error('native-session-rejected');
         } finally {
-          await close();
+          try {
+            await close();
+          } catch (error) {
+            if (completed && isCleanupFailure(error)) {
+              try {
+                retainedEvidence.set(error, {
+                  report: sanitizeEvidence(completed.report),
+                  proof: completed.proof,
+                });
+              } catch {
+                /* Cleanup failure remains authoritative; omit unsafe evidence. */
+              }
+            }
+            throw error;
+          }
         }
       },
     });
@@ -421,9 +417,8 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
       import('./native-guard-proxy.mjs'),
       import('./native-guard-container.mjs'),
     ]);
-    const { validateNativeRequest, isNativeRequestCapacityError } = await import(
-      './native-guard-request.mjs'
-    );
+    const { validateNativeRequest, isNativeRequestCapacityError } =
+      await import('./native-guard-request.mjs');
     const { fileURLToPath } = await import('node:url');
     const root = await mkdtemp(path.join(os.tmpdir(), 'clinicos-native-guard-'));
     const resolvedRoot = await realpath(root);
@@ -485,7 +480,9 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
       };
     } catch {
       await cleanup();
-      throw new Error('native-runtime-rejected');
+      const error = new Error('native-runtime-rejected');
+      provenClean.add(error);
+      throw error;
     }
   };
 }

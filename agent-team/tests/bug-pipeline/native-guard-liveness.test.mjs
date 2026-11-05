@@ -2,11 +2,53 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { mkdtemp, readdir, rm } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 import {
   boundedCleanup,
   runtimeCleanup,
   stageGuardedSession,
+  createNativeRuntimeFactory,
 } from '../../src/bug-pipeline/native-guard-session.mjs';
+
+test(
+  'real factory missing CLI path reports proven cleanup and removes its directory',
+  { skip: process.platform !== 'linux', timeout: 30000 },
+  async () => {
+    const dir = await mkdtemp(path.join(os.tmpdir(), 'native-factory-test-'));
+    const previous = process.env.TMPDIR;
+    process.env.TMPDIR = dir;
+    try {
+      const runtime = createNativeRuntimeFactory({
+        cliPath: '/missing-native-cli-fixture',
+        oauthToken: 'synthetic-only-token',
+      });
+      await assert.rejects(
+        stageGuardedSession({
+          expected: {
+            input: 'synthetic',
+            schema: {},
+            subjectSha: 'a'.repeat(40),
+            model: 'claude-opus-5-5',
+            contextWindow: 1000000,
+            outputCap: 32768,
+          },
+          startRuntime: runtime,
+          validateClaim: async () => true,
+          timeoutMs: 20000,
+          cleanupTimeoutMs: 10000,
+        }),
+        { message: 'native-session-rejected' },
+      );
+      assert.deepEqual(await readdir(dir), []);
+    } finally {
+      if (previous === undefined) delete process.env.TMPDIR;
+      else process.env.TMPDIR = previous;
+      await rm(dir, { recursive: true, force: true });
+    }
+  },
+);
 
 const fixture = fileURLToPath(new URL('./fixtures/native-liveness-child.mjs', import.meta.url));
 test('hung proxy still starts container stop and never reports removed resources', () => {
@@ -59,6 +101,30 @@ test('concurrent cleanup shares one operation and the same sanitized outcome', a
   }, 1000);
   await assert.rejects(failed(), { message: 'native-session-cleanup-failed' });
   await assert.rejects(failed(), { message: 'native-session-cleanup-failed' });
+});
+
+test('untrusted startup rejection cannot claim proven cleanup', async () => {
+  for (const text of ['native-runtime-rejected', 'native-session-cleanup-failed']) {
+    await assert.rejects(
+      stageGuardedSession({
+        expected: {
+          input: 'synthetic',
+          schema: {},
+          subjectSha: 'a'.repeat(40),
+          model: 'claude-opus-5-5',
+          contextWindow: 1000000,
+          outputCap: 32768,
+        },
+        startRuntime: async () => {
+          throw Error(text);
+        },
+        validateClaim: async () => true,
+        timeoutMs: 100,
+        cleanupTimeoutMs: 50,
+      }),
+      { message: 'native-session-cleanup-failed' },
+    );
+  }
 });
 
 test('late startup after cleanup timeout is closed exactly once and cannot regain authority', async () => {

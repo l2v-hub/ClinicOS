@@ -27,6 +27,8 @@ import {
   communicationText,
 } from './issue-review-communication.mjs';
 import { externalReport } from './external-review.mjs';
+import { isCleanupFailure } from './native-guard-outcome.mjs';
+import { readCleanupEvidence } from './native-guard-session.mjs';
 import { claudeFailureCode } from './claude-review-cron.mjs';
 import {
   classifyReviewResult,
@@ -39,6 +41,22 @@ import {
 } from '../../../scripts/quality-gate/claude-bug-review.mjs';
 
 export const CLOUD_REVIEW_REPO = 'l2v-hub/ClinicOS';
+export function sanitizeNativeEvidence(value) {
+  if (typeof value === 'string') return communicationText(value);
+  if (Array.isArray(value)) return value.map(sanitizeNativeEvidence);
+  if (value && typeof value === 'object')
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, sanitizeNativeEvidence(item)]),
+    );
+  return value;
+}
+export const workerFailureReceipt = (error) => ({
+  status: 'worker-failed',
+  providerExecuted: 'unknown',
+  claimed: 'unknown',
+  retryAllowed: false,
+  ...(isCleanupFailure(error) ? { cleanupFailed: true } : {}),
+});
 export const CLOUD_CLAUDE_VERSION = '2.1.301';
 export const CLOUD_CLAUDE_MODEL = 'opus[1m]';
 const SHA = /^[a-f0-9]{40}$/;
@@ -648,12 +666,13 @@ export async function processCloudReview({
         qualification = await probe({ env, run, cwd });
         // Do not trust an absent/partial profile even from an injected probe.
         qualifiedModelProfile({ [qualification?.profile?.model]: qualification?.profile });
-      } catch {
+      } catch (error) {
         return {
           status: 'capability-blocked',
           blockedSubjects,
           providerExecuted: true,
           claimed: false,
+          ...(isCleanupFailure(error) ? { cleanupFailed: true } : {}),
         };
       }
     }
@@ -698,7 +717,7 @@ export async function processCloudReview({
         }));
       }
     } catch (error) {
-      let cleanupFailed = error?.message === 'native-session-cleanup-failed';
+      let cleanupFailed = isCleanupFailure(error);
       try {
         await nativeSession?.close();
       } catch {
@@ -794,10 +813,20 @@ export async function processCloudReview({
   }
   // Bind the already prepared data to the actual native reservation, even across a request race.
   let review,
+    cleanupFailed = false,
+    evidenceProofSha256,
     failureCode = 'review-validation-failed',
     validationDiagnostic = reviewRunnerThrewDiagnostic();
   const retainedReport = () =>
-    review ? { report: structuredClone(review), reportSha256: hash(JSON.stringify(review)) } : {};
+    review
+      ? {
+          report: structuredClone(review),
+          reportSha256: hash(JSON.stringify(review)),
+          ...(evidenceProofSha256
+            ? { evidenceProofSha256, reportEvidenceOnly: true, approval: false }
+            : {}),
+        }
+      : {};
   const ownershipChanged = () => ({
     status: 'ownership-changed',
     pr: subject.pr.number,
@@ -806,30 +835,12 @@ export async function processCloudReview({
     blockedSubjects,
     providerExecuted: true,
     validationDiagnostic,
+    ...(cleanupFailed ? { cleanupFailed: true } : {}),
     ...retainedReport(),
   });
-  try {
-    const result = nativeSession
-      ? await nativeSession.release(claimed)
-      : await run({
-          command: 'claude',
-          args: prepared.args,
-          input: prepared.input,
-          cwd,
-          envMode: 'review',
-          timeoutMs: 20 * 60000,
-          maxOutputBytes: 256 * 1024,
-        });
-    // Observe the captured, already sanitized result without repairing or retaining it.
-    validationDiagnostic = classifyReviewResult(result, claimed.sha, source.tracked);
-    failureCode = claudeFailureCode(result) ?? 'review-validation-failed';
-    assert.equal(claudeFailureCode(result), null, 'Claude review execution failed');
-    const validated = validateReview(
-      JSON.parse(result.stdout).structured_output,
-      claimed.sha,
-      source.tracked,
-    );
-    review = validateReview(
+  const validateEvidence = (report) => {
+    const validated = validateReview(report, claimed.sha, source.tracked);
+    return validateReview(
       {
         ...validated,
         summary: communicationText(validated.summary),
@@ -846,7 +857,38 @@ export async function processCloudReview({
       claimed.sha,
       source.tracked,
     );
-  } catch {
+  };
+  try {
+    const result = nativeSession
+      ? await nativeSession.release(claimed)
+      : await run({
+          command: 'claude',
+          args: prepared.args,
+          input: prepared.input,
+          cwd,
+          envMode: 'review',
+          timeoutMs: 20 * 60000,
+          maxOutputBytes: 256 * 1024,
+        });
+    // Observe the captured, already sanitized result without repairing or retaining it.
+    validationDiagnostic = classifyReviewResult(result, claimed.sha, source.tracked);
+    failureCode = claudeFailureCode(result) ?? 'review-validation-failed';
+    assert.equal(claudeFailureCode(result), null, 'Claude review execution failed');
+    review = validateEvidence(JSON.parse(result.stdout).structured_output);
+  } catch (error) {
+    cleanupFailed = isCleanupFailure(error);
+    if (cleanupFailed) {
+      failureCode = 'claude-execution-error';
+      const evidence = readCleanupEvidence(error);
+      if (evidence) {
+        try {
+          review = validateEvidence(evidence.report);
+          evidenceProofSha256 = hash(JSON.stringify(evidence.proof));
+        } catch {
+          review = undefined;
+        }
+      }
+    }
     let failed;
     try {
       failed = await controller.failOwnedClaim(subject.pr.number, claimed, failureCode);
@@ -879,6 +921,7 @@ export async function processCloudReview({
       providerExecuted: true,
       projected,
       recoveryNotified,
+      ...(cleanupFailed ? { cleanupFailed: true, ...retainedReport() } : {}),
     };
   } finally {
     // Diagnostic delivery is optional and must never mask native control flow.
@@ -993,9 +1036,8 @@ export async function main({ env = process.env, mode = 'review' } = {}) {
       }
       assert.match(env.CLOUD_NATIVE_PR ?? '', /^[1-9][0-9]{0,8}$/);
       assert.match(env.CLOUD_NATIVE_SHA ?? '', SHA);
-      const { createNativeRuntimeFactory, createNativeReviewStager } = await import(
-        './native-guard-session.mjs'
-      );
+      const { createNativeRuntimeFactory, createNativeReviewStager } =
+        await import('./native-guard-session.mjs');
       let qualified;
       const startRuntime = createNativeRuntimeFactory({
         cliPath: isolatedEnv.CLAUDE_NATIVE_BINARY_PATH,
@@ -1049,17 +1091,10 @@ if (process.argv[1] && path.resolve(process.argv[1]) === FILE) {
     console.log(JSON.stringify(result));
     if (!['probe-passed', 'published', 'empty', 'native-profile-qualified'].includes(result.status))
       process.exitCode = 1;
-  } catch {
+  } catch (error) {
     // A thrown failure cannot prove whether a prior provider call or reservation
     // completed. Preserve that uncertainty in the finite artifact, never a retry.
-    console.log(
-      JSON.stringify({
-        status: 'worker-failed',
-        providerExecuted: 'unknown',
-        claimed: 'unknown',
-        retryAllowed: false,
-      }),
-    );
+    console.log(JSON.stringify(workerFailureReceipt(error)));
     console.error(
       'Cloud Claude review blocked; preserve native reservations and inspect trusted authentication, SHA, checks and publication receipts.',
     );

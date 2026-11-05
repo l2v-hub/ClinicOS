@@ -4,13 +4,14 @@ import {
   createPolicyBarrier,
   stageGuardedSession,
   createNativeReviewStager,
+  readCleanupEvidence,
 } from '../../src/bug-pipeline/native-guard-session.mjs';
 import { sourceFixture } from './cloud-review-capacity-fixture.mjs';
+import { isCleanupFailure } from '../../src/bug-pipeline/native-guard-outcome.mjs';
 import {
   validateNativeRequest,
   isNativeRequestCapacityError,
 } from '../../src/bug-pipeline/native-guard-request.mjs';
-
 const line = (message) => Buffer.from(`2026-11-03T14:00:00.000Z [DEBUG] ${message}\n`);
 const settled = 'Remote settings: Saved empty sentinel (404 response)';
 test('native policy settlement requires the complete late genuine marker', () => {
@@ -73,7 +74,6 @@ test('invalid or incomplete UTF8 after settlement cannot authorize a source requ
     assert.equal(barrier.ready(), false);
   }
 });
-
 const sha = 'a'.repeat(40);
 const schema = {
   type: 'object',
@@ -279,9 +279,15 @@ test('a valid forward cannot succeed when cleanup fails', async () => {
     startRuntime: f.startRuntime,
     validateClaim: async () => true,
   });
-  await assert.rejects(session.release({ nonce: 'owned-fixture' }), {
-    message: 'native-session-cleanup-failed',
-  });
+  const failure = await session.release({ nonce: 'owned-fixture' }).then(
+    () => null,
+    (error) => error,
+  );
+  assert.equal(isCleanupFailure(failure), true);
+  const evidence = readCleanupEvidence(failure);
+  assert.deepEqual(evidence.report, { subject_sha: sha });
+  assert.equal(evidence.proof.forwardAttempts, 1);
+  assert.equal(evidence.proof.responseMatchesNative, true);
   assert.equal(f.calls.filter((call) => call === 'forward').length, 1);
   await assert.rejects(session.close(), { message: 'native-session-cleanup-failed' });
 });
@@ -379,7 +385,6 @@ test('optional reports use actual native wrapper budget without starving mandato
   assert.equal(result.prepared.capacity.maxOutputTokens, 128000);
   await result.session.close();
 });
-
 test('capacity-only optional restaging falls back to the still-live mandatory body, never policy failures', async () => {
   for (const rejectSecondPolicy of [false, true]) {
     const f = sourceFixture({
@@ -416,7 +421,6 @@ test('capacity-only optional restaging falls back to the still-live mandatory bo
     assert.ok(runtime.calls.includes('close'));
   }
 });
-
 test('staged source waits for actual owned claim then validates real native and upstream equality', async () => {
   const f = sessionFixture();
   const session = await stageGuardedSession({
@@ -438,7 +442,6 @@ test('staged source waits for actual owned claim then validates real native and 
   await assert.rejects(session.release({ nonce: 'owned-fixture' }), /native-session-rejected/);
   assert.equal(f.calls.filter((call) => call === 'forward').length, 1);
 });
-
 test('foreign claim and unproven isolation cannot forward source', async () => {
   const f = sessionFixture();
   const session = await stageGuardedSession({
@@ -459,7 +462,6 @@ test('foreign claim and unproven isolation cannot forward source', async () => {
   );
   assert.equal(unproven.calls.includes('forward'), false);
 });
-
 test('late retry, late policy and duplicate CLI JSON remain actual failures, never earlier success', async () => {
   for (const failure of [{ lateRetry: true }, { policyFailure: true }, { cliDuplicate: true }]) {
     const f = sessionFixture(failure);
@@ -473,7 +475,6 @@ test('late retry, late policy and duplicate CLI JSON remain actual failures, nev
     assert.ok(f.calls.includes('close'));
   }
 });
-
 test('a stalled already-owned forward reaches terminal failure without replaying source', async () => {
   const keepAlive = setTimeout(() => {}, 1000);
   try {
