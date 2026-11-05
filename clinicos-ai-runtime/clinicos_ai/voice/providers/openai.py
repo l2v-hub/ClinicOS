@@ -15,7 +15,8 @@ def transcribe(model: str, audio: bytes, mime: str, locale: str, timeout: float)
     if not key:
         raise layer.SttError("not_configured", "OPENAI_API_KEY non configurata", 503)
     base = (os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1").rstrip("/")
-    fields = {"model": model, "language": locale.split("-")[0], "response_format": "json",
+    language_field = "languages[]" if model == "gpt-transcribe" else "language"
+    fields = {"model": model, language_field: locale.split("-")[0], "response_format": "json",
               "prompt": layer.stt_hint()}
     body, content_type = layer.multipart_audio(audio, mime, fields)
     data = layer._http_json(f"{base}/audio/transcriptions", body,
