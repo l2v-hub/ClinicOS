@@ -1,0 +1,1144 @@
+TAP version 13
+# Subtest: a complete pinned before/after source packet above old700KiB retains every selected context
+ok 1 - a complete pinned before/after source packet above old700KiB retains every selected context
+  ---
+  duration_ms: 120.9122
+  type: 'test'
+  ...
+# Subtest: the old701KiB fixture is admissible only when full actual input fits the observed profile
+ok 2 - the old701KiB fixture is admissible only when full actual input fits the observed profile
+  ---
+  duration_ms: 23.6177
+  type: 'test'
+  ...
+# Subtest: exact serialized prompt/schema/output/native boundary passes and one added byte fails
+ok 3 - exact serialized prompt/schema/output/native boundary passes and one added byte fails
+  ---
+  duration_ms: 19.9826
+  type: 'test'
+  ...
+# Subtest: Unicode and JSON escaping are counted after serialization, never by string length
+ok 4 - Unicode and JSON escaping are counted after serialization, never by string length
+  ---
+  duration_ms: 31.0695
+  type: 'test'
+  ...
+# Subtest: below-static900000-byte input still fails dynamic allowance before native claim/model
+ok 5 - below-static900000-byte input still fails dynamic allowance before native claim/model
+  ---
+  duration_ms: 30.2807
+  type: 'test'
+  ...
+# Subtest: derived finite transport ceiling is not an unbounded or caller-configurable allowance
+ok 6 - derived finite transport ceiling is not an unbounded or caller-configurable allowance
+  ---
+  duration_ms: 4.9093
+  type: 'test'
+  ...
+# Subtest: individual source blob ceiling is unchanged despite larger aggregate transport
+ok 7 - individual source blob ceiling is unchanged despite larger aggregate transport
+  ---
+  duration_ms: 29.3797
+  type: 'test'
+  ...
+# Subtest: shared explicit recovery transport also rejects dynamic overflow before its existing claim
+ok 8 - shared explicit recovery transport also rejects dynamic overflow before its existing claim
+  ---
+  duration_ms: 11.3159
+  type: 'test'
+  ...
+# Subtest: CLI bootstrap rejection emits a finite unknown-outcome receipt without credentials
+ok 9 - CLI bootstrap rejection emits a finite unknown-outcome receipt without credentials
+  ---
+  duration_ms: 305.6086
+  type: 'test'
+  ...
+# Subtest: optional reports cannot block a real128k candidate whose immutable required context fits
+ok 10 - optional reports cannot block a real128k candidate whose immutable required context fits
+  ---
+  duration_ms: 169.0371
+  type: 'test'
+  ...
+# Subtest: required source alone above real128k admission stays blocked before claim or model
+ok 11 - required source alone above real128k admission stays blocked before claim or model
+  ---
+  duration_ms: 97.7138
+  type: 'test'
+  ...
+# Subtest: invalid immutable source is rejected before qualification, claim or model
+ok 12 - invalid immutable source is rejected before qualification, claim or model
+  ---
+  duration_ms: 11.3962
+  type: 'test'
+  ...
+# Subtest: optional64KiB ceiling omits oversized reports without fetching their body
+ok 13 - optional64KiB ceiling omits oversized reports without fetching their body
+  ---
+  duration_ms: 1.976
+  type: 'test'
+  ...
+# Subtest: direct readers conservatively omit optional reports without a qualified profile
+ok 14 - direct readers conservatively omit optional reports without a qualified profile
+  ---
+  duration_ms: 40.3559
+  type: 'test'
+  ...
+# Subtest: deferred optional selection counts exact escaped/control JSON bytes within the real budget
+ok 15 - deferred optional selection counts exact escaped/control JSON bytes within the real budget
+  ---
+  duration_ms: 59.5687
+  type: 'test'
+  ...
+# Subtest: deferred completion preserves the 24 evidence count and reserves every omitted name
+ok 16 - deferred completion preserves the 24 evidence count and reserves every omitted name
+  ---
+  duration_ms: 4.734
+  type: 'test'
+  ...
+# Subtest: one exact prospective escaped optional entry fits while a one-byte smaller budget omits it
+ok 17 - one exact prospective escaped optional entry fits while a one-byte smaller budget omits it
+  ---
+  duration_ms: 1.8975
+  type: 'test'
+  ...
+# Subtest: explicit recovery uses deferred actual-budget completion before its one existing claim
+ok 18 - explicit recovery uses deferred actual-budget completion before its one existing claim
+  ---
+  duration_ms: 60.9987
+  type: 'test'
+  ...
+# Subtest: explicit recovery refuses oversized verified mandatory context before completion, claim or model
+ok 19 - explicit recovery refuses oversized verified mandatory context before completion, claim or model
+  ---
+  duration_ms: 44.3536
+  type: 'test'
+  ...
+# Subtest: a stored request is not an execution capability; no default verifier grants recovery
+ok 20 - a stored request is not an execution capability; no default verifier grants recovery
+  ---
+  duration_ms: 17.0249
+  type: 'test'
+  ...
+# Subtest: trusted execution authorization uses budget:null, a separate action and append-only replay audit
+ok 21 - trusted execution authorization uses budget:null, a separate action and append-only replay audit
+  ---
+  duration_ms: 14.3743
+  type: 'test'
+  ...
+# Subtest: prepared source projects only generated canonical plan, never a committed implementation-plan
+ok 22 - prepared source projects only generated canonical plan, never a committed implementation-plan
+  ---
+  duration_ms: 8.6415
+  type: 'test'
+  ...
+# Subtest: one technical claim, retain and exact global-round5 publication preserve every original byte
+ok 23 - one technical claim, retain and exact global-round5 publication preserve every original byte
+  ---
+  duration_ms: 26.4121
+  type: 'test'
+  ...
+# Subtest: a distinct authenticated publisher cannot make its own actual review look like new human feedback
+ok 24 - a distinct authenticated publisher cannot make its own actual review look like new human feedback
+  ---
+  duration_ms: 23.5471
+  type: 'test'
+  ...
+# Subtest: concurrent claimants have one CAS winner and no new review or allowance
+ok 25 - concurrent claimants have one CAS winner and no new review or allowance
+  ---
+  duration_ms: 14.1259
+  type: 'test'
+  ...
+# Subtest: changed head fails closed before a recovery claim
+ok 26 - changed head fails closed before a recovery claim
+  ---
+  duration_ms: 5.6341
+  type: 'test'
+  ...
+# Subtest: changed failed-review fails closed before a recovery claim
+ok 27 - changed failed-review fails closed before a recovery claim
+  ---
+  duration_ms: 8.7073
+  type: 'test'
+  ...
+# Subtest: changed owner fails closed before a recovery claim
+ok 28 - changed owner fails closed before a recovery claim
+  ---
+  duration_ms: 5.8189
+  type: 'test'
+  ...
+# Subtest: changed source fails closed before a recovery claim
+ok 29 - changed source fails closed before a recovery claim
+  ---
+  duration_ms: 8.4619
+  type: 'test'
+  ...
+# Subtest: changed request fails closed before a recovery claim
+ok 30 - changed request fails closed before a recovery claim
+  ---
+  duration_ms: 11.4786
+  type: 'test'
+  ...
+# Subtest: changed capability fails closed before a recovery claim
+ok 31 - changed capability fails closed before a recovery claim
+  ---
+  duration_ms: 13.7843
+  type: 'test'
+  ...
+# Subtest: selector field injection, invalid round/nonce/SHA and duplicate native owner fail closed
+ok 32 - selector field injection, invalid round/nonce/SHA and duplicate native owner fail closed
+  ---
+  duration_ms: 2.1294
+  type: 'test'
+  ...
+# Subtest: claims recheck live SHA, checks and maintainer authorization
+ok 33 - claims recheck live SHA, checks and maintainer authorization
+  ---
+  duration_ms: 18.0505
+  type: 'test'
+  ...
+# Subtest: a takeover during CAS prerequisites prevents the reservation
+ok 34 - a takeover during CAS prerequisites prevents the reservation
+  ---
+  duration_ms: 10.7207
+  type: 'test'
+  ...
+# Subtest: a finite provider failure stays spent and can neither re-claim nor erase a genuine report
+ok 35 - a finite provider failure stays spent and can neither re-claim nor erase a genuine report
+  ---
+  duration_ms: 25.2624
+  type: 'test'
+  ...
+# Subtest: unsafe, stale, contradictory or untracked findings are never retained/published
+ok 36 - unsafe, stale, contradictory or untracked findings are never retained/published
+  ---
+  duration_ms: 5.8852
+  type: 'test'
+  ...
+# Subtest: publication uncertainty retains the full genuine report and a second execution is refused
+ok 37 - publication uncertainty retains the full genuine report and a second execution is refused
+  ---
+  duration_ms: 10.4514
+  type: 'test'
+  ...
+# Subtest: revocation at actual POST boundary refuses publication without discarding evidence
+ok 38 - revocation at actual POST boundary refuses publication without discarding evidence
+  ---
+  duration_ms: 5.5052
+  type: 'test'
+  ...
+# Subtest: a replaced execution cannot receive stale failure/retention/publication
+ok 39 - a replaced execution cannot receive stale failure/retention/publication
+  ---
+  duration_ms: 4.2716
+  type: 'test'
+  ...
+# Subtest: authorization mismatch or replay cannot authorize a technical execution
+ok 40 - authorization mismatch or replay cannot authorize a technical execution
+  ---
+  duration_ms: 3.1198
+  type: 'test'
+  ...
+# Subtest: the technical route rejects failed executions that may have used inference
+ok 41 - the technical route rejects failed executions that may have used inference
+  ---
+  duration_ms: 1.2924
+  type: 'test'
+  ...
+# Subtest: an older consumed round cannot recover after another global review was spent
+ok 42 - an older consumed round cannot recover after another global review was spent
+  ---
+  duration_ms: 0.5125
+  type: 'test'
+  ...
+# Subtest: a second request cannot circumvent the one-execution fence of the failed reservation
+ok 43 - a second request cannot circumvent the one-execution fence of the failed reservation
+  ---
+  duration_ms: 1.4328
+  type: 'test'
+  ...
+# Subtest: post-publication competing ownership is never overwritten and genuine evidence survives
+ok 44 - post-publication competing ownership is never overwritten and genuine evidence survives
+  ---
+  duration_ms: 9.2954
+  type: 'test'
+  ...
+# Subtest: source drift during retention cannot replace an already-owned record
+ok 45 - source drift during retention cannot replace an already-owned record
+  ---
+  duration_ms: 9.1094
+  type: 'test'
+  ...
+# Subtest: missing or source-mismatched QA/CI never authorizes recovery
+ok 46 - missing or source-mismatched QA/CI never authorizes recovery
+  ---
+  duration_ms: 3.2972
+  type: 'test'
+  ...
+# Subtest: empty queue and label-only or manual subjects have no provider call or claim
+ok 47 - empty queue and label-only or manual subjects have no provider call or claim
+  ---
+  duration_ms: 11.9556
+  type: 'test'
+  ...
+# Subtest: source then actual auth probe precede the one native claim, validated report, reconciliation, projection and wake
+ok 48 - source then actual auth probe precede the one native claim, validated report, reconciliation, projection and wake
+  ---
+  duration_ms: 11.0625
+  type: 'test'
+  ...
+# Subtest: explicit guarded route stages before claim and releases only after actual native transition
+ok 49 - explicit guarded route stages before claim and releases only after actual native transition
+  ---
+  duration_ms: 5.9232
+  type: 'test'
+  ...
+# Subtest: guarded preclaim conflict closes staged process with no release or source inference
+ok 50 - guarded preclaim conflict closes staged process with no release or source inference
+  ---
+  duration_ms: 2.4075
+  type: 'test'
+  ...
+# Subtest: cleanup failure preserves staging classification without retry or forwarding
+ok 51 - cleanup failure preserves staging classification without retry or forwarding
+  ---
+  duration_ms: 5.7449
+  type: 'test'
+  ...
+# Subtest: cleanup failure preserves claim classification without retry or forwarding
+ok 52 - cleanup failure preserves claim classification without retry or forwarding
+  ---
+  duration_ms: 1.7976
+  type: 'test'
+  ...
+# Subtest: cleanup failure preserves transition classification without retry or forwarding
+ok 53 - cleanup failure preserves transition classification without retry or forwarding
+  ---
+  duration_ms: 3.3766
+  type: 'test'
+  ...
+# Subtest: uncertain claim and failed cleanup retain unknown reservation and never retry
+ok 54 - uncertain claim and failed cleanup retain unknown reservation and never retry
+  ---
+  duration_ms: 2.167
+  type: 'test'
+  ...
+# Subtest: native-required subject never falls back to the classic capacity/transport route
+ok 55 - native-required subject never falls back to the classic capacity/transport route
+  ---
+  duration_ms: 1.6287
+  type: 'test'
+  ...
+# Subtest: a staged process that expired before the claim never consumes a source round
+ok 56 - a staged process that expired before the claim never consumes a source round
+  ---
+  duration_ms: 6.3287
+  type: 'test'
+  ...
+# Subtest: canonical native critical context is hash-verified mandatory, not optional evidence
+ok 57 - canonical native critical context is hash-verified mandatory, not optional evidence
+  ---
+  duration_ms: 161.3252
+  type: 'test'
+  ...
+# Subtest: missing/invalid subscription credentials and stale source stop before native claim
+ok 58 - missing/invalid subscription credentials and stale source stop before native claim
+  ---
+  duration_ms: 1.2312
+  type: 'test'
+  ...
+# Subtest: native CAS loser never invokes review inference
+ok 59 - native CAS loser never invokes review inference
+  ---
+  duration_ms: 0.8868
+  type: 'test'
+  ...
+# Subtest: deferred optional completion cannot rewrite immutable source, feedback, plan or required evidence
+ok 60 - deferred optional completion cannot rewrite immutable source, feedback, plan or required evidence
+  ---
+  duration_ms: 7.5169
+  type: 'test'
+  ...
+# Subtest: original source and packet snapshots cannot be rewritten through reader aliases during qualification
+ok 61 - original source and packet snapshots cannot be rewritten through reader aliases during qualification
+  ---
+  duration_ms: 1.6194
+  type: 'test'
+  ...
+# Subtest: an unexpected returned claim transition cannot authorize inference using an older specification
+ok 62 - an unexpected returned claim transition cannot authorize inference using an older specification
+  ---
+  duration_ms: 1.9589
+  type: 'test'
+  ...
+# Subtest: invalid report spends its own claim, notifies recovery and never retries automatically
+ok 63 - invalid report spends its own claim, notifies recovery and never retries automatically
+  ---
+  duration_ms: 1.7535
+  type: 'test'
+  ...
+# Subtest: uncertain publication preserves genuine findings and the existing running claim
+ok 64 - uncertain publication preserves genuine findings and the existing running claim
+  ---
+  duration_ms: 1.3285
+  type: 'test'
+  ...
+# Subtest: unavailable Codex dispatch retains exact published review receipt without another model call
+ok 65 - unavailable Codex dispatch retains exact published review receipt without another model call
+  ---
+  duration_ms: 1.105
+  type: 'test'
+  ...
+# Subtest: real auth probe requires a real successful structured inference and qualified version
+ok 66 - real auth probe requires a real successful structured inference and qualified version
+  ---
+  duration_ms: 0.6984
+  type: 'test'
+  ...
+# Subtest: probe qualifies only one explicit Opus profile, ignoring internal models and clamping the known context maximum
+ok 67 - probe qualifies only one explicit Opus profile, ignoring internal models and clamping the known context maximum
+  ---
+  duration_ms: 1.5162
+  type: 'test'
+  ...
+# Subtest: numeric Opus version/date IDs normalize an exact optional 1M tag before inference
+ok 68 - numeric Opus version/date IDs normalize an exact optional 1M tag before inference
+  ---
+  duration_ms: 0.4766
+  type: 'test'
+  ...
+# Subtest: base and tagged Opus aliases remain ambiguous and malformed IDs never qualify
+ok 69 - base and tagged Opus aliases remain ambiguous and malformed IDs never qualify
+  ---
+  duration_ms: 0.8674
+  type: 'test'
+  ...
+# Subtest: tagged profiles retain explicit context/output bounds and the 1M inference clamp
+ok 70 - tagged profiles retain explicit context/output bounds and the 1M inference clamp
+  ---
+  duration_ms: 1.3013
+  type: 'test'
+  ...
+# Subtest: actual tagged modelUsage response shape passes the genuine probe before one native claim
+ok 71 - actual tagged modelUsage response shape passes the genuine probe before one native claim
+  ---
+  duration_ms: 1.1429
+  type: 'test'
+  ...
+# Subtest: a real successful probe envelope without context metadata still refuses qualification
+ok 72 - a real successful probe envelope without context metadata still refuses qualification
+  ---
+  duration_ms: 0.4938
+  type: 'test'
+  ...
+# Subtest: missing/small/ambiguous probe context and oversized complete inputs never claim or invoke review
+ok 73 - missing/small/ambiguous probe context and oversized complete inputs never claim or invoke review
+  ---
+  duration_ms: 6.2998
+  type: 'test'
+  ...
+# Subtest: the exact serialized Unicode/escaped prompt and schema fit the qualified profile before its pinned model call
+ok 74 - the exact serialized Unicode/escaped prompt and schema fit the qualified profile before its pinned model call
+  ---
+  duration_ms: 2.2144
+  type: 'test'
+  ...
+# Subtest: every publication stage retains the full sanitized valid report and digest without retrying or failing a claim
+ok 75 - every publication stage retains the full sanitized valid report and digest without retrying or failing a claim
+  ---
+  duration_ms: 2.8614
+  type: 'test'
+  ...
+# Subtest: retained ownership-change report is sanitized and hashed without exposing clinical/contact fields
+ok 76 - retained ownership-change report is sanitized and hashed without exposing clinical/contact fields
+  ---
+  duration_ms: 1.3217
+  type: 'test'
+  ...
+# Subtest: a post-claim timeout spends one round, notifies recovery and never mints a retry
+ok 77 - a post-claim timeout spends one round, notifies recovery and never mints a retry
+  ---
+  duration_ms: 1.2984
+  type: 'test'
+  ...
+# Subtest: workflow token is read-only and the precredential CLI installation uses the complete committed integrity lock
+ok 78 - workflow token is read-only and the precredential CLI installation uses the complete committed integrity lock
+  ---
+  duration_ms: 33.5593
+  type: 'test'
+  ...
+# Subtest: API source packet binds complete base/head source, contract and evidence without executing reviewed content
+ok 79 - API source packet binds complete base/head source, contract and evidence without executing reviewed content
+  ---
+  duration_ms: 3.6539
+  type: 'test'
+  ...
+# Subtest: 77+ binary proof changes remain hash metadata and do not block an ordinary small source review
+ok 80 - 77+ binary proof changes remain hash metadata and do not block an ordinary small source review
+  ---
+  duration_ms: 4.0833
+  type: 'test'
+  ...
+# Subtest: complete tree inventories prove all source changes when comparison files hit GitHub cap300
+ok 81 - complete tree inventories prove all source changes when comparison files hit GitHub cap300
+  ---
+  duration_ms: 4.4676
+  type: 'test'
+  ...
+# Subtest: unsupported first candidate never starves a later eligible native review
+ok 82 - unsupported first candidate never starves a later eligible native review
+  ---
+  duration_ms: 1.3475
+  type: 'test'
+  ...
+# Subtest: API source reader rejects identity/traversal/truncation/omitted diff/blob corruption/oversize
+ok 83 - API source reader rejects identity/traversal/truncation/omitted diff/blob corruption/oversize
+  ---
+  duration_ms: 6.5376
+  type: 'test'
+  ...
+# Subtest: actual review subprocess receives only subscription provider credentials and private empty HOME/cwd
+ok 84 - actual review subprocess receives only subscription provider credentials and private empty HOME/cwd
+  ---
+  duration_ms: 123.6298
+  type: 'test'
+  ...
+# Subtest: trusted cloud generation contract precedes untrusted JSON and states strict verdict consistency
+ok 85 - trusted cloud generation contract precedes untrusted JSON and states strict verdict consistency
+  ---
+  duration_ms: 1.2105
+  type: 'test'
+  ...
+# Subtest: runner throw and diagnostic callback rejection keep the native spent failure
+ok 86 - runner throw and diagnostic callback rejection keep the native spent failure
+  ---
+  duration_ms: 1.3272
+  type: 'test'
+  ...
+# Subtest: diagnostic callback failure never replaces the original native controller exception
+ok 87 - diagnostic callback failure never replaces the original native controller exception
+  ---
+  duration_ms: 1.678
+  type: 'test'
+  ...
+# Subtest: certificate commands use anonymous FIFO stdin key path, only public CSR/CA filenames
+ok 88 - certificate commands use anonymous FIFO stdin key path, only public CSR/CA filenames
+  ---
+  duration_ms: 4.4769
+  type: 'test'
+  ...
+# Subtest: fixed shell creates a real anonymous FIFO; key and shell syntax are never interpolated
+ok 89 - fixed shell creates a real anonymous FIFO; key and shell syntax are never interpolated
+  ---
+  duration_ms: 6.5642
+  type: 'test'
+  ...
+# Subtest: public CA rejects private keys and extra PEM objects before any mount
+ok 90 - public CA rejects private keys and extra PEM objects before any mount
+  ---
+  duration_ms: 2.9651
+  type: 'test'
+  ...
+# Subtest: OpenSSL failure never leaks raw stderr or supplied key into errors
+ok 91 - OpenSSL failure never leaks raw stderr or supplied key into errors
+  ---
+  duration_ms: 3.8219
+  type: 'test'
+  ...
+# Subtest: Linux actual OpenSSL cert chain works with stdin keys; Windows never pretends this proof
+ok 92 - Linux actual OpenSSL cert chain works with stdin keys; Windows never pretends this proof # SKIP
+  ---
+  duration_ms: 0.267
+  type: 'test'
+  ...
+# Subtest: container cleanup success requires proven removal of the owned ID
+ok 93 - container cleanup success requires proven removal of the owned ID
+  ---
+  duration_ms: 52.8114
+  type: 'test'
+  ...
+# Subtest: container cleanup nonzero requires proven removal of the owned ID
+ok 94 - container cleanup nonzero requires proven removal of the owned ID
+  ---
+  duration_ms: 10.1258
+  type: 'test'
+  ...
+# Subtest: container cleanup error requires proven removal of the owned ID
+ok 95 - container cleanup error requires proven removal of the owned ID
+  ---
+  duration_ms: 6.5796
+  type: 'test'
+  ...
+# Subtest: container cleanup throw requires proven removal of the owned ID
+ok 96 - container cleanup throw requires proven removal of the owned ID
+  ---
+  duration_ms: 9.1099
+  type: 'test'
+  ...
+# Subtest: container cleanup timeout requires proven removal of the owned ID
+ok 97 - container cleanup timeout requires proven removal of the owned ID
+  ---
+  duration_ms: 50.7303
+  type: 'test'
+  ...
+# Subtest: container cleanup no-id requires proven removal of the owned ID
+ok 98 - container cleanup no-id requires proven removal of the owned ID
+  ---
+  duration_ms: 55.1844
+  type: 'test'
+  ...
+# Subtest: container cleanup late-id requires proven removal of the owned ID
+ok 99 - container cleanup late-id requires proven removal of the owned ID
+  ---
+  duration_ms: 36.3457
+  type: 'test'
+  ...
+# Subtest: container cleanup auto-removed requires proven removal of the owned ID
+ok 100 - container cleanup auto-removed requires proven removal of the owned ID
+  ---
+  duration_ms: 49.1752
+  type: 'test'
+  ...
+# Subtest: container cleanup list-error requires proven removal of the owned ID
+ok 101 - container cleanup list-error requires proven removal of the owned ID
+  ---
+  duration_ms: 8.5158
+  type: 'test'
+  ...
+# Subtest: container cleanup list-throw requires proven removal of the owned ID
+ok 102 - container cleanup list-throw requires proven removal of the owned ID
+  ---
+  duration_ms: 6.1008
+  type: 'test'
+  ...
+# Subtest: container cleanup list-nonzero requires proven removal of the owned ID
+ok 103 - container cleanup list-nonzero requires proven removal of the owned ID
+  ---
+  duration_ms: 4.9103
+  type: 'test'
+  ...
+# Subtest: container cleanup list-timeout requires proven removal of the owned ID
+ok 104 - container cleanup list-timeout requires proven removal of the owned ID
+  ---
+  duration_ms: 54.1812
+  type: 'test'
+  ...
+# Subtest: container cleanup list-visible requires proven removal of the owned ID
+ok 105 - container cleanup list-visible requires proven removal of the owned ID
+  ---
+  duration_ms: 4.5705
+  type: 'test'
+  ...
+# Subtest: container cleanup list-truncated requires proven removal of the owned ID
+ok 106 - container cleanup list-truncated requires proven removal of the owned ID
+  ---
+  duration_ms: 6.1215
+  type: 'test'
+  ...
+# Subtest: container cleanup list-stderr requires proven removal of the owned ID
+ok 107 - container cleanup list-stderr requires proven removal of the owned ID
+  ---
+  duration_ms: 4.7624
+  type: 'test'
+  ...
+# Subtest: container arguments have immutable image, no network, no secrets or repo mounts
+ok 108 - container arguments have immutable image, no network, no secrets or repo mounts
+  ---
+  duration_ms: 3.4733
+  type: 'test'
+  ...
+# Subtest: mount path injection, duplicate/public mount alias, socket traversal fail
+ok 109 - mount path injection, duplicate/public mount alias, socket traversal fail
+  ---
+  duration_ms: 9.2401
+  type: 'test'
+  ...
+# Subtest: combined private output cap is hard and sanitized receipt never returns raw output
+ok 110 - combined private output cap is hard and sanitized receipt never returns raw output
+  ---
+  duration_ms: 0.862
+  type: 'test'
+  ...
+# Subtest: actual inspection validator rejects isolation/image/env drift, not just builder intent
+ok 111 - actual inspection validator rejects isolation/image/env drift, not just builder intent
+  ---
+  duration_ms: 4.6239
+  type: 'test'
+  ...
+# Subtest: escape comparison requires reachable controlled TCP and DNS bridge baseline
+ok 112 - escape comparison requires reachable controlled TCP and DNS bridge baseline
+  ---
+  duration_ms: 1.1683
+  type: 'test'
+  ...
+# Subtest: deadline settles failed and escalates when inspected Docker child ignores SIGTERM
+ok 113 - deadline settles failed and escalates when inspected Docker child ignores SIGTERM
+  ---
+  duration_ms: 73.5771
+  type: 'test'
+  ...
+# Subtest: controlled probe snapshot precedes even immediate fixture completion
+ok 114 - controlled probe snapshot precedes even immediate fixture completion
+  ---
+  duration_ms: 3.3454
+  type: 'test'
+  ...
+# Subtest: Linux controlled bridge TCP/DNS baseline succeeds; identical network-none fixture cannot escape
+ok 115 - Linux controlled bridge TCP/DNS baseline succeeds; identical network-none fixture cannot escape # SKIP
+  ---
+  duration_ms: 0.6384
+  type: 'test'
+  ...
+# Subtest: guard JSON decodes valid bounded UTF8 once and returns immutable values
+ok 116 - guard JSON decodes valid bounded UTF8 once and returns immutable values
+  ---
+  duration_ms: 4.0888
+  type: 'test'
+  ...
+# Subtest: duplicate decoded/prototype keys and unpaired surrogates never survive parsing
+ok 117 - duplicate decoded/prototype keys and unpaired surrogates never survive parsing
+  ---
+  duration_ms: 6.0846
+  type: 'test'
+  ...
+# Subtest: JSON byte/depth/node/string bounds apply before unbounded construction
+ok 118 - JSON byte/depth/node/string bounds apply before unbounded construction
+  ---
+  duration_ms: 0.7378
+  type: 'test'
+  ...
+# Subtest: duplicate keys are rejected at every nesting and diagnostics never echo input
+ok 119 - duplicate keys are rejected at every nesting and diagnostics never echo input
+  ---
+  duration_ms: 1.0601
+  type: 'test'
+  ...
+# Subtest: fixed native arguments keep official provider and only one turn
+ok 120 - fixed native arguments keep official provider and only one turn
+  ---
+  duration_ms: 5.8066
+  type: 'test'
+  ...
+# Subtest: bootstrap rejects arbitrary commands, env, extra keys and unsafe models
+ok 121 - bootstrap rejects arbitrary commands, env, extra keys and unsafe models
+  ---
+  duration_ms: 16.7712
+  type: 'test'
+  ...
+# Subtest: managed path absence is checked; present, unreadable and unknown errors fail closed
+ok 122 - managed path absence is checked; present, unreadable and unknown errors fail closed
+  ---
+  duration_ms: 1.6051
+  type: 'test'
+  ...
+# Subtest: native environment cannot inherit controller/provider credentials
+ok 123 - native environment cannot inherit controller/provider credentials
+  ---
+  duration_ms: 0.6403
+  type: 'test'
+  ...
+# Subtest: hung proxy still starts container stop and never reports removed resources
+ok 124 - hung proxy still starts container stop and never reports removed resources
+  ---
+  duration_ms: 275.0692
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded startup with no keepalive
+ok 125 - standalone child settles bounded startup with no keepalive
+  ---
+  duration_ms: 313.5268
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded cleanup with no keepalive
+ok 126 - standalone child settles bounded cleanup with no keepalive
+  ---
+  duration_ms: 184.7389
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded isolation with no keepalive
+ok 127 - standalone child settles bounded isolation with no keepalive
+  ---
+  duration_ms: 74.8923
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded release with no keepalive
+ok 128 - standalone child settles bounded release with no keepalive
+  ---
+  duration_ms: 75.7339
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded late-success with no keepalive
+ok 129 - standalone child settles bounded late-success with no keepalive
+  ---
+  duration_ms: 120.4291
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded late-reject with no keepalive
+ok 130 - standalone child settles bounded late-reject with no keepalive
+  ---
+  duration_ms: 125.831
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded late-hang with no keepalive
+ok 131 - standalone child settles bounded late-hang with no keepalive
+  ---
+  duration_ms: 196.193
+  type: 'test'
+  ...
+# Subtest: concurrent cleanup shares one operation and the same sanitized outcome
+ok 132 - concurrent cleanup shares one operation and the same sanitized outcome
+  ---
+  duration_ms: 0.9559
+  type: 'test'
+  ...
+# Subtest: late startup after cleanup timeout is closed exactly once and cannot regain authority
+ok 133 - late startup after cleanup timeout is closed exactly once and cannot regain authority
+  ---
+  duration_ms: 150.9088
+  type: 'test'
+  ...
+# Subtest: TLS key is synchronously erased on success resource cleanup
+ok 134 - TLS key is synchronously erased on success resource cleanup
+  ---
+  duration_ms: 1.4882
+  type: 'test'
+  ...
+# Subtest: TLS key is synchronously erased on reject resource cleanup
+ok 135 - TLS key is synchronously erased on reject resource cleanup
+  ---
+  duration_ms: 0.4539
+  type: 'test'
+  ...
+# Subtest: TLS key is synchronously erased on hang resource cleanup
+ok 136 - TLS key is synchronously erased on hang resource cleanup
+  ---
+  duration_ms: 58.0136
+  type: 'test'
+  ...
+# Subtest: failed disposal still attempts both stops and never removes the directory
+ok 137 - failed disposal still attempts both stops and never removes the directory
+  ---
+  duration_ms: 3.5121
+  type: 'test'
+  ...
+# Subtest: trusted capacity rejection emits only a frozen numeric snapshot and never stages or forwards
+ok 138 - trusted capacity rejection emits only a frozen numeric snapshot and never stages or forwards
+  ---
+  duration_ms: 6.3248
+  type: 'test'
+  ...
+# Subtest: forged codes, maps, default classifier and malformed capacity metadata never notify or admit
+ok 139 - forged codes, maps, default classifier and malformed capacity metadata never notify or admit
+  ---
+  duration_ms: 14.8676
+  type: 'test'
+  ...
+# Subtest: normal source staging preserves the captured forward and capacity callback cannot admit failure
+ok 140 - normal source staging preserves the captured forward and capacity callback cannot admit failure
+  ---
+  duration_ms: 1.0317
+  type: 'test'
+  ...
+# Subtest: CONNECT authority is exact and never an open tunnel
+ok 141 - CONNECT authority is exact and never an open tunnel
+  ---
+  duration_ms: 2.316
+  type: 'test'
+  ...
+# Subtest: raw duplicate framing/auth/host and alternate authentication fail closed
+ok 142 - raw duplicate framing/auth/host and alternate authentication fail closed
+  ---
+  duration_ms: 3.9784
+  type: 'test'
+  ...
+# Subtest: only fixed inference and policy metadata endpoints are allowed
+ok 143 - only fixed inference and policy metadata endpoints are allowed
+  ---
+  duration_ms: 1.0938
+  type: 'test'
+  ...
+# Subtest: upstream TLS cannot inherit local CA/proxy or route to alternate host
+ok 144 - upstream TLS cannot inherit local CA/proxy or route to alternate host
+  ---
+  duration_ms: 38.6831
+  type: 'test'
+  ...
+# Subtest: Linux real CONNECT/TLS holds complete source before parent release and preserves body
+ok 145 - Linux real CONNECT/TLS holds complete source before parent release and preserves body # SKIP
+  ---
+  duration_ms: 0.5325
+  type: 'test'
+  ...
+# Subtest: qualification input includes whole current-size context plus explicit CI headroom
+ok 146 - qualification input includes whole current-size context plus explicit CI headroom
+  ---
+  duration_ms: 7.6236
+  type: 'test'
+  ...
+# Subtest: qualification is explicit exact trusted-main dispatch, never a schedule or candidate
+ok 147 - qualification is explicit exact trusted-main dispatch, never a schedule or candidate
+  ---
+  duration_ms: 3.4795
+  type: 'test'
+  ...
+# Subtest: synthetic unit receipt binds complete input, actual cap, genuine default and build
+ok 148 - synthetic unit receipt binds complete input, actual cap, genuine default and build
+  ---
+  duration_ms: 9.1914
+  type: 'test'
+  ...
+# Subtest: profile, missing isolation, policy, retry, report and actual-cap failures cannot qualify
+ok 149 - profile, missing isolation, policy, retry, report and actual-cap failures cannot qualify
+  ---
+  duration_ms: 82.7587
+  type: 'test'
+  ...
+# Subtest: full843365 plus40KiB synthetic context fits only the sealed actual32k cap
+ok 150 - full843365 plus40KiB synthetic context fits only the sealed actual32k cap
+  ---
+  duration_ms: 62.5598
+  type: 'test'
+  ...
+# Subtest: exact decoded context boundary and one byte over retain the native65536 margin
+ok 151 - exact decoded context boundary and one byte over retain the native65536 margin
+  ---
+  duration_ms: 52.3219
+  type: 'test'
+  ...
+# Subtest: outer escaping is decoded once but embedded packet JSON remains model visible
+ok 152 - outer escaping is decoded once but embedded packet JSON remains model visible
+  ---
+  duration_ms: 2.3174
+  type: 'test'
+  ...
+# Subtest: framing, context fields, extra user content and schema/model mismatch all fail closed
+ok 153 - framing, context fields, extra user content and schema/model mismatch all fail closed
+  ---
+  duration_ms: 2.1476
+  type: 'test'
+  ...
+# Subtest: all native text blocks, schema descriptions and thinking wrappers are accounted without inventing128k metadata
+ok 154 - all native text blocks, schema descriptions and thinking wrappers are accounted without inventing128k metadata
+  ---
+  duration_ms: 1.085
+  type: 'test'
+  ...
+# Subtest: all system/user/tool context bounds and unknown thinking/effort fields fail closed
+ok 155 - all system/user/tool context bounds and unknown thinking/effort fields fail closed
+  ---
+  duration_ms: 5.7029
+  type: 'test'
+  ...
+# Subtest: raw duplicates, decompression/framing and unknown request keys are not normalized into acceptance
+ok 156 - raw duplicates, decompression/framing and unknown request keys are not normalized into acceptance
+  ---
+  duration_ms: 1.6651
+  type: 'test'
+  ...
+# Subtest: only a fully valid one-byte context overflow produces a private-minted numeric capacity error
+ok 157 - only a fully valid one-byte context overflow produces a private-minted numeric capacity error
+  ---
+  duration_ms: 17.146
+  type: 'test'
+  ...
+# Subtest: malformed and oversized requests cannot launder a capacity-only fallback hint
+ok 158 - malformed and oversized requests cannot launder a capacity-only fallback hint
+  ---
+  duration_ms: 130.7787
+  type: 'test'
+  ...
+# Subtest: publicly constructed or prototype-forged errors from hostile getters are not trusted capacity signals
+ok 159 - publicly constructed or prototype-forged errors from hostile getters are not trusted capacity signals
+  ---
+  duration_ms: 1.4245
+  type: 'test'
+  ...
+# Subtest: a previously genuine capacity error cannot be replayed through a different request getter
+ok 160 - a previously genuine capacity error cannot be replayed through a different request getter
+  ---
+  duration_ms: 17.155
+  type: 'test'
+  ...
+# Subtest: top-level request getters cannot escape capacity-only error normalization
+ok 161 - top-level request getters cannot escape capacity-only error normalization
+  ---
+  duration_ms: 14.2189
+  type: 'test'
+  ...
+# Subtest: strict SSE reconstructs one genuine StructuredOutput and matches native CLI report
+ok 162 - strict SSE reconstructs one genuine StructuredOutput and matches native CLI report
+  ---
+  duration_ms: 12.4223
+  type: 'test'
+  ...
+# Subtest: model/output/CLI mismatch, missing stop, duplicate message and malformed UTF8 poison response
+ok 163 - model/output/CLI mismatch, missing stop, duplicate message and malformed UTF8 poison response
+  ---
+  duration_ms: 3.3081
+  type: 'test'
+  ...
+# Subtest: documented thinking/signature blocks stay bounded by genuine cumulative usage before one tool
+ok 164 - documented thinking/signature blocks stay bounded by genuine cumulative usage before one tool
+  ---
+  duration_ms: 1.9259
+  type: 'test'
+  ...
+# Subtest: strict SSE disallows duplicate decoded keys, alternate tools, retry/fallback and output truncation
+ok 165 - strict SSE disallows duplicate decoded keys, alternate tools, retry/fallback and output truncation
+  ---
+  duration_ms: 1.9145
+  type: 'test'
+  ...
+# Subtest: actual review schema subset is enforced and unknown schema keywords reject before a result
+ok 166 - actual review schema subset is enforced and unknown schema keywords reject before a result
+  ---
+  duration_ms: 4.4349
+  type: 'test'
+  ...
+# Subtest: response memory bounds, mutation aliases and poisoned re-use never select an earlier answer
+ok 167 - response memory bounds, mutation aliases and poisoned re-use never select an earlier answer
+  ---
+  duration_ms: 1.6332
+  type: 'test'
+  ...
+# Subtest: native policy settlement requires the complete late genuine marker
+ok 168 - native policy settlement requires the complete late genuine marker
+  ---
+  duration_ms: 4.443
+  type: 'test'
+  ...
+# Subtest: policy watchdog, cache, save failure and late changes irreversibly poison
+ok 169 - policy watchdog, cache, save failure and late changes irreversibly poison
+  ---
+  duration_ms: 1.4651
+  type: 'test'
+  ...
+# Subtest: transport success, malformed prefixes and duplicate settlement are not certificates
+ok 170 - transport success, malformed prefixes and duplicate settlement are not certificates
+  ---
+  duration_ms: 0.9765
+  type: 'test'
+  ...
+# Subtest: diagnostics are finite, private and never returned through receipts or exceptions
+ok 171 - diagnostics are finite, private and never returned through receipts or exceptions
+  ---
+  duration_ms: 2.5309
+  type: 'test'
+  ...
+# Subtest: invalid or incomplete UTF8 after settlement cannot authorize a source request
+ok 172 - invalid or incomplete UTF8 after settlement cannot authorize a source request
+  ---
+  duration_ms: 0.501
+  type: 'test'
+  ...
+# Subtest: concurrent session close calls share cleanup without forwarding
+ok 173 - concurrent session close calls share cleanup without forwarding
+  ---
+  duration_ms: 23.2449
+  type: 'test'
+  ...
+# Subtest: a valid forward cannot succeed when cleanup fails
+ok 174 - a valid forward cannot succeed when cleanup fails
+  ---
+  duration_ms: 5.1786
+  type: 'test'
+  ...
+# Subtest: policy invalidated during awaited claim validation prevents the upstream write
+ok 175 - policy invalidated during awaited claim validation prevents the upstream write
+  ---
+  duration_ms: 2.0383
+  type: 'test'
+  ...
+# Subtest: late policy microtask irreversibly poisons the gate before its await continuation forwards
+ok 176 - late policy microtask irreversibly poisons the gate before its await continuation forwards
+  ---
+  duration_ms: 1.8186
+  type: 'test'
+  ...
+# Subtest: liveness is synchronously fenced after every awaited claim continuation
+ok 177 - liveness is synchronously fenced after every awaited claim continuation
+  ---
+  duration_ms: 1.8081
+  type: 'test'
+  ...
+# Subtest: startup promise is bounded even when the native runtime never returns
+ok 178 - startup promise is bounded even when the native runtime never returns
+  ---
+  duration_ms: 65.5046
+  type: 'test'
+  ...
+# Subtest: optional reports use actual native wrapper budget without starving mandatory source
+ok 179 - optional reports use actual native wrapper budget without starving mandatory source
+  ---
+  duration_ms: 109.2611
+  type: 'test'
+  ...
+# Subtest: capacity-only optional restaging falls back to the still-live mandatory body, never policy failures
+ok 180 - capacity-only optional restaging falls back to the still-live mandatory body, never policy failures
+  ---
+  duration_ms: 127.5203
+  type: 'test'
+  ...
+# Subtest: staged source waits for actual owned claim then validates real native and upstream equality
+ok 181 - staged source waits for actual owned claim then validates real native and upstream equality
+  ---
+  duration_ms: 2.5
+  type: 'test'
+  ...
+# Subtest: foreign claim and unproven isolation cannot forward source
+ok 182 - foreign claim and unproven isolation cannot forward source
+  ---
+  duration_ms: 1.3267
+  type: 'test'
+  ...
+# Subtest: late retry, late policy and duplicate CLI JSON remain actual failures, never earlier success
+ok 183 - late retry, late policy and duplicate CLI JSON remain actual failures, never earlier success
+  ---
+  duration_ms: 1.8133
+  type: 'test'
+  ...
+# Subtest: a stalled already-owned forward reaches terminal failure without replaying source
+ok 184 - a stalled already-owned forward reaches terminal failure without replaying source
+  ---
+  duration_ms: 39.5539
+  type: 'test'
+  ...
+# Subtest: only parent-held identity handle and actual validated claim release exactly one captured forward
+ok 185 - only parent-held identity handle and actual validated claim release exactly one captured forward
+  ---
+  duration_ms: 3.0101
+  type: 'test'
+  ...
+# Subtest: concurrent second request permanently poisons a release waiting on its claim fence
+ok 186 - concurrent second request permanently poisons a release waiting on its claim fence
+  ---
+  duration_ms: 4.7316
+  type: 'test'
+  ...
+# Subtest: forged handles, failed claims and uncertain upstream outcomes never refund or replay
+ok 187 - forged handles, failed claims and uncertain upstream outcomes never refund or replay
+  ---
+  duration_ms: 1.5253
+  type: 'test'
+  ...
+# Subtest: a concurrent second parent release cannot pass the same awaiting fence
+ok 188 - a concurrent second parent release cannot pass the same awaiting fence
+  ---
+  duration_ms: 0.6902
+  type: 'test'
+  ...
+# Subtest: claim and seal aliases are detached and a late retry poisons the final session state
+ok 189 - claim and seal aliases are detached and a late retry poisons the final session state
+  ---
+  duration_ms: 0.6646
+  type: 'test'
+  ...
+1..189
+# tests 189
+# suites 0
+# pass 186
+# fail 0
+# cancelled 0
+# skipped 3
+# todo 0
+# duration_ms 1916.466

@@ -257,9 +257,13 @@ export async function startNativeGuardContainer({
   spawnImpl = spawn,
   validateMounts = validateNativeGuardMounts,
   timeoutMs = 20 * 60000,
+  cleanupTimeoutMs = 10000,
 } = {}) {
   if (spawnImpl === spawn) assert.equal(process.platform, 'linux', 'native-linux-required');
   assert.ok(Number.isSafeInteger(timeoutMs) && timeoutMs > 0 && timeoutMs <= 20 * 60000);
+  assert.ok(
+    Number.isSafeInteger(cleanupTimeoutMs) && cleanupTimeoutMs > 0 && cleanupTimeoutMs <= 10000,
+  );
   const boot = Buffer.from(JSON.stringify(bootstrap));
   parseNativeBootstrap(boot);
   let mountProof;
@@ -285,14 +289,50 @@ export async function startNativeGuardContainer({
     failed = null,
     ownedContainerId = null;
   let finish;
-  const completion = new Promise((r) => {
-    finish = r;
-  });
+  const completion = new Promise((r) => (finish = r));
   let timer, killTimer, cleanup;
+  const proveAbsent = (id) =>
+    new Promise((resolve, reject) => {
+      let p,
+        dirty = false,
+        settled = false;
+      const done = (ok) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(t);
+        if (ok && !dirty) resolve({ removed: true });
+        else reject(Error('native-container-cleanup-unproven'));
+      };
+      const t = setTimeout(() => {
+        try {
+          p?.kill('SIGKILL');
+        } catch {}
+        done(false);
+      }, cleanupTimeoutMs);
+      try {
+        const command = ['container', 'ls', '--all', '--no-trunc'];
+        command.push('--format', '{{.ID}}', '--filter', `id=${id}`);
+        const options = { env, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true };
+        p = spawnImpl('docker', [...HOST, ...command], options);
+        const markDirty = () => (dirty = true);
+        for (const stream of [p.stdout, p.stderr]) stream.on('data', markDirty);
+        p.once('error', () => done(false));
+        p.once('close', (status) => done(status === 0));
+      } catch {
+        done(false);
+      }
+    });
   const removeOwned = () => {
-    if (!ownedContainerId) return Promise.resolve();
-    return (cleanup ??= new Promise((resolve) => {
-      let p;
+    if (!ownedContainerId) return Promise.reject(Error('native-container-cleanup-unproven'));
+    return (cleanup ??= new Promise((resolve, reject) => {
+      let p,
+        t,
+        settled = false;
+      const fail = () => {
+        clearTimeout(t);
+        if (!settled) reject(Error('native-container-cleanup-unproven'));
+        settled = true;
+      };
       try {
         p = spawnImpl('docker', [...HOST, 'rm', '--force', '--', ownedContainerId], {
           env,
@@ -300,20 +340,21 @@ export async function startNativeGuardContainer({
           windowsHide: true,
         });
       } catch {
-        return resolve();
+        return fail();
       }
-      const t = setTimeout(() => {
-        p.kill('SIGKILL');
-        resolve();
-      }, 10000);
-      t.unref?.();
-      p.once('error', () => {
+      t = setTimeout(() => {
+        try {
+          p.kill('SIGKILL');
+        } catch {}
+        fail();
+      }, cleanupTimeoutMs);
+      p.once('error', fail);
+      p.once('close', (status) => {
         clearTimeout(t);
-        resolve();
-      });
-      p.once('close', () => {
-        clearTimeout(t);
-        resolve();
+        if (settled) return;
+        settled = true;
+        if (status === 0) resolve({ removed: true });
+        else proveAbsent(ownedContainerId).then(resolve, reject);
       });
     }));
   };
@@ -344,7 +385,7 @@ export async function startNativeGuardContainer({
     } catch {
       /* Terminal failure remains bounded. */
     }
-    void removeOwned();
+    if (ownedContainerId) void removeOwned().catch(() => {});
     killTimer ??= setTimeout(() => {
       try {
         child?.kill('SIGKILL');
@@ -355,7 +396,6 @@ export async function startNativeGuardContainer({
         end();
       }
     }, 25);
-    killTimer.unref?.();
   };
   try {
     child = spawnImpl('docker', args, { env, stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true });
@@ -414,7 +454,7 @@ export async function startNativeGuardContainer({
     assert.equal(observed.Config?.Image, NATIVE_GUARD_IMAGE);
     ownedContainerId = observed.Id;
     if (failed) {
-      void removeOwned();
+      void removeOwned().catch(() => {});
       throw Error('native-container-stopped');
     }
     const image = await inspectDocker(['image', 'inspect', NATIVE_GUARD_IMAGE], { env, spawnImpl });
@@ -435,9 +475,24 @@ export async function startNativeGuardContainer({
     takePrivateOutput: () => capture.take(),
     async close() {
       if (!closed) stop('native-container-closed');
-      // Never remove by a speculative name: only the observed ID of our actual creation.
-      await removeOwned();
-      await completion;
+      // Wait for the immutable ID to be observed; never remove by a speculative name.
+      if (!ownedContainerId) {
+        let waitTimer;
+        try {
+          await Promise.race([
+            isolation.catch(() => {}),
+            new Promise((_, reject) => {
+              waitTimer = setTimeout(
+                () => reject(Error('native-container-cleanup-unproven')),
+                cleanupTimeoutMs,
+              );
+            }),
+          ]);
+        } finally {
+          clearTimeout(waitTimer);
+        }
+      }
+      return (await Promise.all([removeOwned(), completion]))[0];
     },
   };
 }

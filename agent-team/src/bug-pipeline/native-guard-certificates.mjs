@@ -2,9 +2,10 @@
 import assert from 'node:assert/strict';
 import { generateKeyPairSync, randomBytes, X509Certificate, createPrivateKey } from 'node:crypto';
 import { spawn } from 'node:child_process';
-import { writeFile, mkdtemp } from 'node:fs/promises';
+import { writeFile, mkdtemp, realpath, rm } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { cleanupFailure } from './native-guard-outcome.mjs';
 
 export function certificateCommands(serial, directory = '/tmp/native-public-certificate') {
   assert.match(serial, /^[a-f0-9]{32}$/);
@@ -140,7 +141,11 @@ export function validatePublicCertificate(bytes) {
   assert.equal(cert.ca, true);
   return cert;
 }
-export async function createNativeGuardCertificates({ spawnImpl = spawn } = {}) {
+export async function createNativeGuardCertificates({
+  spawnImpl = spawn,
+  parentDirectory = os.tmpdir(),
+  removeImpl = rm,
+} = {}) {
   if (spawnImpl === spawn) assert.equal(process.platform, 'linux', 'native-linux-required');
   const key = () =>
     generateKeyPairSync('rsa', { modulusLength: 2048 }).privateKey.export({
@@ -149,8 +154,19 @@ export async function createNativeGuardCertificates({ spawnImpl = spawn } = {}) 
     });
   let caKey = Buffer.from(key()),
     leafKey = Buffer.from(key());
+  let removePublic;
   try {
-    const publicDirectory = await mkdtemp(path.join(os.tmpdir(), 'native-guard-public-cert-'));
+    const parent = await realpath(parentDirectory);
+    const publicDirectory = await mkdtemp(path.join(parent, 'native-guard-public-cert-'));
+    let removal;
+    removePublic = () =>
+      (removal ??= (async () => {
+        assert.equal(path.dirname(publicDirectory), parent);
+        assert.match(path.basename(publicDirectory), /^native-guard-public-cert-[A-Za-z0-9]+$/);
+        assert.equal(await realpath(publicDirectory), publicDirectory);
+        await removeImpl(publicDirectory, { recursive: true, force: true });
+      })());
+    assert.equal(await realpath(publicDirectory), publicDirectory);
     const commands = certificateCommands(randomBytes(16).toString('hex'), publicDirectory);
     const ca = await collectOpenSSL(commands[0], [caKey], { spawnImpl });
     const publicCA = validatePublicCertificate(ca);
@@ -185,11 +201,23 @@ export async function createNativeGuardCertificates({ spawnImpl = spawn } = {}) 
       publicCA: Buffer.from(ca),
       tlsOptions,
       publicDirectory,
+      cleanup: removePublic,
       dispose() {
         tlsOptions.key.fill(0);
         tlsOptions.key = Buffer.alloc(0);
       },
     };
+  } catch (error) {
+    caKey.fill(0);
+    leafKey.fill(0);
+    if (removePublic) {
+      try {
+        await removePublic();
+      } catch {
+        throw cleanupFailure();
+      }
+    }
+    throw error;
   } finally {
     caKey.fill(0);
     leafKey.fill(0);

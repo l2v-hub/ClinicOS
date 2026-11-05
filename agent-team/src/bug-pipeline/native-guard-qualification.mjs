@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { lstat, readFile, realpath } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
+import { isCleanupFailure } from './native-guard-outcome.mjs';
 
 export const NATIVE_GUARD_PROFILE = 'native-max-single-forward-v1';
 export const NATIVE_GUARD_OUTPUT_CAP = 32768;
@@ -137,7 +138,8 @@ export async function qualifyNativeGuard({ env, build, health, source }) {
       applicationApproval: false,
       newAllowance: false,
     });
-  } catch {
+  } catch (error) {
+    if (isCleanupFailure(error)) throw error;
     throw rejected();
   }
 }
@@ -172,6 +174,7 @@ export async function nativeGuardBuildIdentity({ env, cliPath }) {
     'container',
     'launcher',
     'session',
+    'outcome',
     'qualification',
   ];
   const files = [
@@ -280,6 +283,7 @@ export function createNativeReviewStager({ startRuntime, qualification }) {
         },
         startRuntime,
         validateClaim,
+        reviewTracked: source.tracked,
       });
     // First hold real, verified mandatory context WITHOUT inference or claim.
     // Keep that live capability until optional selection is actually admitted.

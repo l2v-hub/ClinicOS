@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { cleanupFailure, isCleanupFailure } from '../../src/bug-pipeline/native-guard-outcome.mjs';
+import { boundedCleanup } from '../../src/bug-pipeline/native-guard-session.mjs';
 import {
   makeQualificationInput,
   validateQualificationContext,
@@ -90,6 +92,38 @@ function fixture(overrides = {}) {
     },
   };
 }
+
+test('qualification propagates only branded cleanup failures', async () => {
+  const f = fixture();
+  let actual;
+  try {
+    await boundedCleanup(() => {
+      throw Error('private');
+    }, 50)();
+  } catch (error) {
+    actual = error;
+  }
+  for (const error of [actual, cleanupFailure(), Error('native-session-cleanup-failed')]) {
+    let observed;
+    try {
+      await qualifyNativeGuard({
+        env,
+        build,
+        health: f.health,
+        source: async () => {
+          throw error;
+        },
+      });
+    } catch (failure) {
+      observed = failure;
+    }
+    assert.equal(isCleanupFailure(observed), isCleanupFailure(error));
+    assert.equal(
+      observed.message,
+      isCleanupFailure(error) ? 'native-session-cleanup-failed' : 'native-qualification-rejected',
+    );
+  }
+});
 
 test('synthetic unit receipt binds complete input, actual cap, genuine default and build', async () => {
   const f = fixture();

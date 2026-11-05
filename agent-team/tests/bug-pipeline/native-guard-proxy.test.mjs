@@ -369,6 +369,7 @@ test(
       transport?.destroy();
       await proxy.close();
       cert.dispose();
+      await cert.cleanup();
     }
   },
 );
