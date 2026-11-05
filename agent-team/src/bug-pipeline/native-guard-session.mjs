@@ -1,6 +1,58 @@
 // Native guarded-profile orchestration. No default activation or provider fallback.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+// A timeout is an unknown outcome, never proof that owned resources were removed.
+// Concurrent callers share the original operation, including a sanitized failure.
+export function boundedCleanup(cleanup, timeoutMs = 10000) {
+  if (
+    typeof cleanup !== 'function' ||
+    !Number.isSafeInteger(timeoutMs) ||
+    timeoutMs <= 0 ||
+    timeoutMs > 10000
+  )
+    throw new TypeError('native-cleanup-configuration-invalid');
+  let operation;
+  return () => {
+    if (operation) return operation;
+    let resolveOperation, rejectOperation;
+    operation = new Promise((resolve, reject) => {
+      resolveOperation = resolve;
+      rejectOperation = reject;
+    });
+    const timer = setTimeout(
+      () => rejectOperation(new Error('native-session-cleanup-failed')),
+      timeoutMs,
+    );
+    const finish = (ok) => {
+      clearTimeout(timer);
+      if (ok) resolveOperation();
+      else rejectOperation(new Error('native-session-cleanup-failed'));
+    };
+    try {
+      Promise.resolve(cleanup()).then(
+        () => finish(true),
+        () => finish(false),
+      );
+    } catch {
+      finish(false);
+    }
+    return operation;
+  };
+}
+export async function stopNativeResources(proxy, container) {
+  const start = (resource) => {
+    try {
+      return Promise.resolve(resource?.close());
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+  const outcomes = await Promise.allSettled([start(proxy), start(container)]);
+  if (outcomes.some((outcome) => outcome.status === 'rejected'))
+    throw new Error('native-runtime-cleanup-failed');
+  if (container && outcomes[1].value?.removed !== true)
+    throw new Error('native-runtime-cleanup-failed');
+}
 const capacityFailures = new WeakSet();
 export const isNativeStagingCapacityError = (error) =>
   typeof error === 'object' && error !== null && capacityFailures.has(error);
@@ -80,6 +132,7 @@ export async function stageGuardedSession({
   startRuntime,
   validateClaim,
   timeoutMs = 20 * 60000,
+  cleanupTimeoutMs = 10000,
 }) {
   const { createNativeGuardState } = await import('./native-guard-state.mjs');
   const { createNativeResponseGuard } = await import('./native-guard-response.mjs');
@@ -87,6 +140,9 @@ export async function stageGuardedSession({
   assert.equal(typeof startRuntime, 'function');
   assert.equal(typeof validateClaim, 'function');
   assert.ok(Number.isSafeInteger(timeoutMs) && timeoutMs > 0 && timeoutMs <= 20 * 60000);
+  assert.ok(
+    Number.isSafeInteger(cleanupTimeoutMs) && cleanupTimeoutMs > 0 && cleanupTimeoutMs <= 10000,
+  );
   const pinned = structuredClone(expected);
   assert.equal(pinned.contextWindow, 1000000);
   assert.equal(pinned.outputCap, 32768);
@@ -123,9 +179,7 @@ export async function stageGuardedSession({
     readyReject(new Error('native-session-rejected'));
     // Cancel the parent transport synchronously; a queued microtask must not
     // resume the release gate after a late policy event invalidated its fence.
-    try {
-      Promise.resolve(runtime?.close()).catch(() => {});
-    } catch {}
+    void close().catch(() => {});
   };
   const maybeReady = () => {
     if (staged && policy.ready()) readyResolve(staged);
@@ -134,17 +188,16 @@ export async function stageGuardedSession({
     expireReject(new Error('native-session-rejected'));
     reject();
   }, timeoutMs);
-  timer.unref?.();
-  const close = async () => {
-    if (closed) return;
+  const cleanup = boundedCleanup(async () => {
+    await runtime?.close();
+  }, cleanupTimeoutMs);
+  const close = (reason = new Error('native-session-rejected')) => {
     closed = true;
+    // Wake every wait even if `ready` already settled or release is in progress.
+    expireReject(reason);
     clearTimeout(timer);
     state.data.fail();
-    try {
-      await runtime?.close();
-    } catch {
-      throw new Error('native-session-cleanup-failed');
-    }
+    return cleanup();
   };
   try {
     const startup = Promise.resolve().then(() =>
@@ -213,9 +266,7 @@ export async function stageGuardedSession({
           capacityFailures.add(failure);
           state.data.fail();
           readyReject(failure);
-          Promise.resolve()
-            .then(() => runtime.close())
-            .catch(() => {});
+          void close(failure).catch(() => {});
         },
         observeResponse({ statusCode, requestId, seal }) {
           if (response || seal.bodySha256 !== staged?.seal.bodySha256) {
@@ -238,7 +289,8 @@ export async function stageGuardedSession({
     // resources when it eventually returns, without keeping this wait unbounded.
     startup
       .then((late) => {
-        if (closed || Date.now() >= deadline) return late.close();
+        if (closed || Date.now() >= deadline)
+          return boundedCleanup(() => late.close(), cleanupTimeoutMs)();
       })
       .catch(() => {});
     runtime = await Promise.race([startup, expired]);
@@ -367,24 +419,9 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
     const { fileURLToPath } = await import('node:url');
     const root = await mkdtemp(path.join(os.tmpdir(), 'clinicos-native-guard-'));
     const resolvedRoot = await realpath(root);
-    let certificates,
-      proxy,
-      container,
-      disposed = false;
-    const close = async () => {
-      if (disposed) return;
-      disposed = true;
-      let failed = false;
-      try {
-        await proxy?.close();
-      } catch {
-        failed = true;
-      }
-      try {
-        await container?.close();
-      } catch {
-        failed = true;
-      }
+    let certificates, proxy, container;
+    const close = boundedCleanup(async () => {
+      await stopNativeResources(proxy, container);
       certificates?.dispose();
       // Only the exact private mkdtemp created by this invocation. Never prune
       // Docker, images/volumes, a checkout, user HOME or a caller-selected path.
@@ -392,8 +429,7 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
       assert.equal(path.dirname(resolvedRoot), await realpath(os.tmpdir()));
       assert.match(path.basename(resolvedRoot), /^clinicos-native-guard-[A-Za-z0-9]+$/);
       await rm(resolvedRoot, { recursive: true, force: true });
-      if (failed) throw new Error('native-runtime-cleanup-failed');
-    };
+    });
     try {
       const socketDirectory = path.join(root, 'egress');
       const publicDirectory = path.join(root, 'public');

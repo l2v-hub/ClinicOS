@@ -13,7 +13,6 @@ import {
 
 const line = (message) => Buffer.from(`2026-11-03T14:00:00.000Z [DEBUG] ${message}\n`);
 const settled = 'Remote settings: Saved empty sentinel (404 response)';
-
 test('native policy settlement requires the complete late genuine marker', () => {
   const barrier = createPolicyBarrier();
   assert.equal(barrier.ready(), false);
@@ -24,7 +23,6 @@ test('native policy settlement requires the complete late genuine marker', () =>
   assert.equal(barrier.ready(), true);
   assert.deepEqual(barrier.receipt(), { status: 'settled-empty', settlements: 1 });
 });
-
 test('policy watchdog, cache, save failure and late changes irreversibly poison', () => {
   for (const failure of [
     'Remote settings: Loading promise timed out, resolving anyway (load and fetch barriers)',
@@ -42,7 +40,6 @@ test('policy watchdog, cache, save failure and late changes irreversibly poison'
     }
   }
 });
-
 test('transport success, malformed prefixes and duplicate settlement are not certificates', () => {
   for (const message of [
     line('Remote settings: No settings found (404)'),
@@ -59,7 +56,6 @@ test('transport success, malformed prefixes and duplicate settlement are not cer
   duplicate.push(line(settled));
   assert.equal(duplicate.ready(), false);
 });
-
 test('diagnostics are finite, private and never returned through receipts or exceptions', () => {
   const barrier = createPolicyBarrier();
   const privateText = 'private-diagnostic-fixture';
@@ -68,7 +64,6 @@ test('diagnostics are finite, private and never returned through receipts or exc
   assert.equal(barrier.ready(), false);
   assert.equal(JSON.stringify(barrier.receipt()).includes(privateText), false);
 });
-
 test('invalid or incomplete UTF8 after settlement cannot authorize a source request', () => {
   for (const bytes of [Buffer.from([0xc3]), Buffer.from([0xff]), Buffer.from('partial')]) {
     const barrier = createPolicyBarrier();
@@ -140,6 +135,7 @@ function sessionFixture({
   systemBytes = 0,
   wrapperSequence,
   rejectSecondPolicy = false,
+  closeFailure = false,
 } = {}) {
   const calls = [];
   let privateRead = false;
@@ -250,6 +246,7 @@ function sessionFixture({
         live = false;
         calls.push('close');
         done({ ok: false, code: null });
+        if (closeFailure) throw new Error('synthetic private cleanup detail');
       },
     };
   };
@@ -260,7 +257,34 @@ function sessionFixture({
     die: () => invalidateLive(),
   };
 }
-
+test('concurrent session close calls share cleanup without forwarding', async () => {
+  const f = sessionFixture();
+  const session = await stageGuardedSession({
+    expected,
+    startRuntime: f.startRuntime,
+    validateClaim: async () => true,
+  });
+  const a = session.close(),
+    b = session.close();
+  assert.equal(a, b);
+  await Promise.all([a, b]);
+  assert.equal(f.calls.filter((call) => call === 'close').length, 1);
+  assert.equal(f.calls.includes('forward'), false);
+  assert.throws(() => session.assertReady());
+});
+test('a valid forward cannot succeed when cleanup fails', async () => {
+  const f = sessionFixture({ closeFailure: true });
+  const session = await stageGuardedSession({
+    expected,
+    startRuntime: f.startRuntime,
+    validateClaim: async () => true,
+  });
+  await assert.rejects(session.release({ nonce: 'owned-fixture' }), {
+    message: 'native-session-cleanup-failed',
+  });
+  assert.equal(f.calls.filter((call) => call === 'forward').length, 1);
+  await assert.rejects(session.close(), { message: 'native-session-cleanup-failed' });
+});
 test('policy invalidated during awaited claim validation prevents the upstream write', async () => {
   const f = sessionFixture();
   const session = await stageGuardedSession({
@@ -275,7 +299,6 @@ test('policy invalidated during awaited claim validation prevents the upstream w
   await assert.rejects(session.release({ nonce: 'owned-fixture' }), /native-session-rejected/);
   assert.equal(f.calls.includes('forward'), false);
 });
-
 test('late policy microtask irreversibly poisons the gate before its await continuation forwards', async () => {
   const f = sessionFixture();
   const session = await stageGuardedSession({
@@ -289,7 +312,6 @@ test('late policy microtask irreversibly poisons the gate before its await conti
   await assert.rejects(session.release({ nonce: 'owned-fixture' }), /native-session-rejected/);
   assert.equal(f.calls.includes('forward'), false);
 });
-
 test('liveness is synchronously fenced after every awaited claim continuation', async () => {
   const f = sessionFixture();
   const session = await stageGuardedSession({
@@ -303,7 +325,6 @@ test('liveness is synchronously fenced after every awaited claim continuation', 
   await assert.rejects(session.release({ nonce: 'owned-fixture' }), /native-session-rejected/);
   assert.equal(f.calls.includes('forward'), false);
 });
-
 test('startup promise is bounded even when the native runtime never returns', async () => {
   const outcome = stageGuardedSession({
     expected,
@@ -327,7 +348,6 @@ test('startup promise is bounded even when the native runtime never returns', as
     clearTimeout(timer);
   }
 });
-
 test('optional reports use actual native wrapper budget without starving mandatory source', async () => {
   const f = sourceFixture({
     sourceSize: 215000,
