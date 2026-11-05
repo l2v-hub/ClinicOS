@@ -329,6 +329,7 @@ test('startup promise is bounded even when the native runtime never returns', as
   const outcome = stageGuardedSession({
     expected,
     timeoutMs: 20,
+    cleanupTimeoutMs: 20,
     validateClaim: async () => true,
     startRuntime: async () => new Promise(() => {}),
   }).then(

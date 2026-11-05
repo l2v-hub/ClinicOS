@@ -10,48 +10,64 @@ const expected = {
 };
 const pending = () => new Promise(() => {});
 const mode = process.argv[2];
-let forwards = 0;
+let forwards = 0,
+  closes = 0;
 const line = (text) => Buffer.from(`2026-11-03T14:00:00.000Z [DEBUG] Remote settings: ${text}\n`);
 const startRuntime =
   mode === 'startup'
     ? pending
-    : ['isolation', 'release'].includes(mode)
-      ? async ({ data, onStage, onDiagnostic }) => {
-          setImmediate(() => {
-            const staged = data.stage({
-              seal: {},
-              forward: async () => {
-                forwards++;
-              },
+    : mode.startsWith('late-')
+      ? () =>
+          new Promise((resolve) =>
+            setTimeout(
+              () =>
+                resolve({
+                  close: () => {
+                    closes++;
+                    if (mode === 'late-reject') throw Error('private');
+                    if (mode === 'late-hang') return pending();
+                  },
+                }),
+              40,
+            ),
+          )
+      : ['isolation', 'release'].includes(mode)
+        ? async ({ data, onStage, onDiagnostic }) => {
+            setImmediate(() => {
+              const staged = data.stage({
+                seal: {},
+                forward: async () => {
+                  forwards++;
+                },
+              });
+              onStage(staged);
+              onDiagnostic(line('Saved empty sentinel (404 response)'));
+              if (mode === 'isolation')
+                setImmediate(() => onDiagnostic(line('Unexpected policy change')));
             });
-            onStage(staged);
-            onDiagnostic(line('Saved empty sentinel (404 response)'));
-            if (mode === 'isolation')
-              setImmediate(() => onDiagnostic(line('Unexpected policy change')));
+            return {
+              completion: pending(),
+              isolation:
+                mode === 'isolation'
+                  ? pending()
+                  : Promise.resolve({ runtimeIsolationVerified: true, binaryVerified: true }),
+              isLive: () => true,
+              close: async () => {},
+            };
+          }
+        : async () => ({
+            completion: Promise.resolve({ ok: false }),
+            isolation: pending(),
+            isLive: () => false,
+            close: pending,
           });
-          return {
-            completion: pending(),
-            isolation:
-              mode === 'isolation'
-                ? pending()
-                : Promise.resolve({ runtimeIsolationVerified: true, binaryVerified: true }),
-            isLive: () => true,
-            close: async () => {},
-          };
-        }
-      : async () => ({
-          completion: Promise.resolve({ ok: false }),
-          isolation: pending(),
-          isLive: () => false,
-          close: pending,
-        });
 try {
   const session = await stageGuardedSession({
     expected,
     startRuntime,
     validateClaim: async () => true,
-    timeoutMs: ['isolation', 'release'].includes(mode) ? 1000 : 60,
-    cleanupTimeoutMs: 60,
+    timeoutMs: ['isolation', 'release'].includes(mode) ? 1000 : mode.startsWith('late-') ? 20 : 60,
+    cleanupTimeoutMs: 100,
   });
   if (mode !== 'release') process.exitCode = 1;
   else {
@@ -63,5 +79,7 @@ try {
     process.exitCode = 1;
   }
 } catch (error) {
-  console.log(`${error.message}${mode === 'release' ? ` forwards=${forwards}` : ''}`);
+  console.log(
+    `${error.message}${mode === 'release' ? ` forwards=${forwards}` : ''}${mode.startsWith('late-') ? ` closes=${closes} forwards=${forwards}` : ''}`,
+  );
 }

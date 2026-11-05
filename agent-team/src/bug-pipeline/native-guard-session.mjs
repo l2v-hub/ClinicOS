@@ -53,6 +53,19 @@ export async function stopNativeResources(proxy, container) {
   if (container && outcomes[1].value?.removed !== true)
     throw new Error('native-runtime-cleanup-failed');
 }
+export function runtimeCleanup(certificates, proxy, container, remove, timeoutMs = 10000) {
+  return boundedCleanup(async () => {
+    let disposalFailed = false;
+    try {
+      certificates?.dispose();
+    } catch {
+      disposalFailed = true;
+    }
+    await stopNativeResources(proxy, container);
+    if (disposalFailed) throw new Error('native-runtime-cleanup-failed');
+    await remove();
+  }, timeoutMs);
+}
 const capacityFailures = new WeakSet();
 export const isNativeStagingCapacityError = (error) =>
   typeof error === 'object' && error !== null && capacityFailures.has(error);
@@ -150,6 +163,7 @@ export async function stageGuardedSession({
   assert.match(pinned.model ?? '', /^claude-opus-[0-9]+(?:-[0-9]+){1,3}$/);
   const policy = createPolicyBarrier();
   let runtime,
+    startup,
     staged,
     response,
     closed = false,
@@ -189,7 +203,8 @@ export async function stageGuardedSession({
     reject();
   }, timeoutMs);
   const cleanup = boundedCleanup(async () => {
-    await runtime?.close();
+    const owned = runtime ?? (await startup);
+    await owned.close();
   }, cleanupTimeoutMs);
   const close = (reason = new Error('native-session-rejected')) => {
     closed = true;
@@ -200,7 +215,7 @@ export async function stageGuardedSession({
     return cleanup();
   };
   try {
-    const startup = Promise.resolve().then(() =>
+    startup = Promise.resolve().then(() =>
       startRuntime({
         expected: structuredClone(pinned),
         data: Object.freeze({
@@ -285,14 +300,6 @@ export async function stageGuardedSession({
         },
       }),
     );
-    // A late startup can never restore a timed-out capability. Close its own
-    // resources when it eventually returns, without keeping this wait unbounded.
-    startup
-      .then((late) => {
-        if (closed || Date.now() >= deadline)
-          return boundedCleanup(() => late.close(), cleanupTimeoutMs)();
-      })
-      .catch(() => {});
     runtime = await Promise.race([startup, expired]);
     // An exit before the source/policy barrier must not leave a hung claim wait.
     runtime.completion.then((result) => {
@@ -414,22 +421,23 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
       import('./native-guard-proxy.mjs'),
       import('./native-guard-container.mjs'),
     ]);
-    const { validateNativeRequest, isNativeRequestCapacityError } =
-      await import('./native-guard-request.mjs');
+    const { validateNativeRequest, isNativeRequestCapacityError } = await import(
+      './native-guard-request.mjs'
+    );
     const { fileURLToPath } = await import('node:url');
     const root = await mkdtemp(path.join(os.tmpdir(), 'clinicos-native-guard-'));
     const resolvedRoot = await realpath(root);
     let certificates, proxy, container;
-    const close = boundedCleanup(async () => {
-      await stopNativeResources(proxy, container);
-      certificates?.dispose();
-      // Only the exact private mkdtemp created by this invocation. Never prune
-      // Docker, images/volumes, a checkout, user HOME or a caller-selected path.
-      assert.equal(await realpath(root), resolvedRoot);
-      assert.equal(path.dirname(resolvedRoot), await realpath(os.tmpdir()));
-      assert.match(path.basename(resolvedRoot), /^clinicos-native-guard-[A-Za-z0-9]+$/);
-      await rm(resolvedRoot, { recursive: true, force: true });
-    });
+    let close;
+    const cleanup = () =>
+      (close ??= runtimeCleanup(certificates, proxy, container, async () => {
+        // Only the exact private mkdtemp created by this invocation. Never prune
+        // Docker, images/volumes, a checkout, user HOME or a caller-selected path.
+        assert.equal(await realpath(root), resolvedRoot);
+        assert.equal(path.dirname(resolvedRoot), await realpath(os.tmpdir()));
+        assert.match(path.basename(resolvedRoot), /^clinicos-native-guard-[A-Za-z0-9]+$/);
+        await rm(resolvedRoot, { recursive: true, force: true });
+      }))();
     try {
       const socketDirectory = path.join(root, 'egress');
       const publicDirectory = path.join(root, 'public');
@@ -473,10 +481,10 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
         isolation: container.isolation,
         isLive: () => container.isLive(),
         takePrivateOutput: () => container.takePrivateOutput(),
-        close,
+        close: cleanup,
       };
     } catch {
-      await close();
+      await cleanup();
       throw new Error('native-runtime-rejected');
     }
   };

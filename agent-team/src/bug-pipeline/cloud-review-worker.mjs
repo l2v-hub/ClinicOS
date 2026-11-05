@@ -697,14 +697,27 @@ export async function processCloudReview({
           profile: qualification.profile,
         }));
       }
-    } catch {
-      await nativeSession?.close();
+    } catch (error) {
+      let cleanupFailed = error?.message === 'native-session-cleanup-failed';
+      try {
+        await nativeSession?.close();
+      } catch {
+        cleanupFailed = true;
+      }
       nativeSession = undefined;
       blockedSubjects.push({
         pr: item.subject.pr.number,
         sha: item.subject.sha,
         status: 'capacity-unavailable',
       });
+      if (cleanupFailed)
+        return {
+          status: 'queue-blocked',
+          blockedSubjects,
+          providerExecuted: Boolean(qualification),
+          claimed: false,
+          cleanupFailed: true,
+        };
       continue;
     }
     candidate = { ...item, subject: expectedSubject };
@@ -736,7 +749,12 @@ export async function processCloudReview({
       expectedActor: reviewActor,
     });
   } catch (error) {
-    await nativeSession?.close();
+    let cleanupFailed = false;
+    try {
+      await nativeSession?.close();
+    } catch {
+      cleanupFailed = true;
+    }
     if (
       [
         'preclaim-source-changed',
@@ -745,7 +763,17 @@ export async function processCloudReview({
         'state-rebase-conflict',
       ].includes(error?.code)
     )
-      return preclaimChanged();
+      return { ...preclaimChanged(), ...(cleanupFailed ? { cleanupFailed: true } : {}) };
+    if (cleanupFailed)
+      return {
+        status: 'claim-failed',
+        pr: subject.pr.number,
+        sha: subject.sha,
+        claimed: 'unknown',
+        providerExecuted: Boolean(qualification),
+        blockedSubjects,
+        cleanupFailed: true,
+      };
     throw error;
   }
   try {
@@ -756,8 +784,13 @@ export async function processCloudReview({
   } catch {
     // An unexpected native transition never authorizes old prompt inference or
     // failure of somebody else's reservation. Keep it for authorized recovery.
-    await nativeSession?.close();
-    return preclaimChanged(true);
+    let cleanupFailed = false;
+    try {
+      await nativeSession?.close();
+    } catch {
+      cleanupFailed = true;
+    }
+    return { ...preclaimChanged(true), ...(cleanupFailed ? { cleanupFailed: true } : {}) };
   }
   // Bind the already prepared data to the actual native reservation, even across a request race.
   let review,
@@ -960,8 +993,9 @@ export async function main({ env = process.env, mode = 'review' } = {}) {
       }
       assert.match(env.CLOUD_NATIVE_PR ?? '', /^[1-9][0-9]{0,8}$/);
       assert.match(env.CLOUD_NATIVE_SHA ?? '', SHA);
-      const { createNativeRuntimeFactory, createNativeReviewStager } =
-        await import('./native-guard-session.mjs');
+      const { createNativeRuntimeFactory, createNativeReviewStager } = await import(
+        './native-guard-session.mjs'
+      );
       let qualified;
       const startRuntime = createNativeRuntimeFactory({
         cliPath: isolatedEnv.CLAUDE_NATIVE_BINARY_PATH,
@@ -1016,6 +1050,16 @@ if (process.argv[1] && path.resolve(process.argv[1]) === FILE) {
     if (!['probe-passed', 'published', 'empty', 'native-profile-qualified'].includes(result.status))
       process.exitCode = 1;
   } catch {
+    // A thrown failure cannot prove whether a prior provider call or reservation
+    // completed. Preserve that uncertainty in the finite artifact, never a retry.
+    console.log(
+      JSON.stringify({
+        status: 'worker-failed',
+        providerExecuted: 'unknown',
+        claimed: 'unknown',
+        retryAllowed: false,
+      }),
+    );
     console.error(
       'Cloud Claude review blocked; preserve native reservations and inspect trusted authentication, SHA, checks and publication receipts.',
     );

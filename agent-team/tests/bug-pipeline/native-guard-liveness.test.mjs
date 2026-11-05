@@ -4,6 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import {
   boundedCleanup,
+  runtimeCleanup,
   stageGuardedSession,
 } from '../../src/bug-pipeline/native-guard-session.mjs';
 
@@ -16,10 +17,13 @@ test('hung proxy still starts container stop and never reports removed resources
   assert.equal(result.stdout.trim(), 'native-session-cleanup-failed proxy=1 container=1 removed=0');
 });
 for (const [mode, message] of [
-  ['startup', 'native-session-rejected'],
+  ['startup', 'native-session-cleanup-failed'],
   ['cleanup', 'native-session-cleanup-failed'],
   ['isolation', 'native-session-rejected'],
   ['release', 'native-session-rejected forwards=1'],
+  ['late-success', 'native-session-rejected closes=1 forwards=0'],
+  ['late-reject', 'native-session-cleanup-failed closes=1 forwards=0'],
+  ['late-hang', 'native-session-cleanup-failed closes=1 forwards=0'],
 ]) {
   test(`standalone child settles bounded ${mode} with no keepalive`, () => {
     const result = spawnSync(process.execPath, [fixture, mode], {
@@ -57,7 +61,7 @@ test('concurrent cleanup shares one operation and the same sanitized outcome', a
   await assert.rejects(failed(), { message: 'native-session-cleanup-failed' });
 });
 
-test('late startup is closed and cannot regain a rejected capability', async () => {
+test('late startup after cleanup timeout is closed exactly once and cannot regain authority', async () => {
   let resolveStartup,
     closes = 0;
   const expected = {
@@ -79,6 +83,7 @@ test('late startup is closed and cannot regain a rejected capability', async () 
       timeoutMs: 30,
       cleanupTimeoutMs: 100,
     }),
+    { message: 'native-session-cleanup-failed' },
   );
   resolveStartup({
     close: async () => {
@@ -87,4 +92,69 @@ test('late startup is closed and cannot regain a rejected capability', async () 
   });
   await new Promise((resolve) => setImmediate(resolve));
   assert.equal(closes, 1);
+});
+
+for (const mode of ['success', 'reject', 'hang'])
+  test(`TLS key is synchronously erased on ${mode} resource cleanup`, async () => {
+    const key = Buffer.from('synthetic private key');
+    let proxyCalls = 0,
+      containerCalls = 0,
+      removals = 0;
+    const close = runtimeCleanup(
+      { dispose: () => key.fill(0) },
+      {
+        close: () => {
+          proxyCalls++;
+          if (mode === 'hang') return new Promise(() => {});
+        },
+      },
+      {
+        close: () => {
+          containerCalls++;
+          if (mode === 'reject') throw Error('private');
+          return { removed: true };
+        },
+      },
+      async () => {
+        removals++;
+      },
+      40,
+    );
+    const result = close();
+    assert.ok(key.every((byte) => byte === 0));
+    assert.equal(proxyCalls, 1);
+    assert.equal(containerCalls, 1);
+    if (mode === 'success') await result;
+    else await assert.rejects(result, { message: 'native-session-cleanup-failed' });
+    assert.equal(removals, mode === 'success' ? 1 : 0);
+  });
+
+test('failed disposal still attempts both stops and never removes the directory', async () => {
+  let proxyCalls = 0,
+    containerCalls = 0,
+    removals = 0;
+  const close = runtimeCleanup(
+    {
+      dispose: () => {
+        throw Error('private');
+      },
+    },
+    {
+      close: () => {
+        proxyCalls++;
+      },
+    },
+    {
+      close: () => {
+        containerCalls++;
+        return { removed: true };
+      },
+    },
+    async () => {
+      removals++;
+    },
+    40,
+  );
+  await assert.rejects(close(), { message: 'native-session-cleanup-failed' });
+  assert.deepEqual([proxyCalls, containerCalls, removals], [1, 1, 0]);
 });

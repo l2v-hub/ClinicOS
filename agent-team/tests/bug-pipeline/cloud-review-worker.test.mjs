@@ -251,6 +251,82 @@ test('guarded preclaim conflict closes staged process with no release or source 
   assert.deepEqual(f.calls, ['retrieve', 'probe', 'native-close']);
 });
 
+for (const failure of ['staging', 'claim', 'transition'])
+  test(`cleanup failure preserves ${failure} classification without retry or forwarding`, async () => {
+    const f = fixture();
+    const originalClaim = f.options.handoff.claim;
+    f.options.stageNativeReview = async ({ source, sha, profile }) => ({
+      source: failure === 'staging' ? { ...source, tracked: new Set(['wrong']) } : source,
+      prepared: prepareCloudInference({ packet: source.packet, sha, profile }),
+      session: {
+        assertReady() {},
+        async close() {
+          f.calls.push('native-close');
+          throw Error('private cleanup text');
+        },
+        async release() {
+          f.calls.push('native-release');
+          throw Error('must not forward');
+        },
+      },
+    });
+    f.options.handoff.claim = async (...args) => {
+      if (failure === 'claim') {
+        f.calls.push('claim');
+        const e = Error('private');
+        e.code = 'preclaim-source-changed';
+        throw e;
+      }
+      const result = await originalClaim(...args);
+      if (failure === 'transition') result.sha = 'f'.repeat(40);
+      return result;
+    };
+    const result = await processCloudReview(f.options);
+    assert.equal(
+      result.status,
+      failure === 'staging' ? 'queue-blocked' : 'preclaim-source-changed',
+    );
+    assert.equal(result.cleanupFailed, true);
+    assert.equal(result.claimed, failure === 'transition');
+    if (failure === 'staging')
+      assert.equal(result.blockedSubjects[0].status, 'capacity-unavailable');
+    assert.equal(f.calls.filter((x) => x === 'claim').length, failure === 'staging' ? 0 : 1);
+    assert.equal(f.calls.filter((x) => x === 'native-close').length, 1);
+    assert.equal(
+      f.calls.some((x) => ['native-release', 'model', 'submit', 'wake'].includes(x)),
+      false,
+    );
+    assert.ok(!JSON.stringify(result).includes('private'));
+  });
+
+test('uncertain claim and failed cleanup retain unknown reservation and never retry', async () => {
+  const f = fixture();
+  f.options.stageNativeReview = async ({ source, sha, profile }) => ({
+    source,
+    prepared: prepareCloudInference({ packet: source.packet, sha, profile }),
+    session: {
+      assertReady() {},
+      close: async () => {
+        throw Error('private');
+      },
+      release: async () => {
+        f.calls.push('native-release');
+      },
+    },
+  });
+  f.options.handoff.claim = async () => {
+    f.calls.push('claim');
+    throw Error('private unknown');
+  };
+  const result = await processCloudReview(f.options);
+  assert.equal(result.status, 'claim-failed');
+  assert.equal(result.claimed, 'unknown');
+  assert.equal(result.cleanupFailed, true);
+  assert.equal(f.calls.filter((x) => x === 'claim').length, 1);
+  assert.equal(f.calls.includes('native-release'), false);
+  assert.ok(!JSON.stringify(result).includes('private'));
+});
+
 test('native-required subject never falls back to the classic capacity/transport route', async () => {
   const f = fixture();
   f.subject.operatorCoordination = { nativeReviewProfile: 'native-max-single-forward-v1' };
