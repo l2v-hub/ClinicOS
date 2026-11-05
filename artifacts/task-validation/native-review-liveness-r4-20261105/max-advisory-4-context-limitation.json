@@ -1,0 +1,48 @@
+{
+  "status": "context-incomplete-no-approval",
+  "observedAtUtc": "2026-11-05T20:09:01.7535492Z",
+  "startedAtUtc": "2026-11-05T20:07:25.792Z",
+  "subjectSha": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+  "advisoryOrdinal": 4,
+  "advisoryCeiling": 4,
+  "remainingAfterThis": 0,
+  "startedNonce": "ce3e59af-1796-4726-a616-1cf7ca0e6853",
+  "startedInputSha256": "a9ed46d60598929469f17710ccb28fbb2284d2e86bab58a45b3c36ab8ffab71a",
+  "inputLastWriteUtc": "2026-11-05T20:06:15.2785668Z",
+  "postStartChanges": [
+    {
+      "file": "run-review529-r3-Max-once.mjs",
+      "purpose": "fail-closed ready check",
+      "lastWriteUtc": "2026-11-05T20:08:05.2019155Z",
+      "sha256": "9f36d2b2cad191a465b5227b094aa7c20fbdada2f02f92326b2215f2b2af026f"
+    },
+    {
+      "file": "prepare-review529-r3-Max-once.mjs",
+      "purpose": "add direct missing source modules",
+      "lastWriteUtc": "2026-11-05T20:08:05.2059130Z",
+      "sha256": "133c59da27c56219e49a5012e8820524dd14e5d92a066a7434a3d068c8cd52b0"
+    },
+    {
+      "file": "review529-r3-Max-preflight.json",
+      "purpose": "mark incomplete context and prohibit further invocation",
+      "lastWriteUtc": "2026-11-05T20:08:05.2789655Z",
+      "sha256": "92c6bc83090a85a8154a64bf112145af7df41922d617ce1b29a555be5195c0dc4"
+    }
+  ],
+  "previouslyObservedPreflightSha256": "5dff0e2eefad5e1b0fddf6e55fc8ecf07d4ef5bc9eba34d0425e6543f69ef2af",
+  "missingDirectDependencies": [
+    "agent-team/src/bug-pipeline/workspace.mjs",
+    "agent-team/src/bug-pipeline/review-policy.mjs",
+    "agent-team/src/bug-pipeline/external-review.mjs"
+  ],
+  "missingDependencyBytes": {
+    "reviewPolicy": 1397,
+    "externalReview": 15494,
+    "workspace": 44090
+  },
+  "completeInputBoundLowerBound": 1059822,
+  "previousObservedContext": 1000000,
+  "requestedCapIsProven": false,
+  "caveat": "Model started before incomplete controller context and post-start metadata updates were detected. Input bytes remain unchanged. A response, if any, cannot establish complete review, native approval or release approval. No retry is authorized; inference outcome until process receipt remains unknown.",
+  "modelInvocationsByReceiptAuthor": 0
+}
