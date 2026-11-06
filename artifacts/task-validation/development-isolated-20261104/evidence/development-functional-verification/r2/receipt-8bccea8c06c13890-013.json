@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "source": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "deployment": "069efbfa-270d-4c7a-b23e-78804edf6aa0",
+  "runTag": "8bccea8c06c13890",
+  "phase": "complete",
+  "patientId": "cmw41v3gq000u01pndoevorxy",
+  "diaryId": "cmw41v4ba000w01pnswqhtxfg",
+  "documentId": "cmw41v562000y01pnazeds91d",
+  "cleanupUncertain": false,
+  "covered": [
+    "patient-readback",
+    "diary-readback",
+    "document-content-readback"
+  ],
+  "unverified": [
+    "admission",
+    "parameters",
+    "therapy",
+    "appointments",
+    "OCR",
+    "voice",
+    "AI"
+  ],
+  "documentSha256": "31024ef447763b1d7893f4d73a05440cb35d36b7ca6a90cd1714b990db521564",
+  "cleanupPhase": "logout-verified"
+}

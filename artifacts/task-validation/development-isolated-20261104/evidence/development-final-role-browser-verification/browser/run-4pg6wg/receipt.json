@@ -1,0 +1,267 @@
+{
+  "status": "passed",
+  "scope": "synthetic-ui-role-smoke",
+  "source": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "hostingSource": "e99ee55adf4036089b1616151f6bad37ec2e0828",
+  "backendDeployment": "82304c48-7b14-474d-be4b-890519c7a215",
+  "apiReceiptSha256": "df2958c9a1213d84325fdba0a79eed51fa16fb225d490eff7402b99ebd929636",
+  "results": [
+    {
+      "status": "passed",
+      "id": "SIM-ADMIN",
+      "role": "administrator",
+      "view": "desktop",
+      "noOverflow": true,
+      "labels": [
+        "Dashboard",
+        "Operatori",
+        "Agenda",
+        "Posti Letto",
+        "Orari",
+        "Ruoli"
+      ],
+      "screenshots": {
+        "avatar": "9e1dcfee9145fe6525129fd35587c49bc5e2a576a1dd0a58ff272e24ee0d70cf",
+        "navigation": "749df045a5730f1ef0c0fd4a5874c5b30597fbc72703f41e2cd1e314725c0028"
+      },
+      "blocked": 0,
+      "redirects": 0,
+      "popups": 0,
+      "websockets": 0,
+      "cleanupUncertain": false
+    },
+    {
+      "status": "passed",
+      "id": "SIM-SUPERVISOR-1",
+      "role": "supervisor",
+      "view": "desktop",
+      "noOverflow": true,
+      "labels": [
+        "Dashboard",
+        "Operatori",
+        "Agenda",
+        "Terapia",
+        "Posti Letto",
+        "Orari",
+        "Consegne",
+        "Ruoli",
+        "Milo"
+      ],
+      "screenshots": {
+        "avatar": "ba2df5755dbee8c54836a4d06243e743df27be1bd2125d11ed44c5715183e3a0",
+        "navigation": "a4abef6c9a2491b49cea124a3b18384cc207387d07901a2eaa7ba091b0da9e3b"
+      },
+      "blocked": 0,
+      "redirects": 0,
+      "popups": 0,
+      "websockets": 0,
+      "cleanupUncertain": false
+    },
+    {
+      "status": "passed",
+      "id": "SIM-DOCTOR-1",
+      "role": "doctor",
+      "view": "desktop",
+      "noOverflow": true,
+      "labels": [
+        "Turno",
+        "Pazienti",
+        "Terapia",
+        "Parametri",
+        "Consegne",
+        "Agenda",
+        "Farmaci",
+        "Milo"
+      ],
+      "screenshots": {
+        "avatar": "e657a99c415ae8f3669d16acacbb9fc7117fd356f83ac80e25187101595dd2b0",
+        "navigation": "d59f374bd68d912b16d318e00dff9f08d90699aa63b612e44044cea572ebeafe"
+      },
+      "blocked": 0,
+      "redirects": 0,
+      "popups": 0,
+      "websockets": 0,
+      "cleanupUncertain": false
+    },
+    {
+      "status": "passed",
+      "id": "SIM-NURSE-1",
+      "role": "nurse",
+      "view": "desktop",
+      "noOverflow": true,
+      "labels": [
+        "Turno",
+        "Pazienti",
+        "Terapia",
+        "Parametri",
+        "Consegne",
+        "Agenda",
+        "Farmaci",
+        "Milo"
+      ],
+      "screenshots": {
+        "avatar": "a0dc9b3467f2ba71421dee3b04521c8a45c04b448da2b4e9fda1919ec285ce78",
+        "navigation": "d59f374bd68d912b16d318e00dff9f08d90699aa63b612e44044cea572ebeafe"
+      },
+      "blocked": 0,
+      "redirects": 0,
+      "popups": 0,
+      "websockets": 0,
+      "cleanupUncertain": false
+    },
+    {
+      "status": "passed",
+      "id": "SIM-OSS-1",
+      "role": "oss",
+      "view": "desktop",
+      "noOverflow": true,
+      "labels": [
+        "Turno",
+        "Pazienti",
+        "Parametri",
+        "Consegne",
+        "Agenda",
+        "Farmaci",
+        "Milo"
+      ],
+      "screenshots": {
+        "avatar": "5a73193dbf7a66be58f634854927299774fc35027e687fcca66cf6ccfa0e9345",
+        "navigation": "e050e6fe956c044c0874d009a4a4c866ad30f36eba2234b457d3cfc6c1b122c7"
+      },
+      "blocked": 0,
+      "redirects": 0,
+      "popups": 0,
+      "websockets": 0,
+      "cleanupUncertain": false
+    },
+    {
+      "status": "passed",
+      "id": "SIM-ADMIN",
+      "role": "administrator",
+      "view": "mobile",
+      "noOverflow": true,
+      "labels": [
+        "Dashboard",
+        "Operatori",
+        "Agenda",
+        "Posti Letto",
+        "Orari",
+        "Ruoli"
+      ],
+      "screenshots": {
+        "avatar": "d78a5e8079c7e3eae2835ea96018dad332e2e215d6a090bc16c4b126ad13f0b9",
+        "navigation": "262349b9ea6f4550a2b68c05c1e727324b64e759d7e83eeb5bcb1a9f1150dfe4"
+      },
+      "blocked": 0,
+      "redirects": 0,
+      "popups": 0,
+      "websockets": 0,
+      "cleanupUncertain": false
+    },
+    {
+      "status": "passed",
+      "id": "SIM-SUPERVISOR-1",
+      "role": "supervisor",
+      "view": "mobile",
+      "noOverflow": true,
+      "labels": [
+        "Dashboard",
+        "Operatori",
+        "Agenda",
+        "Terapia",
+        "Posti Letto",
+        "Orari",
+        "Consegne",
+        "Ruoli",
+        "Milo"
+      ],
+      "screenshots": {
+        "avatar": "a8a478385bcfcb3d10292a76ff0199130f29eebc487f7d6c9a9cb73116cad8cc",
+        "navigation": "966f521535f280c5085b28aa0605c1022e544035e18f4ca9acfcadf6e5cb7de8"
+      },
+      "blocked": 0,
+      "redirects": 0,
+      "popups": 0,
+      "websockets": 0,
+      "cleanupUncertain": false
+    },
+    {
+      "status": "passed",
+      "id": "SIM-DOCTOR-1",
+      "role": "doctor",
+      "view": "mobile",
+      "noOverflow": true,
+      "labels": [
+        "Turno",
+        "Pazienti",
+        "Terapia",
+        "Parametri",
+        "Consegne",
+        "Agenda",
+        "Farmaci",
+        "Milo"
+      ],
+      "screenshots": {
+        "avatar": "13964fbff48173586bb49f4283e0bfd6e02314ba8d7ced7576944548dc5dd046",
+        "navigation": "b53c648b6a47c458e16122e16c6d959951a2c3492a4f9b73dea57881f45b7fa1"
+      },
+      "blocked": 0,
+      "redirects": 0,
+      "popups": 0,
+      "websockets": 0,
+      "cleanupUncertain": false
+    },
+    {
+      "status": "passed",
+      "id": "SIM-NURSE-1",
+      "role": "nurse",
+      "view": "mobile",
+      "noOverflow": true,
+      "labels": [
+        "Turno",
+        "Pazienti",
+        "Terapia",
+        "Parametri",
+        "Consegne",
+        "Agenda",
+        "Farmaci",
+        "Milo"
+      ],
+      "screenshots": {
+        "avatar": "0cfbc10675673aa108bf39847272a2631e8f8ef89272e2a74ada81e92c1c5797",
+        "navigation": "b53c648b6a47c458e16122e16c6d959951a2c3492a4f9b73dea57881f45b7fa1"
+      },
+      "blocked": 0,
+      "redirects": 0,
+      "popups": 0,
+      "websockets": 0,
+      "cleanupUncertain": false
+    },
+    {
+      "status": "passed",
+      "id": "SIM-OSS-1",
+      "role": "oss",
+      "view": "mobile",
+      "noOverflow": true,
+      "labels": [
+        "Turno",
+        "Pazienti",
+        "Parametri",
+        "Consegne",
+        "Agenda",
+        "Farmaci",
+        "Milo"
+      ],
+      "screenshots": {
+        "avatar": "4d58d1eddd55c0a1b36f02617ae3353a1cc8c62f1662390cffccbdc30f2df0a6",
+        "navigation": "ad13143295212135f42e7ba3da62c841a433d3e1477b7de7879ca9b618ce6aa4"
+      },
+      "blocked": 0,
+      "redirects": 0,
+      "popups": 0,
+      "websockets": 0,
+      "cleanupUncertain": false
+    }
+  ],
+  "unknown": 0
+}

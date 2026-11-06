@@ -19,7 +19,7 @@ Vercel usa il proprio target di hosting `production` per l'URL stabile di questo
 
 ## Sorgenti e prossime modifiche
 
-La branch di lavoro dedicata raccoglie la base applicativa revisionata M, la configurazione frontend rivolta al nuovo backend e la compatibilità STT corrente. Le release registrano separatamente commit, tree, deployment ID e digest osservato per ogni componente: una branch più recente non prova che sia già distribuita. Il manifest della release verificata prevale sulle supposizioni basate sul solo HEAD locale.
+La branch di lavoro unica è `codex/development-workspace-20261105`, nella worktree `C:/w-rv/development-workspace-20261105`. Raccoglie la base applicativa revisionata M, la configurazione frontend rivolta al nuovo backend e la compatibilità STT corrente. Le branch dei singoli componenti conservano gli input del primo rilascio; il lavoro successivo parte dalla branch unica. Le release registrano separatamente commit, tree, deployment ID e digest osservato per ogni componente: una branch più recente non prova che sia già distribuita. Il manifest della release verificata prevale sulle supposizioni basate sul solo HEAD locale.
 
 Per ogni modifica:
 

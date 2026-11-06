@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "source": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "deployment": "82304c48-7b14-474d-be4b-890519c7a215",
+  "runTag": "c70d572d4f444528",
+  "phase": "complete",
+  "covered": [
+    "voice-admin-denied-before-provider",
+    "voice-invalid-before-provider",
+    "voice-synthetic-backend",
+    "assistant-llm-plan-and-compose"
+  ],
+  "unknownOutcome": false,
+  "cleanupUncertain": false,
+  "nominalModelCallsMaximum": 3,
+  "providerCallBoundConditional": true,
+  "fullParityClaimed": false,
+  "cleanupPhase": "logout-verified"
+}

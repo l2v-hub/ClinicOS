@@ -1,0 +1,19 @@
+{
+  "at": "2026-11-05T22:39:25.4195562Z",
+  "operationId": "a27eb295-c45c-4cc8-bd72-8082905f312c",
+  "deploymentId": "82e468ff-ff9f-4a57-b785-81c7fa491289",
+  "projectId": "30bfd0c6-2b4d-4fcd-b219-f1fbfe1d9820",
+  "environmentId": "e54fd397-76c8-4a14-ac03-4d8a4d580173",
+  "serviceId": "b3bf897a-4e0f-41a1-aa58-3687d9a66443",
+  "sourceCommit": "79346c2aa4d753c8f15d6e03c14378cc252d8c89",
+  "imageDigest": "sha256:4993f249f6d3be35509a492a48b345acf967f5780e57627c48908fe0ead0c0d7",
+  "status": "runtime-provider-success-metadata-only",
+  "aiHealthVerified": false,
+  "sttVerified": false,
+  "ocrVerified": false,
+  "modelCalls": 0,
+  "providerCASClaimed": false,
+  "checkToWriteWindow": true,
+  "automaticRetryAllowed": false,
+  "fileIsNotAuthority": true
+}

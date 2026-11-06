@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "logicalEnvironment": "development",
+  "status": "verified",
+  "frontendUrl": "https://clinicos-development-isolated.vercel.app",
+  "backendUrl": "https://development-backend-development-a4a4.up.railway.app",
+  "railwayProjectId": "30bfd0c6-2b4d-4fcd-b219-f1fbfe1d9820",
+  "railwayEnvironmentId": "e54fd397-76c8-4a14-ac03-4d8a4d580173",
+  "railwayEnvironmentCount": 1,
+  "automaticDeploymentTriggers": 0,
+  "canonicalWorkingBranch": "codex/development-workspace-20261105",
+  "canonicalApplicationBaselineCommit": "f4da5737d31b3be9d3da328d4cbf380fb907581a",
+  "combinedBaselineDeployedAsWhole": false,
+  "components": {
+    "backend": {
+      "serviceId": "f46547d5-1eb2-42a0-bd13-de2a1f7feca1",
+      "sourceCommit": "b5e79ae7bec869af894f12ed6676547f21172db4",
+      "sourceSubtree": "2967a2f7d6eaeff050451d3f7f98fb7f6f79a184",
+      "deploymentId": "82304c48-7b14-474d-be4b-890519c7a215",
+      "imageDigest": "sha256:92c75ecd4a28167802a4af7d560018dcbe48ff401f338fbd7e28b080c099d56e"
+    },
+    "aiRuntime": {
+      "serviceId": "b3bf897a-4e0f-41a1-aa58-3687d9a66443",
+      "sourceCommit": "79346c2aa4d753c8f15d6e03c14378cc252d8c89",
+      "sourceSubtree": "a540702edc0e9ee54f713981d0d1e9996c91bab9",
+      "deploymentId": "82e468ff-ff9f-4a57-b785-81c7fa491289",
+      "imageDigest": "sha256:4993f249f6d3be35509a492a48b345acf967f5780e57627c48908fe0ead0c0d7"
+    },
+    "frontend": {
+      "projectId": "prj_521wrOk01zqRUqFym41yxJw5KS3u",
+      "sourceCommit": "e99ee55adf4036089b1616151f6bad37ec2e0828",
+      "sourceSubtree": "10c77e8d7b264d9681dc520b5c9793290d9f7f23",
+      "deploymentId": "dpl_3wm5mWVhp7GsNuuAv3SVZoj6qKGM",
+      "bundleSha256": "632b47c0b632765a64040ae2c7b8f4e5396b24d4a2170f14a3e223dc51712f6a"
+    },
+    "database": {
+      "serviceId": "8cc1c795-5a61-4ead-b6f4-020b2c29a91b",
+      "deploymentId": "b11e63a5-5611-4a12-8fa7-71f18d02ce42",
+      "imageDigest": "sha256:4fc833b43d2aaf6ecc9b18615f5533602b723a32d0e2efe2dae8ca0f7217c863",
+      "volumeId": "64536a4c-e0c1-4cff-ad76-7f8f33f18926"
+    }
+  },
+  "previousDemo": {
+    "frontend": "https://clinicos-eosin.vercel.app",
+    "backend": "https://clinicos-backend-demo.up.railway.app",
+    "deploymentId": "6a6b5d5a-edad-434a-a074-db19b2051dbe",
+    "aliasChanged": false
+  },
+  "futureProductionCreated": false,
+  "credentialCleanupComplete": false,
+  "credentialCleanupReason": "automatic approval review rejected removal: blocked by policy",
+  "sourceEquivalenceIsNotBinaryEquivalence": true,
+  "independentQa": {
+    "decision": "PASS_WITH_DECLARED_LIMITS",
+    "file": "qa/final-qa-receipt.json",
+    "sha256": "6fe700517b4a85c81e97d1ce4d910128efaf2e5f8041b993ca14902ac48c5aa2",
+    "report": "qa/final-qa.md",
+    "reportSha256": "241a8108cb3a2d6fc327273131adfdcd9394afb8dd694e656c1373d15ce94336"
+  }
+}

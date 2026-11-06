@@ -1,0 +1,23 @@
+{
+  "at": "2026-11-05T23:26:42.3615805Z",
+  "operationId": "ffd3df42-fa83-4167-b68f-4f80424904e7",
+  "action": "database-restart",
+  "projectId": "30bfd0c6-2b4d-4fcd-b219-f1fbfe1d9820",
+  "environmentId": "e54fd397-76c8-4a14-ac03-4d8a4d580173",
+  "serviceId": "8cc1c795-5a61-4ead-b6f4-020b2c29a91b",
+  "deploymentId": "b11e63a5-5611-4a12-8fa7-71f18d02ce42",
+  "imageDigest": "sha256:4fc833b43d2aaf6ecc9b18615f5533602b723a32d0e2efe2dae8ca0f7217c863",
+  "actualUserMessage": "01a1acf5-c3f8-7ba1-9686-44e23d732f2d",
+  "status": "native-provider-accepted-not-restart-proof",
+  "fileIsNotAuthority": true,
+  "providerCASClaimed": false,
+  "checkToCallWindow": true,
+  "automaticRetryAllowed": false,
+  "cliInternalRetryBehaviorQualified": false,
+  "allOwnedClientsIdle": true,
+  "allOwnJobsTerminal": true,
+  "antivirusControlsChanged": false,
+  "blockedScriptExecuted": false,
+  "restartAccepted": true,
+  "physicalRestartObserved": false
+}

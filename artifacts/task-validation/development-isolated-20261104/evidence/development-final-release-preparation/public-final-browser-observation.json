@@ -1,0 +1,51 @@
+{
+  "at": "2026-11-06T00:20:35.816Z",
+  "status": "passed",
+  "scope": "final public API and real browser observations",
+  "aliasMutationPerformed": false,
+  "observations": [
+    {
+      "name": "development",
+      "frontend": "https://clinicos-development-isolated.vercel.app",
+      "backend": "https://development-backend-development-a4a4.up.railway.app",
+      "frontendStatus": 200,
+      "frontendObservationClient": "Playwright Chromium actual navigation/module response",
+      "readyStatus": 200,
+      "deploymentId": "82304c48-7b14-474d-be4b-890519c7a215",
+      "database": "ok",
+      "policy": "ok",
+      "authMode": "demo",
+      "syntheticOnly": true,
+      "temporaryDemo": false,
+      "expiresAt": null,
+      "chooserCount": 5,
+      "bundleSha256": "632b47c0b632765a64040ae2c7b8f4e5396b24d4a2170f14a3e223dc51712f6a",
+      "csp": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://development-backend-development-a4a4.up.railway.app https://login.microsoftonline.com; media-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' blob: https://login.microsoftonline.com; upgrade-insecure-requests",
+      "blocked": 0,
+      "authPostsForwarded": 0
+    },
+    {
+      "name": "previousDemo",
+      "frontend": "https://clinicos-eosin.vercel.app",
+      "backend": "https://clinicos-backend-demo.up.railway.app",
+      "frontendStatus": 200,
+      "frontendObservationClient": "Playwright Chromium actual navigation/module response",
+      "readyStatus": 200,
+      "deploymentId": "6a6b5d5a-edad-434a-a074-db19b2051dbe",
+      "database": "ok",
+      "policy": "ok",
+      "authMode": "demo",
+      "syntheticOnly": true,
+      "temporaryDemo": false,
+      "expiresAt": null,
+      "chooserCount": 5,
+      "bundleSha256": "b84c13e930281403aebe0313cf7452716fe5f6c59d788bb29e449589f74a7f3f",
+      "csp": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://clinicos-backend-demo.up.railway.app https://clinicos-backend-production-df88.up.railway.app https://login.microsoftonline.com; media-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' blob: https://login.microsoftonline.com; upgrade-insecure-requests",
+      "blocked": 0,
+      "authPostsForwarded": 0
+    }
+  ],
+  "nodeFrontendNoStore403PreviouslyObserved": true,
+  "node403CauseUnknown": true,
+  "securitySettingsChanged": false
+}

@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 1,
+  "localRoot": "C:/w-rv/tmp/development-isolated-20261104",
+  "scope": "curated sanitized observations; original fields preserve their original narrower claims",
+  "credentialsCopied": false,
+  "originalDocumentsCopied": false,
+  "receipts": [
+    {
+      "localRelativePath": "manual-frontend-deploy-verified.json",
+      "repositoryRelativePath": "evidence/manual-frontend-deploy-verified.json",
+      "sha256": "4b6b2026f1641a640a6bce14016b8303191609baa358bfa8cbad30e8db834474",
+      "bytes": 905,
+      "status": "frontend-hosting-basics-verified"
+    },
+    {
+      "localRelativePath": "development-synthetic-provenance.json",
+      "repositoryRelativePath": "evidence/development-synthetic-provenance.json",
+      "sha256": "a267b8f3c44abb17fdb6af51f06aa170760589ed2b608af8f117918285e32f3b",
+      "bytes": 2841,
+      "status": "root-source-and-operation-provenance-observed"
+    },
+    {
+      "localRelativePath": "development-backend-stt-deploy-preparation/backend-deploy-verified.json",
+      "repositoryRelativePath": "evidence/development-backend-stt-deploy-preparation/backend-deploy-verified.json",
+      "sha256": "100d324858c6172244fa4447a48d71d20556a181c3b45b208f84a1710832b0c0",
+      "bytes": 909,
+      "status": "backend-ready-source-and-target-verified"
+    },
+    {
+      "localRelativePath": "development-backend-stt-deploy-preparation/migration-log-observation.json",
+      "repositoryRelativePath": "evidence/development-backend-stt-deploy-preparation/migration-log-observation.json",
+      "sha256": "d4e0368f156b8009cff0dfb7ea033c6f45a167eba0f6166be1d8e2b9c49a29b9",
+      "bytes": 373,
+      "status": null
+    },
+    {
+      "localRelativePath": "development-ai-release-preparation/runtime-deploy-verified.json",
+      "repositoryRelativePath": "evidence/development-ai-release-preparation/runtime-deploy-verified.json",
+      "sha256": "d6703a8c6a15098f6b77fd6fd107ad05c092ba427c19084a40400625f6961f5c",
+      "bytes": 774,
+      "status": "runtime-provider-success-metadata-only"
+    },
+    {
+      "localRelativePath": "development-functional-verification/r2/receipt-8bccea8c06c13890-013.json",
+      "repositoryRelativePath": "evidence/development-functional-verification/r2/receipt-8bccea8c06c13890-013.json",
+      "sha256": "cd2574cd8017346e5e6824ccf7b6aa08115e9a8238b926154e0904bb72c2daa8",
+      "bytes": 701,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "extended-functional-verification/receipt-f9441adc0123b9e3-013.json",
+      "repositoryRelativePath": "evidence/extended-functional-verification/receipt-f9441adc0123b9e3-013.json",
+      "sha256": "b22ca8cbd545aa07fc568994293893e6227bc88ac1a2549d41d988d32ca26a59",
+      "bytes": 977,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-additional-functions-verification/receipt-badb560158d99a81-018.json",
+      "repositoryRelativePath": "evidence/development-additional-functions-verification/receipt-badb560158d99a81-018.json",
+      "sha256": "c49458a95722f582ba2f79549e53fb07769a19ee76848a94a4bed5ba6518b8c6",
+      "bytes": 1135,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-beds-protocols-verification/receipt-a7a6f89fa43c6811-031.json",
+      "repositoryRelativePath": "evidence/development-beds-protocols-verification/receipt-a7a6f89fa43c6811-031.json",
+      "sha256": "d9ac1ecdb69f9ec748418c21a18fc763a885943c77a20bef0d28b080499b0e3b",
+      "bytes": 1536,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-enforcement-verification/live-stdout.json",
+      "repositoryRelativePath": "evidence/development-enforcement-verification/live-stdout.json",
+      "sha256": "e35826a52b1ad6db666dde744c55e3f68858e95b695e36e7ad3b0a5adc42a1fa",
+      "bytes": 4215,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-ai-live-verification/receipt-2176d5c750071f86-013.json",
+      "repositoryRelativePath": "evidence/development-ai-live-verification/receipt-2176d5c750071f86-013.json",
+      "sha256": "c9f4c06071fd227f5e5caa54f51e2fe8aafe89cba125ce090942197f62ea80c8",
+      "bytes": 1440,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-ai-backend-verification/receipt-c70d572d4f444528-013.json",
+      "repositoryRelativePath": "evidence/development-ai-backend-verification/receipt-c70d572d4f444528-013.json",
+      "sha256": "f89c721e7984d15c4febc2e099f84fe622e5b96b59a370877a7422b15842fd86",
+      "bytes": 554,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-import-verification/receipt-4746165f31dc651b-013.json",
+      "repositoryRelativePath": "evidence/development-import-verification/receipt-4746165f31dc651b-013.json",
+      "sha256": "efeec55eed1cddcf307a97f7d8f6a9a6b712f16017d5b54488a29563d1a8664a",
+      "bytes": 755,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-agno-preview-verification/receipt-6a27b2930cb43402-006.json",
+      "repositoryRelativePath": "evidence/development-agno-preview-verification/receipt-6a27b2930cb43402-006.json",
+      "sha256": "df29b6cc692b2b48d2f6d06a441a96b43d5623a36230aa0629d235ac4c4991dc",
+      "bytes": 438,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-runtime-negative-verification/receipt-750420260ab671ff-006.json",
+      "repositoryRelativePath": "evidence/development-runtime-negative-verification/receipt-750420260ab671ff-006.json",
+      "sha256": "bca31051b595167394d43cdded3616217d1f1cc0cb751f64574bac869ddcf7d3",
+      "bytes": 578,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-conflict-verification/receipt-ed918f956d48cbcb-008.json",
+      "repositoryRelativePath": "evidence/development-conflict-verification/receipt-ed918f956d48cbcb-008.json",
+      "sha256": "96b71ce2f335adba225221154dceb8a68485b898a69207b0c20345c2cc873805",
+      "bytes": 425,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-native-lifecycle-verification/database-native-accepted.json",
+      "repositoryRelativePath": "evidence/development-native-lifecycle-verification/database-native-accepted.json",
+      "sha256": "71ddb982c8c960f497b6f649050785c4ef2b23a1a99a268fcd2145b597d15fbb",
+      "bytes": 958,
+      "status": "native-provider-accepted-not-restart-proof"
+    },
+    {
+      "localRelativePath": "development-native-lifecycle-verification/database-native-physical-verified.json",
+      "repositoryRelativePath": "evidence/development-native-lifecycle-verification/database-native-physical-verified.json",
+      "sha256": "3a39684cfd2c61dc43a144dddcb82828e27a412f91e156f9e6fa819ea2dc01cc",
+      "bytes": 1153,
+      "status": "native-physical-restart-verified"
+    },
+    {
+      "localRelativePath": "development-native-lifecycle-verification/backend-native-accepted.json",
+      "repositoryRelativePath": "evidence/development-native-lifecycle-verification/backend-native-accepted.json",
+      "sha256": "a5d4d37cc12e8ebc3a761f3d27b4f77bc7e0df8d9aae660fa0157c6c485ee87d",
+      "bytes": 957,
+      "status": "native-provider-accepted-not-restart-proof"
+    },
+    {
+      "localRelativePath": "development-native-lifecycle-verification/backend-native-physical-verified.json",
+      "repositoryRelativePath": "evidence/development-native-lifecycle-verification/backend-native-physical-verified.json",
+      "sha256": "bf452cca27c77c80bb0eaa12d35925867a9a72ccdcf1aab9327a862caeb64121",
+      "bytes": 1126,
+      "status": "native-physical-restart-verified"
+    },
+    {
+      "localRelativePath": "development-physical-lifecycle-verification/database-before-authorized-restart.json",
+      "repositoryRelativePath": "evidence/development-physical-lifecycle-verification/database-before-authorized-restart.json",
+      "sha256": "e5dac558f68373d619ec48bd22c2fac4f26ed42fd0fe86360dc028da82876dfd",
+      "bytes": 780,
+      "status": null
+    },
+    {
+      "localRelativePath": "development-physical-lifecycle-verification/database-after-native-restart.json",
+      "repositoryRelativePath": "evidence/development-physical-lifecycle-verification/database-after-native-restart.json",
+      "sha256": "3b9c563cd2bdf1d536d180013ffd5f9f502ade63066948555883db2c81e457eb",
+      "bytes": 775,
+      "status": null
+    },
+    {
+      "localRelativePath": "development-physical-lifecycle-verification/backend-before-native-restart.json",
+      "repositoryRelativePath": "evidence/development-physical-lifecycle-verification/backend-before-native-restart.json",
+      "sha256": "35f273f789dc24b422fe21d0268a312148a0c12ab52ea3c11b67d1ce64481204",
+      "bytes": 1213,
+      "status": null
+    },
+    {
+      "localRelativePath": "development-physical-lifecycle-verification/backend-after-native-restart.json",
+      "repositoryRelativePath": "evidence/development-physical-lifecycle-verification/backend-after-native-restart.json",
+      "sha256": "24664838bc9cfa0da819c412cf369ca36f513570932ddf775f9bda0fde1073af",
+      "bytes": 1212,
+      "status": null
+    },
+    {
+      "localRelativePath": "development-native-persistence-readback/receipt-022.json",
+      "repositoryRelativePath": "evidence/development-native-persistence-readback/receipt-022.json",
+      "sha256": "234e21982af50a67c0d1c24f9e38a835cfc1ec12aed490542ad0c12e9e42ef94",
+      "bytes": 1475,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-import-persistence-verification/receipt-007.json",
+      "repositoryRelativePath": "evidence/development-import-persistence-verification/receipt-007.json",
+      "sha256": "bc3ad34581ec06cca0d97c02f58e47aed017156e739a6be7964520a6a6a26c2f",
+      "bytes": 591,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-final-role-browser-verification/browser/run-4pg6wg/receipt.json",
+      "repositoryRelativePath": "evidence/development-final-role-browser-verification/browser/run-4pg6wg/receipt.json",
+      "sha256": "79f0663fe2d731f10b9659ec6dae6a769e4cbabbf922954c9d0bc07e1119d385",
+      "bytes": 6723,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-final-refresh-verification/live-stdout.json",
+      "repositoryRelativePath": "evidence/development-final-refresh-verification/live-stdout.json",
+      "sha256": "1510ee90dee752506fcfa0699f0b6f947959b9c03adb815a60abe8ff2651a215",
+      "bytes": 5009,
+      "status": "failed"
+    },
+    {
+      "localRelativePath": "development-refresh-continuation-preparation/live-stdout.json",
+      "repositoryRelativePath": "evidence/development-refresh-continuation-preparation/live-stdout.json",
+      "sha256": "b790163cd5ed95cdddca33ba91fad78085d220a237f4ab5b09fa76e76fe07a11",
+      "bytes": 650,
+      "status": "failed"
+    },
+    {
+      "localRelativePath": "development-final-release-preparation/public-final-browser-observation.json",
+      "repositoryRelativePath": "evidence/development-final-release-preparation/public-final-browser-observation.json",
+      "sha256": "09d7886586da0eaf94c06bcaedc501328f5cc7df387153504d886d900ae1fda3",
+      "bytes": 2838,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-refresh-browser-proof-preparation/live-stdout.json",
+      "repositoryRelativePath": "evidence/development-refresh-browser-proof-preparation/live-stdout.json",
+      "sha256": "b3c37d17f8639c6103040133877002c2065a3559cb0dbec5559286a906202b53",
+      "bytes": 1732,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-refresh-browser-proof-preparation/run-JxVmdj/receipt.json",
+      "repositoryRelativePath": "evidence/development-refresh-browser-proof-preparation/run-JxVmdj/receipt.json",
+      "sha256": "283b145578d0a4ab32b16a4405779db2293a09084c67ed443020d78da22e578d",
+      "bytes": 2290,
+      "status": "passed"
+    },
+    {
+      "localRelativePath": "development-final-role-browser-verification/roles/live-result.json",
+      "repositoryRelativePath": "evidence/role-summary.json",
+      "originalSha256": "df2958c9a1213d84325fdba0a79eed51fa16fb225d490eff7402b99ebd929636",
+      "sha256": "80ec13312c859013b6f7558b92ba597e2291d3e3c8e4f5dcae4f695fa2a382a9",
+      "bytes": 1824,
+      "derived": true
+    }
+  ]
+}

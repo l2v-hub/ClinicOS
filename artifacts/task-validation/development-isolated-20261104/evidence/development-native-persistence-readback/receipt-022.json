@@ -1,0 +1,47 @@
+{
+  "status": "passed",
+  "source": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "deploymentId": "82304c48-7b14-474d-be4b-890519c7a215",
+  "imageDigest": "sha256:92c75ecd4a28167802a4af7d560018dcbe48ff401f338fbd7e28b080c099d56e",
+  "phase": "complete",
+  "ids": {
+    "patientId": "cmw41v3gq000u01pndoevorxy",
+    "diaryId": "cmw41v4ba000w01pnswqhtxfg",
+    "documentId": "cmw41v562000y01pnazeds91d",
+    "therapyId": "cmw43is7v001g01pnuvdnvztb",
+    "appointmentId": "cmw4452ls001j01pnewxu2vxl",
+    "handoverId": "3e27be14-36bb-4e80-ae1a-e70cf1ddf318",
+    "noteId": "cmw4454x8001m01pngf9liwb9",
+    "roomId": "cmw446cy2001p01pn1chv282c",
+    "bedId": "cmw446cy4001q01pnynd1fz71",
+    "assignmentId": "cmw446exk001s01pn0pjtwnhl",
+    "protocolId": "cmw446ii2001v01pnfj6ne9s0",
+    "prnId": "cmw446k2r001y01pn949pfs1k",
+    "administrationId": "cmw446nn1002101pnbqn1kru1"
+  },
+  "documentSha256": "31024ef447763b1d7893f4d73a05440cb35d36b7ca6a90cd1714b990db521564",
+  "covered": [
+    "patient",
+    "diary",
+    "document",
+    "chart",
+    "parameters",
+    "basic-therapy",
+    "protocol",
+    "prn",
+    "appointment",
+    "handover",
+    "note",
+    "assignment",
+    "administration",
+    "room-bed"
+  ],
+  "cleanupUncertain": false,
+  "physicalRestartProofSuppliedExternallyRequired": true,
+  "allOldTokensRevokedClaimed": false,
+  "unverifiedFields": [
+    "assignment-note-not-exposed-by-GET"
+  ],
+  "fullParityClaimed": false,
+  "cleanupPhase": "logout-verified"
+}

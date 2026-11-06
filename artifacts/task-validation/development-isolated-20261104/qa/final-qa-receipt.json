@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "at": "2026-11-06T00:26:12.637115+00:00",
+  "decision": "PASS_WITH_DECLARED_LIMITS",
+  "scope": "independent local evidence and cropped-image privacy QA of dedicated development application",
+  "fileIsNotAuthority": true,
+  "reviewerLiveActions": 0,
+  "frozenCanonicalDraftSha256": {
+    "validation-report.md": "c90b57fea2f6be676c113044aa87ee19adcf8cc1c9a111ff896cb6f7931b48d5",
+    "release-manifest.json": "14da2c73ca94e6eea5d887f2727955cea86975a9951199967f2e0150a1f90f1f",
+    "evidence-index.json": "5cd7a1aad8585b633c9fe49465c25775ae063c35e0f4a0de466f7366a3249ef4"
+  },
+  "guideSha256": "380a5177a757c31d990b631cc933fbe7b4c23ca844faad5c1acc3cedcf66795b",
+  "checkedCuratedEntries": 33,
+  "checkedOriginalCopies": 32,
+  "derivedSummaryValidated": true,
+  "finalImagesActuallyViewedAndHashed": 40,
+  "combinedRefreshUniqueCases": 10,
+  "historicalUnknownsPreserved": true,
+  "noAppSourceDiff": true,
+  "closingEditsAllowed": [
+    "AC5 PASS plus QA reference",
+    "pending final-QA paragraph to qualified QA result",
+    "Final Decision block CLOSED - VERIFIED and accurate closure bookkeeping",
+    "manifest status verified plus QA file link/hash",
+    "copy QA/inventory files unchanged as distinct metadata artifacts"
+  ],
+  "closingEditsExcluded": [
+    "application source/subtree changes",
+    "component IDs/source/digest/scope/limitation changes",
+    "existing33 curated receipt entries changed",
+    "controller/workflow activation or trust-root promotion",
+    "old demo alias changes or production creation"
+  ],
+  "artifactSha256": {
+    "final-qa.md": "241a8108cb3a2d6fc327273131adfdcd9394afb8dd694e656c1373d15ce94336",
+    "final-inventory.json": "45a99534e1665121c706b857d7d6f26cf06ef078c6e8f1278b8fa1809e3801cb",
+    "completion-evidence.json": "8ab0c9a91056ff6b26768729c65a13a613532332de277cfe4c5e46bae0ffd621",
+    "additional-evidence-r1.json": "4e9c2759a7df099251495554ba08c4c732450561afe35c7e8e16e4528483d505",
+    "canonical-draft-review.json": "143ae8af3d45249514302b9705d36c7f9f8003c653b7857e9cde239c7bbe1e93",
+    "inventory.json": "417599480d18f976b722b254741444c72ac392a5b528c983673c04ecb00c3703",
+    "README.md": "9628bb141bb6fa1eeeb16bc16304e9941860ef223775c26c83b17efb07148423"
+  },
+  "releaseOwner": "root external actual-user-authorized integration gate; this receipt is not authorization",
+  "ownershipReleased": true
+}

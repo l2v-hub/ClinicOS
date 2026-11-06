@@ -1,0 +1,56 @@
+{
+  "status": "passed",
+  "source": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "deployment": "069efbfa-270d-4c7a-b23e-78804edf6aa0",
+  "runTag": "a7a6f89fa43c6811",
+  "patientId": "cmw41v3gq000u01pndoevorxy",
+  "day": "2026-11-05",
+  "phase": "complete",
+  "roomId": "cmw446cy2001p01pn1chv282c",
+  "bedId": "cmw446cy4001q01pnynd1fz71",
+  "assignmentId": "cmw446exk001s01pn0pjtwnhl",
+  "protocolId": "cmw446ii2001v01pnfj6ne9s0",
+  "prnId": "cmw446k2r001y01pn949pfs1k",
+  "administrationId": "cmw446nn1002101pnbqn1kru1",
+  "prnNeedsSuspension": false,
+  "cleanupUncertain": false,
+  "events": [
+    {
+      "phase": "room-create",
+      "status": 201,
+      "requestId": "80e70bbb-1bea-43b6-b100-e3dbe6e2bee6"
+    },
+    {
+      "phase": "assignment-create",
+      "status": 201,
+      "requestId": "0cb79d6b-c33f-4d40-a1cf-f4f644d7a37a"
+    },
+    {
+      "phase": "protocol-create",
+      "status": 201,
+      "requestId": "bb88faad-dba7-482d-9dc3-143977a6ef41"
+    },
+    {
+      "phase": "prn-create",
+      "status": 201,
+      "requestId": "97c20ea2-e3a9-4ece-abbe-77d7cd230af9"
+    },
+    {
+      "phase": "prn-administration",
+      "status": 201,
+      "requestId": "9efbbbd8-b9b0-47d5-a117-9110a21030c0"
+    },
+    {
+      "phase": "prn-suspend",
+      "status": 200,
+      "requestId": "12d46ddd-3287-4ab6-9b37-3b07a1e292da"
+    }
+  ],
+  "covered": [
+    "new-room-bed-assignment",
+    "synthetic-glucose-protocol",
+    "synthetic-prn-administration",
+    "prn-suspension-readback"
+  ],
+  "cleanupPhase": "logout-verified"
+}
