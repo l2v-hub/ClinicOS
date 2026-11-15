@@ -24,3 +24,10 @@ ok - ambiente non ammesso: seed e wipe confermato rispondono 403 e non toccano i
 # fallimenti di main, tranne «supervisor: rejected without explicit confirmation…»
 # (therapy-prn-confirmation), che passa in isolamento (2 esecuzioni) e passava nella suite completa:
 # instabile sotto carico, in un'area non toccata.
+
+# Seconda iterazione (la stessa scheda riaperta resta una sola bozza)
+ok - la sessione di una bozza aperta non scade; senza bozza aperta scade come prima
+ok - i documenti seguono la bozza: «Elimina bozza» li rimuove subito
+# pass 2 — fail 0
+# Cartelle backend import (src/ai/upload), intake, synthetic e test che toccano gli import, su
+# database isolato: 338 test, 325 pass, 11 fail, 2 skip — nessun fallimento che non sia già su main.

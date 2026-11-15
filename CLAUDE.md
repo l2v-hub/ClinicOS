@@ -123,6 +123,12 @@ Single source of truth. Do NOT create parallel nav components.
   `PATCH /intake/drafts/:id` con il solo corpo `{"status":"abandoned"}` (archivia, non cancella).
   Mai fondere automaticamente i dati di due bozze, mai archiviarne una senza un gesto esplicito
   dell'operatore (nemmeno alla conferma del paziente), mai riusare lato server una bozza fra schede.
+- **La bozza resta una sola finché l'ingresso non si conclude**: la sessione documenti collegata
+  a una bozza aperta non scade (`expirePageSessions` in `backend/src/ai/upload/pages/cleanup.ts`);
+  i documenti seguono la bozza e spariscono alla conferma o con «Elimina bozza». «Riprendi bozza»
+  riapre sempre la stessa bozza con le ultime modifiche. Se una bozza è rimasta senza documenti
+  (dati precedenti o sessione eliminata a mano), la nuova importazione la **sostituisce** con un
+  gesto esplicito, non le si affianca.
 
 ## Coerenza grafica (regole canoniche — non reinventare per pagina)
 

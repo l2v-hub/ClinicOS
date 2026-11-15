@@ -61,6 +61,8 @@ OperatorSchedule}.tsx`, `design-system.css`, `compact-layout.css`, `design-syste
 | AC11 |   PASS | `logs/synthetic-api-wipe.txt` (106 righe eliminate, identità e audit conservati, 0 trigger disabilitati); `screenshots/after-wipe-pazienti-empty.png`; giro app a sistema vuoto e ripopolato: 0 errori in console                     |
 | AC12 | PASS | test `syntheticDataAvailability: fail closed…` (NODE_ENV assente/errato, demo solo dedotta, produzione → disabilitata), `identità e ruolo…`, `wipe: senza la frase di conferma…`, `ambiente non ammesso…`; capability in `CAPABILITY_CATALOG.json` e `capability-registry.json` (rispetto alla base solo aggiunte) |
 | AC13 | PARTIAL | `test-results/frontend-and-build.txt` (frontend 1594/1594, build frontend e backend OK, nessun nuovo problema di lint sui file toccati); `test-results/backend-suite-comparison.txt` (nessun test fallisce solo sul ramo). Non PASS alla lettera: suite backend e lint completi sono rossi in questo ambiente già su `main` intatto. |
+| AC14 | PASS | `logs/single-draft-reopen.txt` (stessa bozza riaperta e modificata 4 volte, ogni volta dopo la pulizia delle sessioni scadute: sempre 1 bozza, modifiche ritrovate a ogni riapertura, 1 voce in elenco); `screenshots/after-single-draft-reopened-4-times.png`; `trace/single-draft-reopen-trace.zip`; test `draft-session-retention-db.test.ts` (2) |
+| AC15 | PASS | `logs/single-draft-reopen.txt` (B0/B1: bozza senza documenti → messaggio e sostituzione, 1 bozza aperta); `screenshots/after-draft-without-documents.png` |
 
 ## Test Results
 
@@ -105,6 +107,24 @@ OperatorSchedule}.tsx`, `design-system.css`, `compact-layout.css`, `design-syste
 Only sanitized logs are allowed. I log in `logs/` contengono solo identità sintetiche (`SEED-*`,
 `SIM-*`, pazienti inventati), conteggi e codici di stato.
 
+## Seconda iterazione — «la stessa scheda riaperta resta una sola bozza»
+
+Richiesta dell'utente dopo il primo rilascio: riaprendo e modificando più volte la stessa scheda
+deve restare una sola bozza con le ultime modifiche, non 2, 3, 4.
+
+- **Causa riprodotta** (nello stesso browser): la sessione documenti scadeva dopo 60 minuti di
+  inattività anche se collegata a una bozza aperta. Da quel momento «Riprendi bozza» rispondeva
+  «La sessione è scaduta… Nuova importazione»: la bozza non era più riapribile né confermabile e
+  l'unica strada era una nuova importazione, cioè un'altra bozza. Il pulsante «Nuova
+  importazione» in quel contesto girava a vuoto.
+- **Correzione**: `expirePageSessions` non fa scadere la sessione di una bozza ancora aperta
+  (`backend/src/ai/upload/pages/cleanup.ts`). I documenti seguono la bozza: restano finché viene
+  confermata o eliminata. Per le bozze già rimaste senza documenti, «Riprendi bozza» lo spiega e
+  propone «Elimina questa bozza e ripeti l'importazione» (sostituzione esplicita).
+- **Verifica**: vedi AC14 e AC15. Test backend delle cartelle import/intake/synthetic su database
+  isolato: 338 test, 325 pass, 11 fail, tutti già falliti su `main`. Frontend 1596/1596, build OK.
+- **Non rivisto da un revisore indipendente.**
+
 ## Independent Review
 
 Revisione indipendente del diff da parte di un agente QA dedicato (sola lettura). **Esito sulla
@@ -134,6 +154,13 @@ Le correzioni non sono state sottoposte a una seconda revisione indipendente.
   servizio; non ho potuto verificare le variabili reali.
 - **Bozze doppie dopo la conferma**: confermato un paziente, un'eventuale altra bozza dello stesso
   paziente resta nell'elenco finché l'operatore non la elimina (scelta di sicurezza, vedi M2).
+- **Conservazione dei documenti**: i documenti caricati in una bozza restano nel database finché
+  la bozza viene confermata o eliminata, non più 60 minuti. È una scelta di prodotto con effetti
+  su privacy e spazio: una bozza dimenticata conserva i suoi documenti a tempo indeterminato.
+- **Bozze già senza documenti**: i dati inseriti a mano in quelle bozze non sono recuperabili
+  nella nuova importazione (la bozza viene archiviata a database, non cancellata).
+- **Altro dispositivo**: una seconda importazione dello stesso paziente da un altro browser crea
+  ancora una bozza distinta; l'elenco la raggruppa con la precedente (identità forte).
 - **Wipe**: richiede che l'utente DB dell'applicazione sia proprietario delle tabelle
   (`ALTER TABLE … DISABLE TRIGGER USER`). È vero dove l'app esegue le proprie migrazioni; in caso
   contrario il wipe fallisce senza eliminare nulla (transazione unica).

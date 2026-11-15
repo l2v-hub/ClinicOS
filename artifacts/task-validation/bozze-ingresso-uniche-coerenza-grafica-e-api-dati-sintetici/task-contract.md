@@ -48,6 +48,8 @@ server. "OCR / Import" = solo il ciclo di vita della bozza nata da un import, no
 
 ## Expected Behaviour
 
+0. (Aggiunta dopo il primo rilascio) La scheda in bozza è sempre e solo una finché l'ingresso
+   non si conclude: riaprirla e modificarla più volte aggiorna la stessa bozza.
 1. Una sola voce in bozza per paziente e operatore: le bozze con la stessa identità forte (codice
    fiscale, oppure cognome+nome+data di nascita) sono raggruppate, la più recente è quella
    proposta, le precedenti restano raggiungibili ed eliminabili. Le bozze (manuali comprese) sono
@@ -98,6 +100,13 @@ server. "OCR / Import" = solo il ciclo di vita della bozza nata da un import, no
   capability e ogni invocazione è tracciata nell'audit.
 - AC13: `npm run build`, lint e test backend/frontend passano; nessuna regressione sui test
   esistenti di intake/import.
+
+- AC14: (richiesta successiva dell'utente) riaprire e modificare più volte la stessa scheda in
+  bozza lascia sempre UNA sola bozza con le ultime modifiche, anche dopo la scadenza della sessione
+  documenti (60 minuti di inattività): la sessione di una bozza aperta non scade, i documenti
+  seguono la bozza e vengono rimossi alla conferma o con «Elimina bozza».
+- AC15: una bozza già rimasta senza documenti non genera una seconda bozza: «Riprendi bozza» lo
+  spiega e la nuova importazione la sostituisce con un gesto esplicito dell'operatore.
 
 ## Test Plan
 
