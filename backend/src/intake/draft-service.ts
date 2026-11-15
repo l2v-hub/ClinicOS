@@ -22,7 +22,7 @@ import {
 import { saveReceipt } from '../ai/upload/pages/repository.js';
 import { sexFromCodiceFiscale } from '../lib/codice-fiscale.js';
 import { cancelPages } from '../ai/upload/pages/lifecycle.js';
-import { draftIdentityKey, duplicateOfIds } from './draft-identity.js';
+import { duplicateOfIds } from './draft-identity.js';
 
 // ── Allergene sanitation (import seeding) ────────────────────────────────────
 // CLINICAL SAFETY: an `allergene` is a CONCISE allergen name, never a clinical narrative. Real
@@ -263,28 +263,6 @@ export async function abandonDraft(id: string) {
         ),
       );
     }
-  }
-  return archived;
-}
-
-/**
- * Dopo la conferma di un paziente: le altre bozze aperte dello stesso operatore con la stessa
- * identità forte sono doppioni di un paziente che ormai esiste. Restituisce quante ne archivia.
- */
-export async function abandonDuplicateDrafts(confirmedDraftId: string): Promise<number> {
-  const confirmed = await prisma.patientIntakeDraft.findUnique({
-    where: { id: confirmedDraftId },
-  });
-  const identity = confirmed ? draftIdentityKey(confirmed.data) : null;
-  if (!confirmed || !identity || !confirmed.createdById) return 0;
-  const siblings = await prisma.patientIntakeDraft.findMany({
-    where: { status: 'draft', createdById: confirmed.createdById, id: { not: confirmed.id } },
-  });
-  let archived = 0;
-  for (const sibling of siblings) {
-    if (draftIdentityKey(sibling.data) !== identity) continue;
-    await abandonDraft(sibling.id);
-    archived += 1;
   }
   return archived;
 }

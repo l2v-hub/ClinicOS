@@ -2636,7 +2636,7 @@
       "description": "Feed unificato del diario (voci di diario + consegne visibili), paginato keyset con filtri authorType/from/to/limit/cursor.",
       "type": "read",
       "feature_ui": "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx, frontend/src/lib/diaryPages.ts, frontend/src/lib/patientDetailPrefetch.ts, PatientRecordPrintDialog.tsx",
-      "entry_point": "GET /patients/diary-unread-count, GET /patients/:patientId/diary, POST /patients/:patientId/diary/:entryId/ack (explicit purpose read confirms any diary note; default takes charge of an urgent entry; first non-author receipt is shared; author gets 409)",
+      "entry_point": "GET /patients/diary-unread-count, GET /patients/diary-unread, GET /patients/diary-unread-patient-counts, GET /patients/:patientId/diary, POST /patients/:patientId/diary/:entryId/ack (explicit purpose read confirms any diary note; default takes charge of an urgent entry; first non-author receipt is shared; author gets 409)",
       "services": [
         "backend/src/patients/diary-read-service.ts#loadPatientDiary",
         "backend/src/patients/diary-ack-service.ts#acknowledgeDiaryEntry"
@@ -4816,7 +4816,7 @@
     {
       "capability_id": "intake.update_draft",
       "name": "Bozze ingresso — autosalvataggio",
-      "description": "Shallow-merge delle sezioni nel data della bozza (chiavi server-owned scartate, campi import immutabili, versioning per bozze collegate a sessioni pagine). Il solo corpo {status:'abandoned'} archivia la bozza («Elimina bozza») e annulla la sessione documenti ancora aperta.",
+      "description": "Shallow-merge delle sezioni nel data della bozza (chiavi server-owned scartate, campi import immutabili, versioning per bozze collegate a sessioni pagine). Solo sulla rotta HTTP: il solo corpo {status:'abandoned'} archivia la bozza («Elimina bozza») e annulla la sessione documenti ancora aperta; il tool omonimo resta il puro autosalvataggio.",
       "domain": "intake",
       "type": "write",
       "feature_ui": "frontend/src/components/shared/intake/intakeDraftApi.ts (patchDraft)",

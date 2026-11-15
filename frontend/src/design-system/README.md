@@ -25,9 +25,11 @@ Regole uniche, applicate dal foglio canonico (`design-system.css`, blocco «Coer
   `view-header` nel contenuto è dismesso (Operatori, Posti Letto, Orari migrati).
 - **Topbar**: i controlli misurano 44px su ogni pagina (`--ds-control-h` impostato su
   `.compact-topbar`); l'intestazione non cambia più dimensione navigando.
-- **Card di pagina**: `--ds-card-radius` (12px), bordo 1px `--ds-border`, nessuna ombra. Le ombre
-  restano ai livelli sovrapposti (menu, finestre). Una nuova card di pagina si aggiunge all'elenco
-  del blocco canonico, non a un CSS di pagina.
+- **Card di pagina**: `--ds-card-radius` (12px) e nessuna ombra a riposo. Il raggio è imposto dal
+  foglio canonico; l'ombra è azzerata a bassa specificità, così le regole di stato dei componenti
+  (alone di fuoco, hover) continuano a prevalere. Il bordo non si tocca: può portare un significato
+  (stria di priorità delle consegne, tratteggio degli stati vuoti). Una nuova card di pagina si
+  aggiunge all'elenco del blocco canonico, non a un CSS di pagina.
 - **Titoli**: `h1/h2` 18px/600 ovunque; `h3` ha una base comune 16px/600 (specificità minima: le
   regole di componente prevalgono). Nessun titolo con lo stile di default del browser.
 - **Larghezza**: contenuto a tutta larghezza dopo la sidebar; nessun `max-width` per pagina.

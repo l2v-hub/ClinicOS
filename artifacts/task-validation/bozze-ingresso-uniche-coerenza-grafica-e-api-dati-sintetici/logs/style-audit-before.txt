@@ -1,0 +1,340 @@
+
+===== Operatore / Turno
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   11× h36 r8px fs14px fw600 bgrgba(0,0,0,0) cls=ds-link
+   6× h36 r8px fs14px fw600 bgrgb(47,107,237) cls=ds-btn.ds-btn--primary
+   2× h36 r8px fs14px fw600 bgrgba(0,0,0,0) cls=ds-link.widget-toggle
+   1× h36 r8px fs14px fw600 bgrgb(253,236,238) cls=dashboard-notification-compact.dashboard-notification-compact--alarm
+   1× h36 r8px fs14px fw600 bgrgb(255,255,255) cls=ds-btn.ds-btn--secondary
+ cards:
+   6× r12px pad12px/12px bd1px rgb(225,231,240) sh:none cls=adesso-dose__block.is-late
+   1× r16px pad16px/16px bd1px rgb(225,231,240) sh:none cls=adesso-queue.turno-card
+   1× r16px pad10px/16px bd1px rgb(225,231,240) sh:none cls=turno-card.turno-card--empty
+   1× r16px pad16px/16px bd1px rgb(225,231,240) sh:none cls=turno-card.turno-handovers
+ heads:
+   3× H2 fs18px fw600 cls=turno-h2
+   1× H1 fs18px fw600 cls=page-header__title
+   1× H3 fs14px fw600 cls=adesso-queue__section-title
+ inputs:
+   
+
+===== Operatore / Pazienti
+ topbar:
+   1× 44x44 r8px cls=topbar-back
+   1× 80x44 r8px cls=topbar-search topbar-assistant
+   1× 44x44 r8px cls=topbar-search
+   1× 44x44 r8px cls=topbar-avatar
+ buttons:
+   8× h44 r8px fs14px fw600 bgrgb(255,255,255) cls=ds-icon-btn.patient-roster__open
+   3× h44 r8px fs14px fw400 bgrgb(255,255,255) cls=ds-chip
+   2× h44 r8px fs14px fw500 bgrgba(0,0,0,0) cls=ds-sort.patient-roster__sort
+   1× h44 r8px fs14px fw600 bgrgb(255,255,255) cls=btn-secondary.ai-import-btn
+   1× h44 r8px fs14px fw600 bgrgb(47,107,237) cls=ds-btn.ds-btn--primary
+   1× h44 r8px fs14px fw600 bgrgb(234,241,254) cls=ds-chip
+ cards:
+   1× r16px pad24px/24px bd1px rgb(225,231,240) sh:none cls=plist-card.plist-new
+   1× r16px pad24px/24px bd1px rgb(225,231,240) sh:none cls=plist-card.plist-list
+ heads:
+   1× H1 fs18px fw600 cls=page-header__title
+   1× H2 fs18px fw600 cls=
+ inputs:
+   1× INPUT h44 r12px bd2px rgb(185,196,212) bgrgb(245,247,251)
+
+===== Operatore / Terapia
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   4× h36 r8px fs14px fw400 bgrgb(255,255,255) cls=ds-chip
+   3× h36 r8px fs14px fw400 bgrgb(255,255,255) cls=ds-chip.giro-slot
+   2× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=ds-chip
+   2× h36 r8px fs14px fw600 bgrgb(255,255,255) cls=ds-icon-btn
+   1× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=ds-chip.giro-slot
+   1× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=ds-chip.is-active
+   1× h36 r8px fs14px fw600 bgrgb(255,255,255) cls=ds-btn.ds-btn--secondary
+   1× h36 r8px fs14px fw600 bgrgb(47,107,237) cls=ds-btn.ds-btn--primary
+ cards:
+   1× r12px pad12px/16px bd1px rgb(225,231,240) sh:none cls=giro-allergies
+ heads:
+   1× H1 fs18px fw600 cls=page-header__title
+ inputs:
+   1× INPUT h36 r8px bd2px rgb(225,231,240) bgrgb(241,245,251)
+
+===== Operatore / Parametri
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   8× h38 r10px fs13.3333px fw400 bgrgba(0,0,0,0) cls=par-pick__main
+   3× h36 r8px fs14px fw600 bgrgb(255,255,255) cls=ds-btn.ds-btn--secondary
+   2× h36 r8px fs14px fw600 bgrgba(0,0,0,0) cls=ds-link
+   1× h36 r8px fs14px fw600 bgrgb(47,107,237) cls=ds-btn.ds-btn--primary
+ cards:
+   
+ heads:
+   1× H1 fs18px fw600 cls=page-header__title
+   1× H2 fs18px fw600 cls=par-form__name
+ inputs:
+   8× INPUT h36 r8px bd2px rgb(113,129,152) bgrgb(241,245,251)
+   1× INPUT h36 r12px bd2px rgb(113,129,152) bgrgb(241,245,251)
+   1× SELECT h36 r8px bd2px rgb(113,129,152) bgrgb(241,245,251)
+   1× TEXTAREA h80 r8px bd2px rgb(113,129,152) bgrgb(241,245,251)
+
+===== Operatore / Consegne
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   1× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=ds-chip
+   1× h36 r8px fs14px fw400 bgrgb(255,255,255) cls=ds-chip
+ cards:
+   1× r12px pad16px/16px bd1px rgb(225,231,240) sh:none cls=consegna-quick
+ heads:
+   1× H1 fs18px fw600 cls=page-header__title
+   1× H2 fs18px fw500 cls=
+   1× H3 fs16.38px fw700 cls=
+ inputs:
+   1× SELECT h36 r8px bd2px rgb(113,129,152) bgrgb(241,245,251)
+
+===== Operatore / Agenda
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   2× h36 r8px fs14px fw400 bgrgb(255,255,255) cls=agt-view-btn
+   2× h36 r8px fs14px fw600 bgrgb(255,255,255) cls=ds-icon-btn
+   1× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=agt-view-btn.active
+   1× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=ds-chip.is-active
+   1× h36 r8px fs14px fw600 bgrgb(47,107,237) cls=ds-btn.ds-btn--primary
+ cards:
+   1× r16px pad24px/24px bd1px rgb(225,231,240) sh:none cls=agt-day-card
+ heads:
+   1× H1 fs18px fw600 cls=page-header__title
+   1× H2 fs18px fw600 cls=agt-day-card__title
+ inputs:
+   
+
+===== Operatore / Farmaci
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   1× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=filter-chip.active
+   1× h36 r8px fs14px fw400 bgrgb(255,255,255) cls=filter-chip
+ cards:
+   1× r16px pad0px/0px bd1px rgb(225,231,240) sh:none cls=page-anagrafica-farmaci__corpo
+   1× r12px pad0px/16px bd2px rgb(36,91,181) sh:none cls=ricerca-farmaco__campo
+ heads:
+   1× H1 fs18px fw600 cls=page-header__title
+ inputs:
+   1× INPUT h36 r0px bd0px rgb(22,32,46) bgrgba(0,0,0,0)
+
+===== Operatore / Milo
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   1× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=filter-chip.active
+   1× h36 r8px fs14px fw400 bgrgb(255,255,255) cls=filter-chip
+ cards:
+   1× r16px pad0px/0px bd1px rgb(225,231,240) sh:none cls=page-anagrafica-farmaci__corpo
+ heads:
+   1× H1 fs18px fw600 cls=page-header__title
+ inputs:
+   1× INPUT h36 r0px bd0px rgb(22,32,46) bgrgba(0,0,0,0)
+
+===== Amministratore / Dashboard
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   22× h36 r8px fs14px fw600 bgrgb(255,255,255) cls=btn-secondary
+   3× h20 r0px fs14px fw600 bgrgba(0,0,0,0) cls=link-btn
+ cards:
+   1× r12px pad16px/16px bd1px rgb(230,235,242) sh:none cls=admin-attention
+ heads:
+   22× H3 fs15.2px fw500 cls=
+   2× H2 fs18px fw500 cls=
+   1× H1 fs18px fw600 cls=page-header__title
+ inputs:
+   
+
+===== Amministratore / Operatori
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   8× h36 r8px fs14px fw600 bgrgb(255,255,255) cls=icon-btn.icon-btn--sm
+   5× h36 r8px fs14px fw500 bgrgba(0,0,0,0) cls=ds-sort.cdt__sort-btn
+   1× h36 r8px fs14px fw600 bgrgb(47,107,237) cls=btn-success
+   1× h36 r8px fs14px fw600 bgrgb(255,255,255) cls=ds-icon-btn
+   1× h44 r8px fs14px fw400 bgrgba(0,0,0,0) cls=table-filters__toggle
+ cards:
+   1× r8px pad0px/0px bd1px rgb(225,231,240) sh:y cls=cts.cts--open
+ heads:
+   1× H2 fs18px fw700 cls=view-header__title
+ inputs:
+   
+
+===== Amministratore / Agenda
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   4× h36 r8px fs14px fw400 bgrgb(255,255,255) cls=ds-chip
+   4× h51 r0px fs14px fw400 bgrgb(255,255,255) cls=agt-col-hdr
+   2× h36 r8px fs14px fw400 bgrgb(255,255,255) cls=agt-view-btn
+   2× h36 r8px fs14px fw600 bgrgb(255,255,255) cls=ds-icon-btn
+   1× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=agt-view-btn.active
+   1× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=ds-chip.is-active
+   1× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=ds-chip
+ cards:
+   
+ heads:
+   
+ inputs:
+   
+
+===== Amministratore / Terapia
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   3× h104 r8px fs12px fw500 bgrgb(255,240,243) cls=therapy-calendar-count.is-late
+   2× h36 r8px fs14px fw600 bgrgb(255,255,255) cls=ds-icon-btn
+   1× h36 r8px fs14px fw400 bgrgb(255,255,255) cls=ds-chip
+   1× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=ds-chip.is-active
+   1× h88 r8px fs12px fw500 bgrgb(238,243,255) cls=therapy-calendar-count.is-due
+ cards:
+   
+ heads:
+   1× H1 fs18px fw600 cls=page-header__title
+ inputs:
+   
+
+===== Amministratore / Posti Letto
+ topbar:
+   1× 44x44 r8px cls=topbar-back
+   1× 80x44 r8px cls=topbar-search topbar-assistant
+   1× 44x44 r8px cls=topbar-search
+   1× 44x44 r8px cls=topbar-avatar
+ buttons:
+   12× h44 r8px fs14px fw600 bgrgb(255,255,255) cls=icon-btn.icon-btn--sm
+   8× h44 r0px fs12px fw500 bgrgba(0,0,0,0) cls=letto-paziente.letto-paziente--link
+   6× h44 r8px fs14px fw400 bgrgb(255,255,255) cls=ds-chip
+   4× h44 r8px fs14px fw600 bgrgb(255,255,255) cls=icon-btn.icon-btn--danger
+   2× h44 r8px fs14px fw600 bgrgb(234,241,254) cls=ds-chip
+   1× h44 r8px fs14px fw600 bgrgb(47,107,237) cls=btn-success
+   1× h44 r8px fs14px fw600 bgrgb(255,255,255) cls=ds-icon-btn
+ cards:
+   4× r12px pad0px/0px bd1px rgb(225,231,240) sh:y cls=room-card
+   1× r12px pad16px/20px bd1px rgb(225,231,240) sh:y cls=occupancy-stats
+   1× r8px pad0px/0px bd1px rgb(225,231,240) sh:y cls=cts.cts--open
+ heads:
+   1× H2 fs18px fw700 cls=view-header__title
+ inputs:
+   
+
+===== Amministratore / Orari
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   3× h36 r8px fs14px fw400 bgrgb(255,255,255) cls=ds-chip
+   1× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=ds-chip
+   1× h36 r8px fs14px fw600 bgrgb(255,255,255) cls=btn-secondary.btn-sm
+   1× h20 r0px fs14px fw600 bgrgba(0,0,0,0) cls=link-btn
+ cards:
+   1× r12px pad18px/20px bd1px rgb(225,231,240) sh:y cls=schedule-card
+   1× r12px pad32px/20px bd1px rgb(225,231,240) sh:none cls=empty-state-card
+ heads:
+   1× H2 fs18px fw700 cls=view-header__title
+ inputs:
+   
+
+===== Amministratore / Consegne
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   1× h36 r8px fs14px fw600 bgrgb(234,241,254) cls=ds-chip
+   1× h36 r8px fs14px fw400 bgrgb(255,255,255) cls=ds-chip
+ cards:
+   1× r12px pad16px/16px bd1px rgb(225,231,240) sh:none cls=consegna-quick
+ heads:
+   1× H1 fs18px fw600 cls=page-header__title
+   1× H2 fs18px fw500 cls=
+   1× H3 fs16.38px fw700 cls=
+ inputs:
+   1× SELECT h36 r8px bd2px rgb(113,129,152) bgrgb(241,245,251)
+
+===== Amministratore / Ruoli
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   27× h48 r0px fs14px fw700 bgrgba(0,0,0,0) cls=rp-group-toggle
+   4× h36 r0px fs14px fw650 bgrgba(0,0,0,0) cls=top-nav__item
+   3× h36 r8px fs14px fw600 bgrgb(255,255,255) cls=btn-secondary
+   2× h36 r8px fs14px fw400 bgrgb(255,255,255) cls=ds-chip
+   1× h36 r0px fs14px fw800 bgrgba(0,0,0,0) cls=top-nav__item.is-active
+ cards:
+   1× r12px pad12px/16px bd1px rgb(225,231,240) sh:none cls=rp-filters
+   1× r8px pad0px/0px bd1px rgb(225,231,240) sh:y cls=clinicos-table-wrap.rp-matrix__wrap
+ heads:
+   1× H1 fs18px fw600 cls=page-header__title
+ inputs:
+   2× SELECT h36 r8px bd2px rgb(113,129,152) bgrgb(241,245,251)
+   1× INPUT h36 r8px bd2px rgb(113,129,152) bgrgb(241,245,251)
+
+===== Amministratore / Milo
+ topbar:
+   1× 36x36 r8px cls=topbar-back
+   1× 80x36 r8px cls=topbar-search topbar-assistant
+   1× 36x36 r8px cls=topbar-search
+   1× 36x36 r8px cls=topbar-avatar
+ buttons:
+   27× h48 r0px fs14px fw700 bgrgba(0,0,0,0) cls=rp-group-toggle
+   4× h36 r0px fs14px fw650 bgrgba(0,0,0,0) cls=top-nav__item
+   3× h36 r8px fs14px fw600 bgrgb(255,255,255) cls=btn-secondary
+   2× h36 r8px fs14px fw400 bgrgb(255,255,255) cls=ds-chip
+   1× h36 r0px fs14px fw800 bgrgba(0,0,0,0) cls=top-nav__item.is-active
+ cards:
+   1× r12px pad12px/16px bd1px rgb(225,231,240) sh:none cls=rp-filters
+   1× r8px pad0px/0px bd1px rgb(225,231,240) sh:y cls=clinicos-table-wrap.rp-matrix__wrap
+ heads:
+   1× H1 fs18px fw600 cls=page-header__title
+ inputs:
+   2× SELECT h36 r8px bd2px rgb(113,129,152) bgrgb(241,245,251)
+   1× INPUT h36 r8px bd2px rgb(113,129,152) bgrgb(241,245,251)

@@ -1,0 +1,12 @@
+### POST /admin/synthetic-data/wipe (admin, confirmed)
+{"status":"wiped","deleted":{"PatientAssessmentAttestation":0,"PatientDocument":0,"PatientAssessment":0,"PatientNarrativeSection":0,"Cartella":1,"PatientParameterReading":5,"ClinicalNote":13,"ClinicalRecord":8,"Appointment":5,"MedicationAdministration":0,"TherapyAdministrationReceipt":0,"PrnAdministration":0,"PatientIntakeDocument":0,"DiaryEntryAcknowledgement":0,"DiaryEntryReadReceipt":0,"PatientDiaryEntry":5,"TherapySchedule":0,"PatientTherapy":16,"PatientRoomAssignment":8,"Bed":8,"Room":4,"Patient":11,"ConsegnaAcknowledgement":0,"ConsegnaReadReceipt":0,"ConsegnaCreationReceipt":0,"Consegna":5,"NotaRecipientState":0,"Nota":2,"PatientIntakeDraft":3,"ImportAudit":0,"ImportDocument":1,"ImportProcessingUnit":2,"ImportMutation":4,"ImportJob":2,"OperatorSchedule":3},"totalDeleted":106,"counts":{"patients":0,"rooms":0,"beds":0,"roomAssignments":0,"therapies":0,"appointments":0,"consegne":0,"diaryEntries":0,"parameterReadings":0,"notes":0,"intakeDrafts":0,"importJobs":0,"operatorSchedules":0,"operators":4}}
+HTTP 200
+### status after wipe
+{"enabled":true,"tier":"development","reason":null,"confirmation":"CANCELLA TUTTO","counts":{"patients":0,"rooms":0,"beds":0,"roomAssignments":0,"therapies":0,"appointments":0,"consegne":0,"diaryEntries":0,"parameterReadings":0,"notes":0,"intakeDrafts":0,"importJobs":0,"operatorSchedules":0,"operators":4}}
+HTTP 200
+### preserved tables
+User=4
+Operator=4
+AiAuditEvent=31
+audit synthetic rows=10
+user triggers disabled=0

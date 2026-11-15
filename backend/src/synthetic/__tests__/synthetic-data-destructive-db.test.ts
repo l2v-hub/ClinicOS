@@ -6,11 +6,23 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { prisma } from '../../lib/prisma.js';
-import { seedSyntheticData, syntheticDataCounts, wipeSyntheticData } from '../index.js';
+import {
+  seedSyntheticData,
+  syntheticDataAvailability,
+  syntheticDataCounts,
+  wipeSyntheticData,
+} from '../index.js';
 import { PRESERVED_TABLES, WIPED_TABLES, tableCounts } from '../wipe.js';
 
-const enabled = process.env.SYNTHETIC_DATA_DESTRUCTIVE_TESTS === '1';
-const skip = enabled ? false : 'opt-in: SYNTHETIC_DATA_DESTRUCTIVE_TESTS=1 (svuota il database)';
+// Doppia chiave: opt-in esplicito E ambiente in cui l'API stessa sarebbe ammessa. Il test chiama
+// il servizio direttamente, quindi applica qui la stessa guardia della rotta.
+const optedIn = process.env.SYNTHETIC_DATA_DESTRUCTIVE_TESTS === '1';
+const availability = syntheticDataAvailability();
+const skip = !optedIn
+  ? 'opt-in: SYNTHETIC_DATA_DESTRUCTIVE_TESTS=1 (svuota il database)'
+  : !availability.enabled
+    ? `ambiente non ammesso (${availability.tier}): ${availability.reason}`
+    : false;
 
 async function userTriggerStates() {
   return prisma.$queryRaw<Array<{ name: string; enabled: string }>>`

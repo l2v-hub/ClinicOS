@@ -1,6 +1,6 @@
 # Frontend — npm test (suite completa)
-# tests 1594
-# pass 1594
+# tests 1596
+# pass 1596
 # fail 0
 # skipped 0
 EXIT 0
@@ -29,3 +29,9 @@ frontend secret scan OK — 0 findings
       2 components/shared/intake/IntakeWorkspace.tsx react-hooks/set-state-in-effect
 ## backend: eslint sui file toccati/nuovi → 0 problemi
 ## nota: 'npm run lint' completo fallisce anche su main (frontend 159 problemi, backend errori no-control-regex in file non toccati)
+
+# Dopo le correzioni della revisione indipendente
+# npm test (frontend): 1596 pass, 0 fail — npm run build (frontend e backend): exit 0
+# Nota di onestà: il commit 2ec7a6c0 conteneva RoomsManagement.tsx riformattato dal formatter al
+# commit; due test (budget di 500 righe e forma del sorgente) fallivano. Corretto ripristinando la
+# formattazione originale del file e aggiungendo i moduli «Posti letto» a .prettierignore.

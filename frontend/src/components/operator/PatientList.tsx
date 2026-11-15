@@ -6,6 +6,7 @@ import {
   draftUpdatedLabel,
   groupDrafts,
 } from '../shared/intake/draftList';
+import { forgetManualDraft } from '../shared/intake/intakeDraftSession';
 import { API_URL } from '../../config';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { useAnomalieReparto } from './cartella/useAnomalieReparto';
@@ -162,9 +163,13 @@ export function PatientList({
     setDraftDeleteError('');
     try {
       await abandonDraft(draftToDelete.id, { operatorId, operatorRole });
+      // La scheda non deve riaprire la bozza appena eliminata al prossimo «Nuovo ingresso a mano».
+      forgetManualDraft({ operatorId, operatorRole }, draftToDelete.id);
       setDrafts((current) => current.filter((draft) => draft.id !== draftToDelete.id));
       setDraftToDelete(null);
       setDraftRefresh((value) => value + 1);
+      // Il pulsante che ha aperto la conferma non esiste più: il fuoco va a un punto stabile.
+      window.requestAnimationFrame(() => newIntakeButtonRef.current?.focus());
     } catch (error) {
       setDraftDeleteError(
         error instanceof Error ? error.message : 'Impossibile eliminare la bozza. Riprova.',
@@ -457,7 +462,7 @@ export function PatientList({
                   <div className="plist-draft__row">
                     <button
                       type="button"
-                      className="ds-btn ds-btn--secondary plist-draft__resume"
+                      className="ds-btn ds-btn--secondary ds-btn--wrap plist-draft__resume"
                       onClick={() => resumeDraft(draft)}
                     >
                       {previous ? 'Riprendi bozza precedente' : `Riprendi bozza · ${name}`}
@@ -491,8 +496,8 @@ export function PatientList({
                             : `${older.length} bozze precedenti dello stesso paziente`}
                         </summary>
                         <p className="plist-draft__hint">
-                          La bozza qui sopra è la più recente. Le precedenti restano disponibili
-                          finché non le elimini.
+                          La bozza qui sopra è la più recente. Le precedenti restano qui finché non
+                          le riprendi o le elimini.
                         </p>
                         {older.map((draft) => (
                           <div key={draft.id} data-draft-id={draft.id}>

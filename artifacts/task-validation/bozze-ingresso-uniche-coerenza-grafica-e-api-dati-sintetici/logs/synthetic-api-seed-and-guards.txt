@@ -1,0 +1,15 @@
+### POST /admin/synthetic-data/seed (admin)
+{"status":"seeded","demoPatientId":"cmwi3aipa0000yw7dksx3ms93","counts":{"patients":11,"rooms":4,"beds":8,"roomAssignments":8,"therapies":16,"appointments":5,"consegne":5,"diaryEntries":5,"parameterReadings":5,"notes":2,"intakeDrafts":3,"importJobs":2,"operatorSchedules":3,"operators":4}}
+HTTP 200
+### seed again (idempotent)
+{"status":"seeded","demoPatientId":"cmwi3aipa0000yw7dksx3ms93","counts":{"patients":11,"rooms":4,"beds":8,"roomAssignments":8,"therapies":16,"appointments":5,"consegne":5,"diaryEntries":5,"parameterReadings":5,"notes":2,"intakeDrafts":3,"importJobs":2,"operatorSchedules":3,"operators":4}}
+HTTP 200
+### wipe without confirmation
+{"error":"Conferma richiesta: invia {\"confirm\":\"CANCELLA TUTTO\"} per svuotare il sistema","code":"confirmation_required"}
+HTTP 400
+### wipe wrong confirmation
+{"error":"Conferma richiesta: invia {\"confirm\":\"CANCELLA TUTTO\"} per svuotare il sistema","code":"confirmation_required"}
+HTTP 400
+### wipe as operatore
+{"error":"Operazione non consentita al tuo ruolo","code":"capability_denied","capability":"synthetic_data.wipe","role":"operator"}
+HTTP 403

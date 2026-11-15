@@ -75,8 +75,9 @@ server. "OCR / Import" = solo il ciclo di vita della bozza nata da un import, no
   due volte "Nuovo ingresso a mano" senza scrivere nulla non accumula bozze. Dopo "Salva bozza e
   chiudi" un nuovo ingresso a mano parte da una scheda vuota. Nessun riuso lato server di una
   bozza fra schede diverse (rischio di mescolare due pazienti).
-- AC5: confermando un paziente da una bozza, le altre bozze aperte dello stesso operatore con la
-  stessa identità forte passano ad `abandoned`.
+- AC5: nessuna bozza viene archiviata senza un gesto esplicito dell'operatore. (Stesura
+  iniziale: archiviazione automatica dei doppioni alla conferma del paziente — ritirata dopo la
+  revisione indipendente perché scartava in silenzio i documenti caricati nelle altre bozze.)
 - AC6: l'elenco bozze si aggiorna alla chiusura di entrambi i flussi d'ingresso.
 - AC7: su tutte le pagine L1 operatore e amministratore il titolo pagina è nella topbar e i
   controlli della topbar hanno la stessa dimensione (misurata) su ogni pagina.
@@ -91,8 +92,9 @@ server. "OCR / Import" = solo il ciclo di vita della bozza nata da un import, no
   i dati operativi (pazienti e dati collegati, bozze, import, agenda, consegne, note, camere),
   conserva identità di accesso, policy autorizzativa, anagrafica farmaci e audit; dopo il wipe
   l'app si apre senza errori con elenchi vuoti e un nuovo seed funziona.
-- AC12: entrambe le API rispondono 403 su produzione reale (`isRealProduction()`), 403 a ruoli
-  non admin/manager, 400 senza conferma esplicita per il wipe; sono catalogate nel registro
+- AC12: entrambe le API rispondono 403 dove l'ambiente non è dichiarato esplicitamente di prova
+  (chiuso per default: produzione reale, `NODE_ENV` assente o errato, demo solo dedotta), 403 a
+  ruoli non amministratore, 400 senza conferma esplicita per il wipe; sono catalogate nel registro
   capability e ogni invocazione è tracciata nell'audit.
 - AC13: `npm run build`, lint e test backend/frontend passano; nessuna regressione sui test
   esistenti di intake/import.

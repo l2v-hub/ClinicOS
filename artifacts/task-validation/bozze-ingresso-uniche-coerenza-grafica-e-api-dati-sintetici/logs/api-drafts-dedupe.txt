@@ -1,0 +1,8 @@
+AC2 duplicateOfId: { older: true, newest: true }
+AC3 colleague abandon -> 404 Bozza non trovata
+confirm -> 201 created 
+AC5 after confirm, the sibling draft is still open (no silent archiving) — open drafts for this identity: 1
+AC3 abandon confirmed draft -> 400 La bozza è già confermata: il paziente esiste e non può essere eliminata
+autosave with other keys is NOT an abandon -> 200 draft
+created patient id (synthetic, removed by the next wipe): true
+audit rows intake.abandon_draft=2
