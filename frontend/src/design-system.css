@@ -848,3 +848,69 @@ th[aria-sort] .ds-sort:not(#ds) {
   width: var(--ds-icon-size);
   height: var(--ds-icon-size);
 }
+
+/* ── Coerenza di pagina ───────────────────────────────────────────────────────────────────────
+   Le stesse cose hanno lo stesso aspetto su ogni pagina (operatore e amministratore):
+   · intestazione: i controlli non cambiano misura passando da una pagina all'altra;
+   · card di pagina: un solo raggio, bordo sottile, nessuna ombra (le ombre restano ai livelli
+     sovrapposti: menu, finestre);
+   · contenuto: sempre a tutta larghezza dopo la barra laterale;
+   · testo introduttivo e stati vuoti: uno stile solo.
+   ───────────────────────────────────────────────────────────────────────────────────────────── */
+@media screen {
+  /* 44px è la misura già adottata al letto del paziente: l'intestazione la usa su ogni pagina. */
+  .compact-topbar:not(#ds) {
+    --ds-control-h: 44px;
+  }
+}
+:is(
+  .turno-card,
+  .plist-card,
+  .agt-day-card,
+  .page-anagrafica-farmaci__corpo,
+  .consegna-quick,
+  .consegna-card,
+  .admin-attention,
+  .occupancy-stats,
+  .room-card,
+  .schedule-card,
+  .empty-state-card,
+  .rp-filters,
+  .rp-matrix__wrap
+):not(#ds) {
+  border-radius: var(--ds-card-radius);
+  border: 1px solid var(--ds-border);
+  box-shadow: none;
+}
+:is(.op-management, .rooms-view, .schedule-view, .admin-dashboard) > .cts:not(#ds) {
+  border-radius: var(--ds-card-radius);
+  box-shadow: none;
+}
+:is(.rooms-view, .schedule-view):not(#ds) {
+  max-width: none;
+}
+.page-lead:not(#ds) {
+  margin: 0 0 var(--ds-layout-gap);
+  font: 400 14px/20px var(--ds-font);
+  color: var(--ds-text-muted);
+}
+/* Consegne: titolo, conteggio e stato vuoto con il ritmo delle altre pagine. */
+.handover-queue:not(#ds) {
+  margin-top: var(--ds-layout-gap);
+}
+.handover-queue > h2:not(#ds) {
+  margin: 0 0 4px;
+}
+.handover-queue > p:not(#ds) {
+  margin: 0 0 12px;
+  color: var(--ds-text-muted);
+}
+.handover-queue .handover-rounds__detail > p:not(#ds),
+.handover-queue .handover-rounds__list > p:not(#ds) {
+  margin: 0;
+  padding: var(--ds-card-padding);
+  background: var(--ds-surface);
+  border: 1px dashed var(--ds-border-strong);
+  border-radius: var(--ds-card-radius);
+  color: var(--ds-text-muted);
+}

@@ -36,7 +36,7 @@ export function ConsegneUnreadQueue({
       </p>
     );
   return (
-    <section aria-label="Note non confermate" aria-busy={queue.loading}>
+    <section className="handover-queue" aria-label="Note non confermate" aria-busy={queue.loading}>
       <h2 ref={heading} tabIndex={-1}>
         Non confermate
       </h2>
