@@ -142,6 +142,15 @@ const ADMIN_OVERVIEW_READS = new Set([
 ]);
 
 function administrator(cap: CapabilityEntry): Rule {
+  // Dati sintetici di prova: strumento dell'amministratore tecnico. Il backend li rifiuta comunque
+  // fuori dagli ambienti di prova (mai su una produzione reale), qualunque sia la policy.
+  if (cap.id === 'synthetic_data.status' || cap.id === 'synthetic_data.seed')
+    return { effect: 'ALLOWED', review: 'Solo ambienti di prova: rifiutato in produzione reale.' };
+  if (cap.id === 'synthetic_data.wipe')
+    return {
+      effect: 'ALLOWED_WITH_CONFIRMATION',
+      review: 'Svuota tutti i dati operativi. Solo ambienti di prova, con frase di conferma.',
+    };
   if (cap.domain === 'dev')
     return { effect: 'DENIED', review: 'Solo sviluppo: non serve in esercizio.' };
   if (cap.id.startsWith('intake.legacy_'))
