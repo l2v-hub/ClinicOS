@@ -109,6 +109,30 @@ Single source of truth. Do NOT create parallel nav components.
 
 <!-- SPECKIT START -->
 
+## Dati sintetici e bozze d'ingresso
+
+- **Dati di prova**: `POST /admin/synthetic-data/seed` popola un dataset sintetico completo,
+  `POST /admin/synthetic-data/wipe` (body `{"confirm":"CANCELLA TUTTO"}`) svuota i dati operativi,
+  `GET /admin/synthetic-data` dà stato e conteggi. Solo admin/manager, **mai su produzione reale**.
+  Dettagli: `docs/synthetic-data-api.md`; codice: `backend/src/synthetic/`. Una nuova tabella Prisma
+  va dichiarata in `WIPED_TABLES` o `PRESERVED_TABLES` (`synthetic/wipe.ts`), altrimenti un test fallisce.
+- **Una voce in bozza per paziente**: `GET /intake/drafts` segnala i doppioni con `duplicateOfId`
+  (identità forte: CF valido oppure cognome+nome+data di nascita — `backend/src/intake/draft-identity.ts`);
+  l'elenco li raggruppa (`frontend/src/components/shared/intake/draftList.ts`). «Elimina bozza» =
+  `PATCH /intake/drafts/:id` con il solo corpo `{"status":"abandoned"}` (archivia, non cancella).
+  Mai fondere automaticamente i dati di due bozze, mai riusare lato server una bozza fra schede.
+
+## Coerenza grafica (regole canoniche — non reinventare per pagina)
+
+- Titolo di pagina **sempre** nella topbar con `PageHeader` (`title`/`subtitle`/`actions`): niente
+  `view-header` o titoli nel contenuto.
+- I controlli della topbar hanno la stessa misura su ogni pagina (`--ds-control-h: 44px` su
+  `.compact-topbar`); le card di pagina usano `--ds-card-radius`, bordo 1px, nessuna ombra; `h1/h2`
+  = 18px/600 e `h3` ha una base comune (`compact-layout.css`). Le regole stanno in
+  `frontend/src/design-system.css` («Coerenza di pagina») e `compact-layout.css`: una nuova card di
+  pagina si aggiunge a quell'elenco, non a un CSS di pagina.
+- Contenuto a tutta larghezza dopo la sidebar: nessun `max-width` per pagina.
+
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
 at `specs/016-agnos-llm-reads/plan.md`.

@@ -1,0 +1,32 @@
+# Backend — suite completa su database isolato (clinicos_test), ramo
+# tests 1959
+# pass 1847
+# fail 106
+# skipped 6
+
+# Backend — stessa suite su main intatto (b5e79ae7), database isolato (clinicos_base)
+# tests 1948
+# pass 1835
+# fail 108
+# skipped 5
+
+# Test che falliscono SOLO sul ramo (per nome; i file *-db elencati per percorso sono gli stessi nelle due esecuzioni)
+(fine elenco)
+
+# Test che falliscono SOLO su main
+pause/continue and return persist; retries preserve exact history and valid dose receipts
+real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts
+
+# Nuovi test di questo task nella suite completa
+ok 742 - draftIdentityKey: solo identità forte (CF valido oppure cognome+nome+data di nascita)
+ok 743 - duplicateOfIds: la più recente è la principale; il proprietario fa parte della chiave
+ok 744 - listDrafts segnala i doppioni dello stesso paziente con duplicateOfId
+ok 745 - abandonDraft archivia senza cancellare, è idempotente e rifiuta le bozze confermate
+ok 746 - abandonDuplicateDrafts archivia solo i doppioni forti dello stesso operatore
+ok 1067 - demo seed creates explicit rooms, beds and one normalized placement per patient
+ok 1375 - seed idempotente, wipe completo anche sulle tabelle append-only, nuovo seed # SKIP opt-in: SYNTHETIC_DATA_DESTRUCTIVE_TESTS=1 (svu
+ok 1376 - syntheticDataAvailability: mai in produzione, demo solo sintetica, staging solo con flag
+ok 1377 - ogni tabella dello schema è dichiarata: svuotata oppure conservata, mai dimenticata
+ok 1378 - identità e ruolo: anonimo 401, ruolo clinico 403, amministratore 200
+ok 1379 - wipe: senza la frase di conferma esatta non viene eliminato nulla
+ok 1380 - ambiente non ammesso: seed e wipe confermato rispondono 403 e non toccano i dati

@@ -1,0 +1,24 @@
+# SYNTHETIC_DATA_DESTRUCTIVE_TESTS=1 — seed → wipe → seed su Postgres reale (database di sviluppo locale)
+# Tre esecuzioni consecutive sullo stesso database; ogni esecuzione parte da un database con un
+# paziente estraneo al dataset (il wipe deve eliminare tutto, non solo ciò che il seed ha creato).
+# Nota di onestà: la prima stesura del test non era rieseguibile (lasciava una riga append-only e
+# confrontava i conteggi con lo stato iniziale): è fallita alla seconda esecuzione ed è stata corretta.
+ok 1 - seed idempotente, wipe completo anche sulle tabelle append-only, nuovo seed # pass 1 # fail 0 (run 1)
+ok 1 - seed idempotente, wipe completo anche sulle tabelle append-only, nuovo seed # pass 1 # fail 0 (run 2)
+ok 1 - seed idempotente, wipe completo anche sulle tabelle append-only, nuovo seed # pass 1 # fail 0 (run 3)
+
+# Guardie (non distruttive)
+ok 1 - draftIdentityKey: solo identità forte (CF valido oppure cognome+nome+data di nascita)
+ok 2 - duplicateOfIds: la più recente è la principale; il proprietario fa parte della chiave
+ok 3 - listDrafts segnala i doppioni dello stesso paziente con duplicateOfId
+ok 4 - abandonDraft archivia senza cancellare, è idempotente e rifiuta le bozze confermate
+ok 5 - abandonDuplicateDrafts archivia solo i doppioni forti dello stesso operatore
+ok 6 - syntheticDataAvailability: mai in produzione, demo solo sintetica, staging solo con flag
+ok 7 - ogni tabella dello schema è dichiarata: svuotata oppure conservata, mai dimenticata
+ok 8 - identità e ruolo: anonimo 401, ruolo clinico 403, amministratore 200
+ok 9 - wipe: senza la frase di conferma esatta non viene eliminato nulla
+ok 10 - ambiente non ammesso: seed e wipe confermato rispondono 403 e non toccano i dati
+# tests 10
+# pass 10
+# fail 0
+# skipped 0
