@@ -29,8 +29,11 @@ class IntakeFlowBoundary extends Component<
   render() {
     if (!this.state.failed) return this.props.children;
     return (
-      <AccessibleDialogSurface labelledBy="intake-flow-error" onClose={this.props.onClose}
-        presentation={this.props.presentation}>
+      <AccessibleDialogSurface
+        labelledBy="intake-flow-error"
+        onClose={this.props.onClose}
+        presentation={this.props.presentation}
+      >
         <h2 id="intake-flow-error">Impossibile aprire il modulo</h2>
         <p role="alert">
           Il modulo non è stato caricato. Riprova ricarica la pagina mantenendo la scelta del metodo
@@ -103,6 +106,7 @@ export function NewPatientFlow({
             open
             onClose={onClose}
             onCreated={(patientId, moduleTabId) => onDone(patientId, moduleTabId, 'manuale')}
+            manualDraftId={resumeDraftId}
             operatorId={operatorId}
             operatorRole={operatorRole}
             operatoreNome={operatoreNome}
