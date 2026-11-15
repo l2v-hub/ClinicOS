@@ -13,11 +13,13 @@ const DischargeImportModal = lazy(() =>
 interface Props {
   onStart?: () => void;
   onImported?: (patientId?: string, moduleTabId?: string) => void;
+  /** La finestra d'import si è chiusa (anche senza paziente creato: può aver lasciato una bozza). */
+  onClosed?: () => void;
   operatorId?: string;
   operatorRole?: string;
 }
 
-export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }: Props) {
+export function AIImportStatus({ onStart, onImported, onClosed, operatorId, operatorRole }: Props) {
   const { loading, available, reason } = useAiImportStatus();
   const [open, setOpen] = useState(false);
   const title = loading
@@ -51,7 +53,10 @@ export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }
         <Suspense fallback={<DialogLoading onClose={() => setOpen(false)} />}>
           <DischargeImportModal
             open={open}
-            onClose={() => setOpen(false)}
+            onClose={() => {
+              setOpen(false);
+              onClosed?.();
+            }}
             onImported={onImported}
             operatorId={operatorId}
             operatorRole={operatorRole}

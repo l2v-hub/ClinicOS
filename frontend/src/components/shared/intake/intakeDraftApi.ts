@@ -33,6 +33,9 @@ export interface DraftResponse {
   version?: number;
   /** Job d'import a pagine collegato alla bozza (card Documenti). */
   importJobId?: string | null;
+  updatedAt?: string;
+  /** Elenco bozze: id della bozza più recente dello stesso paziente, null se è questa. */
+  duplicateOfId?: string | null;
 }
 
 export interface ConfirmResponse {
@@ -103,6 +106,24 @@ export async function createDraft(
     throw new Error((err as { error?: string }).error ?? `createDraft failed: ${res.status}`);
   }
   return res.json() as Promise<DraftResponse>;
+}
+
+/** «Elimina bozza»: il server la archivia (non compare più negli elenchi) e chiude i suoi documenti. */
+export async function abandonDraft(id: string, op?: OperatorHeaders): Promise<void> {
+  const res = await fetch(`${API_URL}/intake/drafts/${id}`, {
+    method: 'PATCH',
+    headers: buildHeaders(op),
+    body: JSON.stringify({ status: 'abandoned' }),
+  });
+  const body = (await res.json().catch(() => ({}))) as { error?: string; status?: string };
+  if (!res.ok)
+    throw new DraftApiError(body.error ?? 'Impossibile eliminare la bozza. Riprova.', res.status);
+  // Un backend non ancora aggiornato risponde 200 senza archiviare: mai fingere l'eliminazione.
+  if (body.status !== 'abandoned')
+    throw new DraftApiError(
+      'Eliminazione non ancora disponibile su questo servizio. Riprova più tardi.',
+      res.status,
+    );
 }
 
 export async function patchDraft(

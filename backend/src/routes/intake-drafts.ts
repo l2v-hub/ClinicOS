@@ -6,6 +6,8 @@ import {
   patchDraft,
   listDrafts,
   seedDraftFromImport,
+  abandonDraft,
+  abandonDuplicateDrafts,
 } from '../intake/draft-service.js';
 import { confirmDraft, type ConfirmPayload } from '../ai/upload/confirm-service.js';
 import { AiExtractionError } from '../ai/types.js';
@@ -120,10 +122,17 @@ intakeDraftsRouter.get('/:id', async (req, res) => {
   }
 });
 
-// PATCH /intake/drafts/:id — autosave: shallow-merge top-level keys into data
+// PATCH /intake/drafts/:id — autosave: shallow-merge top-level keys into data.
+// Il solo corpo `{ "status": "abandoned" }` è «Elimina bozza»: archivia la bozza (stato abandoned,
+// la riga resta a DB) e annulla la sessione documenti ancora aperta. Stessa capability
+// dell'autosalvataggio: chi può modificare la propria bozza può anche scartarla.
 intakeDraftsRouter.patch('/:id', async (req, res) => {
   try {
     const patch = (req.body ?? {}) as Record<string, unknown>;
+    if (patch.status === 'abandoned' && Object.keys(patch).length === 1) {
+      const archived = await abandonDraft(String(req.params.id));
+      return res.status(200).json({ id: archived.id, status: archived.status });
+    }
     const draft = await patchDraft(String(req.params.id), patch);
     return res.status(200).json(draft);
   } catch (err) {
@@ -204,6 +213,14 @@ intakeDraftsRouter.post('/:id/confirm', async (req, res) => {
     if (result.status === 'duplicate') {
       return res.status(409).json(result);
     }
+    // Il paziente esiste: le altre bozze dello stesso operatore per la stessa identità sono
+    // doppioni. Best effort — la conferma è già avvenuta e non deve fallire per questo.
+    await abandonDuplicateDrafts(String(req.params.id)).catch((error) =>
+      console.error(
+        'intake-drafts: duplicate cleanup failed:',
+        error instanceof Error ? error.name : 'unknown',
+      ),
+    );
     return res.status(result.status === 'created' ? 201 : 200).json(result);
   } catch (err) {
     return handleError(res, err);

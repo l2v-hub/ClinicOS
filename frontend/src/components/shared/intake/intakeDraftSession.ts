@@ -18,12 +18,15 @@ export function clearManualDraft(actor: Actor) {
     /* Storage may be unavailable. */
   }
 }
-/** Persist only the opaque draft ID; a failed resume must not create another patient draft. */
-export function openManualDraft(actor: Actor): Promise<DraftResponse> {
+/**
+ * Persist only the opaque draft ID; a failed resume must not create another patient draft.
+ * `resumeId` = «Riprendi bozza» dall'elenco: quella bozza diventa quella della scheda corrente.
+ */
+export function openManualDraft(actor: Actor, resumeId?: string): Promise<DraftResponse> {
   const actorKey = key(actor);
   const current = pending.get(actorKey);
   if (current) return current;
-  const id = remembered(actor);
+  const id = resumeId ?? remembered(actor);
   const request = (id ? getDraft(id, actor) : createDraft('manual', actor))
     .then((draft) => {
       try {

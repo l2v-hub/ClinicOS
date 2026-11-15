@@ -395,6 +395,58 @@ td.patient-roster__actions > button + button {
   padding: 24px;
   min-width: 0;
 }
+/* Ingressi in bozza: una voce per paziente (più recente), le precedenti in un riquadro richiudibile. */
+.plist-drafts > h2 {
+  margin: 0 0 12px;
+}
+.plist-drafts__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.plist-draft__row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+.plist-draft__meta {
+  flex: 1;
+  min-width: 160px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.plist-draft__older {
+  margin: 8px 0 4px;
+  padding: 8px 12px;
+  border-left: 3px solid var(--border);
+}
+.plist-draft__older > summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 14px;
+  padding: 6px 0;
+}
+.plist-draft__older[open] > summary {
+  margin-bottom: 4px;
+}
+.plist-draft__hint {
+  margin: 0 0 8px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.plist-draft__older .plist-draft__row + div,
+.plist-draft__older > div + div {
+  margin-top: 8px;
+}
+.plist-draft__error {
+  display: block;
+  margin-top: 8px;
+  color: var(--red);
+}
 .plist-new {
   display: flex;
   align-items: center;
