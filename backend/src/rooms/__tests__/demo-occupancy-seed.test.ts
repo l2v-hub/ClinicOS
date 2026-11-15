@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 
-const seed = readFileSync(new URL('../../seed.ts', import.meta.url), 'utf8');
+const seed = readFileSync(new URL('../../synthetic/demo-dataset.ts', import.meta.url), 'utf8');
 const migration = readFileSync(
   new URL(
     '../../../../prisma/migrations/20260902193000_seed_demo_room_occupancy/migration.sql',
