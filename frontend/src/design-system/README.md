@@ -16,6 +16,23 @@ Ogni pattern definisce: **stile visivo**, **comportamento**, **interazione**, **
 
 ---
 
+## Coerenza di pagina (2026-11-15)
+
+Regole uniche, applicate dal foglio canonico (`design-system.css`, blocco «Coerenza di pagina», e
+`compact-layout.css`): le pagine non le ridefiniscono.
+
+- **Titolo di pagina**: sempre nella topbar tramite `PageHeader` (`title`, `subtitle`, `actions`).
+  `view-header` nel contenuto è dismesso (Operatori, Posti Letto, Orari migrati).
+- **Topbar**: i controlli misurano 44px su ogni pagina (`--ds-control-h` impostato su
+  `.compact-topbar`); l'intestazione non cambia più dimensione navigando.
+- **Card di pagina**: `--ds-card-radius` (12px), bordo 1px `--ds-border`, nessuna ombra. Le ombre
+  restano ai livelli sovrapposti (menu, finestre). Una nuova card di pagina si aggiunge all'elenco
+  del blocco canonico, non a un CSS di pagina.
+- **Titoli**: `h1/h2` 18px/600 ovunque; `h3` ha una base comune 16px/600 (specificità minima: le
+  regole di componente prevalgono). Nessun titolo con lo stile di default del browser.
+- **Larghezza**: contenuto a tutta larghezza dopo la sidebar; nessun `max-width` per pagina.
+- **Testo introduttivo**: `.page-lead`.
+
 ## Bottoni
 
 **Classe base**: sempre una combinazione `{ruolo} {dimensione}`, mai una dimensione da sola.
