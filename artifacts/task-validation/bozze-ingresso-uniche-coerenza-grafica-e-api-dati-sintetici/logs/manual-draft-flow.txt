@@ -1,0 +1,7 @@
+1. untouched draft reused in the same tab: true | manual drafts added: 1 | list unchanged: true
+2. list before: Ingressi in bozza · dati da completare | Riprendi bozza · Esempio Teresa | A mano · aggiornata oggi alle 17:24
+   list after manual save: Ingressi in bozza · dati da completare | Riprendi bozza · Manuale Lucia | A mano · aggiornata oggi alle 17:34 | Riprendi bozza · Esempio Teresa | A mano · aggiornata oggi alle 17:24
+3. new intake starts on a different, empty draft: true | Nome = ""
+4. resumed the same draft after reload: true | Cognome = Manuale
+5. list after delete: Ingressi in bozza · dati da completare | Riprendi bozza · Esempio Teresa | A mano · aggiornata oggi alle 17:24
+   manual drafts open now vs start: 1 | console errors: 0 []

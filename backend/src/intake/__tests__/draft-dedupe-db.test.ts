@@ -3,7 +3,7 @@ import { after, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { prisma } from '../../lib/prisma.js';
-import { abandonDraft, abandonDuplicateDrafts, listDrafts, patchDraft } from '../draft-service.js';
+import { abandonDraft, listDrafts, patchDraft } from '../draft-service.js';
 import { draftIdentityKey, duplicateOfIds } from '../draft-identity.js';
 
 const run = randomUUID().slice(0, 8);
@@ -126,24 +126,4 @@ test('abandonDraft archivia senza cancellare, è idempotente e rifiuta le bozze 
     abandonDraft(`missing-${run}`),
     (error: { kind?: string }) => error.kind === 'not_found',
   );
-});
-
-test('abandonDuplicateDrafts archivia solo i doppioni forti dello stesso operatore', async () => {
-  const identity = { lastName: `Confermato${run}`, firstName: 'Carla', dateOfBirth: '1945-05-05' };
-  const confirmed = await draft(identity);
-  const duplicate = await draft(identity);
-  const homonym = await draft({ ...identity, dateOfBirth: '1960-06-06' });
-  const colleague = await draft(identity, COLLEAGUE);
-
-  assert.equal(await abandonDuplicateDrafts(confirmed.id), 1);
-  const status = async (id: string) =>
-    (await prisma.patientIntakeDraft.findUnique({ where: { id } }))?.status;
-  assert.equal(await status(duplicate.id), 'abandoned');
-  assert.equal(await status(confirmed.id), 'draft', 'la bozza confermata non viene toccata qui');
-  assert.equal(await status(homonym.id), 'draft');
-  assert.equal(await status(colleague.id), 'draft');
-
-  const weak = await draft({ lastName: 'Senza', firstName: 'Data' });
-  await draft({ lastName: 'Senza', firstName: 'Data' });
-  assert.equal(await abandonDuplicateDrafts(weak.id), 0, 'identità debole: nessuna archiviazione');
 });

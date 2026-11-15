@@ -6,21 +6,7 @@ import { ClinicalTableSection } from '../operator/cartella/shared';
 import { RoomFormPanel } from './RoomFormPanel';
 import { BedEditDialog } from './BedEditDialog';
 import './RoomActions.css';
-import {
-  FORM_CAMERA_VUOTO,
-  STATO_LETTO_CLASS,
-  STATO_LETTO_LABEL,
-  bedStatoDisplay,
-  activeBedAssignment,
-  fetchFacilityData,
-  roomActionNames,
-  bedEditName,
-  type RoomAPI,
-  type BedAPI,
-  type OccupancyAPI,
-  type StatoLetto,
-  type BedEditTarget,
-} from './RoomManagementModel';
+import { FORM_CAMERA_VUOTO, STATO_LETTO_CLASS, STATO_LETTO_LABEL, bedStatoDisplay, activeBedAssignment, fetchFacilityData, roomActionNames, bedEditName, type RoomAPI, type BedAPI, type OccupancyAPI, type StatoLetto, type BedEditTarget } from './RoomManagementModel';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { PageHeader } from '../shared/PageHeader';
 
@@ -252,18 +238,9 @@ export function RoomsManagement() {
     <div className="rooms-view">
       <PageHeader
         title="Posti Letto"
-        subtitle={
-          occ ? `${occ.totalRooms} camere · ${occ.totalBeds} letti` : `${rooms.length} camere`
-        }
+        subtitle={occ ? `${occ.totalRooms} camere · ${occ.totalBeds} letti` : `${rooms.length} camere`}
         actions={
-          <button
-            className="btn-success"
-            onClick={() => {
-              setFormAperto((v) => !v);
-              setEditId(null);
-              setForm(FORM_CAMERA_VUOTO);
-            }}
-          >
+          <button className="btn-success" onClick={() => { setFormAperto((v) => !v); setEditId(null); setForm(FORM_CAMERA_VUOTO); }}>
             <IcoPlus /> Nuova camera
           </button>
         }
@@ -328,24 +305,12 @@ export function RoomsManagement() {
 
       {/* Presentation-only editors; resource identity stays separate from editable values. */}
       {formAperto && (
-        <RoomFormPanel
-          roomNumber={editId ? editRoomNumber : null}
-          form={form}
-          onChange={setForm}
-          saving={saving}
-          onSave={() => void salvaCamera()}
-          onClose={() => setFormAperto(false)}
-        />
+        <RoomFormPanel roomNumber={editId ? editRoomNumber : null} form={form} onChange={setForm}
+          saving={saving} onSave={() => void salvaCamera()} onClose={() => setFormAperto(false)} />
       )}
       {lettoEdit && (
-        <BedEditDialog
-          target={lettoEdit}
-          form={lettoForm}
-          onChange={setLettoForm}
-          bedSaving={bedSaving}
-          onSave={() => void salvaLetto()}
-          onClose={() => setLettoEdit(null)}
-        />
+        <BedEditDialog target={lettoEdit} form={lettoForm} onChange={setLettoForm}
+          bedSaving={bedSaving} onSave={() => void salvaLetto()} onClose={() => setLettoEdit(null)} />
       )}
 
       {/* Filtro reparto */}
@@ -419,24 +384,24 @@ export function RoomsManagement() {
                     </span>
                   </div>
                   <div className="room-card__actions">
-                    <button
-                      className="icon-btn icon-btn--sm icon-btn--edit"
+                  <button
+                    className="icon-btn icon-btn--sm icon-btn--edit"
 
-                      onClick={() => apriModificaCamera(room)}
-                      title={roomActionNames(room.numero).edit}
-                      aria-label={roomActionNames(room.numero).edit}
-                    >
-                      <IcoEdit />
-                    </button>
-                    <button
-                      className="icon-btn icon-btn--danger"
+                    onClick={() => apriModificaCamera(room)}
+                    title={roomActionNames(room.numero).edit}
+                    aria-label={roomActionNames(room.numero).edit}
+                  >
+                    <IcoEdit />
+                  </button>
+                  <button
+                    className="icon-btn icon-btn--danger"
 
-                      onClick={() => setPendingRoom(room)}
-                      title={roomActionNames(room.numero).remove}
-                      aria-label={roomActionNames(room.numero).remove}
-                    >
-                      <IcoTrash />
-                    </button>
+                    onClick={() => setPendingRoom(room)}
+                    title={roomActionNames(room.numero).remove}
+                    aria-label={roomActionNames(room.numero).remove}
+                  >
+                    <IcoTrash />
+                  </button>
                   </div>
                 </div>
 
@@ -496,9 +461,7 @@ export function RoomsManagement() {
 
       <ConfirmDialog
         open={pendingRoom !== null}
-        title={
-          pendingRoom ? roomActionNames(pendingRoom.numero).deleteTitle : 'Eliminare la camera?'
-        }
+        title={pendingRoom ? roomActionNames(pendingRoom.numero).deleteTitle : 'Eliminare la camera?'}
         message={
           pendingRoom
             ? `La camera ${pendingRoom.numero} verrà eliminata. L'azione non è reversibile.`

@@ -1,0 +1,5 @@
+drafts list @390px: document overflow=0px, resume button 312x60
+drafts list @360px: document overflow=0px, resume button 282x80
+focus after delete: Nuovo ingresso
+new manual intake after deleting the remembered draft: same draft = false | Cognome = ""
+urgent consegna card left border: 5px rgb(217, 58, 74)

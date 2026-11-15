@@ -413,6 +413,13 @@ td.patient-roster__actions > button + button {
   flex-wrap: wrap;
   gap: 8px 12px;
 }
+/* Nomi lunghi: il pulsante va a capo dentro la card, mai fuori dallo schermo. */
+.plist-draft__resume {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
 .plist-draft__meta {
   flex: 1;
   min-width: 160px;

@@ -17,10 +17,27 @@ import { PRESERVED_TABLES, WIPED_TABLES } from '../wipe.js';
 
 const schema = readFileSync(new URL('../../../../prisma/schema.prisma', import.meta.url), 'utf8');
 
-test('syntheticDataAvailability: mai in produzione, demo solo sintetica, staging solo con flag', () => {
+test('syntheticDataAvailability: fail closed — serve una dichiarazione esplicita dell’ambiente', () => {
   const at = (env: Record<string, string>) => syntheticDataAvailability(env as NodeJS.ProcessEnv);
-  assert.equal(at({ NODE_ENV: 'development' }).enabled, true);
-  assert.equal(at({ NODE_ENV: 'test' }).enabled, true);
+  const enabled = (env: Record<string, string>) => at(env).enabled;
+
+  // Sviluppo e test: solo con NODE_ENV dichiarato alla lettera.
+  assert.equal(enabled({ NODE_ENV: 'development' }), true);
+  assert.equal(enabled({ NODE_ENV: 'test' }), true);
+  assert.equal(enabled({ NODE_ENV: 'development', CLINICOS_ENV: 'development' }), true);
+
+  // Variabili assenti o scritte male NON sono «sviluppo»: un servizio ospitato senza NODE_ENV,
+  // o con un refuso, deve restare chiuso.
+  for (const env of [
+    {},
+    { AUTH_MODE: 'entra' },
+    { NODE_ENV: 'prod' },
+    { NODE_ENV: 'Development' },
+    { NODE_ENV: '' },
+    { CLINICOS_ENV: 'development' },
+    { CLINICOS_ENV: 'test', NODE_ENV: 'staging' },
+  ])
+    assert.equal(enabled(env), false, JSON.stringify(env));
 
   // Produzione reale: nessuna combinazione di variabili la riabilita.
   for (const env of [
@@ -28,7 +45,7 @@ test('syntheticDataAvailability: mai in produzione, demo solo sintetica, staging
     { NODE_ENV: 'production', CLINICOS_ENV: 'production' },
     { NODE_ENV: 'production', CLINICOS_ENV: 'production', SYNTHETIC_DATA_API_ENABLED: 'true' },
     { NODE_ENV: 'production', CLINICOS_ENV: 'production', DEMO_DATASET_ID: 'synthetic-v1' },
-    // Tier scritto male = produzione (fail closed).
+    // Tier scritto male = produzione.
     { NODE_ENV: 'development', CLINICOS_ENV: 'prod', SYNTHETIC_DATA_API_ENABLED: 'true' },
   ]) {
     const result = at(env);
@@ -36,18 +53,32 @@ test('syntheticDataAvailability: mai in produzione, demo solo sintetica, staging
     assert.equal(result.tier, 'production');
   }
 
-  assert.equal(at({ NODE_ENV: 'production', DEMO_DATASET_ID: 'synthetic-v1' }).enabled, true);
+  // Demo: tier dichiarato E dataset sintetico dichiarato. Il tier «demo» dedotto dal solo
+  // DEMO_DATASET_ID su un servizio di produzione non basta.
   assert.equal(
-    at({ NODE_ENV: 'production', CLINICOS_ENV: 'demo', DEMO_DATASET_ID: 'synthetic-v1' }).enabled,
+    enabled({ NODE_ENV: 'production', CLINICOS_ENV: 'demo', DEMO_DATASET_ID: 'synthetic-v1' }),
     true,
   );
-  assert.equal(at({ NODE_ENV: 'production', CLINICOS_ENV: 'demo' }).enabled, false);
-
-  assert.equal(at({ NODE_ENV: 'production', CLINICOS_ENV: 'staging' }).enabled, false);
+  assert.equal(enabled({ NODE_ENV: 'production', DEMO_DATASET_ID: 'synthetic-v1' }), false);
+  assert.equal(enabled({ NODE_ENV: 'production', CLINICOS_ENV: 'demo' }), false);
   assert.equal(
-    at({ NODE_ENV: 'production', CLINICOS_ENV: 'staging', SYNTHETIC_DATA_API_ENABLED: 'true' })
-      .enabled,
+    enabled({ NODE_ENV: 'production', CLINICOS_ENV: 'demo', DEMO_DATASET_ID: 'real' }),
+    false,
+  );
+
+  // Staging: tier dichiarato E flag esplicito.
+  assert.equal(enabled({ NODE_ENV: 'production', CLINICOS_ENV: 'staging' }), false);
+  assert.equal(
+    enabled({
+      NODE_ENV: 'production',
+      CLINICOS_ENV: 'staging',
+      SYNTHETIC_DATA_API_ENABLED: 'true',
+    }),
     true,
+  );
+  assert.equal(
+    enabled({ NODE_ENV: 'production', CLINICOS_ENV: 'staging', SYNTHETIC_DATA_API_ENABLED: '1' }),
+    false,
   );
 });
 

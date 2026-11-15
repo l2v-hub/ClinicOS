@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
+import { recordAuditEvent } from '../ai/audit-store.js';
 import {
   createDraft,
   getDraft,
@@ -7,7 +8,6 @@ import {
   listDrafts,
   seedDraftFromImport,
   abandonDraft,
-  abandonDuplicateDrafts,
 } from '../intake/draft-service.js';
 import { confirmDraft, type ConfirmPayload } from '../ai/upload/confirm-service.js';
 import { AiExtractionError } from '../ai/types.js';
@@ -131,6 +131,19 @@ intakeDraftsRouter.patch('/:id', async (req, res) => {
     const patch = (req.body ?? {}) as Record<string, unknown>;
     if (patch.status === 'abandoned' && Object.keys(patch).length === 1) {
       const archived = await abandonDraft(String(req.params.id));
+      // Il route gate la registra come normale autosalvataggio: qui la traccia dell'eliminazione.
+      const operator = (req as AuthedRequest).operator;
+      recordAuditEvent({
+        requestId: `draft-abandon-${archived.id}`,
+        operatorId: operator?.id ?? 'unknown',
+        operatorRole: operator?.role ?? 'unknown',
+        patientId: null,
+        actionType: 'intake.abandon_draft',
+        kind: 'delete',
+        channel: 'gui',
+        fields: ['status'],
+        outcome: 'ok',
+      });
       return res.status(200).json({ id: archived.id, status: archived.status });
     }
     const draft = await patchDraft(String(req.params.id), patch);
@@ -213,14 +226,6 @@ intakeDraftsRouter.post('/:id/confirm', async (req, res) => {
     if (result.status === 'duplicate') {
       return res.status(409).json(result);
     }
-    // Il paziente esiste: le altre bozze dello stesso operatore per la stessa identità sono
-    // doppioni. Best effort — la conferma è già avvenuta e non deve fallire per questo.
-    await abandonDuplicateDrafts(String(req.params.id)).catch((error) =>
-      console.error(
-        'intake-drafts: duplicate cleanup failed:',
-        error instanceof Error ? error.name : 'unknown',
-      ),
-    );
     return res.status(result.status === 'created' ? 201 : 200).json(result);
   } catch (err) {
     return handleError(res, err);

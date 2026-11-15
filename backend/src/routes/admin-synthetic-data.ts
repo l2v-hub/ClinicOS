@@ -77,16 +77,21 @@ router.post('/wipe', async (req, res) => {
     });
     return;
   }
+  let result;
   try {
-    const result = await wipeSyntheticData(prisma);
-    res.status(200).json({ status: 'wiped', ...result });
+    result = await wipeSyntheticData(prisma);
   } catch (error) {
+    // Transazione unica: un errore qui significa che non è stato eliminato nulla.
     console.error(
       'POST /admin/synthetic-data/wipe error:',
       error instanceof Error ? `${error.name}: ${error.message.slice(0, 200)}` : error,
     );
     res.status(500).json({ error: 'Errore durante lo svuotamento: nessun dato è stato eliminato' });
+    return;
   }
+  // Il wipe è già avvenuto: un errore nel rileggere i conteggi non deve farlo sembrare fallito.
+  const counts = await syntheticDataCounts(prisma).catch(() => null);
+  res.status(200).json({ status: 'wiped', ...result, counts });
 });
 
 export default router;

@@ -1141,6 +1141,14 @@
         },
         {
           "method": "GET",
+          "path": "/patients/diary-unread"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-patient-counts"
+        },
+        {
+          "method": "GET",
           "path": "/patients/:patientId/diary"
         },
         {

@@ -1,8 +1,9 @@
 # API dati sintetici — popolare e svuotare il sistema per le prove
 
 Due chiamate per provare tutta l'applicazione: una crea un dataset inventato che copre ogni
-schermata, l'altra cancella tutto e lascia il sistema pulito. **Non sono disponibili su una
-produzione reale**, qualunque variabile sia impostata.
+schermata, l'altra cancella tutto e lascia il sistema pulito. Sono attive **solo dove l'ambiente
+è dichiarato esplicitamente come di prova** (vedi «Sicurezze»): in ogni altro caso, produzione
+reale compresa, rispondono 403.
 
 | Chiamata                          | Cosa fa                                                |
 | --------------------------------- | ------------------------------------------------------ |
@@ -14,8 +15,9 @@ Codice: `backend/src/routes/admin-synthetic-data.ts`, `backend/src/synthetic/`.
 
 ## Come si invocano
 
-Serve un'identità **amministratore/manager** (stessa autenticazione del resto dell'API: header demo
-`X-Operator-Id`/`X-Operator-Role`, token del Simulatore ruoli oppure Bearer Entra).
+Serve un'identità con ruolo **amministratore** (`administrator`) o legacy admin/manager (stessa
+autenticazione del resto dell'API: header demo `X-Operator-Id`/`X-Operator-Role`, token del
+Simulatore ruoli oppure Bearer Entra). Il ruolo `supervisor` non è abilitato.
 
 ```bash
 API=http://localhost:3001
@@ -51,8 +53,11 @@ curl -s -X POST "$API/admin/synthetic-data/seed" -H "Authorization: Bearer $TOKE
 
 ## Cosa crea il seed
 
-Tutti i dati sono inventati, con chiavi fisse `SEED-…` (rieseguire il seed non duplica e non
-riporta indietro ciò che è stato lavorato durante le prove).
+Tutti i dati sono inventati, con chiavi fisse `SEED-…`. Il seed si può ripetere senza creare
+duplicati, ma **riporta ai valori iniziali i record del dataset di base**: anagrafiche dei
+pazienti `SEED-…`, letti e assegnazioni, stato e dosaggio delle terapie, appuntamenti e l'intera
+cartella del paziente demo «Fabio Forlano». Non vengono invece toccati i dati aggiuntivi già
+presenti (consegne, diario, note, orari, bozza) né ciò che è stato creato a mano durante le prove.
 
 | Funzione dell'app           | Dati creati                                                                                  |
 | --------------------------- | -------------------------------------------------------------------------------------------- |
@@ -91,17 +96,21 @@ Tutte lato server, in quest'ordine:
 1. **Identità**: senza operatore autenticato → `401`.
 2. **Ruolo e capability**: solo admin/manager; le capability `synthetic_data.status|seed|wipe` sono
    catalogate (dominio `dev`) e negate ai ruoli clinici → `403 capability_denied`.
-3. **Ambiente** (`syntheticDataAvailability`) → `403 synthetic_data_disabled` quando non ammesso:
+3. **Ambiente** (`syntheticDataAvailability`) → `403 synthetic_data_disabled` quando non ammesso.
+   La regola è «chiuso per default»: serve una dichiarazione esplicita e coerente; una variabile
+   assente o scritta male non abilita mai nulla.
 
-   | Ambiente (`CLINICOS_ENV`) | Disponibile                                                 |
-   | ------------------------- | ----------------------------------------------------------- |
-   | `development`, `test`     | sì                                                          |
-   | `demo`                    | solo con `DEMO_DATASET_ID=synthetic-v1`                     |
-   | `staging`                 | solo con `SYNTHETIC_DATA_API_ENABLED=true`                  |
-   | `production`              | **mai** (anche un valore di tier scritto male = produzione) |
+   | Ambiente               | Disponibile solo se                                                         |
+   | ---------------------- | --------------------------------------------------------------------------- |
+   | sviluppo / test        | `NODE_ENV` è letteralmente `development` o `test`                           |
+   | demo                   | `CLINICOS_ENV=demo` esplicito **e** `DEMO_DATASET_ID=synthetic-v1`          |
+   | staging                | `CLINICOS_ENV=staging` esplicito **e** `SYNTHETIC_DATA_API_ENABLED=true`    |
+   | produzione, altri casi | **mai** (`NODE_ENV` assente o errato, tier scritto male, demo solo dedotta) |
 
 4. **Conferma** (solo wipe): senza `{"confirm":"CANCELLA TUTTO"}` → `400 confirmation_required`.
-5. **Audit**: ogni seed/wipe, anche rifiutato, è registrato con identità, ruolo ed esito.
+5. **Audit**: seed e wipe, anche rifiutati, sono registrati con identità, ruolo ed esito dal
+   controllo delle capability (attivo su ogni ambiente ospitato; in locale si può disattivare con
+   `AUTHZ_ENFORCEMENT=off`, e in quel caso non c'è traccia).
 
 Il wipe è una sola transazione: se qualcosa fallisce non viene eliminato nulla. Alcune tabelle
 cliniche sono protette da trigger «append-only»; il wipe li sospende solo dentro la transazione e
@@ -117,7 +126,8 @@ li riattiva prima del commit.
 # guardie (non scrivono né cancellano): girano con la suite backend
 cd backend && npm test
 
-# giro completo seed → wipe → seed. DISTRUTTIVO per il database puntato da DATABASE_URL: opt-in
+# giro completo seed → wipe → seed. DISTRUTTIVO per il database puntato da DATABASE_URL: opt-in,
+# e solo in un ambiente in cui l'API stessa sarebbe ammessa
 SYNTHETIC_DATA_DESTRUCTIVE_TESTS=1 AUTH_MODE=demo NODE_ENV=test node --import tsx --test \
   src/synthetic/__tests__/synthetic-data-destructive-db.test.ts
 ```

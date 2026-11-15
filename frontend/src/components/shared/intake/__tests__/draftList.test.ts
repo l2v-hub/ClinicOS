@@ -9,7 +9,7 @@ import {
 } from '../draftList';
 import type { DraftResponse } from '../intakeDraftApi';
 import { abandonDraft, createDraft } from '../intakeDraftApi';
-import { clearManualDraft, openManualDraft } from '../intakeDraftSession';
+import { clearManualDraft, forgetManualDraft, openManualDraft } from '../intakeDraftSession';
 
 const draft = (id: string, extra: Partial<DraftResponse> = {}): DraftResponse => ({
   id,
@@ -179,3 +179,88 @@ test('«Riprendi bozza» a mano apre proprio quella bozza e la ricorda per la sc
     Object.assign(globalThis, { window: originalWindow });
   }
 });
+
+function withSession(
+  run: (calls: { method?: string; url: string }[], respond: Map<string, unknown>) => Promise<void>,
+) {
+  return async () => {
+    const values = new Map<string, string>();
+    const originalFetch = globalThis.fetch;
+    const originalWindow = globalThis.window;
+    Object.assign(globalThis, {
+      window: {
+        sessionStorage: {
+          getItem: (key: string) => values.get(key) ?? null,
+          setItem: (key: string, value: string) => values.set(key, value),
+          removeItem: (key: string) => values.delete(key),
+        },
+      },
+    });
+    const calls: { method?: string; url: string }[] = [];
+    // id → corpo della risposta di GET /intake/drafts/:id ; '' → corpo del POST (nuova bozza)
+    const respond = new Map<string, unknown>();
+    globalThis.fetch = (async (url: string, init: RequestInit) => {
+      calls.push({ method: init.method, url });
+      const id = init.method === 'POST' ? '' : url.split('/').at(-1)!;
+      const body = respond.get(id);
+      return {
+        ok: true,
+        json: async () => (typeof body === 'function' ? await body() : body),
+      } as Response;
+    }) as typeof fetch;
+    try {
+      await run(calls, respond);
+    } finally {
+      globalThis.fetch = originalFetch;
+      Object.assign(globalThis, { window: originalWindow });
+    }
+  };
+}
+
+test(
+  'una bozza eliminata non viene riaperta: «Nuovo ingresso a mano» parte da una nuova',
+  withSession(async (calls, respond) => {
+    const actor = { operatorId: 'synthetic-operator-deleted', operatorRole: 'nurse' };
+    respond.set('', { id: 'first', data: {} });
+    assert.equal((await openManualDraft(actor)).id, 'first');
+    // Eliminata da un'altra scheda: il server la restituisce come `abandoned`.
+    respond.set('first', {
+      id: 'first',
+      status: 'abandoned',
+      data: { anagrafica: { firstName: 'X' } },
+    });
+    respond.set('', { id: 'second', data: {} });
+    const reopened = await openManualDraft(actor);
+    assert.equal(reopened.id, 'second', 'mai i dati della bozza eliminata');
+    assert.equal(calls.at(-1)?.method, 'POST');
+    // …e la scheda ora ricorda la nuova.
+    respond.set('second', { id: 'second', data: {} });
+    assert.equal((await openManualDraft(actor)).id, 'second');
+
+    // Eliminata da questa scheda: dimenticata subito, senza passare dal server.
+    forgetManualDraft(actor, 'other-draft');
+    assert.equal((await openManualDraft(actor)).id, 'second', 'un altro id non tocca la memoria');
+    forgetManualDraft(actor, 'second');
+    respond.set('', { id: 'third', data: {} });
+    assert.equal((await openManualDraft(actor)).id, 'third');
+  }),
+);
+
+test(
+  '«Riprendi bozza · X» non riceve la bozza di un’apertura precedente ancora in corso',
+  withSession(async (_calls, respond) => {
+    const actor = { operatorId: 'synthetic-operator-race', operatorRole: 'nurse' };
+    let release!: () => void;
+    const gate = new Promise<void>((resolve) => (release = resolve));
+    respond.set('', async () => {
+      await gate;
+      return { id: 'slow-new', data: {} };
+    });
+    respond.set('listed', { id: 'listed', data: { anagrafica: { lastName: 'Rossi' } } });
+    const slow = openManualDraft(actor);
+    const resumed = await openManualDraft(actor, 'listed');
+    assert.equal(resumed.id, 'listed');
+    release();
+    assert.equal((await slow).id, 'slow-new');
+  }),
+);

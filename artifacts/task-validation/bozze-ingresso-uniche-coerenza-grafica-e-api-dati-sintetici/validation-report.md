@@ -14,8 +14,8 @@
    due voci identiche. Ora il server riconosce i doppioni per identità forte (CF valido oppure
    cognome+nome+data di nascita) e l'elenco mostra una sola voce principale (la più recente) con le
    precedenti richiudibili sotto di lei. Aggiunti «Elimina bozza» (archiviazione, non cancellazione),
-   le bozze manuali nell'elenco, l'archiviazione dei doppioni alla conferma del paziente e il
-   refresh dell'elenco alla chiusura di «Importa dimissione». Nessuna fusione automatica di dati.
+   le bozze manuali nell'elenco e il refresh dell'elenco alla chiusura di «Importa dimissione».
+   Nessuna fusione automatica di dati e nessuna archiviazione senza un gesto dell'operatore.
 2. **Coerenza grafica.** Titolo di pagina sempre nella topbar (migrati Operatori, Posti Letto,
    Orari); controlli della topbar di misura costante; card di pagina con un solo raggio/bordo e
    senza ombre; `h1/h2` 18px/600 e base comune per `h3`; contenuto a tutta larghezza; Consegne con
@@ -50,16 +50,16 @@ OperatorSchedule}.tsx`, `design-system.css`, `compact-layout.css`, `design-syste
 | ---- | -----: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | AC1  |   PASS | `screenshots/before-drafts-duplicate.png` (2 voci identiche) → `screenshots/after-drafts-grouped.png`, `after-drafts-older-open.png` (1 voce + «1 bozza precedente»); `trace/drafts-grouped-trace.zip`                                |
 | AC2  |   PASS | `logs/api-drafts-dedupe.txt` (HTTP reale); test `duplicateOfIds`, `listDrafts segnala i doppioni`, `draftIdentityKey` (identità deboli mai raggruppate) in `test-results/backend-new-tests.txt`                                       |
-| AC3  |   PASS | `logs/api-drafts-dedupe.txt`: collega → 404, bozza confermata → 400; test `abandonDraft archivia senza cancellare…`; UI `screenshots/after-drafts-delete-confirm.png`, `after-drafts-deleted.png`                                     |
+| AC3 | PASS | `logs/api-drafts-dedupe.txt`: collega → 404, bozza confermata → 400; test `abandonDraft archivia senza cancellare…`; UI `screenshots/after-drafts-delete-confirm.png`, `after-drafts-deleted.png`; `logs/review-fixes-browser.txt` (fuoco dopo l'eliminazione, bozza eliminata non riaperta) |
 | AC4  |   PASS | `logs/manual-draft-flow.txt` (5 passi nel browser); `screenshots/after-manual-draft-listed.png`, `after-manual-draft-resumed.png`; test `draftList.test.ts`                                                                           |
-| AC5  |   PASS | `logs/api-drafts-dedupe.txt` («after confirm, open drafts for this identity: 0»); test `abandonDuplicateDrafts archivia solo i doppioni forti dello stesso operatore`                                                                 |
+| AC5 | PASS | Criterio riscritto dopo la revisione: nessuna archiviazione senza un gesto dell'operatore. L'archiviazione automatica alla conferma è stata rimossa (`abandonDuplicateDrafts` eliminata dal servizio e dalla rotta); l'unico percorso che archivia è `PATCH {status:'abandoned'}` (test `abandonDraft…`) |
 | AC6  |   PASS | `logs/manual-draft-flow.txt` (elenco aggiornato dopo la chiusura della scheda); prop `onClosed` di `AIImportStatus` → refresh in `PatientList.tsx`                                                                                    |
 | AC7  |   PASS | `logs/style-audit-before.txt` (36px su 15 pagine, 44px su 2) → `logs/style-audit-after.txt` (44px su 17/17); titoli in topbar: `screenshots/after-ad-02-Operatori.png`, `after-ad-05-Posti_Letto.png`, `after-ad-06-Orari.png`        |
-| AC8  |   PASS | `logs/style-audit-after.txt`: tutti gli `H1/H2` 18px/600 (prima 500/600/700); card di pagina `r12 sh:none` (prima r8/r12/r16 con ombre miste); `H3` senza classe 16px/600 (prima 16.38px/700 di default)                              |
-| AC9  |   PASS | `screenshots/before-op-05-Consegne.png` → `after-op-05-Consegne.png`; `before-ad-05-Posti_Letto.png` → `after-ad-05-Posti_Letto.png` (piena larghezza); `logs/responsive-check.txt` (tablet e mobile: 0px di overflow orizzontale)    |
+| AC8 | PASS | `logs/style-audit-after.txt`: tutti gli `H1/H2` 18px/600; 24 card di pagina `r12 sh:none`; le card consegna mantengono stria di priorità e ombra proprie (`logs/review-fixes-browser.txt`: bordo sinistro 5px rosso) |
+| AC9 | PASS | `screenshots/before-op-05-Consegne.png` → `after-op-05-Consegne.png`; `before-ad-05-Posti_Letto.png` → `after-ad-05-Posti_Letto.png`; `logs/responsive-check.txt`; nomi lunghi nell'elenco bozze a 390/360px senza overflow (`screenshots/after-drafts-long-name-mobile.png`) |
 | AC10 |   PASS | `logs/synthetic-api-seed-and-guards.txt` (seed due volte, stessi conteggi); test distruttivo in `test-results/backend-new-tests.txt` (conteggi esatti del dataset)                                                                    |
 | AC11 |   PASS | `logs/synthetic-api-wipe.txt` (106 righe eliminate, identità e audit conservati, 0 trigger disabilitati); `screenshots/after-wipe-pazienti-empty.png`; giro app a sistema vuoto e ripopolato: 0 errori in console                     |
-| AC12 |   PASS | test `syntheticDataAvailability…`, `identità e ruolo…`, `wipe: senza la frase di conferma…`, `ambiente non ammesso…` (incluso audit del tentativo); capability in `CAPABILITY_CATALOG.json` e `capability-registry.json`              |
+| AC12 | PASS | test `syntheticDataAvailability: fail closed…` (NODE_ENV assente/errato, demo solo dedotta, produzione → disabilitata), `identità e ruolo…`, `wipe: senza la frase di conferma…`, `ambiente non ammesso…`; capability in `CAPABILITY_CATALOG.json` e `capability-registry.json` (rispetto alla base solo aggiunte) |
 | AC13 | PARTIAL | `test-results/frontend-and-build.txt` (frontend 1594/1594, build frontend e backend OK, nessun nuovo problema di lint sui file toccati); `test-results/backend-suite-comparison.txt` (nessun test fallisce solo sul ramo). Non PASS alla lettera: suite backend e lint completi sono rossi in questo ambiente già su `main` intatto. |
 
 ## Test Results
@@ -78,7 +78,7 @@ OperatorSchedule}.tsx`, `design-system.css`, `compact-layout.css`, `design-syste
 
 ### Suite complete
 
-- **Frontend** `npm test`: 1594 pass, 0 fail. `npm run build`: OK.
+- **Frontend** `npm test`: 1596 pass, 0 fail (dopo le correzioni della revisione). `npm run build`: OK.
 - **Backend** `npm run build`: OK.
 - **Backend** `npm test` su database isolato: **1847 pass, 106 fail** sul ramo; **1835 pass, 108
   fail** su `main` intatto (`b5e79ae7`) nello stesso ambiente. L'insieme dei test falliti è lo
@@ -107,9 +107,21 @@ Only sanitized logs are allowed. I log in `logs/` contengono solo identità sint
 
 ## Independent Review
 
-Revisione indipendente del diff affidata a un agente QA dedicato (sola lettura). Al momento di
-questo commit la revisione è ancora in corso: eventuali rilievi e correzioni sono registrati nei
-commit successivi del ramo e in fondo a questo report.
+Revisione indipendente del diff da parte di un agente QA dedicato (sola lettura). **Esito sulla
+prima stesura: REJECT** — 1 rilievo bloccante, 6 importanti, 9 minori. Tutti verificati e gestiti:
+
+| Rilievo | Problema | Correzione |
+| --- | --- | --- |
+| B1 (bloccante) | Il controllo dell'ambiente era «aperto per default»: con `NODE_ENV` assente o errato, o con il solo `DEMO_DATASET_ID`, seed e wipe risultavano abilitati | Ora chiuso per default: serve `NODE_ENV=development\|test` letterale, oppure `CLINICOS_ENV=demo` + dataset sintetico, oppure `CLINICOS_ENV=staging` + flag. Test estesi ai casi segnalati |
+| M1 | La rigenerazione del registro capability aveva tolto due rotte del diario (`diary-unread`, `diary-unread-patient-counts`) presenti solo nel registro e non nel catalogo | Rotte aggiunte al catalogo sorgente e registro rigenerato: rispetto alla base contiene solo aggiunte |
+| M2 | La conferma di un paziente archiviava in silenzio le altre bozze e ne eliminava i documenti | Archiviazione automatica rimossa |
+| M3 | Una bozza a mano eliminata veniva riaperta da «Nuovo ingresso a mano» | La scheda dimentica la bozza eliminata; una bozza `abandoned` non viene mai riaperta (test + browser) |
+| M4 | Nomi lunghi nell'elenco bozze causavano scorrimento orizzontale su telefono | Il pulsante va a capo (verificato a 390 e 360px) |
+| M5 | La regola delle card toglieva stria di priorità e alone di fuoco alle consegne | Regola ristretta: solo raggio e ombra a riposo, mai il bordo; card consegna escluse |
+| M6 | La documentazione dichiarava che il seed non riporta indietro i dati lavorati | Documentazione e commenti corretti: il seed ripristina i record del dataset di base |
+| m1–m9 | Messaggio d'errore del wipe, precisazioni su audit e ruoli, guardia d'ambiente nel test distruttivo, fuoco dopo l'eliminazione, corsa su «Riprendi», descrizione del tool, audit dell'eliminazione, regole fuori da `@media screen` | Corretti; m7 (il tool `intake.update_draft` non archivia) è documentato nel catalogo, non allineato |
+
+Le correzioni non sono state sottoposte a una seconda revisione indipendente.
 
 ## Residual Risks
 
@@ -117,6 +129,11 @@ commit successivi del ramo e in fondo a questo report.
   le tre nuove capability `synthetic_data.*` nascono negate (default della policy) finché non
   vengono abilitate. «Elimina bozza» non ne risente: usa la capability esistente
   `intake.update_draft`.
+- **Ambiente della demo ospitata**: con il controllo chiuso per default le API funzionano sulla
+  demo solo se `CLINICOS_ENV=demo` e `DEMO_DATASET_ID=synthetic-v1` sono entrambi impostati sul
+  servizio; non ho potuto verificare le variabili reali.
+- **Bozze doppie dopo la conferma**: confermato un paziente, un'eventuale altra bozza dello stesso
+  paziente resta nell'elenco finché l'operatore non la elimina (scelta di sicurezza, vedi M2).
 - **Wipe**: richiede che l'utente DB dell'applicazione sia proprietario delle tabelle
   (`ALTER TABLE … DISABLE TRIGGER USER`). È vero dove l'app esegue le proprie migrazioni; in caso
   contrario il wipe fallisce senza eliminare nulla (transazione unica).
