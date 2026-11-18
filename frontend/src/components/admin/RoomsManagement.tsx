@@ -8,6 +8,7 @@ import { BedEditDialog } from './BedEditDialog';
 import './RoomActions.css';
 import { FORM_CAMERA_VUOTO, STATO_LETTO_CLASS, STATO_LETTO_LABEL, bedStatoDisplay, activeBedAssignment, fetchFacilityData, roomActionNames, bedEditName, type RoomAPI, type BedAPI, type OccupancyAPI, type StatoLetto, type BedEditTarget } from './RoomManagementModel';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
+import { PageHeader } from '../shared/PageHeader';
 
 /* ── Component ─────────────────────────────────────────── */
 
@@ -235,25 +236,15 @@ export function RoomsManagement() {
 
   return (
     <div className="rooms-view">
-      <div className="view-header">
-        <div>
-          <h2 className="view-header__title">Posti Letto</h2>
-          <p className="view-header__sub">
-            {occ ? `${occ.totalRooms} camere · ${occ.totalBeds} letti` : `${rooms.length} camere`}
-          </p>
-        </div>
-        <button
-          className="btn-success"
-
-          onClick={() => {
-            setFormAperto((v) => !v);
-            setEditId(null);
-            setForm(FORM_CAMERA_VUOTO);
-          }}
-        >
-          <IcoPlus /> Nuova camera
-        </button>
-      </div>
+      <PageHeader
+        title="Posti Letto"
+        subtitle={occ ? `${occ.totalRooms} camere · ${occ.totalBeds} letti` : `${rooms.length} camere`}
+        actions={
+          <button className="btn-success" onClick={() => { setFormAperto((v) => !v); setEditId(null); setForm(FORM_CAMERA_VUOTO); }}>
+            <IcoPlus /> Nuova camera
+          </button>
+        }
+      />
 
       {/* Error alert */}
       {error && (

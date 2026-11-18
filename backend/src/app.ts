@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import { adminRouter as adminRoomsRouter, patientAssignmentRouter } from './routes/admin-rooms.js';
+import adminSyntheticDataRouter from './routes/admin-synthetic-data.js';
 import patientRoomOptionsRouter from './routes/patient-room-options.js';
 import patientTherapiesRouter from './routes/patient-therapies.js';
 import patientsRouter from './routes/patients.js';
@@ -221,6 +222,8 @@ app.use('/authz', authzRouter);
 // Backend enforcement of the capability policy for every catalogued route, before any router.
 app.use(capabilityRouteGate);
 
+// Dati sintetici di prova (seed/wipe): prima di /admin generico, mai su produzione reale.
+app.use('/admin/synthetic-data', adminSyntheticDataRouter);
 app.use('/admin', adminRoomsRouter);
 app.use('/admin', adminRosterOrderRouter);
 app.use('/me', meRosterOrderRouter);

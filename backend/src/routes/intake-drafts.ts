@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
+import { recordAuditEvent } from '../ai/audit-store.js';
 import {
   createDraft,
   getDraft,
   patchDraft,
   listDrafts,
   seedDraftFromImport,
+  abandonDraft,
 } from '../intake/draft-service.js';
 import { confirmDraft, type ConfirmPayload } from '../ai/upload/confirm-service.js';
 import { AiExtractionError } from '../ai/types.js';
@@ -120,10 +122,30 @@ intakeDraftsRouter.get('/:id', async (req, res) => {
   }
 });
 
-// PATCH /intake/drafts/:id — autosave: shallow-merge top-level keys into data
+// PATCH /intake/drafts/:id — autosave: shallow-merge top-level keys into data.
+// Il solo corpo `{ "status": "abandoned" }` è «Elimina bozza»: archivia la bozza (stato abandoned,
+// la riga resta a DB) e annulla la sessione documenti ancora aperta. Stessa capability
+// dell'autosalvataggio: chi può modificare la propria bozza può anche scartarla.
 intakeDraftsRouter.patch('/:id', async (req, res) => {
   try {
     const patch = (req.body ?? {}) as Record<string, unknown>;
+    if (patch.status === 'abandoned' && Object.keys(patch).length === 1) {
+      const archived = await abandonDraft(String(req.params.id));
+      // Il route gate la registra come normale autosalvataggio: qui la traccia dell'eliminazione.
+      const operator = (req as AuthedRequest).operator;
+      recordAuditEvent({
+        requestId: `draft-abandon-${archived.id}`,
+        operatorId: operator?.id ?? 'unknown',
+        operatorRole: operator?.role ?? 'unknown',
+        patientId: null,
+        actionType: 'intake.abandon_draft',
+        kind: 'delete',
+        channel: 'gui',
+        fields: ['status'],
+        outcome: 'ok',
+      });
+      return res.status(200).json({ id: archived.id, status: archived.status });
+    }
     const draft = await patchDraft(String(req.params.id), patch);
     return res.status(200).json(draft);
   } catch (err) {

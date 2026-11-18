@@ -1,0 +1,8 @@
+tablet Operatore/Pazienti: horizontal overflow=0px topbar button heights=[44,44,44,44] console errors=0
+tablet Amministratore/Operatori: horizontal overflow=0px topbar button heights=[44,44,44,44] console errors=0
+tablet Amministratore/Posti Letto: horizontal overflow=0px topbar button heights=[44,44,44,44] console errors=0
+tablet Operatore/Consegne: horizontal overflow=0px topbar button heights=[44,44,44,44] console errors=0
+mobile Operatore/Pazienti: horizontal overflow=0px topbar button heights=[44,44,44,44,44] console errors=0
+mobile Amministratore/Operatori: horizontal overflow=0px topbar button heights=[44,44,44,44,44] console errors=0
+mobile Amministratore/Posti Letto: horizontal overflow=0px topbar button heights=[44,44,44,44,44] console errors=0
+mobile Operatore/Consegne: horizontal overflow=0px topbar button heights=[44,44,44,44,44] console errors=0

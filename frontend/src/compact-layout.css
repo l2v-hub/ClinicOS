@@ -5,9 +5,21 @@
     font-size: var(--ds-body-font);
     line-height: 1.45;
   }
+  /* Un solo titolo di pagina/sezione: stessa misura E stesso peso ovunque. */
   .app-shell :is(h1, h2):not(#ds) {
     font-size: var(--ds-title-font);
     line-height: 24px;
+    font-weight: 600;
+  }
+  /* Sottotitolo di sezione: base comune per ogni h3 che la pagina non stilizza da sé (specificità
+     minima: qualunque regola di componente continua a prevalere). Mai lo stile del browser. */
+  :where(.app-shell) h3 {
+    margin: 16px 0 8px;
+    font: 600 16px/22px var(--ds-font);
+    color: var(--ds-text);
+  }
+  :where(.app-shell) h3:where(:first-child) {
+    margin-top: 0;
   }
   :is(.compact-topbar, .topbar-right):not(#ds) {
     gap: 12px;

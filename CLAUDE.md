@@ -102,12 +102,61 @@ Single source of truth. Do NOT create parallel nav components.
 ## Build & deploy
 
 - Before committing frontend work: `cd frontend && npm run build` must pass (`tsc -b && vite build`).
-- **Frontend (Vercel) — MANUAL.** Deploy prod (project `clinicos__`, alias `clinicos-eosin.vercel.app`) from repo root:
-  `vercel deploy --prod --archive=tgz --yes` (call the global `vercel` binary directly — `npx vercel` gets rewritten to `npm` by a shell hook). A `--prod` deploy auto-promotes the alias. **Pushing to `main` does NOT deploy the frontend** — only this command does. Cadence: run it when the user says "deploy" after a verified fix, never automatically.
-- **Backend (Railway) — AUTO.** Deploys automatically via GitHub Actions (`.github/workflows/deploy-backend.yml`) on merge/push to `main` (backend URL `clinicos-backend-production-df88.up.railway.app`). Merging a backend PR triggers "Deploy Backend to Railway" + "AI Import E2E Gate" — watch with `gh run watch <id> --exit-status`. Don't try to deploy the backend by hand.
-- **Prod is behind Entra/OIDC auth:** anonymous `curl` to the Vercel URL returns 403 — can't verify prod pages by curl. Verify with LOCAL Playwright + ask the user to hard-reload (Ctrl+Shift+R) authenticated. `frontend/vercel.json` SPA rewrite must stay `"/((?!assets/).*)"` (excludes `/assets/`) — a catch-all serves `index.html` for missing hashed chunks → "MIME type text/html" errors. Don't re-broaden it.
+- **The live site is the isolated development environment** — `https://clinicos-development-isolated.vercel.app`
+  (synthetic data, five simulated profiles). The previous demo (`clinicos-eosin.vercel.app`,
+  backend `clinicos-backend-production-df88.up.railway.app`) is **retired**: do not deploy to it
+  and do not give its URL to the user.
+  - Frontend: Vercel project `clinicos-development-isolated`.
+  - API: `https://development-backend-development-a4a4.up.railway.app` (dedicated Railway project,
+    single environment `development`); `frontend/vercel.json` allows only this backend in `connect-src`.
+  - Procedure, target IDs and rules: `docs/operations/development-release.md`. Read it before any release.
+- **Nothing deploys automatically.** Pushing or merging to `main` does NOT update the site. The old
+  workflows (`deploy-backend.yml`, `deploy-runtime.yml`, `deploy-demo-exact-commit.yml`, demo auth)
+  targeted the retired demo and are disabled on GitHub on purpose: never re-enable or run them.
+- A release is a specific operation run by the operator with their own Railway/Vercel
+  authorization (runtime if needed, then backend, then frontend). A cloud session has neither the
+  credentials nor network access to those hosts: prepare the source, say plainly that the release
+  is still to be done, and never report a change as online without evidence from the site itself.
+- On the development environment do not run seed, manual SQL or implicit deletions: its test
+  fixtures are preserved synthetic records. `POST /admin/synthetic-data/wipe` deletes them — only
+  on an explicit request from the user.
+- After a release the browser may serve the old bundle: ask the user for a hard reload
+  (Ctrl+Shift+R). `frontend/vercel.json` SPA rewrite must stay `"/((?!assets/).*)"` (excludes
+  `/assets/`) — a catch-all serves `index.html` for missing hashed chunks → "MIME type text/html"
+  errors. Don't re-broaden it.
 
-<!-- SPECKIT START -->
+## Dati sintetici e bozze d'ingresso
+
+- **Dati di prova**: `POST /admin/synthetic-data/seed` popola un dataset sintetico completo,
+  `POST /admin/synthetic-data/wipe` (body `{"confirm":"CANCELLA TUTTO"}`) svuota i dati operativi,
+  `GET /admin/synthetic-data` dà stato e conteggi. Solo amministratore, e solo dove l'ambiente è
+  dichiarato esplicitamente di prova (chiuso per default: `NODE_ENV` assente o errato = disabilitato).
+  Dettagli: `docs/synthetic-data-api.md`; codice: `backend/src/synthetic/`. Una nuova tabella Prisma
+  va dichiarata in `WIPED_TABLES` o `PRESERVED_TABLES` (`synthetic/wipe.ts`), altrimenti un test fallisce.
+- **Una voce in bozza per paziente**: `GET /intake/drafts` segnala i doppioni con `duplicateOfId`
+  (identità forte: CF valido oppure cognome+nome+data di nascita — `backend/src/intake/draft-identity.ts`);
+  l'elenco li raggruppa (`frontend/src/components/shared/intake/draftList.ts`). «Elimina bozza» =
+  `PATCH /intake/drafts/:id` con il solo corpo `{"status":"abandoned"}` (archivia, non cancella).
+  Mai fondere automaticamente i dati di due bozze, mai archiviarne una senza un gesto esplicito
+  dell'operatore (nemmeno alla conferma del paziente), mai riusare lato server una bozza fra schede.
+- **La bozza resta una sola finché l'ingresso non si conclude**: la sessione documenti collegata
+  a una bozza aperta non scade (`expirePageSessions` in `backend/src/ai/upload/pages/cleanup.ts`);
+  i documenti seguono la bozza e spariscono alla conferma o con «Elimina bozza». «Riprendi bozza»
+  riapre sempre la stessa bozza con le ultime modifiche. Se una bozza è rimasta senza documenti
+  (dati precedenti o sessione eliminata a mano), la nuova importazione la **sostituisce** con un
+  gesto esplicito, non le si affianca.
+
+## Coerenza grafica (regole canoniche — non reinventare per pagina)
+
+- Titolo di pagina **sempre** nella topbar con `PageHeader` (`title`/`subtitle`/`actions`): niente
+  `view-header` o titoli nel contenuto.
+- I controlli della topbar hanno la stessa misura su ogni pagina (`--ds-control-h: 44px` su
+  `.compact-topbar`); le card di pagina usano `--ds-card-radius` e nessuna ombra a riposo (mai
+  toccare il bordo o le ombre di stato: stria di priorità, alone di fuoco); `h1/h2`
+  = 18px/600 e `h3` ha una base comune (`compact-layout.css`). Le regole stanno in
+  `frontend/src/design-system.css` («Coerenza di pagina») e `compact-layout.css`: una nuova card di
+  pagina si aggiunge a quell'elenco, non a un CSS di pagina.
+- Contenuto a tutta larghezza dopo la sidebar: nessun `max-width` per pagina.
 
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
