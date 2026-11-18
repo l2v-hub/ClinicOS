@@ -102,12 +102,28 @@ Single source of truth. Do NOT create parallel nav components.
 ## Build & deploy
 
 - Before committing frontend work: `cd frontend && npm run build` must pass (`tsc -b && vite build`).
-- **Frontend (Vercel) — MANUAL.** Deploy prod (project `clinicos__`, alias `clinicos-eosin.vercel.app`) from repo root:
-  `vercel deploy --prod --archive=tgz --yes` (call the global `vercel` binary directly — `npx vercel` gets rewritten to `npm` by a shell hook). A `--prod` deploy auto-promotes the alias. **Pushing to `main` does NOT deploy the frontend** — only this command does. Cadence: run it when the user says "deploy" after a verified fix, never automatically.
-- **Backend (Railway) — AUTO.** Deploys automatically via GitHub Actions (`.github/workflows/deploy-backend.yml`) on merge/push to `main` (backend URL `clinicos-backend-production-df88.up.railway.app`). Merging a backend PR triggers "Deploy Backend to Railway" + "AI Import E2E Gate" — watch with `gh run watch <id> --exit-status`. Don't try to deploy the backend by hand.
-- **Prod is behind Entra/OIDC auth:** anonymous `curl` to the Vercel URL returns 403 — can't verify prod pages by curl. Verify with LOCAL Playwright + ask the user to hard-reload (Ctrl+Shift+R) authenticated. `frontend/vercel.json` SPA rewrite must stay `"/((?!assets/).*)"` (excludes `/assets/`) — a catch-all serves `index.html` for missing hashed chunks → "MIME type text/html" errors. Don't re-broaden it.
-
-<!-- SPECKIT START -->
+- **The live site is the isolated development environment** — `https://clinicos-development-isolated.vercel.app`
+  (synthetic data, five simulated profiles). The previous demo (`clinicos-eosin.vercel.app`,
+  backend `clinicos-backend-production-df88.up.railway.app`) is **retired**: do not deploy to it
+  and do not give its URL to the user.
+  - Frontend: Vercel project `clinicos-development-isolated`.
+  - API: `https://development-backend-development-a4a4.up.railway.app` (dedicated Railway project,
+    single environment `development`); `frontend/vercel.json` allows only this backend in `connect-src`.
+  - Procedure, target IDs and rules: `docs/operations/development-release.md`. Read it before any release.
+- **Nothing deploys automatically.** Pushing or merging to `main` does NOT update the site. The old
+  workflows (`deploy-backend.yml`, `deploy-runtime.yml`, `deploy-demo-exact-commit.yml`, demo auth)
+  targeted the retired demo and are disabled on GitHub on purpose: never re-enable or run them.
+- A release is a specific operation run by the operator with their own Railway/Vercel
+  authorization (runtime if needed, then backend, then frontend). A cloud session has neither the
+  credentials nor network access to those hosts: prepare the source, say plainly that the release
+  is still to be done, and never report a change as online without evidence from the site itself.
+- On the development environment do not run seed, manual SQL or implicit deletions: its test
+  fixtures are preserved synthetic records. `POST /admin/synthetic-data/wipe` deletes them — only
+  on an explicit request from the user.
+- After a release the browser may serve the old bundle: ask the user for a hard reload
+  (Ctrl+Shift+R). `frontend/vercel.json` SPA rewrite must stay `"/((?!assets/).*)"` (excludes
+  `/assets/`) — a catch-all serves `index.html` for missing hashed chunks → "MIME type text/html"
+  errors. Don't re-broaden it.
 
 ## Dati sintetici e bozze d'ingresso
 
