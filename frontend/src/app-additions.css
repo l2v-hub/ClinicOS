@@ -1114,53 +1114,18 @@
 
 /* ── Shell ── */
 .agt-view {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
   height: 100%;
   overflow: hidden;
 }
 
 /* ── Header ── */
-.agt-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 8px 20px 8px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-  flex-wrap: wrap;
-}
-
-.agt-header__left {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.agt-header__title {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.2;
-}
-
 .agt-header__date {
   font-size: 13px;
   color: var(--text-muted);
   text-transform: capitalize;
 }
 
-.agt-header__right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-/* Operator agenda adopts the canonical PageHeader while retaining agenda-specific controls. */
+/* Both agendas adopt the canonical PageHeader while retaining agenda-specific controls. */
 .agt-page-subtitle,
 .agt-page-actions {
   display: flex;
@@ -3321,10 +3286,6 @@
    ROOMS MANAGEMENT
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.rooms-view {
-  max-width: 1100px;
-}
-
 .rooms-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
@@ -3525,10 +3486,6 @@
    OPERATOR SCHEDULE
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.schedule-view {
-  max-width: 900px;
-}
-
 .schedule-op-selector {
   display: flex;
   flex-wrap: wrap;
@@ -3640,10 +3597,6 @@
 ═══════════════════════════════════════════════════════════════════════════ */
 
 /* REQ-010: full-width page aligned with other operative sections (Consegne, Pazienti…) */
-.notes-page {
-  max-width: none;
-}
-
 .notes-list {
   display: flex;
   flex-direction: column;
@@ -8484,10 +8437,10 @@ textarea.form-input {
   gap: 10px;
 }
 .import-modal--intake .npm-card {
-  padding: 14px 16px 16px;
+  padding: var(--ds-card-padding);
   gap: 12px;
   background: var(--surface);
-  border-radius: 10px;
+  border-radius: var(--ds-card-radius);
   box-shadow: none;
 }
 .import-modal--intake .npm-card--intake-section {
@@ -8501,7 +8454,7 @@ textarea.form-input {
   align-items: center;
   gap: 8px;
   min-height: 46px;
-  padding: 10px 14px;
+  padding: 8px var(--ds-card-padding);
   background: var(--surface-raised);
   border-bottom: 1px solid var(--divider);
 }
@@ -8515,13 +8468,10 @@ textarea.form-input {
 }
 .import-modal--intake .npm-card__title {
   margin: 0;
-  font-size: 12px;
-}
-.import-modal--intake .npm-card__desc {
-  font-size: 11.5px;
+  color: var(--text);
 }
 .import-modal--intake .npm-card__body {
-  padding: 12px 14px 14px;
+  padding: var(--ds-card-padding);
 }
 .import-modal--intake .npm-card__status {
   flex: 0 0 auto;
@@ -8576,7 +8526,7 @@ textarea.form-input {
   border-bottom: 0;
 }
 .import-modal--intake .npm-grid {
-  gap: 10px 14px;
+  gap: 12px var(--ds-layout-gap);
 }
 .import-modal--intake .npm-grid--identity,
 .import-modal--intake .npm-grid--contacts {
@@ -8585,18 +8535,11 @@ textarea.form-input {
 .import-modal--intake .npm-field {
   gap: 4px;
 }
-.import-modal--intake .npm-label {
-  font-size: 12.5px;
-}
-.import-modal--intake .npm-hint {
-  font-size: 11px;
-}
 .import-modal--intake .npm-input {
   min-height: 44px;
   padding: 9px 11px;
   border-width: 1px;
   border-radius: 8px;
-  font-size: 13.5px;
 }
 .import-modal--intake .npm-textarea {
   min-height: 74px;
@@ -10251,27 +10194,21 @@ textarea.form-input {
 .step-verifica {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-.step-verifica__title {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0;
+  gap: var(--ds-layout-gap);
 }
 .step-verifica__section {
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--ds-card-radius);
   background: var(--surface, #fff);
-  padding: 14px 16px;
+  padding: var(--ds-card-padding);
 }
 .step-verifica__section-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.8px;
   color: var(--text-muted);
-  margin: 0 0 10px;
+  margin: 0 0 12px;
 }
 .step-verifica__dl {
   display: grid;

@@ -100,7 +100,6 @@ export function StepVerifica({
 
   return (
     <div className="step-verifica" data-testid="intake-step-5">
-      <h3 className="step-verifica__title">Riepilogo</h3>
       {legacyPainPresent(data) && (
         <p role="status">
           I dati dolore precedenti restano conservati nella bozza d’ingresso e consultabili nello

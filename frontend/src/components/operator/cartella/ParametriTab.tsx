@@ -10,6 +10,8 @@ interface Props {
   paziente: Paziente;
   onUpdate: (updates: Partial<CartellaPaziente>) => void;
   operatoreNome: string;
+  /** Scheda d'ingresso: all'apertura solo la riga di oggi; il mese intero resta a un tocco. */
+  todayFirst?: boolean;
 }
 
 const MESI = [
@@ -126,8 +128,15 @@ function daysInMonth(mese: number, anno: number): number {
   return new Date(anno, mese, 0).getDate();
 }
 
-export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
+export function ParametriTab({
+  cartella,
+  paziente,
+  onUpdate,
+  operatoreNome,
+  todayFirst = false,
+}: Props) {
   const today = new Date();
+  const [wholeMonth, setWholeMonth] = useState(!todayFirst);
   const [viewMese, setViewMese] = useState(today.getMonth() + 1);
   const [viewAnno, setViewAnno] = useState(today.getFullYear());
   const [modulo, setModulo] = useState(false);
@@ -160,6 +169,9 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
   const mensili: ParametriMensili[] = cartella.parametriMensili ?? [];
   const meseCorrente = findOrCreateMese(mensili, viewMese, viewAnno);
   const numGiorni = daysInMonth(viewMese, viewAnno);
+  const onlyToday =
+    !wholeMonth && viewMese === today.getMonth() + 1 && viewAnno === today.getFullYear();
+  const giorni = onlyToday ? [today.getDate()] : Array.from({ length: numGiorni }, (_, i) => i + 1);
 
   // Quante celle si possono compilare in rapida sequenza (Tab attraverso una riga) prima che
   // il salvataggio parta: raggruppa una PUT dell'intera cartella per "burst" di editing invece
@@ -312,7 +324,7 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
     if (colIdx < GRID_COLS.length - 1) {
       // Next column, same row
       startEditing(giorno, GRID_COLS[colIdx + 1].key);
-    } else if (giorno < numGiorni) {
+    } else if (!onlyToday && giorno < numGiorni) {
       // First column, next row
       startEditing(giorno + 1, GRID_COLS[0].key);
     } else {
@@ -590,6 +602,16 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
             <span className="cr-meta" style={{ marginLeft: 8 }}>
               Clicca su una cella per modificare il valore direttamente
             </span>
+            {todayFirst && (
+              <button
+                type="button"
+                className="btn-secondary btn-sm"
+                aria-pressed={wholeMonth}
+                onClick={() => setWholeMonth((v) => !v)}
+              >
+                Tutto il mese
+              </button>
+            )}
           </div>
 
           {/* -- Monthly grid -- */}
@@ -612,7 +634,7 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
                 </tr>
               </thead>
               <tbody>
-                {Array.from({ length: numGiorni }, (_, i) => i + 1).map((g) => (
+                {giorni.map((g) => (
                   <tr key={g}>
                     <td className="parametri-day-col">{g}</td>
                     {GRID_COLS.map((c) => renderCell(g, c))}

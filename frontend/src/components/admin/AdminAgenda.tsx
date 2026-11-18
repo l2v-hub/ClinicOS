@@ -8,6 +8,7 @@ import { appointmentLanding, type PatientLanding } from '../../lib/patientTarget
 import type { Appuntamento, Operatore, TherapySlot, TherapySlotPageInfo } from '../../types';
 import { IcoPlus } from '../../icons';
 import { DateNav } from '../shared/DateNav';
+import { PageHeader } from '../shared/PageHeader';
 import { AppointmentForm } from '../shared/AppointmentForm';
 import { localIsoDate } from '../../lib/appointmentRange';
 import { AgendaLegend } from '../shared/AgendaLegend';
@@ -297,37 +298,36 @@ export function AdminAgenda({
 
   return (
     <div className="agt-view">
-      {/* ── Header ── */}
-      <div className="agt-header">
-        <div className="agt-header__left">
-          <span className="agt-header__title">Agenda Globale</span>
-          <span className="agt-header__date">{titleLabel()}</span>
-        </div>
-        <div className="agt-header__right">
-          <div className="agt-view-switcher" role="group" aria-label="Visualizzazione agenda">
-            {(['giornaliero', 'settimanale', 'mensile'] as ViewMode[]).map((v) => (
-              <button
-                type="button"
-                key={v}
-                className={`agt-view-btn${view === v ? ' active' : ''}`}
-                onClick={() => changeView(v)}
-                aria-pressed={view === v}
-              >
-                {v === 'giornaliero' ? 'Giorno' : v === 'settimanale' ? 'Settimana' : 'Mese'}
-              </button>
-            ))}
+      <PageHeader
+        title="Agenda Globale"
+        subtitle={<span className="agt-header__date">{titleLabel()}</span>}
+        actions={
+          <div className="agt-page-actions">
+            <div className="agt-view-switcher" role="group" aria-label="Visualizzazione agenda">
+              {(['giornaliero', 'settimanale', 'mensile'] as ViewMode[]).map((v) => (
+                <button
+                  type="button"
+                  key={v}
+                  className={`agt-view-btn${view === v ? ' active' : ''}`}
+                  onClick={() => changeView(v)}
+                  aria-pressed={view === v}
+                >
+                  {v === 'giornaliero' ? 'Giorno' : v === 'settimanale' ? 'Settimana' : 'Mese'}
+                </button>
+              ))}
+            </div>
+            <DateNav
+              isToday={showsToday}
+              onPrev={() => navigate(-1)}
+              onToday={goToday}
+              onNext={() => navigate(1)}
+              prevLabel="Intervallo precedente"
+              nextLabel="Intervallo successivo"
+              todayLabel="Vai a oggi"
+            />
           </div>
-          <DateNav
-            isToday={showsToday}
-            onPrev={() => navigate(-1)}
-            onToday={goToday}
-            onNext={() => navigate(1)}
-            prevLabel="Intervallo precedente"
-            nextLabel="Intervallo successivo"
-            todayLabel="Vai a oggi"
-          />
-        </div>
-      </div>
+        }
+      />
 
       {/* Nelle viste aggregate, dove non esistono colonne operatore, resta un filtro compatto. */}
       {(view !== 'giornaliero' || loadingAppuntamenti || appointmentLoadError) && (

@@ -52,8 +52,6 @@ interface StepClinicaProps {
   showTherapyAcceptance?: boolean;
   /** Dati dolore precedenti (sola lettura). */
   showLegacyPain?: boolean;
-  /** Titoli delle sezioni: nascosti quando la card della pagina ha già il titolo. */
-  showTitles?: boolean;
   /** Flusso «da documenti»: ritorno alla revisione per risolvere i conflitti della terapia. */
   onBackToDocuments?: () => void;
 }
@@ -88,7 +86,6 @@ export function StepClinica({
   therapyBlock = true,
   showTherapyAcceptance = true,
   showLegacyPain = true,
-  showTitles = true,
   onBackToDocuments,
 }: StepClinicaProps) {
   // Keep manual additions next to the imported drugs, before the other clinical sections.
@@ -159,7 +156,7 @@ export function StepClinica({
         <NrsLegacyContent value={data.dolore} title="Dati dolore precedenti della bozza" intake />
       )}
       {sections.map((def) => {
-        const { sectionKey, title, component: Editor } = def;
+        const { sectionKey, component: Editor } = def;
 
         // Cast: the registry stores ComponentType<SectionProps<never>> for type-safety at
         // definition time; here we widen to SectionProps<unknown> for intake rendering.
@@ -225,7 +222,6 @@ export function StepClinica({
             {isImported && showSource[sectionKey] && hasSource && (
               <SourceComparePanel refs={refs} />
             )}
-            {showTitles && <div className="step-clinica__section-title">{title}</div>}
             <EditorCast
               mode="intake"
               value={data[sectionKey]}

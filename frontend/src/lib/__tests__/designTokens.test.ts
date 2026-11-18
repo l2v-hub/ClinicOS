@@ -77,7 +77,13 @@ test('intentional responsive sidebar overrides remain media-scoped', () => {
 test('the imported style graph has one token owner and one font request', () => {
   const roots = importedStyles.flatMap(topLevelRootBlocks);
   assert.equal(roots.length, 1);
-  assert.equal(importedStyles.join('\n').match(/fonts\.googleapis\.com/g)?.length, 1);
+  // Un solo foglio dei font, collegato da index.html (in parallelo al CSS), mai da un @import.
+  assert.doesNotMatch(importedStyles.join('\n'), /fonts\.googleapis\.com/);
+  const html = readFileSync(new URL('../../../index.html', import.meta.url), 'utf8');
+  assert.equal(
+    html.match(/rel="stylesheet"\s+href="https:\/\/fonts\.googleapis\.com\/css2/g)?.length,
+    1,
+  );
 });
 
 test('legacy theme aliases and automatic dark overrides cannot retarget the clinical theme', () => {

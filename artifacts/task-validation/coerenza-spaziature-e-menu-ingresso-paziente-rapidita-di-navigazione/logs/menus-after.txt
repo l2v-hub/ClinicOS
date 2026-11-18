@@ -1,0 +1,73 @@
+== Op/Turno
+
+
+== Op/Pazienti
+   1× ds-chip [ACTIVE]                             h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   4× ds-chip                                      h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+
+== Op/Cartella paziente (#/dettaglio-paziente/SEED-PAZ-001)
+   1× top-nav__item [ACTIVE]                       h44 r8px pad 4px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   7× top-nav__item                                h44 r8px pad 4px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   group top-nav.top-nav--level2                gap 12px h44 mb 0px pad 0px/0px bg rgba(0, 0, 0, 0)
+== Op/Cartella > Terapia
+   10× top-nav__item                                h44 r8px pad 4px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   2× top-nav__item [ACTIVE]                       h44 r8px pad 4px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   2× ds-chip [ACTIVE]                             h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   1× ds-chip                                      h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   group top-nav.top-nav--level2                gap 12px h44 mb 0px pad 0px/0px bg rgba(0, 0, 0, 0)
+   group top-nav.top-nav--level3                gap 12px h52 mb 0px pad 0px/16px bg rgb(255, 255, 255)
+== Op/Terapia
+   1× ds-chip.giro-slot [ACTIVE]                   h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   2× ds-chip.giro-slot                            h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   3× ds-chip [ACTIVE]                             h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   5× ds-chip                                      h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   group ds-chip-group                          gap 8px h96 mb 0px pad 0px/0px bg rgba(0, 0, 0, 0)
+== Op/Parametri
+
+
+== Op/Consegne
+   1× ds-chip [ACTIVE]                             h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   1× ds-chip                                      h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   group ds-chip-group                          gap 8px h44 mb 0px pad 0px/0px bg rgba(0, 0, 0, 0)
+== Op/Agenda
+   1× agt-view-btn [ACTIVE]                        h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   2× agt-view-btn                                 h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   1× ds-chip [ACTIVE]                             h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+
+== Op/Farmaci
+   1× filter-chip [ACTIVE]                         h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   1× filter-chip                                  h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   group filter-chips.ricerca-farmaco__criterio gap 8px h44 mb 0px pad 0px/0px bg rgba(0, 0, 0, 0)
+== Am/Dashboard
+
+
+== Am/Operatori
+
+
+== Am/Agenda
+   1× agt-view-btn [ACTIVE]                        h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   2× agt-view-btn                                 h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   2× ds-chip [ACTIVE]                             h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   4× ds-chip                                      h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   group ds-chip-group                          gap 8px h44 mb 0px pad 0px/0px bg rgba(0, 0, 0, 0)
+== Am/Terapia
+   2× ds-chip [ACTIVE]                             h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   1× ds-chip                                      h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   group ds-chip-group                          gap 8px h96 mb 0px pad 0px/0px bg rgba(0, 0, 0, 0)
+== Am/Posti Letto
+   2× ds-chip [ACTIVE]                             h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   6× ds-chip                                      h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   group filter-chips                           gap 8px h44 mb 0px pad 0px/0px bg rgba(0, 0, 0, 0)
+== Am/Orari
+   1× ds-chip [ACTIVE]                             h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   8× ds-chip                                      h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+
+== Am/Consegne
+   1× ds-chip [ACTIVE]                             h44 r8px pad 0px/12px 14px/600 bd 2px rgb(47, 107, 237) bg rgb(234, 241, 254) fg rgb(29, 79, 196)
+   1× ds-chip                                      h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   group ds-chip-group                          gap 8px h44 mb 0px pad 0px/0px bg rgba(0, 0, 0, 0)
+== Am/Ruoli
+   1× top-nav__item [ACTIVE]                       h44 r0px pad 4px/12px 14px/800 bd 0px rgb(23, 79, 174) bg rgba(0, 0, 0, 0) fg rgb(23, 79, 174)
+   4× top-nav__item                                h44 r0px pad 4px/12px 14px/650 bd 0px rgb(82, 102, 125) bg rgba(0, 0, 0, 0) fg rgb(82, 102, 125)
+   2× ds-chip                                      h44 r8px pad 0px/12px 14px/400 bd 2px rgb(225, 231, 240) bg rgb(255, 255, 255) fg rgb(22, 32, 46)
+   group top-nav.top-nav--level3                gap 12px h52 mb 0px pad 0px/10px bg rgba(0, 0, 0, 0)

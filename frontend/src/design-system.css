@@ -19,7 +19,8 @@
 @import './compact-layout.css';
 
 :root {
-  --ds-control-h: 36px;
+  /* Una sola altezza dei controlli su ogni pagina a schermo (misura al letto del paziente). */
+  --ds-control-h: 44px;
   --ds-control-font: 14px;
   --ds-body-font: 14px;
   --ds-title-font: 18px;
@@ -49,10 +50,9 @@
   --ds-font: var(--font-ui, 'Inter', system-ui, sans-serif);
 }
 
-/* Same density in every context; touch devices retain a larger hit area. */
+/* Same density in every context; touch keyboards need 16px fields (no zoom on focus). */
 @media (pointer: coarse) {
   :root {
-    --ds-control-h: 40px;
     --ds-field-font: 16px;
   }
 }
@@ -61,13 +61,9 @@
     --ds-field-font: 16px;
   }
 }
-/* 44px is a contextual bedside design goal, not a blanket WCAG AA failure rule.
-   The ancestor also contains the portal topbar: patient/room controls inherit
-   one canonical token. Other routes and printed forms keep their metrics. */
+/* 44px is the bedside design goal, adopted as the single control height of every screen page
+   (not a blanket WCAG AA failure rule: printed forms keep their own metrics, see @media print). */
 @media screen {
-  .main-area-clean:has(> main > :is(.patient-list-view, .patient-record-view, .rooms-view)) {
-    --ds-control-h: 44px;
-  }
   .main-area-clean:has(> main > :is(.patient-list-view, .patient-record-view, .rooms-view))
     .compact-topbar
     button:focus-visible {
@@ -106,16 +102,18 @@
     height: auto;
     min-width: var(--ds-control-h);
   }
-  .patient-record-view :is(.inline-edit__value, .inline-edit-row, .inline-edit__btn):not(#ds) {
+  /* Modifica sul posto: stessa area di tocco nella cartella e nella scheda d'ingresso. */
+  :is(.patient-record-view, .intake-section)
+    :is(.inline-edit__value, .inline-edit-row, .inline-edit__btn):not(#ds) {
     min-height: var(--ds-control-h);
     min-width: var(--ds-control-h);
   }
-  .patient-record-view .inline-edit__btn:not(#ds) {
+  :is(.patient-record-view, .intake-section) .inline-edit__btn:not(#ds) {
     width: var(--ds-control-h);
     height: var(--ds-control-h);
     flex-shrink: 0;
   }
-  .patient-record-view
+  :is(.patient-record-view, .intake-section)
     :is(.inline-edit__value, .inline-edit-row, .inline-edit__btn):not(#ds):focus-visible {
     outline: var(--ds-focus);
     outline-offset: 2px;
@@ -858,10 +856,6 @@ th[aria-sort] .ds-sort:not(#ds) {
    · testo introduttivo e stati vuoti: uno stile solo.
    ───────────────────────────────────────────────────────────────────────────────────────────── */
 @media screen {
-  /* 44px è la misura già adottata al letto del paziente: l'intestazione la usa su ogni pagina. */
-  .compact-topbar:not(#ds) {
-    --ds-control-h: 44px;
-  }
   /* Raggio: canonico, con la spinta `:not(#ds)` (non porta alcun significato di stato). */
   :is(
     .turno-card,
@@ -890,18 +884,80 @@ th[aria-sort] .ds-sort:not(#ds) {
   :is(.op-management, .rooms-view, .schedule-view, .admin-dashboard) > .cts {
     box-shadow: none;
   }
-  :is(.rooms-view, .schedule-view):not(#ds) {
+  /* Ritmo di pagina: ogni pagina è una pila verticale a tutta larghezza. La distanza fra i suoi
+     blocchi è una sola (`--ds-layout-gap`) e la dà la pagina con `gap`: i blocchi non portano
+     margini verticali propri. Una nuova pagina si aggiunge a questo elenco. */
+  .page-content
+    > :is(
+      .operator-dashboard,
+      .patient-list-view,
+      .giro-view,
+      .par-view,
+      .handover-workspace,
+      .agt-view,
+      .page-anagrafica-farmaci,
+      .notes-page,
+      .admin-dashboard,
+      .op-management,
+      .rooms-view,
+      .schedule-view,
+      .rp-page
+    ):not(#ds) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ds-layout-gap);
     max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  .page-content
+    > :is(
+      .operator-dashboard,
+      .patient-list-view,
+      .giro-view,
+      .par-view,
+      .handover-workspace,
+      .agt-view,
+      .page-anagrafica-farmaci,
+      .notes-page,
+      .admin-dashboard,
+      .op-management,
+      .rooms-view,
+      .schedule-view,
+      .rp-page
+    )
+    > *:not(#ds) {
+    margin-block: 0;
+    /* un blocco non allarga mai la pagina: il suo contenuto va a capo o scorre al suo interno */
+    min-width: 0;
+  }
+  /* Azioni di pagina (il titolo è nell'intestazione): una riga di controlli, senza rientri propri. */
+  .page-header--in-topbar:not(#ds) {
+    padding: 0;
+    margin: 0;
+  }
+  /* Card di pagina: un solo rientro interno. */
+  :is(
+    .plist-card,
+    .agt-day-card,
+    .consegna-quick,
+    .consegna-card,
+    .admin-attention,
+    .admin-ward-summary,
+    .occupancy-stats,
+    .schedule-card,
+    .roster-defaults,
+    .rp-filters,
+    .empty-state-card,
+    .page-anagrafica-farmaci .ricerca-farmaco
+  ):not(#ds) {
+    padding: var(--ds-card-padding);
   }
   .page-lead:not(#ds) {
-    margin: 0 0 var(--ds-layout-gap);
     font: 400 14px/20px var(--ds-font);
     color: var(--ds-text-muted);
   }
   /* Consegne: titolo, conteggio e stato vuoto con il ritmo delle altre pagine. */
-  .handover-queue:not(#ds) {
-    margin-top: var(--ds-layout-gap);
-  }
   .handover-queue > h2:not(#ds) {
     margin: 0 0 4px;
   }

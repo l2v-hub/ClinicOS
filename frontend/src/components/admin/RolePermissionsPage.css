@@ -2,12 +2,7 @@
    pulsanti, campi) restano quelli canonici di design-system.css. Rosso solo per gli errori. */
 
 .rp-page {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
   min-width: 0;
-  /* .page-content already provides the page gutter. */
-  padding: 0;
 }
 
 .rp-body {

@@ -1,0 +1,21 @@
+1024px Turno     scrollW 1024 vs 1024
+1024px Pazienti  scrollW 1024 vs 1024
+1024px Terapia   scrollW 1024 vs 1024
+1024px Consegne  scrollW 1024 vs 1024
+1024px Agenda    scrollW 1024 vs 1024
+1024px Farmaci   scrollW 1024 vs 1024
+1024px Ingresso  scrollW 1024 vs 1024
+768px Turno     scrollW 768 vs 768
+768px Pazienti  scrollW 768 vs 768
+768px Terapia   scrollW 768 vs 768
+768px Consegne  scrollW 768 vs 768
+768px Agenda    scrollW 768 vs 768
+768px Farmaci   scrollW 768 vs 768
+768px Ingresso  scrollW 768 vs 768 | fuori: link-btn
+390px Turno     scrollW 390 vs 390
+390px Pazienti  scrollW 390 vs 390
+390px Terapia   scrollW 390 vs 390
+390px Consegne  scrollW 390 vs 390
+390px Agenda    scrollW 390 vs 390
+390px Farmaci   scrollW 390 vs 390
+390px Ingresso  scrollW 390 vs 390 | fuori: link-btn ; btn-secondary btn-sm

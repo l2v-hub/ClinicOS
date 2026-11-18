@@ -1,0 +1,48 @@
+sections:
+   anagrafica: pad 16px/16px mt 0px radius 12px border 1px bg rgb(255,255,255)
+   ingresso: pad 16px/16px mt 0px radius 12px border 1px bg rgb(255,255,255)
+   allergie: pad 16px/16px mt 0px radius 12px border 1px bg rgb(255,255,255)
+   terapia: pad 16px/16px mt 0px radius 12px border 1px bg rgb(255,255,255)
+   diagnosi: pad 16px/16px mt 0px radius 12px border 1px bg rgb(255,255,255)
+   parametri: pad 16px/16px mt 0px radius 12px border 1px bg rgb(255,255,255)
+   moduli: pad 16px/16px mt 0px radius 12px border 1px bg rgb(255,255,255)
+   riepilogo: pad 16px/16px mt 0px radius 12px border 1px bg rgb(255,255,255)
+sectionGaps:
+   16,16,16,16,16,16,16
+headings:
+   9× H3 18px/600 mt0px mb0px cls=intake-section__title
+   4× H4 12px/700 mt0px mb12px cls=step-verifica__section-title
+   3× H3 12px/700 mt0px mb0px cls=npm-card__title
+   2× H3 14px/600 mt0px mb0px cls=clinical-card__title
+   1× H2 18px/600 mt0px mb0px cls=
+labels:
+   25× 13px/600 mb0px cls=npm-label
+inputs:
+   18× INPUT h44 r8px bd1px rgb(113,129,152) pad11px fs14px
+   4× SELECT h44 r8px bd1px rgb(113,129,152) pad11px fs14px
+   2× TEXTAREA h89 r8px bd1px rgb(113,129,152) pad11px fs14px
+   1× INPUT h44 r8px bd1px rgb(36,91,181) pad11px fs14px
+buttons:
+   9× h73 r10px fs14px/400 cls=intake-module-card
+   7× h44 r12px fs14px/400 cls=intake-index__item
+   4× h44 r8px fs14px/600 cls=ds-icon-btn
+   4× h44 r8px fs14px/600 cls=ds-btn.ds-btn--secondary
+   4× h44 r8px fs14px/600 cls=btn-secondary.btn-sm
+   4× h44 r8px fs14px/600 cls=ds-link
+   3× h44 r8px fs14px/600 cls=btn-sm.btn-secondary
+   3× h44 r8px fs14px/600 cls=btn-sm
+   2× h44 r8px fs14px/600 cls=clinical-card__edit.btn-link
+   2× h44 r8px fs14px/600 cls=ds-icon-btn.clinical-card__toggle
+   2× h27 r6px fs14px/500 cls=inline-edit-block__value.inline-edit__value
+   1× h44 r12px fs14px/600 cls=intake-index__item
+   1× h20 r0px fs14px/600 cls=link-btn
+   1× h44 r8px fs14px/600 cls=ds-btn.ds-btn--primary
+fieldGaps:
+   5× grid gap 12px/16px cls=npm-grid
+   4× grid gap 12px/12px cls=step-verifica__row
+   1× grid gap normal/normal cls=intake-page__grid
+   1× grid gap 12px/12px cls=intake-modules-grid
+grid:
+   264px 1006px
+scroller:
+   import-modal__body scrollHeight=4008 client=777

@@ -1,13 +1,9 @@
 /* Farmaci — HMI 1 (artifacts/hmi-parity/proto/farmaci.png). Solo la pagina: la modale della
    terapia usa lo stesso corpo di ricerca con i suoi stili. */
-.page-anagrafica-farmaci {
-  max-width: none;
-}
 .page-anagrafica-farmaci__corpo {
   border-radius: 16px;
 }
 .page-anagrafica-farmaci .ricerca-farmaco {
-  padding: 24px;
   gap: 16px;
 }
 .page-anagrafica-farmaci .ricerca-farmaco__campo {

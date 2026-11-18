@@ -1,14 +1,5 @@
 /* Il mio turno uses shared control, typography and spacing tokens. */
 
-.operator-dashboard.turno {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-layout-gap);
-  max-width: none;
-  margin: 0;
-  width: 100%;
-}
-
 /* Indicatori compatti: etichetta e stato a sinistra, valore a destra. */
 .turno .dashboard-kpi-band {
   gap: 12px;

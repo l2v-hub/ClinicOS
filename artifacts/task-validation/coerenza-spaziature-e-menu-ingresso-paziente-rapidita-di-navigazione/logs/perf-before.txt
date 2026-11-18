@@ -1,0 +1,37 @@
+Misure di partenza della rapidità (analisi a più agenti, sola lettura, sul commit di partenza).
+
+== bundle and code splitting
+Source: frontend/dist of HEAD (reproduced byte-identical in a scratch copy build: entry 643,589 B). All measuring scripts/outputs are in <scratch>/perf/bundle/ (graph.cjs, dist.cjs, meta.cjs, chain.cjs, measure.cjs, ab.cjs, evalcost.cjs, preload-timeline.cjs, tabs.cjs, parity.cjs; scratch copies fe-base/fe-fix and builds dist-base/dist-fix). Repo untouched; the preview servers I started (4337-4339) are stopped.
+
+CRITICAL PATH (needed before the Login screen can even mount; there is no session restore, so every load/reload goes through it):
+- Entry static closure = 15 JS files, 1,116,974 B raw / 319,902 B gzip / 263,942 B brotli. index-*.js 643,589 raw / 183,338 gz; patientDemographics-*.js 428,197 / 118,345; assessmentTypes 22,638 / 8,091; 12 small chunks (<9 kB each).
+- Composition of that closure (esbuild metafile of the same graph, total 1,120,906 B, i.e. within 0.4% of the real build): codice-fiscale-js 425 kB (38%), @azure/msal-browser + msal-common 250 kB (22%), react-dom + react + scheduler 192 kB (17%), lib/assessments/* 88 kB (8%), App.tsx 59 kB, everything else ~105 kB. No page component leaks into the entry: the React.lazy route splits are intact; what leaks is libraries/data.
+- CSS: index-*.css 283,751 raw / 47,941 gz (render blocking, starts with an @import to Google Fonts).
+- Operator first page (Turno = OperatorDashboard) adds 11 JS files 95,783 raw / 33,963 gz + 2 CSS 26,951 / 4,941 gz. Total JS to a usable Turno page: ~1.21 MB raw / ~354 kB gz, of which 675 kB raw / 176 kB gz (codice-fiscale + msal) is not used by Login or Turno.
+
+RUNTIME (Chromium, vite preview of dist with gzip, API proxied to localhost:3001, cache disabled):
+- Unthrottled: 58 JS + 17 CSS requests (507 kB + 82 kB transferred) before the login button is used, because the idle preloader starts 50 ms after mount; login click adds 7 JS + 26 API calls; idle adds 46 JS + 21 CSS. Whole first visit = 153 assets, 913,447 B transferred.
+- Slow 4G (1.6 Mbps, 150 ms RTT) + CPU x4: entry chunk finished at 2,284 ms, login visible 3,104 ms (median of 5), OperatorDashboard chunk available at 2,989 ms, last preloaded chunk at 10,789 ms. Fast 4G (9 Mbps, 60 ms) + CPU x4: entry 501 ms, dashboard chunk 1,046 ms, last preload 4,161 ms.
+- Main-thread cost of the codice-fiscale chunk alone (compile + evaluate, warm HTTP cache, median of 7): 27.9 ms at 1x, 111 ms at CPU x4. msal part: 8.8 ms / 14 ms.
+- pdf.js is NOT on any early path: pdf-*.js (427 kB) has zero static importers (4 dynamic ones, all inside render/print functions) and neither it nor pdf.worker.min-*.mjs (1.26 MB) was requested during load + login + 25 s idle + Pazienti + opening a patient chart + clicking the Documenti tab. Only three stubs load in idle (PdfCanvasPreview 2.2 kB gz, worker-URL stub 448 B, pdfPreviewResources 618 B).
+- Idle prefetch exists and works (App.tsx:250-282, PatientDetailLazyTabs.tsx:83): after it completes, Pazienti, opening a patient and the tabs Moduli/Parametri/Terapia/Clinica/Dimissione fetched no new asset. Only Documenti fetched 3 files on click.
+
+== network requests during load and navigation
+Session as Operatore (login → Turno → Pazienti → first patient → back → Terapia → Parametri → Consegne → Agenda → Farmaci → Turno → Pazienti), 2.5 s settle per step, backend on localhost:3001.
+
+PRODUCTION BUNDLE (frontend/dist replayed under the dev origin by Playwright, config chunk pointed at :3001 in flight; no StrictMode): 90 API requests, 53 distinct URLs, 229,060 B of JSON, 89 CORS preflights.
+Per step (requests / bytes): login screen 1 / 94 B; login→Turno 18 / 78.7 kB; Pazienti 15 / 17.9 kB; open patient 15 / 20.2 kB; back 3 / 13.5 kB; Terapia 9 / 11.4 kB; Parametri 3 / 9.1 kB; Consegne 4 / 13.3 kB; Agenda 2 / 11.1 kB; Farmaci 0; Turno again 5 / 35.8 kB; Pazienti again 15 / 17.9 kB.
+Heaviest URLs over the session: /patients/diary-unread?limit=20 6x = 43.3 kB; /therapy-slots?date= 5x = 53.3 kB; /intake/drafts 3x = 21.4 kB; /patients/page (3 URL variants) 6x = 22.6 kB; /auth/me 13.2 kB; per-patient /parameter-readings 21x.
+
+DEV SERVER (StrictMode on, frontend/src/main.tsx:11-13): 109 requests of which 16 aborted, 100 real OPTIONS preflights, 249.5 kB.
+How StrictMode duplicates were told apart: the same click path was replayed against the production bundle. Dev-only (not reported): /auth/status x2, /intake/drafts x2, abort+retry of /patients/page, /therapy-slots/page, the four PatientToday reads, and diary-unread x4 (x2 in prod). Duplicates that survive in the production bundle are reported below.
+
+Latency: no slow endpoint locally. Worst observed: /patients/:id/intake-review 78 ms, /patients/diary-unread 67 ms, /patients/page 59 ms, /therapy-slots 50 ms. Railway latency could not be measured from here.
+
+Idle polling (95 s per page): Turno 11 requests / 64.7 kB (every 30 s: diary-unread-count + 2x diary-unread 7.2 kB; every 60 s: 2x therapy-slots 10.7 kB), about 420 requests and 2.4 MB per hour. Patient detail 7 requests / 21.7 kB (7.2 kB diary-unread every 30 s). Pazienti, Terapia, Consegne, Agenda: only the 17 B badge count every 30 s.
+
+Sequential chains: none of the first-wave requests gates a later wave (each delayed 1.5 s in turn: the Turno wave and the PatientToday wave did not move). The only data-dependent chains are patients/page → clinical-summary and therapy-slots → farmaci/stato.
+
+Caveat: the run happened at 23:05 UTC = 00:05 facility time, so hooks using the browser date and hooks using the facility date disagreed (Turno fetched therapy-slots for 3 dates instead of 2).
+
+Scripts and raw logs: <scratch>/perf/network/ (record.cjs, report.cjs, poll.cjs, flash.cjs, firstpaz.cjs, gate.cjs, gate-login.cjs, run-dev.json, run-dist.json, run-dev-delay150.json, poll.out). Nothing in /home/user/ClinicOS was modified; no preview server was started.

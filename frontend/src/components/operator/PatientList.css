@@ -381,18 +381,11 @@ td.patient-roster__actions > button + button {
 }
 
 /* ═══ HMI 1 · lista pazienti come il prototipo ═════════════════════════════
-   Card bianche raggio 16 padding 24; controlli 48 (bordo 2, raggio 12); righe ≥ 72 con il
-   riquadro 48 della camera; intestazioni in didascalia grigia 14/500, non maiuscole. */
-.patient-list-view {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
+   Card bianche (raggio e rientro: design-system.css); righe ≥ 72 con il riquadro 48 della
+   camera; intestazioni in didascalia grigia 14/500, non maiuscole. */
 .plist-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
   min-width: 0;
 }
 /* Ingressi in bozza: una voce per paziente (più recente), le precedenti in un riquadro richiudibile. */

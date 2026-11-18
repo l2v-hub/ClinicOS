@@ -21,7 +21,13 @@ import './App.css';
 // Ultimo foglio: il design system canonico decide l'aspetto di ogni controllo.
 import './design-system.css';
 import { API_URL } from './config';
-import { authAvailability, canStartLogin, parseAuthStatus, type AuthCheckState, type AuthStatus } from './lib/authAvailability';
+import {
+  authAvailability,
+  canStartLogin,
+  parseAuthStatus,
+  type AuthCheckState,
+  type AuthStatus,
+} from './lib/authAvailability';
 import { useRosterOrder } from './lib/useRosterOrder';
 import { useBedsideTouchLayout } from './lib/useBedsideTouchLayout';
 import {
@@ -258,12 +264,27 @@ function preloadRouteModules(): void {
     routeLoaders.PatientList,
     routeLoaders.PatientDetail,
   ];
+  // In coda per ultime le pagine della sola amministrazione: chi è al letto del paziente trova
+  // prima le proprie pagine, i tab della cartella e la scheda d'ingresso.
+  const adminOnly: Array<() => Promise<unknown>> = [
+    routeLoaders.OperatorManagement,
+    routeLoaders.AdminAgenda,
+    routeLoaders.RoomsManagement,
+    routeLoaders.OperatorSchedule,
+    routeLoaders.RolePermissionsPage,
+  ];
   const rest: Array<() => Promise<unknown>> = [
-    ...Object.values(routeLoaders).filter((loader) => !first.includes(loader)),
+    ...Object.values(routeLoaders).filter(
+      (loader) => !first.includes(loader) && !adminOnly.includes(loader),
+    ),
     () =>
       import('./components/operator/PatientDetailLazyTabs').then((m) =>
         m.preloadPatientDetailTabs(),
       ),
+    // La scheda «Nuovo ingresso» porta con sé il catalogo dei comuni per il calcolo del codice
+    // fiscale: scaricata in anticipo, si apre senza attese.
+    () => import('./components/shared/intake/IntakeWorkspace'),
+    ...adminOnly,
   ];
   const idle = (fn: () => void) =>
     typeof window.requestIdleCallback === 'function'
@@ -523,7 +544,11 @@ export default function App() {
         setAuthCheck('available');
       })
       .catch((error: unknown) => {
-        if (controller.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) return;
+        if (
+          controller.signal.aborted ||
+          (error instanceof DOMException && error.name === 'AbortError')
+        )
+          return;
         setAuthStatus(null);
         setAuthCheck('unavailable');
       })
@@ -2282,7 +2307,8 @@ export default function App() {
           code?: string;
         } | null;
         if (!sessionResponse.ok || !session?.token) {
-          if (session?.code === 'simulator_disabled' || session?.code === 'auth_disabled') retryAuthStatus();
+          if (session?.code === 'simulator_disabled' || session?.code === 'auth_disabled')
+            retryAuthStatus();
           setLoginError(session?.error ?? 'Profilo simulato non disponibile');
           return;
         }
@@ -2306,11 +2332,15 @@ export default function App() {
         return;
       }
       const identity = (await identityResponse.json()) as AuthMeResponse;
-      setAuthStatus((prev) => prev ? ({
-        ...prev,
-        mode: identity.authMode,
-        temporaryDemo: identity.temporaryDemo,
-      }) : null);
+      setAuthStatus((prev) =>
+        prev
+          ? {
+              ...prev,
+              mode: identity.authMode,
+              temporaryDemo: identity.temporaryDemo,
+            }
+          : null,
+      );
       const nextAuthz = authzFromIdentity(identity, Boolean(simulatorIdentityId));
       setSessionCapabilities(nextAuthz.capabilities);
       setAuthz(nextAuthz);

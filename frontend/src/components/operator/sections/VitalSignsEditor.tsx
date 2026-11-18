@@ -64,6 +64,7 @@ export function VitalSignsEditor({
           // mutation path silently loses data; merge over the existing slice.
           onUpdate={(patch) => onChange({ ...(value ?? {}), ...patch })}
           operatoreNome={operatoreNome ?? ''}
+          todayFirst
         />
       </Suspense>
     );

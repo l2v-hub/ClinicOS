@@ -1,4 +1,4 @@
-import { isValidCF } from './codiceFiscale';
+import { isValidCF } from './cfCheck';
 import { validatePatientPhone } from './patientPhone';
 
 export const DEMOGRAPHIC_LABELS = {

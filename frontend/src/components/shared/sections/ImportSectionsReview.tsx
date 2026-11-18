@@ -1,4 +1,4 @@
-import { fiscalCodeSex } from '../../../lib/codiceFiscale';
+import { fiscalCodeSex } from '../../../lib/cfCheck';
 import { intakeDemographicErrors } from '../../../lib/intakeDemographics';
 import { DemographicsStatus } from '../DemographicsStatus';
 import { useEffect, useMemo, useState } from 'react';

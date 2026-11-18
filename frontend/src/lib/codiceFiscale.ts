@@ -1,43 +1,13 @@
-// #294: helper per il codice fiscale — validazione live e calcolo dai dati anagrafici.
-// La libreria codice-fiscale-js (approvata dal PO) porta il catalogo comuni→codice
-// catastale necessario al calcolo; la validazione autoritativa resta lato backend.
+// #294: calcolo del codice fiscale dai dati anagrafici (scheda d'ingresso).
+// La libreria codice-fiscale-js (approvata dal PO) porta il catalogo comuni→codice catastale
+// necessario al calcolo: per questo questo modulo si importa solo dove si calcola. Il controllo
+// formale (forma + carattere di controllo) vive in `cfCheck.ts`, senza la libreria; la validazione
+// autoritativa resta lato backend.
 
 import CodiceFiscale from 'codice-fiscale-js';
+import { normalizeCF } from './cfCheck';
 
-export function normalizeCF(raw: string): string {
-  return raw.trim().toUpperCase();
-}
-
-export function isValidCF(raw: string): boolean {
-  const cf = normalizeCF(raw);
-  if (cf.length !== 16) return false;
-  try {
-    return CodiceFiscale.check(cf);
-  } catch {
-    return false;
-  }
-}
-
-/** Missing sex may be proposed from a validated fiscal code; explicit values always win. */
-export function fiscalCodeSex(raw: string): 'M' | 'F' | null {
-  if (!isValidCF(raw)) return null;
-  const digits = normalizeCF(raw)
-    .slice(9, 11)
-    .replace(/[LMNPQRSTUV]/g, (letter) => String('LMNPQRSTUV'.indexOf(letter)));
-  const encoded = Number(digits);
-  const sex = encoded >= 41 && encoded <= 71 ? 'F' : 'M';
-  const day = sex === 'F' ? encoded - 40 : encoded;
-  if (day < 1 || day > 31) return null;
-  const code = normalizeCF(raw);
-  const month = 'ABCDEHLMPRST'.indexOf(code[8]);
-  const year =
-    2000 +
-    Number(
-      code.slice(6, 8).replace(/[LMNPQRSTUV]/g, (letter) => String('LMNPQRSTUV'.indexOf(letter))),
-    );
-  if (new Date(Date.UTC(year, month, day)).getUTCMonth() !== month) return null;
-  return sex;
-}
+export { normalizeCF, isValidCF, fiscalCodeSex } from './cfCheck';
 
 export interface ComputeCFInput {
   nome: string;

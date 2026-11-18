@@ -5,10 +5,7 @@
 // ignora gli header e richiede il Bearer verificato.
 // PRIVACY: questo modulo non logga mai token o identità.
 
-import {
-  createStandardPublicClientApplication,
-  type IPublicClientApplication,
-} from '@azure/msal-browser';
+import type { IPublicClientApplication } from '@azure/msal-browser';
 import { isSimulatorSession, operatorHeaders } from './operatorSession';
 
 const env = (import.meta as ImportMeta & { env?: Record<string, unknown> }).env;
@@ -24,20 +21,31 @@ let appPromise: Promise<IPublicClientApplication> | null = null;
 
 function msalApp(): Promise<IPublicClientApplication> {
   if (!appPromise) {
-    appPromise = createStandardPublicClientApplication({
-      auth: {
-        clientId: CLIENT_ID!,
-        authority: `https://login.microsoftonline.com/${TENANT_ID}`,
-        redirectUri: window.location.origin,
-      },
-      cache: { cacheLocation: 'sessionStorage' },
-    }).then(async (app) => {
-      // Completa un eventuale redirect di login in corso e fissa l'account attivo.
-      const result = await app.handleRedirectPromise().catch(() => null);
-      const account = result?.account ?? app.getActiveAccount() ?? app.getAllAccounts()[0] ?? null;
-      if (account) app.setActiveAccount(account);
-      return app;
-    });
+    // La libreria MSAL si scarica solo quando l'accesso Entra viene davvero usato.
+    appPromise = import('@azure/msal-browser')
+      .then(({ createStandardPublicClientApplication }) =>
+        createStandardPublicClientApplication({
+          auth: {
+            clientId: CLIENT_ID!,
+            authority: `https://login.microsoftonline.com/${TENANT_ID}`,
+            redirectUri: window.location.origin,
+          },
+          cache: { cacheLocation: 'sessionStorage' },
+        }),
+      )
+      .then(async (app) => {
+        // Completa un eventuale redirect di login in corso e fissa l'account attivo.
+        const result = await app.handleRedirectPromise().catch(() => null);
+        const account =
+          result?.account ?? app.getActiveAccount() ?? app.getAllAccounts()[0] ?? null;
+        if (account) app.setActiveAccount(account);
+        return app;
+      })
+      .catch((error) => {
+        // Download o avvio falliti: il prossimo tentativo riparte da capo, non resta bloccato.
+        appPromise = null;
+        throw error;
+      });
   }
   return appPromise;
 }
