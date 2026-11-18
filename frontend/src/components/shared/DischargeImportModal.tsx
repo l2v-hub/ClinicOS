@@ -4,7 +4,7 @@ import { getCurrentOperator } from '../../lib/operatorSession';
 import { useRecencyClock } from '../../lib/useRecencyClock';
 import { ConfirmDialog } from './ConfirmDialog';
 import { AccessibleDialogSurface } from './AccessibleDialogSurface';
-import { getDraft } from './intake/intakeDraftApi';
+import { abandonDraft, getDraft } from './intake/intakeDraftApi';
 import { IntakeWorkspace } from './intake/IntakeWorkspace';
 import { ImportDocumentsWorkspace } from './import/ImportDocumentsWorkspace';
 import { ImportReviewWorkspace } from './import/ImportReviewWorkspace';
@@ -65,6 +65,10 @@ function ImportSession({
   const [opening, setOpening] = useState(true);
   const [attempt, setAttempt] = useState(0);
   const [terminal, setTerminal] = useState(false);
+  // «Riprendi bozza» su una bozza i cui documenti non esistono più: l'operatore ha scelto di
+  // eliminarla e ripetere l'importazione. Da qui la finestra lavora su una sessione nuova.
+  const [draftReplaced, setDraftReplaced] = useState(false);
+  const resumeDraftId = draftReplaced ? undefined : initialDraftId;
   const [creation, setCreation] = useState<'pending' | 'created' | null>(null);
   const [retryMutation, setRetryMutation] = useState<(() => Promise<ImportJob>) | null>(null);
   const active = useRef(true);
@@ -178,8 +182,8 @@ function ImportSession({
   useEffect(() => {
     let alive = true;
     let sessionRead = true;
-    const opening = initialDraftId
-      ? getDraft(initialDraftId, actor).then((draft) => {
+    const opening = resumeDraftId
+      ? getDraft(resumeDraftId, actor).then((draft) => {
           if (!draft.importJobId) throw new Error('La bozza non ha un documento collegato.');
           if (draft.status !== 'draft') throw new Error('Questa bozza è già stata confermata.');
           return api.get(draft.importJobId);
@@ -222,7 +226,7 @@ function ImportSession({
     api,
     actor.operatorId,
     actor.operatorRole,
-    initialDraftId,
+    resumeDraftId,
     attempt,
     updateJob,
     invalidateSession,
@@ -431,7 +435,11 @@ function ImportSession({
       {navigationNotice && <p role="alert">{navigationNotice}</p>}
       {error && (
         <div className="import-modal__error" role="alert">
-          <p>{error}</p>
+          <p>
+            {terminal && resumeDraftId
+              ? 'I documenti di questa bozza non sono più disponibili: la bozza non può essere ripresa né completata. Per proseguire con questo paziente eliminala e ripeti l’importazione; i dati inseriti a mano nella bozza andranno reinseriti.'
+              : error}
+          </p>
           {retryMutation && (
             <button
               className="btn-secondary"
@@ -446,16 +454,36 @@ function ImportSession({
             (terminal ? (
               <button
                 className="btn-primary"
+                disabled={busy}
                 onClick={() => {
-                  importSessionMemory.clear(actor);
-                  setTerminal(false);
-                  setCreation('pending');
-                  setOpening(true);
-                  setError('');
-                  setAttempt((value) => value + 1);
+                  const restart = () => {
+                    importSessionMemory.clear(actor);
+                    setTerminal(false);
+                    setCreation('pending');
+                    setOpening(true);
+                    setError('');
+                    setAttempt((value) => value + 1);
+                  };
+                  if (!resumeDraftId) return restart();
+                  // Una sola bozza per paziente: la nuova importazione SOSTITUISCE questa bozza,
+                  // non le si affianca. È un gesto esplicito dell'operatore (etichetta del tasto).
+                  setBusy(true);
+                  void abandonDraft(resumeDraftId, actor)
+                    .then(() => {
+                      setDraftReplaced(true);
+                      restart();
+                    })
+                    .catch((e: unknown) =>
+                      setError(e instanceof Error ? e.message : 'Impossibile eliminare la bozza.'),
+                    )
+                    .finally(() => {
+                      if (active.current) setBusy(false);
+                    });
                 }}
               >
-                Nuova importazione
+                {resumeDraftId
+                  ? 'Elimina questa bozza e ripeti l’importazione'
+                  : 'Nuova importazione'}
               </button>
             ) : (
               <button

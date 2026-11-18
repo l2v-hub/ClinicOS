@@ -1,4 +1,5 @@
 import { openManualDraft, clearManualDraft } from './intakeDraftSession';
+import { isBlankDraftData } from './draftList';
 import { intakeDemographicErrors } from '../../../lib/intakeDemographics';
 import { useEffect, useRef, useState } from 'react';
 import { birthDateValue, type DemographicField } from '../../../lib/patientDemographics';
@@ -110,6 +111,8 @@ interface IntakeWorkspaceProps {
   operatorRole?: string;
   /** When set, skip createDraft and load this existing import draft prefilled at step 3. */
   importDraftId?: string;
+  /** «Riprendi bozza» di un ingresso a mano: apre questa bozza invece di una nuova. */
+  manualDraftId?: string;
   /** When provided, return to the import review from the footer. */
   onBackToDocuments?: () => void;
   /** Authenticated original remains available after import review handoff. */
@@ -128,6 +131,7 @@ export function IntakeWorkspace({
   operatorId,
   operatorRole,
   importDraftId,
+  manualDraftId,
   onBackToDocuments,
   importDocuments,
 }: IntakeWorkspaceProps) {
@@ -213,9 +217,10 @@ export function IntakeWorkspace({
         // the queue and payload now; a later workspace must not replace either.
         const queue = saveQueueRef.current;
         const latest = dataRef.current;
-        if (queue) void queue.save(latest).catch(() => {
-          // Unmounted UI cannot display an error; leave the existing draft intact.
-        });
+        if (queue)
+          void queue.save(latest).catch(() => {
+            // Unmounted UI cannot display an error; leave the existing draft intact.
+          });
       }
     },
     [],
@@ -258,7 +263,7 @@ export function IntakeWorkspace({
     setError(null);
     const request = importDraftId
       ? getDraft(importDraftId, { operatorId, operatorRole })
-      : openManualDraft({ operatorId, operatorRole });
+      : openManualDraft({ operatorId, operatorRole }, manualDraftId);
     request
       .then((draft) => {
         if (!active) return;
@@ -293,7 +298,7 @@ export function IntakeWorkspace({
     return () => {
       active = false;
     };
-  }, [open, draftId, importDraftId, operatorId, operatorRole, openingAttempt]);
+  }, [open, draftId, importDraftId, manualDraftId, operatorId, operatorRole, openingAttempt]);
 
   // The asynchronous draft loads after the dialog's initial focus pass. Focus
   // Name once, without stealing focus on autosave or subsequent field updates.
@@ -823,6 +828,11 @@ export function IntakeWorkspace({
       }
       await persistDraft(data);
       setSaveState('saved');
+      // Bozza con dati salvata e chiusa: resta nell'elenco «Ingressi in bozza» (Riprendi) e il
+      // prossimo «Nuovo ingresso a mano» parte da una scheda vuota, non dai dati di questo
+      // paziente. Una bozza ancora vuota resta quella della scheda: non se ne accumulano altre.
+      if (!importDraftId && close === onClose && !isBlankDraftData(dataRef.current))
+        clearManualDraft(op);
       close();
       return true;
     } catch (e) {

@@ -21,6 +21,8 @@ import {
 } from '../ai/upload/pages/draft-mutations.js';
 import { saveReceipt } from '../ai/upload/pages/repository.js';
 import { sexFromCodiceFiscale } from '../lib/codice-fiscale.js';
+import { cancelPages } from '../ai/upload/pages/lifecycle.js';
+import { duplicateOfIds } from './draft-identity.js';
 
 // ── Allergene sanitation (import seeding) ────────────────────────────────────
 // CLINICAL SAFETY: an `allergene` is a CONCISE allergen name, never a clinical narrative. Real
@@ -121,7 +123,9 @@ export async function patchDraft(id: string, rawPatch: Record<string, unknown>) 
     if (current.status !== 'draft')
       throw new AiExtractionError(
         'config',
-        'La bozza è già confermata e non può essere modificata',
+        current.status === 'abandoned'
+          ? 'La bozza è stata eliminata e non può essere modificata'
+          : 'La bozza è già confermata e non può essere modificata',
       );
     let existingData = (current.data ?? {}) as Record<string, unknown>;
     const pageSession = !!existingData._importSource;
@@ -200,14 +204,67 @@ export async function patchDraft(id: string, rawPatch: Record<string, unknown>) 
   });
 }
 
+/**
+ * Bozze aperte dell'operatore, dalla più recente. Ogni riga porta `duplicateOfId`: l'id della bozza
+ * più recente dello stesso paziente (identità forte) o null — così ogni client mostra una sola
+ * voce per paziente senza reinventare il confronto.
+ */
 export async function listDrafts(createdById?: string) {
-  return prisma.patientIntakeDraft.findMany({
+  const drafts = await prisma.patientIntakeDraft.findMany({
     where: {
       status: 'draft',
       ...(createdById ? { createdById } : {}),
     },
     orderBy: { updatedAt: 'desc' },
   });
+  const duplicates = duplicateOfIds(drafts);
+  return drafts.map((draft) => ({ ...draft, duplicateOfId: duplicates.get(draft.id) ?? null }));
+}
+
+const PAGE_SESSION_CLOSED = ['confirmed', 'cancelled', 'expired'];
+
+/**
+ * Archivia una bozza aperta (stato `abandoned`: esce dagli elenchi, la riga resta a DB).
+ * La sessione documenti collegata, se è una sessione a pagine ancora aperta, viene annullata:
+ * i suoi file temporanei non devono sopravvivere alla bozza che li usava.
+ */
+export async function abandonDraft(id: string) {
+  const archived = await prisma.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT "id" FROM "PatientIntakeDraft" WHERE "id" = ${id} FOR UPDATE`;
+    const draft = await tx.patientIntakeDraft.findUnique({ where: { id } });
+    if (!draft) throw new AiExtractionError('not_found', 'Bozza non trovata');
+    if (draft.status === 'abandoned') return draft;
+    if (draft.status !== 'draft')
+      throw new AiExtractionError(
+        'config',
+        'La bozza è già confermata: il paziente esiste e non può essere eliminata',
+      );
+    return tx.patientIntakeDraft.update({
+      where: { id },
+      data: { status: 'abandoned', version: { increment: 1 } },
+    });
+  });
+  if (archived.importJobId) {
+    const job = await prisma.importJob.findUnique({
+      where: { id: archived.importJobId },
+      select: { status: true, manifest: true, createdPatientId: true },
+    });
+    if (
+      job &&
+      !job.createdPatientId &&
+      object(job.manifest).version === 1 &&
+      !PAGE_SESSION_CLOSED.includes(job.status)
+    ) {
+      // Best effort: la bozza è già archiviata; una sessione rimasta aperta scade comunque da sola.
+      await cancelPages(archived.importJobId).catch((error) =>
+        console.error(
+          'abandonDraft: session cancel failed:',
+          error instanceof Error ? error.name : 'unknown',
+        ),
+      );
+    }
+  }
+  return archived;
 }
 
 // ── F5 #124 — seed an intake draft from a finished AI extraction job ──────────
@@ -365,6 +422,11 @@ export async function seedDraftFromImport(jobId: string, opts: SeedDraftFromImpo
           ? canAccessOwnedResource(opts.actor, existing.createdById)
           : (existing.createdById ?? null) === (opts.createdById ?? null);
         if (!allowed) throw new AiExtractionError('not_found', 'Bozza non trovata');
+        if (existing.status === 'abandoned')
+          throw new AiExtractionError(
+            'config',
+            'La bozza di questi documenti è stata eliminata: avvia una nuova importazione.',
+          );
         if (pageResult) assertDraftSource(object(existing.data), pageResult);
         return existing.status === 'draft' && !pageResult
           ? {

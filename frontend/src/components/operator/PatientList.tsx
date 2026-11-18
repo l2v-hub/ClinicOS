@@ -1,10 +1,17 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { listDrafts, type DraftResponse } from '../shared/intake/intakeDraftApi';
+import { abandonDraft, listDrafts, type DraftResponse } from '../shared/intake/intakeDraftApi';
+import {
+  draftPatientName,
+  draftResumePath,
+  draftUpdatedLabel,
+  groupDrafts,
+} from '../shared/intake/draftList';
+import { forgetManualDraft } from '../shared/intake/intakeDraftSession';
 import { API_URL } from '../../config';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { useAnomalieReparto } from './cartella/useAnomalieReparto';
 import type { Paziente } from '../../types';
-import { IcoSearch, IcoX, IcoPlus, IcoUser } from '../../icons';
+import { IcoSearch, IcoX, IcoPlus, IcoUser, IcoTrash } from '../../icons';
 import { usePatientListPage } from './usePatientListPage';
 import { PageHeader } from '../shared/PageHeader';
 import { AIImportStatus } from '../shared/AIImportStatus';
@@ -130,7 +137,7 @@ export function PatientList({
     void listDrafts({ operatorId, operatorRole })
       .then((items) => {
         if (active) {
-          setDrafts(items.filter((draft) => draft.source === 'import'));
+          setDrafts(items);
           setDraftError(false);
         }
       })
@@ -141,6 +148,36 @@ export function PatientList({
       active = false;
     };
   }, [canIntake, operatorId, operatorRole, newPatientPath, draftRefresh]);
+  // Una voce per paziente: la bozza più recente, con le precedenti dello stesso paziente sotto.
+  const draftGroups = useMemo(() => groupDrafts(drafts), [drafts]);
+  const [draftToDelete, setDraftToDelete] = useState<DraftResponse | null>(null);
+  const [deletingDraft, setDeletingDraft] = useState(false);
+  const [draftDeleteError, setDraftDeleteError] = useState('');
+  function resumeDraft(draft: DraftResponse) {
+    setResumeDraftId(draft.id);
+    setNewPatientPath(draftResumePath(draft));
+  }
+  async function confirmDeleteDraft() {
+    if (!draftToDelete || deletingDraft) return;
+    setDeletingDraft(true);
+    setDraftDeleteError('');
+    try {
+      await abandonDraft(draftToDelete.id, { operatorId, operatorRole });
+      // La scheda non deve riaprire la bozza appena eliminata al prossimo «Nuovo ingresso a mano».
+      forgetManualDraft({ operatorId, operatorRole }, draftToDelete.id);
+      setDrafts((current) => current.filter((draft) => draft.id !== draftToDelete.id));
+      setDraftToDelete(null);
+      setDraftRefresh((value) => value + 1);
+      // Il pulsante che ha aperto la conferma non esiste più: il fuoco va a un punto stabile.
+      window.requestAnimationFrame(() => newIntakeButtonRef.current?.focus());
+    } catch (error) {
+      setDraftDeleteError(
+        error instanceof Error ? error.message : 'Impossibile eliminare la bozza. Riprova.',
+      );
+    } finally {
+      setDeletingDraft(false);
+    }
+  }
   const newIntakeButtonRef = useRef<HTMLButtonElement>(null);
   const focusNewIntakeRef = useRef(false);
   useEffect(() => {
@@ -346,6 +383,7 @@ export function PatientList({
           <div className="plist-new__actions">
             <AIImportStatus
               onImported={handleImported}
+              onClosed={() => setDraftRefresh((value) => value + 1)}
               operatorId={operatorId}
               operatorRole={operatorRole}
             />
@@ -406,8 +444,8 @@ export function PatientList({
         </p>
       )}
 
-      {canIntake && (drafts.length > 0 || draftError) && (
-        <section className="plist-card" aria-label="Ingressi in bozza">
+      {canIntake && (draftGroups.length > 0 || draftError) && (
+        <section className="plist-card plist-drafts" aria-label="Ingressi in bozza">
           <h2>Ingressi in bozza · dati da completare</h2>
           {draftError ? (
             <p role="alert">
@@ -417,30 +455,86 @@ export function PatientList({
               </button>
             </p>
           ) : (
-            drafts.map((draft) => {
-              const identity = (draft.data.anagrafica ?? {}) as {
-                firstName?: string;
-                lastName?: string;
-              };
-              return (
-                <button
-                  key={draft.id}
-                  type="button"
-                  className="ds-btn ds-btn--secondary"
-                  onClick={() => {
-                    setResumeDraftId(draft.id);
-                    setNewPatientPath('documenti');
-                  }}
-                >
-                  Riprendi bozza ·{' '}
-                  {[identity.lastName, identity.firstName].filter(Boolean).join(' ') ||
-                    'Identità da completare'}
-                </button>
-              );
-            })
+            <ul className="plist-drafts__list">
+              {draftGroups.map(({ primary, older }) => {
+                const name = draftPatientName(primary);
+                const row = (draft: DraftResponse, previous: boolean) => (
+                  <div className="plist-draft__row">
+                    <button
+                      type="button"
+                      className="ds-btn ds-btn--secondary ds-btn--wrap plist-draft__resume"
+                      onClick={() => resumeDraft(draft)}
+                    >
+                      {previous ? 'Riprendi bozza precedente' : `Riprendi bozza · ${name}`}
+                    </button>
+                    <span className="plist-draft__meta">
+                      {draftResumePath(draft) === 'documenti' ? 'Da documenti' : 'A mano'}
+                      {draftUpdatedLabel(draft) && ` · aggiornata ${draftUpdatedLabel(draft)}`}
+                    </span>
+                    <button
+                      type="button"
+                      className="ds-icon-btn plist-draft__delete"
+                      aria-label={`Elimina la bozza${previous ? ' precedente' : ''} di ${name}`}
+                      title="Elimina bozza"
+                      onClick={() => {
+                        setDraftDeleteError('');
+                        setDraftToDelete(draft);
+                      }}
+                    >
+                      <IcoTrash />
+                    </button>
+                  </div>
+                );
+                return (
+                  <li key={primary.id} className="plist-draft" data-draft-id={primary.id}>
+                    {row(primary, false)}
+                    {older.length > 0 && (
+                      <details className="plist-draft__older">
+                        <summary>
+                          {older.length === 1
+                            ? '1 bozza precedente dello stesso paziente'
+                            : `${older.length} bozze precedenti dello stesso paziente`}
+                        </summary>
+                        <p className="plist-draft__hint">
+                          La bozza qui sopra è la più recente. Le precedenti restano qui finché non
+                          le riprendi o le elimini.
+                        </p>
+                        {older.map((draft) => (
+                          <div key={draft.id} data-draft-id={draft.id}>
+                            {row(draft, true)}
+                          </div>
+                        ))}
+                      </details>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
           )}
         </section>
       )}
+
+      <ConfirmDialog
+        open={draftToDelete !== null}
+        title="Eliminare la bozza?"
+        message={
+          <>
+            La bozza di <strong>{draftToDelete ? draftPatientName(draftToDelete) : ''}</strong> e i
+            documenti caricati al suo interno non saranno più disponibili. Nessun paziente viene
+            creato o modificato.
+            {draftDeleteError && (
+              <span role="alert" className="plist-draft__error">
+                {' '}
+                {draftDeleteError}
+              </span>
+            )}
+          </>
+        }
+        confirmLabel="Elimina bozza"
+        busy={deletingDraft}
+        onConfirm={() => void confirmDeleteDraft()}
+        onCancel={() => setDraftToDelete(null)}
+      />
 
       <section className="plist-card plist-list" aria-label="Elenco pazienti">
         <div className="plist-toolbar">

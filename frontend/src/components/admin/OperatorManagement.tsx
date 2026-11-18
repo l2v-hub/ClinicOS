@@ -8,6 +8,7 @@ import { TableFilters } from '../shared/TableFilters';
 import type { TableFilterField } from '../shared/TableFilters';
 import { OperatorFormPanel } from './OperatorFormPanel';
 import { RosterDefaultsPanel } from './RosterDefaultsPanel';
+import { PageHeader } from '../shared/PageHeader';
 import { EMPTY_OPERATOR_FORM, operatorProfileUpdate } from './operatorFormModel';
 import {
   OPERATOR_ROLE_EXPLANATION,
@@ -238,25 +239,22 @@ export function OperatorManagement({
 
   return (
     <div className="op-management">
-      <div className="view-header">
-        <div>
-          <h2 className="view-header__title">Gestione Operatori</h2>
-          <p className="view-header__sub">
-            {summary?.active ?? operatori.filter((o) => o.stato === 'attivo').length} attivi su{' '}
-            {summary?.total ?? operatori.length} totali
-          </p>
-        </div>
-        <button
-          className="btn-success"
-          onClick={apriNuovo}
-          aria-expanded={formAperto}
-          aria-controls="operator-form-panel"
-        >
-          <IcoPlus /> Nuovo Operatore
-        </button>
-      </div>
+      <PageHeader
+        title="Gestione Operatori"
+        subtitle={`${summary?.active ?? operatori.filter((o) => o.stato === 'attivo').length} attivi su ${summary?.total ?? operatori.length} totali`}
+        actions={
+          <button
+            className="btn-success"
+            onClick={apriNuovo}
+            aria-expanded={formAperto}
+            aria-controls="operator-form-panel"
+          >
+            <IcoPlus /> Nuovo Operatore
+          </button>
+        }
+      />
 
-      <p className="view-header__sub">{OPERATOR_ROLE_EXPLANATION}</p>
+      <p className="page-lead">{OPERATOR_ROLE_EXPLANATION}</p>
       <RosterDefaultsPanel />
       {/* Form */}
       {formAperto && (

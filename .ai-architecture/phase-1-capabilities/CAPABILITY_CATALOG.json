@@ -2406,7 +2406,7 @@
       "sensitivity": "low",
       "risk": "solo sviluppo",
       "agno_integration": "none",
-      "files": ["backend/src/routes/patients.ts"],
+      "files": ["backend/src/routes/patients.ts", "backend/src/synthetic/demo-patient.ts"],
       "technical_state": "GAP",
       "rationale": "Fixture di sviluppo (~600 righe inline).",
       "gap": {
@@ -2636,7 +2636,7 @@
       "description": "Feed unificato del diario (voci di diario + consegne visibili), paginato keyset con filtri authorType/from/to/limit/cursor.",
       "type": "read",
       "feature_ui": "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx, frontend/src/lib/diaryPages.ts, frontend/src/lib/patientDetailPrefetch.ts, PatientRecordPrintDialog.tsx",
-      "entry_point": "GET /patients/diary-unread-count, GET /patients/:patientId/diary, POST /patients/:patientId/diary/:entryId/ack (explicit purpose read confirms any diary note; default takes charge of an urgent entry; first non-author receipt is shared; author gets 409)",
+      "entry_point": "GET /patients/diary-unread-count, GET /patients/diary-unread, GET /patients/diary-unread-patient-counts, GET /patients/:patientId/diary, POST /patients/:patientId/diary/:entryId/ack (explicit purpose read confirms any diary note; default takes charge of an urgent entry; first non-author receipt is shared; author gets 409)",
       "services": [
         "backend/src/patients/diary-read-service.ts#loadPatientDiary",
         "backend/src/patients/diary-ack-service.ts#acknowledgeDiaryEntry"
@@ -4816,14 +4816,15 @@
     {
       "capability_id": "intake.update_draft",
       "name": "Bozze ingresso — autosalvataggio",
-      "description": "Shallow-merge delle sezioni nel data della bozza (chiavi server-owned scartate, campi import immutabili, versioning per bozze collegate a sessioni pagine).",
+      "description": "Shallow-merge delle sezioni nel data della bozza (chiavi server-owned scartate, campi import immutabili, versioning per bozze collegate a sessioni pagine). Solo sulla rotta HTTP: il solo corpo {status:'abandoned'} archivia la bozza («Elimina bozza») e annulla la sessione documenti ancora aperta; il tool omonimo resta il puro autosalvataggio.",
       "domain": "intake",
       "type": "write",
       "feature_ui": "frontend/src/components/shared/intake/intakeDraftApi.ts (patchDraft)",
       "entry_point": "PATCH /intake/drafts/:id (backend/src/routes/intake-drafts.ts:119)",
       "services": [
         "backend/src/ai/ownership.ts#loadIntakeDraftOwner",
-        "backend/src/intake/draft-service.ts#patchDraft"
+        "backend/src/intake/draft-service.ts#patchDraft",
+        "backend/src/intake/draft-service.ts#abandonDraft"
       ],
       "input": "draftId, body = partial draft data (+expectedDraftVersion/requestId for linked drafts)",
       "output": "updated PatientIntakeDraft",
@@ -4832,7 +4833,8 @@
       ],
       "side_effects": [
         "PatientIntakeDraft update (version++)",
-        "ImportJob expiresAt renew / receipt when page-linked"
+        "ImportJob expiresAt renew / receipt when page-linked",
+        "PatientIntakeDraft status=abandoned + cancel sessione pagine (solo con body {status:'abandoned'})"
       ],
       "dependencies": ["prisma"],
       "sensitivity": "high",
@@ -7524,6 +7526,118 @@
       "legacy_roles": [],
       "patient_scoped": false,
       "idempotency": "natural",
+      "test": null
+    },
+    {
+      "capability_id": "synthetic_data.status",
+      "name": "Dati sintetici — stato",
+      "description": "Stato dell'API dei dati sintetici: abilitata o no per l'ambiente, tier e conteggi correnti.",
+      "domain": "dev",
+      "type": "read",
+      "feature_ui": null,
+      "entry_point": "GET /admin/synthetic-data (backend/src/routes/admin-synthetic-data.ts)",
+      "services": ["backend/src/synthetic/index.ts"],
+      "input": "-",
+      "output": "{enabled, tier, reason, confirmation, counts}",
+      "validations": ["requireRole admin|manager"],
+      "side_effects": [],
+      "dependencies": ["prisma"],
+      "sensitivity": "low",
+      "risk": "solo conteggi, nessun dato clinico",
+      "agno_integration": "none",
+      "tool_candidate": null,
+      "files": ["backend/src/routes/admin-synthetic-data.ts", "backend/src/synthetic/index.ts"],
+      "technical_state": "GAP",
+      "rationale": "Strumento di prova: deliberatamente non esposto come tool né all'assistente.",
+      "gap": {
+        "cause": "Dev/demo-only",
+        "minimal_change": "Nessuno",
+        "files": ["backend/src/routes/admin-synthetic-data.ts"],
+        "regression_risk": "low"
+      },
+      "exposure": "DEV_ONLY",
+      "invocability": "DISCOVERED",
+      "legacy_roles": ["admin", "manager"],
+      "patient_scoped": false,
+      "idempotency": "none",
+      "test": null
+    },
+    {
+      "capability_id": "synthetic_data.seed",
+      "name": "Dati sintetici — crea dataset di prova",
+      "description": "Crea o aggiorna in modo idempotente il dataset sintetico (operatori, pazienti con cartella, camere, terapie, agenda, consegne, diario, parametri, note, orari, una bozza).",
+      "domain": "dev",
+      "type": "action",
+      "feature_ui": null,
+      "entry_point": "POST /admin/synthetic-data/seed (backend/src/routes/admin-synthetic-data.ts)",
+      "services": ["backend/src/synthetic/index.ts"],
+      "input": "-",
+      "output": "{status, demoPatientId, counts}",
+      "validations": [
+        "requireRole admin|manager",
+        "syntheticDataAvailability (mai produzione reale; demo solo con dataset sintetico; staging solo con flag)"
+      ],
+      "side_effects": ["upsert del dataset SEED-*"],
+      "dependencies": ["prisma"],
+      "sensitivity": "low",
+      "risk": "scrive dati inventati; rifiutato in produzione reale",
+      "agno_integration": "none",
+      "tool_candidate": null,
+      "files": ["backend/src/routes/admin-synthetic-data.ts", "backend/src/synthetic/index.ts"],
+      "technical_state": "GAP",
+      "rationale": "Strumento di prova: deliberatamente non esposto come tool né all'assistente.",
+      "gap": {
+        "cause": "Dev/demo-only",
+        "minimal_change": "Nessuno",
+        "files": ["backend/src/routes/admin-synthetic-data.ts"],
+        "regression_risk": "low"
+      },
+      "exposure": "DEV_ONLY",
+      "invocability": "DISCOVERED",
+      "legacy_roles": ["admin", "manager"],
+      "patient_scoped": false,
+      "idempotency": "none",
+      "test": null
+    },
+    {
+      "capability_id": "synthetic_data.wipe",
+      "name": "Dati sintetici — svuota il sistema",
+      "description": "Elimina tutti i dati operativi (pazienti e dati collegati, agenda, consegne, note, bozze, import, camere, orari). Conserva identità, policy, anagrafica farmaci e audit.",
+      "domain": "dev",
+      "type": "action",
+      "feature_ui": null,
+      "entry_point": "POST /admin/synthetic-data/wipe (backend/src/routes/admin-synthetic-data.ts)",
+      "services": ["backend/src/synthetic/index.ts"],
+      "input": "body {confirm: 'CANCELLA TUTTO'}",
+      "output": "{status, deleted, totalDeleted, counts}",
+      "validations": [
+        "requireRole admin|manager",
+        "syntheticDataAvailability (mai produzione reale; demo solo con dataset sintetico; staging solo con flag)",
+        "frase di conferma obbligatoria"
+      ],
+      "side_effects": [
+        "TRUNCATE delle tabelle operative (trigger append-only sospesi nella transazione)",
+        "rimozione file temporanei degli import"
+      ],
+      "dependencies": ["prisma"],
+      "sensitivity": "critical",
+      "risk": "distruttivo e irreversibile; rifiutato in produzione reale",
+      "agno_integration": "none",
+      "tool_candidate": null,
+      "files": ["backend/src/routes/admin-synthetic-data.ts", "backend/src/synthetic/index.ts"],
+      "technical_state": "GAP",
+      "rationale": "Strumento di prova: deliberatamente non esposto come tool né all'assistente.",
+      "gap": {
+        "cause": "Dev/demo-only",
+        "minimal_change": "Nessuno",
+        "files": ["backend/src/routes/admin-synthetic-data.ts"],
+        "regression_risk": "low"
+      },
+      "exposure": "DEV_ONLY",
+      "invocability": "DISCOVERED",
+      "legacy_roles": ["admin", "manager"],
+      "patient_scoped": false,
+      "idempotency": "none",
       "test": null
     }
   ]

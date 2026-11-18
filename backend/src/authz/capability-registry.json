@@ -3527,6 +3527,60 @@
           "path": "/ai/voice/stt"
         }
       ]
+    },
+    {
+      "id": "synthetic_data.status",
+      "name": "Dati sintetici — stato",
+      "domain": "dev",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "DEV_ONLY",
+      "technicalState": "GAP",
+      "legacyRoles": ["admin", "manager"],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/admin/synthetic-data"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_data.seed",
+      "name": "Dati sintetici — crea dataset di prova",
+      "domain": "dev",
+      "type": "action",
+      "sensitivity": "low",
+      "exposure": "DEV_ONLY",
+      "technicalState": "GAP",
+      "legacyRoles": ["admin", "manager"],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/admin/synthetic-data/seed"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_data.wipe",
+      "name": "Dati sintetici — svuota il sistema",
+      "domain": "dev",
+      "type": "action",
+      "sensitivity": "critical",
+      "exposure": "DEV_ONLY",
+      "technicalState": "GAP",
+      "legacyRoles": ["admin", "manager"],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/admin/synthetic-data/wipe"
+        }
+      ]
     }
   ]
 }

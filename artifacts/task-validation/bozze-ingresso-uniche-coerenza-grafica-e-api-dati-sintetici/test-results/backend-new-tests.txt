@@ -1,0 +1,33 @@
+# SYNTHETIC_DATA_DESTRUCTIVE_TESTS=1 — seed → wipe → seed su Postgres reale (database di sviluppo locale)
+# Ogni esecuzione parte da un database con un paziente estraneo al dataset. Dopo le correzioni
+# della revisione: una esecuzione in ambiente ammesso (NODE_ENV=test) e una con NODE_ENV=production,
+# dove il test si rifiuta di partire anche con l'opt-in.
+# Nota di onestà: la prima stesura del test non era rieseguibile ed è fallita alla seconda
+# esecuzione; è stata corretta (3 esecuzioni consecutive verdi prima della revisione).
+ok 1 - seed idempotente, wipe completo anche sulle tabelle append-only, nuovo seed # pass 1 # fail 0 
+ok 1 - seed idempotente, wipe completo anche sulle tabelle append-only, nuovo seed # SKIP ambiente non ammesso (production): Non disponibile in produzione
+
+# Guardie e bozze (non distruttive), dopo le correzioni della revisione
+ok - draftIdentityKey: solo identità forte (CF valido oppure cognome+nome+data di nascita)
+ok - duplicateOfIds: la più recente è la principale; il proprietario fa parte della chiave
+ok - listDrafts segnala i doppioni dello stesso paziente con duplicateOfId
+ok - abandonDraft archivia senza cancellare, è idempotente e rifiuta le bozze confermate
+ok - syntheticDataAvailability: fail closed — serve una dichiarazione esplicita dell’ambiente
+ok - ogni tabella dello schema è dichiarata: svuotata oppure conservata, mai dimenticata
+ok - identità e ruolo: anonimo 401, ruolo clinico 403, amministratore 200
+ok - wipe: senza la frase di conferma esatta non viene eliminato nulla
+ok - ambiente non ammesso: seed e wipe confermato rispondono 403 e non toccano i dati
+# pass 9 — fail 0
+
+# Directory backend toccate (authz, tools, intake, synthetic, rooms, routes) su database isolato,
+# dopo le correzioni: 510 test, 483 pass, 26 fail, 1 skip. I 26 falliti sono tutti nell'elenco dei
+# fallimenti di main, tranne «supervisor: rejected without explicit confirmation…»
+# (therapy-prn-confirmation), che passa in isolamento (2 esecuzioni) e passava nella suite completa:
+# instabile sotto carico, in un'area non toccata.
+
+# Seconda iterazione (la stessa scheda riaperta resta una sola bozza)
+ok - la sessione di una bozza aperta non scade; senza bozza aperta scade come prima
+ok - i documenti seguono la bozza: «Elimina bozza» li rimuove subito
+# pass 2 — fail 0
+# Cartelle backend import (src/ai/upload), intake, synthetic e test che toccano gli import, su
+# database isolato: 338 test, 325 pass, 11 fail, 2 skip — nessun fallimento che non sia già su main.

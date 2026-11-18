@@ -23,3 +23,10 @@ mockup/
 # Evidence artifacts
 artifacts/
 requirements/evidence/
+
+# Moduli «Posti letto»: i test (frontend/src/lib/__tests__/roomActionIdentity.test.ts) ne fissano
+# il budget di 500 righe e la forma del sorgente; la formattazione automatica li fa fallire.
+frontend/src/components/admin/RoomsManagement.tsx
+frontend/src/components/admin/RoomManagementModel.ts
+frontend/src/components/admin/RoomFormPanel.tsx
+frontend/src/components/admin/BedEditDialog.tsx

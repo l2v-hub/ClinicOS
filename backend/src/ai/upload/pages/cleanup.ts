@@ -47,6 +47,16 @@ export async function expirePageSessions(now = new Date()) {
         (job.status === 'processing_pages' && job.leaseExpiresAt && job.leaseExpiresAt > now)
       )
         return 0;
+      // Una sessione collegata a una bozza d'ingresso ancora aperta non scade: la bozza è l'unità
+      // di lavoro dell'operatore e deve restare riapribile e confermabile finché l'ingresso non si
+      // conclude. Senza i suoi documenti la bozza non si potrebbe più riprendere né confermare, e
+      // l'unica strada sarebbe una nuova importazione, cioè una seconda bozza dello stesso
+      // paziente. I documenti seguono la bozza: spariscono alla conferma o con «Elimina bozza».
+      const openDraft = await tx.patientIntakeDraft.findFirst({
+        where: { importJobId: job.id, status: 'draft' },
+        select: { id: true },
+      });
+      if (openDraft) return 0;
       await clearPageSession(tx, job.id, 'expired');
       return 1;
     });

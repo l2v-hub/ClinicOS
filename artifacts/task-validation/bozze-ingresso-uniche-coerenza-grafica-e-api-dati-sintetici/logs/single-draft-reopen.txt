@@ -1,0 +1,9 @@
+A0. created: open drafts=1
+A1. reopened after expiry sweep (sessions expired by sweep: 0) — phone shown on open="", saved now="3330000001" | open drafts=1 total rows=1 | session=review_ready
+A2. reopened after expiry sweep (sessions expired by sweep: 0) — phone shown on open="3330000001", saved now="3330000002" | open drafts=1 total rows=1 | session=review_ready
+A3. reopened after expiry sweep (sessions expired by sweep: 0) — phone shown on open="3330000002", saved now="3330000003" | open drafts=1 total rows=1 | session=review_ready
+A4. reopened after expiry sweep (sessions expired by sweep: 0) — phone shown on open="3330000003", saved now="3330000004" | open drafts=1 total rows=1 | session=review_ready
+A. list entries for this patient: 1 | "bozze precedenti" shown: 0
+B0. "Riaprolloa" resumed without documents -> I documenti di questa bozza non sono più disponibili: la bozza non può essere ripresa né completata. Per proseguire con questo paziente eliminala e ripeti l’importazione; i dati inseriti a mano nella bozza andranno reinseriti. | Elimina questa bozza e ripeti l’importazione
+B1. after replacing: open drafts for "Riaprolloa"=1 (rows incl. archived=2) | list entries=1
+console errors: 0 []
