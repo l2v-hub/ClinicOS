@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "source": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "deployment": "069efbfa-270d-4c7a-b23e-78804edf6aa0",
+  "runTag": "badb560158d99a81",
+  "patientId": "cmw41v3gq000u01pndoevorxy",
+  "phase": "complete",
+  "appointmentId": "cmw4452ls001j01pnewxu2vxl",
+  "handoverId": "3e27be14-36bb-4e80-ae1a-e70cf1ddf318",
+  "noteId": "cmw4454x8001m01pngf9liwb9",
+  "covered": [
+    "room-availability-discovery",
+    "operator-directory",
+    "tool-registry-discovery",
+    "appointment-readback",
+    "handover-readback",
+    "note-readback"
+  ],
+  "unverified": [
+    "bed-assignment",
+    "glucose-protocol",
+    "PRN",
+    "synthetic-administration",
+    "full-parity"
+  ],
+  "events": [
+    {
+      "phase": "appointment",
+      "status": 201,
+      "requestId": "d4e1b155-37c4-4329-bef5-50a8c5dce54d"
+    },
+    {
+      "phase": "handover",
+      "status": 201,
+      "requestId": "3e298959-a056-4cdf-9592-e9cc0ed58acd"
+    },
+    {
+      "phase": "note",
+      "status": 201,
+      "requestId": "119a5be8-fb77-4efd-aa64-f77f57ef4f8f"
+    }
+  ],
+  "cleanupUncertain": false,
+  "cleanupPhase": "logout-verified"
+}

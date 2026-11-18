@@ -1,0 +1,83 @@
+{
+  "scope": "derived-summary-not-original-receipt",
+  "originalSha256": "df2958c9a1213d84325fdba0a79eed51fa16fb225d490eff7402b99ebd929636",
+  "originalLocalRelativePath": "development-final-role-browser-verification/roles/live-result.json",
+  "status": "passed",
+  "source": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "deploymentId": "82304c48-7b14-474d-be4b-890519c7a215",
+  "profiles": [
+    {
+      "id": "SIM-ADMIN",
+      "role": "administrator",
+      "normal": {
+        "expected": 145,
+        "observed": 145,
+        "mismatched": 0
+      },
+      "tampered": {
+        "expected": 145,
+        "observed": 145,
+        "mismatched": 0
+      }
+    },
+    {
+      "id": "SIM-SUPERVISOR-1",
+      "role": "supervisor",
+      "normal": {
+        "expected": 145,
+        "observed": 145,
+        "mismatched": 0
+      },
+      "tampered": {
+        "expected": 145,
+        "observed": 145,
+        "mismatched": 0
+      }
+    },
+    {
+      "id": "SIM-DOCTOR-1",
+      "role": "doctor",
+      "normal": {
+        "expected": 145,
+        "observed": 145,
+        "mismatched": 0
+      },
+      "tampered": {
+        "expected": 145,
+        "observed": 145,
+        "mismatched": 0
+      }
+    },
+    {
+      "id": "SIM-NURSE-1",
+      "role": "nurse",
+      "normal": {
+        "expected": 145,
+        "observed": 145,
+        "mismatched": 0
+      },
+      "tampered": {
+        "expected": 145,
+        "observed": 145,
+        "mismatched": 0
+      }
+    },
+    {
+      "id": "SIM-OSS-1",
+      "role": "oss",
+      "normal": {
+        "expected": 145,
+        "observed": 145,
+        "mismatched": 0
+      },
+      "tampered": {
+        "expected": 145,
+        "observed": 145,
+        "mismatched": 0
+      }
+    }
+  ],
+  "cleanupUncertain": false,
+  "unknownCapabilities": 0,
+  "skippedProfiles": 0
+}

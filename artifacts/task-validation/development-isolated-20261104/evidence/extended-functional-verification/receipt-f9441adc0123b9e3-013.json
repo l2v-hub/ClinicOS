@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "source": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "deployment": "069efbfa-270d-4c7a-b23e-78804edf6aa0",
+  "patientId": "cmw41v3gq000u01pndoevorxy",
+  "runTag": "f9441adc0123b9e3",
+  "phase": "complete",
+  "therapyId": "cmw43is7v001g01pnuvdnvztb",
+  "cleanupUncertain": false,
+  "covered": [
+    "chart-admission-readback",
+    "parameters-readback",
+    "therapy-readback"
+  ],
+  "unverified": [
+    "appointments",
+    "voice",
+    "OCR",
+    "AI",
+    "full-parity"
+  ],
+  "events": [
+    {
+      "phase": "chart",
+      "status": 200,
+      "requestId": "80a1a29b-82c3-4bfb-8a68-505ce61a8f5d"
+    },
+    {
+      "phase": "parameters",
+      "status": 200,
+      "requestId": "87e2f51d-d505-49a7-be66-a96ce1d0acd3"
+    },
+    {
+      "phase": "therapy",
+      "status": 201,
+      "requestId": "d63d77b8-1699-4666-baf3-34a3f3040e26"
+    }
+  ],
+  "syntheticTherapyConfirmation": "operator-intent-required",
+  "cleanupPhase": "logout-verified"
+}

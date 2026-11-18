@@ -1,0 +1,100 @@
+### test_openai_stt_contract.py
+test_current_model_uses_languages_array_not_legacy_language (test_openai_stt_contract.OpenAITranscriptionContractTests.test_current_model_uses_languages_array_not_legacy_language) ... ok
+test_legacy_models_keep_singular_language (test_openai_stt_contract.OpenAITranscriptionContractTests.test_legacy_models_keep_singular_language) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.011s
+
+OK
+
+exit=0
+### test_voice_stt.py
+test_google_request_shape_and_no_speech_marker (test_voice_stt.SttAdapterTests.test_google_request_shape_and_no_speech_marker) ... ok
+test_invalid_audio (test_voice_stt.SttAdapterTests.test_invalid_audio) ... ok
+test_mock_returns_empty_transcript_never_invents (test_voice_stt.SttAdapterTests.test_mock_returns_empty_transcript_never_invents) ... ok
+test_not_configured (test_voice_stt.SttAdapterTests.test_not_configured) ... ok
+test_provider_errors_are_typed (test_voice_stt.SttAdapterTests.test_provider_errors_are_typed) ... stt provider=google model=m bytes=4 durationMs=0 outcome=timeout correlationId=-
+ok
+test_endpoint_auth_and_limits (test_voice_stt.SttEndpointTests.test_endpoint_auth_and_limits) ... C:\w-rv\development-ai-compat-20261105\clinicos-ai-runtime\clinicos_ai\domain\contracts.py:36: UserWarning: Field name "schema" in "CreateJobRequest" shadows an attribute in parent "BaseModel"
+  class CreateJobRequest(BaseModel):
+C:\w-rv\development-ai-compat-20261105\clinicos-ai-runtime\clinicos_ai\api\app.py:88: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+C:\Users\Claudio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\fastapi\applications.py:4681: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)  # ty: ignore[deprecated]
+C:\w-rv\development-ai-compat-20261105\clinicos-ai-runtime\tests\test_voice_stt.py:118: StarletteDeprecationWarning: 'HTTP_413_REQUEST_ENTITY_TOO_LARGE' is deprecated. Use 'HTTP_413_CONTENT_TOO_LARGE' instead.
+  await voice_transcribe(FakeRequest({}, {"content-length": str(10_000_000)}),
+Executing <Task finished name='Task-27' coro=<SttEndpointTests.test_endpoint_auth_and_limits() done, defined at C:\w-rv\development-ai-compat-20261105\clinicos-ai-runtime\tests\test_voice_stt.py:87> result=None created at C:\Users\Claudio\AppData\Local\Python\pythoncore-3.14-64\Lib\asyncio\runners.py:110> took 0.461 seconds
+ok
+test_provider_non_json_is_a_typed_error (test_voice_stt.SttEndpointTests.test_provider_non_json_is_a_typed_error) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.522s
+
+OK
+
+exit=0
+### test_env_config.py
+test_1_reads_agnos_llm_provider (test_env_config.AgnosLlmTests.test_1_reads_agnos_llm_provider) ... ok
+test_2_reads_agnos_llm_model (test_env_config.AgnosLlmTests.test_2_reads_agnos_llm_model) ... ok
+test_3_azure_only_when_provider_azure_openai (test_env_config.AgnosLlmTests.test_3_azure_only_when_provider_azure_openai) ... ok
+test_3b_azure_missing_endpoint_is_clear_error (test_env_config.AgnosLlmTests.test_3b_azure_missing_endpoint_is_clear_error) ... ok
+test_8_legacy_agent_model_only_as_fallback (test_env_config.AgnosLlmTests.test_8_legacy_agent_model_only_as_fallback) ... ok
+test_9_missing_required_gives_clear_error (test_env_config.AgnosLlmTests.test_9_missing_required_gives_clear_error) ... ok
+test_5_extraction_uses_ai_extraction_model_not_agnos (test_env_config.ExtractionTests.test_5_extraction_uses_ai_extraction_model_not_agnos) ... ok
+test_6_mistral_separate_from_agnos (test_env_config.ExtractionTests.test_6_mistral_separate_from_agnos) ... ok
+test_extraction_default_provider_mistral (test_env_config.ExtractionTests.test_extraction_default_provider_mistral) ... ok
+test_health_legacy_provider_shown (test_env_config.LlmHealthTests.test_health_legacy_provider_shown) ... ok
+test_health_missing_azure_env_is_error_no_secret (test_env_config.LlmHealthTests.test_health_missing_azure_env_is_error_no_secret) ... ok
+test_health_never_exposes_secret (test_env_config.LlmHealthTests.test_health_never_exposes_secret) ... ok
+test_health_shape_azure_ok (test_env_config.LlmHealthTests.test_health_shape_azure_ok) ... ok
+test_4_ocr_uses_ai_ocr_model_not_agnos (test_env_config.OcrTests.test_4_ocr_uses_ai_ocr_model_not_agnos) ... ok
+test_7_azure_separate_from_ocr (test_env_config.OcrTests.test_7_azure_separate_from_ocr) ... ok
+test_ocr_default_provider_mistral (test_env_config.OcrTests.test_ocr_default_provider_mistral) ... ok
+test_ocr_legacy_provider_colon_model (test_env_config.OcrTests.test_ocr_legacy_provider_colon_model) ... ok
+test_normalize_azure_openai (test_env_config.ProviderAliasTests.test_normalize_azure_openai) ... ok
+test_repair_bare_model_rides_agnos_provider (test_env_config.RepairTests.test_repair_bare_model_rides_agnos_provider) ... ok
+test_repair_explicit_provider_model_kept (test_env_config.RepairTests.test_repair_explicit_provider_model_kept) ... ok
+test_repair_missing_inherits_agnos (test_env_config.RepairTests.test_repair_missing_inherits_agnos) ... ok
+test_10_no_secret_in_config_log (test_env_config.SecretSafetyTests.test_10_no_secret_in_config_log) ... ok
+test_11_no_secret_key_in_frontend (test_env_config.SecretSafetyTests.test_11_no_secret_key_in_frontend) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 11.407s
+
+OK
+
+exit=0
+### test_registry.py
+test_met_capability_ok (test_registry.CapabilityTests.test_met_capability_ok) ... ok
+test_unmet_capability_raises (test_registry.CapabilityTests.test_unmet_capability_raises) ... ok
+test_all_roles_available (test_registry.ConfigTests.test_all_roles_available) ... ok
+test_change_provider_via_env_only (test_registry.ConfigTests.test_change_provider_via_env_only) ... ok
+test_fallback_both_spellings (test_registry.ConfigTests.test_fallback_both_spellings) ... ok
+test_missing_role_model_is_error (test_registry.ConfigTests.test_missing_role_model_is_error) ... ok
+test_temperature_and_timeout_per_role_and_global (test_registry.ConfigTests.test_temperature_and_timeout_per_role_and_global) ... ok
+test_credentials_check (test_registry.RegistryTests.test_credentials_check) ... ok
+test_public_status_has_no_secrets (test_registry.RegistryTests.test_public_status_has_no_secrets) ... ok
+test_resolve_primary_then_fallback (test_registry.RegistryTests.test_resolve_primary_then_fallback) ... ok
+test_usable_specs_filters_by_credentials (test_registry.RegistryTests.test_usable_specs_filters_by_credentials) ... ok
+test_parse_openai_like (test_registry.SpecTests.test_parse_openai_like) ... ok
+test_parse_rejects_empty (test_registry.SpecTests.test_parse_rejects_empty) ... ok
+test_parse_rejects_unknown_provider (test_registry.SpecTests.test_parse_rejects_unknown_provider) ... ok
+test_parse_requires_colon (test_registry.SpecTests.test_parse_requires_colon) ... ok
+test_parse_valid (test_registry.SpecTests.test_parse_valid) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.002s
+
+OK
+
+exit=0

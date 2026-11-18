@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "phase": "complete",
+  "source": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "deployment": "82304c48-7b14-474d-be4b-890519c7a215",
+  "runTag": "6a27b2930cb43402",
+  "cleanupUncertain": false,
+  "converseOutcome": "received",
+  "modelCallsNominal": 1,
+  "modelCallCountNotHardBound": true,
+  "readingsCount": 0,
+  "measurementIdsUnchanged": true,
+  "previewVerified": true,
+  "cleanupPhase": "logout-verified"
+}

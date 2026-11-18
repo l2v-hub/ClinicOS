@@ -1,0 +1,9 @@
+# Validation report
+
+Final Decision: IMPLEMENTED NOT VERIFIED
+
+Base source: `b5e79ae7bec869af894f12ed6676547f21172db4`. The isolated source patch changes only the OpenAI STT adapter and adds a source-owned unit test. The exact model `gpt-transcribe` now emits multipart `languages[]`; other models retain singular `language`. The fake decodes the actual multipart body and checks the audio, fields, locale, JSON response and usage. The test failed on the original source and passes with the change. [OpenAI file transcription documentation](https://developers.openai.com/api/docs/guides/speech-to-text) shows `languages[]` for the current model.
+
+Final offline suite ran in separate subprocesses with a minimized environment and Python `-B`: multipart contract 2, existing voice 7, environment configuration 23 and registry 16, total 48 passed. `test-results/offline-unittest.log` is the captured output. Fake HTTP prevents network calls; marker credentials are synthetic. The independent peer found no concrete issue in the narrow source review and did not perform live calls. Before the final isolated suite, one local voice test was run with the shell environment inherited; its fake transport did not make provider calls, but implicit environment presence checks cannot be excluded. No real credential value was intentionally read or printed.
+
+No model, provider API, real audio, deployment or database was contacted. This patch alone does not prove runtime behavior, provider model entitlement, hard spending limits, STT accounting, full OCR/assistant/voice behavior or trust-root release approval. Provider activation and any bounded smoke require separate authority. The primary M checkout was not edited by this patch; a previous separate configuration analysis inadvertently generated ignored Python bytecode there, disclosed separately to the parent. At the time of these offline tests, no commit or push had been performed.

@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "source": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "deployment": "82304c48-7b14-474d-be4b-890519c7a215",
+  "runTag": "4746165f31dc651b",
+  "phase": "complete",
+  "jobId": "cmw45ju9h000701k26z4k108o",
+  "patientId": "cmw45k80v000h01k2m2no1ity",
+  "documentId": "import-cmw45juad000901k28hecuqz2",
+  "pdfSha256": "d633dc7c0d2911caabdcf7642a43bfcf0e62392cf2e91101e766bd82c0be051b",
+  "ocrIdentityVerified": true,
+  "phoneOperatorProvided": true,
+  "cleanupUncertain": false,
+  "backgroundJobMayContinue": false,
+  "nominalStableWorkerCallsMaximum": 5,
+  "workerRestartMayRepeat": true,
+  "covered": [
+    "ocr-review-identity",
+    "patient-readback",
+    "original-document-readback"
+  ],
+  "cleanupPhase": "logout-verified"
+}

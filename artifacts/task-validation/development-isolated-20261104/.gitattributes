@@ -1,0 +1,3 @@
+# Preserve original receipt bytes and their published SHA256 through Git.
+evidence/** -text
+qa/** -text

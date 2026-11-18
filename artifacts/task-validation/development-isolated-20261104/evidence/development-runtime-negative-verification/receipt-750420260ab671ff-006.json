@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "phase": "complete",
+  "source": "79346c2aa4d753c8f15d6e03c14378cc252d8c89",
+  "deploymentId": "82e468ff-ff9f-4a57-b785-81c7fa491289",
+  "imageDigest": "sha256:4993f249f6d3be35509a492a48b345acf967f5780e57627c48908fe0ead0c0d7",
+  "runTag": "750420260ab671ff",
+  "inputSha256": "ae2b9bec79148ff4f8a468bb64806393e1bcc882ddd5aee69c4f6570db745d9d",
+  "jobId": "cfec051c-0659-4e3c-b9bc-cc6b5b23f76f",
+  "attempt": 1,
+  "outcome": "failed",
+  "nominalOcrRequests": 1,
+  "providerCallsNotHardBound": true,
+  "errorKind": "invalid_request",
+  "noResult": true
+}

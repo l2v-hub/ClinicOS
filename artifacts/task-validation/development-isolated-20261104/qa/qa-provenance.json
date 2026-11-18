@@ -1,0 +1,42 @@
+{
+  "scope": "derived inventory formatting only; unchanged QA receipt and report remain original bytes",
+  "originalQaReceiptSha256": "6fe700517b4a85c81e97d1ce4d910128efaf2e5f8041b993ca14902ac48c5aa2",
+  "files": [
+    {
+      "originalLocalPath": "C:/w-rv/tmp/development-isolated-20261104/development-final-evidence-preparation/final-inventory.json",
+      "originalSha256": "45a99534e1665121c706b857d7d6f26cf06ef078c6e8f1278b8fa1809e3801cb",
+      "originalBytes": 18386,
+      "repositoryRelativePath": "qa/final-inventory.derived.json",
+      "derivedSha256": "17433078c1e568ccf7ef128cf51a397de9f9910218db3b04a357730976ade023",
+      "derivedBytes": 15341,
+      "transformation": "JSON whitespace minification only; original immutable source retained locally"
+    },
+    {
+      "originalLocalPath": "C:/w-rv/tmp/development-isolated-20261104/development-final-evidence-preparation/completion-evidence.json",
+      "originalSha256": "8ab0c9a91056ff6b26768729c65a13a613532332de277cfe4c5e46bae0ffd621",
+      "originalBytes": 2993,
+      "repositoryRelativePath": "qa/completion-evidence.derived.json",
+      "derivedSha256": "826e18f1247acd72c01f39b439301dc5760971f95d46b4f526d7fd8d75ae0c1e",
+      "derivedBytes": 2473,
+      "transformation": "JSON whitespace minification only; original immutable source retained locally"
+    },
+    {
+      "originalLocalPath": "C:/w-rv/tmp/development-isolated-20261104/development-final-evidence-preparation/additional-evidence-r1.json",
+      "originalSha256": "4e9c2759a7df099251495554ba08c4c732450561afe35c7e8e16e4528483d505",
+      "originalBytes": 6837,
+      "repositoryRelativePath": "qa/additional-evidence-r1.derived.json",
+      "derivedSha256": "81acab165f00a61a1ed50b788275dd8eb351d9d10dacfb26eeccdc9778e12fa4",
+      "derivedBytes": 5377,
+      "transformation": "JSON whitespace minification only; original immutable source retained locally"
+    },
+    {
+      "originalLocalPath": "C:/w-rv/tmp/development-isolated-20261104/development-final-evidence-preparation/canonical-draft-review.json",
+      "originalSha256": "143ae8af3d45249514302b9705d36c7f9f8003c653b7857e9cde239c7bbe1e93",
+      "originalBytes": 2243,
+      "repositoryRelativePath": "qa/canonical-draft-review.derived.json",
+      "derivedSha256": "0fd45cac835376e2fe01f8da343f8a49e76240e0416975036b2d876fe91c406c",
+      "derivedBytes": 2022,
+      "transformation": "JSON whitespace minification only; original immutable source retained locally"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "scriptAsset": "/assets/index-Vq8jZr5R.js",
+  "homeHttp": 200,
+  "logicalEnvironment": "development",
+  "url": "https://clinicos-development-isolated.vercel.app",
+  "applicationBase": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "scriptSha256": "632b47c0b632765a64040ae2c7b8f4e5396b24d4a2170f14a3e223dc51712f6a",
+  "at": "2026-11-05T20:52:34.5591484Z",
+  "projectId": "prj_521wrOk01zqRUqFym41yxJw5KS3u",
+  "oldAliasChanged": false,
+  "fiveRoleParityVerified": false,
+  "spaDeepLinkHttp": 200,
+  "retryAllowed": false,
+  "compiledNewApiUrlPresent": true,
+  "cspAllowsOldBackends": false,
+  "deploymentId": "dpl_3wm5mWVhp7GsNuuAv3SVZoj6qKGM",
+  "status": "frontend-hosting-basics-verified",
+  "cspMatchesReviewedConfig": true,
+  "sourceCommit": "e99ee55adf4036089b1616151f6bad37ec2e0828",
+  "browserNetworkVerified": false,
+  "operationId": "fe9248db-402f-42a0-b051-1c5c771305e5"
+}

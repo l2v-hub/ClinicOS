@@ -1,0 +1,15 @@
+{
+  "events": [
+    {
+      "at": "2026-11-05T22:57:57.912402055Z",
+      "kind": "migration-command-started"
+    },
+    {
+      "at": "2026-11-05T22:57:59.708235420Z",
+      "kind": "no-pending-migrations"
+    }
+  ],
+  "rawLogsCopied": false,
+  "source": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "deploymentId": "82304c48-7b14-474d-be4b-890519c7a215"
+}

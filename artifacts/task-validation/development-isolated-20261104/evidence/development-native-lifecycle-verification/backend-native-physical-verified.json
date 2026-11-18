@@ -1,0 +1,23 @@
+{
+  "at": "2026-11-05T23:33:51.9476803Z",
+  "status": "native-physical-restart-verified",
+  "role": "backend",
+  "operationId": "6571bcd6-cc8b-4df2-b092-11e56190c2cf",
+  "projectId": "30bfd0c6-2b4d-4fcd-b219-f1fbfe1d9820",
+  "environmentId": "e54fd397-76c8-4a14-ac03-4d8a4d580173",
+  "serviceId": "f46547d5-1eb2-42a0-bd13-de2a1f7feca1",
+  "deploymentId": "82304c48-7b14-474d-be4b-890519c7a215",
+  "imageDigest": "sha256:92c75ecd4a28167802a4af7d560018dcbe48ff401f338fbd7e28b080c099d56e",
+  "acceptedSha256": "a5d4d37cc12e8ebc3a761f3d27b4f77bc7e0df8d9aae660fa0157c6c485ee87d",
+  "beforeFile": "backend-before-native-restart.json",
+  "beforeSha256": "35f273f789dc24b422fe21d0268a312148a0c12ab52ea3c11b67d1ce64481204",
+  "afterFile": "backend-after-native-restart.json",
+  "afterSha256": "24664838bc9cfa0da819c412cf369ca36f513570932ddf775f9bda0fde1073af",
+  "processTupleChanged": true,
+  "backendReady": true,
+  "backendDeploymentId": "82304c48-7b14-474d-be4b-890519c7a215",
+  "fileIsNotAuthority": true,
+  "providerCASClaimed": false,
+  "antivirusControlsChanged": false,
+  "blockedScriptExecuted": false
+}

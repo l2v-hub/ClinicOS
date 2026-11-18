@@ -1,0 +1,43 @@
+{
+  "status":"root-source-and-operation-provenance-observed",
+  "fileIsNotAuthority":true,
+  "projectId":"30bfd0c6-2b4d-4fcd-b219-f1fbfe1d9820",
+  "environmentId":"e54fd397-76c8-4a14-ac03-4d8a4d580173",
+  "databaseServiceId":"8cc1c795-5a61-4ead-b6f4-020b2c29a91b",
+  "volumeId":"64536a4c-e0c1-4cff-ad76-7f8f33f18926",
+  "databaseSourceImage":"ghcr.io/railwayapp-templates/postgres-ssl@sha256:4fc833b43d2aaf6ecc9b18615f5533602b723a32d0e2efe2dae8ca0f7217c863",
+  "backendSource":"b5e79ae7bec869af894f12ed6676547f21172db4",
+  "freshProjectServiceVolumeCreatedWithoutClone":true,
+  "newDatabaseCredentialsComparedPrivately":true,
+  "migrationCommand":"npm run db:migrate",
+  "manualSqlOrSeedPerformed":false,
+  "oldDatabaseOrClinicalDataCopied":false,
+  "userAttachmentReadOrUsed":false,
+  "sourceInspection":{
+    "backendStartupSeedNotFound":true,
+    "clinicalPatientInsertInMigrationScanNotFound":true,
+    "conditionalDemoRoomMigration":"20260902193000_seed_demo_room_occupancy",
+    "conditionalDemoRoomPrerequisite":"existing MRN-DEMO-001; absent in fresh database and not created by these tests",
+    "otherDataInsertMigrations":"technical RosterEpoch/RosterContext; no imported patient payloads",
+    "readToolAllowlistOnly":true,
+    "residentScopeDefaultWhenOverrideAbsent":"facility",
+    "rawBackendVariableDictionaryRequiresOverrideAbsent":true
+  },
+  "knownClinicalWritesByRoot":[
+    "development-functional-verification/r2/receipt-8bccea8c06c13890-013.json",
+    "extended-functional-verification/receipt-f9441adc0123b9e3-013.json",
+    "development-additional-functions-verification/receipt-badb560158d99a81-018.json",
+    "development-beds-protocols-verification/receipt-a7a6f89fa43c6811-031.json"
+  ],
+  "knownPatientIds":["cmw41v3gq000u01pndoevorxy"],
+  "knownSimulatorIds":["SIM-ADMIN","SIM-SUPERVISOR-1","SIM-DOCTOR-1","SIM-NURSE-1","SIM-OSS-1"],
+  "otherExpectedWrites":"simulator User/Operator upserts, automatic synthetic action/audit/technical bookkeeping; runtime-only synthetic OCR job does not populate backend patients",
+  "providerDataInputs":"only generated fixtures, new synthetic clinical/operational rows and built-in simulator directory",
+  "operationalScope":"root serializes clinical writers and deployment/restart operations; no deliberate backend restart/deploy/replica change during active import",
+  "limitations":[
+    "provenance chain and fresh complete API roster checks are not a cell-by-cell database dump",
+    "read-to-call windows remain; provider CAS and exclusion of every possible external actor are not claimed",
+    "before assistant use, requalify actual backend source/config and complete facility roster, synthetic therapy labels and five simulator identities",
+    "future synthetic import is a separately recorded write and adds its own patient ID only after verified receipt"
+  ]
+}
