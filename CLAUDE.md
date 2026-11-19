@@ -102,17 +102,20 @@ Single source of truth. Do NOT create parallel nav components.
 ## Build & deploy
 
 - Before committing frontend work: `cd frontend && npm run build` must pass (`tsc -b && vite build`).
-- **The live site is the isolated development environment** — `https://clinicos-development-isolated.vercel.app`
-  (synthetic data, five simulated profiles). The previous demo (`clinicos-eosin.vercel.app`,
-  backend `clinicos-backend-production-df88.up.railway.app`) is **retired**: do not deploy to it
-  and do not give its URL to the user.
-  - Frontend: Vercel project `clinicos-development-isolated`.
-  - API: `https://development-backend-development-a4a4.up.railway.app` (dedicated Railway project,
-    single environment `development`); `frontend/vercel.json` allows only this backend in `connect-src`.
-  - Procedure, target IDs and rules: `docs/operations/development-release.md`. Read it before any release.
-- **Nothing deploys automatically.** Pushing or merging to `main` does NOT update the site. The old
+- **Two sites, one source (`main`).** Since 2026-11-19 the user wants `main` visible on both:
+  - **Demo**: `https://clinicos-eosin.vercel.app`, backend
+    `https://clinicos-backend-production-df88.up.railway.app`. Procedure: `docs/operations/demo-release.md`.
+  - **Isolated development**: `https://clinicos-development-isolated.vercel.app` (synthetic data,
+    five simulated profiles), Vercel project `clinicos-development-isolated`, API
+    `https://development-backend-development-a4a4.up.railway.app`. Procedure, target IDs and rules:
+    `docs/operations/development-release.md`.
+  - `frontend/vercel.json` allows the backends of both sites in `connect-src`: keep them together.
+  - Read the procedure of the target site before any release; never mix the two (aliases, data,
+    secrets stay separate).
+- **Nothing deploys automatically.** Pushing or merging to `main` does NOT update either site. The demo
   workflows (`deploy-backend.yml`, `deploy-runtime.yml`, `deploy-demo-exact-commit.yml`, demo auth)
-  targeted the retired demo and are disabled on GitHub on purpose: never re-enable or run them.
+  are disabled on GitHub by the owner: Claude never re-enables or runs them — the owner does, when
+  they decide to release.
 - A release is a specific operation run by the operator with their own Railway/Vercel
   authorization (runtime if needed, then backend, then frontend). A cloud session has neither the
   credentials nor network access to those hosts: prepare the source, say plainly that the release
