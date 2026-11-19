@@ -629,6 +629,8 @@ export default function App() {
   // Chiavi dell'ultimo caricamento riuscito per dataset: una richiesta con la stessa chiave
   // rivalida senza svuotare cio' che e' a schermo (stale-while-revalidate).
   const loadedAppointmentRangeRef = useRef<string | null>(null);
+  /** Intervallo della richiesta di appuntamenti in corso (null a richiesta conclusa). */
+  const appointmentInFlightKeyRef = useRef<string | null>(null);
   const loadedConsegneKeyRef = useRef<string | null>(null);
   const loadedNotesKeyRef = useRef<string | null>(null);
   const loadedTherapyKeyRef = useRef<string | null>(null);
@@ -949,7 +951,7 @@ export default function App() {
     patientNavigationSequenceRef.current += 1;
     setRestoringPazienteFromHash(false);
     pushNav('dettaglio-paziente', p, target);
-    loadCartella(p.id);
+    loadCartella(p.id, { pending: cartellaPrefetchRef.current.get(p.id) });
     // Il riepilogo della lista non porta indirizzo e referente, che vivono solo nelle colonne del
     // paziente: una lettura mirata completa la scheda senza bloccarne l'apertura.
     if (!('address' in p)) {
@@ -1395,6 +1397,7 @@ export default function App() {
     const requestedRange = range ?? { from: today, to: today };
     appointmentRangeRef.current = requestedRange;
     const rangeKey = JSON.stringify(requestedRange);
+    appointmentInFlightKeyRef.current = rangeKey;
     // Stesso intervallo gia' caricato in sessione: l'agenda resta visibile con gli ultimi dati
     // mentre si rivalida. Un intervallo nuovo non mostra mai appuntamenti di un altro periodo.
     const sameRange = loadedAppointmentRangeRef.current === rangeKey;
@@ -1436,6 +1439,8 @@ export default function App() {
         showToast(message);
       }
     } finally {
+      if (request === appointmentRequestSequenceRef.current)
+        appointmentInFlightKeyRef.current = null;
       if (
         sessionEpoch === sessionEpochRef.current &&
         request === appointmentRequestSequenceRef.current
@@ -1995,11 +2000,14 @@ export default function App() {
     preloadRouteModules();
     const clinicalOverviewTimer = window.setTimeout(() => void loadClinicalOverview(), 0);
     const appointmentDay = localIsoDate();
-    void loadAppuntamenti({
+    const sessionRange = {
       from: appointmentDay,
       to: appointmentDay,
       operatorId: utente.ruolo === 'operatore' ? utente.id : undefined,
-    });
+    };
+    // Il Turno, montato nello stesso istante, può aver già chiesto la stessa giornata.
+    if (appointmentInFlightKeyRef.current !== JSON.stringify(sessionRange))
+      void loadAppuntamenti(sessionRange);
     // Dashboard receives only a constant-size exact read model; the feed loads on navigation.
     void loadConsegneOverview();
     void loadNotes({ box: 'all', q: '' });
@@ -2121,11 +2129,14 @@ export default function App() {
     void loadConsegne(consegneQueryRef.current);
   }, [utente, navKey, consegneMode, loadConsegne]);
 
+  // Dipende dal solo id: il paziente aperto viene arricchito (indirizzo, referente) dopo
+  // l'apertura, e quell'aggiornamento non deve rileggere le consegne.
+  const selectedPatientId = pazienteSelezionato?.id;
   useEffect(() => {
-    if (!utente || navKey !== 'dettaglio-paziente' || !pazienteSelezionato) return;
-    const timer = window.setTimeout(() => void loadPatientConsegne(pazienteSelezionato.id), 0);
+    if (!utente || navKey !== 'dettaglio-paziente' || !selectedPatientId) return;
+    const timer = window.setTimeout(() => void loadPatientConsegne(selectedPatientId), 0);
     return () => window.clearTimeout(timer);
-  }, [utente, navKey, pazienteSelezionato, loadPatientConsegne]);
+  }, [utente, navKey, selectedPatientId, loadPatientConsegne]);
 
   // Resolve a patient restored from the hash with one URL-encoded authenticated lookup. The
   // pending id is consumed once and every outcome closes the loading state.
@@ -2921,29 +2932,36 @@ export default function App() {
     return cartelle.find((c) => c.pazienteId === pazienteId) ?? createDefaultCartella(pazienteId);
   }
 
+  type CartellaRead = { patientId: string; data: CartellaPaziente | null } | null;
+  async function readCartella(pazienteId: string): Promise<CartellaRead> {
+    const res = await fetch(`${API_URL}/patients/${pazienteId}/cartella`, {
+      headers: operatorHeaders(),
+    });
+    return res.ok ? ((await res.json()) as CartellaRead) : null;
+  }
+
   // Cartelle richieste in anticipo (hover/focus su una riga della lista) e non ancora arrivate:
-  // evita richieste doppie mentre il puntatore si muove sull'elenco.
-  const cartellaPrefetchRef = useRef(new Set<string>());
+  // evita richieste doppie mentre il puntatore si muove sull'elenco, e il clic che apre il
+  // paziente riusa la lettura già in corso invece di ripeterla.
+  const cartellaPrefetchRef = useRef(new Map<string, Promise<CartellaRead>>());
   function prefetchCartella(p: Paziente): void {
     if (cartelle.some((c) => c.pazienteId === p.id) || cartellaPrefetchRef.current.has(p.id))
       return;
-    cartellaPrefetchRef.current.add(p.id);
-    void loadCartella(p.id, { silent: true }).finally(() => {
+    const pending = readCartella(p.id);
+    cartellaPrefetchRef.current.set(p.id, pending);
+    void loadCartella(p.id, { silent: true, pending }).finally(() => {
       cartellaPrefetchRef.current.delete(p.id);
     });
   }
 
   async function loadCartella(
     pazienteId: string,
-    options: { silent?: boolean } = {},
+    options: { silent?: boolean; pending?: Promise<CartellaRead> } = {},
   ): Promise<void> {
     const sessionEpoch = patientNavigationSequenceRef.current;
     try {
-      const res = await fetch(`${API_URL}/patients/${pazienteId}/cartella`, {
-        headers: operatorHeaders(),
-      });
-      if (!res.ok) return;
-      const json = (await res.json()) as { patientId: string; data: CartellaPaziente | null };
+      const json = await (options.pending ?? readCartella(pazienteId));
+      if (!json) return;
       if (sessionEpoch !== patientNavigationSequenceRef.current) return;
       if (json.data) {
         setCartelle((prev) => {

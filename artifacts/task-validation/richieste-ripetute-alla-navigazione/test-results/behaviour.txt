@@ -1,0 +1,7 @@
+PASS — «Da leggere» visibile nel Turno
+PASS — chip delle urgenze presente: «1 urgenza da prendere in carico»
+PASS — dopo «Ho capito» la coda viene riletta (2 lettura/e)
+PASS — urgenza presa in carico non più segnalata: «(nessun chip)»
+PASS — cartella aperta: «Bassi, Giorgio»
+PASS — schede della cartella visibili (8)
+PASS — nessun errore JavaScript (0)

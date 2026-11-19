@@ -97,3 +97,38 @@ test('count transport failure, duplicate ids, negative/string counts and out-of-
     }),
   );
 });
+
+test('first page: concurrent readers share one request, the next read starts a new one', async () => {
+  const { fetchUnreadDiaryFirstPage } = await import('../diaryUnreadQueue');
+  let calls = 0;
+  let release: () => void = () => {};
+  const gate = new Promise<void>((resolve) => (release = resolve));
+  const fetcher = (async (url: string, init: RequestInit) => {
+    calls++;
+    assert.match(String(url), /\/patients\/diary-unread\?limit=20$/);
+    assert.equal(init.cache, 'no-store');
+    await gate;
+    return new Response(
+      JSON.stringify({
+        entries: [],
+        totalUnread: 0,
+        filteredUnread: 0,
+        hasMore: false,
+        nextCursor: null,
+        patientCounts: [],
+      }),
+    );
+  }) as typeof fetch;
+  const headers = { 'X-Operator-Id': 'op-shared' };
+  const a = fetchUnreadDiaryFirstPage('/api-shared', headers, fetcher);
+  const b = fetchUnreadDiaryFirstPage('/api-shared', headers, fetcher);
+  assert.equal(a, b, 'stessa richiesta in corso');
+  release();
+  assert.deepEqual(await a, await b);
+  assert.equal(calls, 1);
+  await fetchUnreadDiaryFirstPage('/api-shared', headers, fetcher);
+  assert.equal(calls, 2, 'nessuna cache dopo la fine della richiesta');
+  // Un altro operatore non condivide la lettura.
+  await fetchUnreadDiaryFirstPage('/api-shared', { 'X-Operator-Id': 'op-other' }, fetcher);
+  assert.equal(calls, 3);
+});

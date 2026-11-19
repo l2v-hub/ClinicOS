@@ -4,7 +4,11 @@
 import { useEffect, useState } from 'react';
 import { API_URL } from '../config';
 import { operatorHeaders } from './operatorSession';
-import { parseUnreadDiaryPage, type UnreadDiaryEntry } from './diaryUnreadQueue';
+import {
+  fetchUnreadDiaryFirstPage,
+  parseUnreadDiaryPage,
+  type UnreadDiaryEntry,
+} from './diaryUnreadQueue';
 import { DIARY_READING_CHANGED_EVENT } from './diaryReading';
 import { URGENCY_ACKNOWLEDGED_EVENT } from './urgency';
 import { takeChargeRows } from './turnoUnread';
@@ -33,15 +37,18 @@ export function useUnreadUrgencies(enabled: boolean): UnreadUrgencies {
       let cursor: string | null = null;
       let hasMore = true;
       for (let page = 0; page < MAX_PAGES && hasMore; page++) {
-        const params = new URLSearchParams({ limit: '20' });
-        if (cursor) params.set('cursor', cursor);
-        const response = await fetch(`${API_URL}/patients/diary-unread?${params}`, {
-          headers: operatorHeaders(),
-          signal: controller.signal,
-          cache: 'no-store',
-        });
-        if (!response.ok) throw new Error('unavailable');
-        const body = parseUnreadDiaryPage(await response.json());
+        let body;
+        if (!cursor) body = await fetchUnreadDiaryFirstPage(API_URL, operatorHeaders());
+        else {
+          const params = new URLSearchParams({ limit: '20', cursor });
+          const response = await fetch(`${API_URL}/patients/diary-unread?${params}`, {
+            headers: operatorHeaders(),
+            signal: controller.signal,
+            cache: 'no-store',
+          });
+          if (!response.ok) throw new Error('unavailable');
+          body = parseUnreadDiaryPage(await response.json());
+        }
         rows.push(...takeChargeRows(body.entries));
         hasMore = body.hasMore;
         cursor = body.nextCursor;
