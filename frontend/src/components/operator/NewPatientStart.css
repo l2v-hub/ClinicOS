@@ -3,7 +3,7 @@
   outline: none;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--ds-layout-gap);
   min-width: 0;
 }
 .nps__top {

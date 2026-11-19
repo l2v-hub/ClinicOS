@@ -2,14 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 const read = (file: string) => readFileSync(new URL(`../../../${file}`, import.meta.url), 'utf8');
-test('416 uses a screen-only bedside control token, not a blanket WCAG failure', () => {
+test('416 uses one bedside control height on every screen page, not a blanket WCAG failure', () => {
   const css = read('design-system.css');
-  assert.match(
-    css,
-    /@media screen\s*\{[\s\S]*?\.main-area-clean:has\(> main > :is\(\.patient-list-view, \.patient-record-view, \.rooms-view\)\)[\s\S]*?--ds-control-h: 44px/,
-  );
+  // Una sola misura: nessuna pagina la ridefinisce (né per puntatore, né per pagina).
+  assert.deepEqual(css.match(/--ds-control-h: \d+px/g), [
+    '--ds-control-h: 44px',
+    '--ds-control-h: 48px',
+  ]);
   assert.match(css, /@media print[\s\S]*?--ds-control-h: 48px/);
-  assert.match(css, /bedside design goal.*not.*WCAG/i);
+  assert.match(css, /bedside design goal[\s\S]*?not[\s\S]*?WCAG/i);
 });
 test('416 keeps shared icon controls from shrinking and search targets separate', () => {
   const css = read('design-system.css');

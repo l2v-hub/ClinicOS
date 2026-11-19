@@ -4,11 +4,14 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- App.css importa Public Sans/JetBrains Mono da Google Fonts; preconnect avvia la
-         negoziazione DNS/TLS verso entrambi i domini prima ancora che il CSS venga scaricato
-         e parsato, invece di farla partire solo quando il browser incontra @import. -->
+    <!-- Inter e JetBrains Mono (Google Fonts): il foglio dei font è collegato qui, non con un
+         @import nel CSS dell'app, così si scarica in parallelo al CSS invece che dopo. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
     <title>ClinicOS — Gestione clinica</title>
   </head>
   <body>

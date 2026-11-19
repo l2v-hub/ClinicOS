@@ -352,7 +352,11 @@ export function PatientList({
   if (newIntake && canIntake)
     return (
       <>
-        <NewPatientStart onBack={() => onCloseNewIntake?.()} onChoose={setNewPatientPath} />
+        <NewPatientStart
+          onBack={() => onCloseNewIntake?.()}
+          onChoose={setNewPatientPath}
+          path={newPatientPath}
+        />
         {newPatientFlow}
       </>
     );

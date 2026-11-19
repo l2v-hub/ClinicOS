@@ -424,11 +424,10 @@
 /* #449: «Scrivi una consegna» in cima alla pagina Consegne. */
 .consegna-quick {
   display: grid;
+  /* la colonna non si allarga oltre la card: l'elenco pazienti si restringe, non sborda */
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
-  margin: 0 0 16px;
-  padding: 16px;
   border: 1px solid var(--border);
-  border-radius: 12px;
   background: var(--surface, #fff);
 }
 .consegna-quick__patient {

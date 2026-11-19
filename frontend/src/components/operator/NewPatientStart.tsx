@@ -8,11 +8,13 @@ import './NewPatientStart.css';
 interface Props {
   onChoose: (path: NewPatientPath) => void;
   onBack: () => void;
+  /** Strada già scelta: la scheda è aperta sopra questa pagina e l'intestazione lo dice. */
+  path?: NewPatientPath | null;
 }
 
 /** Pagina "Nuovo ingresso" (HMI 1): come arriva il paziente. Porta ai flussi di sempre: import dei
  *  documenti (lettera o file del trasferimento) oppure inserimento guidato a mano. */
-export function NewPatientStart({ onChoose, onBack }: Props) {
+export function NewPatientStart({ onChoose, onBack, path }: Props) {
   const { loading, available, reason } = useAiImportStatus();
   // All'apertura il fuoco va sulla pagina: il Tab parte da qui, non dal fondo del documento.
   const pageRef = useRef<HTMLDivElement>(null);
@@ -32,7 +34,16 @@ export function NewPatientStart({ onChoose, onBack }: Props) {
 
   return (
     <div className="nps" ref={pageRef} tabIndex={-1} role="region" aria-label="Nuovo ingresso">
-      <PageHeader title="Nuovo ingresso" subtitle="Scegli come arriva il paziente" />
+      <PageHeader
+        title="Nuovo ingresso"
+        subtitle={
+          path === 'manuale'
+            ? 'Scheda compilata a mano'
+            : path === 'documenti'
+              ? 'Scheda da documenti'
+              : 'Scegli come arriva il paziente'
+        }
+      />
       <div className="nps__top">
         <button type="button" className="ds-link" onClick={onBack}>
           ← Torna ai pazienti

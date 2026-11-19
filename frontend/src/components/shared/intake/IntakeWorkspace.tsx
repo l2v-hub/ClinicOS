@@ -1108,7 +1108,6 @@ export function IntakeWorkspace({
                     only={['allergie']}
                     therapyBlock={false}
                     showLegacyPain={false}
-                    showTitles={false}
                   />
                 </section>
 
@@ -1160,7 +1159,6 @@ export function IntakeWorkspace({
                     only={['terapia']}
                     showTherapyAcceptance={false}
                     showLegacyPain={false}
-                    showTitles={false}
                   />
                 </section>
 
@@ -1186,7 +1184,6 @@ export function IntakeWorkspace({
                     operatoreNome={operatoreNome}
                     only={['parametri']}
                     therapyBlock={false}
-                    showTitles={false}
                   />
                 </section>
 
