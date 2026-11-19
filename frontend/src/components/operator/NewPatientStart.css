@@ -1,10 +1,6 @@
 /* Nuovo ingresso — HMI 1 (artifacts/hmi-parity/proto/ingresso-start.png). Token del design system. */
 .nps {
   outline: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-layout-gap);
-  min-width: 0;
 }
 .nps__top {
   display: flex;

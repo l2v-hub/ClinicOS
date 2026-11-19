@@ -29,23 +29,20 @@ export function isValidCF(raw: string): boolean {
   return String.fromCharCode(65 + (sum % 26)) === cf[15];
 }
 
+/** Cifre di un tratto numerico, comprese le lettere di omocodia (L=0 … V=9). */
+const omocodiaDigits = (part: string) =>
+  Number(part.replace(/[LMNPQRSTUV]/g, (letter) => String('LMNPQRSTUV'.indexOf(letter))));
+
 /** Missing sex may be proposed from a validated fiscal code; explicit values always win. */
 export function fiscalCodeSex(raw: string): 'M' | 'F' | null {
   if (!isValidCF(raw)) return null;
-  const digits = normalizeCF(raw)
-    .slice(9, 11)
-    .replace(/[LMNPQRSTUV]/g, (letter) => String('LMNPQRSTUV'.indexOf(letter)));
-  const encoded = Number(digits);
+  const code = normalizeCF(raw);
+  const encoded = omocodiaDigits(code.slice(9, 11));
   const sex = encoded >= 41 && encoded <= 71 ? 'F' : 'M';
   const day = sex === 'F' ? encoded - 40 : encoded;
   if (day < 1 || day > 31) return null;
-  const code = normalizeCF(raw);
   const month = 'ABCDEHLMPRST'.indexOf(code[8]);
-  const year =
-    2000 +
-    Number(
-      code.slice(6, 8).replace(/[LMNPQRSTUV]/g, (letter) => String('LMNPQRSTUV'.indexOf(letter))),
-    );
+  const year = 2000 + omocodiaDigits(code.slice(6, 8));
   if (new Date(Date.UTC(year, month, day)).getUTCMonth() !== month) return null;
   return sex;
 }

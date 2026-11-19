@@ -12,12 +12,8 @@ import {
   type ReactNode,
 } from 'react';
 
-import {
-  deriveAutoCFUpdate,
-  fiscalCodeSex,
-  normalizeCF,
-  type FiscalCodeOrigin,
-} from '../../../lib/codiceFiscale';
+import { deriveAutoCFUpdate, type FiscalCodeOrigin } from '../../../lib/codiceFiscale';
+import { fiscalCodeSex, normalizeCF } from '../../../lib/cfCheck';
 import { useAiField } from './intakeAiOrigin';
 import { AiBadge } from './IntakeAiBadge';
 import { PATIENT_PHONE_MAX_LENGTH } from '../../../lib/patientPhone';

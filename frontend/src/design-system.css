@@ -19,7 +19,8 @@
 @import './compact-layout.css';
 
 :root {
-  /* Una sola altezza dei controlli su ogni pagina a schermo (misura al letto del paziente). */
+  /* Una sola altezza dei controlli su ogni pagina a schermo: 44px is the bedside design goal, not a
+     blanket WCAG AA failure rule; printed forms keep their own metrics (see @media print). */
   --ds-control-h: 44px;
   --ds-control-font: 14px;
   --ds-body-font: 14px;
@@ -50,19 +51,12 @@
   --ds-font: var(--font-ui, 'Inter', system-ui, sans-serif);
 }
 
-/* Same density in every context; touch keyboards need 16px fields (no zoom on focus). */
-@media (pointer: coarse) {
+/* Touch keyboards and phones need 16px fields (no zoom on focus). */
+@media (pointer: coarse), (max-width: 600px) {
   :root {
     --ds-field-font: 16px;
   }
 }
-@media (max-width: 600px) {
-  :root {
-    --ds-field-font: 16px;
-  }
-}
-/* 44px is the bedside design goal, adopted as the single control height of every screen page
-   (not a blanket WCAG AA failure rule: printed forms keep their own metrics, see @media print). */
 @media screen {
   .main-area-clean:has(> main > :is(.patient-list-view, .patient-record-view, .rooms-view))
     .compact-topbar
@@ -901,7 +895,8 @@ th[aria-sort] .ds-sort:not(#ds) {
       .op-management,
       .rooms-view,
       .schedule-view,
-      .rp-page
+      .rp-page,
+      .nps
     ):not(#ds) {
     display: flex;
     flex-direction: column;
@@ -909,27 +904,10 @@ th[aria-sort] .ds-sort:not(#ds) {
     max-width: none;
     margin: 0;
     padding: 0;
-  }
-  .page-content
-    > :is(
-      .operator-dashboard,
-      .patient-list-view,
-      .giro-view,
-      .par-view,
-      .handover-workspace,
-      .agt-view,
-      .page-anagrafica-farmaci,
-      .notes-page,
-      .admin-dashboard,
-      .op-management,
-      .rooms-view,
-      .schedule-view,
-      .rp-page
-    )
-    > *:not(#ds) {
-    margin-block: 0;
-    /* un blocco non allarga mai la pagina: il suo contenuto va a capo o scorre al suo interno */
-    min-width: 0;
+
+    & > *:not(#ds) {
+      margin-block: 0;
+    }
   }
   /* Azioni di pagina (il titolo è nell'intestazione): una riga di controlli, senza rientri propri. */
   .page-header--in-topbar:not(#ds) {

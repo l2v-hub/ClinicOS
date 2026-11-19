@@ -249,6 +249,13 @@ const RolePermissionsPage = lazy(() =>
   routeLoaders.RolePermissionsPage().then((module) => ({ default: module.RolePermissionsPage })),
 );
 
+/** Esegue `fn` quando il browser è inattivo (al più tardi dopo 2 s). */
+function whenIdle(fn: () => void): void {
+  if (typeof window.requestIdleCallback === 'function')
+    window.requestIdleCallback(() => fn(), { timeout: 2000 });
+  else window.setTimeout(fn, 200);
+}
+
 let routeModulesPreloaded = false;
 /** Scarica in background, uno alla volta e a browser inattivo, i chunk delle pagine e dei tab della
  * cartella. Idempotente: il browser tiene i moduli gia' importati, quindi la navigazione successiva
@@ -265,7 +272,7 @@ function preloadRouteModules(): void {
     routeLoaders.PatientDetail,
   ];
   // In coda per ultime le pagine della sola amministrazione: chi è al letto del paziente trova
-  // prima le proprie pagine, i tab della cartella e la scheda d'ingresso.
+  // prima le proprie pagine e i tab della cartella.
   const adminOnly: Array<() => Promise<unknown>> = [
     routeLoaders.OperatorManagement,
     routeLoaders.AdminAgenda,
@@ -281,23 +288,16 @@ function preloadRouteModules(): void {
       import('./components/operator/PatientDetailLazyTabs').then((m) =>
         m.preloadPatientDetailTabs(),
       ),
-    // La scheda «Nuovo ingresso» porta con sé il catalogo dei comuni per il calcolo del codice
-    // fiscale: scaricata in anticipo, si apre senza attese.
-    () => import('./components/shared/intake/IntakeWorkspace'),
     ...adminOnly,
   ];
-  const idle = (fn: () => void) =>
-    typeof window.requestIdleCallback === 'function'
-      ? window.requestIdleCallback(() => fn(), { timeout: 2000 })
-      : window.setTimeout(fn, 200);
   const next = () => {
     const loader = rest.shift();
     if (!loader) return;
     loader()
       .catch(() => undefined)
-      .finally(() => idle(next));
+      .finally(() => whenIdle(next));
   };
-  void Promise.allSettled(first.map((loader) => loader())).finally(() => idle(next));
+  void Promise.allSettled(first.map((loader) => loader())).finally(() => whenIdle(next));
 }
 
 function PageLoading() {
@@ -478,6 +478,13 @@ export default function App() {
   const [authz, setAuthz] = useState<AuthzContext | null>(null);
   // I componenti profondi (es. "+ Nuova terapia") leggono le capability con useCan.
   useEffect(() => setSessionCapabilities(authz?.capabilities ?? null), [authz]);
+  // La scheda «Nuovo ingresso» porta con sé il catalogo dei comuni (calcolo del codice fiscale):
+  // la si scarica in anticipo solo per chi può aprire un ingresso.
+  const canIntake = Boolean(authz?.capabilities) && can(authz?.capabilities, 'intake.create_draft');
+  useEffect(() => {
+    if (canIntake)
+      whenIdle(() => void import('./components/shared/intake/IntakeWorkspace').catch(() => {}));
+  }, [canIntake]);
   const unreadDiaryNotes = useDiaryUnreadCount(
     utente
       ? `${utente.id}:${authz?.appRole ?? utente.ruolo}:${authz?.policyVersion ?? 'legacy'}`
