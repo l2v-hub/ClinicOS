@@ -1,7 +1,11 @@
 import type { PatientIdentityData } from './patientIdentity';
 import { parsePatientIdentity } from './patientIdentity';
-import { isDiaryReadReceipt, type DiaryReadReceipt } from './diaryReading';
-import { isUrgencyView } from './urgency';
+import {
+  DIARY_READING_CHANGED_EVENT,
+  isDiaryReadReceipt,
+  type DiaryReadReceipt,
+} from './diaryReading';
+import { URGENCY_ACKNOWLEDGED_EVENT, isUrgencyView } from './urgency';
 import type { UrgencyView } from '../types';
 
 export interface UnreadDiaryEntry {
@@ -131,4 +135,40 @@ export async function fetchUnreadPatientCounts(
     seen.add(item.patientId);
     return item;
   });
+}
+
+const firstPageInFlight = new Map<string, Promise<UnreadDiaryPage>>();
+// Dopo una conferma di lettura o una presa in carico la coda va riletta da capo: una richiesta
+// partita prima della conferma non si riusa. (Registrato prima dei componenti che rileggono.)
+if (typeof window !== 'undefined')
+  for (const event of [DIARY_READING_CHANGED_EVENT, URGENCY_ACKNOWLEDGED_EVENT])
+    window.addEventListener(event, () => firstPageInFlight.clear());
+
+/**
+ * Prima pagina della coda «da leggere». Il Turno la legge da due punti nello stesso istante (coda e
+ * urgenze): le letture contemporanee condividono la richiesta in corso. Nessuna cache: conclusa la
+ * richiesta, la lettura successiva ne fa una nuova. Nessun segnale di annullamento condiviso: chi
+ * smette di aspettare ignora il risultato, l'altro lo riceve comunque.
+ */
+export function fetchUnreadDiaryFirstPage(
+  apiUrl: string,
+  headers: Record<string, string>,
+  fetcher: typeof fetch = fetch,
+): Promise<UnreadDiaryPage> {
+  const key = `${apiUrl}\u0000${JSON.stringify(headers)}`;
+  const pending = firstPageInFlight.get(key);
+  if (pending) return pending;
+  const request = (async () => {
+    const response = await fetcher(`${apiUrl}/patients/diary-unread?limit=20`, {
+      headers,
+      cache: 'no-store',
+    });
+    if (!response.ok) throw new Error('Coda delle note non confermate non disponibile.');
+    return parseUnreadDiaryPage(await response.json());
+  })().finally(() => {
+    // Solo se è ancora questa la lettura condivisa (una conferma può averla già sostituita).
+    if (firstPageInFlight.get(key) === request) firstPageInFlight.delete(key);
+  });
+  firstPageInFlight.set(key, request);
+  return request;
 }

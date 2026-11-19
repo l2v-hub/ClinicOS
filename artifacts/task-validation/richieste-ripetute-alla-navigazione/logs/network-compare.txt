@@ -1,0 +1,22 @@
+Richieste all'API per passo (bundle di produzione, stesso percorso, senza preflight)
+
+passo                         prima   dopo
+01 load→login screen              1      1
+02 login→Turno                   18     16
+03 Pazienti                      15     15
+04 open first patient            15     13
+05 back                           3      3
+06 Terapia                        9      9
+07 Parametri                      3      3
+08 Consegne                       4      4
+09 Agenda                         2      2
+11 Turno (again)                  6      5
+12 Pazienti (again)              15     15
+TOTALE (GET/POST/PATCH)          91     86
+
+diary-unread prima pagina          02 login→Turno         prima 2 dopo 1
+diary-unread prima pagina          04 open first patient  prima 1 dopo 1
+diary-unread prima pagina          11 Turno (again)       prima 2 dopo 1
+appointments                       02 login→Turno         prima 2 dopo 1
+consegne del paziente              04 open first patient  prima 2 dopo 1
+cartella SEED-PAZ-003 (apertura)   04 open first patient  prima 2 dopo 1
