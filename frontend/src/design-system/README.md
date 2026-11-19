@@ -23,8 +23,9 @@ Regole uniche, applicate dal foglio canonico (`design-system.css`, blocco «Coer
 
 - **Titolo di pagina**: sempre nella topbar tramite `PageHeader` (`title`, `subtitle`, `actions`).
   `view-header` nel contenuto è dismesso (Operatori, Posti Letto, Orari migrati).
-- **Topbar**: i controlli misurano 44px su ogni pagina (`--ds-control-h` impostato su
-  `.compact-topbar`); l'intestazione non cambia più dimensione navigando.
+- **Altezza dei controlli**: una sola, 44px (`--ds-control-h` su `:root`), in ogni pagina e
+  nell'intestazione: chip, filtri, pulsanti e campi non cambiano misura navigando. Solo la stampa
+  ha la sua (48px). Nessuna pagina ridefinisce il token.
 - **Card di pagina**: `--ds-card-radius` (12px) e nessuna ombra a riposo. Il raggio è imposto dal
   foglio canonico; l'ombra è azzerata a bassa specificità, così le regole di stato dei componenti
   (alone di fuoco, hover) continuano a prevalere. Il bordo non si tocca: può portare un significato
@@ -34,6 +35,28 @@ Regole uniche, applicate dal foglio canonico (`design-system.css`, blocco «Coer
   regole di componente prevalgono). Nessun titolo con lo stile di default del browser.
 - **Larghezza**: contenuto a tutta larghezza dopo la sidebar; nessun `max-width` per pagina.
 - **Testo introduttivo**: `.page-lead`.
+
+### Spaziature (2026-11-18): una scala, tre misure di pagina
+
+Scala: 4 · 8 · 12 · 16 · 24. A livello di pagina se ne usano tre, sempre le stesse:
+
+| Dove                                   | Misura | Token               |
+| -------------------------------------- | -----: | ------------------- |
+| Rientro della pagina (`.page-content`) |   24px | —                   |
+| Distanza fra i blocchi di una pagina   |   16px | `--ds-layout-gap`   |
+| Rientro interno di una card di pagina  |   16px | `--ds-card-padding` |
+
+- **La pagina è una pila verticale** (`display: flex; flex-direction: column; gap`): la distanza
+  fra i blocchi la dà la pagina, i blocchi non portano margini verticali propri (niente
+  `margin-bottom` né `style={{ marginBottom }}` sui blocchi di pagina). Le pagine sono elencate nel
+  blocco «Ritmo di pagina» di `design-system.css`: una pagina nuova si aggiunge lì.
+- **Azioni di pagina**: `PageHeader actions` è la prima riga del contenuto, senza rientri propri.
+- **Menu e filtri**: scelte e filtri sono chip (`ds-chip`, e le classi storiche allineate);
+  la navigazione fra viste di una stessa pagina è `TopNav` (`level3`, schede sottolineate). Stessa
+  altezza per entrambi.
+- **Scheda «Nuovo ingresso»**: stesse misure (16px fra le sezioni, 16px dentro sezioni e riquadri,
+  campi a 12px/16px). Un titolo per sezione (18px/600); i riquadri interni hanno una didascalia
+  maiuscola 12px/700. Gli editor della cartella riusati nella scheda non aggiungono rientri.
 
 ## Bottoni
 

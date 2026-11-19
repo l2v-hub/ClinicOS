@@ -1,0 +1,13 @@
+PASS — scelta: sottotitolo «Scegli come arriva il paziente»
+PASS — scheda aperta: il sottotitolo in alto dice «Scheda compilata a mano»
+PASS — 9 blocchi (Documenti + 8 sezioni), un titolo ciascuno, nessuno ripetuto (Documenti, Anagrafica, Ingresso, Allergie, Terapia, Diagnosi e anamnesi, Parametri iniziali, Moduli da pianificare, Riepilogo)
+PASS — nessun secondo titolo «Riepilogo»
+PASS — parametri: all'apertura una sola riga (oggi) — righe: 1
+PASS — «Tutto il mese» mostra il mese intero — righe: 30
+PASS — di nuovo solo oggi
+PASS — dopo il ricaricamento la bozza è in elenco, una sola voce
+PASS — riprende la stessa bozza
+PASS — i dati inseriti sono al loro posto
+PASS — data di nascita conservata
+PASS — bozza di prova eliminata dall'elenco
+PASS — nessun errore JavaScript in pagina (0)

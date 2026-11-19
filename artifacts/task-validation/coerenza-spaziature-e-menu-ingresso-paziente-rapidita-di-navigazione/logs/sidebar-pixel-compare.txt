@@ -1,0 +1,17 @@
+am-agenda.png: pixel diversi nella sidebar (0..96px) = 0
+am-consegne.png: pixel diversi nella sidebar (0..96px) = 0
+am-dashboard.png: pixel diversi nella sidebar (0..96px) = 0
+am-operatori.png: pixel diversi nella sidebar (0..96px) = 0
+am-orari.png: pixel diversi nella sidebar (0..96px) = 0
+am-posti-letto.png: pixel diversi nella sidebar (0..96px) = 0
+am-ruoli.png: pixel diversi nella sidebar (0..96px) = 0
+am-terapia.png: pixel diversi nella sidebar (0..96px) = 0
+op-agenda.png: pixel diversi nella sidebar (0..96px) = 0
+op-cartella-terapia.png: pixel diversi nella sidebar (0..96px) = 0
+op-cartella.png: pixel diversi nella sidebar (0..96px) = 0
+op-consegne.png: pixel diversi nella sidebar (0..96px) = 0
+op-farmaci.png: pixel diversi nella sidebar (0..96px) = 0
+op-parametri.png: pixel diversi nella sidebar (0..96px) = 0
+op-pazienti.png: pixel diversi nella sidebar (0..96px) = 0
+op-terapia.png: pixel diversi nella sidebar (0..96px) = 0
+op-turno.png: pixel diversi nella sidebar (0..96px) = 0

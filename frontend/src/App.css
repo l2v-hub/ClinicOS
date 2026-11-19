@@ -3,7 +3,6 @@
    Stack: React 19 + Vite, pure CSS, no external UI libs
    ────────────────────────────────────────────────────────── */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 @import './app-additions.css';
 @import './clinicos-restyle.css';
 @import './form-controls.css';
@@ -3761,18 +3760,9 @@ textarea.form-input {
    ADMIN DASHBOARD
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.admin-dashboard {
-  max-width: 1040px;
-}
-
 .admin-dashboard__clinical-heading {
   margin-top: 28px;
   margin-bottom: 12px;
-}
-
-.operator-dashboard {
-  max-width: 1400px;
-  margin: 0 auto;
 }
 
 .dashboard__date {
@@ -4004,10 +3994,6 @@ textarea.form-input {
 /* ═══════════════════════════════════════════════════════════════════════════
    OPERATOR MANAGEMENT
 ═══════════════════════════════════════════════════════════════════════════ */
-
-.op-management {
-  max-width: 1040px;
-}
 
 .op-form-panel {
   background: var(--surface);
@@ -4930,10 +4916,6 @@ textarea.form-input {
    PATIENT LIST VIEW
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.patient-list-view {
-  max-width: 1400px;
-  margin: 0 auto;
-}
 .operator-agenda-view {
   max-width: 1400px;
   margin: 0 auto;

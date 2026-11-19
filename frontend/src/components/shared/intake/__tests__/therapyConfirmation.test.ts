@@ -338,5 +338,7 @@ test('intake keeps complete therapy source available next to manual additions', 
   );
   assert.match(markup, /Confronta con il testo completo della terapia/);
   assert.ok(markup.includes(source));
-  assert.ok(markup.indexOf('manual-therapy-editor') < markup.indexOf('Allergie'));
+  // La terapia precede le allergie (riconosciute dal loro selettore di stato: i titoli li dà la pagina).
+  const allergies = markup.indexOf('allergy-status');
+  assert.ok(allergies > 0 && markup.indexOf('manual-therapy-editor') < allergies);
 });

@@ -1,0 +1,5 @@
+PASS — elenco pazienti caricato (10 righe), età e CF mostrati
+PASS — codice fiscale calcolato dai dati anagrafici (sesso M): RSSMRA80A01H501U
+PASS — un codice con carattere di controllo sbagliato (RSSMRA80A01H501X) è segnalato: «Dati anagrafici da correggere: Codice fiscale non valido (16 caratteri, carattere di contr»
+PASS — il codice corretto non è segnalato
+PASS — nessun errore JavaScript (0)

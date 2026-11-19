@@ -314,7 +314,7 @@ export function RoomsManagement() {
       )}
 
       {/* Filtro reparto */}
-      <div className="filter-chips" style={{ marginBottom: 16 }}>
+      <div className="filter-chips">
         {reparti.map((r) => (
           <button
             key={r}
@@ -330,7 +330,7 @@ export function RoomsManagement() {
       </div>
 
       {/* Filtro stato letto */}
-      <div className="filter-chips" style={{ marginBottom: 16 }}>
+      <div className="filter-chips">
         {(
           [
             { key: 'tutti', label: 'Tutti gli stati' },
