@@ -4,11 +4,23 @@ import { operatorHeaders } from '../../lib/operatorSession';
 import { DIARY_READING_CHANGED_EVENT, postDiaryRead } from '../../lib/diaryReading';
 import { URGENCY_ACKNOWLEDGED_EVENT, postUrgencyAck } from '../../lib/urgency';
 import {
+  fetchUnreadDiaryFirstPage,
   parseUnreadDiaryPage,
   unreadDiaryAckPath,
   type UnreadDiaryEntry,
   type UnreadDiaryPage,
 } from '../../lib/diaryUnreadQueue';
+
+async function readNextPage(cursor: string, signal: AbortSignal): Promise<UnreadDiaryPage> {
+  const params = new URLSearchParams({ limit: '20', cursor });
+  const response = await fetch(`${API_URL}/patients/diary-unread?${params}`, {
+    headers: operatorHeaders(),
+    signal,
+    cache: 'no-store',
+  });
+  if (!response.ok) throw new Error('Coda delle note non confermate non disponibile.');
+  return parseUnreadDiaryPage(await response.json());
+}
 
 /** `live`: si rilegge anche al ritorno sulla finestra e ogni 30 s, come il badge Consegne
  *  (useDiaryUnreadCount), così il Turno e il badge non si separano (#446 QA). */
@@ -31,15 +43,9 @@ export function useUnreadDiaryQueue(enabled = true, live = false) {
     setLoading(true);
     setError('');
     try {
-      const params = new URLSearchParams({ limit: '20' });
-      if (cursor) params.set('cursor', cursor);
-      const response = await fetch(`${API_URL}/patients/diary-unread?${params}`, {
-        headers: operatorHeaders(),
-        signal: abort.signal,
-        cache: 'no-store',
-      });
-      if (!response.ok) throw new Error('Coda delle note non confermate non disponibile.');
-      const incoming = parseUnreadDiaryPage(await response.json());
+      const incoming = cursor
+        ? await readNextPage(cursor, abort.signal)
+        : await fetchUnreadDiaryFirstPage(API_URL, operatorHeaders());
       if (cursor && incoming.nextCursor === cursor)
         throw new Error('La pagina non è avanzata. Ricarica la coda.');
       if (abort.signal.aborted || request !== sequence.current) return;

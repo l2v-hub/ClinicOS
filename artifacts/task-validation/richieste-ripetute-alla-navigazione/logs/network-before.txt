@@ -1,0 +1,205 @@
+
+=== 01 load→login screen  []  requests=1 preflights=0 bytes=94 span=24ms
+  +    0ms    24ms  200      94B GET /auth/status
+
+=== 02 login→Turno  [#/operator-dashboard]  requests=36 preflights=0 bytes=70638 span=1419ms
+  +    0ms     9ms  200   13187B GET /auth/me
+  +    1ms     1ms  204       0B OPTIONS /auth/me
+  +   16ms  1160ms  200     297B GET /me/roster-order
+  +   16ms  1219ms  200      17B GET /patients/diary-unread-count
+  +   16ms     1ms  204       0B OPTIONS /me/roster-order
+  +   17ms  1212ms  200     274B GET /appointments?from=2026-11-19&to=2026-11-19&limit=1000&operatorId=SEED-OP-001 DUPx2
+  +   17ms     1ms  204       0B OPTIONS /patients/diary-unread-count
+  +   17ms  1220ms  200     274B GET /appointments?from=2026-11-19&to=2026-11-19&limit=1000&operatorId=SEED-OP-001 DUPx2
+  +   17ms  1223ms  200    4895B GET /consegne/overview
+  +   18ms  1213ms  200     858B GET /notes?box=all&limit=50
+  +   18ms     1ms  204       0B OPTIONS /appointments?from=2026-11-19&to=2026-11-19&limit=1000&operatorId=SEED-OP-001 DUPx2
+  +   18ms     3ms  204       0B OPTIONS /appointments?from=2026-11-19&to=2026-11-19&limit=1000&operatorId=SEED-OP-001 DUPx2
+  +   18ms     4ms  204       0B OPTIONS /consegne/overview
+  +   20ms     2ms  204       0B OPTIONS /notes?box=all&limit=50
+  +   28ms  1207ms  200     132B GET /patients/clinical-summary/overview
+  +   29ms     3ms  204       0B OPTIONS /patients/clinical-summary/overview
+  +  315ms   959ms  200   10653B GET /therapy-slots?date=2026-11-19
+  +  316ms    52ms  204       0B OPTIONS /therapy-slots?date=2026-11-19
+  +  316ms   964ms  200   10653B GET /therapy-slots?date=2026-11-20
+  +  317ms    52ms  204       0B OPTIONS /therapy-slots?date=2026-11-20
+  +  317ms   969ms  200    7219B GET /patients/diary-unread?limit=20 DUPx2
+  +  317ms   968ms  200    7219B GET /patients/diary-unread?limit=20 DUPx2
+  +  317ms    51ms  204       0B OPTIONS /patients/diary-unread?limit=20 DUPx2
+  +  317ms    51ms  204       0B OPTIONS /patients/diary-unread?limit=20 DUPx2
+  + 1156ms   173ms  200    3760B GET /patients/page?limit=50
+  + 1156ms   108ms  200    1873B GET /operators/directory/page?limit=100
+  + 1157ms   221ms  200    4590B GET /patients/parameters/page?limit=25&month=11&year=2026&date=2026-11-19&view=entry
+  + 1160ms     2ms  204       0B OPTIONS /patients/page?limit=50
+  + 1160ms     5ms  204       0B OPTIONS /operators/directory/page?limit=100
+  + 1160ms     5ms  204       0B OPTIONS /patients/parameters/page?limit=25&month=11&year=2026&date=2026-11-19&view=entry
+  + 1385ms    19ms  200      77B GET /farmaci/stato
+  + 1386ms    24ms  200    2033B GET /patients/clinical-summary?patientIds=SEED-PAZ-001%2CSEED-PAZ-002%2CSEED-PAZ-003%2CSEED-PAZ-004%2CSEED-PAZ-005%2CSEED-PAZ-006%2CSEED-PAZ-007%2CSEED-PAZ-008
+  + 1389ms     2ms  204       0B OPTIONS /farmaci/stato
+  + 1389ms     2ms  204       0B OPTIONS /patients/clinical-summary?patientIds=SEED-PAZ-001%2CSEED-PAZ-002%2CSEED-PAZ-003%2CSEED-PAZ-004%2CSEED-PAZ-005%2CSEED-PAZ-006%2CSEED-PAZ-007%2CSEED-PAZ-008
+  + 1403ms    16ms  200    2627B GET /patients/clinical-summary?patientIds=SEED-PAZ-003%2CSEED-PAZ-001%2Ccmwi5byg60005z67dms1k5py7%2CSEED-PAZ-006%2CSEED-PAZ-004%2CSEED-PAZ-007%2CSEED-PAZ-002%2CSEED-PAZ-008%2CSEED-PAZ-005%2Ccmwi5n6nd0007m97de5c7rt83
+  + 1404ms     5ms  204       0B OPTIONS /patients/clinical-summary?patientIds=SEED-PAZ-003%2CSEED-PAZ-001%2Ccmwi5byg60005z67dms1k5py7%2CSEED-PAZ-006%2CSEED-PAZ-004%2CSEED-PAZ-007%2CSEED-PAZ-002%2CSEED-PAZ-008%2CSEED-PAZ-005%2Ccmwi5n6nd0007m97de5c7rt83
+
+=== 03 Pazienti  [#/pazienti]  requests=30 preflights=0 bytes=18115 span=77ms
+  +    0ms    19ms  200     195B GET /ai/extraction/status
+  +    1ms     1ms  204       0B OPTIONS /ai/extraction/status
+  +    2ms    20ms  200     788B GET /patients/SEED-PAZ-003/parameter-readings?limit=50
+  +    2ms    31ms  200    1524B GET /patients/SEED-PAZ-001/parameter-readings?limit=50
+  +    2ms    29ms  200      49B GET /patients/cmwi5byg60005z67dms1k5py7/parameter-readings?limit=50
+  +    3ms    34ms  200      49B GET /patients/SEED-PAZ-006/parameter-readings?limit=50
+  +    3ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-003/parameter-readings?limit=50
+  +    3ms    47ms  200    3760B GET /patients/page?limit=50
+  +    3ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-001/parameter-readings?limit=50
+  +    4ms     1ms  204       0B OPTIONS /patients/cmwi5byg60005z67dms1k5py7/parameter-readings?limit=50
+  +    4ms    37ms  200    7284B GET /intake/drafts
+  +    4ms    32ms  200      23B GET /patients/settings
+  +    4ms     4ms  204       0B OPTIONS /patients/SEED-PAZ-006/parameter-readings?limit=50
+  +    5ms     5ms  204       0B OPTIONS /patients/page?limit=50
+  +   10ms     1ms  204       0B OPTIONS /intake/drafts
+  +   11ms     4ms  204       0B OPTIONS /patients/settings
+  +   32ms    22ms  200      49B GET /patients/SEED-PAZ-004/parameter-readings?limit=50
+  +   34ms     4ms  204       0B OPTIONS /patients/SEED-PAZ-004/parameter-readings?limit=50
+  +   40ms    20ms  200     810B GET /patients/SEED-PAZ-007/parameter-readings?limit=50
+  +   42ms    20ms  200     810B GET /patients/SEED-PAZ-002/parameter-readings?limit=50
+  +   42ms    21ms  200      49B GET /patients/SEED-PAZ-008/parameter-readings?limit=50
+  +   44ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-007/parameter-readings?limit=50
+  +   45ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-002/parameter-readings?limit=50
+  +   45ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-008/parameter-readings?limit=50
+  +   52ms    17ms  200    2627B GET /patients/clinical-summary?patientIds=SEED-PAZ-003%2CSEED-PAZ-001%2Ccmwi5byg60005z67dms1k5py7%2CSEED-PAZ-006%2CSEED-PAZ-004%2CSEED-PAZ-007%2CSEED-PAZ-002%2CSEED-PAZ-008%2CSEED-PAZ-005%2Ccmwi5n6nd0007m97de5c7rt83
+  +   53ms     4ms  204       0B OPTIONS /patients/clinical-summary?patientIds=SEED-PAZ-003%2CSEED-PAZ-001%2Ccmwi5byg60005z67dms1k5py7%2CSEED-PAZ-006%2CSEED-PAZ-004%2CSEED-PAZ-007%2CSEED-PAZ-002%2CSEED-PAZ-008%2CSEED-PAZ-005%2Ccmwi5n6nd0007m97de5c7rt83
+  +   59ms    17ms  200      49B GET /patients/SEED-PAZ-005/parameter-readings?limit=50
+  +   59ms     2ms  204       0B OPTIONS /patients/SEED-PAZ-005/parameter-readings?limit=50
+  +   62ms    15ms  200      49B GET /patients/cmwi5n6nd0007m97de5c7rt83/parameter-readings?limit=50
+  +   62ms     1ms  204       0B OPTIONS /patients/cmwi5n6nd0007m97de5c7rt83/parameter-readings?limit=50
+
+=== 04 open first patient  [#/dettaglio-paziente/SEED-PAZ-003]  requests=30 preflights=0 bytes=19270 span=131ms
+  +    0ms    16ms  200      40B GET /patients/SEED-PAZ-003/cartella DUPx2
+  +    1ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-003/cartella DUPx2
+  +    3ms    26ms  200      40B GET /patients/SEED-PAZ-003/cartella DUPx2
+  +    4ms    29ms  200     473B GET /patients/SEED-PAZ-003
+  +    4ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-003/cartella DUPx2
+  +    4ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-003
+  +   18ms    25ms  200    1873B GET /operators/directory/page?limit=100
+  +   19ms    32ms  200    1197B GET /patients/SEED-PAZ-003/room-options
+  +   20ms     3ms  204       0B OPTIONS /operators/directory/page?limit=100
+  +   20ms     ?ms net::ERR_ABORTED       0B GET /consegne?limit=20&patientId=SEED-PAZ-003 DUPx2 CANCELED
+  +   22ms     3ms  204       0B OPTIONS /patients/SEED-PAZ-003/room-options
+  +   22ms     3ms  204       0B OPTIONS /consegne?limit=20&patientId=SEED-PAZ-003 DUPx2
+  +   36ms    94ms  200    7219B GET /patients/diary-unread?limit=20
+  +   37ms     1ms  204       0B OPTIONS /patients/diary-unread?limit=20
+  +   38ms    54ms  200    1607B GET /patients/SEED-PAZ-003/therapies/page?limit=100&status=attiva
+  +   39ms    41ms  200      49B GET /patients/SEED-PAZ-003/parameter-readings?limit=50&date=2026-11-19
+  +   40ms     5ms  204       0B OPTIONS /patients/SEED-PAZ-003/therapies/page?limit=100&status=attiva
+  +   41ms     4ms  204       0B OPTIONS /patients/SEED-PAZ-003/parameter-readings?limit=50&date=2026-11-19
+  +   41ms    90ms  200     107B GET /patients/SEED-PAZ-003/intake-review
+  +   43ms     3ms  204       0B OPTIONS /patients/SEED-PAZ-003/intake-review
+  +   52ms    50ms  200     903B GET /consegne?limit=20&patientId=SEED-PAZ-003 DUPx2
+  +   53ms     4ms  204       0B OPTIONS /consegne?limit=20&patientId=SEED-PAZ-003 DUPx2
+  +   59ms    44ms  200    1774B GET /patients/SEED-PAZ-003/narrative-sections
+  +   59ms    63ms  200    1607B GET /patients/SEED-PAZ-003/therapies/page?limit=100&status=tutte
+  +   60ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-003/narrative-sections
+  +   60ms    67ms  200    1521B GET /patients/SEED-PAZ-003/diary?limit=50
+  +   60ms    70ms  200     860B GET /patients/SEED-PAZ-003/assessments/catalog
+  +   61ms     2ms  204       0B OPTIONS /patients/SEED-PAZ-003/therapies/page?limit=100&status=tutte
+  +   63ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-003/diary?limit=50
+  +   63ms     3ms  204       0B OPTIONS /patients/SEED-PAZ-003/assessments/catalog
+
+=== 05 back  [#/pazienti]  requests=6 preflights=0 bytes=13671 span=51ms
+  +    0ms    35ms  200    3760B GET /patients/page?limit=50
+  +    1ms    23ms  200    7284B GET /intake/drafts
+  +    1ms     1ms  204       0B OPTIONS /patients/page?limit=50
+  +    1ms     3ms  204       0B OPTIONS /intake/drafts
+  +   36ms    15ms  200    2627B GET /patients/clinical-summary?patientIds=SEED-PAZ-003%2CSEED-PAZ-001%2Ccmwi5byg60005z67dms1k5py7%2CSEED-PAZ-006%2CSEED-PAZ-004%2CSEED-PAZ-007%2CSEED-PAZ-002%2CSEED-PAZ-008%2CSEED-PAZ-005%2Ccmwi5n6nd0007m97de5c7rt83
+  +   37ms     4ms  204       0B OPTIONS /patients/clinical-summary?patientIds=SEED-PAZ-003%2CSEED-PAZ-001%2Ccmwi5byg60005z67dms1k5py7%2CSEED-PAZ-006%2CSEED-PAZ-004%2CSEED-PAZ-007%2CSEED-PAZ-002%2CSEED-PAZ-008%2CSEED-PAZ-005%2Ccmwi5n6nd0007m97de5c7rt83
+
+=== 06 Terapia  [#/terapie]  requests=18 preflights=0 bytes=11378 span=86ms
+  +    0ms    35ms  200   11058B GET /therapy-slots/page?date=2026-11-19&limit=100
+  +    1ms     1ms  204       0B OPTIONS /therapy-slots/page?date=2026-11-19&limit=100
+  +   44ms    16ms  200      40B GET /patients/SEED-PAZ-003/cartella
+  +   44ms    17ms  200      40B GET /patients/SEED-PAZ-001/cartella
+  +   44ms    24ms  200      40B GET /patients/SEED-PAZ-006/cartella
+  +   44ms    20ms  200      40B GET /patients/SEED-PAZ-004/cartella
+  +   44ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-003/cartella
+  +   44ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-001/cartella
+  +   45ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-006/cartella
+  +   45ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-004/cartella
+  +   63ms    19ms  200      40B GET /patients/SEED-PAZ-007/cartella
+  +   64ms    20ms  200      40B GET /patients/SEED-PAZ-002/cartella
+  +   67ms     2ms  204       0B OPTIONS /patients/SEED-PAZ-007/cartella
+  +   67ms     2ms  204       0B OPTIONS /patients/SEED-PAZ-002/cartella
+  +   68ms    17ms  200      40B GET /patients/SEED-PAZ-008/cartella
+  +   70ms    16ms  200      40B GET /patients/SEED-PAZ-005/cartella
+  +   71ms     3ms  204       0B OPTIONS /patients/SEED-PAZ-008/cartella
+  +   74ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-005/cartella
+
+=== 07 Parametri  [#/parametri-multipaziente]  requests=6 preflights=0 bytes=9138 span=37ms
+  +    0ms    17ms  200     788B GET /patients/SEED-PAZ-003/parameter-readings?limit=50
+  +    1ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-003/parameter-readings?limit=50
+  +    2ms    35ms  200    3760B GET /patients/page?limit=25&asOf=2026-11-19
+  +    2ms    33ms  200    4590B GET /patients/parameters/page?limit=25&month=11&year=2026&date=2026-11-19&view=entry
+  +    3ms     2ms  204       0B OPTIONS /patients/page?limit=25&asOf=2026-11-19
+  +    3ms     2ms  204       0B OPTIONS /patients/parameters/page?limit=25&month=11&year=2026&date=2026-11-19&view=entry
+
+=== 08 Consegne  [#/consegne]  requests=8 preflights=0 bytes=13279 span=41ms
+  +    0ms    14ms  200    1873B GET /operators/directory/page?limit=100
+  +    0ms     1ms  204       0B OPTIONS /operators/directory/page?limit=100
+  +    3ms    30ms  200    7219B GET /patients/diary-unread?limit=20
+  +    4ms    24ms  200    3760B GET /patients/page?limit=50&asOf=2026-11-19
+  +    5ms     1ms  204       0B OPTIONS /patients/diary-unread?limit=20
+  +    5ms     1ms  204       0B OPTIONS /patients/page?limit=50&asOf=2026-11-19
+  +   30ms    11ms  200     427B GET /patients/diary-unread-patient-counts?patientIds=SEED-PAZ-003%2CSEED-PAZ-001%2Ccmwi5byg60005z67dms1k5py7%2CSEED-PAZ-006%2CSEED-PAZ-004%2CSEED-PAZ-007%2CSEED-PAZ-002%2CSEED-PAZ-008%2CSEED-PAZ-005%2Ccmwi5n6nd0007m97de5c7rt83
+  +   32ms     2ms  204       0B OPTIONS /patients/diary-unread-patient-counts?patientIds=SEED-PAZ-003%2CSEED-PAZ-001%2Ccmwi5byg60005z67dms1k5py7%2CSEED-PAZ-006%2CSEED-PAZ-004%2CSEED-PAZ-007%2CSEED-PAZ-002%2CSEED-PAZ-008%2CSEED-PAZ-005%2Ccmwi5n6nd0007m97de5c7rt83
+
+=== 09 Agenda  [#/agenda-operatore]  requests=4 preflights=0 bytes=11332 span=36ms
+  +    0ms    36ms  200   11058B GET /therapy-slots/page?date=2026-11-19&limit=100
+  +    0ms    17ms  200     274B GET /appointments?from=2026-11-19&to=2026-11-19&limit=1000&operatorId=SEED-OP-001
+  +    1ms     2ms  204       0B OPTIONS /therapy-slots/page?date=2026-11-19&limit=100
+  +    2ms     1ms  204       0B OPTIONS /appointments?from=2026-11-19&to=2026-11-19&limit=1000&operatorId=SEED-OP-001
+
+=== 11 Turno (again)  [#/operator-dashboard]  requests=12 preflights=0 bytes=37854 span=92ms
+  +    0ms    21ms  200      77B GET /farmaci/stato
+  +    0ms    68ms  200   10653B GET /therapy-slots?date=2026-11-19
+  +    1ms    91ms  200   10653B GET /therapy-slots?date=2026-11-20
+  +    1ms     1ms  204       0B OPTIONS /farmaci/stato
+  +    1ms    56ms  200    7219B GET /patients/diary-unread?limit=20 DUPx2
+  +    1ms     2ms  204       0B OPTIONS /therapy-slots?date=2026-11-19
+  +    1ms    77ms  200    7219B GET /patients/diary-unread?limit=20 DUPx2
+  +    1ms     4ms  204       0B OPTIONS /therapy-slots?date=2026-11-20
+  +    1ms    78ms  200    2033B GET /patients/clinical-summary?patientIds=SEED-PAZ-001%2CSEED-PAZ-002%2CSEED-PAZ-003%2CSEED-PAZ-004%2CSEED-PAZ-005%2CSEED-PAZ-006%2CSEED-PAZ-007%2CSEED-PAZ-008
+  +    2ms     4ms  204       0B OPTIONS /patients/diary-unread?limit=20 DUPx2
+  +    2ms     4ms  204       0B OPTIONS /patients/diary-unread?limit=20 DUPx2
+  +    6ms     1ms  204       0B OPTIONS /patients/clinical-summary?patientIds=SEED-PAZ-001%2CSEED-PAZ-002%2CSEED-PAZ-003%2CSEED-PAZ-004%2CSEED-PAZ-005%2CSEED-PAZ-006%2CSEED-PAZ-007%2CSEED-PAZ-008
+
+=== 12 Pazienti (again)  [#/pazienti]  requests=30 preflights=0 bytes=18115 span=80ms
+  +    0ms    17ms  200     195B GET /ai/extraction/status
+  +    1ms     1ms  204       0B OPTIONS /ai/extraction/status
+  +    1ms    35ms  200     788B GET /patients/SEED-PAZ-003/parameter-readings?limit=50
+  +    1ms    36ms  200    1524B GET /patients/SEED-PAZ-001/parameter-readings?limit=50
+  +    1ms     3ms  204       0B OPTIONS /patients/SEED-PAZ-003/parameter-readings?limit=50
+  +    2ms    37ms  200      49B GET /patients/cmwi5byg60005z67dms1k5py7/parameter-readings?limit=50
+  +    2ms    38ms  200      49B GET /patients/SEED-PAZ-006/parameter-readings?limit=50
+  +    2ms     3ms  204       0B OPTIONS /patients/SEED-PAZ-001/parameter-readings?limit=50
+  +    2ms    52ms  200    3760B GET /patients/page?limit=50
+  +    2ms    38ms  200    7284B GET /intake/drafts
+  +    2ms    51ms  200      23B GET /patients/settings
+  +    4ms     2ms  204       0B OPTIONS /patients/cmwi5byg60005z67dms1k5py7/parameter-readings?limit=50
+  +    5ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-006/parameter-readings?limit=50
+  +    5ms     2ms  204       0B OPTIONS /patients/page?limit=50
+  +    5ms     2ms  204       0B OPTIONS /intake/drafts
+  +    5ms     2ms  204       0B OPTIONS /patients/settings
+  +   40ms    21ms  200      49B GET /patients/SEED-PAZ-004/parameter-readings?limit=50
+  +   43ms     2ms  204       0B OPTIONS /patients/SEED-PAZ-004/parameter-readings?limit=50
+  +   44ms    22ms  200     810B GET /patients/SEED-PAZ-007/parameter-readings?limit=50
+  +   45ms    22ms  200     810B GET /patients/SEED-PAZ-002/parameter-readings?limit=50
+  +   45ms    22ms  200      49B GET /patients/SEED-PAZ-008/parameter-readings?limit=50
+  +   48ms     2ms  204       0B OPTIONS /patients/SEED-PAZ-007/parameter-readings?limit=50
+  +   48ms     2ms  204       0B OPTIONS /patients/SEED-PAZ-002/parameter-readings?limit=50
+  +   48ms     3ms  204       0B OPTIONS /patients/SEED-PAZ-008/parameter-readings?limit=50
+  +   60ms    19ms  200    2627B GET /patients/clinical-summary?patientIds=SEED-PAZ-003%2CSEED-PAZ-001%2Ccmwi5byg60005z67dms1k5py7%2CSEED-PAZ-006%2CSEED-PAZ-004%2CSEED-PAZ-007%2CSEED-PAZ-002%2CSEED-PAZ-008%2CSEED-PAZ-005%2Ccmwi5n6nd0007m97de5c7rt83
+  +   61ms     1ms  204       0B OPTIONS /patients/clinical-summary?patientIds=SEED-PAZ-003%2CSEED-PAZ-001%2Ccmwi5byg60005z67dms1k5py7%2CSEED-PAZ-006%2CSEED-PAZ-004%2CSEED-PAZ-007%2CSEED-PAZ-002%2CSEED-PAZ-008%2CSEED-PAZ-005%2Ccmwi5n6nd0007m97de5c7rt83
+  +   64ms    11ms  200      49B GET /patients/SEED-PAZ-005/parameter-readings?limit=50
+  +   67ms     1ms  204       0B OPTIONS /patients/SEED-PAZ-005/parameter-readings?limit=50
+  +   67ms    13ms  200      49B GET /patients/cmwi5n6nd0007m97de5c7rt83/parameter-readings?limit=50
+  +   68ms     1ms  204       0B OPTIONS /patients/cmwi5n6nd0007m97de5c7rt83/parameter-readings?limit=50
+
+TOTAL mode=dist requests=181 preflights=0 bytes=222884
