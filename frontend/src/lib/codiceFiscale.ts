@@ -7,8 +7,6 @@
 import CodiceFiscale from 'codice-fiscale-js';
 import { normalizeCF } from './cfCheck';
 
-export { normalizeCF, isValidCF, fiscalCodeSex } from './cfCheck';
-
 export interface ComputeCFInput {
   nome: string;
   cognome: string;

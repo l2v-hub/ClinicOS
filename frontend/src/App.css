@@ -4912,14 +4912,6 @@ textarea.form-input {
   color: var(--text-xmuted);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   PATIENT LIST VIEW
-═══════════════════════════════════════════════════════════════════════════ */
-
-.operator-agenda-view {
-  max-width: 1400px;
-  margin: 0 auto;
-}
 .consegne-page {
   max-width: 1400px;
   margin: 0 auto;
@@ -5014,7 +5006,6 @@ textarea.form-input {
   .patient-detail,
   .patient-record-view,
   .consegne-page,
-  .operator-agenda-view,
   .admin-dashboard {
     padding-bottom: 84px;
   }
@@ -5999,9 +5990,7 @@ textarea.form-input {
 .patients-view,
 .patient-detail,
 .patient-detail-view,
-.op-management,
-.agenda-admin-view,
-.admin-dashboard {
+.agenda-admin-view {
   max-width: none;
 }
 

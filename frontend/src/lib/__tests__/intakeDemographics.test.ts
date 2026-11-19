@@ -2,7 +2,7 @@ import { intakeCompletionPending } from '../patientListView';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { intakeDemographicErrors } from '../intakeDemographics';
-import { fiscalCodeSex } from '../codiceFiscale';
+import { fiscalCodeSex } from '../cfCheck';
 import { intakeProgress } from '../../components/shared/intake/intakeProgress';
 
 const identity = { firstName: 'Mario', lastName: 'Rossi', codiceFiscale: 'RSSMRA80A01H501U' };
