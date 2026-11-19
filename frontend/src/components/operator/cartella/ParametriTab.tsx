@@ -173,12 +173,11 @@ export function ParametriTab({
   const onlyToday = !wholeMonth && isCurrentMonth;
   // Vista ridotta: oggi più i giorni che hanno già un valore (una bozza ripresa nei giorni
   // successivi non nasconde ciò che è stato rilevato prima).
-  const hasValues = (g: number) => {
-    const day = meseCorrente.giorni.find((d) => d.giorno === g);
-    return !!day && GRID_COLS.some((c) => String(day[c.key] ?? '').trim() !== '');
-  };
+  const filledDays = new Set(meseCorrente.giorni.filter(giornoHasData).map((d) => d.giorno));
   const allDays = Array.from({ length: numGiorni }, (_, i) => i + 1);
-  const giorni = onlyToday ? allDays.filter((g) => g === today.getDate() || hasValues(g)) : allDays;
+  const giorni = onlyToday
+    ? allDays.filter((g) => g === today.getDate() || filledDays.has(g))
+    : allDays;
 
   // Quante celle si possono compilare in rapida sequenza (Tab attraverso una riga) prima che
   // il salvataggio parta: raggruppa una PUT dell'intera cartella per "burst" di editing invece
@@ -612,7 +611,7 @@ export function ParametriTab({
             {todayFirst && isCurrentMonth && (
               <button
                 type="button"
-                className="btn-secondary btn-sm"
+                className="ds-chip"
                 aria-pressed={wholeMonth}
                 onClick={() => setWholeMonth((v) => !v)}
               >

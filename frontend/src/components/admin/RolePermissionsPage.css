@@ -653,9 +653,6 @@ select.rp-assign__select--changed:not(#ds) {
 }
 
 @media (max-width: 1023px) {
-  .rp-page {
-    padding: 0;
-  }
   .rp-changebar {
     margin: 0 -14px;
     padding: 10px 14px;

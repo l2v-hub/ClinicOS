@@ -1,0 +1,85 @@
+== Op/Turno
+main.page-content.content-panel[pad 24px/24px disp block] > div.operator-dashboard.turno[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | ul.turno-action-chips                                    mt 0px mb 0px pad 0px/0px bg - r 0px h 40
+   gap  16 | div.turno-grid                                           mt 0px mb 0px pad 0px/0px bg - r 0px h 1553
+== Op/Pazienti
+main.page-content.content-panel[pad 24px/24px disp block] > div.patient-list-view[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | section.plist-card.plist-new                             mt 0px mb 0px pad 16px/16px bg y r 12px h 82
+   gap  16 | section.plist-card.plist-drafts                          mt 0px mb 0px pad 16px/16px bg y r 12px h 218
+   gap  16 | section.plist-card.plist-list                            mt 0px mb 0px pad 16px/16px bg y r 12px h 1125
+== Op/Terapia
+main.page-content.content-panel[pad 24px/24px disp block] > div.giro-view[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | div.giro-primary-controls                                mt 0px mb 0px pad 0px/0px bg - r 0px h 44
+   gap  16 | ul.giro-patients                                         mt 0px mb 0px pad 0px/0px bg - r 0px h 1748
+== Op/Parametri
+main.page-content.content-panel[pad 24px/24px disp block] > div.par-view[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | div.par-grid                                             mt 0px mb 0px pad 0px/0px bg - r 0px h 784
+   gap  16 | p.parameter-entry-help                                   mt 0px mb 0px pad 0px/0px bg - r 0px h 20
+== Op/Consegne
+main.page-content.content-panel[pad 24px/24px disp block] > div.handover-workspace[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | section.consegna-quick                                   mt 0px mb 0px pad 16px/16px bg y r 12px h 110
+   gap  16 | div.ds-chip-group                                        mt 0px mb 0px pad 0px/0px bg - r 0px h 44
+   gap  16 | section.handover-queue                                   mt 0px mb 0px pad 0px/0px bg - r 0px h 2631
+   gap  16 | p.handover-workspace__memory                             mt 0px mb 0px pad 0px/0px bg - r 0px h 17
+== Op/Agenda
+main.page-content.content-panel[pad 24px/24px disp block] > div.agt-view.agt-view--hmi[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | header.page-header.page-header--in-topbar                mt 0px mb 0px pad 0px/0px bg - r 0px h 44
+   gap  16 | div.agt-state-filter                                     mt 0px mb 0px pad 0px/0px bg - r 0px h 44
+   gap  16 | p.empty-state-card                                       mt 0px mb 0px pad 16px/16px bg y r 12px h 54
+   gap  16 | section.agt-day-card                                     mt 0px mb 0px pad 16px/16px bg y r 12px h 1403
+== Op/Farmaci
+main.page-content.content-panel[pad 24px/24px disp block] > div.page-anagrafica-farmaci[pad 0px/0px disp flex] > div.page-anagrafica-farmaci__corpo[pad 0px/0px disp block] > div.ricerca-farmaco[pad 16px/16px disp flex gap 16px maxw none]
+   gap   0 | div.ricerca-farmaco__campo                               mt 0px mb 0px pad 0px/16px bg y r 12px h 48
+   gap  16 | div.filter-chips.ricerca-farmaco__criterio               mt 0px mb 0px pad 0px/0px bg - r 0px h 44
+   gap  16 | div.ricerca-farmaco__esiti                               mt 0px mb 0px pad 0px/0px bg - r 0px h 52
+== Op/Milo
+main.page-content.content-panel[pad 24px/24px disp block] > div.page-anagrafica-farmaci[pad 0px/0px disp flex] > div.page-anagrafica-farmaci__corpo[pad 0px/0px disp block] > div.ricerca-farmaco[pad 16px/16px disp flex gap 16px maxw none]
+   gap   0 | div.ricerca-farmaco__campo                               mt 0px mb 0px pad 0px/16px bg y r 12px h 48
+   gap  16 | div.filter-chips.ricerca-farmaco__criterio               mt 0px mb 0px pad 0px/0px bg - r 0px h 44
+   gap  16 | div.ricerca-farmaco__esiti                               mt 0px mb 0px pad 0px/0px bg - r 0px h 52
+== Am/Dashboard
+main.page-content.content-panel[pad 24px/24px disp block] > div.admin-dashboard[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | section.admin-attention                                  mt 0px mb 0px pad 16px/16px bg y r 12px h 1609
+   gap  16 | section.admin-ward-summary                               mt 0px mb 0px pad 16px/16px bg - r 12px h 196
+== Am/Operatori
+main.page-content.content-panel[pad 24px/24px disp block] > div.op-management[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | header.page-header.page-header--in-topbar                mt 0px mb 0px pad 0px/0px bg - r 0px h 44
+   gap  16 | p.page-lead                                              mt 0px mb 0px pad 0px/0px bg - r 0px h 20
+   gap  16 | details.roster-order.roster-defaults                     mt 0px mb 0px pad 16px/16px bg y r 10px h 78
+   gap  16 | div.cts.cts--open                                        mt 0px mb 0px pad 0px/0px bg y r 12px h 821
+== Am/Agenda
+main.page-content.content-panel[pad 24px/24px disp block] > div.agt-view[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | header.page-header.page-header--in-topbar                mt 0px mb 0px pad 0px/0px bg - r 0px h 44
+   gap  16 | div.agt-state-filter                                     mt 0px mb 0px pad 0px/0px bg - r 0px h 44
+   gap  16 | div.agt-legend                                           mt 0px mb 0px pad 4px/20px bg y r 0px h 26
+   gap  16 | p.empty-state-card                                       mt 0px mb 0px pad 16px/16px bg y r 12px h 54
+   gap  16 | div.agt-admin-day-wrap                                   mt 0px mb 0px pad 0px/0px bg y r 0px h 555
+== Am/Terapia
+main.page-content.content-panel[pad 24px/24px disp block] > div.giro-view[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | div.giro-primary-controls                                mt 0px mb 0px pad 0px/0px bg - r 0px h 40
+   gap  16 | section.tcal                                             mt 0px mb 0px pad 0px/0px bg - r 0px h 440
+== Am/Posti Letto
+main.page-content.content-panel[pad 24px/24px disp block] > div.rooms-view[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | header.page-header.page-header--in-topbar                mt 0px mb 0px pad 0px/0px bg - r 0px h 44
+   gap  16 | div.occupancy-stats                                      mt 0px mb 0px pad 16px/16px bg y r 12px h 90
+   gap  16 | div.filter-chips                                         mt 0px mb 0px pad 0px/0px bg - r 0px h 44
+   gap  16 | div.filter-chips                                         mt 0px mb 0px pad 0px/0px bg - r 0px h 44
+   gap  16 | div.cts.cts--open                                        mt 0px mb 0px pad 0px/0px bg y r 12px h 511
+== Am/Orari
+main.page-content.content-panel[pad 24px/24px disp block] > div.schedule-view[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | div.schedule-op-selector                                 mt 0px mb 0px pad 0px/0px bg - r 0px h 96
+   gap  16 | div.schedule-card                                        mt 0px mb 0px pad 16px/16px bg y r 12px h 191
+== Am/Consegne
+main.page-content.content-panel[pad 24px/24px disp block] > div.handover-workspace[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | section.consegna-quick                                   mt 0px mb 0px pad 16px/16px bg y r 12px h 110
+   gap  16 | div.ds-chip-group                                        mt 0px mb 0px pad 0px/0px bg - r 0px h 44
+   gap  16 | section.handover-queue                                   mt 0px mb 0px pad 0px/0px bg - r 0px h 2643
+   gap  16 | p.handover-workspace__memory                             mt 0px mb 0px pad 0px/0px bg - r 0px h 17
+== Am/Ruoli
+main.page-content.content-panel[pad 24px/24px disp block] > div.rp-page[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | header.page-header.page-header--in-topbar                mt 0px mb 0px pad 0px/0px bg - r 0px h 66
+   gap  16 | div.rp-body                                              mt 0px mb 0px pad 0px/0px bg - r 0px h 791
+== Am/Milo
+main.page-content.content-panel[pad 24px/24px disp block] > div.rp-page[pad 0px/0px disp flex gap 16px maxw none]
+   gap   0 | header.page-header.page-header--in-topbar                mt 0px mb 0px pad 0px/0px bg - r 0px h 66
+   gap  16 | div.rp-body                                              mt 0px mb 0px pad 0px/0px bg - r 0px h 791
