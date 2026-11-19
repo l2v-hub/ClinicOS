@@ -1,0 +1,6 @@
+Politica di sicurezza dei contenuti (frontend/vercel.json): direttive cambiate
+- prima: connect-src 'self' https://development-backend-development-a4a4.up.railway.app https://login.microsoftonline.com
+- dopo:  connect-src 'self' https://development-backend-development-a4a4.up.railway.app https://clinicos-backend-demo.up.railway.app https://clinicos-backend-production-df88.up.railway.app https://login.microsoftonline.com
+direttive totali: 14 -> 14; cambiate: 1
+riscrittura SPA: /((?!assets/).*)
+resto del file identico: True
