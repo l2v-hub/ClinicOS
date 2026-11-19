@@ -169,9 +169,16 @@ export function ParametriTab({
   const mensili: ParametriMensili[] = cartella.parametriMensili ?? [];
   const meseCorrente = findOrCreateMese(mensili, viewMese, viewAnno);
   const numGiorni = daysInMonth(viewMese, viewAnno);
-  const onlyToday =
-    !wholeMonth && viewMese === today.getMonth() + 1 && viewAnno === today.getFullYear();
-  const giorni = onlyToday ? [today.getDate()] : Array.from({ length: numGiorni }, (_, i) => i + 1);
+  const isCurrentMonth = viewMese === today.getMonth() + 1 && viewAnno === today.getFullYear();
+  const onlyToday = !wholeMonth && isCurrentMonth;
+  // Vista ridotta: oggi più i giorni che hanno già un valore (una bozza ripresa nei giorni
+  // successivi non nasconde ciò che è stato rilevato prima).
+  const hasValues = (g: number) => {
+    const day = meseCorrente.giorni.find((d) => d.giorno === g);
+    return !!day && GRID_COLS.some((c) => String(day[c.key] ?? '').trim() !== '');
+  };
+  const allDays = Array.from({ length: numGiorni }, (_, i) => i + 1);
+  const giorni = onlyToday ? allDays.filter((g) => g === today.getDate() || hasValues(g)) : allDays;
 
   // Quante celle si possono compilare in rapida sequenza (Tab attraverso una riga) prima che
   // il salvataggio parta: raggruppa una PUT dell'intera cartella per "burst" di editing invece
@@ -602,7 +609,7 @@ export function ParametriTab({
             <span className="cr-meta" style={{ marginLeft: 8 }}>
               Clicca su una cella per modificare il valore direttamente
             </span>
-            {todayFirst && (
+            {todayFirst && isCurrentMonth && (
               <button
                 type="button"
                 className="btn-secondary btn-sm"

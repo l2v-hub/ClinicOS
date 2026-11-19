@@ -101,7 +101,26 @@ sidebar, viste strette, misure di rapidità di partenza, build.
 
 ## QA indipendente
 
-In corso al momento della stesura.
+Revisione del commit e0841d5b da parte di un agente che non ha scritto il codice (sola lettura,
+senza browser): esito **READY FOR QA**. `tsc -b` OK, suite 1597/1597, lint 139 errori tutti
+preesistenti (nessuno nuovo nei file toccati). Controllati e puliti: blocchi CSS rimossi (graffe,
+liste di selettori), gestori invariati nell'Agenda amministratore, navigazione da tastiera nei
+parametri, parità del controllo del codice fiscale, ordine del redirect MSAL, coda di
+precaricamento (16 moduli, nessun doppione), `vercel.json` invariato, nessun file fuori ambito.
+
+Tre osservazioni minori:
+
+1. Parametri nella scheda d'ingresso: una bozza ripresa in un giorno successivo nascondeva i valori
+   dei giorni precedenti. **Corretto** dopo la revisione: la vista ridotta mostra oggi più i giorni
+   che hanno già un valore.
+2. Il pulsante «Tutto il mese» restava visibile su un altro mese, dove non ha effetto.
+   **Corretto**: compare solo sul mese corrente.
+3. La regola unica azzera anche un `padding-bottom: 84px` previsto sotto i 1024px per un pulsante
+   flottante dell'assistente che oggi non è montato: nessun effetto visibile, regola residua in
+   `App.css`. Non corretto.
+
+Le correzioni 1 e 2 sono state verificate con controllo dei tipi e suite (1597/1597), non nel
+browser: l'ambiente locale non era più disponibile dopo il riavvio della sessione.
 
 ## Final Decision
 
