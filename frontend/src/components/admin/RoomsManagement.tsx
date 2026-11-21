@@ -274,7 +274,7 @@ export function RoomsManagement() {
           <span className="occ-stat__lbl">Occupati</span>
         </div>
         <div className="occ-stat">
-          <span className="occ-stat__val" style={{ color: 'var(--emerald)' }}>
+          <span className="occ-stat__val" style={{ color: 'color-mix(in srgb, var(--emerald) 70%, black)' }}>
             {occ?.freeBeds ?? 0}
           </span>
           <span className="occ-stat__lbl">Liberi</span>
@@ -376,7 +376,7 @@ export function RoomsManagement() {
                   <div className="room-occupancy-indicator">
                     <span
                       style={{
-                        color: occupati === room.beds.length ? 'var(--red)' : 'var(--emerald)',
+                        color: occupati === room.beds.length ? 'var(--red)' : 'color-mix(in srgb, var(--emerald) 70%, black)',
                         fontWeight: 700,
                       }}
                     >
@@ -407,7 +407,7 @@ export function RoomsManagement() {
 
                 {room.note && <p className="room-note">{room.note}</p>}
                 {room.stato === 'manutenzione' && (
-                  <p className="room-note" style={{ color: 'var(--amber)', fontWeight: 600 }}>
+                  <p className="room-note" style={{ color: 'color-mix(in srgb, var(--amber) 70%, black)', fontWeight: 600 }}>
                     In manutenzione
                   </p>
                 )}

@@ -550,14 +550,17 @@
 :is(.alert-chip--red, .letto-stato--occupato):not(#ds) {
   color: color-mix(in srgb, var(--red, #d93a4a) 80%, black);
 }
-.agt-badge--programmato:not(#ds) {
+.letto-stato--libero:not(#ds) {
+  color: color-mix(in srgb, var(--emerald, #16a37b) 70%, black);
+}
+:is(.agt-badge--programmato, .badge--amber):not(#ds) {
   background: color-mix(in srgb, var(--amber, #c77700) 70%, black);
 }
 /* Giorno senza turno: resta attenuato ma leggibile (era 0.55 → 3.7:1). */
 .schedule-day--off:not(#ds) {
   opacity: 0.75;
 }
-.agt-badge--completato:not(#ds) {
+:is(.agt-badge--completato, .badge--green):not(#ds) {
   background: color-mix(in srgb, #16a37b 75%, black);
 }
 
