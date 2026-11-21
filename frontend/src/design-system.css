@@ -527,6 +527,38 @@
 /* ── Avatar con il colore dell'operatore: iniziali sempre leggibili ───────────────────────── */
 .op-avatar-sm[style*='background']:not(#ds) {
   color: #fff;
+  /* Velo scuro del 25% sul colore dell'operatore (ombra interna: il colore arriva inline come
+     `background`): stessa tinta, iniziali ≥4.5:1 su ogni colore. */
+  box-shadow: inset 0 0 0 100px rgb(0 0 0 / 0.25);
+}
+
+/* ── Contrasto delle etichette piccole (WCAG AA 4.5:1) ─────────────────────────────────────────
+   Badge e chip a 10–14px su fondo tinto: il testo usa la variante scura della stessa tinta, come
+   `ds-badge` (blu attivo, ambra e rosso scuriti). Il significato dei colori non cambia. */
+:is(
+  .cts__badge,
+  .room-number-badge,
+  .assistant-id__badge,
+  .patient-roster-status:not(.patient-roster-status--warning),
+  .op-avatar-sm:not([style*='background'])
+):not(#ds) {
+  color: var(--ds-blue-active);
+}
+:is(.alert-chip--amber, .letto-stato--manutenzione):not(#ds) {
+  color: color-mix(in srgb, var(--amber, #c77700) 70%, black);
+}
+:is(.alert-chip--red, .letto-stato--occupato):not(#ds) {
+  color: color-mix(in srgb, var(--red, #d93a4a) 80%, black);
+}
+.agt-badge--programmato:not(#ds) {
+  background: color-mix(in srgb, var(--amber, #c77700) 70%, black);
+}
+/* Giorno senza turno: resta attenuato ma leggibile (era 0.55 → 3.7:1). */
+.schedule-day--off:not(#ds) {
+  opacity: 0.75;
+}
+.agt-badge--completato:not(#ds) {
+  background: color-mix(in srgb, #16a37b 75%, black);
 }
 
 /* Icone a tratto nei pulsanti con etichetta comprimibile (azioni di intestazione della cartella). */

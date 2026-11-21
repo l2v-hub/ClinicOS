@@ -3,7 +3,7 @@
 // Modalità ingresso, Motivo ingresso, Operatore responsabile, Note iniziali.
 // No fetches here — the parent IntakeWorkspace owns patchDraft.
 
-import { useEffect, useRef } from 'react';
+import { cloneElement, isValidElement, useEffect, useId, useRef, type ReactElement } from 'react';
 import { localIsoDate } from '../../../lib/appointmentRange';
 
 /** Giorno locale di elaborazione (non UTC: fra mezzanotte e le 2 darebbe il giorno prima). */
@@ -71,13 +71,22 @@ function NpmField({
   span2?: boolean;
   children: React.ReactNode;
 }) {
+  // L'etichetta nomina il campo anche per i lettori di schermo (data, ora ed elenchi non hanno
+  // un segnaposto che li descriva).
+  const inputId = useId();
+  const control = isValidElement(children)
+    ? cloneElement(children as ReactElement<{ id?: string; 'aria-required'?: boolean }>, {
+        id: inputId,
+        'aria-required': required ? true : undefined,
+      })
+    : children;
   return (
     <div className={`npm-field${span2 ? ' npm-span-2' : ''}`}>
-      <label className="npm-label">
+      <label className="npm-label" htmlFor={inputId}>
         {label}
         {required && <span className="npm-required"> *</span>}
       </label>
-      {children}
+      {control}
       {hint && <span className="npm-hint">{hint}</span>}
     </div>
   );

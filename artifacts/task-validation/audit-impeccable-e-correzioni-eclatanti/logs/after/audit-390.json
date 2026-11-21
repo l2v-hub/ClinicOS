@@ -1,0 +1,381 @@
+[
+ {
+  "label": "login",
+  "width": 390,
+  "axe": [],
+  "controls": 2,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:26px/800"
+  ]
+ },
+ {
+  "label": "Operatore-Turno",
+  "width": 390,
+  "axe": [],
+  "controls": 43,
+  "small": [
+   {
+    "tag": "button",
+    "cls": "turno-appt__who link-btn",
+    "txt": "Mancini, Roberto",
+    "w": 127,
+    "h": 20
+   }
+  ],
+  "smallCount": 1,
+  "under44": 1,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600",
+   "H2:18px/600",
+   "H3:14px/600"
+  ]
+ },
+ {
+  "label": "Operatore-Pazienti",
+  "width": 390,
+  "axe": [],
+  "controls": 42,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600",
+   "H2:18px/600"
+  ]
+ },
+ {
+  "label": "Operatore-cartella",
+  "width": 390,
+  "axe": [],
+  "controls": 44,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600",
+   "H2:18px/600"
+  ]
+ },
+ {
+  "label": "Operatore-Terapia",
+  "width": 390,
+  "axe": [],
+  "controls": 45,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600"
+  ]
+ },
+ {
+  "label": "Operatore-Parametri",
+  "width": 390,
+  "axe": [],
+  "controls": 40,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600",
+   "H2:18px/600"
+  ]
+ },
+ {
+  "label": "Operatore-Consegne",
+  "width": 390,
+  "axe": [],
+  "controls": 32,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600",
+   "H2:18px/600",
+   "H3:16px/600"
+  ]
+ },
+ {
+  "label": "Operatore-Agenda",
+  "width": 390,
+  "axe": [],
+  "controls": 47,
+  "small": [
+   {
+    "tag": "button",
+    "cls": "link-btn agt-apt-card__patient",
+    "txt": "Mancini, Roberto",
+    "w": 115,
+    "h": 20
+   }
+  ],
+  "smallCount": 1,
+  "under44": 1,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600",
+   "H2:18px/600"
+  ]
+ },
+ {
+  "label": "Operatore-Farmaci",
+  "width": 390,
+  "axe": [],
+  "controls": 16,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600"
+  ]
+ },
+ {
+  "label": "Operatore-Milo",
+  "width": 390,
+  "axe": [],
+  "controls": 26,
+  "small": [
+   {
+    "tag": "button",
+    "cls": "link-btn",
+    "txt": "Riprova",
+    "w": 358,
+    "h": 20
+   }
+  ],
+  "smallCount": 1,
+  "under44": 1,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600",
+   "H2:18px/600"
+  ]
+ },
+ {
+  "label": "login",
+  "width": 390,
+  "axe": [],
+  "controls": 2,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:26px/800"
+  ]
+ },
+ {
+  "label": "Amministratore-Dashboard",
+  "width": 390,
+  "axe": [],
+  "controls": 37,
+  "small": [
+   {
+    "tag": "button",
+    "cls": "link-btn",
+    "txt": "Verifica prescrizioni",
+    "w": 136,
+    "h": 20
+   },
+   {
+    "tag": "button",
+    "cls": "link-btn",
+    "txt": "Verifica turni",
+    "w": 88,
+    "h": 20
+   },
+   {
+    "tag": "button",
+    "cls": "link-btn",
+    "txt": "Completa turni",
+    "w": 100,
+    "h": 20
+   },
+   {
+    "tag": "button",
+    "cls": "link-btn",
+    "txt": "Gestisci letti",
+    "w": 83,
+    "h": 20
+   }
+  ],
+  "smallCount": 4,
+  "under44": 4,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600",
+   "H2:18px/600",
+   "H3:15.2px/500"
+  ]
+ },
+ {
+  "label": "Amministratore-Operatori",
+  "width": 390,
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "n": 6,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "targets": [
+     ".pt-list-card:nth-child(2) > .op-avatar-sm ratio=3.74 fg=#ffffff bg=#0d9488 fs=10.5pt (14px)",
+     ".pt-list-card:nth-child(4) > .op-avatar-sm ratio=3.46 fg=#ffffff bg=#c77700 fs=10.5pt (14px)",
+     ".pt-list-card:nth-child(6) > .op-avatar-sm ratio=4.23 fg=#ffffff bg=#8b5cf6 fs=10.5pt (14px)",
+     ".pt-list-card:nth-child(7) > .op-avatar-sm ratio=3.76 fg=#ffffff bg=#059669 fs=10.5pt (14px)",
+     ".pt-list-card:nth-child(8) > .op-avatar-sm ratio=2.77 fg=#ffffff bg=#0ea5e9 fs=10.5pt (14px)",
+     ".pt-list-card:nth-child(9) > .op-avatar-sm ratio=3.76 fg=#ffffff bg=#ef4444 fs=10.5pt (14px)"
+    ]
+   }
+  ],
+  "controls": 35,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600"
+  ]
+ },
+ {
+  "label": "Amministratore-Agenda",
+  "width": 390,
+  "axe": [],
+  "controls": 35,
+  "small": [
+   {
+    "tag": "button",
+    "cls": "link-btn agt-apt-card__patient",
+    "txt": "Mancini, Roberto",
+    "w": 36,
+    "h": 20
+   }
+  ],
+  "smallCount": 1,
+  "under44": 1,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600"
+  ]
+ },
+ {
+  "label": "Amministratore-Terapia",
+  "width": 390,
+  "axe": [],
+  "controls": 34,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600"
+  ]
+ },
+ {
+  "label": "Amministratore-Posti Letto",
+  "width": 390,
+  "axe": [],
+  "controls": 48,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600"
+  ]
+ },
+ {
+  "label": "Amministratore-Orari",
+  "width": 390,
+  "axe": [],
+  "controls": 24,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600"
+  ]
+ },
+ {
+  "label": "Amministratore-Consegne",
+  "width": 390,
+  "axe": [],
+  "controls": 37,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600",
+   "H2:18px/600",
+   "H3:16px/600"
+  ]
+ },
+ {
+  "label": "Amministratore-Ruoli",
+  "width": 390,
+  "axe": [],
+  "controls": 54,
+  "small": [],
+  "smallCount": 0,
+  "under44": 0,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600"
+  ]
+ },
+ {
+  "label": "Amministratore-Milo",
+  "width": 390,
+  "axe": [],
+  "controls": 64,
+  "small": [
+   {
+    "tag": "button",
+    "cls": "link-btn",
+    "txt": "Riprova",
+    "w": 358,
+    "h": 20
+   }
+  ],
+  "smallCount": 1,
+  "under44": 1,
+  "pageOverflow": 0,
+  "overflow": [],
+  "headings": [
+   "H1:18px/600",
+   "H2:18px/600",
+   "H3:14px/600"
+  ]
+ }
+]
