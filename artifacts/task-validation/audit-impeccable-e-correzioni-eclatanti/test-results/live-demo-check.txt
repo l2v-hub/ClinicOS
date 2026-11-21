@@ -1,11 +1,12 @@
-Amministratore: regola contrasto avatar presente nel CSS servito = false
-Amministratore Operatori: axe color-contrastx5[.badge,.op-avatar-sm]
-Amministratore Posti Letto: axe color-contrastx18[.badge,.occ-stat__val,span]
-Amministratore Orari: axe color-contrastx1[.badge]
-Amministratore Agenda: axe color-contrastx1[.badge]
+Verifica sul sito pubblicato 2026-11-21T09:39:57Z, deployment di main 2cfc8618
+Amministratore Operatori: axe color-contrastx4[.op-avatar-sm]
+Amministratore Posti Letto: axe -
+Amministratore Orari: axe -
+Amministratore Agenda: axe -
 Amministratore: errori console/API []
-Medico 1: regola contrasto avatar presente nel CSS servito = false
-Medico 1 Turno: axe color-contrastx1[.badge]
-Medico 1 Pazienti: axe color-contrastx1[.badge]
-Medico 1 Agenda: axe color-contrastx1[.badge]
+Medico 1 Turno: axe -
+Medico 1 Pazienti: axe -
+Medico 1 Agenda: axe -
 Medico 1: errori console/API []
+Stile calcolato sul sito: Operatori avatar boxShadow rgba(0, 0, 0, 0.25) 0px 0px 0px 100px inset
+Nota: i 4 avvisi su .op-avatar-sm sono il falso positivo noto (axe legge il colore inline e non l'ombra interna); contrasto misurato sui pixel >= 4.71:1 (logs/avatar-pixel-contrast.txt).
