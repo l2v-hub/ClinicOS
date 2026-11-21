@@ -112,3 +112,18 @@ leggibili già presenti in `ds-badge`.
 4. **[P3] `/impeccable polish`** — link-pulsanti piccoli, spazio residuo su telefono.
 
 Report non salvato con `impeccable audit-storage` (motore non eseguito): questa copia ne fa le veci.
+
+## Seconda tornata (verifica sul sito pubblicato)
+
+Sulla demo, con dati diversi dall'ambiente locale (letti liberi, simulatore ruoli), axe ha trovato
+stati non visibili in locale, dello stesso tipo del P1 n. 1:
+
+- «LIBERO» verde su verde chiaro (2.89:1), contatore dei letti liberi e «0/1» verdi su bianco
+  (3.2:1), «In manutenzione» ambra su bianco: **corretti** con le varianti scure della stessa tinta
+  (`design-system.css`, `RoomsManagement.tsx`).
+- Badge «SIMULATORE» (`.badge--amber`, bianco su ambra, 3.46:1) e `.badge--green`: sfondo scurito
+  come per `agt-badge` (6.3 e 5.3:1).
+
+Verifica: suite 1598/1598 (`logs/frontend-tests-2.log`), build OK (`logs/frontend-build-2.log`),
+scansione amministratore a 1366px pulita salvo il falso positivo degli avatar, sidebar 0 pixel
+diversi (`logs/after2/`). Esito sul sito: `test-results/live-demo-check.txt`.

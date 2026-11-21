@@ -1,0 +1,11 @@
+Amministratore: regola contrasto avatar presente nel CSS servito = false
+Amministratore Operatori: axe color-contrastx5[.badge,.op-avatar-sm]
+Amministratore Posti Letto: axe color-contrastx18[.badge,.occ-stat__val,span]
+Amministratore Orari: axe color-contrastx1[.badge]
+Amministratore Agenda: axe color-contrastx1[.badge]
+Amministratore: errori console/API []
+Medico 1: regola contrasto avatar presente nel CSS servito = false
+Medico 1 Turno: axe color-contrastx1[.badge]
+Medico 1 Pazienti: axe color-contrastx1[.badge]
+Medico 1 Agenda: axe color-contrastx1[.badge]
+Medico 1: errori console/API []
