@@ -61,7 +61,19 @@ cartella.
 ## Runtime Evidence
 
 Ambiente locale (frontend 5173, backend 3001, Postgres locale con dati sintetici), profili
-Amministratore e Operatore, 1366×900 e 390×900. Non pubblicato sui siti: il rilascio resta da fare.
+Amministratore e Operatore, 1366×900 e 390×900.
+
+## Rilascio
+
+Unito in `main` con [l2v-hub/ClinicOS#542](https://github.com/l2v-hub/ClinicOS/pull/542) (`9387dc81`), CI verde
+(frontend-tests, archive-tests, gate, browser-e2e, real-provider, secret-scan, bug-pipeline-tests).
+Frontend del merge identico a `8de3f9dd` (`git diff` vuoto su `frontend/`). Pubblicato su
+`https://clinicos-eosin.vercel.app`: deployment `dpl_2iDnBi1oYDwnQeDdk3skHeEJfg22` (READY, produzione,
+alias confermato dall'API Vercel), build locale con `VITE_API_URL` = backend `…-df88`. Backend non
+toccato. Verifica sul sito: `test-results/live-demo-check.txt` — CSS servito con i token nuovi e il
+fallback ritardato, blocco di correzioni vecchio assente, badge con i colori attesi, Orari in modifica
+10 menu a 44px (modifica annullata, nessun salvataggio), axe pulito salvo il falso positivo noto
+degli avatar, nessun errore di console o API (Amministratore e Medico 1).
 
 ## Logs
 

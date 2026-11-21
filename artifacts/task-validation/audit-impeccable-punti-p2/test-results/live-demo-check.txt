@@ -1,0 +1,20 @@
+Amministratore: CSS servito: --ds-tone-warning=color-mix(in srgb, #c77700 70%, black) | page-loading animation: 0.15s ease-out 0.4s 1 normal backwards running page-loading-reveal | blocco di correzioni vecchio presente=false
+Amministratore Operatori: axe color-contrastx4[.op-avatar-sm]
+   badge: badge--amber color=rgb(255, 255, 255) bg=color(srgb 0.546274 0.326667 0) ; cts__badge color=rgb(29, 79, 196) bg=rgb(238, 243, 254)
+Amministratore Posti Letto: axe -
+   badge: badge--amber color=rgb(255, 255, 255) bg=color(srgb 0.546274 0.326667 0) ; cts__badge color=rgb(29, 79, 196) bg=rgb(238, 243, 254) ; room-number-badge color=rgb(29, 79, 196) bg=rgba(47, 107, 237, 0.14) ; letto-stato--libero color=rgb(11, 107, 96) bg=rgb(231, 247, 240)
+Amministratore Orari: axe -
+   badge: badge--amber color=rgb(255, 255, 255) bg=color(srgb 0.546274 0.326667 0)
+   Orari in modifica: 10 menu, altezze 44
+   modifica annullata (nessun salvataggio sulla demo)
+Amministratore Agenda: axe -
+   badge: badge--amber color=rgb(255, 255, 255) bg=color(srgb 0.546274 0.326667 0)
+Amministratore: errori console/API []
+Medico 1: CSS servito: --ds-tone-warning=color-mix(in srgb, #c77700 70%, black) | page-loading animation: 0.15s ease-out 0.4s 1 normal backwards running page-loading-reveal | blocco di correzioni vecchio presente=false
+Medico 1 Turno: axe -
+   badge: badge--amber color=rgb(255, 255, 255) bg=color(srgb 0.546274 0.326667 0)
+Medico 1 Pazienti: axe -
+   badge: badge--amber color=rgb(255, 255, 255) bg=color(srgb 0.546274 0.326667 0)
+Medico 1 Agenda: axe -
+   badge: badge--amber color=rgb(255, 255, 255) bg=color(srgb 0.546274 0.326667 0)
+Medico 1: errori console/API []
