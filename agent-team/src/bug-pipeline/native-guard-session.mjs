@@ -1,6 +1,40 @@
-// Native guarded-profile orchestration. No default activation or provider fallback.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { boundedCleanup, isCleanupFailure } from './native-guard-outcome.mjs';
+export { boundedCleanup } from './native-guard-outcome.mjs';
+const provenClean = new WeakSet();
+const retainedEvidence = new WeakMap();
+export function readCleanupEvidence(error) {
+  const value = isCleanupFailure(error) ? retainedEvidence.get(error) : undefined;
+  return value === undefined ? undefined : structuredClone(value);
+}
+export async function stopNativeResources(proxy, container) {
+  const start = (resource) => {
+    try {
+      return Promise.resolve(resource?.close());
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+  const outcomes = await Promise.allSettled([start(proxy), start(container)]);
+  if (outcomes.some((outcome) => outcome.status === 'rejected'))
+    throw new Error('native-runtime-cleanup-failed');
+  if (container && outcomes[1].value?.removed !== true)
+    throw new Error('native-runtime-cleanup-failed');
+}
+export function runtimeCleanup(certificates, proxy, container, remove, timeoutMs = 10000) {
+  return boundedCleanup(async () => {
+    let disposalFailed = false;
+    try {
+      certificates?.dispose();
+    } catch {
+      disposalFailed = true;
+    }
+    await stopNativeResources(proxy, container);
+    if (disposalFailed) throw new Error('native-runtime-cleanup-failed');
+    await remove();
+  }, timeoutMs);
+}
 const capacityFailures = new WeakSet();
 export const isNativeStagingCapacityError = (error) =>
   typeof error === 'object' && error !== null && capacityFailures.has(error);
@@ -80,6 +114,8 @@ export async function stageGuardedSession({
   startRuntime,
   validateClaim,
   timeoutMs = 20 * 60000,
+  cleanupTimeoutMs = 10000,
+  reviewTracked,
 }) {
   const { createNativeGuardState } = await import('./native-guard-state.mjs');
   const { createNativeResponseGuard } = await import('./native-guard-response.mjs');
@@ -87,13 +123,18 @@ export async function stageGuardedSession({
   assert.equal(typeof startRuntime, 'function');
   assert.equal(typeof validateClaim, 'function');
   assert.ok(Number.isSafeInteger(timeoutMs) && timeoutMs > 0 && timeoutMs <= 20 * 60000);
+  assert.ok(
+    Number.isSafeInteger(cleanupTimeoutMs) && cleanupTimeoutMs > 0 && cleanupTimeoutMs <= 10000,
+  );
   const pinned = structuredClone(expected);
+  const tracked = reviewTracked === undefined ? null : new Set(reviewTracked);
   assert.equal(pinned.contextWindow, 1000000);
   assert.equal(pinned.outputCap, 32768);
   assert.match(pinned.subjectSha ?? '', /^[a-f0-9]{40}$/);
   assert.match(pinned.model ?? '', /^claude-opus-[0-9]+(?:-[0-9]+){1,3}$/);
   const policy = createPolicyBarrier();
   let runtime,
+    startup,
     staged,
     response,
     closed = false,
@@ -110,22 +151,22 @@ export async function stageGuardedSession({
     readyReject = reject;
   });
   ready.catch(() => {});
+  let claimSha256;
   const state = createNativeGuardState({
     validateClaim: async (claim, seal) => {
       assert.equal(policy.ready(), true, 'native-policy-unproven');
       assert.equal(runtime?.isLive(), true, 'native-process-unavailable');
       const owned = await validateClaim(claim, seal);
-      return owned === true && policy.ready() && runtime.isLive();
+      if (owned !== true || !policy.ready() || !runtime.isLive()) return false;
+      claimSha256 = createHash('sha256').update(JSON.stringify(claim)).digest('hex');
+      return true;
     },
   });
   const reject = () => {
     state.data.fail();
     readyReject(new Error('native-session-rejected'));
-    // Cancel the parent transport synchronously; a queued microtask must not
-    // resume the release gate after a late policy event invalidated its fence.
-    try {
-      Promise.resolve(runtime?.close()).catch(() => {});
-    } catch {}
+    // Synchronously fence late policy events before a queued release resumes.
+    void close().catch(() => {});
   };
   const maybeReady = () => {
     if (staged && policy.ready()) readyResolve(staged);
@@ -134,20 +175,28 @@ export async function stageGuardedSession({
     expireReject(new Error('native-session-rejected'));
     reject();
   }, timeoutMs);
-  timer.unref?.();
-  const close = async () => {
-    if (closed) return;
+  const cleanup = boundedCleanup(async () => {
+    let owned = runtime;
+    if (!owned) {
+      try {
+        owned = await startup;
+      } catch (error) {
+        if (provenClean.has(error)) return;
+        throw error;
+      }
+    }
+    await owned.close();
+  }, cleanupTimeoutMs);
+  const close = (reason = new Error('native-session-rejected')) => {
     closed = true;
+    // Wake every wait even if `ready` already settled or release is in progress.
+    expireReject(reason);
     clearTimeout(timer);
     state.data.fail();
-    try {
-      await runtime?.close();
-    } catch {
-      throw new Error('native-session-cleanup-failed');
-    }
+    return cleanup();
   };
   try {
-    const startup = Promise.resolve().then(() =>
+    startup = Promise.resolve().then(() =>
       startRuntime({
         expected: structuredClone(pinned),
         data: Object.freeze({
@@ -213,9 +262,7 @@ export async function stageGuardedSession({
           capacityFailures.add(failure);
           state.data.fail();
           readyReject(failure);
-          Promise.resolve()
-            .then(() => runtime.close())
-            .catch(() => {});
+          void close(failure).catch(() => {});
         },
         observeResponse({ statusCode, requestId, seal }) {
           if (response || seal.bodySha256 !== staged?.seal.bodySha256) {
@@ -234,13 +281,6 @@ export async function stageGuardedSession({
         },
       }),
     );
-    // A late startup can never restore a timed-out capability. Close its own
-    // resources when it eventually returns, without keeping this wait unbounded.
-    startup
-      .then((late) => {
-        if (closed || Date.now() >= deadline) return late.close();
-      })
-      .catch(() => {});
     runtime = await Promise.race([startup, expired]);
     // An exit before the source/policy barrier must not leave a hung claim wait.
     runtime.completion.then((result) => {
@@ -267,6 +307,7 @@ export async function stageGuardedSession({
       },
       close,
       async release(actualClaim) {
+        let completed, projectEvidence;
         try {
           assert.equal(released, false);
           assert.equal(policy.ready(), true);
@@ -289,7 +330,9 @@ export async function stageGuardedSession({
           assert.equal(envelope.type, 'result');
           assert.equal(envelope.subtype, 'success');
           const network = response.finish({ cliReport: envelope.structured_output });
-          const { qualifiedModelProfile } = await import('./cloud-review-worker.mjs');
+          const { qualifiedModelProfile, projectNativeEvidence } =
+            await import('./cloud-review-worker.mjs');
+          projectEvidence = projectNativeEvidence;
           const profile = qualifiedModelProfile(envelope.modelUsage);
           assert.equal(profile.model, pinned.model);
           const isolation = await runtime.isolation;
@@ -298,6 +341,8 @@ export async function stageGuardedSession({
           const hash = (value) => createHash('sha256').update(value).digest('hex');
           const proof = {
             inputSha256: hash(pinned.input),
+            subjectSha: pinned.subjectSha,
+            claimSha256,
             schemaSha256: hash(JSON.stringify(pinned.schema)),
             bodySha256: seal.bodySha256,
             contextSha256: seal.contextSha256,
@@ -315,7 +360,7 @@ export async function stageGuardedSession({
             imageDigest: isolation.imageDigest,
             cliSha256: isolation.cliSha256,
           };
-          return {
+          completed = {
             ok: true,
             code: 0,
             stdout: JSON.stringify({
@@ -328,10 +373,29 @@ export async function stageGuardedSession({
             profile,
             proof,
           };
+          return completed;
         } catch {
           throw new Error('native-session-rejected');
         } finally {
-          await close();
+          try {
+            await close();
+          } catch (error) {
+            if (completed && tracked && isCleanupFailure(error)) {
+              try {
+                const report = projectEvidence(completed.report, pinned.subjectSha, tracked);
+                retainedEvidence.set(error, {
+                  report,
+                  proof: {
+                    ...completed.proof,
+                    reportSha256: createHash('sha256').update(JSON.stringify(report)).digest('hex'),
+                  },
+                });
+              } catch {
+                /* Cleanup failure remains authoritative; omit unsafe evidence. */
+              }
+            }
+            throw error;
+          }
         }
       },
     });
@@ -341,7 +405,6 @@ export async function stageGuardedSession({
     throw new Error('native-session-rejected');
   }
 }
-
 export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
   assert.equal(process.platform, 'linux', 'native-linux-required');
   assert.ok(typeof oauthToken === 'string' && oauthToken.length > 0 && oauthToken.length <= 8192);
@@ -367,39 +430,25 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
     const { fileURLToPath } = await import('node:url');
     const root = await mkdtemp(path.join(os.tmpdir(), 'clinicos-native-guard-'));
     const resolvedRoot = await realpath(root);
-    let certificates,
-      proxy,
-      container,
-      disposed = false;
-    const close = async () => {
-      if (disposed) return;
-      disposed = true;
-      let failed = false;
-      try {
-        await proxy?.close();
-      } catch {
-        failed = true;
-      }
-      try {
-        await container?.close();
-      } catch {
-        failed = true;
-      }
-      certificates?.dispose();
-      // Only the exact private mkdtemp created by this invocation. Never prune
-      // Docker, images/volumes, a checkout, user HOME or a caller-selected path.
-      assert.equal(await realpath(root), resolvedRoot);
-      assert.equal(path.dirname(resolvedRoot), await realpath(os.tmpdir()));
-      assert.match(path.basename(resolvedRoot), /^clinicos-native-guard-[A-Za-z0-9]+$/);
-      await rm(resolvedRoot, { recursive: true, force: true });
-      if (failed) throw new Error('native-runtime-cleanup-failed');
-    };
+    let certificates, proxy, container;
+    let close;
+    const cleanup = () =>
+      (close ??= runtimeCleanup(certificates, proxy, container, async () => {
+        await certificates?.cleanup();
+        // Remove only this invocation's private mkdtemp.
+        assert.equal(await realpath(root), resolvedRoot);
+        assert.equal(path.dirname(resolvedRoot), await realpath(os.tmpdir()));
+        assert.match(path.basename(resolvedRoot), /^clinicos-native-guard-[A-Za-z0-9]+$/);
+        await rm(resolvedRoot, { recursive: true, force: true });
+      }))();
     try {
       const socketDirectory = path.join(root, 'egress');
       const publicDirectory = path.join(root, 'public');
       await mkdir(socketDirectory, { mode: 0o700 });
       await mkdir(publicDirectory, { mode: 0o700 });
-      certificates = await certificatesModule.createNativeGuardCertificates();
+      certificates = await certificatesModule.createNativeGuardCertificates({
+        parentDirectory: resolvedRoot,
+      });
       const ca = await certificatesModule.writeNativePublicCA(
         publicDirectory,
         certificates.publicCA,
@@ -437,11 +486,13 @@ export function createNativeRuntimeFactory({ cliPath, oauthToken }) {
         isolation: container.isolation,
         isLive: () => container.isLive(),
         takePrivateOutput: () => container.takePrivateOutput(),
-        close,
+        close: cleanup,
       };
     } catch {
-      await close();
-      throw new Error('native-runtime-rejected');
+      await cleanup();
+      const error = new Error('native-runtime-rejected');
+      provenClean.add(error);
+      throw error;
     }
   };
 }

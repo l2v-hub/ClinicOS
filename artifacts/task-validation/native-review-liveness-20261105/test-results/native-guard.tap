@@ -1,0 +1,580 @@
+TAP version 13
+# Subtest: certificate commands use anonymous FIFO stdin key path, only public CSR/CA filenames
+ok 1 - certificate commands use anonymous FIFO stdin key path, only public CSR/CA filenames
+  ---
+  duration_ms: 1.2288
+  type: 'test'
+  ...
+# Subtest: fixed shell creates a real anonymous FIFO; key and shell syntax are never interpolated
+ok 2 - fixed shell creates a real anonymous FIFO; key and shell syntax are never interpolated
+  ---
+  duration_ms: 3.9088
+  type: 'test'
+  ...
+# Subtest: public CA rejects private keys and extra PEM objects before any mount
+ok 3 - public CA rejects private keys and extra PEM objects before any mount
+  ---
+  duration_ms: 2.8334
+  type: 'test'
+  ...
+# Subtest: OpenSSL failure never leaks raw stderr or supplied key into errors
+ok 4 - OpenSSL failure never leaks raw stderr or supplied key into errors
+  ---
+  duration_ms: 0.94
+  type: 'test'
+  ...
+# Subtest: Linux actual OpenSSL cert chain works with stdin keys; Windows never pretends this proof
+ok 5 - Linux actual OpenSSL cert chain works with stdin keys; Windows never pretends this proof # SKIP
+  ---
+  duration_ms: 0.1162
+  type: 'test'
+  ...
+# Subtest: container cleanup success requires proven removal of the owned ID
+ok 6 - container cleanup success requires proven removal of the owned ID
+  ---
+  duration_ms: 41.6959
+  type: 'test'
+  ...
+# Subtest: container cleanup nonzero requires proven removal of the owned ID
+ok 7 - container cleanup nonzero requires proven removal of the owned ID
+  ---
+  duration_ms: 5.6945
+  type: 'test'
+  ...
+# Subtest: container cleanup error requires proven removal of the owned ID
+ok 8 - container cleanup error requires proven removal of the owned ID
+  ---
+  duration_ms: 3.5625
+  type: 'test'
+  ...
+# Subtest: container cleanup throw requires proven removal of the owned ID
+ok 9 - container cleanup throw requires proven removal of the owned ID
+  ---
+  duration_ms: 3.2851
+  type: 'test'
+  ...
+# Subtest: container cleanup timeout requires proven removal of the owned ID
+ok 10 - container cleanup timeout requires proven removal of the owned ID
+  ---
+  duration_ms: 47.4167
+  type: 'test'
+  ...
+# Subtest: container cleanup no-id requires proven removal of the owned ID
+ok 11 - container cleanup no-id requires proven removal of the owned ID
+  ---
+  duration_ms: 47.4632
+  type: 'test'
+  ...
+# Subtest: container cleanup late-id requires proven removal of the owned ID
+ok 12 - container cleanup late-id requires proven removal of the owned ID
+  ---
+  duration_ms: 30.6666
+  type: 'test'
+  ...
+# Subtest: container cleanup auto-removed requires proven removal of the owned ID
+ok 13 - container cleanup auto-removed requires proven removal of the owned ID
+  ---
+  duration_ms: 31.1765
+  type: 'test'
+  ...
+# Subtest: container cleanup list-error requires proven removal of the owned ID
+ok 14 - container cleanup list-error requires proven removal of the owned ID
+  ---
+  duration_ms: 2.4045
+  type: 'test'
+  ...
+# Subtest: container cleanup list-throw requires proven removal of the owned ID
+ok 15 - container cleanup list-throw requires proven removal of the owned ID
+  ---
+  duration_ms: 2.3866
+  type: 'test'
+  ...
+# Subtest: container cleanup list-nonzero requires proven removal of the owned ID
+ok 16 - container cleanup list-nonzero requires proven removal of the owned ID
+  ---
+  duration_ms: 2.2552
+  type: 'test'
+  ...
+# Subtest: container cleanup list-timeout requires proven removal of the owned ID
+ok 17 - container cleanup list-timeout requires proven removal of the owned ID
+  ---
+  duration_ms: 55.2729
+  type: 'test'
+  ...
+# Subtest: container cleanup list-visible requires proven removal of the owned ID
+ok 18 - container cleanup list-visible requires proven removal of the owned ID
+  ---
+  duration_ms: 2.4098
+  type: 'test'
+  ...
+# Subtest: container cleanup list-truncated requires proven removal of the owned ID
+ok 19 - container cleanup list-truncated requires proven removal of the owned ID
+  ---
+  duration_ms: 2.2563
+  type: 'test'
+  ...
+# Subtest: container cleanup list-stderr requires proven removal of the owned ID
+ok 20 - container cleanup list-stderr requires proven removal of the owned ID
+  ---
+  duration_ms: 3.1268
+  type: 'test'
+  ...
+# Subtest: container arguments have immutable image, no network, no secrets or repo mounts
+ok 21 - container arguments have immutable image, no network, no secrets or repo mounts
+  ---
+  duration_ms: 2.7353
+  type: 'test'
+  ...
+# Subtest: mount path injection, duplicate/public mount alias, socket traversal fail
+ok 22 - mount path injection, duplicate/public mount alias, socket traversal fail
+  ---
+  duration_ms: 5.6642
+  type: 'test'
+  ...
+# Subtest: combined private output cap is hard and sanitized receipt never returns raw output
+ok 23 - combined private output cap is hard and sanitized receipt never returns raw output
+  ---
+  duration_ms: 0.6477
+  type: 'test'
+  ...
+# Subtest: actual inspection validator rejects isolation/image/env drift, not just builder intent
+ok 24 - actual inspection validator rejects isolation/image/env drift, not just builder intent
+  ---
+  duration_ms: 3.3766
+  type: 'test'
+  ...
+# Subtest: escape comparison requires reachable controlled TCP and DNS bridge baseline
+ok 25 - escape comparison requires reachable controlled TCP and DNS bridge baseline
+  ---
+  duration_ms: 0.6165
+  type: 'test'
+  ...
+# Subtest: deadline settles failed and escalates when inspected Docker child ignores SIGTERM
+ok 26 - deadline settles failed and escalates when inspected Docker child ignores SIGTERM
+  ---
+  duration_ms: 66.7886
+  type: 'test'
+  ...
+# Subtest: controlled probe snapshot precedes even immediate fixture completion
+ok 27 - controlled probe snapshot precedes even immediate fixture completion
+  ---
+  duration_ms: 1.0713
+  type: 'test'
+  ...
+# Subtest: Linux controlled bridge TCP/DNS baseline succeeds; identical network-none fixture cannot escape
+ok 28 - Linux controlled bridge TCP/DNS baseline succeeds; identical network-none fixture cannot escape # SKIP
+  ---
+  duration_ms: 0.5128
+  type: 'test'
+  ...
+# Subtest: guard JSON decodes valid bounded UTF8 once and returns immutable values
+ok 29 - guard JSON decodes valid bounded UTF8 once and returns immutable values
+  ---
+  duration_ms: 2.073
+  type: 'test'
+  ...
+# Subtest: duplicate decoded/prototype keys and unpaired surrogates never survive parsing
+ok 30 - duplicate decoded/prototype keys and unpaired surrogates never survive parsing
+  ---
+  duration_ms: 13.366
+  type: 'test'
+  ...
+# Subtest: JSON byte/depth/node/string bounds apply before unbounded construction
+ok 31 - JSON byte/depth/node/string bounds apply before unbounded construction
+  ---
+  duration_ms: 0.8592
+  type: 'test'
+  ...
+# Subtest: duplicate keys are rejected at every nesting and diagnostics never echo input
+ok 32 - duplicate keys are rejected at every nesting and diagnostics never echo input
+  ---
+  duration_ms: 0.8507
+  type: 'test'
+  ...
+# Subtest: fixed native arguments keep official provider and only one turn
+ok 33 - fixed native arguments keep official provider and only one turn
+  ---
+  duration_ms: 2.8732
+  type: 'test'
+  ...
+# Subtest: bootstrap rejects arbitrary commands, env, extra keys and unsafe models
+ok 34 - bootstrap rejects arbitrary commands, env, extra keys and unsafe models
+  ---
+  duration_ms: 12.4002
+  type: 'test'
+  ...
+# Subtest: managed path absence is checked; present, unreadable and unknown errors fail closed
+ok 35 - managed path absence is checked; present, unreadable and unknown errors fail closed
+  ---
+  duration_ms: 1.4357
+  type: 'test'
+  ...
+# Subtest: native environment cannot inherit controller/provider credentials
+ok 36 - native environment cannot inherit controller/provider credentials
+  ---
+  duration_ms: 0.4827
+  type: 'test'
+  ...
+# Subtest: hung proxy still starts container stop and never reports removed resources
+ok 37 - hung proxy still starts container stop and never reports removed resources
+  ---
+  duration_ms: 176.9088
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded startup with no keepalive
+ok 38 - standalone child settles bounded startup with no keepalive
+  ---
+  duration_ms: 158.898
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded cleanup with no keepalive
+ok 39 - standalone child settles bounded cleanup with no keepalive
+  ---
+  duration_ms: 136.6952
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded isolation with no keepalive
+ok 40 - standalone child settles bounded isolation with no keepalive
+  ---
+  duration_ms: 63.0937
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded release with no keepalive
+ok 41 - standalone child settles bounded release with no keepalive
+  ---
+  duration_ms: 60.9813
+  type: 'test'
+  ...
+# Subtest: concurrent cleanup shares one operation and the same sanitized outcome
+ok 42 - concurrent cleanup shares one operation and the same sanitized outcome
+  ---
+  duration_ms: 0.7933
+  type: 'test'
+  ...
+# Subtest: late startup is closed and cannot regain a rejected capability
+ok 43 - late startup is closed and cannot regain a rejected capability
+  ---
+  duration_ms: 37.6921
+  type: 'test'
+  ...
+# Subtest: trusted capacity rejection emits only a frozen numeric snapshot and never stages or forwards
+ok 44 - trusted capacity rejection emits only a frozen numeric snapshot and never stages or forwards
+  ---
+  duration_ms: 1.8942
+  type: 'test'
+  ...
+# Subtest: forged codes, maps, default classifier and malformed capacity metadata never notify or admit
+ok 45 - forged codes, maps, default classifier and malformed capacity metadata never notify or admit
+  ---
+  duration_ms: 6.2052
+  type: 'test'
+  ...
+# Subtest: normal source staging preserves the captured forward and capacity callback cannot admit failure
+ok 46 - normal source staging preserves the captured forward and capacity callback cannot admit failure
+  ---
+  duration_ms: 0.4735
+  type: 'test'
+  ...
+# Subtest: CONNECT authority is exact and never an open tunnel
+ok 47 - CONNECT authority is exact and never an open tunnel
+  ---
+  duration_ms: 0.9978
+  type: 'test'
+  ...
+# Subtest: raw duplicate framing/auth/host and alternate authentication fail closed
+ok 48 - raw duplicate framing/auth/host and alternate authentication fail closed
+  ---
+  duration_ms: 1.1779
+  type: 'test'
+  ...
+# Subtest: only fixed inference and policy metadata endpoints are allowed
+ok 49 - only fixed inference and policy metadata endpoints are allowed
+  ---
+  duration_ms: 0.4197
+  type: 'test'
+  ...
+# Subtest: upstream TLS cannot inherit local CA/proxy or route to alternate host
+ok 50 - upstream TLS cannot inherit local CA/proxy or route to alternate host
+  ---
+  duration_ms: 19.8246
+  type: 'test'
+  ...
+# Subtest: Linux real CONNECT/TLS holds complete source before parent release and preserves body
+ok 51 - Linux real CONNECT/TLS holds complete source before parent release and preserves body # SKIP
+  ---
+  duration_ms: 0.7584
+  type: 'test'
+  ...
+# Subtest: qualification input includes whole current-size context plus explicit CI headroom
+ok 52 - qualification input includes whole current-size context plus explicit CI headroom
+  ---
+  duration_ms: 4.6252
+  type: 'test'
+  ...
+# Subtest: qualification is explicit exact trusted-main dispatch, never a schedule or candidate
+ok 53 - qualification is explicit exact trusted-main dispatch, never a schedule or candidate
+  ---
+  duration_ms: 2.6884
+  type: 'test'
+  ...
+# Subtest: synthetic unit receipt binds complete input, actual cap, genuine default and build
+ok 54 - synthetic unit receipt binds complete input, actual cap, genuine default and build
+  ---
+  duration_ms: 5.9192
+  type: 'test'
+  ...
+# Subtest: profile, missing isolation, policy, retry, report and actual-cap failures cannot qualify
+ok 55 - profile, missing isolation, policy, retry, report and actual-cap failures cannot qualify
+  ---
+  duration_ms: 43.4811
+  type: 'test'
+  ...
+# Subtest: full843365 plus40KiB synthetic context fits only the sealed actual32k cap
+ok 56 - full843365 plus40KiB synthetic context fits only the sealed actual32k cap
+  ---
+  duration_ms: 45.7664
+  type: 'test'
+  ...
+# Subtest: exact decoded context boundary and one byte over retain the native65536 margin
+ok 57 - exact decoded context boundary and one byte over retain the native65536 margin
+  ---
+  duration_ms: 32.058
+  type: 'test'
+  ...
+# Subtest: outer escaping is decoded once but embedded packet JSON remains model visible
+ok 58 - outer escaping is decoded once but embedded packet JSON remains model visible
+  ---
+  duration_ms: 1.0092
+  type: 'test'
+  ...
+# Subtest: framing, context fields, extra user content and schema/model mismatch all fail closed
+ok 59 - framing, context fields, extra user content and schema/model mismatch all fail closed
+  ---
+  duration_ms: 2.1113
+  type: 'test'
+  ...
+# Subtest: all native text blocks, schema descriptions and thinking wrappers are accounted without inventing128k metadata
+ok 60 - all native text blocks, schema descriptions and thinking wrappers are accounted without inventing128k metadata
+  ---
+  duration_ms: 3.71
+  type: 'test'
+  ...
+# Subtest: all system/user/tool context bounds and unknown thinking/effort fields fail closed
+ok 61 - all system/user/tool context bounds and unknown thinking/effort fields fail closed
+  ---
+  duration_ms: 2.6805
+  type: 'test'
+  ...
+# Subtest: raw duplicates, decompression/framing and unknown request keys are not normalized into acceptance
+ok 62 - raw duplicates, decompression/framing and unknown request keys are not normalized into acceptance
+  ---
+  duration_ms: 0.532
+  type: 'test'
+  ...
+# Subtest: only a fully valid one-byte context overflow produces a private-minted numeric capacity error
+ok 63 - only a fully valid one-byte context overflow produces a private-minted numeric capacity error
+  ---
+  duration_ms: 12.8427
+  type: 'test'
+  ...
+# Subtest: malformed and oversized requests cannot launder a capacity-only fallback hint
+ok 64 - malformed and oversized requests cannot launder a capacity-only fallback hint
+  ---
+  duration_ms: 61.2773
+  type: 'test'
+  ...
+# Subtest: publicly constructed or prototype-forged errors from hostile getters are not trusted capacity signals
+ok 65 - publicly constructed or prototype-forged errors from hostile getters are not trusted capacity signals
+  ---
+  duration_ms: 0.6177
+  type: 'test'
+  ...
+# Subtest: a previously genuine capacity error cannot be replayed through a different request getter
+ok 66 - a previously genuine capacity error cannot be replayed through a different request getter
+  ---
+  duration_ms: 10.3303
+  type: 'test'
+  ...
+# Subtest: top-level request getters cannot escape capacity-only error normalization
+ok 67 - top-level request getters cannot escape capacity-only error normalization
+  ---
+  duration_ms: 11.0059
+  type: 'test'
+  ...
+# Subtest: strict SSE reconstructs one genuine StructuredOutput and matches native CLI report
+ok 68 - strict SSE reconstructs one genuine StructuredOutput and matches native CLI report
+  ---
+  duration_ms: 7.8169
+  type: 'test'
+  ...
+# Subtest: model/output/CLI mismatch, missing stop, duplicate message and malformed UTF8 poison response
+ok 69 - model/output/CLI mismatch, missing stop, duplicate message and malformed UTF8 poison response
+  ---
+  duration_ms: 2.5789
+  type: 'test'
+  ...
+# Subtest: documented thinking/signature blocks stay bounded by genuine cumulative usage before one tool
+ok 70 - documented thinking/signature blocks stay bounded by genuine cumulative usage before one tool
+  ---
+  duration_ms: 1.3192
+  type: 'test'
+  ...
+# Subtest: strict SSE disallows duplicate decoded keys, alternate tools, retry/fallback and output truncation
+ok 71 - strict SSE disallows duplicate decoded keys, alternate tools, retry/fallback and output truncation
+  ---
+  duration_ms: 1.8032
+  type: 'test'
+  ...
+# Subtest: actual review schema subset is enforced and unknown schema keywords reject before a result
+ok 72 - actual review schema subset is enforced and unknown schema keywords reject before a result
+  ---
+  duration_ms: 3.7033
+  type: 'test'
+  ...
+# Subtest: response memory bounds, mutation aliases and poisoned re-use never select an earlier answer
+ok 73 - response memory bounds, mutation aliases and poisoned re-use never select an earlier answer
+  ---
+  duration_ms: 1.5309
+  type: 'test'
+  ...
+# Subtest: native policy settlement requires the complete late genuine marker
+ok 74 - native policy settlement requires the complete late genuine marker
+  ---
+  duration_ms: 1.67
+  type: 'test'
+  ...
+# Subtest: policy watchdog, cache, save failure and late changes irreversibly poison
+ok 75 - policy watchdog, cache, save failure and late changes irreversibly poison
+  ---
+  duration_ms: 0.5641
+  type: 'test'
+  ...
+# Subtest: transport success, malformed prefixes and duplicate settlement are not certificates
+ok 76 - transport success, malformed prefixes and duplicate settlement are not certificates
+  ---
+  duration_ms: 0.2283
+  type: 'test'
+  ...
+# Subtest: diagnostics are finite, private and never returned through receipts or exceptions
+ok 77 - diagnostics are finite, private and never returned through receipts or exceptions
+  ---
+  duration_ms: 1.6182
+  type: 'test'
+  ...
+# Subtest: invalid or incomplete UTF8 after settlement cannot authorize a source request
+ok 78 - invalid or incomplete UTF8 after settlement cannot authorize a source request
+  ---
+  duration_ms: 0.2511
+  type: 'test'
+  ...
+# Subtest: concurrent session close calls share cleanup without forwarding
+ok 79 - concurrent session close calls share cleanup without forwarding
+  ---
+  duration_ms: 11.7191
+  type: 'test'
+  ...
+# Subtest: a valid forward cannot succeed when cleanup fails
+ok 80 - a valid forward cannot succeed when cleanup fails
+  ---
+  duration_ms: 4.0555
+  type: 'test'
+  ...
+# Subtest: policy invalidated during awaited claim validation prevents the upstream write
+ok 81 - policy invalidated during awaited claim validation prevents the upstream write
+  ---
+  duration_ms: 1.5764
+  type: 'test'
+  ...
+# Subtest: late policy microtask irreversibly poisons the gate before its await continuation forwards
+ok 82 - late policy microtask irreversibly poisons the gate before its await continuation forwards
+  ---
+  duration_ms: 1.3784
+  type: 'test'
+  ...
+# Subtest: liveness is synchronously fenced after every awaited claim continuation
+ok 83 - liveness is synchronously fenced after every awaited claim continuation
+  ---
+  duration_ms: 1.3396
+  type: 'test'
+  ...
+# Subtest: startup promise is bounded even when the native runtime never returns
+ok 84 - startup promise is bounded even when the native runtime never returns
+  ---
+  duration_ms: 25.6154
+  type: 'test'
+  ...
+# Subtest: optional reports use actual native wrapper budget without starving mandatory source
+ok 85 - optional reports use actual native wrapper budget without starving mandatory source
+  ---
+  duration_ms: 84.9388
+  type: 'test'
+  ...
+# Subtest: capacity-only optional restaging falls back to the still-live mandatory body, never policy failures
+ok 86 - capacity-only optional restaging falls back to the still-live mandatory body, never policy failures
+  ---
+  duration_ms: 119.7282
+  type: 'test'
+  ...
+# Subtest: staged source waits for actual owned claim then validates real native and upstream equality
+ok 87 - staged source waits for actual owned claim then validates real native and upstream equality
+  ---
+  duration_ms: 2.3144
+  type: 'test'
+  ...
+# Subtest: foreign claim and unproven isolation cannot forward source
+ok 88 - foreign claim and unproven isolation cannot forward source
+  ---
+  duration_ms: 7.2271
+  type: 'test'
+  ...
+# Subtest: late retry, late policy and duplicate CLI JSON remain actual failures, never earlier success
+ok 89 - late retry, late policy and duplicate CLI JSON remain actual failures, never earlier success
+  ---
+  duration_ms: 1.9665
+  type: 'test'
+  ...
+# Subtest: a stalled already-owned forward reaches terminal failure without replaying source
+ok 90 - a stalled already-owned forward reaches terminal failure without replaying source
+  ---
+  duration_ms: 34.9801
+  type: 'test'
+  ...
+# Subtest: only parent-held identity handle and actual validated claim release exactly one captured forward
+ok 91 - only parent-held identity handle and actual validated claim release exactly one captured forward
+  ---
+  duration_ms: 1.1791
+  type: 'test'
+  ...
+# Subtest: concurrent second request permanently poisons a release waiting on its claim fence
+ok 92 - concurrent second request permanently poisons a release waiting on its claim fence
+  ---
+  duration_ms: 2.4969
+  type: 'test'
+  ...
+# Subtest: forged handles, failed claims and uncertain upstream outcomes never refund or replay
+ok 93 - forged handles, failed claims and uncertain upstream outcomes never refund or replay
+  ---
+  duration_ms: 0.7986
+  type: 'test'
+  ...
+# Subtest: a concurrent second parent release cannot pass the same awaiting fence
+ok 94 - a concurrent second parent release cannot pass the same awaiting fence
+  ---
+  duration_ms: 0.3741
+  type: 'test'
+  ...
+# Subtest: claim and seal aliases are detached and a late retry poisons the final session state
+ok 95 - claim and seal aliases are detached and a late retry poisons the final session state
+  ---
+  duration_ms: 0.3881
+  type: 'test'
+  ...
+1..95
+# tests 95
+# suites 0
+# pass 92
+# fail 0
+# cancelled 0
+# skipped 3
+# todo 0
+# duration_ms 813.1368

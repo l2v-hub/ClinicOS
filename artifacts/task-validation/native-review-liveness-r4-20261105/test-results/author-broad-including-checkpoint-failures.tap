@@ -1,0 +1,1708 @@
+TAP version 13
+# Subtest: QA1 F1 unchanged refusal assertions followed by authorized unpublished source restoration and budgeted fresh correction
+not ok 1 - QA1 F1 unchanged refusal assertions followed by authorized unpublished source restoration and budgeted fresh correction
+  ---
+  duration_ms: 2042.0279
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:301:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:302:13)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+# Subtest: QA1 F1 observed checkpoint publication requests a new-head review without republish or old-review correction
+not ok 2 - QA1 F1 observed checkpoint publication requests a new-head review without republish or old-review correction
+  ---
+  duration_ms: 856.3174
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:353:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:354:13)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: checkpoint recovery refuses unknown-head before source restoration or inference
+not ok 3 - checkpoint recovery refuses unknown-head before source restoration or inference
+  ---
+  duration_ms: 825.6451
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:399:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:400:15)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: checkpoint recovery refuses unavailable-observation before source restoration or inference
+not ok 4 - checkpoint recovery refuses unavailable-observation before source restoration or inference
+  ---
+  duration_ms: 824.0482
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:399:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:400:15)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: checkpoint recovery refuses changed-observation before source restoration or inference
+not ok 5 - checkpoint recovery refuses changed-observation before source restoration or inference
+  ---
+  duration_ms: 826.4002
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:399:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:400:15)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: checkpoint recovery refuses dirty-local before source restoration or inference
+not ok 6 - checkpoint recovery refuses dirty-local before source restoration or inference
+  ---
+  duration_ms: 826.8165
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:399:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:400:15)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: checkpoint recovery refuses foreign-branch before source restoration or inference
+not ok 7 - checkpoint recovery refuses foreign-branch before source restoration or inference
+  ---
+  duration_ms: 882.507
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:399:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:400:15)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: checkpoint recovery refuses changed-token before source restoration or inference
+not ok 8 - checkpoint recovery refuses changed-token before source restoration or inference
+  ---
+  duration_ms: 1005.5937
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:399:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:400:15)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: checkpoint recovery refuses changed-round before source restoration or inference
+not ok 9 - checkpoint recovery refuses changed-round before source restoration or inference
+  ---
+  duration_ms: 919.0001
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:399:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:400:15)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: unknown publish stays blocked until native unknown head observation is usable
+not ok 10 - unknown publish stays blocked until native unknown head observation is usable
+  ---
+  duration_ms: 829.6871
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:426:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:427:15)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: unknown publish stays blocked until native source head observation is usable
+not ok 11 - unknown publish stays blocked until native source head observation is usable
+  ---
+  duration_ms: 840.6104
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:426:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:427:15)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: unknown publish stays blocked until native checkpoint head observation is usable
+not ok 12 - unknown publish stays blocked until native checkpoint head observation is usable
+  ---
+  duration_ms: 883.1423
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:426:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:427:15)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: checkpoint source restoration is recoverable after a failed state save and still needs an allowance
+not ok 13 - checkpoint source restoration is recoverable after a failed state save and still needs an allowance
+  ---
+  duration_ms: 856.9936
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:449:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:450:13)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: checkpoint reconciliation cannot consume free-text maintainer permission without the injected verifier
+not ok 14 - checkpoint reconciliation cannot consume free-text maintainer permission without the injected verifier
+  ---
+  duration_ms: 840.2738
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:466:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:467:13)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: a remote checkpoint published after failed restoration-save reconciles the archived checkpoint without replay
+not ok 15 - a remote checkpoint published after failed restoration-save reconciles the archived checkpoint without replay
+  ---
+  duration_ms: 853.7563
+  type: 'test'
+  location: 'C:\\w-rv\\native-review-liveness-r4-author-20261105\\agent-team\\tests\\bug-pipeline\\checkpoint-recovery.test.mjs:483:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Controller checkpoint requires the registered owned worktree
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async fixture (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:147:3)
+    async TestContext.<anonymous> (file:///C:/w-rv/native-review-liveness-r4-author-20261105/agent-team/tests/bug-pipeline/checkpoint-recovery.test.mjs:484:13)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: canonical qualification requires the saved successful receipt tied to its trusted worker SHA
+ok 16 - canonical qualification requires the saved successful receipt tied to its trusted worker SHA
+  ---
+  duration_ms: 33.436
+  type: 'test'
+  ...
+# Subtest: saved probe qualification only reads its exact run and pinned manifest plus --version; no inference
+ok 17 - saved probe qualification only reads its exact run and pinned manifest plus --version; no inference
+  ---
+  duration_ms: 5.5404
+  type: 'test'
+  ...
+# Subtest: unavailable, foreign, failed, wrong-source or wrong-workflow probe and changed CLI fail without inference
+ok 18 - unavailable, foreign, failed, wrong-source or wrong-workflow probe and changed CLI fail without inference
+  ---
+  duration_ms: 119.1154
+  type: 'test'
+  ...
+# Subtest: default qualification with real recovery core uses exactly one --print after CAS, replay spends zero
+ok 19 - default qualification with real recovery core uses exactly one --print after CAS, replay spends zero
+  ---
+  duration_ms: 54.5313
+  type: 'test'
+  ...
+# Subtest: missing capability and concurrent recovery never spend an extra model invocation including qualification
+ok 20 - missing capability and concurrent recovery never spend an extra model invocation including qualification
+  ---
+  duration_ms: 39.9779
+  type: 'test'
+  ...
+# Subtest: ordinary queued packet still refuses a missing committed implementation plan
+ok 21 - ordinary queued packet still refuses a missing committed implementation plan
+  ---
+  duration_ms: 25.6507
+  type: 'test'
+  ...
+# Subtest: trusted recovery plan is explicitly generated, never inserted as fake committed evidence
+ok 22 - trusted recovery plan is explicitly generated, never inserted as fake committed evidence
+  ---
+  duration_ms: 5.9286
+  type: 'test'
+  ...
+# Subtest: recovery fallback binds exact subject/nonces/complete source manifest and refuses omitted/forged inputs
+ok 23 - recovery fallback binds exact subject/nonces/complete source manifest and refuses omitted/forged inputs
+  ---
+  duration_ms: 55.2997
+  type: 'test'
+  ...
+# Subtest: recovery cannot replace missing contract/validation or overwrite a genuinely committed implementation plan
+ok 24 - recovery cannot replace missing contract/validation or overwrite a genuinely committed implementation plan
+  ---
+  duration_ms: 5.3253
+  type: 'test'
+  ...
+# Subtest: additional recovery evidence is bounded frozen text under its own packet, not generated committed proof
+ok 25 - additional recovery evidence is bounded frozen text under its own packet, not generated committed proof
+  ---
+  duration_ms: 2.6799
+  type: 'test'
+  ...
+# Subtest: native review publisher checks revocation at actual POST boundary, and guards idempotent acknowledgement
+ok 26 - native review publisher checks revocation at actual POST boundary, and guards idempotent acknowledgement
+  ---
+  duration_ms: 4.557
+  type: 'test'
+  ...
+# Subtest: same-round transport uses qualified source before one claim and retains real report before publication
+ok 27 - same-round transport uses qualified source before one claim and retains real report before publication
+  ---
+  duration_ms: 26.2366
+  type: 'test'
+  ...
+# Subtest: non-maintainer, missing capability, source failure, bad qualification and CAS loss invoke no review
+ok 28 - non-maintainer, missing capability, source failure, bad qualification and CAS loss invoke no review
+  ---
+  duration_ms: 6.2783
+  type: 'test'
+  ...
+# Subtest: nonzero/throw/invalid/stale outputs spend only failed technical execution, never publish or retry
+ok 29 - nonzero/throw/invalid/stale outputs spend only failed technical execution, never publish or retry
+  ---
+  duration_ms: 5.2289
+  type: 'test'
+  ...
+# Subtest: retain/publication uncertainty returns genuine report and never reclassifies it as provider failure
+ok 30 - retain/publication uncertainty returns genuine report and never reclassifies it as provider failure
+  ---
+  duration_ms: 4.2603
+  type: 'test'
+  ...
+# Subtest: selector rejects coercion, traversal, leading zeros, extra whitespace and malformed SHA/nonce
+ok 31 - selector rejects coercion, traversal, leading zeros, extra whitespace and malformed SHA/nonce
+  ---
+  duration_ms: 3.1698
+  type: 'test'
+  ...
+# Subtest: main refuses schedule, label, non-main and foreign repo before any provider call
+ok 32 - main refuses schedule, label, non-main and foreign repo before any provider call
+  ---
+  duration_ms: 10.4237
+  type: 'test'
+  ...
+# Subtest: review child isolation has subscription token only; no GitHub/API/proxy credentials or alternative provider
+ok 33 - review child isolation has subscription token only; no GitHub/API/proxy credentials or alternative provider
+  ---
+  duration_ms: 1.7921
+  type: 'test'
+  ...
+# Subtest: workflow recovery remains explicit and uses constant trusted entry with same concurrency and no permission escalation
+ok 34 - workflow recovery remains explicit and uses constant trusted entry with same concurrency and no permission escalation
+  ---
+  duration_ms: 32.7423
+  type: 'test'
+  ...
+# Subtest: unset and true enable eligible reviews; false and malformed settings fail closed
+ok 35 - unset and true enable eligible reviews; false and malformed settings fail closed
+  ---
+  duration_ms: 10.1681
+  type: 'test'
+  ...
+# Subtest: authentication probe dispatch bypass is preserved for every activation setting
+ok 36 - authentication probe dispatch bypass is preserved for every activation setting
+  ---
+  duration_ms: 1.2701
+  type: 'test'
+  ...
+# Subtest: the repository, trusted ref, eligible event filters and protected checkout remain intact
+ok 37 - the repository, trusted ref, eligible event filters and protected checkout remain intact
+  ---
+  duration_ms: 1.0349
+  type: 'test'
+  ...
+# Subtest: a complete pinned before/after source packet above old700KiB retains every selected context
+ok 38 - a complete pinned before/after source packet above old700KiB retains every selected context
+  ---
+  duration_ms: 155.2857
+  type: 'test'
+  ...
+# Subtest: the old701KiB fixture is admissible only when full actual input fits the observed profile
+ok 39 - the old701KiB fixture is admissible only when full actual input fits the observed profile
+  ---
+  duration_ms: 39.1821
+  type: 'test'
+  ...
+# Subtest: exact serialized prompt/schema/output/native boundary passes and one added byte fails
+ok 40 - exact serialized prompt/schema/output/native boundary passes and one added byte fails
+  ---
+  duration_ms: 24.4154
+  type: 'test'
+  ...
+# Subtest: Unicode and JSON escaping are counted after serialization, never by string length
+ok 41 - Unicode and JSON escaping are counted after serialization, never by string length
+  ---
+  duration_ms: 44.5836
+  type: 'test'
+  ...
+# Subtest: below-static900000-byte input still fails dynamic allowance before native claim/model
+ok 42 - below-static900000-byte input still fails dynamic allowance before native claim/model
+  ---
+  duration_ms: 28.7955
+  type: 'test'
+  ...
+# Subtest: derived finite transport ceiling is not an unbounded or caller-configurable allowance
+ok 43 - derived finite transport ceiling is not an unbounded or caller-configurable allowance
+  ---
+  duration_ms: 8.9238
+  type: 'test'
+  ...
+# Subtest: individual source blob ceiling is unchanged despite larger aggregate transport
+ok 44 - individual source blob ceiling is unchanged despite larger aggregate transport
+  ---
+  duration_ms: 35.7921
+  type: 'test'
+  ...
+# Subtest: shared explicit recovery transport also rejects dynamic overflow before its existing claim
+ok 45 - shared explicit recovery transport also rejects dynamic overflow before its existing claim
+  ---
+  duration_ms: 12.3586
+  type: 'test'
+  ...
+# Subtest: worker entry can self-import while asynchronous CLI main is pending
+ok 46 - worker entry can self-import while asynchronous CLI main is pending
+  ---
+  duration_ms: 1401.1048
+  type: 'test'
+  ...
+# Subtest: CLI bootstrap rejection emits a finite unknown-outcome receipt without credentials
+ok 47 - CLI bootstrap rejection emits a finite unknown-outcome receipt without credentials
+  ---
+  duration_ms: 181.803
+  type: 'test'
+  ...
+# Subtest: optional reports cannot block a real128k candidate whose immutable required context fits
+ok 48 - optional reports cannot block a real128k candidate whose immutable required context fits
+  ---
+  duration_ms: 220.3425
+  type: 'test'
+  ...
+# Subtest: required source alone above real128k admission stays blocked before claim or model
+ok 49 - required source alone above real128k admission stays blocked before claim or model
+  ---
+  duration_ms: 138.8517
+  type: 'test'
+  ...
+# Subtest: invalid immutable source is rejected before qualification, claim or model
+ok 50 - invalid immutable source is rejected before qualification, claim or model
+  ---
+  duration_ms: 28.9431
+  type: 'test'
+  ...
+# Subtest: optional64KiB ceiling omits oversized reports without fetching their body
+ok 51 - optional64KiB ceiling omits oversized reports without fetching their body
+  ---
+  duration_ms: 5.0684
+  type: 'test'
+  ...
+# Subtest: direct readers conservatively omit optional reports without a qualified profile
+ok 52 - direct readers conservatively omit optional reports without a qualified profile
+  ---
+  duration_ms: 94.9901
+  type: 'test'
+  ...
+# Subtest: deferred optional selection counts exact escaped/control JSON bytes within the real budget
+ok 53 - deferred optional selection counts exact escaped/control JSON bytes within the real budget
+  ---
+  duration_ms: 96.8778
+  type: 'test'
+  ...
+# Subtest: deferred completion preserves the 24 evidence count and reserves every omitted name
+ok 54 - deferred completion preserves the 24 evidence count and reserves every omitted name
+  ---
+  duration_ms: 8.0162
+  type: 'test'
+  ...
+# Subtest: one exact prospective escaped optional entry fits while a one-byte smaller budget omits it
+ok 55 - one exact prospective escaped optional entry fits while a one-byte smaller budget omits it
+  ---
+  duration_ms: 5.1901
+  type: 'test'
+  ...
+# Subtest: explicit recovery uses deferred actual-budget completion before its one existing claim
+ok 56 - explicit recovery uses deferred actual-budget completion before its one existing claim
+  ---
+  duration_ms: 115.3692
+  type: 'test'
+  ...
+# Subtest: explicit recovery refuses oversized verified mandatory context before completion, claim or model
+ok 57 - explicit recovery refuses oversized verified mandatory context before completion, claim or model
+  ---
+  duration_ms: 103.7641
+  type: 'test'
+  ...
+# Subtest: a stored request is not an execution capability; no default verifier grants recovery
+ok 58 - a stored request is not an execution capability; no default verifier grants recovery
+  ---
+  duration_ms: 24.6307
+  type: 'test'
+  ...
+# Subtest: trusted execution authorization uses budget:null, a separate action and append-only replay audit
+ok 59 - trusted execution authorization uses budget:null, a separate action and append-only replay audit
+  ---
+  duration_ms: 18.7284
+  type: 'test'
+  ...
+# Subtest: prepared source projects only generated canonical plan, never a committed implementation-plan
+ok 60 - prepared source projects only generated canonical plan, never a committed implementation-plan
+  ---
+  duration_ms: 11.9621
+  type: 'test'
+  ...
+# Subtest: one technical claim, retain and exact global-round5 publication preserve every original byte
+ok 61 - one technical claim, retain and exact global-round5 publication preserve every original byte
+  ---
+  duration_ms: 62.3671
+  type: 'test'
+  ...
+# Subtest: a distinct authenticated publisher cannot make its own actual review look like new human feedback
+ok 62 - a distinct authenticated publisher cannot make its own actual review look like new human feedback
+  ---
+  duration_ms: 43.0913
+  type: 'test'
+  ...
+# Subtest: concurrent claimants have one CAS winner and no new review or allowance
+ok 63 - concurrent claimants have one CAS winner and no new review or allowance
+  ---
+  duration_ms: 23.2505
+  type: 'test'
+  ...
+# Subtest: changed head fails closed before a recovery claim
+ok 64 - changed head fails closed before a recovery claim
+  ---
+  duration_ms: 7.6293
+  type: 'test'
+  ...
+# Subtest: changed failed-review fails closed before a recovery claim
+ok 65 - changed failed-review fails closed before a recovery claim
+  ---
+  duration_ms: 7.6822
+  type: 'test'
+  ...
+# Subtest: changed owner fails closed before a recovery claim
+ok 66 - changed owner fails closed before a recovery claim
+  ---
+  duration_ms: 14.2123
+  type: 'test'
+  ...
+# Subtest: changed source fails closed before a recovery claim
+ok 67 - changed source fails closed before a recovery claim
+  ---
+  duration_ms: 12.2311
+  type: 'test'
+  ...
+# Subtest: changed request fails closed before a recovery claim
+ok 68 - changed request fails closed before a recovery claim
+  ---
+  duration_ms: 7.835
+  type: 'test'
+  ...
+# Subtest: changed capability fails closed before a recovery claim
+ok 69 - changed capability fails closed before a recovery claim
+  ---
+  duration_ms: 14.5751
+  type: 'test'
+  ...
+# Subtest: selector field injection, invalid round/nonce/SHA and duplicate native owner fail closed
+ok 70 - selector field injection, invalid round/nonce/SHA and duplicate native owner fail closed
+  ---
+  duration_ms: 7.0213
+  type: 'test'
+  ...
+# Subtest: claims recheck live SHA, checks and maintainer authorization
+ok 71 - claims recheck live SHA, checks and maintainer authorization
+  ---
+  duration_ms: 28.7771
+  type: 'test'
+  ...
+# Subtest: a takeover during CAS prerequisites prevents the reservation
+ok 72 - a takeover during CAS prerequisites prevents the reservation
+  ---
+  duration_ms: 11.5932
+  type: 'test'
+  ...
+# Subtest: a finite provider failure stays spent and can neither re-claim nor erase a genuine report
+ok 73 - a finite provider failure stays spent and can neither re-claim nor erase a genuine report
+  ---
+  duration_ms: 59.1451
+  type: 'test'
+  ...
+# Subtest: unsafe, stale, contradictory or untracked findings are never retained/published
+ok 74 - unsafe, stale, contradictory or untracked findings are never retained/published
+  ---
+  duration_ms: 10.5662
+  type: 'test'
+  ...
+# Subtest: publication uncertainty retains the full genuine report and a second execution is refused
+ok 75 - publication uncertainty retains the full genuine report and a second execution is refused
+  ---
+  duration_ms: 26.6183
+  type: 'test'
+  ...
+# Subtest: revocation at actual POST boundary refuses publication without discarding evidence
+ok 76 - revocation at actual POST boundary refuses publication without discarding evidence
+  ---
+  duration_ms: 18.2481
+  type: 'test'
+  ...
+# Subtest: a replaced execution cannot receive stale failure/retention/publication
+ok 77 - a replaced execution cannot receive stale failure/retention/publication
+  ---
+  duration_ms: 22.103
+  type: 'test'
+  ...
+# Subtest: authorization mismatch or replay cannot authorize a technical execution
+ok 78 - authorization mismatch or replay cannot authorize a technical execution
+  ---
+  duration_ms: 8.6659
+  type: 'test'
+  ...
+# Subtest: the technical route rejects failed executions that may have used inference
+ok 79 - the technical route rejects failed executions that may have used inference
+  ---
+  duration_ms: 4.0887
+  type: 'test'
+  ...
+# Subtest: an older consumed round cannot recover after another global review was spent
+ok 80 - an older consumed round cannot recover after another global review was spent
+  ---
+  duration_ms: 0.9983
+  type: 'test'
+  ...
+# Subtest: a second request cannot circumvent the one-execution fence of the failed reservation
+ok 81 - a second request cannot circumvent the one-execution fence of the failed reservation
+  ---
+  duration_ms: 3.8
+  type: 'test'
+  ...
+# Subtest: post-publication competing ownership is never overwritten and genuine evidence survives
+ok 82 - post-publication competing ownership is never overwritten and genuine evidence survives
+  ---
+  duration_ms: 36.2402
+  type: 'test'
+  ...
+# Subtest: source drift during retention cannot replace an already-owned record
+ok 83 - source drift during retention cannot replace an already-owned record
+  ---
+  duration_ms: 15.4183
+  type: 'test'
+  ...
+# Subtest: missing or source-mismatched QA/CI never authorizes recovery
+ok 84 - missing or source-mismatched QA/CI never authorizes recovery
+  ---
+  duration_ms: 4.2741
+  type: 'test'
+  ...
+# Subtest: untrusted cleanup error cannot inject session evidence
+ok 85 - untrusted cleanup error cannot inject session evidence
+  ---
+  duration_ms: 5.9201
+  type: 'test'
+  ...
+# Subtest: verified session sanitizes sensitive text before private evidence storage
+ok 86 - verified session sanitizes sensitive text before private evidence storage
+  ---
+  duration_ms: 63.4376
+  type: 'test'
+  ...
+# Subtest: evidence rejects unsafe raw token and preserves a tracked @ path
+ok 87 - evidence rejects unsafe raw token and preserves a tracked @ path
+  ---
+  duration_ms: 17.6389
+  type: 'test'
+  ...
+# Subtest: qualification cleanup failure remains distinct from ordinary probe failure
+ok 88 - qualification cleanup failure remains distinct from ordinary probe failure
+  ---
+  duration_ms: 19.8197
+  type: 'test'
+  ...
+# Subtest: post-forward cleanup failure retains evidence only, ownershipChanged=false
+ok 89 - post-forward cleanup failure retains evidence only, ownershipChanged=false
+  ---
+  duration_ms: 22.9381
+  type: 'test'
+  ...
+# Subtest: post-forward cleanup failure retains evidence only, ownershipChanged=true
+ok 90 - post-forward cleanup failure retains evidence only, ownershipChanged=true
+  ---
+  duration_ms: 17.0498
+  type: 'test'
+  ...
+# Subtest: cleanup failure plus uncertain claim update preserves evidence without a second claim
+ok 91 - cleanup failure plus uncertain claim update preserves evidence without a second claim
+  ---
+  duration_ms: 13.7021
+  type: 'test'
+  ...
+# Subtest: cleanup evidence with wrong subject is never retained or published
+ok 92 - cleanup evidence with wrong subject is never retained or published
+  ---
+  duration_ms: 7.5029
+  type: 'test'
+  ...
+# Subtest: worker rejects valid cleanup evidence for a different prepared input
+ok 93 - worker rejects valid cleanup evidence for a different prepared input
+  ---
+  duration_ms: 14.1241
+  type: 'test'
+  ...
+# Subtest: empty queue and label-only or manual subjects have no provider call or claim
+ok 94 - empty queue and label-only or manual subjects have no provider call or claim
+  ---
+  duration_ms: 2.2803
+  type: 'test'
+  ...
+# Subtest: source then actual auth probe precede the one native claim, validated report, reconciliation, projection and wake
+ok 95 - source then actual auth probe precede the one native claim, validated report, reconciliation, projection and wake
+  ---
+  duration_ms: 5.5517
+  type: 'test'
+  ...
+# Subtest: explicit guarded route stages before claim and releases only after actual native transition
+ok 96 - explicit guarded route stages before claim and releases only after actual native transition
+  ---
+  duration_ms: 3.6101
+  type: 'test'
+  ...
+# Subtest: guarded preclaim conflict closes staged process with no release or source inference
+ok 97 - guarded preclaim conflict closes staged process with no release or source inference
+  ---
+  duration_ms: 2.0371
+  type: 'test'
+  ...
+# Subtest: cleanup failure preserves staging classification without retry or forwarding
+ok 98 - cleanup failure preserves staging classification without retry or forwarding
+  ---
+  duration_ms: 3.2384
+  type: 'test'
+  ...
+# Subtest: cleanup failure preserves claim classification without retry or forwarding
+ok 99 - cleanup failure preserves claim classification without retry or forwarding
+  ---
+  duration_ms: 1.7545
+  type: 'test'
+  ...
+# Subtest: cleanup failure preserves transition classification without retry or forwarding
+ok 100 - cleanup failure preserves transition classification without retry or forwarding
+  ---
+  duration_ms: 3.667
+  type: 'test'
+  ...
+# Subtest: uncertain claim and failed cleanup retain unknown reservation and never retry
+ok 101 - uncertain claim and failed cleanup retain unknown reservation and never retry
+  ---
+  duration_ms: 2.6069
+  type: 'test'
+  ...
+# Subtest: native-required subject never falls back to the classic capacity/transport route
+ok 102 - native-required subject never falls back to the classic capacity/transport route
+  ---
+  duration_ms: 1.6667
+  type: 'test'
+  ...
+# Subtest: a staged process that expired before the claim never consumes a source round
+ok 103 - a staged process that expired before the claim never consumes a source round
+  ---
+  duration_ms: 2.4582
+  type: 'test'
+  ...
+# Subtest: canonical native critical context is hash-verified mandatory, not optional evidence
+ok 104 - canonical native critical context is hash-verified mandatory, not optional evidence
+  ---
+  duration_ms: 280.2373
+  type: 'test'
+  ...
+# Subtest: missing/invalid subscription credentials and stale source stop before native claim
+ok 105 - missing/invalid subscription credentials and stale source stop before native claim
+  ---
+  duration_ms: 9.8409
+  type: 'test'
+  ...
+# Subtest: native CAS loser never invokes review inference
+ok 106 - native CAS loser never invokes review inference
+  ---
+  duration_ms: 3.1023
+  type: 'test'
+  ...
+# Subtest: deferred optional completion cannot rewrite immutable source, feedback, plan or required evidence
+ok 107 - deferred optional completion cannot rewrite immutable source, feedback, plan or required evidence
+  ---
+  duration_ms: 26.5511
+  type: 'test'
+  ...
+# Subtest: original source and packet snapshots cannot be rewritten through reader aliases during qualification
+ok 108 - original source and packet snapshots cannot be rewritten through reader aliases during qualification
+  ---
+  duration_ms: 2.5495
+  type: 'test'
+  ...
+# Subtest: an unexpected returned claim transition cannot authorize inference using an older specification
+ok 109 - an unexpected returned claim transition cannot authorize inference using an older specification
+  ---
+  duration_ms: 7.1901
+  type: 'test'
+  ...
+# Subtest: invalid report spends its own claim, notifies recovery and never retries automatically
+ok 110 - invalid report spends its own claim, notifies recovery and never retries automatically
+  ---
+  duration_ms: 3.9349
+  type: 'test'
+  ...
+# Subtest: uncertain publication preserves genuine findings and the existing running claim
+ok 111 - uncertain publication preserves genuine findings and the existing running claim
+  ---
+  duration_ms: 3.1355
+  type: 'test'
+  ...
+# Subtest: unavailable Codex dispatch retains exact published review receipt without another model call
+ok 112 - unavailable Codex dispatch retains exact published review receipt without another model call
+  ---
+  duration_ms: 4.7725
+  type: 'test'
+  ...
+# Subtest: real auth probe requires a real successful structured inference and qualified version
+ok 113 - real auth probe requires a real successful structured inference and qualified version
+  ---
+  duration_ms: 1.1897
+  type: 'test'
+  ...
+# Subtest: probe qualifies only one explicit Opus profile, ignoring internal models and clamping the known context maximum
+ok 114 - probe qualifies only one explicit Opus profile, ignoring internal models and clamping the known context maximum
+  ---
+  duration_ms: 3.0401
+  type: 'test'
+  ...
+# Subtest: numeric Opus version/date IDs normalize an exact optional 1M tag before inference
+ok 115 - numeric Opus version/date IDs normalize an exact optional 1M tag before inference
+  ---
+  duration_ms: 1.4741
+  type: 'test'
+  ...
+# Subtest: base and tagged Opus aliases remain ambiguous and malformed IDs never qualify
+ok 116 - base and tagged Opus aliases remain ambiguous and malformed IDs never qualify
+  ---
+  duration_ms: 9.3861
+  type: 'test'
+  ...
+# Subtest: tagged profiles retain explicit context/output bounds and the 1M inference clamp
+ok 117 - tagged profiles retain explicit context/output bounds and the 1M inference clamp
+  ---
+  duration_ms: 4.9158
+  type: 'test'
+  ...
+# Subtest: actual tagged modelUsage response shape passes the genuine probe before one native claim
+ok 118 - actual tagged modelUsage response shape passes the genuine probe before one native claim
+  ---
+  duration_ms: 5.0222
+  type: 'test'
+  ...
+# Subtest: a real successful probe envelope without context metadata still refuses qualification
+ok 119 - a real successful probe envelope without context metadata still refuses qualification
+  ---
+  duration_ms: 2.1352
+  type: 'test'
+  ...
+# Subtest: missing/small/ambiguous probe context and oversized complete inputs never claim or invoke review
+ok 120 - missing/small/ambiguous probe context and oversized complete inputs never claim or invoke review
+  ---
+  duration_ms: 21.4032
+  type: 'test'
+  ...
+# Subtest: the exact serialized Unicode/escaped prompt and schema fit the qualified profile before its pinned model call
+ok 121 - the exact serialized Unicode/escaped prompt and schema fit the qualified profile before its pinned model call
+  ---
+  duration_ms: 5.8729
+  type: 'test'
+  ...
+# Subtest: every publication stage retains the full sanitized valid report and digest without retrying or failing a claim
+ok 122 - every publication stage retains the full sanitized valid report and digest without retrying or failing a claim
+  ---
+  duration_ms: 6.3762
+  type: 'test'
+  ...
+# Subtest: retained ownership-change report is sanitized and hashed without exposing clinical/contact fields
+ok 123 - retained ownership-change report is sanitized and hashed without exposing clinical/contact fields
+  ---
+  duration_ms: 3.189
+  type: 'test'
+  ...
+# Subtest: a post-claim timeout spends one round, notifies recovery and never mints a retry
+ok 124 - a post-claim timeout spends one round, notifies recovery and never mints a retry
+  ---
+  duration_ms: 4.5591
+  type: 'test'
+  ...
+# Subtest: workflow token is read-only and the precredential CLI installation uses the complete committed integrity lock
+ok 125 - workflow token is read-only and the precredential CLI installation uses the complete committed integrity lock
+  ---
+  duration_ms: 30.2013
+  type: 'test'
+  ...
+# Subtest: API source packet binds complete base/head source, contract and evidence without executing reviewed content
+ok 126 - API source packet binds complete base/head source, contract and evidence without executing reviewed content
+  ---
+  duration_ms: 6.3598
+  type: 'test'
+  ...
+# Subtest: 77+ binary proof changes remain hash metadata and do not block an ordinary small source review
+ok 127 - 77+ binary proof changes remain hash metadata and do not block an ordinary small source review
+  ---
+  duration_ms: 10.2852
+  type: 'test'
+  ...
+# Subtest: complete tree inventories prove all source changes when comparison files hit GitHub cap300
+ok 128 - complete tree inventories prove all source changes when comparison files hit GitHub cap300
+  ---
+  duration_ms: 19.1049
+  type: 'test'
+  ...
+# Subtest: unsupported first candidate never starves a later eligible native review
+ok 129 - unsupported first candidate never starves a later eligible native review
+  ---
+  duration_ms: 4.8256
+  type: 'test'
+  ...
+# Subtest: API source reader rejects identity/traversal/truncation/omitted diff/blob corruption/oversize
+ok 130 - API source reader rejects identity/traversal/truncation/omitted diff/blob corruption/oversize
+  ---
+  duration_ms: 23.9768
+  type: 'test'
+  ...
+# Subtest: actual review subprocess receives only subscription provider credentials and private empty HOME/cwd
+ok 131 - actual review subprocess receives only subscription provider credentials and private empty HOME/cwd
+  ---
+  duration_ms: 199.1711
+  type: 'test'
+  ...
+# Subtest: trusted cloud generation contract precedes untrusted JSON and states strict verdict consistency
+ok 132 - trusted cloud generation contract precedes untrusted JSON and states strict verdict consistency
+  ---
+  duration_ms: 1.7858
+  type: 'test'
+  ...
+# Subtest: runner throw and diagnostic callback rejection keep the native spent failure
+ok 133 - runner throw and diagnostic callback rejection keep the native spent failure
+  ---
+  duration_ms: 1.7436
+  type: 'test'
+  ...
+# Subtest: diagnostic callback failure never replaces the original native controller exception
+ok 134 - diagnostic callback failure never replaces the original native controller exception
+  ---
+  duration_ms: 2.4338
+  type: 'test'
+  ...
+# Subtest: descendant recovery authenticates both compare endpoints and rereads current main
+ok 135 - descendant recovery authenticates both compare endpoints and rereads current main
+  ---
+  duration_ms: 10.2462
+  type: 'test'
+  ...
+# Subtest: recovery archives exact old progress and deployment facts without changing review or attempt histories
+ok 136 - recovery archives exact old progress and deployment facts without changing review or attempt histories
+  ---
+  duration_ms: 7.9575
+  type: 'test'
+  ...
+# Subtest: failed generation removes its owned public directory
+ok 137 - failed generation removes its owned public directory
+  ---
+  duration_ms: 579.4349
+  type: 'test'
+  ...
+# Subtest: failed public directory removal is reported as cleanup failure
+ok 138 - failed public directory removal is reported as cleanup failure
+  ---
+  duration_ms: 428.1643
+  type: 'test'
+  ...
+# Subtest: certificate commands use anonymous FIFO stdin key path, only public CSR/CA filenames
+ok 139 - certificate commands use anonymous FIFO stdin key path, only public CSR/CA filenames
+  ---
+  duration_ms: 2.2461
+  type: 'test'
+  ...
+# Subtest: fixed shell creates a real anonymous FIFO; key and shell syntax are never interpolated
+ok 140 - fixed shell creates a real anonymous FIFO; key and shell syntax are never interpolated
+  ---
+  duration_ms: 3.2547
+  type: 'test'
+  ...
+# Subtest: public CA rejects private keys and extra PEM objects before any mount
+ok 141 - public CA rejects private keys and extra PEM objects before any mount
+  ---
+  duration_ms: 4.3641
+  type: 'test'
+  ...
+# Subtest: OpenSSL failure never leaks raw stderr or supplied key into errors
+ok 142 - OpenSSL failure never leaks raw stderr or supplied key into errors
+  ---
+  duration_ms: 2.0359
+  type: 'test'
+  ...
+# Subtest: Linux actual OpenSSL cert chain works with stdin keys; Windows never pretends this proof
+ok 143 - Linux actual OpenSSL cert chain works with stdin keys; Windows never pretends this proof # SKIP
+  ---
+  duration_ms: 0.3176
+  type: 'test'
+  ...
+# Subtest: container cleanup success requires proven removal of the owned ID
+ok 144 - container cleanup success requires proven removal of the owned ID
+  ---
+  duration_ms: 69.2832
+  type: 'test'
+  ...
+# Subtest: container cleanup nonzero requires proven removal of the owned ID
+ok 145 - container cleanup nonzero requires proven removal of the owned ID
+  ---
+  duration_ms: 12.5785
+  type: 'test'
+  ...
+# Subtest: container cleanup error requires proven removal of the owned ID
+ok 146 - container cleanup error requires proven removal of the owned ID
+  ---
+  duration_ms: 11.6642
+  type: 'test'
+  ...
+# Subtest: container cleanup throw requires proven removal of the owned ID
+ok 147 - container cleanup throw requires proven removal of the owned ID
+  ---
+  duration_ms: 11.4481
+  type: 'test'
+  ...
+# Subtest: container cleanup timeout requires proven removal of the owned ID
+ok 148 - container cleanup timeout requires proven removal of the owned ID
+  ---
+  duration_ms: 49.51
+  type: 'test'
+  ...
+# Subtest: container cleanup no-id requires proven removal of the owned ID
+ok 149 - container cleanup no-id requires proven removal of the owned ID
+  ---
+  duration_ms: 54.0077
+  type: 'test'
+  ...
+# Subtest: container cleanup late-id requires proven removal of the owned ID
+ok 150 - container cleanup late-id requires proven removal of the owned ID
+  ---
+  duration_ms: 44.2096
+  type: 'test'
+  ...
+# Subtest: container cleanup auto-removed requires proven removal of the owned ID
+ok 151 - container cleanup auto-removed requires proven removal of the owned ID
+  ---
+  duration_ms: 50.6642
+  type: 'test'
+  ...
+# Subtest: container cleanup list-error requires proven removal of the owned ID
+ok 152 - container cleanup list-error requires proven removal of the owned ID
+  ---
+  duration_ms: 9.5163
+  type: 'test'
+  ...
+# Subtest: container cleanup list-throw requires proven removal of the owned ID
+ok 153 - container cleanup list-throw requires proven removal of the owned ID
+  ---
+  duration_ms: 16.6644
+  type: 'test'
+  ...
+# Subtest: container cleanup list-nonzero requires proven removal of the owned ID
+ok 154 - container cleanup list-nonzero requires proven removal of the owned ID
+  ---
+  duration_ms: 8.8263
+  type: 'test'
+  ...
+# Subtest: container cleanup list-timeout requires proven removal of the owned ID
+ok 155 - container cleanup list-timeout requires proven removal of the owned ID
+  ---
+  duration_ms: 57.5227
+  type: 'test'
+  ...
+# Subtest: container cleanup list-visible requires proven removal of the owned ID
+ok 156 - container cleanup list-visible requires proven removal of the owned ID
+  ---
+  duration_ms: 14.2276
+  type: 'test'
+  ...
+# Subtest: container cleanup list-truncated requires proven removal of the owned ID
+ok 157 - container cleanup list-truncated requires proven removal of the owned ID
+  ---
+  duration_ms: 6.8482
+  type: 'test'
+  ...
+# Subtest: container cleanup list-stderr requires proven removal of the owned ID
+ok 158 - container cleanup list-stderr requires proven removal of the owned ID
+  ---
+  duration_ms: 12.0898
+  type: 'test'
+  ...
+# Subtest: container arguments have immutable image, no network, no secrets or repo mounts
+ok 159 - container arguments have immutable image, no network, no secrets or repo mounts
+  ---
+  duration_ms: 5.5194
+  type: 'test'
+  ...
+# Subtest: mount path injection, duplicate/public mount alias, socket traversal fail
+ok 160 - mount path injection, duplicate/public mount alias, socket traversal fail
+  ---
+  duration_ms: 15.8505
+  type: 'test'
+  ...
+# Subtest: combined private output cap is hard and sanitized receipt never returns raw output
+ok 161 - combined private output cap is hard and sanitized receipt never returns raw output
+  ---
+  duration_ms: 1.7585
+  type: 'test'
+  ...
+# Subtest: actual inspection validator rejects isolation/image/env drift, not just builder intent
+ok 162 - actual inspection validator rejects isolation/image/env drift, not just builder intent
+  ---
+  duration_ms: 6.501
+  type: 'test'
+  ...
+# Subtest: escape comparison requires reachable controlled TCP and DNS bridge baseline
+ok 163 - escape comparison requires reachable controlled TCP and DNS bridge baseline
+  ---
+  duration_ms: 1.4859
+  type: 'test'
+  ...
+# Subtest: deadline settles failed and escalates when inspected Docker child ignores SIGTERM
+ok 164 - deadline settles failed and escalates when inspected Docker child ignores SIGTERM
+  ---
+  duration_ms: 87.2165
+  type: 'test'
+  ...
+# Subtest: controlled probe snapshot precedes even immediate fixture completion
+ok 165 - controlled probe snapshot precedes even immediate fixture completion
+  ---
+  duration_ms: 1.091
+  type: 'test'
+  ...
+# Subtest: Linux controlled bridge TCP/DNS baseline succeeds; identical network-none fixture cannot escape
+ok 166 - Linux controlled bridge TCP/DNS baseline succeeds; identical network-none fixture cannot escape # SKIP
+  ---
+  duration_ms: 0.4698
+  type: 'test'
+  ...
+# Subtest: guard JSON decodes valid bounded UTF8 once and returns immutable values
+ok 167 - guard JSON decodes valid bounded UTF8 once and returns immutable values
+  ---
+  duration_ms: 6.142
+  type: 'test'
+  ...
+# Subtest: duplicate decoded/prototype keys and unpaired surrogates never survive parsing
+ok 168 - duplicate decoded/prototype keys and unpaired surrogates never survive parsing
+  ---
+  duration_ms: 7.8854
+  type: 'test'
+  ...
+# Subtest: JSON byte/depth/node/string bounds apply before unbounded construction
+ok 169 - JSON byte/depth/node/string bounds apply before unbounded construction
+  ---
+  duration_ms: 1.0628
+  type: 'test'
+  ...
+# Subtest: duplicate keys are rejected at every nesting and diagnostics never echo input
+ok 170 - duplicate keys are rejected at every nesting and diagnostics never echo input
+  ---
+  duration_ms: 1.6316
+  type: 'test'
+  ...
+# Subtest: fixed native arguments keep official provider and only one turn
+ok 171 - fixed native arguments keep official provider and only one turn
+  ---
+  duration_ms: 6.5356
+  type: 'test'
+  ...
+# Subtest: bootstrap rejects arbitrary commands, env, extra keys and unsafe models
+ok 172 - bootstrap rejects arbitrary commands, env, extra keys and unsafe models
+  ---
+  duration_ms: 23.4427
+  type: 'test'
+  ...
+# Subtest: managed path absence is checked; present, unreadable and unknown errors fail closed
+ok 173 - managed path absence is checked; present, unreadable and unknown errors fail closed
+  ---
+  duration_ms: 2.0525
+  type: 'test'
+  ...
+# Subtest: native environment cannot inherit controller/provider credentials
+ok 174 - native environment cannot inherit controller/provider credentials
+  ---
+  duration_ms: 0.7341
+  type: 'test'
+  ...
+# Subtest: real factory missing CLI path reports proven cleanup and removes its directory
+ok 175 - real factory missing CLI path reports proven cleanup and removes its directory # SKIP
+  ---
+  duration_ms: 3.5495
+  type: 'test'
+  ...
+# Subtest: hung proxy still starts container stop and never reports removed resources
+ok 176 - hung proxy still starts container stop and never reports removed resources
+  ---
+  duration_ms: 355.6019
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded startup with no keepalive
+ok 177 - standalone child settles bounded startup with no keepalive
+  ---
+  duration_ms: 436.313
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded cleanup with no keepalive
+ok 178 - standalone child settles bounded cleanup with no keepalive
+  ---
+  duration_ms: 254.2606
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded isolation with no keepalive
+ok 179 - standalone child settles bounded isolation with no keepalive
+  ---
+  duration_ms: 141.1516
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded release with no keepalive
+ok 180 - standalone child settles bounded release with no keepalive
+  ---
+  duration_ms: 118.3652
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded late-success with no keepalive
+ok 181 - standalone child settles bounded late-success with no keepalive
+  ---
+  duration_ms: 153.4381
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded late-reject with no keepalive
+ok 182 - standalone child settles bounded late-reject with no keepalive
+  ---
+  duration_ms: 139.8773
+  type: 'test'
+  ...
+# Subtest: standalone child settles bounded late-hang with no keepalive
+ok 183 - standalone child settles bounded late-hang with no keepalive
+  ---
+  duration_ms: 236.4629
+  type: 'test'
+  ...
+# Subtest: concurrent cleanup shares one operation and the same sanitized outcome
+ok 184 - concurrent cleanup shares one operation and the same sanitized outcome
+  ---
+  duration_ms: 1.7545
+  type: 'test'
+  ...
+# Subtest: untrusted startup rejection cannot claim proven cleanup
+ok 185 - untrusted startup rejection cannot claim proven cleanup
+  ---
+  duration_ms: 7.2395
+  type: 'test'
+  ...
+# Subtest: late startup after cleanup timeout is closed exactly once and cannot regain authority
+ok 186 - late startup after cleanup timeout is closed exactly once and cannot regain authority
+  ---
+  duration_ms: 151.4947
+  type: 'test'
+  ...
+# Subtest: TLS key is synchronously erased on success resource cleanup
+ok 187 - TLS key is synchronously erased on success resource cleanup
+  ---
+  duration_ms: 0.6241
+  type: 'test'
+  ...
+# Subtest: TLS key is synchronously erased on reject resource cleanup
+ok 188 - TLS key is synchronously erased on reject resource cleanup
+  ---
+  duration_ms: 0.1941
+  type: 'test'
+  ...
+# Subtest: TLS key is synchronously erased on hang resource cleanup
+ok 189 - TLS key is synchronously erased on hang resource cleanup
+  ---
+  duration_ms: 45.7154
+  type: 'test'
+  ...
+# Subtest: failed disposal still attempts both stops and never removes the directory
+ok 190 - failed disposal still attempts both stops and never removes the directory
+  ---
+  duration_ms: 1.4583
+  type: 'test'
+  ...
+# Subtest: trusted capacity rejection emits only a frozen numeric snapshot and never stages or forwards
+ok 191 - trusted capacity rejection emits only a frozen numeric snapshot and never stages or forwards
+  ---
+  duration_ms: 8.8074
+  type: 'test'
+  ...
+# Subtest: forged codes, maps, default classifier and malformed capacity metadata never notify or admit
+ok 192 - forged codes, maps, default classifier and malformed capacity metadata never notify or admit
+  ---
+  duration_ms: 17.6035
+  type: 'test'
+  ...
+# Subtest: normal source staging preserves the captured forward and capacity callback cannot admit failure
+ok 193 - normal source staging preserves the captured forward and capacity callback cannot admit failure
+  ---
+  duration_ms: 1.2005
+  type: 'test'
+  ...
+# Subtest: CONNECT authority is exact and never an open tunnel
+ok 194 - CONNECT authority is exact and never an open tunnel
+  ---
+  duration_ms: 3.1032
+  type: 'test'
+  ...
+# Subtest: raw duplicate framing/auth/host and alternate authentication fail closed
+ok 195 - raw duplicate framing/auth/host and alternate authentication fail closed
+  ---
+  duration_ms: 9.0119
+  type: 'test'
+  ...
+# Subtest: only fixed inference and policy metadata endpoints are allowed
+ok 196 - only fixed inference and policy metadata endpoints are allowed
+  ---
+  duration_ms: 1.2708
+  type: 'test'
+  ...
+# Subtest: upstream TLS cannot inherit local CA/proxy or route to alternate host
+ok 197 - upstream TLS cannot inherit local CA/proxy or route to alternate host
+  ---
+  duration_ms: 76.8088
+  type: 'test'
+  ...
+# Subtest: Linux real CONNECT/TLS holds complete source before parent release and preserves body
+ok 198 - Linux real CONNECT/TLS holds complete source before parent release and preserves body # SKIP
+  ---
+  duration_ms: 0.6827
+  type: 'test'
+  ...
+# Subtest: qualification input includes whole current-size context plus explicit CI headroom
+ok 199 - qualification input includes whole current-size context plus explicit CI headroom
+  ---
+  duration_ms: 11.4558
+  type: 'test'
+  ...
+# Subtest: qualification is explicit exact trusted-main dispatch, never a schedule or candidate
+ok 200 - qualification is explicit exact trusted-main dispatch, never a schedule or candidate
+  ---
+  duration_ms: 12.459
+  type: 'test'
+  ...
+# Subtest: qualification propagates only branded cleanup failures
+ok 201 - qualification propagates only branded cleanup failures
+  ---
+  duration_ms: 7.3668
+  type: 'test'
+  ...
+# Subtest: synthetic unit receipt binds complete input, actual cap, genuine default and build
+ok 202 - synthetic unit receipt binds complete input, actual cap, genuine default and build
+  ---
+  duration_ms: 12.729
+  type: 'test'
+  ...
+# Subtest: profile, missing isolation, policy, retry, report and actual-cap failures cannot qualify
+ok 203 - profile, missing isolation, policy, retry, report and actual-cap failures cannot qualify
+  ---
+  duration_ms: 103.9632
+  type: 'test'
+  ...
+# Subtest: full843365 plus40KiB synthetic context fits only the sealed actual32k cap
+ok 204 - full843365 plus40KiB synthetic context fits only the sealed actual32k cap
+  ---
+  duration_ms: 94.7649
+  type: 'test'
+  ...
+# Subtest: exact decoded context boundary and one byte over retain the native65536 margin
+ok 205 - exact decoded context boundary and one byte over retain the native65536 margin
+  ---
+  duration_ms: 89.2239
+  type: 'test'
+  ...
+# Subtest: outer escaping is decoded once but embedded packet JSON remains model visible
+ok 206 - outer escaping is decoded once but embedded packet JSON remains model visible
+  ---
+  duration_ms: 6.1913
+  type: 'test'
+  ...
+# Subtest: framing, context fields, extra user content and schema/model mismatch all fail closed
+ok 207 - framing, context fields, extra user content and schema/model mismatch all fail closed
+  ---
+  duration_ms: 7.5829
+  type: 'test'
+  ...
+# Subtest: all native text blocks, schema descriptions and thinking wrappers are accounted without inventing128k metadata
+ok 208 - all native text blocks, schema descriptions and thinking wrappers are accounted without inventing128k metadata
+  ---
+  duration_ms: 3.5845
+  type: 'test'
+  ...
+# Subtest: all system/user/tool context bounds and unknown thinking/effort fields fail closed
+ok 209 - all system/user/tool context bounds and unknown thinking/effort fields fail closed
+  ---
+  duration_ms: 20.3448
+  type: 'test'
+  ...
+# Subtest: raw duplicates, decompression/framing and unknown request keys are not normalized into acceptance
+ok 210 - raw duplicates, decompression/framing and unknown request keys are not normalized into acceptance
+  ---
+  duration_ms: 1.8822
+  type: 'test'
+  ...
+# Subtest: only a fully valid one-byte context overflow produces a private-minted numeric capacity error
+ok 211 - only a fully valid one-byte context overflow produces a private-minted numeric capacity error
+  ---
+  duration_ms: 58.8363
+  type: 'test'
+  ...
+# Subtest: malformed and oversized requests cannot launder a capacity-only fallback hint
+ok 212 - malformed and oversized requests cannot launder a capacity-only fallback hint
+  ---
+  duration_ms: 235.6717
+  type: 'test'
+  ...
+# Subtest: publicly constructed or prototype-forged errors from hostile getters are not trusted capacity signals
+ok 213 - publicly constructed or prototype-forged errors from hostile getters are not trusted capacity signals
+  ---
+  duration_ms: 2.1649
+  type: 'test'
+  ...
+# Subtest: a previously genuine capacity error cannot be replayed through a different request getter
+ok 214 - a previously genuine capacity error cannot be replayed through a different request getter
+  ---
+  duration_ms: 28.4321
+  type: 'test'
+  ...
+# Subtest: top-level request getters cannot escape capacity-only error normalization
+ok 215 - top-level request getters cannot escape capacity-only error normalization
+  ---
+  duration_ms: 30.7223
+  type: 'test'
+  ...
+# Subtest: strict SSE reconstructs one genuine StructuredOutput and matches native CLI report
+ok 216 - strict SSE reconstructs one genuine StructuredOutput and matches native CLI report
+  ---
+  duration_ms: 14.9489
+  type: 'test'
+  ...
+# Subtest: model/output/CLI mismatch, missing stop, duplicate message and malformed UTF8 poison response
+ok 217 - model/output/CLI mismatch, missing stop, duplicate message and malformed UTF8 poison response
+  ---
+  duration_ms: 6.0629
+  type: 'test'
+  ...
+# Subtest: documented thinking/signature blocks stay bounded by genuine cumulative usage before one tool
+ok 218 - documented thinking/signature blocks stay bounded by genuine cumulative usage before one tool
+  ---
+  duration_ms: 2.2062
+  type: 'test'
+  ...
+# Subtest: strict SSE disallows duplicate decoded keys, alternate tools, retry/fallback and output truncation
+ok 219 - strict SSE disallows duplicate decoded keys, alternate tools, retry/fallback and output truncation
+  ---
+  duration_ms: 3.0757
+  type: 'test'
+  ...
+# Subtest: actual review schema subset is enforced and unknown schema keywords reject before a result
+ok 220 - actual review schema subset is enforced and unknown schema keywords reject before a result
+  ---
+  duration_ms: 6.5014
+  type: 'test'
+  ...
+# Subtest: response memory bounds, mutation aliases and poisoned re-use never select an earlier answer
+ok 221 - response memory bounds, mutation aliases and poisoned re-use never select an earlier answer
+  ---
+  duration_ms: 9.1639
+  type: 'test'
+  ...
+# Subtest: native policy settlement requires the complete late genuine marker
+ok 222 - native policy settlement requires the complete late genuine marker
+  ---
+  duration_ms: 9.8558
+  type: 'test'
+  ...
+# Subtest: policy watchdog, cache, save failure and late changes irreversibly poison
+ok 223 - policy watchdog, cache, save failure and late changes irreversibly poison
+  ---
+  duration_ms: 2.5205
+  type: 'test'
+  ...
+# Subtest: transport success, malformed prefixes and duplicate settlement are not certificates
+ok 224 - transport success, malformed prefixes and duplicate settlement are not certificates
+  ---
+  duration_ms: 0.9069
+  type: 'test'
+  ...
+# Subtest: diagnostics are finite, private and never returned through receipts or exceptions
+ok 225 - diagnostics are finite, private and never returned through receipts or exceptions
+  ---
+  duration_ms: 5.4264
+  type: 'test'
+  ...
+# Subtest: invalid or incomplete UTF8 after settlement cannot authorize a source request
+ok 226 - invalid or incomplete UTF8 after settlement cannot authorize a source request
+  ---
+  duration_ms: 1.2104
+  type: 'test'
+  ...
+# Subtest: concurrent session close calls share cleanup without forwarding
+ok 227 - concurrent session close calls share cleanup without forwarding
+  ---
+  duration_ms: 40.3521
+  type: 'test'
+  ...
+# Subtest: a valid forward cannot succeed when cleanup fails
+ok 228 - a valid forward cannot succeed when cleanup fails
+  ---
+  duration_ms: 13.6033
+  type: 'test'
+  ...
+# Subtest: policy invalidated during awaited claim validation prevents the upstream write
+ok 229 - policy invalidated during awaited claim validation prevents the upstream write
+  ---
+  duration_ms: 4.8809
+  type: 'test'
+  ...
+# Subtest: late policy microtask irreversibly poisons the gate before its await continuation forwards
+ok 230 - late policy microtask irreversibly poisons the gate before its await continuation forwards
+  ---
+  duration_ms: 4.3806
+  type: 'test'
+  ...
+# Subtest: liveness is synchronously fenced after every awaited claim continuation
+ok 231 - liveness is synchronously fenced after every awaited claim continuation
+  ---
+  duration_ms: 4.8607
+  type: 'test'
+  ...
+# Subtest: startup promise is bounded even when the native runtime never returns
+ok 232 - startup promise is bounded even when the native runtime never returns
+  ---
+  duration_ms: 54.8794
+  type: 'test'
+  ...
+# Subtest: optional reports use actual native wrapper budget without starving mandatory source
+ok 233 - optional reports use actual native wrapper budget without starving mandatory source
+  ---
+  duration_ms: 259.7819
+  type: 'test'
+  ...
+# Subtest: capacity-only optional restaging falls back to the still-live mandatory body, never policy failures
+ok 234 - capacity-only optional restaging falls back to the still-live mandatory body, never policy failures
+  ---
+  duration_ms: 227.6956
+  type: 'test'
+  ...
+# Subtest: staged source waits for actual owned claim then validates real native and upstream equality
+ok 235 - staged source waits for actual owned claim then validates real native and upstream equality
+  ---
+  duration_ms: 4.0306
+  type: 'test'
+  ...
+# Subtest: foreign claim and unproven isolation cannot forward source
+ok 236 - foreign claim and unproven isolation cannot forward source
+  ---
+  duration_ms: 2.2772
+  type: 'test'
+  ...
+# Subtest: late retry, late policy and duplicate CLI JSON remain actual failures, never earlier success
+ok 237 - late retry, late policy and duplicate CLI JSON remain actual failures, never earlier success
+  ---
+  duration_ms: 4.5641
+  type: 'test'
+  ...
+# Subtest: a stalled already-owned forward reaches terminal failure without replaying source
+ok 238 - a stalled already-owned forward reaches terminal failure without replaying source
+  ---
+  duration_ms: 32.1502
+  type: 'test'
+  ...
+# Subtest: only parent-held identity handle and actual validated claim release exactly one captured forward
+ok 239 - only parent-held identity handle and actual validated claim release exactly one captured forward
+  ---
+  duration_ms: 5.5568
+  type: 'test'
+  ...
+# Subtest: concurrent second request permanently poisons a release waiting on its claim fence
+ok 240 - concurrent second request permanently poisons a release waiting on its claim fence
+  ---
+  duration_ms: 4.4082
+  type: 'test'
+  ...
+# Subtest: forged handles, failed claims and uncertain upstream outcomes never refund or replay
+ok 241 - forged handles, failed claims and uncertain upstream outcomes never refund or replay
+  ---
+  duration_ms: 1.6681
+  type: 'test'
+  ...
+# Subtest: a concurrent second parent release cannot pass the same awaiting fence
+ok 242 - a concurrent second parent release cannot pass the same awaiting fence
+  ---
+  duration_ms: 1.1307
+  type: 'test'
+  ...
+# Subtest: claim and seal aliases are detached and a late retry poisons the final session state
+ok 243 - claim and seal aliases are detached and a late retry poisons the final session state
+  ---
+  duration_ms: 1.074
+  type: 'test'
+  ...
+1..243
+# tests 243
+# suites 0
+# pass 224
+# fail 15
+# cancelled 0
+# skipped 4
+# todo 0
+# duration_ms 14326.0286

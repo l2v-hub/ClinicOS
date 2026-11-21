@@ -1,0 +1,551 @@
+{
+  "at": "2026-11-05T20:06:15.255Z",
+  "pr": 529,
+  "sha": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+  "base": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "mode": "advisory-only",
+  "inputBytes": 805305,
+  "inputSha256": "a9ed46d60598929469f17710ccb28fbb2284d2e86bab58a45b3c36ab8ffab71a",
+  "conservativeContextUpperBound": 998841,
+  "qualifiedContextUpperBound": 1000000,
+  "manifest": [
+    {
+      "file": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 42816,
+      "sha256": "f9873e2eda7788cd4bc6d36d48cc1350616afe12b5ed4a0eeb38932b406507be",
+      "blob": "f6685811115766de6da8d9c3d5ffa3f0a6804853"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/native-guard-container.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 16113,
+      "sha256": "8c973db404c8c42a057bad63900202c4a139a5da75a90688c9c97a05bf987b10",
+      "blob": "b1aa0da3ac39c533380308779b0c7dc2b4dbb0fd"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/native-guard-outcome.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 1435,
+      "sha256": "23e7caec6a45b81674a369bb77ccbf7b2feb9c9b4f5547c53f4dc7407e64f849",
+      "blob": "da3f0c8aa98fc80c9867c4a761a4ed30574ed58c"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/native-guard-qualification.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 13001,
+      "sha256": "72b6e8036ae44def149627978076735412bc6e6f90226f5628295a4a74056530",
+      "blob": "ec354fdb150e123d39ba168ce5e987222a3d19b0"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/native-guard-session.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 18147,
+      "sha256": "cb8622243e0bd435c230379e0250b074ed88ce954cd444e6a7268a4c1ea1f3aa",
+      "blob": "2d25e679dea30ecb50d8f78f79886ed0eea59d32"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/cloud-review-cli-failure.test.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 945,
+      "sha256": "3923a4532108229afd1ce4c2836fe5c4dd7b0f2336e2c58ab27c6122725a4165",
+      "blob": "64f943111d56222e680037b094b44f3bab9a8571"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/cloud-review-worker.test.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 50752,
+      "sha256": "ad1c10c7494eae0b6133b8bebc7877fc46debe6fe05ebc60b6f68b137d211243",
+      "blob": "7210cecff85ab96faa3ab771d47061bb8367a434"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/fixtures/native-liveness-child.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 2706,
+      "sha256": "cfbeb4cd5fee3954ea5612afc51562cba055638ea1afb978b99f24c94b53c54d",
+      "blob": "4f4f1b62464208365765334bd462075441570335"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/fixtures/native-resource-child.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 655,
+      "sha256": "a074e7fc31d8455f31bdd94287b113bdd30bbff3bade1d04669207a5cb120670",
+      "blob": "16606c37a6d5e356d0cf6174f3da6ddd3c67cb41"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/fixtures/native-review-evidence.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 5860,
+      "sha256": "92e906fea87cd6a392c0eb7a974743c11309febb9093dd5c323c04e57f7e4693",
+      "blob": "707b734219ea2d975fe4cd779f56b1f7804fce4e"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/native-guard-cleanup.test.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 5930,
+      "sha256": "bb6b120b0e083fdd2b609af7e501eb70e081964793efd1eb65526dfbcf4fae3b",
+      "blob": "67ed0f7487eab5546bd48007c854bbcbd630e3b4"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/native-guard-liveness.test.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 6975,
+      "sha256": "387620f23f9b388a2a986f2ed09d81d6f2a1950162737f30cf91041ebd90ebf4",
+      "blob": "7df09ce28d7d900e1b8241f39bd7a4d2ce99eaeb"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/native-guard-qualification.test.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 5689,
+      "sha256": "55af2ac6571c45c993627d1dabba9e99f541f921d965ed21fa95f48fe8341dca",
+      "blob": "5fb3404418f6c14bd0576b146abbd39b03882ee1"
+    },
+    {
+      "file": "agent-team/tests/bug-pipeline/native-guard-session.test.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 17835,
+      "sha256": "7a39468b4160ae7631a8b6d8abaf9384198a3fa1bca667743f4d6d3a1bd10d21",
+      "blob": "c557e4a1660f3fb7c8c8214f32105bee1c2b9c6e"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-20261105/analysis.md",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 2114,
+      "sha256": "415987c9583e3240f51a17c7228fcc6cc3cbeec97b65249be86239d599185be9",
+      "blob": "89f296180674cf4e2fa0fd3a5dd728f40193f57b"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-20261105/implementation-plan.md",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 2321,
+      "sha256": "630831fa54cfcaae00b9f386c1dbbaa89869a551fcd4608462a5cc26f738daff",
+      "blob": "53deda3b6b1afaa2327ddde6b5a1b318e1d156f7"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-20261105/independent-review.md",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 1794,
+      "sha256": "e8450706569f0d7985d9531c3087217518700b37f36c00408e47f45aa77e661b",
+      "blob": "2fdbd76e4f0d9485886fa7266934ea6e89ec0b02"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-20261105/task-contract.md",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 2951,
+      "sha256": "204ccff584366125b18b55f189167047a3e1f57599eb0843e5c98ff21b4f3451",
+      "blob": "bc1756e2a9bc0aa83ed0ae63e299ac84f89ffbc8"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-20261105/test-results/native-guard.tap",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 21425,
+      "sha256": "7f43cb2f683c5c7d590bbe1f60f4262f5faf957186af43b3bbd9b140de737977",
+      "blob": "a099e1de8bb317509f7200bc1f76d4d8b36ff421"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-20261105/validation-report.md",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 3233,
+      "sha256": "2b7196e2a677f6c258151160d7f584be90a8586ead515c994de13666a2cad41d",
+      "blob": "fa18619f8d7278344a21ef01f217a72d12b03d2b"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r2-20261105/implementation-plan.md",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 2523,
+      "sha256": "8d6261db96e829038f5f92c6f8522933f03916f33e56312e7021365a86a5923c",
+      "blob": "560b345087cabb9537e6b4e8e936ed68107fae26"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r2-20261105/imported-history.json",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 951,
+      "sha256": "271d87bab8cd6b4f3a713e7200ea298d868b03e97a9e57b3508117f8de1ac523",
+      "blob": "8cf7100a7627773299079a35b5546c9985ad2f4e"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r2-20261105/prior-Max-advisory.json",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 7732,
+      "sha256": "a38489e0b225f4653f5a242d51292361939ee621627c623223cd12cc011ae4f6",
+      "blob": "735383c80f97549afcd8692ca95eae916f524d6f"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r2-20261105/prior-Max-execution-evidence.json",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 2790,
+      "sha256": "813961bb3bd582d8c02cd519088537baa13b65edff559a8ad4c89e0a79be1134",
+      "blob": "19340e59a24793b663b91226dda6838c64d936cf"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r2-20261105/prior-native-state-reconciliation.json",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 878,
+      "sha256": "a2eab0f439564e7b01bcc0246e2709e9379b5a335893e58bcbf5c9454a9dce30",
+      "blob": "0d1b5803351473c1003b5677848c51700ce64136"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r2-20261105/task-contract.md",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 4111,
+      "sha256": "cb5c0aede7395240a8c75b32a1e2ca5825cffdb23e0c9da9cc194724604b57a5",
+      "blob": "73d42c8a29eb95fb4bdb3bb10f4ba3683eaa0243"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r2-20261105/test-results/integration-native-worker.tap",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 43437,
+      "sha256": "f966756342b35d0ffb7500247bd4ff0dcbe792baf3b8da216dcb3df3e74d5bb9",
+      "blob": "903035a9ea48eff97153c81ebd05c8acef189655"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r2-20261105/validation-report.md",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 3172,
+      "sha256": "f2f4cccae900345a405192b710fbbd5e4db9c33a14334cde4a495da1e070a4ce",
+      "blob": "65538cbc38a7c95b26679af073e2657f14f57b25"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r3-20261105/advisory-3-receipt-manifest.json",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 1256,
+      "sha256": "375c47a6705a03b69fe1801c636c9bf36573342be19d0951e39b9b89c53448c2",
+      "blob": "1b91e9e8745843c509a7007f64f5fa7ff799c89c"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r3-20261105/integration-ownership.md",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 465,
+      "sha256": "f7b41532f0ae1a6f7e5104512194b16cd9d2f5f18b48b10cc4d5bb2d59e3d2dc",
+      "blob": "38167fff0f740fcf8d9a2eb1d53ab0963f382d17"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r3-20261105/max-advisory-3-report.json",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 9003,
+      "sha256": "0a4f61e178d8d7ef6f3a2b222066dc195102624ccaa3939b530949efb907f284",
+      "blob": "c4d92ce5c4da9f48c96cc356f344ac3f5e4d4d1b"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r3-20261105/task-contract.md",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 3162,
+      "sha256": "9b0041be1fb2133c3d6b97a996b3f6100e339d9b9f2ac831372fbb5ab14e6b5e",
+      "blob": "e91d48214a35c76958edd15076ce596275f99d30"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r3-20261105/test-results/native-worker.tap",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 45040,
+      "sha256": "0a6db241428089cee89149d044ee85dcc76e2eca0e9f5ff9b40fbb45c8ef0b36",
+      "blob": "de006ae714ba81dd6b8f4b4c175947cdf161adf6"
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r3-20261105/validation-report.md",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 2315,
+      "sha256": "9999805a6075555bb43d4919a32a46d9b432bd07cd8525b8505461071f21ab86",
+      "blob": "4c5eccefceb14e888f8c53bba04e75ef8248425b"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/native-guard-json.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 4299,
+      "sha256": "b1aa5d5c4b01d2458f17a2b399c419eb33733219425bc5025638f5ef97bf7302",
+      "blob": "09ba073b5700006957ecaa03b3ea4b9b12dc40cf"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/native-guard-request.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 10478,
+      "sha256": "89d6f4ede6756870f9769e469c69a772a4f3d0d6c7ae7355b72ffd9e5190aa07",
+      "blob": "67b8841c0c8c11156ed4fe6a26feac6a5bf5b70b"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/native-guard-response.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 14145,
+      "sha256": "8774a289af7aeee476aab35b1eab82c414985127a0dec695b69b734045fa68fe",
+      "blob": "747a1c6db5d4e18e8e7a6786c03fbe93f8eefbc4"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/native-guard-state.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 2367,
+      "sha256": "08719cdb6645144f5a524e2e2ef48ee66be5b33a43cdf49e02ece033c436a7ce",
+      "blob": "119bc48473277bdb8babd7f24754506c76d6e21b"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/native-guard-certificates.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 6956,
+      "sha256": "e29ef98c80adbb078ad64b78d61fb98d4643724b2c66bb6135cd06a5c6ad0c33",
+      "blob": "b93cabddd6ed1f2601cbd10e8c8d5337038c033f"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/native-guard-proxy.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 13473,
+      "sha256": "18d6c18b73e5df87b4ef86e24dc0df9adc3be9437d70ee9215776684554db7d5",
+      "blob": "2f27849acb6e35506c268e212d534df695d7ee7f"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/native-guard-launcher.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 6293,
+      "sha256": "0df0f48cf981b885b90b566c4f811e8bc0234e7f5ab479ea0213afacc6a08c20",
+      "blob": "6adcd03dd560e29cbb2b346f652479de062625bd"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/cloud-review-capacity.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 2173,
+      "sha256": "7551f184bdce36251a8617e91193b6d8d99900034bb1acf6b26523e1d62e1845",
+      "blob": "3bd23f7571d468c4080e3ac6d004fea53142ad71"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/cloud-review-recovery-worker.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 7454,
+      "sha256": "90c762d2dd5c3a47ab183241548117ceee19b45b8f96f39c38e973a77bf67a4f",
+      "blob": "44882de8fc51e1aa8b79bdc837a9c84ac6e6535e"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/cloud-review-recovery.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 19531,
+      "sha256": "3c5285ca892e72ca3a4114fd602ec23b2a02913097f3ba31346d39ba02a62485",
+      "blob": "d3c37cea8987b73ef6d0583990d652e66536122e"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/cloud-recovery-qualification.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 3122,
+      "sha256": "ebd7ae15f6c15c81af4aee2a8b0ca355a987e114d3a6257296800cc8f287cfbd",
+      "blob": "18a247f580484ba98a317caba8216d9f01f1789f"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/comment-review-handoff.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 48980,
+      "sha256": "086ee18c81a07353d8dbc1d835b39e2338d4b7c1bed1a38e65ab6570dceea435",
+      "blob": "ea6cec8a0cace0dbb3876dce48e3efe8daf796be"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/standalone-review.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 47608,
+      "sha256": "10f94026e6622b85ea80d0565c43e77ba1c56a22e93db94608678924a6382efd",
+      "blob": "61deb6074d09ad83158644db33f88d8cb12ee2e5"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/github.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 61068,
+      "sha256": "0c7b8a38f097ea6c6d0bb7f49b407ed08cbd75bd23fa3d372b75fb556d82c212",
+      "blob": "b6f4829b1e1560b8b7af2a882399f442ce86451e"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/contracts.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 11325,
+      "sha256": "084599442394406bd89ee5ae7c4a25417c48da47adbfbc281dc533ad511d1482",
+      "blob": "4b2b261933bbbfe30fa43419edb885b766851709"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/issue-review-communication.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 26331,
+      "sha256": "44a1caf63b8bf114a1bbc8a7d6915e1c0f11282cc1e9574caa9de2c8f466a7b9",
+      "blob": "f78abc8efe4c5c9f19960949bd0bdf2d6c67d255"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/claude-review-cron.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 14709,
+      "sha256": "5d54688f8187d3fbffa2a1106b52343b3a223b53366119d4b2f7f8c8d49e9d03",
+      "blob": "73c4df76623c5b4d158ef0e766047e97109f6bc1"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/review-validation-diagnostic.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 4608,
+      "sha256": "c4a3d6cd6d1a0b0ef67a22cfc6941fa2c9b9cdaa964357860d103271e9a7e58b",
+      "blob": "47fd29e6cd7bd58c0db879b0911f1240c8672ac3"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/operator-ownership.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 3951,
+      "sha256": "15fafef81826c7d7424ce903b73dab8a9ea8d6a19954b62c02c68fd0a117b77d",
+      "blob": "caf4873fa79b85f11348009452ed74cb255baab9"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/operator-authorization.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 21568,
+      "sha256": "d5b01b3c9820921df87d911c56ab1e12bf0172420a6b82fc0205479bd80c8dc8",
+      "blob": "ccd1d89ed7f53e412dd77f35c2ec542f6002ccf9"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/attempt-budget.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 19260,
+      "sha256": "555b457b375c4fe35b1e73f2081671e951748503adf598cf0312a5ce8d6e6094",
+      "blob": "ad68a21410fe349e9983e634c1670ab0145a305b"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/release.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 65973,
+      "sha256": "774fab99bf5c7c88c74c42a894d08e217c1859fee97be918e144b78ecd5ee2c1",
+      "blob": "3361f1840f3e77e47e82b6d4bfcb64144e4fc4b3"
+    },
+    {
+      "file": "agent-team/src/bug-pipeline/process.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 10533,
+      "sha256": "2859598df0808313faed958604a173d066ffd1ad627992e37ef605be7dea9870",
+      "blob": "58eb486c968ea9c1181c647609479d639478a713"
+    },
+    {
+      "file": "agent-team/src/core/sanitize.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 1012,
+      "sha256": "1a4d2b9565663b3ed5a593cdecf7cbadbd6f9cd6ef296a4b8c1c426b08ca042b",
+      "blob": "6520e5e5f57029e9d25dc71e37bc8813a5f98485"
+    },
+    {
+      "file": "scripts/quality-gate/claude-bug-review.mjs",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 15991,
+      "sha256": "0050f0e980ad9901852b5e2f12138d5738969e025131343e11f0a8a8485a3b0a",
+      "blob": "e10296976b8c29c59291a96c985995b24e7d7627"
+    },
+    {
+      "file": ".github/workflows/claude-cloud-review.yml",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 5109,
+      "sha256": "df418849427d26f07b0c7f96b05f29e458ee4fabe32cad307e76859fe416dd31",
+      "blob": "7841948070e7cc8abb3da651e0af5b54e59df176"
+    },
+    {
+      "file": "docs/claude-local-review-prompt.md",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 11630,
+      "sha256": "6d9b828976113e2f3a5afedf1044af7b2f5ce42f87039510cd47218db7e97ef8",
+      "blob": "6347048c2932fee9d6a09c4c2246f6019bfdb040"
+    },
+    {
+      "file": "scripts/automation/claude-cloud-tools/package.json",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 246,
+      "sha256": "545379c90727ef75e5d7278d8484e36a24f7cc034edd92a56a69b049c7326f59",
+      "blob": "22e14325cb0ab01278feb5d2f253e7772f693be2"
+    },
+    {
+      "file": "scripts/automation/claude-cloud-tools/package-lock.json",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 5198,
+      "sha256": "70cf34a9a534c37fbcfa1580cd2da69c749bbaafac97f07f3be8bcf63aefea11",
+      "blob": "6c6d0480b3d68d1749c1069f8af7303cb77c6789"
+    }
+  ],
+  "omitted": [
+    {
+      "file": "artifacts/task-validation/native-review-liveness-20261105/test-results/native-guard.tap",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 21425,
+      "sha256": "7f43cb2f683c5c7d590bbe1f60f4262f5faf957186af43b3bbd9b140de737977",
+      "blob": "a099e1de8bb317509f7200bc1f76d4d8b36ff421",
+      "reason": "TAP transcript represented by immutable digest and summary; full file retained in repository",
+      "summary": [
+        "# tests 95",
+        "# pass 92",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 3"
+      ]
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r2-20261105/test-results/integration-native-worker.tap",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 43437,
+      "sha256": "f966756342b35d0ffb7500247bd4ff0dcbe792baf3b8da216dcb3df3e74d5bb9",
+      "blob": "903035a9ea48eff97153c81ebd05c8acef189655",
+      "reason": "TAP transcript represented by immutable digest and summary; full file retained in repository",
+      "summary": [
+        "# tests 189",
+        "# pass 186",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 3"
+      ]
+    },
+    {
+      "file": "artifacts/task-validation/native-review-liveness-r3-20261105/test-results/native-worker.tap",
+      "ref": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+      "bytes": 45040,
+      "sha256": "0a6db241428089cee89149d044ee85dcc76e2eca0e9f5ff9b40fbb45c8ef0b36",
+      "blob": "de006ae714ba81dd6b8f4b4c175947cdf161adf6",
+      "reason": "TAP transcript represented by immutable digest and summary; full file retained in repository",
+      "summary": [
+        "# tests 197",
+        "# pass 193",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 4"
+      ]
+    }
+  ],
+  "previousInvocations": [
+    {
+      "resultFile": "max-review1-result.json",
+      "processFile": "max-review1-process.json",
+      "resultSha256": "194b011baf3050fd16961b05e3d65af5893f5e01cb75e765cf2471377e979544",
+      "processSha256": "765648ec8aef5e719fbc93d8258a5f03d8f2e437f1e032bec315ec3bd8a443a9"
+    },
+    {
+      "resultFile": "review529-advisory-result.json",
+      "processFile": "review529-advisory-process.json",
+      "resultSha256": "43c03091130a837e1d3ecd43d98a14761ab6bea2d7562d85babeb3cac58ce3f9",
+      "processSha256": "60ad7075248ead27a13c062e9febdaa07bcadad025630f9c177a3f075ed7160f"
+    },
+    {
+      "resultFile": "review529-r2-Max-result.json",
+      "processFile": "review529-r2-Max-process.json",
+      "resultSha256": "85de4906816077894450758196da8c2eecd23b736834d7a6fe9d917650cf7e11",
+      "processSha256": "2bca52800a724c0ac855d49a6c6b254330bb6c61ed1da8e065636e87dee974c5"
+    }
+  ],
+  "advisoryOrdinal": 4,
+  "advisoryCeiling": 4,
+  "remainingAfterThis": 0,
+  "nativeAllowanceAdded": false,
+  "nativeCanonicalWrites": 0,
+  "implementationAllowanceAdded": false,
+  "failedNativeRun": 41937588247,
+  "failedQualificationInference": "unknown",
+  "stateBlob": "99e3794f3fdcfc28870746b4ce127aac721d5107",
+  "allSubjectsDigest": "94e56e37eea10c9159e458dcf70f242a718385c2e873719463ae77c1d0a623ec",
+  "authorization": {
+    "sourceThread": "01a1a68d-ebc6-72c3-a5fc-8e9ceb74e8fa",
+    "sourceTurn": "01a1acf5-c394-7c51-a974-8d42bd566bca",
+    "actualUserMessageId": "01a1acf5-c3f8-7ba1-9686-44e23d732f2d",
+    "verifiedThrough": "root verified actual current user message",
+    "notNativeCapability": true
+  },
+  "nativeQualified": false,
+  "modelInvocations": 0,
+  "observedPriorMaxOutputTokens": 128000,
+  "requestedOutputCap": 32768,
+  "requestedCapEnforced": false,
+  "ready": false,
+  "status": "blocked-essential-controller-dependencies",
+  "missingEssentialSources": [
+    "agent-team/src/bug-pipeline/workspace.mjs",
+    "agent-team/src/bug-pipeline/review-policy.mjs",
+    "agent-team/src/bug-pipeline/external-review.mjs"
+  ],
+  "completeInputBoundLowerBound": 1042931
+}

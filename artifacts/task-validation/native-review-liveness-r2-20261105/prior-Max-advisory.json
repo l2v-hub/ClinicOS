@@ -1,0 +1,41 @@
+{
+  "subject_sha": "65ab406e08327c21d669f2d6ba3e5a871b3459ec",
+  "classification": "advisory-only",
+  "verdict": "changes-requested",
+  "summary": "Advisory source review only; no code was executed. This is not an approval, final QA, or merge or deployment authorization. Three source-derived regressions in cleanup reporting and secret handling remain. No path was found that weakens the one-forward guarantee or the request, response or claim fencing. Forward authority is still fenced synchronously by the state phase plus the policy, liveness and deadline checks. close() now wakes the startup, ready, isolation and release waits through the shared rejection, and referenced timers address the exit13 reproductions supplied in the packet. Container removal targets only the observed ID, and exit status and list-output checks fail closed. A candidate leak of the mandatory session in createNativeReviewStager was ruled out: mandatory.close() has already started at agent-team/src/bug-pipeline/native-guard-qualification.mjs:314 before any later failure can reach the catch block. Supplied hosted CI and local TAP results are evidence only; they are not live Docker or guarded native qualification, and the hosted failure site remains unknown.",
+  "findings": [
+    {
+      "severity": "medium",
+      "file": "agent-team/src/bug-pipeline/native-guard-session.mjs",
+      "line": 424,
+      "problem": "Secret-handling regression: certificates?.dispose() now runs only after stopNativeResources succeeds. The baseline attempted proxy and container cleanup independently, then always disposed the certificates. Now, if container removal is unproven or a resource close rejects, the function exits before disposal. If proxy close hangs, it never reaches disposal, even after the outer timeout has reported failure. The ephemeral leaf private key buffer then stays unzeroed in parent memory in exactly the failure paths this PR makes explicit. Retaining the private directory on unknown cleanup is intended by AC6, but keeping the key material live is not required by that contract.",
+      "requested_change": "Separate key disposal from proof of resource removal. Dispose the certificates synchronously when cleanup begins, or otherwise guarantee disposal on every cleanup outcome including a hung close. Keep the directory removal conditional on proven container and proxy cleanup, and preserve the sanitized failure.",
+      "test_expectation": "Add a regression through an injectable or extracted runtime cleanup seam. With a rejected container close and with a never-settling proxy close, the key buffer must be zeroed, the private directory must be retained, and cleanup must reject with the sanitized failure. With a successful close, the key must be zeroed and the directory removed. No current test exercises this factory cleanup path."
+    },
+    {
+      "severity": "medium",
+      "file": "agent-team/src/bug-pipeline/native-guard-session.mjs",
+      "line": 191,
+      "problem": "The memoized cleanup can record success without closing anything. If the deadline or another rejection fires while startup is pending, close() runs cleanup while runtime is undefined, so `await runtime?.close()` resolves immediately and that success is cached. The startup may still go on to create the proxy, private directory and container. The late handler at line 293 closes that runtime through a separate boundedCleanup, and the `.catch(() => {})` at line 295 discards any failure or timeout. The caller receives native-session-rejected whether resources were proven removed or remain unknown, contrary to AC2 and to implementation-plan item 4, which requires unknown resources to stay distinguishable from successful removal. The worker can then continue or exit with no signal that a late container may have survived.",
+      "requested_change": "Make the session cleanup operation own pending startup. When runtime is not yet assigned, it should wait within the cleanup bound for the startup result and close that exact returned runtime. A startup or close that does not settle in time must produce native-session-cleanup-failed, not a cached success. Keep authority invalidated synchronously and never let a late startup restore capability.",
+      "test_expectation": "Extend the standalone child and late-startup tests. A permanently pending startup must settle within the bound with the explicit unknown-cleanup failure. A startup that returns late with a rejecting or hung close must also surface that failure through the shared cleanup result. A late startup with a successful close must close exactly once. All cases must show zero forwards and no keepalive-dependent exit."
+    },
+    {
+      "severity": "low",
+      "file": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "line": 756,
+      "problem": "Caller effect of the stricter close contract: nativeSession.close() can now reject whenever container removal is unproven, but the worker still awaits it unguarded. At this line, a rejection replaces the structured preclaimChanged(true) result, which reports an existing reservation, with a generic throw. The top-level handler then exits without writing a receipt, recreating an empty-receipt diagnostic for a reserved claim. The same unguarded pattern at lines 698 and 736 can abort remaining candidate processing and can mask preclaim-source-changed classification. The durable reservation itself is preserved, so this is a loss of control-flow and diagnostic fidelity rather than a fencing failure.",
+      "requested_change": "Catch close failures at these worker call sites and keep the original control-flow result, adding a sanitized field such as cleanupFailed: true. Do not turn a cleanup failure into success, retry or refund, and keep a nonzero exit.",
+      "test_expectation": "Add processCloudReview tests with a native session whose close rejects, covering the claim-transition mismatch, claim failure and staging failure paths. Each must keep its original classification and reservation state, report the sanitized cleanup failure, perform zero forwards, and never issue a new claim, retry or refund."
+    }
+  ],
+  "limitations": [
+    "No tools, tests, Docker, provider or model were run; findings come from reading the supplied sources, and line numbers were derived by manual counting.",
+    "Live Docker behavior is unproven. Hypothesis, not reproduced: if rm --force collides with in-progress auto-removal, a nonzero rm followed by a still-visible ID yields a permanent cleanup-unproven result with no bounded re-check. This fails closed but could discard a run, and it needs live guarded Docker evidence.",
+    "If docker run exits or is killed before the ID is observed, cleanup reports unproven even when no container was created. This is honest and fails closed, but it retains the private directory and masks the original rejection; live frequency is unknown.",
+    "Container cleanup can take up to three consecutive cleanup windows (ID wait, rm, list) while the outer bound is one window, so the outer failure can precede a later successful removal. This is conservative and is not reported as a defect.",
+    "The failed run's exact failure site and any probe or qualification inference outcome remain UNKNOWN; the supplied reproductions establish defects, not the hosted cause.",
+    "This advisory cannot satisfy the native profile, which requires Linux, pinned CLI 2.1.301 and guarded 1M/32768 one-forward proof; the local CLI is Windows 2.1.296.",
+    "Independent native human approval, native claim, candidate parity, fresh source-bound qualification and deployment evidence are all absent. No retry, refund, merge or deployment is authorized by this review."
+  ]
+}
