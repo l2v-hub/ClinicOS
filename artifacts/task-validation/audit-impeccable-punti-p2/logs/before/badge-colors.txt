@@ -1,0 +1,16 @@
+agt-badge.agt-badge--programmato                 color=rgb(255, 255, 255)     bg=color(srgb 0.546274 0.326667 0) op=1 ratio=6.27  | Amministratore-Agenda, Operatore-Agenda
+alert-chip.alert-chip--amber                     color=color(srgb 0.546274 0.326667 0) bg=rgb(253, 243, 226)         op=1 ratio=5.7  | Operatore-Pazienti
+assistant-id__badge                              color=rgb(29, 79, 196)       bg=rgba(47, 107, 237, 0.14)   op=1 ratio=7.08  | Amministratore-Milo, Operatore-Milo
+cts__badge                                       color=rgb(29, 79, 196)       bg=rgb(238, 243, 254)         op=1 ratio=6.36  | Amministratore-Operatori, Amministratore-Posti Letto
+ds-badge.ds-badge--stale                         color=rgb(22, 32, 46)        bg=rgb(255, 255, 255)         op=1 ratio=16.4  | Operatore-Pazienti
+letto-stato-badge.letto-stato--occupato          color=color(srgb 0.680784 0.181961 0.232157) bg=rgb(254, 226, 226)         op=1 ratio=5.29  | Amministratore-Posti Letto
+news2-chip.ds-badge.ds-badge--alarm              color=color(srgb 0.723333 0.193333 0.246667) bg=rgb(253, 236, 238)         op=1 ratio=5.16  | Operatore-Pazienti
+news2-chip.ds-badge.ds-badge--alarm-strong       color=rgb(255, 255, 255)     bg=rgb(217, 58, 74)           op=1 ratio=4.51  | Operatore-Pazienti
+occ-stat__val                                    color=rgb(217, 58, 74)       bg=rgba(0, 0, 0, 0)           op=1 ratio=4.51  | Amministratore-Posti Letto
+op-avatar-sm                                     color=rgb(29, 79, 196)       bg=rgb(238, 243, 254)         op=1 ratio=6.36  | Amministratore-Orari
+op-avatar-sm[inline-bg]                          color=rgb(255, 255, 255)     bg=rgb(47, 107, 237)          op=1 ratio=4.72 rgba(0, 0, 0, 0.25) 0px 0px 0px 100px in | Amministratore-Operatori
+patient-roster-status                            color=rgb(29, 79, 196)       bg=rgb(238, 243, 254)         op=1 ratio=6.36  | Operatore-Pazienti
+patient-roster-status.patient-roster-status--warning color=rgb(138, 87, 0)        bg=rgb(253, 243, 226)         op=1 ratio=5.54  | Operatore-Pazienti
+room-number-badge                                color=rgb(29, 79, 196)       bg=rgba(47, 107, 237, 0.14)   op=1 ratio=7.08  | Amministratore-Posti Letto
+schedule-day.schedule-day--active                color=rgb(22, 32, 46)        bg=rgb(231, 247, 240)         op=1 ratio=14.81  | Amministratore-Orari
+schedule-day.schedule-day--off                   color=rgb(22, 32, 46)        bg=rgb(245, 247, 251)         op=0.75 ratio=15.29  | Amministratore-Orari

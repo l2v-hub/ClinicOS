@@ -3516,7 +3516,7 @@ body {
   min-width: 44px;
   border-radius: 12px;
   background: var(--indigo-bg);
-  color: var(--blue);
+  color: var(--ds-blue-active);
   font-size: 14px;
   font-weight: 800;
   display: flex;
@@ -3631,12 +3631,12 @@ body {
 
 .alert-chip--red {
   background: var(--red-bg);
-  color: var(--red);
+  color: var(--ds-tone-alarm);
   border: 1px solid var(--red-border);
 }
 .alert-chip--amber {
   background: var(--amber-bg);
-  color: var(--amber);
+  color: var(--ds-tone-warning);
   border: 1px solid rgba(217, 119, 6, 0.2);
 }
 
@@ -3806,6 +3806,15 @@ textarea.form-input {
   gap: 10px;
   color: var(--text-muted);
   font-size: 14px;
+  /* Niente lampo nei caricamenti brevi: il messaggio resta trasparente per 400 ms (lo spazio è già
+     riservato) e appare solo se l'attesa continua. Senza animazioni resta visibile da subito. */
+  animation: page-loading-reveal 0.15s ease-out 0.4s backwards;
+}
+
+@keyframes page-loading-reveal {
+  from {
+    opacity: 0;
+  }
 }
 
 .page-load-error {
@@ -4760,11 +4769,11 @@ textarea.form-input {
   color: #ffffff;
 }
 .badge--green {
-  background: var(--emerald);
+  background: var(--ds-tone-ok-solid);
   color: #ffffff;
 }
 .badge--amber {
-  background: var(--amber);
+  background: var(--ds-tone-warning);
   color: #ffffff;
 }
 .badge--red {
@@ -5682,7 +5691,7 @@ textarea.form-input {
   padding: 2px 6px;
   border-radius: 999px;
   background: var(--blue-dim);
-  color: var(--primary, var(--blue));
+  color: var(--ds-blue-active);
 }
 .ai-drawer__body {
   padding: 18px;
