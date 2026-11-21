@@ -1,0 +1,60 @@
+PAGES 21 width 1366
+{
+ "color-contrast": {
+  "impact": "serious",
+  "pages": 1,
+  "nodes": 4,
+  "help": "Elements must meet minimum color contrast ratio thresholds"
+ }
+}
+login                              axe - | <24px 0 | <44 0/2 | overflow 0 | H1:26px/800
+Operatore-Turno                    axe - | <24px 1 | <44 1/42 | overflow 0 | H1:18px/600 H2:18px/600 H3:14px/600
+Operatore-Pazienti                 axe - | <24px 0 | <44 0/54 | overflow 0 | H1:18px/600 H2:18px/600
+Operatore-cartella                 axe - | <24px 0 | <44 0/25 | overflow 0 | H1:18px/600 H2:18px/600 H3:16px/600
+Operatore-ingresso-a-mano          axe - | <24px 1 | <44 1/89 | overflow 0 | H1:18px/600 H2:18px/600 H3:18px/600 H3:12px/700 H3:14px/600 H4:12px/700
+Operatore-Terapia                  axe - | <24px 0 | <44 0/44 | overflow 0 | H1:18px/600
+Operatore-Parametri                axe - | <24px 0 | <44 0/39 | overflow 0 | H1:18px/600 H2:18px/600
+Operatore-Consegne                 axe - | <24px 0 | <44 0/31 | overflow 0 | H1:18px/600 H2:18px/600 H3:16px/600
+Operatore-Agenda                   axe - | <24px 1 | <44 1/46 | overflow 0 | H1:18px/600 H2:18px/600
+Operatore-Farmaci                  axe - | <24px 0 | <44 0/15 | overflow 0 | H1:18px/600
+Operatore-Milo                     axe - | <24px 1 | <44 1/25 | overflow 0 | H1:18px/600 H2:18px/600
+login                              axe - | <24px 0 | <44 0/2 | overflow 0 | H1:26px/800
+Amministratore-Dashboard           axe - | <24px 4 | <44 4/36 | overflow 0 | H1:18px/600 H2:18px/600 H3:15.2px/500
+Amministratore-Operatori           axe color-contrastx4 | <24px 0 | <44 0/39 | overflow 0 | H1:18px/600
+Amministratore-Agenda              axe - | <24px 1 | <44 1/34 | overflow 0 | H1:18px/600
+Amministratore-Terapia             axe - | <24px 0 | <44 0/33 | overflow 0 | H1:18px/600
+Amministratore-Posti Letto         axe - | <24px 0 | <44 0/47 | overflow 0 | H1:18px/600
+Amministratore-Orari               axe - | <24px 0 | <44 0/23 | overflow 0 | H1:18px/600
+Amministratore-Consegne            axe - | <24px 0 | <44 0/36 | overflow 0 | H1:18px/600 H2:18px/600 H3:16px/600
+Amministratore-Ruoli               axe - | <24px 0 | <44 0/53 | overflow 0 | H1:18px/600
+Amministratore-Milo                axe - | <24px 1 | <44 1/63 | overflow 0 | H1:18px/600 H2:18px/600 H3:14px/600
+
+PAGES 20 width 390
+{
+ "color-contrast": {
+  "impact": "serious",
+  "pages": 1,
+  "nodes": 6,
+  "help": "Elements must meet minimum color contrast ratio thresholds"
+ }
+}
+login                              axe - | <24px 0 | <44 0/2 | overflow 0 | H1:26px/800
+Operatore-Turno                    axe - | <24px 1 | <44 1/43 | overflow 0 | H1:18px/600 H2:18px/600 H3:14px/600
+Operatore-Pazienti                 axe - | <24px 0 | <44 0/42 | overflow 0 | H1:18px/600 H2:18px/600
+Operatore-cartella                 axe - | <24px 0 | <44 0/44 | overflow 0 | H1:18px/600 H2:18px/600
+Operatore-Terapia                  axe - | <24px 0 | <44 0/45 | overflow 0 | H1:18px/600
+Operatore-Parametri                axe - | <24px 0 | <44 0/40 | overflow 0 | H1:18px/600 H2:18px/600
+Operatore-Consegne                 axe - | <24px 0 | <44 0/32 | overflow 0 | H1:18px/600 H2:18px/600 H3:16px/600
+Operatore-Agenda                   axe - | <24px 1 | <44 1/47 | overflow 0 | H1:18px/600 H2:18px/600
+Operatore-Farmaci                  axe - | <24px 0 | <44 0/16 | overflow 0 | H1:18px/600
+Operatore-Milo                     axe - | <24px 1 | <44 1/26 | overflow 0 | H1:18px/600 H2:18px/600
+login                              axe - | <24px 0 | <44 0/2 | overflow 0 | H1:26px/800
+Amministratore-Dashboard           axe - | <24px 4 | <44 4/37 | overflow 0 | H1:18px/600 H2:18px/600 H3:15.2px/500
+Amministratore-Operatori           axe color-contrastx6 | <24px 0 | <44 0/35 | overflow 0 | H1:18px/600
+Amministratore-Agenda              axe - | <24px 1 | <44 1/35 | overflow 0 | H1:18px/600
+Amministratore-Terapia             axe - | <24px 0 | <44 0/34 | overflow 0 | H1:18px/600
+Amministratore-Posti Letto         axe - | <24px 0 | <44 0/48 | overflow 0 | H1:18px/600
+Amministratore-Orari               axe - | <24px 0 | <44 0/24 | overflow 0 | H1:18px/600
+Amministratore-Consegne            axe - | <24px 0 | <44 0/37 | overflow 0 | H1:18px/600 H2:18px/600 H3:16px/600
+Amministratore-Ruoli               axe - | <24px 0 | <44 0/54 | overflow 0 | H1:18px/600
+Amministratore-Milo                axe - | <24px 1 | <44 1/64 | overflow 0 | H1:18px/600 H2:18px/600 H3:14px/600

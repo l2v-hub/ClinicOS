@@ -1,0 +1,37 @@
+[
+ {
+  "label": "Operatore-Pazienti-ricerca",
+  "dialog": "dialog am aria-modal=true labelled=true",
+  "focusInside": true,
+  "violations": [],
+  "escCloses": true
+ },
+ {
+  "label": "Operatore-Agenda-Nuovo appuntamento",
+  "dialog": "dialog modal-box aria-modal=true labelled=true",
+  "focusInside": true,
+  "violations": [],
+  "escCloses": true
+ },
+ {
+  "label": "Amministratore-Operatori-Nuovo Operatore",
+  "dialog": "NONE",
+  "focusInside": null,
+  "violations": [],
+  "escCloses": true
+ },
+ {
+  "label": "Amministratore-Posti Letto-Nuova camera",
+  "dialog": "NONE",
+  "focusInside": null,
+  "violations": [],
+  "escCloses": true
+ },
+ {
+  "label": "Amministratore-Orari-Modifica orari",
+  "dialog": "NONE",
+  "focusInside": null,
+  "violations": [],
+  "escCloses": true
+ }
+]

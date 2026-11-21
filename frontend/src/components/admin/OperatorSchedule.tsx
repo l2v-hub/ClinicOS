@@ -202,7 +202,9 @@ export function OperatorSchedule({
                               background: turno.disponibile
                                 ? 'var(--emerald-bg)'
                                 : 'var(--divider)',
-                              color: turno.disponibile ? 'var(--emerald)' : 'var(--text-muted)',
+                              color: turno.disponibile
+                                ? 'color-mix(in srgb, var(--emerald) 70%, black)'
+                                : 'var(--text)',
                             }}
                           >
                             {turno.disponibile ? 'Disp.' : 'Off'}
@@ -217,6 +219,7 @@ export function OperatorSchedule({
                                 className="form-select"
                                 style={{ height: 32, fontSize: 12, padding: '0 6px' }}
                                 value={turno.oraInizio}
+                                aria-label={`Inizio turno ${GIORNO_LABEL[giorno]}`}
                                 onChange={(e) => updateOrario(giorno, 'oraInizio', e.target.value)}
                               >
                                 {ORA_OPTIONS.map((o) => (
@@ -230,6 +233,7 @@ export function OperatorSchedule({
                                 className="form-select"
                                 style={{ height: 32, fontSize: 12, padding: '0 6px' }}
                                 value={turno.oraFine}
+                                aria-label={`Fine turno ${GIORNO_LABEL[giorno]}`}
                                 onChange={(e) => updateOrario(giorno, 'oraFine', e.target.value)}
                               >
                                 {ORA_OPTIONS.map((o) => (

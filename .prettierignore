@@ -30,3 +30,6 @@ frontend/src/components/admin/RoomsManagement.tsx
 frontend/src/components/admin/RoomManagementModel.ts
 frontend/src/components/admin/RoomFormPanel.tsx
 frontend/src/components/admin/BedEditDialog.tsx
+
+# Skill di terze parti copiata invariata (Apache 2.0): non riformattare
+.claude/skills/impeccable/

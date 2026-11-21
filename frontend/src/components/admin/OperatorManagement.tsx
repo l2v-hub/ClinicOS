@@ -322,12 +322,16 @@ export function OperatorManagement({
                 <button
                   className="icon-btn icon-btn--sm icon-btn--edit"
                   onClick={() => apriModifica(op)}
+                  title="Modifica"
+                  aria-label={`Modifica ${op.cognome} ${op.nome}`}
                 >
                   <IcoEdit />
                 </button>
                 <button
                   className={`icon-btn icon-btn--sm${op.stato === 'attivo' ? ' icon-btn--danger' : ' icon-btn--success'}`}
                   onClick={() => onToggleStato(op.id)}
+                  title={op.stato === 'attivo' ? 'Disattiva' : 'Riattiva'}
+                  aria-label={`${op.stato === 'attivo' ? 'Disattiva' : 'Riattiva'} ${op.cognome} ${op.nome}`}
                 >
                   {op.stato === 'attivo' ? <IcoX /> : <IcoCheck />}
                 </button>

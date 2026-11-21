@@ -1,0 +1,9 @@
+avatar 0 inline background: rgb(47, 107, 237); bg 35,80,177 text 255,255,255 ratio 7.36
+avatar 1 inline background: rgb(13, 148, 136); bg 9,111,102 text 255,255,255 ratio 6.04
+avatar 2 inline background: rgb(108, 75, 209); bg 81,56,156 text 255,255,255 ratio 8.77
+avatar 3 inline background: rgb(199, 119, 0); bg 149,89,0 text 255,255,255 ratio 5.67
+avatar 4 inline background: rgb(220, 38, 38); bg 165,28,28 text 255,255,255 ratio 7.55
+avatar 5 inline background: rgb(139, 92, 246); bg 104,69,184 text 255,255,255 ratio 6.70
+avatar 6 inline background: rgb(5, 150, 105); bg 3,112,78 text 255,255,255 ratio 6.12
+avatar 7 inline background: rgb(14, 165, 233); bg 10,123,174 text 255,255,255 ratio 4.71
+avatar 8 inline background: rgb(239, 68, 68); bg 179,51,51 text 255,255,255 ratio 6.11

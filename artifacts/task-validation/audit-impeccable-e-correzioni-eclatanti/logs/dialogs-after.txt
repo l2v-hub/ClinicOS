@@ -1,0 +1,5 @@
+Operatore-Pazienti-ricerca                   dialog am aria-modal=true labelled=true | focusInside=true | esc=true | axe -
+Operatore-Agenda-Nuovo appuntamento          dialog modal-box aria-modal=true labelled=true | focusInside=true | esc=true | axe -
+Amministratore-Operatori-Nuovo Operatore     NONE | focusInside=null | esc=true | axe -
+Amministratore-Posti Letto-Nuova camera      NONE | focusInside=null | esc=true | axe -
+Amministratore-Orari-Modifica orari          NONE | focusInside=null | esc=true | axe -

@@ -1,0 +1,10 @@
+TOPBAR Il mio turno |  | 0 pazienti non dimessi |  | Turno mattino | 07:40 | Milo | SIMULATORE | M1
+PAGE GAP 16px / operator-dashboard turno ctrl-h 44px
+PAGE Pazienti -> Pazienti |  | 0 caricati su 0 | text 320
+patient rows 0
+PAGE Pazienti -> Pazienti |  | 0 caricati su 0 | text 320
+INGRESSO ← Torna ai pazienti | Lettera o trasferimento | Fotografa le pagine o carica PDF e foto, anche più file: l’AI propone i dati, tu li verifichi. | Compilazione assistita dall’AI | A mano | Inserisci anagrafica, ingresso e dati clinici passo per passo.
+PAGE Agenda -> Agenda di oggi |  | Medico 1 | text 254
+PAGE Consegne -> Consegne |  | Scrivi, leggi e conferma le consegne del reparto | text 387
+API {"ok":27}
+ERRS []
