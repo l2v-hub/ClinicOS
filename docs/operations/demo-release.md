@@ -9,11 +9,24 @@ Il rilascio lo esegue l'operatore con i propri accessi Vercel/Railway. Una sessi
 credenziali né rete verso quei servizi: prepara la sorgente e non dichiara nulla «online» senza
 un riscontro dal sito.
 
-**Non verificato da chi ha scritto questa pagina** (da controllare al primo rilascio): a quale
-progetto Railway punta il segreto `RAILWAY_TOKEN` di GitHub; quale progetto Vercel serve l'alias
-`clinicos-eosin.vercel.app` (i manifest di giugno lo chiamano `clinicos__`; il workflow archiviato
-`deploy-vercel.yml.disabled` riporta `prj_6eDFTx8o4IoZhCXr4Sd7LX6dteo6` nel team
-`team_P8yHboFntuOI9pT0zdgbJAqU`); quale commit la demo sta servendo oggi.
+**Target verificati al rilascio del 2026-11-21** (registro:
+`artifacts/task-validation/rilascio-di-main-sulla-demo-clinicos-eosin/logs/release-log.md`):
+
+- Vercel: progetto `clinicos__` (`prj_6eDFTx8o4IoZhCXr4Sd7LX6dteo6`, team
+  `team_P8yHboFntuOI9pT0zdgbJAqU`), root `frontend`, deploy da Git disattivati; il dominio
+  `clinicos-eosin.vercel.app` è dichiarato sul progetto, quindi ogni deploy `--prod` lo riprende.
+- Railway: progetto «glistening-friendship», ambiente `production`, servizio `clinicos-backend`
+  (`…-df88`), database `Postgres` (`${{Postgres.DATABASE_URL}}`), runtime `clinicos-ai-runtime`.
+  L'ambiente «demo» (`clinicos-backend-demo.up.railway.app`) non esiste più: il workflow
+  `deploy-demo-exact-commit.yml` punta ancora a quell'ambiente e non va usato.
+- **Trappola**: `VITE_API_URL` salvata su Vercel (sensibile, illeggibile) vale ancora
+  `https://clinicos-backend-demo.up.railway.app`. Una build fatta da Vercel produce un sito senza
+  backend. Correggila nel progetto (Settings → Environment Variables) con
+  `https://clinicos-backend-production-df88.up.railway.app`, oppure costruisci in locale come al
+  punto 2 sostituendo il valore in `.vercel/.env.production.local` prima di `vercel build`.
+- Se la demo è stata spenta: `Postgres` e `clinicos-ai-runtime` vanno riaccesi (Redeploy
+  dell'ultimo deployment, stessa immagine) prima del backend, altrimenti le migrazioni falliscono
+  con `P1001`.
 
 ## Ordine
 

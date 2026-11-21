@@ -1,0 +1,8 @@
+2026-11-21T07:40:36Z
+GET https://clinicos-backend-production-df88.up.railway.app/health
+{"status":"ok"}
+GET /patients (no auth) -> 401
+GET https://clinicos-eosin.vercel.app/ -> 200
+bundle /assets/index-DeoLN1ah.js
+VITE_API_URL:`https://clinicos-backend-production-df88.up.railway.app`
+GET /assets/missing.js -> 404 text/plain; charset=utf-8
