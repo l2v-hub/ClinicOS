@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "scope": "development-isolated-20261104",
+  "source": {
+    "commit": "b5e79ae7bec869af894f12ed6676547f21172db4",
+    "tree": "131b244c873c521500f732d0615f4edd0f8a5731"
+  },
+  "target": {
+    "workspaceId": "de658001-fd6b-42a4-ad6b-117b57e9429d",
+    "projectId": "30bfd0c6-2b4d-4fcd-b219-f1fbfe1d9820",
+    "environmentId": "e54fd397-76c8-4a14-ac03-4d8a4d580173",
+    "environmentName": "development",
+    "ephemeral": false
+  },
+  "state": "source-free-services-verified",
+  "deployed": false,
+  "parity": "not-proven",
+  "services": {
+    "frontend": null,
+    "backend": "f46547d5-1eb2-42a0-bd13-de2a1f7feca1",
+    "database": "8cc1c795-5a61-4ead-b6f4-020b2c29a91b",
+    "runtime": "b3bf897a-4e0f-41a1-aa58-3687d9a66443"
+  },
+  "protectedBaseline": {
+    "projectId": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+    "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+    "deploymentId": "6a6b5d5a-edad-434a-a074-db19b2051dbe"
+  },
+  "configuration": {
+    "NODE_ENV": "production",
+    "CLINICOS_ENV": "demo",
+    "AUTH_MODE": "demo",
+    "DEMO_DATASET_ID": "synthetic-v1",
+    "DEMO_AUTH_NO_EXPIRY": "true",
+    "ALLOW_PRODUCTION_DEMO_AUTH": "true",
+    "ROLE_SIMULATOR_ENABLED": "true",
+    "ROLE_SIMULATOR_ALLOW_PRODUCTION": "true",
+    "AUTHZ_UNMAPPED_ROUTES": "deny"
+  },
+  "configurationApplied": false,
+  "secrets": "Generate dedicated secrets at application time; do not copy demo or production credentials",
+  "releasePolicy": "Existing demo release workflow is fixed to the baseline target; never repoint it. Dedicated candidate release receipt and current review/CI/QA gates required.",
+  "rollback": "Keep public aliases on baseline; stop candidate traffic through candidate-only configuration if validation fails. Preserve data, project and all evidence."
+}

@@ -1,0 +1,106 @@
+name: Isolated development exact release
+run-name: development ${{ inputs.operation }} ${{ inputs.service }} ${{ inputs.dispatch_id }}
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/development-isolated/**'
+      - '.github/workflows/deploy-development-exact.yml'
+      - 'config/development-isolated/**'
+  workflow_dispatch:
+    inputs:
+      operation:
+        type: choice
+        options: [preflight, stage-source, commit-source, deploy]
+        default: preflight
+        required: true
+      service:
+        type: choice
+        options: [backend, runtime]
+        required: true
+      reviewed_workflow_sha:
+        description: Exact protected main commit containing the independently reviewed gate
+        type: string
+        required: true
+      gate_pr:
+        description: Native merged gate PR with independent human approval and passing checks
+        type: string
+        required: true
+      dispatch_id:
+        description: New UUID; never reuse an uncertain or completed operation
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clinicos-development-isolated
+  cancel-in-progress: false
+
+jobs:
+  development-release-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - run: node --test scripts/development-isolated/*.test.mjs
+
+  release:
+    needs: development-release-tests
+    if: >-
+      github.event_name == 'workflow_dispatch' && github.repository == 'l2v-hub/ClinicOS' &&
+      github.ref == 'refs/heads/main' && github.sha == inputs.reviewed_workflow_sha &&
+      github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: 'clinicos-development-isolated / development'
+    permissions:
+      contents: read
+      pull-requests: read
+      checks: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Validate dispatch before provider credentials
+        env:
+          DEVELOPMENT_OPERATION: ${{ inputs.operation }}
+          DEVELOPMENT_SERVICE: ${{ inputs.service }}
+          DEVELOPMENT_WORKFLOW_SHA: ${{ inputs.reviewed_workflow_sha }}
+          DEVELOPMENT_DISPATCH_ID: ${{ inputs.dispatch_id }}
+        run: |
+          node --input-type=module <<'JS'
+          import { request, validateContext } from './scripts/development-isolated/policy.mjs';
+          const e = process.env;
+          validateContext(e, request({action:e.DEVELOPMENT_OPERATION,service:e.DEVELOPMENT_SERVICE,
+            dispatchId:e.DEVELOPMENT_DISPATCH_ID,workflowSha:e.DEVELOPMENT_WORKFLOW_SHA}));
+          JS
+      - name: Execute only the fixed isolated development action
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RAILWAY_DEVELOPMENT_TOKEN: ${{ secrets.RAILWAY_DEVELOPMENT_TOKEN }}
+          DEVELOPMENT_OPERATION: ${{ inputs.operation }}
+          DEVELOPMENT_SERVICE: ${{ inputs.service }}
+          DEVELOPMENT_WORKFLOW_SHA: ${{ inputs.reviewed_workflow_sha }}
+          DEVELOPMENT_DISPATCH_ID: ${{ inputs.dispatch_id }}
+          DEVELOPMENT_GATE_PR: ${{ inputs.gate_pr }}
+        run: node scripts/development-isolated/live.mjs
+      - name: Retain only sanitized verification receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: development-release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: development-*-receipt.json
+          if-no-files-found: ignore
+          retention-days: 30
