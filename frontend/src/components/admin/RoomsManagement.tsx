@@ -268,13 +268,13 @@ export function RoomsManagement() {
       {/* Occupancy stats */}
       <div className="occupancy-stats" hidden={!occupancy}>
         <div className="occ-stat">
-          <span className="occ-stat__val" style={{ color: 'var(--red)' }}>
+          <span className="occ-stat__val" style={{ color: 'var(--ds-tone-alarm)' }}>
             {occ?.occupiedBeds ?? 0}
           </span>
           <span className="occ-stat__lbl">Occupati</span>
         </div>
         <div className="occ-stat">
-          <span className="occ-stat__val" style={{ color: 'color-mix(in srgb, var(--emerald) 70%, black)' }}>
+          <span className="occ-stat__val" style={{ color: 'var(--ds-tone-ok)' }}>
             {occ?.freeBeds ?? 0}
           </span>
           <span className="occ-stat__lbl">Liberi</span>
@@ -376,7 +376,7 @@ export function RoomsManagement() {
                   <div className="room-occupancy-indicator">
                     <span
                       style={{
-                        color: occupati === room.beds.length ? 'var(--red)' : 'color-mix(in srgb, var(--emerald) 70%, black)',
+                        color: occupati === room.beds.length ? 'var(--ds-tone-alarm)' : 'var(--ds-tone-ok)',
                         fontWeight: 700,
                       }}
                     >
@@ -407,7 +407,7 @@ export function RoomsManagement() {
 
                 {room.note && <p className="room-note">{room.note}</p>}
                 {room.stato === 'manutenzione' && (
-                  <p className="room-note" style={{ color: 'color-mix(in srgb, var(--amber) 70%, black)', fontWeight: 600 }}>
+                  <p className="room-note" style={{ color: 'var(--ds-tone-warning)', fontWeight: 600 }}>
                     In manutenzione
                   </p>
                 )}

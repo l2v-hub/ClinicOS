@@ -202,9 +202,7 @@ export function OperatorSchedule({
                               background: turno.disponibile
                                 ? 'var(--emerald-bg)'
                                 : 'var(--divider)',
-                              color: turno.disponibile
-                                ? 'color-mix(in srgb, var(--emerald) 70%, black)'
-                                : 'var(--text)',
+                              color: turno.disponibile ? 'var(--ds-tone-ok)' : 'var(--text)',
                             }}
                           >
                             {turno.disponibile ? 'Disp.' : 'Off'}
@@ -212,12 +210,13 @@ export function OperatorSchedule({
                         )}
                       </div>
                       {turno.disponibile && (
-                        <div className="schedule-day__times">
+                        <div
+                          className={`schedule-day__times${editing ? ' schedule-day__times--edit' : ''}`}
+                        >
                           {editing ? (
                             <>
                               <select
                                 className="form-select"
-                                style={{ height: 32, fontSize: 12, padding: '0 6px' }}
                                 value={turno.oraInizio}
                                 aria-label={`Inizio turno ${GIORNO_LABEL[giorno]}`}
                                 onChange={(e) => updateOrario(giorno, 'oraInizio', e.target.value)}
@@ -228,10 +227,8 @@ export function OperatorSchedule({
                                   </option>
                                 ))}
                               </select>
-                              <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>–</span>
                               <select
                                 className="form-select"
-                                style={{ height: 32, fontSize: 12, padding: '0 6px' }}
                                 value={turno.oraFine}
                                 aria-label={`Fine turno ${GIORNO_LABEL[giorno]}`}
                                 onChange={(e) => updateOrario(giorno, 'oraFine', e.target.value)}

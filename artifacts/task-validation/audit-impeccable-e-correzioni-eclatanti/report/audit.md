@@ -127,3 +127,14 @@ stati non visibili in locale, dello stesso tipo del P1 n. 1:
 Verifica: suite 1598/1598 (`logs/frontend-tests-2.log`), build OK (`logs/frontend-build-2.log`),
 scansione amministratore a 1366px pulita salvo il falso positivo degli avatar, sidebar 0 pixel
 diversi (`logs/after2/`). Esito sul sito: `test-results/live-demo-check.txt`.
+
+## Punti P2 (task `audit-impeccable-punti-p2`)
+
+| Punto | Esito |
+| ----- | ----- |
+| 6. Colori codificati / badge storici | **Corretto per i badge di stato**: token `--ds-tone-*` su `:root` usati da `ds-badge` e dai badge storici nel loro CSS; blocco di correzioni `:not(#ds)` rimosso. Gli altri esadecimali dei fogli storici restano. |
+| 7. Menu orari a 32px | **Corretto**: 44px, impilati nella cella, nessuno stile inline. |
+| 8. Tema scuro | **Non fatto**: decisione di prodotto, non chiesta dal brief; richiederebbe un rifacimento dei fogli storici. |
+| 9. Lampo «Caricamento modulo…» | **Corretto**: il messaggio appare solo dopo 400 ms di attesa. |
+
+Evidenze: `../../audit-impeccable-punti-p2/validation-report.md`.

@@ -1,0 +1,30 @@
+## Tutti gli stati dei badge (elementi di prova, fondo bianco sotto i fondi trasparenti)
+agt-badge agt-badge--programmato           ratio=6.27 OK | color=rgb(255, 255, 255) bg=color(srgb 0.546274 0.326667 0)
+agt-badge agt-badge--in_corso              ratio=7.08 OK | color=rgb(255, 255, 255) bg=rgb(29, 79, 196)
+agt-badge agt-badge--completato            ratio=5.28 OK | color=rgb(255, 255, 255) bg=color(srgb 0.0647059 0.479412 0.361765)
+agt-badge agt-badge--annullato             ratio=5.46 OK | color=rgb(255, 255, 255) bg=rgb(90, 107, 128)
+agt-badge agt-badge--urgent                ratio=4.51 OK | color=rgb(255, 255, 255) bg=rgb(217, 58, 74)
+letto-stato-badge letto-stato--libero      ratio=5.77 OK | color=rgb(11, 107, 96) bg=rgb(231, 247, 240)
+letto-stato-badge letto-stato--occupato    ratio=5.16 OK | color=color(srgb 0.723333 0.193333 0.246667) bg=rgb(253, 236, 238)
+letto-stato-badge letto-stato--manutenzione ratio=5.7 OK | color=color(srgb 0.546274 0.326667 0) bg=rgb(253, 243, 226)
+alert-chip alert-chip--red                 ratio=5.16 OK | color=color(srgb 0.723333 0.193333 0.246667) bg=rgb(253, 236, 238)
+alert-chip alert-chip--amber               ratio=5.7 OK | color=color(srgb 0.546274 0.326667 0) bg=rgb(253, 243, 226)
+badge--green                               ratio=5.28 OK | color=rgb(255, 255, 255) bg=color(srgb 0.0647059 0.479412 0.361765)
+badge--amber                               ratio=6.27 OK | color=rgb(255, 255, 255) bg=color(srgb 0.546274 0.326667 0)
+cts__badge                                 ratio=6.36 OK | color=rgb(29, 79, 196) bg=rgb(238, 243, 254)
+room-number-badge                          ratio=5.88 OK | color=rgb(29, 79, 196) bg=rgba(47, 107, 237, 0.14)
+assistant-id__badge                        ratio=5.88 OK | color=rgb(29, 79, 196) bg=rgba(47, 107, 237, 0.14)
+patient-roster-status                      ratio=6.36 OK | color=rgb(29, 79, 196) bg=rgb(238, 243, 254)
+op-avatar-sm                               ratio=6.36 OK | color=rgb(29, 79, 196) bg=rgb(238, 243, 254)
+ds-badge ds-badge--ok                      ratio=5.77 OK | color=rgb(11, 107, 96) bg=rgb(231, 247, 240)
+ds-badge ds-badge--info                    ratio=6.24 OK | color=rgb(29, 79, 196) bg=rgb(234, 241, 254)
+ds-badge ds-badge--warning                 ratio=5.7 OK | color=color(srgb 0.546274 0.326667 0) bg=rgb(253, 243, 226)
+ds-badge ds-badge--alarm                   ratio=5.16 OK | color=color(srgb 0.723333 0.193333 0.246667) bg=rgb(253, 236, 238)
+## Orari in modifica 1366px: 10 menu, altezze 44px, larghezze 101-101px, dentro la cella true, sbordo pagina 0px
+   esempio: {"h":44,"w":101,"inside":true,"label":"Inizio turno Lun","value":"07:00"}
+## Orari in modifica 390px: 10 menu, altezze 44px, larghezze 137-137px, dentro la cella true, sbordo pagina 0px
+   esempio: {"h":44,"w":137,"inside":true,"label":"Inizio turno Lun","value":"07:00"}
+## Caricamento ritardato (normale): campioni 86; primo opacità>0.05 a 634ms, piena a 767ms dalla comparsa del fallback
+   0ms=0.00  114ms=0.00  222ms=0.00  300ms=0.00  400ms=0.00  503ms=0.00  700ms=0.74  1000ms=1.00  1400ms=1.00
+## Caricamento ritardato (animation-none): campioni 92; primo opacità>0.05 a 0ms, piena a 0ms dalla comparsa del fallback
+   0ms=1.00  114ms=1.00  203ms=1.00  302ms=1.00  402ms=1.00  503ms=1.00  703ms=1.00  1003ms=1.00  1403ms=1.00

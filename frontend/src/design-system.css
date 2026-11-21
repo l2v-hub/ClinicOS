@@ -48,6 +48,14 @@
   --ds-ai-strong: #5329b3;
   --ds-ai-tint: #f1ecfd;
   --ds-ai-border: #8a66e3;
+  /* Toni di stato, un solo insieme per ds-badge e per i badge storici (agt-badge, letto-stato,
+     alert-chip, badge--*): testo piccolo su tinta chiara e fondi pieni sotto testo bianco, sempre
+     ≥4.5:1. Il blu di stato è --ds-blue-active. */
+  --ds-tone-ok: var(--badge-success-text, #0b6b60); /* stesso verde di stato-pill e ds-badge--ok */
+  --ds-tone-ok-solid: color-mix(in srgb, var(--emerald, #16a37b) 75%, black);
+  --ds-tone-warning: color-mix(in srgb, var(--amber, #c77700) 70%, black);
+  --ds-tone-alarm: color-mix(in srgb, var(--red, #d93a4a) 85%, black);
+  --ds-tone-neutral-solid: var(--ds-text-muted);
   --ds-font: var(--font-ui, 'Inter', system-ui, sans-serif);
 }
 
@@ -532,38 +540,6 @@
   box-shadow: inset 0 0 0 100px rgb(0 0 0 / 0.25);
 }
 
-/* ── Contrasto delle etichette piccole (WCAG AA 4.5:1) ─────────────────────────────────────────
-   Badge e chip a 10–14px su fondo tinto: il testo usa la variante scura della stessa tinta, come
-   `ds-badge` (blu attivo, ambra e rosso scuriti). Il significato dei colori non cambia. */
-:is(
-  .cts__badge,
-  .room-number-badge,
-  .assistant-id__badge,
-  .patient-roster-status:not(.patient-roster-status--warning),
-  .op-avatar-sm:not([style*='background'])
-):not(#ds) {
-  color: var(--ds-blue-active);
-}
-:is(.alert-chip--amber, .letto-stato--manutenzione):not(#ds) {
-  color: color-mix(in srgb, var(--amber, #c77700) 70%, black);
-}
-:is(.alert-chip--red, .letto-stato--occupato):not(#ds) {
-  color: color-mix(in srgb, var(--red, #d93a4a) 80%, black);
-}
-.letto-stato--libero:not(#ds) {
-  color: color-mix(in srgb, var(--emerald, #16a37b) 70%, black);
-}
-:is(.agt-badge--programmato, .badge--amber):not(#ds) {
-  background: color-mix(in srgb, var(--amber, #c77700) 70%, black);
-}
-/* Giorno senza turno: resta attenuato ma leggibile (era 0.55 → 3.7:1). */
-.schedule-day--off:not(#ds) {
-  opacity: 0.75;
-}
-:is(.agt-badge--completato, .badge--green):not(#ds) {
-  background: color-mix(in srgb, #16a37b 75%, black);
-}
-
 /* Icone a tratto nei pulsanti con etichetta comprimibile (azioni di intestazione della cartella). */
 .ds-btn--collapsible svg:not(#ds) {
   width: var(--ds-icon-size);
@@ -715,12 +691,12 @@ button.ds-badge:not(#ds):disabled {
 }
 .ds-badge--warning:not(#ds) {
   background: var(--amber-bg, #fdf3e2);
-  color: color-mix(in srgb, var(--amber, #c77700) 70%, black);
+  color: var(--ds-tone-warning);
 }
 .ds-badge--alarm:not(#ds) {
   background: var(--red-bg, #fdecee);
   border-color: var(--red-border, #f6c9ce);
-  color: color-mix(in srgb, var(--red, #d93a4a) 85%, black);
+  color: var(--ds-tone-alarm);
 }
 .ds-badge--alarm-strong:not(#ds) {
   background: var(--red, #d93a4a);

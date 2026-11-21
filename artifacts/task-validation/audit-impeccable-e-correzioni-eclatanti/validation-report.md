@@ -50,6 +50,15 @@ Ambiente locale (frontend 5173, backend 3001, Postgres locale con dati sintetici
 Operatore e Amministratore, 1366×900 e 390×900. Non pubblicato sui siti: il rilascio resta da
 fare.
 
+## Rilascio
+
+Unito in `main` con [l2v-hub/ClinicOS#540](https://github.com/l2v-hub/ClinicOS/pull/540) (`f3ec5f50`) e
+[l2v-hub/ClinicOS#541](https://github.com/l2v-hub/ClinicOS/pull/541) (`2cfc8618`), CI verde su entrambe. Frontend
+pubblicato su `https://clinicos-eosin.vercel.app` (deployment `dpl_GdDF1Eu4HfxePdTCQQ8Zh3q1wtjX`, build
+dall'albero di `2cfc8618`, `VITE_API_URL` = backend `…-df88`). Backend non toccato. Verifica sul sito:
+`test-results/live-demo-check.txt` (7 pagine, axe pulito salvo il falso positivo degli avatar, nessun
+errore di console o API).
+
 ## Logs
 
 Only sanitized logs are allowed. `logs/` (scansioni JSON, riassunti, build, test, lint).

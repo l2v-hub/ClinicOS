@@ -1398,22 +1398,22 @@
 }
 
 .agt-badge--programmato {
-  background: #c77700;
+  background: var(--ds-tone-warning);
   color: #ffffff;
   font-weight: 600;
 }
 .agt-badge--in_corso {
-  background: #1d4fc4;
+  background: var(--ds-blue-active);
   color: #ffffff;
   font-weight: 600;
 }
 .agt-badge--completato {
-  background: #16a37b;
+  background: var(--ds-tone-ok-solid);
   color: #ffffff;
   font-weight: 600;
 }
 .agt-badge--annullato {
-  background: #6b7280;
+  background: var(--ds-tone-neutral-solid);
   color: #ffffff;
   font-weight: 600;
 }
@@ -3322,7 +3322,7 @@
   align-items: center;
   gap: 4px;
   background: var(--blue-dim);
-  color: var(--blue);
+  color: var(--ds-blue-active);
   border-radius: var(--radius-sm);
   padding: 5px 9px;
   font-size: 13px;
@@ -3420,16 +3420,16 @@
 }
 
 .letto-stato--libero {
-  background: #e7f7f0;
-  color: var(--emerald);
+  background: var(--emerald-bg);
+  color: var(--ds-tone-ok);
 }
 .letto-stato--occupato {
-  background: #fee2e2;
-  color: var(--red);
+  background: var(--red-bg);
+  color: var(--ds-tone-alarm);
 }
 .letto-stato--manutenzione {
-  background: #fdf3e2;
-  color: var(--amber);
+  background: var(--amber-bg);
+  color: var(--ds-tone-warning);
 }
 
 .letto-paziente {
@@ -3552,8 +3552,9 @@
   border-color: var(--emerald);
   background: var(--emerald-bg);
 }
+/* Giorno senza turno: attenuato ma leggibile (0.55 dava 3.7:1). */
 .schedule-day--off {
-  opacity: 0.55;
+  opacity: 0.75;
 }
 
 .schedule-day__header {
@@ -3575,6 +3576,15 @@
   align-items: center;
   gap: 4px;
   flex-wrap: wrap;
+}
+/* In modifica: inizio e fine impilati a tutta larghezza della cella, all'altezza canonica dei controlli. */
+.schedule-day__times--edit {
+  flex-direction: column;
+  align-items: stretch;
+}
+.schedule-day__times--edit .form-select {
+  width: 100%;
+  min-width: 0;
 }
 
 .schedule-time-range {
@@ -7381,7 +7391,7 @@ textarea.form-input {
 .cts__badge {
   font-size: 10px;
   font-weight: 700;
-  color: var(--indigo);
+  color: var(--ds-blue-active);
   background: var(--indigo-bg);
   padding: 2px 8px;
   border-radius: 999px;
