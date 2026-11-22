@@ -56,18 +56,35 @@ export function allowedToolSchema(ctx: UserContext) {
   return READ_TOOL_SCHEMA.filter((t) => !ctx.readToolAllowed || ctx.readToolAllowed(t.name));
 }
 
+/** Diagnostica del team sempre visibile nei log (nessun contenuto: motivi, conteggi, tempi). */
+function teamLog(fields: Record<string, unknown>) {
+  console.warn(`[ai-team] ${JSON.stringify(fields)}`);
+}
+
+export type TeamRejection = 'no_text' | 'no_reads' | 'no_citations' | 'ungrounded' | 'action_claim';
+
+/** Motivo per cui una risposta del team non può essere mostrata (null = accettabile). */
+export function teamRejection(res: TeamRuntimeResponse, grant: AgentGrant): TeamRejection | null {
+  const text = (res.answerText ?? '').trim();
+  const cited = Array.isArray(res.citedSources) ? res.citedSources : [];
+  if (!text) return 'no_text';
+  if (grant.sources.length === 0) return 'no_reads';
+  if (cited.length === 0) return 'no_citations';
+  // Ogni fonte citata deve essere una fonte consegnata dal backend: nessuna fonte inventata.
+  if (cited.some((c) => !grant.sources.some((s) => sameSource(s, c)))) return 'ungrounded';
+  if (claimsActionOrOverride(text)) return 'action_claim';
+  return null;
+}
+
 /** Verifica della risposta del team contro ciò che il backend ha restituito alla delega. */
 export function acceptTeamAnswer(
   res: TeamRuntimeResponse,
   grant: AgentGrant,
 ): Omit<TeamAnswer, 'members' | 'model'> | null {
+  if (teamRejection(res, grant)) return null;
   const text = (res.answerText ?? '').trim();
   const cited = Array.isArray(res.citedSources) ? res.citedSources : [];
-  if (!text || cited.length === 0 || grant.sources.length === 0) return null;
-  // Ogni fonte citata deve essere una fonte consegnata dal backend: nessuna fonte inventata.
   const grounded = cited.map((c) => grant.sources.find((s) => sameSource(s, c)));
-  if (grounded.some((g) => !g)) return null;
-  if (claimsActionOrOverride(text)) return null;
   return {
     answerText: text,
     citedSources: grounded as SourceReference[],
@@ -98,6 +115,7 @@ export async function teamAnswer(
     operatorName: opts.operatorName,
     ttlMs: (opts.cfg.teamTimeoutMs ?? 60_000) + 30_000,
   });
+  const startedAt = Date.now();
   try {
     const res = await deps.callTeamRuntime({
       question,
@@ -111,10 +129,27 @@ export async function teamAnswer(
       maxToolCalls: grant.maxCalls,
       timeoutSeconds: Math.round((opts.cfg.teamTimeoutMs ?? 60_000) / 1000),
     });
-    const accepted = acceptTeamAnswer(res, grant);
-    if (!accepted) return null;
+    const rejected = teamRejection(res, grant);
+    // Diagnostica senza contenuti: motivo, letture, fonti, durata.
+    teamLog({
+      outcome: rejected ? 'rejected' : 'accepted',
+      reason: rejected ?? undefined,
+      reads: grant.results.length,
+      sources: grant.sources.length,
+      cited: Array.isArray(res.citedSources) ? res.citedSources.length : 0,
+      members: (res.members ?? []).join(','),
+      ms: Date.now() - startedAt,
+    });
+    if (rejected) return null;
+    const accepted = acceptTeamAnswer(res, grant)!;
     return { ...accepted, members: res.members ?? [], model: res.model };
-  } catch {
+  } catch (error) {
+    teamLog({
+      outcome: 'error',
+      error: error instanceof Error ? error.name : 'error',
+      reads: grant.results.length,
+      ms: Date.now() - startedAt,
+    });
     return null; // servizio AI assente, errore o tempo scaduto → percorso classico
   } finally {
     revokeAgentGrant(grant);

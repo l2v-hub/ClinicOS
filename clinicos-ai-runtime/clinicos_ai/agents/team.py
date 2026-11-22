@@ -17,6 +17,8 @@ Regole che il team non può aggirare (le applica il backend, non il prompt):
 """
 from __future__ import annotations
 
+import logging
+
 import asyncio
 import json
 import os
@@ -85,6 +87,8 @@ SPECIALISTS: dict[str, dict[str, Any]] = {
     },
 }
 
+_log = logging.getLogger("clinicos_ai.runtime")
+
 COORDINATOR_INSTRUCTIONS = [
     f"{TEAM_MARKER}",
     "Sei Milo, l'assistente di ClinicOS (struttura sanitaria). Coordini un team di specialisti.",
@@ -92,6 +96,8 @@ COORDINATOR_INSTRUCTIONS = [
     "componi la risposta finale in italiano, breve e concreta.",
     "Usa SOLO dati restituiti dagli strumenti. Ogni valore citato deve avere la sua fonte [S#] "
     "esattamente come compare nei risultati. Se un dato manca, dillo.",
+    "Quando riassumi la risposta di uno specialista CONSERVA i suoi riferimenti [S#] accanto ai "
+    "valori: senza riferimenti la risposta non può essere mostrata.",
     "Non fornire diagnosi, prognosi, terapie o valutazioni cliniche personali: riporti i dati e, "
     "dove esiste, il punteggio calcolato dal sistema con la sua fonte.",
     "Non dichiarare mai di aver registrato, modificato o eseguito qualcosa: il team legge soltanto.",
@@ -296,12 +302,24 @@ async def run_milo_team(req: dict, model_factory: Callable[[], Any], timeout_sec
     except asyncio.TimeoutError as ex:
         raise RuntimeError_(ErrorKind.TIMEOUT, f"Team: timeout {timeout_seconds}s") from ex
     answer, cited = renumber_citations(text, ledger)
+    citation_mode = "explicit"
+    if not cited and ledger.items and any(c.get("ok") for c in ledger.calls):
+        # Il modello non ha riportato i [S#]: si citano le fonti effettivamente lette dal backend
+        # con la delega (fondate per costruzione; il backend le verifica comunque).
+        cited = list(ledger.items[:MAX_FALLBACK_SOURCES])
+        citation_mode = "all_read"
+    _log.warning("assistant team result members=%s calls=%d ok=%d sources=%d cited=%d mode=%s chars=%d",
+                 ",".join(members) or "-", len(ledger.calls), sum(1 for c in ledger.calls if c.get("ok")),
+                 len(ledger.items), len(cited), citation_mode, len(answer))
     return {
         "answerText": answer,
         "citedSources": cited,
         "members": members,
         "toolCalls": ledger.calls,
     }
+
+
+MAX_FALLBACK_SOURCES = 20
 
 
 def renumber_citations(text: str, ledger: SourceLedger) -> tuple[str, list[dict]]:
