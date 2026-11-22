@@ -52,8 +52,9 @@ export function numberSourceIds(text: string, sources: SourceReference[]): strin
     if (s.recordId && s.recordId.length >= 6 && !seen.has(s.recordId)) seen.set(s.recordId, i + 1);
   });
   for (const [id, n] of seen) {
+    // «[id]», «[fonte: id]», «(fonte: id)», «fonte: id», «id» → « [n]» (parentesi comprese).
     const re = new RegExp(
-      `\\s*\\(?\\s*(?:(?:fonte|fonti|source|recordId|id)\\s*[:=]?\\s*)?\\[?${escape(id)}\\]?\\s*\\)?`,
+      `\\s*[[(]?\\s*(?:(?:fonte|fonti|source|recordId|id)\\s*[:=]?\\s*)?${escape(id)}\\s*[\\])]?`,
       'gi',
     );
     out = out.replace(re, ` [${n}]`);
