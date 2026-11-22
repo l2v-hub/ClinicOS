@@ -59,14 +59,19 @@ Nessuna modifica a backend, schema o rotte.
 | Unit             |    PASS | `logs/frontend-milo-phase4.log` (9/9)                                                          |
 | Integration      |    PASS | conferma → richiesta alla rotta dei parametri con funzione di salvataggio simulata             |
 | API              |      NA | rotta esistente, invariata                                                                     |
-| Playwright       | NOT RUN | sul sito: previsto dopo il rilascio                                                            |
-| Persistence      | NOT RUN | dopo il rilascio: valori confermati visibili nella pagina Parametri                            |
+| Playwright       |    PASS | sul sito: `logs/demo-live.log`, screenshot 01–03 (giro dettato, bozze, conferme, riepilogo) |
+| Persistence      |    PASS | sul sito: la scheda del paziente mostra le 2 rilevazioni registrate dal giro (screenshot 07) |
 | Agnos AI         |      NA | nessuna azione nuova del registro                                                              |
 | Voice            |    PASS | frammenti di trascrizione, numeri in parole (unit); il microfono reale non è provato in locale |
 | OCR              |      NA |                                                                                                |
 | Security/privacy |    PASS | nessun dato clinico nel browser; scritture solo sui pazienti autorizzati dal backend           |
 
 ## Runtime Evidence
+
+Sul sito (demo, commit `cdc409f`) con il paziente di prova «Prova Milo» creato su richiesta
+dell'utente: `logs/demo-live.log` e `screenshots/01-giro-bozza.png`, `02-giro-registrati.png`,
+`03-giro-fine.png`, `07-paziente-due-rilevazioni-oggi.png`.
+
 
 `screenshots/giro-visita-render-locale.png`: pannello del giro reso con gli stili dell'app e dati
 sintetici. Mostra una bozza registrata, due in bozza, un cognome ambiguo da attribuire e un valore
@@ -87,4 +92,4 @@ impossibile segnalato. Non è il sito.
 
 ## Final Decision
 
-IMPLEMENTED — NOT VERIFIED
+CLOSED — VERIFIED

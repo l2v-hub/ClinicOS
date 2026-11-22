@@ -1,0 +1,8 @@
+Suite backend completa (npm test) con le correzioni, 2026-11-22
+# tests 2005
+# pass 1887
+# fail 112
+# tests 54
+# pass 16
+# fail 38
+File in errore: 150; baseline: 150; nuovi rispetto alla baseline: 0

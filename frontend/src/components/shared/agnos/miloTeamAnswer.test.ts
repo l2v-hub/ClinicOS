@@ -61,3 +61,20 @@ test('conversation history: last turns, operator text and Milo answer text', () 
   const many = Array.from({ length: 10 }, (_, i) => ({ role: 'utente' as const, text: `d${i}` }));
   assert.equal(conversationHistory(many).length, 6);
 });
+
+test('composed prose of the classic path also numbers its sources', () => {
+  const html = renderToStaticMarkup(
+    createElement(AnswerView, {
+      answer: {
+        ...answer,
+        mode: 'llm',
+        composed: true,
+        team: undefined,
+        answerText: 'NEWS2 6 [1].',
+      },
+    }),
+  );
+  assert.match(html, /\[1\] <!-- -->Rilevazione parametri|\[1\] Rilevazione parametri/);
+  assert.match(html, /2 fonti</);
+  assert.doesNotMatch(html, /citate/);
+});

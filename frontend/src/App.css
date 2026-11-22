@@ -6105,10 +6105,26 @@ textarea.form-input {
   body.milo-printing .milo-print-target * {
     visibility: visible;
   }
+  /* Gli antenati del pannello (fisso, traslato, con scorrimento) non devono spostare il report. */
+  body.milo-printing *:has(.milo-print-target) {
+    position: static !important;
+    transform: none !important;
+    overflow: visible !important;
+    inset: auto !important;
+    width: auto !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: none !important;
+    box-shadow: none !important;
+  }
+  body.milo-printing {
+    background: #fff;
+  }
   body.milo-printing .milo-print-target {
     position: absolute;
     inset: 0 auto auto 0;
     width: 100%;
+    background: #fff;
   }
   body.milo-printing .milo-print-target .milo-print-only {
     display: flex;

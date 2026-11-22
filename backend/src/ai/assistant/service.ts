@@ -39,6 +39,7 @@ import { loadAssistantLlmConfig } from './config.js';
 import { validateQueryPlan } from '../gateway/query/validate.js';
 import { dedupeNav, navFromSource, type NavAction } from './nav.js';
 import { blocksFromResults, type MiloBlock } from './blocks.js';
+import { localizeInstants, numberSourceIds } from './model-view.js';
 import { runQueryPlan } from '../gateway/query/engine.js';
 import { boundStaffList, MAX_STAFF_RESULTS } from './staff-window.js';
 import { boundTodayAppointments, todayAppointmentLimit } from './appointments-today-window.js';
@@ -660,6 +661,9 @@ export async function assistantQuery(
       ) {
         return empty({ notFound: false, refusal: 'Accesso non autorizzato per questa richiesta.' });
       }
+      // Una lettura con parametri non validi (es. una data proposta dal modello e non
+      // interpretabile) non è un errore del servizio: la risposta è «non trovato», mai un 500.
+      if (e instanceof GatewayError && e.kind === 'bad_request') return empty();
       throw e;
     }
   }
@@ -671,11 +675,11 @@ export async function assistantQuery(
   let answerText: string | undefined;
   let composed = false;
   if (cfg.composeEnabled && cfg.runtimeUrl && results.length > 0) {
-    const c = await composeAnswer(question, results, cappedSources, {
+    const c = await composeAnswer(question, localizeInstants(results), cappedSources, {
       callComposeRuntime: (req) => callComposeRuntime(req, cfg),
     });
     if (c.composed) {
-      answerText = c.answerText;
+      answerText = c.answerText ? numberSourceIds(c.answerText, cappedSources) : c.answerText;
       composed = true;
     }
   }

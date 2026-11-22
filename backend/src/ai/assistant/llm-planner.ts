@@ -122,6 +122,17 @@ function validatePlan(raw: unknown, ctx: PlanContext): QueryPlan | null {
 }
 
 /** Pianifica una lettura via LLM con validazione e fallback deterministico garantito. */
+/** Intent del deterministico abbastanza specifici da prevalere su un piano LLM diverso. */
+export const PRECISE_INTENTS = new Set<string>([
+  'staff_shifts',
+  'agenda',
+  'parameters_overview',
+  'clinical_score',
+  'diary',
+  'assessments',
+  'administrations',
+]);
+
 export async function planQueryLLM(
   question: string,
   ctx: PlanContext,
@@ -138,6 +149,13 @@ export async function planQueryLLM(
     });
     const validated = validatePlan(res?.plan, ctx);
     if (!validated) return fallback();
+    // Milo: le domande che il deterministico riconosce con certezza fra le letture dedicate (turni,
+    // agenda, parametri, NEWS2, diario, scale, somministrazioni) usano lo strumento dedicato anche se
+    // il modello propone una lettura generica (panoramica, query_data): più precisa e senza date
+    // costruite dal modello.
+    const precise = planQuery(question, ctx);
+    if (PRECISE_INTENTS.has(precise.intent) && validated.intent !== precise.intent)
+      return { plan: precise, mode: 'deterministic' };
     // F1 ≥ F0: se l'LLM non sa (piano vuoto/unknown) ma il deterministico ha un piano, usa quello.
     if (validated.tools.length === 0 || validated.intent === 'unknown') {
       const det = planQuery(question, ctx);

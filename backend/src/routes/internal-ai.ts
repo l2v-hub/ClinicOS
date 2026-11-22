@@ -6,6 +6,7 @@ import { checkServiceToken, parseUserContext } from '../ai/gateway/context.js';
 import { GatewayError } from '../ai/gateway/types.js';
 import * as svc from '../ai/gateway/services.js';
 import { assistantQuery, executeReadTool, ReadToolRefused } from '../ai/assistant/service.js';
+import { localizeInstants } from '../ai/assistant/model-view.js';
 import { resolveAgentGrant } from '../ai/assistant/agent-grants.js';
 
 const internalAiRouter = Router();
@@ -56,7 +57,8 @@ internalAiRouter.post('/tools/:tool', async (req: Request, res: Response) => {
   if (!grant) return res.status(401).json({ error: 'Delega non valida o scaduta' });
   try {
     const out = await executeReadTool(String(req.params.tool), req.body?.args ?? {}, grant);
-    return res.status(200).json(out);
+    // Al team (modello) arrivano gli istanti in ora della struttura; la delega conserva i dati originali.
+    return res.status(200).json({ ...out, data: localizeInstants(out.data) });
   } catch (err) {
     if (err instanceof ReadToolRefused) {
       const status =

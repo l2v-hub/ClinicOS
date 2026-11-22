@@ -293,3 +293,26 @@ test('query_data with patient "current" returns the open patient rows', async ()
   );
   assert.ok(rows.data.length > 0);
 });
+
+test('query_data on appointments: a date without zone is facility time, garbage is refused before the database (no 500)', async () => {
+  const plan = (value: unknown) => ({
+    steps: [
+      {
+        id: 's1',
+        from: 'appointment',
+        filter: [{ field: 'scheduledAt', op: 'lt', value }],
+        select: ['id', 'scheduledAt'],
+      },
+    ],
+    answer: { primaryStep: 's1' },
+  });
+  const rows = await assistant.dispatchQueryData(plan(`${dayOffset(2)}T00:00:00`), ctx(), ENV);
+  assert.ok(
+    (rows.data as Array<{ id: string }>).some((r) => r.id === 'app-anna'),
+    JSON.stringify(rows.data),
+  );
+  // Valore non interpretabile: richiesta rifiutata prima del database, risposta vuota (mai 500).
+  const garbage = await assistant.dispatchQueryData(plan('dopodomani'), ctx(), ENV);
+  assert.deepEqual(garbage.data, []);
+
+});

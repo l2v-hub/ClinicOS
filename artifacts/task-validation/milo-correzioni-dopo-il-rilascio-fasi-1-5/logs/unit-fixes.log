@@ -1,0 +1,172 @@
+TAP version 13
+# Subtest: 016 F1: READ_TOOLS contiene solo tool di lettura del gateway
+ok 1 - 016 F1: READ_TOOLS contiene solo tool di lettura del gateway
+  ---
+  duration_ms: 0.79391
+  type: 'test'
+  ...
+# Subtest: 016 F1: nessun tool di scrittura/cancellazione è nell allowlist
+ok 2 - 016 F1: nessun tool di scrittura/cancellazione è nell allowlist
+  ---
+  duration_ms: 0.192378
+  type: 'test'
+  ...
+# Subtest: 016 F1: piano LLM valido (solo read tools) è accettato
+ok 3 - 016 F1: piano LLM valido (solo read tools) è accettato
+  ---
+  duration_ms: 1.869642
+  type: 'test'
+  ...
+# Subtest: 016 F1: piano LLM con tool FUORI allowlist → fallback deterministico
+ok 4 - 016 F1: piano LLM con tool FUORI allowlist → fallback deterministico
+  ---
+  duration_ms: 0.802444
+  type: 'test'
+  ...
+# Subtest: 016 F1: runtime che lancia/timeout → fallback deterministico (nessun errore)
+ok 5 - 016 F1: runtime che lancia/timeout → fallback deterministico (nessun errore)
+  ---
+  duration_ms: 0.983205
+  type: 'test'
+  ...
+# Subtest: 016 F1: scope=cross dichiarato dall LLM su tool patient-scoped è IGNORATO (no falso rifiuto)
+ok 6 - 016 F1: scope=cross dichiarato dall LLM su tool patient-scoped è IGNORATO (no falso rifiuto)
+  ---
+  duration_ms: 0.193038
+  type: 'test'
+  ...
+# Subtest: 016 F1: requiresCrossPatientAccess è RICALCOLATO server-side, non fidato dall LLM
+ok 7 - 016 F1: requiresCrossPatientAccess è RICALCOLATO server-side, non fidato dall LLM
+  ---
+  duration_ms: 0.613456
+  type: 'test'
+  ...
+# Subtest: 016 F1: piano LLM VUOTO ma deterministico non-vuoto → preferisci deterministico (F1 >= F0)
+ok 8 - 016 F1: piano LLM VUOTO ma deterministico non-vuoto → preferisci deterministico (F1 >= F0)
+  ---
+  duration_ms: 0.551614
+  type: 'test'
+  ...
+# Subtest: 016 F1: piano LLM vuoto E deterministico vuoto → resta vuoto (nessuna invenzione)
+ok 9 - 016 F1: piano LLM vuoto E deterministico vuoto → resta vuoto (nessuna invenzione)
+  ---
+  duration_ms: 1.008031
+  type: 'test'
+  ...
+# Subtest: 016 F1: injectPatientId riempie patientId mancante nei tool patient-scoped
+ok 10 - 016 F1: injectPatientId riempie patientId mancante nei tool patient-scoped
+  ---
+  duration_ms: 0.536571
+  type: 'test'
+  ...
+# Subtest: 016 F1: injectPatientId SOVRASCRIVE il patientId proposto dall LLM (paziente autoritativo)
+ok 11 - 016 F1: injectPatientId SOVRASCRIVE il patientId proposto dall LLM (paziente autoritativo)
+  ---
+  duration_ms: 0.176668
+  type: 'test'
+  ...
+# Subtest: 016 F1: injectPatientId sovrascrive un patientId PLACEHOLDER dell LLM
+ok 12 - 016 F1: injectPatientId sovrascrive un patientId PLACEHOLDER dell LLM
+  ---
+  duration_ms: 0.078263
+  type: 'test'
+  ...
+# Subtest: 016 F1: injectPatientId NON tocca i tool non patient-scoped (search_patients)
+ok 13 - 016 F1: injectPatientId NON tocca i tool non patient-scoped (search_patients)
+  ---
+  duration_ms: 0.063964
+  type: 'test'
+  ...
+# Subtest: 016 F1: injectPatientId senza patientId noto → piano invariato
+ok 14 - 016 F1: injectPatientId senza patientId noto → piano invariato
+  ---
+  duration_ms: 0.048877
+  type: 'test'
+  ...
+# Subtest: 016 F3: piano LLM con query_data + intent data_query è accettato (non cross-patient)
+ok 15 - 016 F3: piano LLM con query_data + intent data_query è accettato (non cross-patient)
+  ---
+  duration_ms: 0.207781
+  type: 'test'
+  ...
+# Subtest: ISO instants become facility time for the model; other strings and the original stay
+ok 16 - ISO instants become facility time for the model; other strings and the original stay
+  ---
+  duration_ms: 0.874966
+  type: 'test'
+  ...
+# Subtest: raw source ids in the prose become numbered references in source order
+ok 17 - raw source ids in the prose become numbered references in source order
+  ---
+  duration_ms: 2.304864
+  type: 'test'
+  ...
+# Subtest: the team is off unless explicitly enabled, and off when clinical data may not reach the model
+ok 18 - the team is off unless explicitly enabled, and off when clinical data may not reach the model
+  ---
+  duration_ms: 0.804282
+  type: 'test'
+  ...
+# Subtest: conversation history: role and text only, at most six turns of 600 characters
+ok 19 - conversation history: role and text only, at most six turns of 600 characters
+  ---
+  duration_ms: 0.313667
+  type: 'test'
+  ...
+# Subtest: grants: random, single question, constant-time lookup, revocable
+ok 20 - grants: random, single question, constant-time lookup, revocable
+  ---
+  duration_ms: 0.479633
+  type: 'test'
+  ...
+# Subtest: team answers are accepted only when every cited source was handed out
+ok 21 - team answers are accepted only when every cited source was handed out
+  ---
+  duration_ms: 2.42875
+  type: 'test'
+  ...
+# Subtest: parameters: kpi with the read values and the trend with the same readings
+ok 22 - parameters: kpi with the read values and the trend with the same readings
+  ---
+  duration_ms: 25.521551
+  type: 'test'
+  ...
+# Subtest: NEWS2: total, risk tone, protocol response and source come from the backend score
+ok 23 - NEWS2: total, risk tone, protocol response and source come from the backend score
+  ---
+  duration_ms: 3.785407
+  type: 'test'
+  ...
+# Subtest: tables: known tools only, fixed columns, at most 50 rows, wall-clock dates kept as written
+ok 24 - tables: known tools only, fixed columns, at most 50 rows, wall-clock dates kept as written
+  ---
+  duration_ms: 0.724328
+  type: 'test'
+  ...
+# Subtest: never more than 8 blocks per answer
+ok 25 - never more than 8 blocks per answer
+  ---
+  duration_ms: 1.076808
+  type: 'test'
+  ...
+# Subtest: a precise deterministic intent wins over a generic LLM plan (shifts, agenda)
+ok 26 - a precise deterministic intent wins over a generic LLM plan (shifts, agenda)
+  ---
+  duration_ms: 8.088894
+  type: 'test'
+  ...
+# Subtest: date filter values become instants in facility time; garbage is a bad request
+ok 27 - date filter values become instants in facility time; garbage is a bad request
+  ---
+  duration_ms: 1.40629
+  type: 'test'
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 27
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 754.692735
