@@ -190,23 +190,93 @@ class MiloTeamTests(unittest.TestCase):
         self.assertEqual(text, "Uno [1], due [2], ancora [1] e falso.")
         self.assertEqual([c["recordId"] for c in cited], ["3", "1"])
 
-    def test_team_models_ask_for_no_reasoning_so_tools_work(self):
-        """Azure gpt-6.1-sol su chat/completions rifiuta gli strumenti col ragionamento attivo."""
+    def test_azure_chat_model_becomes_responses_model_for_the_team(self):
+        """Azure gpt-6.1-sol: su chat/completions niente strumenti col ragionamento, e il ragionamento
+        non si spegne → il team usa la Responses API dello stesso deployment."""
+        from agno.models.azure import AzureOpenAI, AzureOpenAIResponses
         from clinicos_ai.models.providers.agno_team import team_model
 
-        FakeModel.bodies.clear()
-        factory = self._factory()
-        asyncio.run(team_mod.run_milo_team(self._req(), lambda: team_model(factory()), timeout_seconds=30,
-                                           env=self._env()))
-        self.assertTrue(FakeModel.bodies)
-        self.assertTrue(all(b.get("reasoning_effort") == "none" for b in FakeModel.bodies))
-        # Configurabile, con ripiego su «none» per valori non ammessi.
-        self.assertEqual(team_model(factory(), env={"AI_TEAM_REASONING_EFFORT": "low"}).reasoning_effort, "low")
-        self.assertEqual(team_model(factory(), env={"AI_TEAM_REASONING_EFFORT": "boh"}).reasoning_effort, "none")
-        # Un valore già impostato dal provider non viene toccato.
-        m = factory()
-        m.reasoning_effort = "high"
-        self.assertEqual(team_model(m).reasoning_effort, "high")
+        chat = AzureOpenAI(id="gpt-6.1-sol", api_key="k", azure_endpoint="https://example.invalid")
+        out = team_model(chat, env={})
+        self.assertIsInstance(out, AzureOpenAIResponses)
+        self.assertEqual((out.id, out.api_key, out.azure_endpoint, out.reasoning_effort),
+                         ("gpt-6.1-sol", "k", "https://example.invalid", "low"))
+        self.assertEqual(team_model(chat, env={"AI_TEAM_REASONING_EFFORT": "medium"}).reasoning_effort, "medium")
+        self.assertEqual(team_model(chat, env={"AI_TEAM_REASONING_EFFORT": "none"}).reasoning_effort, "low")
+        other = self._factory()()
+        self.assertIs(team_model(other, env={}), other)  # altri provider invariati
+
+    def test_full_loop_on_the_responses_api(self):
+        """Il ciclo coordinatore → specialista → strumento → backend gira sulla Responses API."""
+        from agno.models.openai.responses import OpenAIResponses
+
+        server = _serve(FakeResponses)
+        try:
+            Backend.calls.clear()
+            FakeResponses.bodies.clear()
+            base = f"http://127.0.0.1:{server.server_address[1]}/v1"
+            factory = lambda: OpenAIResponses(id="fake", base_url=base, api_key="x", reasoning_effort="low")  # noqa: E731
+            out = asyncio.run(team_mod.run_milo_team(self._req(), factory, timeout_seconds=30, env=self._env()))
+        finally:
+            server.shutdown()
+        reads = [c for c in Backend.calls if c["path"] == "/internal/ai/tools/get_patient_parameters"]
+        self.assertEqual(len(reads), 1)
+        self.assertTrue(reads[0]["authorized"])
+        self.assertIn("[1]", out["answerText"])
+        self.assertEqual(out["citedSources"], [SOURCE])
+        self.assertEqual(out["members"], ["clinico"])
+        self.assertTrue(all(b.get("reasoning", {}).get("effort") == "low" for b in FakeResponses.bodies))
+
+
+class FakeResponses(BaseHTTPRequestHandler):
+    """Finto endpoint /v1/responses: delega, poi strumento, poi risposta con [S1]."""
+
+    bodies: list = []
+
+    def log_message(self, *a):
+        pass
+
+    def _reply(self, output: list):
+        payload = {"id": f"resp_{len(FakeResponses.bodies)}", "object": "response", "created_at": 0,
+                   "model": "fake", "status": "completed", "output": output, "parallel_tool_calls": True,
+                   "tool_choice": "auto", "tools": [],
+                   "usage": {"input_tokens": 10, "output_tokens": 5, "total_tokens": 15,
+                             "input_tokens_details": {"cached_tokens": 0},
+                             "output_tokens_details": {"reasoning_tokens": 0}}}
+        data = json.dumps(payload).encode()
+        self.send_response(200)
+        self.send_header("content-type", "application/json")
+        self.send_header("content-length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
+    def do_POST(self):  # noqa: N802
+        req = json.loads(self.rfile.read(int(self.headers.get("content-length") or 0)))
+        FakeResponses.bodies.append(req)
+        tools = {t.get("name"): t for t in req.get("tools") or [] if t.get("type") == "function"}
+        items = req.get("input") if isinstance(req.get("input"), list) else []
+        answered = any(isinstance(i, dict) and i.get("type") == "function_call_output" for i in items)
+        delegate = next((n for n in tools if "member" in n or "delegate" in n or "transfer" in n), None)
+        call = lambda name, args: [{"type": "function_call", "id": f"fc_{name}", "call_id": f"call_{name}",  # noqa: E731
+                                    "name": name, "arguments": json.dumps(args), "status": "completed"}]
+        if delegate and not answered:
+            params = tools[delegate].get("parameters", {}).get("properties", {})
+            args = {}
+            for key in params:
+                if "member" in key or key.endswith("id"):
+                    args[key] = "clinico"
+                elif "task" in key or "description" in key or "input" in key:
+                    args[key] = "Andamento della pressione del paziente aperto negli ultimi 7 giorni"
+                elif "output" in key:
+                    args[key] = "Valori con fonti"
+            self._reply(call(delegate, args))
+            return
+        if "get_patient_parameters" in tools and not answered:
+            self._reply(call("get_patient_parameters", {"days": 7}))
+            return
+        self._reply([{"type": "message", "id": "msg_1", "role": "assistant", "status": "completed",
+                      "content": [{"type": "output_text", "annotations": [],
+                                   "text": "La sistolica è salita da 130 a 150 mmHg in 7 giorni [S1]."}]}])
 
 
 if __name__ == "__main__":

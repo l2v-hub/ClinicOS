@@ -8,17 +8,36 @@ from __future__ import annotations
 import os
 from typing import Any, Callable
 
-_TEAM_EFFORTS = ("none", "minimal", "low", "medium", "high")
+_TEAM_EFFORTS = ("minimal", "low", "medium", "high", "xhigh")
+
+
+def team_reasoning_effort(env=os.environ) -> str:
+    value = (env.get("AI_TEAM_REASONING_EFFORT") or "low").strip().lower()
+    return value if value in _TEAM_EFFORTS else "low"
 
 
 def team_model(model: Any, env=os.environ) -> Any:
-    """Modello per il team. I modelli di ragionamento su chat/completions (es. Azure gpt-6.1-sol)
-    rifiutano gli strumenti se il ragionamento è attivo: il team chiede `reasoning_effort` esplicito
-    (AI_TEAM_REASONING_EFFORT, default «none»). I modelli senza il campo restano invariati."""
-    if hasattr(model, "reasoning_effort") and getattr(model, "reasoning_effort", None) is None:
-        value = (env.get("AI_TEAM_REASONING_EFFORT") or "none").strip().lower()
-        model.reasoning_effort = value if value in _TEAM_EFFORTS else "none"
-    return model
+    """Modello per il team di agenti.
+
+    I modelli di ragionamento Azure (es. gpt-6.1-sol) su chat/completions non accettano strumenti con
+    il ragionamento attivo e non accettano di spegnerlo: per il team si usa la Responses API dello
+    stesso deployment (stesso endpoint e chiave), che supporta strumenti e ragionamento insieme.
+    Livello: AI_TEAM_REASONING_EFFORT (default «low», per i tempi di risposta). Gli altri provider
+    restano invariati.
+    """
+    try:
+        from agno.models.azure import AzureOpenAI, AzureOpenAIResponses
+    except ImportError:  # pragma: no cover - Agno senza il modulo Azure
+        return model
+    if not isinstance(model, AzureOpenAI):
+        return model
+    return AzureOpenAIResponses(
+        id=model.id,
+        api_key=model.api_key,
+        azure_endpoint=model.azure_endpoint,
+        **({"api_version": env["AI_TEAM_RESPONSES_API_VERSION"]} if env.get("AI_TEAM_RESPONSES_API_VERSION") else {}),
+        reasoning_effort=team_reasoning_effort(env),
+    )
 
 
 def team_tool(name: str, description: str, parameters: dict, entrypoint: Callable[..., str]):

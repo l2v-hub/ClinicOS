@@ -34,14 +34,20 @@ deploy precedente aveva ridistribuito l'immagine vecchia. Ricaricato da `main` (
 
 ## Expected Behaviour
 
-- I modelli del team chiedono `reasoning_effort='none'` (variabile `AI_TEAM_REASONING_EFFORT`,
-  default `none`; un valore non ammesso torna a `none`) quando il modello lo supporta.
+- Primo tentativo (#546): `reasoning_effort='none'` su chat/completions. Sul sito il modello lo
+  rifiuta («does not support 'none' … Supported values are: 'low', 'medium', 'high', and 'xhigh'»).
+  Quindi su chat/completions questo modello non può usare strumenti.
+- Correzione: per i modelli Azure il team usa la Responses API dello stesso deployment
+  (`AzureOpenAIResponses`, stesso endpoint e chiave), che supporta strumenti e ragionamento;
+  livello `AI_TEAM_REASONING_EFFORT` (default `low`, valori minimal/low/medium/high/xhigh). Gli altri
+  provider restano invariati.
 - Le forme «[id]», «[fonte: id]», «(fonte: id)» diventano un solo «[n]».
 
 ## Acceptance Criteria
 
-- AC1: il modello costruito per il team ha `reasoning_effort='none'` e la richiesta al modello lo
-  contiene (test con il finto modello compatibile).
+- AC1: un modello Azure chat diventa per il team un modello Responses API con lo stesso deployment;
+  il ciclo completo del team (coordinatore → specialista → strumento → backend) gira su un finto
+  endpoint `/v1/responses` e le richieste portano il livello di ragionamento.
 - AC2: `numberSourceIds` non lascia parentesi spurie per «[id]», «[fonte: id]», «(fonte: id)».
 - AC3: test del servizio AI e del backend, typecheck.
 - AC4 (dopo il rilascio): sulla demo almeno una domanda risponde in modalità team con fonti
