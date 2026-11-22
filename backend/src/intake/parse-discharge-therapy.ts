@@ -898,10 +898,110 @@ export function looksLikePrescriptionLine(line: string): boolean {
   );
 }
 
+// ── Terapia scritta in tabella ───────────────────────────────────────────────
+// L'OCR restituisce le tabelle come righe markdown: "| Farmaco | Dose | Posologia | Via | Note |".
+// Lette come righe di testo libero producono prescrizioni senza nome (la riga inizia con "|") e
+// persino l'intestazione e il separatore diventano "farmaci". Qui ogni cella va nel campo che la
+// SUA colonna dichiara: deterministico, senza modello, e la riga originale resta verbatim.
+type TherapyColumn = 'farmaco' | 'dose' | 'posologia' | 'via' | 'note';
+const TABLE_ROW_RE = /^\s*\|.*\|\s*$/;
+const TABLE_SEPARATOR_RE = /^\s*\|?\s*:?-{2,}:?\s*(?:\|\s*:?-{2,}:?\s*)*\|?\s*$/;
+const TABLE_COLUMNS: Array<[TherapyColumn, RegExp]> = [
+  [
+    'farmaco',
+    /^(?:farmac[oi]|medicinal[ei]|principio attivo|specialita|prodotto|nome(?: del)?(?: farmaco| commerciale)?|terapia)\b/,
+  ],
+  ['dose', /^(?:dose|dosaggi[oi]|concentrazione)\b/],
+  [
+    'posologia',
+    /^(?:posologia|frequenza|orari[o]?|somministrazion[ei]|modalita|schema|quando|ore)\b/,
+  ],
+  ['via', /^via\b/],
+  ['note', /^(?:note|nota|indicazion[ei]|osservazion[ei]|avvertenz[ae])\b/],
+];
+const TABLE_ROUTES: Array<[RegExp, string]> = [
+  [/^(?:os|per os|orale|per bocca|p\.?\s?o\.?)$/i, 'OS'],
+  [/^(?:sc|s\.c\.|sottocute|sottocutanea)$/i, 'SC'],
+  [/^(?:im|i\.m\.|intramuscolo|intramuscolare)$/i, 'IM'],
+  [/^(?:ev|e\.v\.|endovena|endovenosa)$/i, 'EV'],
+  [/^(?:inal|inalatoria|aerosol|inalazione)$/i, 'INAL'],
+  [/^(?:td|transdermica|cerotto)$/i, 'TD'],
+  [/^(?:sl|sublinguale)$/i, 'SL'],
+  [/^(?:top|topica|cutanea)$/i, 'TOP'],
+  [/^(?:rett|rettale)$/i, 'RETT'],
+  [/^(?:oft|oftalmica|oculare)$/i, 'OFT'],
+];
+const tableCells = (line: string) =>
+  line
+    .trim()
+    .replace(/^\|/, '')
+    .replace(/\|$/, '')
+    .split('|')
+    .map((cell) => cell.replace(/\*\*/g, '').trim());
+const tableKey = (cell: string) =>
+  cell
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z ]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+/** Le colonne dichiarate dall'intestazione; null se non è l'intestazione di una tabella di terapia. */
+function therapyTableColumns(line: string): Array<TherapyColumn | null> | null {
+  const columns = tableCells(line).map((cell) => {
+    const key = tableKey(cell);
+    return TABLE_COLUMNS.find(([, re]) => re.test(key))?.[0] ?? null;
+  });
+  // Serve la colonna del farmaco e almeno un'altra riconosciuta: altrimenti non è una terapia.
+  return columns.includes('farmaco') && columns.filter(Boolean).length >= 2 ? columns : null;
+}
+/** Una riga di tabella → una prescrizione, cella per cella secondo l'intestazione. */
+function therapyTableRow(
+  columns: Array<TherapyColumn | null>,
+  line: string,
+): ParsedTherapyRow | null {
+  const cells = tableCells(line);
+  const cell = (column: TherapyColumn) =>
+    columns
+      .map((c, i) => (c === column ? (cells[i] ?? '') : ''))
+      .filter(Boolean)
+      .join(' ');
+  const farmaco = cell('farmaco');
+  if (!farmaco) return null; // riga vuota o di sole note: non è una prescrizione
+  const via = cell('via');
+  const route = TABLE_ROUTES.find(([re]) => re.test(via))?.[1] ?? '';
+  const posologia = cell('posologia');
+  // La via nota entra come sigla fra parentesi, la forma che il lettore di riga riconosce.
+  const base = parseTherapyLine(
+    [farmaco, route ? `(${route})` : '', posologia].filter(Boolean).join(' '),
+  );
+  const dose = cell('dose');
+  const extra = [
+    // Una via che non è una sigla nota resta scritta, sotto gli occhi dell'operatore.
+    via && !route ? `via: ${via}` : '',
+    // Dose della colonna diversa dal dosaggio scritto accanto al nome: si mostrano entrambe.
+    dose && base.dosaggio && dose.toLowerCase() !== base.dosaggio.toLowerCase()
+      ? `dose: ${dose}`
+      : '',
+    cell('note'),
+  ].filter(Boolean);
+  return {
+    ...base,
+    dosaggio: base.dosaggio || dose,
+    note: [base.note, ...extra].filter(Boolean).join(' · '),
+    originalText: line.trim(),
+    // Una riga ricomposta dalle colonne va sempre confermata dall'operatore.
+    stato: 'da_verificare',
+  };
+}
+
 export function parseDischargeTherapy(text: string): ParsedTherapyRow[] {
   const rows: ParsedTherapyRow[] = [];
   let sawDrugs = false;
   let previousWasRow = false;
+  // Colonne della tabella in corso: valgono finché le righe restano righe di tabella, anche
+  // oltre una riga vuota o un cambio pagina.
+  let table: Array<TherapyColumn | null> | null = null;
   for (const lines of splitTherapyParagraphs(text)) {
     // Un paragrafo di sole fasce (tabella staccata dalla sua intestazione) continua l'elenco.
     const isDrugParagraph = talksAboutDrugs(lines) || lines.some(isGlucoseScaleOnlyLine);
@@ -910,6 +1010,23 @@ export function parseDischargeTherapy(text: string): ParsedTherapyRow[] {
       continue;
     }
     for (const line of lines) {
+      if (TABLE_ROW_RE.test(line)) {
+        if (TABLE_SEPARATOR_RE.test(line)) continue;
+        const header = therapyTableColumns(line);
+        if (header) {
+          table = header; // l'intestazione dichiara le colonne, non è un farmaco
+          continue;
+        }
+        if (table) {
+          const row = therapyTableRow(table, line);
+          if (row) {
+            rows.push(row);
+            previousWasRow = true;
+          }
+          continue;
+        }
+        // Tabella senza intestazione riconoscibile: resta una riga da verificare, come prima.
+      } else table = null;
       // Saltata senza interrompere l'elenco: le fasce sotto restano dell'insulina sopra.
       if (isNonDrugInstruction(line)) continue;
       const last = rows[rows.length - 1];

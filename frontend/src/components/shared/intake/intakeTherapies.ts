@@ -80,9 +80,10 @@ export function therapyInputDiagnostics(input: Record<string, unknown>): Therapy
     )
       add('glucoseScale', 'Inserisci uno schema glicemico valido');
     else
-      validateGlucoseScaleRows(glucoseScaleRows(protocol), glucoseScaleDoseUnit(protocol)).errors.forEach(
-        (message) => add('glucoseScale', message),
-      );
+      validateGlucoseScaleRows(
+        glucoseScaleRows(protocol),
+        glucoseScaleDoseUnit(protocol),
+      ).errors.forEach((message) => add('glucoseScale', message));
     if (input.tipo !== 'periodica')
       add('tipo', 'Lo schema glicemico richiede gli orari di rilevazione');
   }

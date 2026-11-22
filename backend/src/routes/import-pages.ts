@@ -28,6 +28,7 @@ import {
 import { pageUpload, uploadMetadata } from '../ai/upload/pages/multipart.js';
 import { groupPdf, verifiedBytes } from '../ai/upload/pages/pdf.js';
 import { saveReview } from '../ai/upload/pages/review.js';
+import { kickWorker } from '../ai/upload/worker.js';
 import { pageTextHandler } from '../ai/upload/pages/page-text.js';
 import { uploadLimitError } from '../ai/upload/upload-errors.js';
 const router = Router();
@@ -166,23 +167,21 @@ router.post(
   '/:id/process',
   pageOnly,
   extractionCostGuard,
-  handle(async (req, res) =>
-    res.status(202).json({
-      ...(await processPages(String(req.params.id), req.body)),
-      message: 'Elaborazione avviata',
-    }),
-  ),
+  handle(async (req, res) => {
+    const job = await processPages(String(req.params.id), req.body);
+    kickWorker();
+    res.status(202).json({ ...job, message: 'Elaborazione avviata' });
+  }),
 );
 router.post(
   '/:id/retry',
   pageOnly,
   extractionCostGuard,
-  handle(async (req, res) =>
-    res.status(202).json({
-      ...(await processPages(String(req.params.id), req.body, true)),
-      message: 'Nuovo tentativo avviato',
-    }),
-  ),
+  handle(async (req, res) => {
+    const job = await processPages(String(req.params.id), req.body, true);
+    kickWorker();
+    res.status(202).json({ ...job, message: 'Nuovo tentativo avviato' });
+  }),
 );
 router.post(
   '/:id/reopen',

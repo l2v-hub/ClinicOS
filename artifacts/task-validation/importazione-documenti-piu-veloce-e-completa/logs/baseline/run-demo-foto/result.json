@@ -1,0 +1,1799 @@
+{
+ "status": "review_ready",
+ "model": "azure:gpt-6.1-sol",
+ "resultData": {
+  "_full": {
+   "cartella": {
+    "farmaci": [
+     {
+      "via": "orale",
+      "dose": "50 mg",
+      "nome": "Furosemide (Lasix) 25 mg cpr",
+      "note": "Terapia domiciliare consigliata; controllo peso quotidiano.",
+      "stato": "",
+      "frequenza": "2 cpr alle 08:00, 1 cpr alle 14:00"
+     },
+     {
+      "via": "orale",
+      "dose": "2,5 mg",
+      "nome": "Bisoprololo 2,5 mg cpr",
+      "note": "Terapia domiciliare consigliata.",
+      "stato": "",
+      "frequenza": "1 cpr alle 08:00"
+     },
+     {
+      "via": "orale",
+      "dose": "5 mg",
+      "nome": "Ramipril 5 mg cpr",
+      "note": "Terapia domiciliare consigliata; controllo creatinina e potassio.",
+      "stato": "",
+      "frequenza": "1 cpr alle 20:00"
+     },
+     {
+      "via": "orale",
+      "dose": "2,5 mg",
+      "nome": "Apixaban (Eliquis) 2,5 mg cpr",
+      "note": "Terapia domiciliare consigliata.",
+      "stato": "",
+      "frequenza": "1 cpr alle 08:00 e alle 20:00"
+     },
+     {
+      "via": "orale",
+      "dose": "25 mg",
+      "nome": "Spironolattone 25 mg cpr",
+      "note": "Terapia domiciliare consigliata.",
+      "stato": "",
+      "frequenza": "1 cpr alle 12:00"
+     },
+     {
+      "via": "orale",
+      "dose": "40 mg",
+      "nome": "Atorvastatina 40 mg cpr",
+      "note": "Terapia domiciliare consigliata.",
+      "stato": "",
+      "frequenza": "1 cpr alle 22:00"
+     },
+     {
+      "via": "sc",
+      "dose": "18 UI",
+      "nome": "Insulina glargine (Lantus)",
+      "note": "Terapia domiciliare consigliata; secondo glicemie.",
+      "stato": "",
+      "frequenza": "Alle 22:00"
+     },
+     {
+      "via": "sc",
+      "dose": "6 UI",
+      "nome": "Insulina lispro (Humalog)",
+      "note": "Terapia domiciliare consigliata; secondo schema.",
+      "stato": "",
+      "frequenza": "Ai tre pasti principali"
+     },
+     {
+      "via": "orale",
+      "dose": "20 mg",
+      "nome": "Pantoprazolo 20 mg cpr",
+      "note": "Terapia domiciliare consigliata.",
+      "stato": "",
+      "frequenza": "1 cpr alle 07:00 a digiuno"
+     },
+     {
+      "via": "",
+      "dose": "18 mcg",
+      "nome": "Tiotropio 18 mcg cps inalatoria",
+      "note": "Terapia domiciliare consigliata.",
+      "stato": "",
+      "frequenza": "1 inalazione alle 08:00",
+      "viaOriginale": "inalatoria"
+     }
+    ],
+    "terapie": [
+     {
+      "tipo": "altra",
+      "stato": "",
+      "descrizione": "Dieta iposodica e ipoglucidica"
+     },
+     {
+      "tipo": "altra",
+      "stato": "",
+      "descrizione": "Restrizione idrica a 1,5 litri al giorno"
+     },
+     {
+      "tipo": "riabilitativa",
+      "stato": "",
+      "descrizione": "Dimissione verso struttura residenziale per riabilitazione"
+     }
+    ],
+    "allergie": [
+     {
+      "gravita": "",
+      "reazione": "Rash cutaneo",
+      "allergene": "Penicillina"
+     },
+     {
+      "tipo": "Intolleranza",
+      "gravita": "",
+      "reazione": "Gas tralgia (intolleranza)",
+      "allergene": "FANS"
+     }
+    ],
+    "anamnesi": {
+     "patologicaRemota": "Infarto miocardico anteriore nel 2015 trattato con PTCA e stent su IVA. Diabete mellito tipo 2 dal 2004. Ipertensione arteriosa dal 1998. Protesi d'anca destra nel 2019. BPCO lieve. Ex fumatore (40 pack/years).",
+     "patologicaProssima": "Accesso in Pronto Soccorso il 2026-11-09 per dispnea ingravescente da circa cinque giorni, ortopnea ed edemi declivi. Incremento ponderale di 4 kg nell'ultima settimana e ridotta aderenza alla terapia diuretica."
+    },
+    "diagnosi": [
+     {
+      "tipo": "",
+      "stato": "",
+      "codiceICD": "",
+      "descrizione": "Scompenso cardiaco acuto in cardiopatia ischemica cronica (FE 35%)"
+     },
+     {
+      "tipo": "",
+      "stato": "",
+      "codiceICD": "",
+      "descrizione": "Fibrillazione atriale permanente"
+     },
+     {
+      "tipo": "",
+      "stato": "",
+      "codiceICD": "",
+      "descrizione": "Insufficienza renale cronica stadio IIIb"
+     },
+     {
+      "tipo": "",
+      "stato": "",
+      "codiceICD": "",
+      "descrizione": "Diabete mellito tipo 2 in terapia insulinica, dal 2004"
+     },
+     {
+      "tipo": "",
+      "stato": "",
+      "codiceICD": "",
+      "descrizione": "Ipertensione arteriosa dal 1998"
+     },
+     {
+      "tipo": "",
+      "stato": "",
+      "codiceICD": "",
+      "descrizione": "Infarto miocardico anteriore nel 2015, trattato con PTCA e stent su IVA"
+     },
+     {
+      "tipo": "",
+      "stato": "",
+      "codiceICD": "",
+      "descrizione": "BPCO lieve"
+     },
+     {
+      "tipo": "",
+      "stato": "",
+      "codiceICD": "",
+      "descrizione": "Insufficienza mitralica moderata"
+     }
+    ],
+    "diabetico": true,
+    "pianoCura": {
+     "esamiEmatici": "Creatinina, elettroliti ed emocromo tra 7 giorni.",
+     "controlloPeso": "Controllo del peso corporeo ogni mattina; contattare il medico se aumento superiore a 2 kg in tre giorni.",
+     "visitaCardiologica": {
+      "ora": "09:30",
+      "data": "2026-12-02",
+      "sede": "Ambulatorio Scompenso"
+     },
+     "visitaDiabetologica": "Entro un mese."
+    },
+    "lettoNumero": "",
+    "noteClinica": [
+     {
+      "descrizione": "Protesi d'anca destra nel 2019."
+     },
+     {
+      "descrizione": "Ex fumatore (40 pack/years)."
+     },
+     {
+      "descrizione": "Indice di Barthel 60/100; parzialmente autonomo nelle attività quotidiane; deambula con deambulatore."
+     },
+     {
+      "descrizione": "Non lesioni da pressione."
+     }
+    ],
+    "cameraNumero": "",
+    "dataRicovero": "2026-11-09",
+    "diarioMedico": [
+     {
+      "ora": "",
+      "data": "2026-11-09",
+      "descrizione": "All'ingresso paziente dispnoico. Rx torace: congestione polmonare bilaterale con versamento pleurico basale destro. Ecocardiogramma: FE 35%, ipocinesia anteriore, insufficienza mitralica moderata."
+     },
+     {
+      "ora": "",
+      "data": "",
+      "descrizione": "Avviata terapia diuretica endovenosa con progressivo miglioramento del compenso e calo ponderale di 5 kg. Ottimizzata la terapia per lo scompenso. Buon controllo della frequenza ventricolare."
+     },
+     {
+      "ora": "",
+      "data": "2026-11-18",
+      "medico": "Dott. Andrea Morelli",
+      "descrizione": "Alla dimissione paziente eupnoico a riposo, apiretico, vigile e orientato. Deambula con deambulatore, parzialmente autonomo nelle attività quotidiane (Barthel 60/100). Non lesioni da pressione."
+     }
+    ],
+    "ipertensione": true,
+    "noteGenerali": "Documento di prova senza valore clinico. Dimissione verso struttura residenziale per riabilitazione.",
+    "codiceFiscale": "BNCGNN41R07A944W",
+    "medicoCurante": "Dott.ssa Laura Conti",
+    "presaInCarico": {
+     "destinazione": "Struttura residenziale per riabilitazione",
+     "nomeStruttura": ""
+    },
+    "statoRicovero": "Dimesso",
+    "dataDimissione": "2026-11-18",
+    "parametriVitali": [
+     {
+      "stato": "",
+      "unita": "mmHg",
+      "valore": "150/90",
+      "etichetta": "Pressione arteriosa all'ingresso"
+     },
+     {
+      "note": "Aritmico",
+      "stato": "",
+      "unita": "bpm",
+      "valore": "104",
+      "etichetta": "Frequenza cardiaca all'ingresso"
+     },
+     {
+      "stato": "",
+      "unita": "%",
+      "valore": "89",
+      "etichetta": "SpO2 all'ingresso in aria ambiente"
+     },
+     {
+      "stato": "",
+      "unita": "kg",
+      "valore": "82",
+      "etichetta": "Peso all'ingresso"
+     },
+     {
+      "stato": "",
+      "unita": "pg/mL",
+      "valore": "6840",
+      "etichetta": "NT-proBNP"
+     },
+     {
+      "stato": "",
+      "unita": "mg/dL",
+      "valore": "1,9",
+      "etichetta": "Creatinina"
+     },
+     {
+      "stato": "",
+      "unita": "mL/min",
+      "valore": "34",
+      "etichetta": "eGFR"
+     },
+     {
+      "stato": "",
+      "unita": "%",
+      "valore": "7,8",
+      "etichetta": "HbA1c"
+     },
+     {
+      "stato": "",
+      "unita": "mEq/L",
+      "valore": "4,4",
+      "etichetta": "Potassio"
+     },
+     {
+      "stato": "",
+      "unita": "%",
+      "valore": "35",
+      "etichetta": "Frazione di eiezione"
+     },
+     {
+      "stato": "",
+      "unita": "mmHg",
+      "valore": "125/75",
+      "etichetta": "Pressione arteriosa alla dimissione"
+     },
+     {
+      "stato": "",
+      "unita": "bpm",
+      "valore": "76",
+      "etichetta": "Frequenza cardiaca alla dimissione"
+     },
+     {
+      "stato": "",
+      "unita": "%",
+      "valore": "96",
+      "etichetta": "SpO2 alla dimissione in aria ambiente"
+     },
+     {
+      "stato": "",
+      "unita": "kg",
+      "valore": "77",
+      "etichetta": "Peso alla dimissione"
+     }
+    ],
+    "indicatoriRischio": [
+     {
+      "tipo": "Rischio di caduta",
+      "livello": "moderato"
+     }
+    ],
+    "patologiaIngresso": ""
+   },
+   "anagrafica": {
+    "nome": "Giovanni",
+    "email": "",
+    "sesso": "M",
+    "cognome": "Bianchi",
+    "telefono": "051 5550177",
+    "indirizzo": "Via Mazzini 22, 40137 Bologna",
+    "dataNascita": "1941-10-07",
+    "contattoEmergenzaTel": "333 5550123",
+    "contattoEmergenzaNome": "Bianchi Marta (figlia)"
+   }
+  },
+  "_merge": {
+   "report": {
+    "filled": 20,
+    "missing": 5,
+    "conflict": 0,
+    "duplicate": 0
+   },
+   "version": "1.0.0",
+   "documents": [
+    {
+     "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+     "model": "azure:gpt-6.1-sol",
+     "filename": "Lettera 1"
+    }
+   ]
+  },
+  "_groups": [
+   {
+    "_full": {
+     "cartella": {
+      "farmaci": [
+       {
+        "via": "orale",
+        "dose": "50 mg",
+        "nome": "Furosemide (Lasix) 25 mg cpr",
+        "note": "Terapia domiciliare consigliata; controllo peso quotidiano.",
+        "stato": "",
+        "frequenza": "2 cpr alle 08:00, 1 cpr alle 14:00"
+       },
+       {
+        "via": "orale",
+        "dose": "2,5 mg",
+        "nome": "Bisoprololo 2,5 mg cpr",
+        "note": "Terapia domiciliare consigliata.",
+        "stato": "",
+        "frequenza": "1 cpr alle 08:00"
+       },
+       {
+        "via": "orale",
+        "dose": "5 mg",
+        "nome": "Ramipril 5 mg cpr",
+        "note": "Terapia domiciliare consigliata; controllo creatinina e potassio.",
+        "stato": "",
+        "frequenza": "1 cpr alle 20:00"
+       },
+       {
+        "via": "orale",
+        "dose": "2,5 mg",
+        "nome": "Apixaban (Eliquis) 2,5 mg cpr",
+        "note": "Terapia domiciliare consigliata.",
+        "stato": "",
+        "frequenza": "1 cpr alle 08:00 e alle 20:00"
+       },
+       {
+        "via": "orale",
+        "dose": "25 mg",
+        "nome": "Spironolattone 25 mg cpr",
+        "note": "Terapia domiciliare consigliata.",
+        "stato": "",
+        "frequenza": "1 cpr alle 12:00"
+       },
+       {
+        "via": "orale",
+        "dose": "40 mg",
+        "nome": "Atorvastatina 40 mg cpr",
+        "note": "Terapia domiciliare consigliata.",
+        "stato": "",
+        "frequenza": "1 cpr alle 22:00"
+       },
+       {
+        "via": "sc",
+        "dose": "18 UI",
+        "nome": "Insulina glargine (Lantus)",
+        "note": "Terapia domiciliare consigliata; secondo glicemie.",
+        "stato": "",
+        "frequenza": "Alle 22:00"
+       },
+       {
+        "via": "sc",
+        "dose": "6 UI",
+        "nome": "Insulina lispro (Humalog)",
+        "note": "Terapia domiciliare consigliata; secondo schema.",
+        "stato": "",
+        "frequenza": "Ai tre pasti principali"
+       },
+       {
+        "via": "orale",
+        "dose": "20 mg",
+        "nome": "Pantoprazolo 20 mg cpr",
+        "note": "Terapia domiciliare consigliata.",
+        "stato": "",
+        "frequenza": "1 cpr alle 07:00 a digiuno"
+       },
+       {
+        "via": "",
+        "dose": "18 mcg",
+        "nome": "Tiotropio 18 mcg cps inalatoria",
+        "note": "Terapia domiciliare consigliata.",
+        "stato": "",
+        "frequenza": "1 inalazione alle 08:00",
+        "viaOriginale": "inalatoria"
+       }
+      ],
+      "terapie": [
+       {
+        "tipo": "altra",
+        "stato": "",
+        "descrizione": "Dieta iposodica e ipoglucidica"
+       },
+       {
+        "tipo": "altra",
+        "stato": "",
+        "descrizione": "Restrizione idrica a 1,5 litri al giorno"
+       },
+       {
+        "tipo": "riabilitativa",
+        "stato": "",
+        "descrizione": "Dimissione verso struttura residenziale per riabilitazione"
+       }
+      ],
+      "allergie": [
+       {
+        "gravita": "",
+        "reazione": "Rash cutaneo",
+        "allergene": "Penicillina"
+       },
+       {
+        "tipo": "Intolleranza",
+        "gravita": "",
+        "reazione": "Gas tralgia (intolleranza)",
+        "allergene": "FANS"
+       }
+      ],
+      "anamnesi": {
+       "patologicaRemota": "Infarto miocardico anteriore nel 2015 trattato con PTCA e stent su IVA. Diabete mellito tipo 2 dal 2004. Ipertensione arteriosa dal 1998. Protesi d'anca destra nel 2019. BPCO lieve. Ex fumatore (40 pack/years).",
+       "patologicaProssima": "Accesso in Pronto Soccorso il 2026-11-09 per dispnea ingravescente da circa cinque giorni, ortopnea ed edemi declivi. Incremento ponderale di 4 kg nell'ultima settimana e ridotta aderenza alla terapia diuretica."
+      },
+      "diagnosi": [
+       {
+        "tipo": "",
+        "stato": "",
+        "codiceICD": "",
+        "descrizione": "Scompenso cardiaco acuto in cardiopatia ischemica cronica (FE 35%)"
+       },
+       {
+        "tipo": "",
+        "stato": "",
+        "codiceICD": "",
+        "descrizione": "Fibrillazione atriale permanente"
+       },
+       {
+        "tipo": "",
+        "stato": "",
+        "codiceICD": "",
+        "descrizione": "Insufficienza renale cronica stadio IIIb"
+       },
+       {
+        "tipo": "",
+        "stato": "",
+        "codiceICD": "",
+        "descrizione": "Diabete mellito tipo 2 in terapia insulinica, dal 2004"
+       },
+       {
+        "tipo": "",
+        "stato": "",
+        "codiceICD": "",
+        "descrizione": "Ipertensione arteriosa dal 1998"
+       },
+       {
+        "tipo": "",
+        "stato": "",
+        "codiceICD": "",
+        "descrizione": "Infarto miocardico anteriore nel 2015, trattato con PTCA e stent su IVA"
+       },
+       {
+        "tipo": "",
+        "stato": "",
+        "codiceICD": "",
+        "descrizione": "BPCO lieve"
+       },
+       {
+        "tipo": "",
+        "stato": "",
+        "codiceICD": "",
+        "descrizione": "Insufficienza mitralica moderata"
+       }
+      ],
+      "diabetico": true,
+      "pianoCura": {
+       "esamiEmatici": "Creatinina, elettroliti ed emocromo tra 7 giorni.",
+       "controlloPeso": "Controllo del peso corporeo ogni mattina; contattare il medico se aumento superiore a 2 kg in tre giorni.",
+       "visitaCardiologica": {
+        "ora": "09:30",
+        "data": "2026-12-02",
+        "sede": "Ambulatorio Scompenso"
+       },
+       "visitaDiabetologica": "Entro un mese."
+      },
+      "lettoNumero": "",
+      "noteClinica": [
+       {
+        "descrizione": "Protesi d'anca destra nel 2019."
+       },
+       {
+        "descrizione": "Ex fumatore (40 pack/years)."
+       },
+       {
+        "descrizione": "Indice di Barthel 60/100; parzialmente autonomo nelle attività quotidiane; deambula con deambulatore."
+       },
+       {
+        "descrizione": "Non lesioni da pressione."
+       }
+      ],
+      "cameraNumero": "",
+      "dataRicovero": "2026-11-09",
+      "diarioMedico": [
+       {
+        "ora": "",
+        "data": "2026-11-09",
+        "descrizione": "All'ingresso paziente dispnoico. Rx torace: congestione polmonare bilaterale con versamento pleurico basale destro. Ecocardiogramma: FE 35%, ipocinesia anteriore, insufficienza mitralica moderata."
+       },
+       {
+        "ora": "",
+        "data": "",
+        "descrizione": "Avviata terapia diuretica endovenosa con progressivo miglioramento del compenso e calo ponderale di 5 kg. Ottimizzata la terapia per lo scompenso. Buon controllo della frequenza ventricolare."
+       },
+       {
+        "ora": "",
+        "data": "2026-11-18",
+        "medico": "Dott. Andrea Morelli",
+        "descrizione": "Alla dimissione paziente eupnoico a riposo, apiretico, vigile e orientato. Deambula con deambulatore, parzialmente autonomo nelle attività quotidiane (Barthel 60/100). Non lesioni da pressione."
+       }
+      ],
+      "ipertensione": true,
+      "noteGenerali": "Documento di prova senza valore clinico. Dimissione verso struttura residenziale per riabilitazione.",
+      "codiceFiscale": "BNCGNN41R07A944W",
+      "medicoCurante": "Dott.ssa Laura Conti",
+      "presaInCarico": {
+       "destinazione": "Struttura residenziale per riabilitazione",
+       "nomeStruttura": ""
+      },
+      "statoRicovero": "Dimesso",
+      "dataDimissione": "2026-11-18",
+      "parametriVitali": [
+       {
+        "stato": "",
+        "unita": "mmHg",
+        "valore": "150/90",
+        "etichetta": "Pressione arteriosa all'ingresso"
+       },
+       {
+        "note": "Aritmico",
+        "stato": "",
+        "unita": "bpm",
+        "valore": "104",
+        "etichetta": "Frequenza cardiaca all'ingresso"
+       },
+       {
+        "stato": "",
+        "unita": "%",
+        "valore": "89",
+        "etichetta": "SpO2 all'ingresso in aria ambiente"
+       },
+       {
+        "stato": "",
+        "unita": "kg",
+        "valore": "82",
+        "etichetta": "Peso all'ingresso"
+       },
+       {
+        "stato": "",
+        "unita": "pg/mL",
+        "valore": "6840",
+        "etichetta": "NT-proBNP"
+       },
+       {
+        "stato": "",
+        "unita": "mg/dL",
+        "valore": "1,9",
+        "etichetta": "Creatinina"
+       },
+       {
+        "stato": "",
+        "unita": "mL/min",
+        "valore": "34",
+        "etichetta": "eGFR"
+       },
+       {
+        "stato": "",
+        "unita": "%",
+        "valore": "7,8",
+        "etichetta": "HbA1c"
+       },
+       {
+        "stato": "",
+        "unita": "mEq/L",
+        "valore": "4,4",
+        "etichetta": "Potassio"
+       },
+       {
+        "stato": "",
+        "unita": "%",
+        "valore": "35",
+        "etichetta": "Frazione di eiezione"
+       },
+       {
+        "stato": "",
+        "unita": "mmHg",
+        "valore": "125/75",
+        "etichetta": "Pressione arteriosa alla dimissione"
+       },
+       {
+        "stato": "",
+        "unita": "bpm",
+        "valore": "76",
+        "etichetta": "Frequenza cardiaca alla dimissione"
+       },
+       {
+        "stato": "",
+        "unita": "%",
+        "valore": "96",
+        "etichetta": "SpO2 alla dimissione in aria ambiente"
+       },
+       {
+        "stato": "",
+        "unita": "kg",
+        "valore": "77",
+        "etichetta": "Peso alla dimissione"
+       }
+      ],
+      "indicatoriRischio": [
+       {
+        "tipo": "Rischio di caduta",
+        "livello": "moderato"
+       }
+      ],
+      "patologiaIngresso": ""
+     },
+     "anagrafica": {
+      "nome": "Giovanni",
+      "email": "",
+      "sesso": "M",
+      "cognome": "Bianchi",
+      "telefono": "051 5550177",
+      "indirizzo": "Via Mazzini 22, 40137 Bologna",
+      "dataNascita": "1941-10-07",
+      "contattoEmergenzaTel": "333 5550123",
+      "contattoEmergenzaNome": "Bianchi Marta (figlia)"
+     }
+    },
+    "label": "Lettera 1",
+    "model": "azure:gpt-6.1-sol",
+    "groupId": "bdc6b144-17a7-440d-8026-a732501a316d",
+    "pageIds": [
+     "1cb1aae6-b6c1-4ba8-83c3-e8d26c35a71b",
+     "3c5f9979-d8e1-4a4a-9180-b4d54615e418"
+    ],
+    "rawText": "Azienda Ospedaliera Santa Chiara (dati di prova)\n\nU.O. Medicina Interna 2 — Direttore: Dott. P. Ferri\n\nVia dei Tigli 14, 40100 Bologna — Tel. 051 5550100\n\nCod. documento LD-2026-004471\n\nStampato il 18/11/2026 10:42\n\nPagina 1 di 2\n\n# LETTERA DI DIMISSIONE\n\nCognome e nome: BIANCHI GIOVANNI\n\nNato il: 07/10/1941 a Bologna (BO)\n\nResidenza: Via Mazzini 22, 40137 Bologna\n\nMedico curante: Dott.ssa Laura Conti\n\nData ricovero: 09/11/2026\n\nSesso: M\n\nCodice fiscale: BNCGNN41R07A944W\n\nTelefono: 051 5550177\n\nFamiliare di riferimento: Bianchi Marta (figlia)\n333 5550123\n\nData dimissione: 18/11/2026\n\n# DIAGNOSI ALLA DIMISSIONE\n\nScompenso cardiaco acuto in cardiopatia ischemica cronica (FE 35%). Fibrillazione atriale permanente.\nInsufficienza renale cronica stadio IIIb. Diabete mellito tipo 2 in terapia insulinica. Ipertensione arteriosa.\n\n# ALLERGIE\n\nAllergia nota a PENICILLINA (rash cutaneo). Intolleranza a FANS (gastralgia).\n\n# ANAMNESI PATOLOGICA REMOTA\n\nInfarto miocardico anteriore nel 2015 trattato con PTCA e stent su IVA. Diabete mellito tipo 2 dal 2004.\nIpertensione arteriosa dal 1998. Protesi d'anca destra nel 2019. BPCO lieve, ex fumatore (40 pack/years).\n\n# ANAMNESI PATOLOGICA PROSSIMA\n\nIl paziente giunge in Pronto Soccorso il 09/11/2026 per dispnea ingravescente da circa cinque giorni,\nortopnea ed edemi declivi. Riferisce incremento ponderale di 4 kg nell'ultima settimana e ridotta aderenza\nalla terapia diuretica.\n\n# DECORSO CLINICO\n\nAll'ingresso paziente dispnoico, PA 150/90 mmHg, FC 104 bpm aritmico, SpO2 89% in aria ambiente,\npeso 82 kg. Agli esami: NT-proBNP 6.840 pg/mL, creatinina 1,9 mg/dL, eGFR 34 mL/min, HbA1c 7,8%,\nK 4,4 mEq/L. Rx torace: congestione polmonare bilaterale con versamento pleurico basale destro.\nEcocardiogramma: FE 35%, ipocinesia anteriore, insufficienza mitralica moderata.\n\nAvviata terapia diuretica endovenosa con progressivo miglioramento del compenso e calo ponderale di 5\nkg. Ottimizzata la terapia per lo scompenso. Buon controllo della frequenza ventricolare. Alla dimissione\npaziente eupnoico a riposo, PA 125/75 mmHg, FC 76 bpm, SpO2 96% in aria ambiente, peso 77 kg,\napiretico.\n\nAzienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2 — documento di prova senza valore clinico\n\nLD-2026-004471 — pag. 1/2\n\nAzienda Ospedaliera Santa Chiara (dati di prova)\n\nU.O. Medicina Interna 2 — Direttore: Dott. P. Ferri\n\nVia dei Tigli 14, 40100 Bologna — Tel. 051 5550100\n\nCod. documento LD-2026-004471\n\nStampato il 18/11/2026 10:42\n\nPagina 2 di 2\n\nPaziente: BIANCHI GIOVANNI — nato il 07/10/1941 — CF BNCGNN41R07A944W\n\nTERAPIA DOMICILIARE CONSIGLIATA\n\n|  Farmaco | Dose | Posologia | Via | Note  |\n| --- | --- | --- | --- | --- |\n|  Furosemide (Lasix) 25 mg cpr | 50 mg | 2 cpr ore 8, 1 cpr ore 14 | os | controllo peso quotidiano  |\n|  Bisoprololo 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 | os |   |\n|  Ramipril 5 mg cpr | 5 mg | 1 cpr ore 20 | os | controllo creatinina e potassio  |\n|  Apixaban (Eliquis) 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 e ore 20 | os |   |\n|  Spironolattone 25 mg cpr | 25 mg | 1 cpr ore 12 | os |   |\n|  Atorvastatina 40 mg cpr | 40 mg | 1 cpr ore 22 | os |   |\n|  Insulina glargine (Lantus) | 18 UI | ore 22 | sc | secondo glicemie  |\n|  Insulina lispro (Humalog) | 6 UI | ai tre pasti principali | sc | secondo schema  |\n|  Pantoprazolo 20 mg cpr | 20 mg | 1 cpr ore 7 a digiuno | os |   |\n|  Tiotropio 18 mcg cps inalatoria | 18 mcg | 1 inalazione ore 8 | inalatoria |   |\n\n# CONSIGLI E CONTROLLI\n\nDieta iposodica e ipoglucidica, restrizione idrica a 1,5 litri al giorno. Controllo del peso corporeo ogni mattina: contattare il medico se aumento superiore a 2 kg in tre giorni. Esami ematici (creatinina, elettroliti, emocromo) tra 7 giorni. Visita cardiologica di controllo il 02/12/2026 ore 9:30 presso Ambulatorio Scompenso. Visita diabetologica entro un mese.\n\n# CONDIZIONI ALLA DIMISSIONE\n\nPaziente vigile, orientato, deambula con deambulatore, parzialmente autonomo nelle attività quotidiane (Barthel 60/100). Non lesioni da pressione. Rischio di caduta moderato. Si dimette verso struttura residenziale per riabilitazione.\n\nBologna, 18/11/2026\n\nIl medico dimettente: Dott. Andrea Morelli\n\nAzienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2 — documento di prova senza valore clinico\n\nLD-2026-004471 — pag. 2/2",
+    "_sections": null,
+    "inputHash": "8c6b71e14edf1510c59d94967a33ae977c692466a70f2d03b037099599768491",
+    "_narrative": {
+     "sex": "M",
+     "email": "",
+     "phone": "",
+     "address": "",
+     "boldTags": [],
+     "lastName": "Bianchi",
+     "warnings": [],
+     "firstName": "Giovanni",
+     "fiscalCode": "BNCGNN41R07A944W",
+     "dateOfBirth": "1941-10-07",
+     "therapyText": "TERAPIA DOMICILIARE CONSIGLIATA\n\n|  Farmaco | Dose | Posologia | Via | Note  |\n| --- | --- | --- | --- | --- |\n|  Furosemide (Lasix) 25 mg cpr | 50 mg | 2 cpr ore 8, 1 cpr ore 14 | os | controllo peso quotidiano  |\n|  Bisoprololo 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 | os |   |\n|  Ramipril 5 mg cpr | 5 mg | 1 cpr ore 20 | os | controllo creatinina e potassio  |\n|  Apixaban (Eliquis) 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 e ore 20 | os |   |\n|  Spironolattone 25 mg cpr | 25 mg | 1 cpr ore 12 | os |   |\n|  Atorvastatina 40 mg cpr | 40 mg | 1 cpr ore 22 | os |   |\n|  Insulina glargine (Lantus) | 18 UI | ore 22 | sc | secondo glicemie  |\n|  Insulina lispro (Humalog) | 6 UI | ai tre pasti principali | sc | secondo schema  |\n|  Pantoprazolo 20 mg cpr | 20 mg | 1 cpr ore 7 a digiuno | os |   |\n|  Tiotropio 18 mcg cps inalatoria | 18 mcg | 1 inalazione ore 8 | inalatoria |   |",
+     "placeOfBirth": "",
+     "unmappedText": "",
+     "allergiesText": "# ALLERGIE\n\nAllergia nota a PENICILLINA (rash cutaneo). Intolleranza a FANS (gastralgia).",
+     "allergyStatus": "present",
+     "anamnesisText": "# ANAMNESI PATOLOGICA REMOTA\n\nInfarto miocardico anteriore nel 2015 trattato con PTCA e stent su IVA. Diabete mellito tipo 2 dal 2004.\nIpertensione arteriosa dal 1998. Protesi d'anca destra nel 2019. BPCO lieve, ex fumatore (40 pack/years).\n\n# ANAMNESI PATOLOGICA PROSSIMA\n\nIl paziente giunge in Pronto Soccorso il 09/11/2026 per dispnea ingravescente da circa cinque giorni,\nortopnea ed edemi declivi. Riferisce incremento ponderale di 4 kg nell'ultima settimana e ridotta aderenza\nalla terapia diuretica.",
+     "diagnosisText": "# DIAGNOSI ALLA DIMISSIONE\n\nScompenso cardiaco acuto in cardiopatia ischemica cronica (FE 35%). Fibrillazione atriale permanente.\nInsufficienza renale cronica stadio IIIb. Diabete mellito tipo 2 in terapia insulinica. Ipertensione arteriosa.",
+     "schemaVersion": "clinicos-discharge-narrative-v1",
+     "missingSections": [
+      "CONSULENZE",
+      "DIAGNOSTICA_PER_IMMAGINI",
+      "PRESTAZIONI_E_INTERVENTI"
+     ],
+     "sourceReferences": [
+      {
+       "fileId": "bdc6b144-17a7-440d-8026-a732501a316d",
+       "fileName": "Lettera 1",
+       "sectionKey": "DIAGNOSI"
+      },
+      {
+       "fileId": "bdc6b144-17a7-440d-8026-a732501a316d",
+       "fileName": "Lettera 1",
+       "sectionKey": "ANAMNESI"
+      },
+      {
+       "fileId": "bdc6b144-17a7-440d-8026-a732501a316d",
+       "fileName": "Lettera 1",
+       "sectionKey": "DECORSO_OSPEDALIERO"
+      },
+      {
+       "fileId": "bdc6b144-17a7-440d-8026-a732501a316d",
+       "fileName": "Lettera 1",
+       "sectionKey": "TERAPIA"
+      },
+      {
+       "fileId": "bdc6b144-17a7-440d-8026-a732501a316d",
+       "fileName": "Lettera 1",
+       "sectionKey": "CONSIGLI_E_CONTROLLI"
+      },
+      {
+       "fileId": "bdc6b144-17a7-440d-8026-a732501a316d",
+       "fileName": "Lettera 1",
+       "sectionKey": "ALLERGIE"
+      }
+     ],
+     "consultationsText": "",
+     "hospitalCourseText": "# DECORSO CLINICO\n\nAll'ingresso paziente dispnoico, PA 150/90 mmHg, FC 104 bpm aritmico, SpO2 89% in aria ambiente,\npeso 82 kg. Agli esami: NT-proBNP 6.840 pg/mL, creatinina 1,9 mg/dL, eGFR 34 mL/min, HbA1c 7,8%,\nK 4,4 mEq/L. Rx torace: congestione polmonare bilaterale con versamento pleurico basale destro.\nEcocardiogramma: FE 35%, ipocinesia anteriore, insufficienza mitralica moderata.\n\nAvviata terapia diuretica endovenosa con progressivo miglioramento del compenso e calo ponderale di 5\nkg. Ottimizzata la terapia per lo scompenso. Buon controllo della frequenza ventricolare. Alla dimissione\npaziente eupnoico a riposo, PA 125/75 mmHg, FC 76 bpm, SpO2 96% in aria ambiente, peso 77 kg,\napiretico.\n\nAzienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2 — documento di prova senza valore clinico\n\nLD-2026-004471 — pag. 1/2\n\nAzienda Ospedaliera Santa Chiara (dati di prova)\n\nU.O. Medicina Interna 2 — Direttore: Dott. P. Ferri\n\nVia dei Tigli 14, 40100 Bologna — Tel. 051 5550100\n\nCod. documento LD-2026-004471\n\nStampato il 18/11/2026 10:42\n\n--- Pagina 2/2 ---\n\nPaziente: BIANCHI GIOVANNI — nato il 07/10/1941 — CF BNCGNN41R07A944W",
+     "adviceAndFollowUpText": "# CONSIGLI E CONTROLLI\n\nDieta iposodica e ipoglucidica, restrizione idrica a 1,5 litri al giorno. Controllo del peso corporeo ogni mattina: contattare il medico se aumento superiore a 2 kg in tre giorni. Esami ematici (creatinina, elettroliti, emocromo) tra 7 giorni. Visita cardiologica di controllo il 02/12/2026 ore 9:30 presso Ambulatorio Scompenso. Visita diabetologica entro un mese.\n\n# CONDIZIONI ALLA DIMISSIONE\n\nPaziente vigile, orientato, deambula con deambulatore, parzialmente autonomo nelle attività quotidiane (Barthel 60/100). Non lesioni da pressione. Rischio di caduta moderato. Si dimette verso struttura residenziale per riabilitazione.\n\nBologna, 18/11/2026\n\nIl medico dimettente: Dott. Andrea Morelli\n\nAzienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2 — documento di prova senza valore clinico\n\nLD-2026-004471 — pag. 2/2",
+     "imagingDiagnosticsText": "",
+     "proceduresAndInterventionsText": ""
+    },
+    "cleanedRawText": "Azienda Ospedaliera Santa Chiara (dati di prova)\n\nU.O. Medicina Interna 2 — Direttore: Dott. P. Ferri\n\nVia dei Tigli 14, 40100 Bologna — Tel. 051 5550100\n\nCod. documento LD-2026-004471\n\nStampato il 18/11/2026 10:42\n\n--- Pagina 1/2 ---\n\n# LETTERA DI DIMISSIONE\n\nCognome e nome: BIANCHI GIOVANNI\n\nNato il: 07/10/1941 a Bologna (BO)\n\nResidenza: Via Mazzini 22, 40137 Bologna\n\nMedico curante: Dott.ssa Laura Conti\n\nData ricovero: 09/11/2026\n\nSesso: M\n\nCodice fiscale: BNCGNN41R07A944W\n\nTelefono: 051 5550177\n\nFamiliare di riferimento: Bianchi Marta (figlia)\n333 5550123\n\nData dimissione: 18/11/2026\n\n# DIAGNOSI ALLA DIMISSIONE\n\nScompenso cardiaco acuto in cardiopatia ischemica cronica (FE 35%). Fibrillazione atriale permanente.\nInsufficienza renale cronica stadio IIIb. Diabete mellito tipo 2 in terapia insulinica. Ipertensione arteriosa.\n\n# ALLERGIE\n\nAllergia nota a PENICILLINA (rash cutaneo). Intolleranza a FANS (gastralgia).\n\n# ANAMNESI PATOLOGICA REMOTA\n\nInfarto miocardico anteriore nel 2015 trattato con PTCA e stent su IVA. Diabete mellito tipo 2 dal 2004.\nIpertensione arteriosa dal 1998. Protesi d'anca destra nel 2019. BPCO lieve, ex fumatore (40 pack/years).\n\n# ANAMNESI PATOLOGICA PROSSIMA\n\nIl paziente giunge in Pronto Soccorso il 09/11/2026 per dispnea ingravescente da circa cinque giorni,\nortopnea ed edemi declivi. Riferisce incremento ponderale di 4 kg nell'ultima settimana e ridotta aderenza\nalla terapia diuretica.\n\n# DECORSO CLINICO\n\nAll'ingresso paziente dispnoico, PA 150/90 mmHg, FC 104 bpm aritmico, SpO2 89% in aria ambiente,\npeso 82 kg. Agli esami: NT-proBNP 6.840 pg/mL, creatinina 1,9 mg/dL, eGFR 34 mL/min, HbA1c 7,8%,\nK 4,4 mEq/L. Rx torace: congestione polmonare bilaterale con versamento pleurico basale destro.\nEcocardiogramma: FE 35%, ipocinesia anteriore, insufficienza mitralica moderata.\n\nAvviata terapia diuretica endovenosa con progressivo miglioramento del compenso e calo ponderale di 5\nkg. Ottimizzata la terapia per lo scompenso. Buon controllo della frequenza ventricolare. Alla dimissione\npaziente eupnoico a riposo, PA 125/75 mmHg, FC 76 bpm, SpO2 96% in aria ambiente, peso 77 kg,\napiretico.\n\nAzienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2 — documento di prova senza valore clinico\n\nLD-2026-004471 — pag. 1/2\n\nAzienda Ospedaliera Santa Chiara (dati di prova)\n\nU.O. Medicina Interna 2 — Direttore: Dott. P. Ferri\n\nVia dei Tigli 14, 40100 Bologna — Tel. 051 5550100\n\nCod. documento LD-2026-004471\n\nStampato il 18/11/2026 10:42\n\n--- Pagina 2/2 ---\n\nPaziente: BIANCHI GIOVANNI — nato il 07/10/1941 — CF BNCGNN41R07A944W\n\nTERAPIA DOMICILIARE CONSIGLIATA\n\n|  Farmaco | Dose | Posologia | Via | Note  |\n| --- | --- | --- | --- | --- |\n|  Furosemide (Lasix) 25 mg cpr | 50 mg | 2 cpr ore 8, 1 cpr ore 14 | os | controllo peso quotidiano  |\n|  Bisoprololo 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 | os |   |\n|  Ramipril 5 mg cpr | 5 mg | 1 cpr ore 20 | os | controllo creatinina e potassio  |\n|  Apixaban (Eliquis) 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 e ore 20 | os |   |\n|  Spironolattone 25 mg cpr | 25 mg | 1 cpr ore 12 | os |   |\n|  Atorvastatina 40 mg cpr | 40 mg | 1 cpr ore 22 | os |   |\n|  Insulina glargine (Lantus) | 18 UI | ore 22 | sc | secondo glicemie  |\n|  Insulina lispro (Humalog) | 6 UI | ai tre pasti principali | sc | secondo schema  |\n|  Pantoprazolo 20 mg cpr | 20 mg | 1 cpr ore 7 a digiuno | os |   |\n|  Tiotropio 18 mcg cps inalatoria | 18 mcg | 1 inalazione ore 8 | inalatoria |   |\n\n# CONSIGLI E CONTROLLI\n\nDieta iposodica e ipoglucidica, restrizione idrica a 1,5 litri al giorno. Controllo del peso corporeo ogni mattina: contattare il medico se aumento superiore a 2 kg in tre giorni. Esami ematici (creatinina, elettroliti, emocromo) tra 7 giorni. Visita cardiologica di controllo il 02/12/2026 ore 9:30 presso Ambulatorio Scompenso. Visita diabetologica entro un mese.\n\n# CONDIZIONI ALLA DIMISSIONE\n\nPaziente vigile, orientato, deambula con deambulatore, parzialmente autonomo nelle attività quotidiane (Barthel 60/100). Non lesioni da pressione. Rischio di caduta moderato. Si dimette verso struttura residenziale per riabilitazione.\n\nBologna, 18/11/2026\n\nIl medico dimettente: Dott. Andrea Morelli\n\nAzienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2 — documento di prova senza valore clinico\n\nLD-2026-004471 — pag. 2/2"
+   }
+  ],
+  "_review": {
+   "decisions": [],
+   "unresolvedConflictIds": []
+  },
+  "_source": {
+   "resultHash": "44df2e7c652e6ec24ad2a92c69b0c191041ce066fc34cf97df63c4b15faf5804",
+   "manifestRevision": 2
+  },
+  "rawText": "[Lettera 1]\nAzienda Ospedaliera Santa Chiara (dati di prova)\n\nU.O. Medicina Interna 2 — Direttore: Dott. P. Ferri\n\nVia dei Tigli 14, 40100 Bologna — Tel. 051 5550100\n\nCod. documento LD-2026-004471\n\nStampato il 18/11/2026 10:42\n\nPagina 1 di 2\n\n# LETTERA DI DIMISSIONE\n\nCognome e nome: BIANCHI GIOVANNI\n\nNato il: 07/10/1941 a Bologna (BO)\n\nResidenza: Via Mazzini 22, 40137 Bologna\n\nMedico curante: Dott.ssa Laura Conti\n\nData ricovero: 09/11/2026\n\nSesso: M\n\nCodice fiscale: BNCGNN41R07A944W\n\nTelefono: 051 5550177\n\nFamiliare di riferimento: Bianchi Marta (figlia)\n333 5550123\n\nData dimissione: 18/11/2026\n\n# DIAGNOSI ALLA DIMISSIONE\n\nScompenso cardiaco acuto in cardiopatia ischemica cronica (FE 35%). Fibrillazione atriale permanente.\nInsufficienza renale cronica stadio IIIb. Diabete mellito tipo 2 in terapia insulinica. Ipertensione arteriosa.\n\n# ALLERGIE\n\nAllergia nota a PENICILLINA (rash cutaneo). Intolleranza a FANS (gastralgia).\n\n# ANAMNESI PATOLOGICA REMOTA\n\nInfarto miocardico anteriore nel 2015 trattato con PTCA e stent su IVA. Diabete mellito tipo 2 dal 2004.\nIpertensione arteriosa dal 1998. Protesi d'anca destra nel 2019. BPCO lieve, ex fumatore (40 pack/years).\n\n# ANAMNESI PATOLOGICA PROSSIMA\n\nIl paziente giunge in Pronto Soccorso il 09/11/2026 per dispnea ingravescente da circa cinque giorni,\nortopnea ed edemi declivi. Riferisce incremento ponderale di 4 kg nell'ultima settimana e ridotta aderenza\nalla terapia diuretica.\n\n# DECORSO CLINICO\n\nAll'ingresso paziente dispnoico, PA 150/90 mmHg, FC 104 bpm aritmico, SpO2 89% in aria ambiente,\npeso 82 kg. Agli esami: NT-proBNP 6.840 pg/mL, creatinina 1,9 mg/dL, eGFR 34 mL/min, HbA1c 7,8%,\nK 4,4 mEq/L. Rx torace: congestione polmonare bilaterale con versamento pleurico basale destro.\nEcocardiogramma: FE 35%, ipocinesia anteriore, insufficienza mitralica moderata.\n\nAvviata terapia diuretica endovenosa con progressivo miglioramento del compenso e calo ponderale di 5\nkg. Ottimizzata la terapia per lo scompenso. Buon controllo della frequenza ventricolare. Alla dimissione\npaziente eupnoico a riposo, PA 125/75 mmHg, FC 76 bpm, SpO2 96% in aria ambiente, peso 77 kg,\napiretico.\n\nAzienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2 — documento di prova senza valore clinico\n\nLD-2026-004471 — pag. 1/2\n\nAzienda Ospedaliera Santa Chiara (dati di prova)\n\nU.O. Medicina Interna 2 — Direttore: Dott. P. Ferri\n\nVia dei Tigli 14, 40100 Bologna — Tel. 051 5550100\n\nCod. documento LD-2026-004471\n\nStampato il 18/11/2026 10:42\n\nPagina 2 di 2\n\nPaziente: BIANCHI GIOVANNI — nato il 07/10/1941 — CF BNCGNN41R07A944W\n\nTERAPIA DOMICILIARE CONSIGLIATA\n\n|  Farmaco | Dose | Posologia | Via | Note  |\n| --- | --- | --- | --- | --- |\n|  Furosemide (Lasix) 25 mg cpr | 50 mg | 2 cpr ore 8, 1 cpr ore 14 | os | controllo peso quotidiano  |\n|  Bisoprololo 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 | os |   |\n|  Ramipril 5 mg cpr | 5 mg | 1 cpr ore 20 | os | controllo creatinina e potassio  |\n|  Apixaban (Eliquis) 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 e ore 20 | os |   |\n|  Spironolattone 25 mg cpr | 25 mg | 1 cpr ore 12 | os |   |\n|  Atorvastatina 40 mg cpr | 40 mg | 1 cpr ore 22 | os |   |\n|  Insulina glargine (Lantus) | 18 UI | ore 22 | sc | secondo glicemie  |\n|  Insulina lispro (Humalog) | 6 UI | ai tre pasti principali | sc | secondo schema  |\n|  Pantoprazolo 20 mg cpr | 20 mg | 1 cpr ore 7 a digiuno | os |   |\n|  Tiotropio 18 mcg cps inalatoria | 18 mcg | 1 inalazione ore 8 | inalatoria |   |\n\n# CONSIGLI E CONTROLLI\n\nDieta iposodica e ipoglucidica, restrizione idrica a 1,5 litri al giorno. Controllo del peso corporeo ogni mattina: contattare il medico se aumento superiore a 2 kg in tre giorni. Esami ematici (creatinina, elettroliti, emocromo) tra 7 giorni. Visita cardiologica di controllo il 02/12/2026 ore 9:30 presso Ambulatorio Scompenso. Visita diabetologica entro un mese.\n\n# CONDIZIONI ALLA DIMISSIONE\n\nPaziente vigile, orientato, deambula con deambulatore, parzialmente autonomo nelle attività quotidiane (Barthel 60/100). Non lesioni da pressione. Rischio di caduta moderato. Si dimette verso struttura residenziale per riabilitazione.\n\nBologna, 18/11/2026\n\nIl medico dimettente: Dott. Andrea Morelli\n\nAzienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2 — documento di prova senza valore clinico\n\nLD-2026-004471 — pag. 2/2",
+  "cartella": {
+   "farmaci": {
+    "items": [
+     {
+      "key": "furosemide (lasix) 25 mg cpr",
+      "value": {
+       "via": "orale",
+       "dose": "50 mg",
+       "nome": "Furosemide (Lasix) 25 mg cpr",
+       "note": "Terapia domiciliare consigliata; controllo peso quotidiano.",
+       "stato": "",
+       "frequenza": "2 cpr alle 08:00, 1 cpr alle 14:00"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"nome\":\"Furosemide (Lasix) 25 mg cpr\",\"dose\":\"50 mg\",\"frequenza\":\"2 cpr alle 08:00, 1 cpr alle 14:00\",\"via\":\"orale\",\"st…",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "bisoprololo 2,5 mg cpr",
+      "value": {
+       "via": "orale",
+       "dose": "2,5 mg",
+       "nome": "Bisoprololo 2,5 mg cpr",
+       "note": "Terapia domiciliare consigliata.",
+       "stato": "",
+       "frequenza": "1 cpr alle 08:00"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"nome\":\"Bisoprololo 2,5 mg cpr\",\"dose\":\"2,5 mg\",\"frequenza\":\"1 cpr alle 08:00\",\"via\":\"orale\",\"stato\":\"\",\"note\":\"Terapia…",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "ramipril 5 mg cpr",
+      "value": {
+       "via": "orale",
+       "dose": "5 mg",
+       "nome": "Ramipril 5 mg cpr",
+       "note": "Terapia domiciliare consigliata; controllo creatinina e potassio.",
+       "stato": "",
+       "frequenza": "1 cpr alle 20:00"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"nome\":\"Ramipril 5 mg cpr\",\"dose\":\"5 mg\",\"frequenza\":\"1 cpr alle 20:00\",\"via\":\"orale\",\"stato\":\"\",\"note\":\"Terapia domici…",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "apixaban (eliquis) 2,5 mg cpr",
+      "value": {
+       "via": "orale",
+       "dose": "2,5 mg",
+       "nome": "Apixaban (Eliquis) 2,5 mg cpr",
+       "note": "Terapia domiciliare consigliata.",
+       "stato": "",
+       "frequenza": "1 cpr alle 08:00 e alle 20:00"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"nome\":\"Apixaban (Eliquis) 2,5 mg cpr\",\"dose\":\"2,5 mg\",\"frequenza\":\"1 cpr alle 08:00 e alle 20:00\",\"via\":\"orale\",\"stato…",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "spironolattone 25 mg cpr",
+      "value": {
+       "via": "orale",
+       "dose": "25 mg",
+       "nome": "Spironolattone 25 mg cpr",
+       "note": "Terapia domiciliare consigliata.",
+       "stato": "",
+       "frequenza": "1 cpr alle 12:00"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"nome\":\"Spironolattone 25 mg cpr\",\"dose\":\"25 mg\",\"frequenza\":\"1 cpr alle 12:00\",\"via\":\"orale\",\"stato\":\"\",\"note\":\"Terapi…",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "atorvastatina 40 mg cpr",
+      "value": {
+       "via": "orale",
+       "dose": "40 mg",
+       "nome": "Atorvastatina 40 mg cpr",
+       "note": "Terapia domiciliare consigliata.",
+       "stato": "",
+       "frequenza": "1 cpr alle 22:00"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"nome\":\"Atorvastatina 40 mg cpr\",\"dose\":\"40 mg\",\"frequenza\":\"1 cpr alle 22:00\",\"via\":\"orale\",\"stato\":\"\",\"note\":\"Terapia…",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "insulina glargine (lantus)",
+      "value": {
+       "via": "sc",
+       "dose": "18 UI",
+       "nome": "Insulina glargine (Lantus)",
+       "note": "Terapia domiciliare consigliata; secondo glicemie.",
+       "stato": "",
+       "frequenza": "Alle 22:00"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"nome\":\"Insulina glargine (Lantus)\",\"dose\":\"18 UI\",\"frequenza\":\"Alle 22:00\",\"via\":\"sc\",\"stato\":\"\",\"note\":\"Terapia domic…",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "insulina lispro (humalog)",
+      "value": {
+       "via": "sc",
+       "dose": "6 UI",
+       "nome": "Insulina lispro (Humalog)",
+       "note": "Terapia domiciliare consigliata; secondo schema.",
+       "stato": "",
+       "frequenza": "Ai tre pasti principali"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"nome\":\"Insulina lispro (Humalog)\",\"dose\":\"6 UI\",\"frequenza\":\"Ai tre pasti principali\",\"via\":\"sc\",\"stato\":\"\",\"note\":\"Te…",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "pantoprazolo 20 mg cpr",
+      "value": {
+       "via": "orale",
+       "dose": "20 mg",
+       "nome": "Pantoprazolo 20 mg cpr",
+       "note": "Terapia domiciliare consigliata.",
+       "stato": "",
+       "frequenza": "1 cpr alle 07:00 a digiuno"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"nome\":\"Pantoprazolo 20 mg cpr\",\"dose\":\"20 mg\",\"frequenza\":\"1 cpr alle 07:00 a digiuno\",\"via\":\"orale\",\"stato\":\"\",\"note\"…",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "tiotropio 18 mcg cps inalatoria",
+      "value": {
+       "via": "",
+       "dose": "18 mcg",
+       "nome": "Tiotropio 18 mcg cps inalatoria",
+       "note": "Terapia domiciliare consigliata.",
+       "stato": "",
+       "frequenza": "1 inalazione alle 08:00",
+       "viaOriginale": "inalatoria"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"nome\":\"Tiotropio 18 mcg cps inalatoria\",\"dose\":\"18 mcg\",\"frequenza\":\"1 inalazione alle 08:00\",\"via\":\"\",\"viaOriginale\":…",
+        "filename": "Lettera 1"
+       }
+      ]
+     }
+    ],
+    "status": "extracted",
+    "duplicatesRemoved": 0
+   },
+   "terapie": {
+    "items": [
+     {
+      "key": "altra|dieta iposodica e ipoglucidica",
+      "value": {
+       "tipo": "altra",
+       "stato": "",
+       "descrizione": "Dieta iposodica e ipoglucidica"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"tipo\":\"altra\",\"descrizione\":\"Dieta iposodica e ipoglucidica\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "altra|restrizione idrica a 1,5 litri al giorno",
+      "value": {
+       "tipo": "altra",
+       "stato": "",
+       "descrizione": "Restrizione idrica a 1,5 litri al giorno"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"tipo\":\"altra\",\"descrizione\":\"Restrizione idrica a 1,5 litri al giorno\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "riabilitativa|dimissione verso struttura residenziale per riabilitazione",
+      "value": {
+       "tipo": "riabilitativa",
+       "stato": "",
+       "descrizione": "Dimissione verso struttura residenziale per riabilitazione"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"tipo\":\"riabilitativa\",\"descrizione\":\"Dimissione verso struttura residenziale per riabilitazione\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     }
+    ],
+    "status": "extracted",
+    "duplicatesRemoved": 0
+   },
+   "allergie": {
+    "items": [
+     {
+      "key": "penicillina",
+      "value": {
+       "gravita": "",
+       "reazione": "Rash cutaneo",
+       "allergene": "Penicillina"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"allergene\":\"Penicillina\",\"reazione\":\"Rash cutaneo\",\"gravita\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "fans",
+      "value": {
+       "tipo": "Intolleranza",
+       "gravita": "",
+       "reazione": "Gas tralgia (intolleranza)",
+       "allergene": "FANS"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"allergene\":\"FANS\",\"reazione\":\"Gas tralgia (intolleranza)\",\"gravita\":\"\",\"tipo\":\"Intolleranza\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     }
+    ],
+    "status": "extracted",
+    "duplicatesRemoved": 0
+   },
+   "diagnosi": {
+    "items": [
+     {
+      "key": "|scompenso cardiaco acuto in cardiopatia ischemica cronica (fe 35%)",
+      "value": {
+       "tipo": "",
+       "stato": "",
+       "codiceICD": "",
+       "descrizione": "Scompenso cardiaco acuto in cardiopatia ischemica cronica (FE 35%)"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"codiceICD\":\"\",\"descrizione\":\"Scompenso cardiaco acuto in cardiopatia ischemica cronica (FE 35%)\",\"tipo\":\"\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "|fibrillazione atriale permanente",
+      "value": {
+       "tipo": "",
+       "stato": "",
+       "codiceICD": "",
+       "descrizione": "Fibrillazione atriale permanente"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"codiceICD\":\"\",\"descrizione\":\"Fibrillazione atriale permanente\",\"tipo\":\"\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "|insufficienza renale cronica stadio iiib",
+      "value": {
+       "tipo": "",
+       "stato": "",
+       "codiceICD": "",
+       "descrizione": "Insufficienza renale cronica stadio IIIb"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"codiceICD\":\"\",\"descrizione\":\"Insufficienza renale cronica stadio IIIb\",\"tipo\":\"\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "|diabete mellito tipo 2 in terapia insulinica, dal 2004",
+      "value": {
+       "tipo": "",
+       "stato": "",
+       "codiceICD": "",
+       "descrizione": "Diabete mellito tipo 2 in terapia insulinica, dal 2004"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"codiceICD\":\"\",\"descrizione\":\"Diabete mellito tipo 2 in terapia insulinica, dal 2004\",\"tipo\":\"\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "|ipertensione arteriosa dal 1998",
+      "value": {
+       "tipo": "",
+       "stato": "",
+       "codiceICD": "",
+       "descrizione": "Ipertensione arteriosa dal 1998"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"codiceICD\":\"\",\"descrizione\":\"Ipertensione arteriosa dal 1998\",\"tipo\":\"\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "|infarto miocardico anteriore nel 2015, trattato con ptca e stent su iva",
+      "value": {
+       "tipo": "",
+       "stato": "",
+       "codiceICD": "",
+       "descrizione": "Infarto miocardico anteriore nel 2015, trattato con PTCA e stent su IVA"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"codiceICD\":\"\",\"descrizione\":\"Infarto miocardico anteriore nel 2015, trattato con PTCA e stent su IVA\",\"tipo\":\"\",\"stato…",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "|bpco lieve",
+      "value": {
+       "tipo": "",
+       "stato": "",
+       "codiceICD": "",
+       "descrizione": "BPCO lieve"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"codiceICD\":\"\",\"descrizione\":\"BPCO lieve\",\"tipo\":\"\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "|insufficienza mitralica moderata",
+      "value": {
+       "tipo": "",
+       "stato": "",
+       "codiceICD": "",
+       "descrizione": "Insufficienza mitralica moderata"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"codiceICD\":\"\",\"descrizione\":\"Insufficienza mitralica moderata\",\"tipo\":\"\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     }
+    ],
+    "status": "extracted",
+    "duplicatesRemoved": 0
+   },
+   "lettoNumero": {
+    "value": "",
+    "status": "missing",
+    "sources": []
+   },
+   "noteClinica": {
+    "items": [],
+    "status": "missing",
+    "duplicatesRemoved": 0
+   },
+   "cameraNumero": {
+    "value": "",
+    "status": "missing",
+    "sources": []
+   },
+   "dataRicovero": {
+    "value": "2026-11-09",
+    "status": "extracted",
+    "sources": [
+     {
+      "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+      "model": "azure:gpt-6.1-sol",
+      "snippet": "2026-11-09",
+      "filename": "Lettera 1"
+     }
+    ]
+   },
+   "diarioMedico": {
+    "items": [
+     {
+      "key": "2026-11-09|",
+      "value": {
+       "ora": "",
+       "data": "2026-11-09",
+       "descrizione": "All'ingresso paziente dispnoico. Rx torace: congestione polmonare bilaterale con versamento pleurico basale destro. Ecocardiogramma: FE 35%, ipocinesia anteriore, insufficienza mitralica moderata."
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"data\":\"2026-11-09\",\"ora\":\"\",\"descrizione\":\"All'ingresso paziente dispnoico. Rx torace: congestione polmonare bilateral…",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "2026-11-18|",
+      "value": {
+       "ora": "",
+       "data": "2026-11-18",
+       "medico": "Dott. Andrea Morelli",
+       "descrizione": "Alla dimissione paziente eupnoico a riposo, apiretico, vigile e orientato. Deambula con deambulatore, parzialmente autonomo nelle attività quotidiane (Barthel 60/100). Non lesioni da pressione."
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"data\":\"2026-11-18\",\"ora\":\"\",\"descrizione\":\"Alla dimissione paziente eupnoico a riposo, apiretico, vigile e orientato. …",
+        "filename": "Lettera 1"
+       }
+      ]
+     }
+    ],
+    "status": "extracted",
+    "duplicatesRemoved": 0
+   },
+   "noteGenerali": {
+    "value": "Documento di prova senza valore clinico. Dimissione verso struttura residenziale per riabilitazione.",
+    "status": "extracted",
+    "sources": [
+     {
+      "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+      "model": "azure:gpt-6.1-sol",
+      "snippet": "Documento di prova senza valore clinico. Dimissione verso struttura residenziale per riabilitazione.",
+      "filename": "Lettera 1"
+     }
+    ]
+   },
+   "codiceFiscale": {
+    "value": "BNCGNN41R07A944W",
+    "status": "extracted",
+    "sources": [
+     {
+      "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+      "model": "azure:gpt-6.1-sol",
+      "snippet": "BNCGNN41R07A944W",
+      "filename": "Lettera 1"
+     }
+    ]
+   },
+   "medicoCurante": {
+    "value": "Dott.ssa Laura Conti",
+    "status": "extracted",
+    "sources": [
+     {
+      "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+      "model": "azure:gpt-6.1-sol",
+      "snippet": "Dott.ssa Laura Conti",
+      "filename": "Lettera 1"
+     }
+    ]
+   },
+   "statoRicovero": {
+    "value": "Dimesso",
+    "status": "extracted",
+    "sources": [
+     {
+      "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+      "model": "azure:gpt-6.1-sol",
+      "snippet": "Dimesso",
+      "filename": "Lettera 1"
+     }
+    ]
+   },
+   "parametriVitali": {
+    "items": [
+     {
+      "key": "pressione arteriosa all'ingresso|",
+      "value": {
+       "stato": "",
+       "unita": "mmHg",
+       "valore": "150/90",
+       "etichetta": "Pressione arteriosa all'ingresso"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"Pressione arteriosa all'ingresso\",\"valore\":\"150/90\",\"unita\":\"mmHg\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "frequenza cardiaca all'ingresso|",
+      "value": {
+       "note": "Aritmico",
+       "stato": "",
+       "unita": "bpm",
+       "valore": "104",
+       "etichetta": "Frequenza cardiaca all'ingresso"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"Frequenza cardiaca all'ingresso\",\"valore\":\"104\",\"unita\":\"bpm\",\"stato\":\"\",\"note\":\"Aritmico\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "spo2 all'ingresso in aria ambiente|",
+      "value": {
+       "stato": "",
+       "unita": "%",
+       "valore": "89",
+       "etichetta": "SpO2 all'ingresso in aria ambiente"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"SpO2 all'ingresso in aria ambiente\",\"valore\":\"89\",\"unita\":\"%\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "peso all'ingresso|",
+      "value": {
+       "stato": "",
+       "unita": "kg",
+       "valore": "82",
+       "etichetta": "Peso all'ingresso"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"Peso all'ingresso\",\"valore\":\"82\",\"unita\":\"kg\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "nt-probnp|",
+      "value": {
+       "stato": "",
+       "unita": "pg/mL",
+       "valore": "6840",
+       "etichetta": "NT-proBNP"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"NT-proBNP\",\"valore\":\"6840\",\"unita\":\"pg/mL\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "creatinina|",
+      "value": {
+       "stato": "",
+       "unita": "mg/dL",
+       "valore": "1,9",
+       "etichetta": "Creatinina"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"Creatinina\",\"valore\":\"1,9\",\"unita\":\"mg/dL\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "egfr|",
+      "value": {
+       "stato": "",
+       "unita": "mL/min",
+       "valore": "34",
+       "etichetta": "eGFR"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"eGFR\",\"valore\":\"34\",\"unita\":\"mL/min\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "hba1c|",
+      "value": {
+       "stato": "",
+       "unita": "%",
+       "valore": "7,8",
+       "etichetta": "HbA1c"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"HbA1c\",\"valore\":\"7,8\",\"unita\":\"%\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "potassio|",
+      "value": {
+       "stato": "",
+       "unita": "mEq/L",
+       "valore": "4,4",
+       "etichetta": "Potassio"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"Potassio\",\"valore\":\"4,4\",\"unita\":\"mEq/L\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "frazione di eiezione|",
+      "value": {
+       "stato": "",
+       "unita": "%",
+       "valore": "35",
+       "etichetta": "Frazione di eiezione"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"Frazione di eiezione\",\"valore\":\"35\",\"unita\":\"%\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "pressione arteriosa alla dimissione|",
+      "value": {
+       "stato": "",
+       "unita": "mmHg",
+       "valore": "125/75",
+       "etichetta": "Pressione arteriosa alla dimissione"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"Pressione arteriosa alla dimissione\",\"valore\":\"125/75\",\"unita\":\"mmHg\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "frequenza cardiaca alla dimissione|",
+      "value": {
+       "stato": "",
+       "unita": "bpm",
+       "valore": "76",
+       "etichetta": "Frequenza cardiaca alla dimissione"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"Frequenza cardiaca alla dimissione\",\"valore\":\"76\",\"unita\":\"bpm\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "spo2 alla dimissione in aria ambiente|",
+      "value": {
+       "stato": "",
+       "unita": "%",
+       "valore": "96",
+       "etichetta": "SpO2 alla dimissione in aria ambiente"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"SpO2 alla dimissione in aria ambiente\",\"valore\":\"96\",\"unita\":\"%\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     },
+     {
+      "key": "peso alla dimissione|",
+      "value": {
+       "stato": "",
+       "unita": "kg",
+       "valore": "77",
+       "etichetta": "Peso alla dimissione"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"etichetta\":\"Peso alla dimissione\",\"valore\":\"77\",\"unita\":\"kg\",\"stato\":\"\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     }
+    ],
+    "status": "extracted",
+    "duplicatesRemoved": 0
+   },
+   "indicatoriRischio": {
+    "items": [
+     {
+      "key": "rischio di caduta",
+      "value": {
+       "tipo": "Rischio di caduta",
+       "livello": "moderato"
+      },
+      "status": "extracted",
+      "sources": [
+       {
+        "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+        "model": "azure:gpt-6.1-sol",
+        "snippet": "{\"tipo\":\"Rischio di caduta\",\"livello\":\"moderato\"}",
+        "filename": "Lettera 1"
+       }
+      ]
+     }
+    ],
+    "status": "extracted",
+    "duplicatesRemoved": 0
+   },
+   "patologiaIngresso": {
+    "value": "",
+    "status": "missing",
+    "sources": []
+   }
+  },
+  "_sections": null,
+  "_conflicts": [],
+  "_narrative": {
+   "sex": "M",
+   "email": "",
+   "phone": "",
+   "address": "",
+   "boldTags": [],
+   "lastName": "Bianchi",
+   "warnings": [],
+   "firstName": "Giovanni",
+   "fiscalCode": "BNCGNN41R07A944W",
+   "dateOfBirth": "1941-10-07",
+   "therapyText": "TERAPIA DOMICILIARE CONSIGLIATA\n\n|  Farmaco | Dose | Posologia | Via | Note  |\n| --- | --- | --- | --- | --- |\n|  Furosemide (Lasix) 25 mg cpr | 50 mg | 2 cpr ore 8, 1 cpr ore 14 | os | controllo peso quotidiano  |\n|  Bisoprololo 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 | os |   |\n|  Ramipril 5 mg cpr | 5 mg | 1 cpr ore 20 | os | controllo creatinina e potassio  |\n|  Apixaban (Eliquis) 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 e ore 20 | os |   |\n|  Spironolattone 25 mg cpr | 25 mg | 1 cpr ore 12 | os |   |\n|  Atorvastatina 40 mg cpr | 40 mg | 1 cpr ore 22 | os |   |\n|  Insulina glargine (Lantus) | 18 UI | ore 22 | sc | secondo glicemie  |\n|  Insulina lispro (Humalog) | 6 UI | ai tre pasti principali | sc | secondo schema  |\n|  Pantoprazolo 20 mg cpr | 20 mg | 1 cpr ore 7 a digiuno | os |   |\n|  Tiotropio 18 mcg cps inalatoria | 18 mcg | 1 inalazione ore 8 | inalatoria |   |",
+   "placeOfBirth": "",
+   "unmappedText": "",
+   "allergiesText": "# ALLERGIE\n\nAllergia nota a PENICILLINA (rash cutaneo). Intolleranza a FANS (gastralgia).",
+   "allergyStatus": "present",
+   "anamnesisText": "# ANAMNESI PATOLOGICA REMOTA\n\nInfarto miocardico anteriore nel 2015 trattato con PTCA e stent su IVA. Diabete mellito tipo 2 dal 2004.\nIpertensione arteriosa dal 1998. Protesi d'anca destra nel 2019. BPCO lieve, ex fumatore (40 pack/years).\n\n# ANAMNESI PATOLOGICA PROSSIMA\n\nIl paziente giunge in Pronto Soccorso il 09/11/2026 per dispnea ingravescente da circa cinque giorni,\nortopnea ed edemi declivi. Riferisce incremento ponderale di 4 kg nell'ultima settimana e ridotta aderenza\nalla terapia diuretica.",
+   "diagnosisText": "# DIAGNOSI ALLA DIMISSIONE\n\nScompenso cardiaco acuto in cardiopatia ischemica cronica (FE 35%). Fibrillazione atriale permanente.\nInsufficienza renale cronica stadio IIIb. Diabete mellito tipo 2 in terapia insulinica. Ipertensione arteriosa.",
+   "schemaVersion": "clinicos-discharge-narrative-v1",
+   "missingSections": [
+    "CONSULENZE",
+    "DIAGNOSTICA_PER_IMMAGINI",
+    "PRESTAZIONI_E_INTERVENTI"
+   ],
+   "sourceReferences": [
+    {
+     "fileId": "bdc6b144-17a7-440d-8026-a732501a316d",
+     "fileName": "Lettera 1",
+     "sectionKey": "DIAGNOSI"
+    },
+    {
+     "fileId": "bdc6b144-17a7-440d-8026-a732501a316d",
+     "fileName": "Lettera 1",
+     "sectionKey": "ANAMNESI"
+    },
+    {
+     "fileId": "bdc6b144-17a7-440d-8026-a732501a316d",
+     "fileName": "Lettera 1",
+     "sectionKey": "DECORSO_OSPEDALIERO"
+    },
+    {
+     "fileId": "bdc6b144-17a7-440d-8026-a732501a316d",
+     "fileName": "Lettera 1",
+     "sectionKey": "TERAPIA"
+    },
+    {
+     "fileId": "bdc6b144-17a7-440d-8026-a732501a316d",
+     "fileName": "Lettera 1",
+     "sectionKey": "CONSIGLI_E_CONTROLLI"
+    },
+    {
+     "fileId": "bdc6b144-17a7-440d-8026-a732501a316d",
+     "fileName": "Lettera 1",
+     "sectionKey": "ALLERGIE"
+    }
+   ],
+   "consultationsText": "",
+   "hospitalCourseText": "# DECORSO CLINICO\n\nAll'ingresso paziente dispnoico, PA 150/90 mmHg, FC 104 bpm aritmico, SpO2 89% in aria ambiente,\npeso 82 kg. Agli esami: NT-proBNP 6.840 pg/mL, creatinina 1,9 mg/dL, eGFR 34 mL/min, HbA1c 7,8%,\nK 4,4 mEq/L. Rx torace: congestione polmonare bilaterale con versamento pleurico basale destro.\nEcocardiogramma: FE 35%, ipocinesia anteriore, insufficienza mitralica moderata.\n\nAvviata terapia diuretica endovenosa con progressivo miglioramento del compenso e calo ponderale di 5\nkg. Ottimizzata la terapia per lo scompenso. Buon controllo della frequenza ventricolare. Alla dimissione\npaziente eupnoico a riposo, PA 125/75 mmHg, FC 76 bpm, SpO2 96% in aria ambiente, peso 77 kg,\napiretico.\n\nAzienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2 — documento di prova senza valore clinico\n\nLD-2026-004471 — pag. 1/2\n\nAzienda Ospedaliera Santa Chiara (dati di prova)\n\nU.O. Medicina Interna 2 — Direttore: Dott. P. Ferri\n\nVia dei Tigli 14, 40100 Bologna — Tel. 051 5550100\n\nCod. documento LD-2026-004471\n\nStampato il 18/11/2026 10:42\n\n--- Pagina 2/2 ---\n\nPaziente: BIANCHI GIOVANNI — nato il 07/10/1941 — CF BNCGNN41R07A944W",
+   "adviceAndFollowUpText": "# CONSIGLI E CONTROLLI\n\nDieta iposodica e ipoglucidica, restrizione idrica a 1,5 litri al giorno. Controllo del peso corporeo ogni mattina: contattare il medico se aumento superiore a 2 kg in tre giorni. Esami ematici (creatinina, elettroliti, emocromo) tra 7 giorni. Visita cardiologica di controllo il 02/12/2026 ore 9:30 presso Ambulatorio Scompenso. Visita diabetologica entro un mese.\n\n# CONDIZIONI ALLA DIMISSIONE\n\nPaziente vigile, orientato, deambula con deambulatore, parzialmente autonomo nelle attività quotidiane (Barthel 60/100). Non lesioni da pressione. Rischio di caduta moderato. Si dimette verso struttura residenziale per riabilitazione.\n\nBologna, 18/11/2026\n\nIl medico dimettente: Dott. Andrea Morelli\n\nAzienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2 — documento di prova senza valore clinico\n\nLD-2026-004471 — pag. 2/2",
+   "imagingDiagnosticsText": "",
+   "proceduresAndInterventionsText": ""
+  },
+  "anagrafica": {
+   "nome": {
+    "value": "Giovanni",
+    "status": "extracted",
+    "sources": [
+     {
+      "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+      "model": "azure:gpt-6.1-sol",
+      "snippet": "Giovanni",
+      "filename": "Lettera 1"
+     }
+    ]
+   },
+   "email": {
+    "value": "",
+    "status": "missing",
+    "sources": []
+   },
+   "sesso": {
+    "value": "M",
+    "status": "extracted",
+    "sources": [
+     {
+      "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+      "model": "azure:gpt-6.1-sol",
+      "snippet": "M",
+      "filename": "Lettera 1"
+     }
+    ]
+   },
+   "cognome": {
+    "value": "Bianchi",
+    "status": "extracted",
+    "sources": [
+     {
+      "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+      "model": "azure:gpt-6.1-sol",
+      "snippet": "Bianchi",
+      "filename": "Lettera 1"
+     }
+    ]
+   },
+   "telefono": {
+    "value": "051 5550177",
+    "status": "extracted",
+    "sources": [
+     {
+      "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+      "model": "azure:gpt-6.1-sol",
+      "snippet": "051 5550177",
+      "filename": "Lettera 1"
+     }
+    ]
+   },
+   "indirizzo": {
+    "value": "Via Mazzini 22, 40137 Bologna",
+    "status": "extracted",
+    "sources": [
+     {
+      "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+      "model": "azure:gpt-6.1-sol",
+      "snippet": "Via Mazzini 22, 40137 Bologna",
+      "filename": "Lettera 1"
+     }
+    ]
+   },
+   "dataNascita": {
+    "value": "1941-10-07",
+    "status": "extracted",
+    "sources": [
+     {
+      "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+      "model": "azure:gpt-6.1-sol",
+      "snippet": "1941-10-07",
+      "filename": "Lettera 1"
+     }
+    ]
+   },
+   "contattoEmergenzaTel": {
+    "value": "333 5550123",
+    "status": "extracted",
+    "sources": [
+     {
+      "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+      "model": "azure:gpt-6.1-sol",
+      "snippet": "333 5550123",
+      "filename": "Lettera 1"
+     }
+    ]
+   },
+   "contattoEmergenzaNome": {
+    "value": "Bianchi Marta (figlia)",
+    "status": "extracted",
+    "sources": [
+     {
+      "docId": "bdc6b144-17a7-440d-8026-a732501a316d",
+      "model": "azure:gpt-6.1-sol",
+      "snippet": "Bianchi Marta (figlia)",
+      "filename": "Lettera 1"
+     }
+    ]
+   }
+  },
+  "cleanedRawText": "[Lettera 1]\nAzienda Ospedaliera Santa Chiara (dati di prova)\n\nU.O. Medicina Interna 2 — Direttore: Dott. P. Ferri\n\nVia dei Tigli 14, 40100 Bologna — Tel. 051 5550100\n\nCod. documento LD-2026-004471\n\nStampato il 18/11/2026 10:42\n\n--- Pagina 1/2 ---\n\n# LETTERA DI DIMISSIONE\n\nCognome e nome: BIANCHI GIOVANNI\n\nNato il: 07/10/1941 a Bologna (BO)\n\nResidenza: Via Mazzini 22, 40137 Bologna\n\nMedico curante: Dott.ssa Laura Conti\n\nData ricovero: 09/11/2026\n\nSesso: M\n\nCodice fiscale: BNCGNN41R07A944W\n\nTelefono: 051 5550177\n\nFamiliare di riferimento: Bianchi Marta (figlia)\n333 5550123\n\nData dimissione: 18/11/2026\n\n# DIAGNOSI ALLA DIMISSIONE\n\nScompenso cardiaco acuto in cardiopatia ischemica cronica (FE 35%). Fibrillazione atriale permanente.\nInsufficienza renale cronica stadio IIIb. Diabete mellito tipo 2 in terapia insulinica. Ipertensione arteriosa.\n\n# ALLERGIE\n\nAllergia nota a PENICILLINA (rash cutaneo). Intolleranza a FANS (gastralgia).\n\n# ANAMNESI PATOLOGICA REMOTA\n\nInfarto miocardico anteriore nel 2015 trattato con PTCA e stent su IVA. Diabete mellito tipo 2 dal 2004.\nIpertensione arteriosa dal 1998. Protesi d'anca destra nel 2019. BPCO lieve, ex fumatore (40 pack/years).\n\n# ANAMNESI PATOLOGICA PROSSIMA\n\nIl paziente giunge in Pronto Soccorso il 09/11/2026 per dispnea ingravescente da circa cinque giorni,\nortopnea ed edemi declivi. Riferisce incremento ponderale di 4 kg nell'ultima settimana e ridotta aderenza\nalla terapia diuretica.\n\n# DECORSO CLINICO\n\nAll'ingresso paziente dispnoico, PA 150/90 mmHg, FC 104 bpm aritmico, SpO2 89% in aria ambiente,\npeso 82 kg. Agli esami: NT-proBNP 6.840 pg/mL, creatinina 1,9 mg/dL, eGFR 34 mL/min, HbA1c 7,8%,\nK 4,4 mEq/L. Rx torace: congestione polmonare bilaterale con versamento pleurico basale destro.\nEcocardiogramma: FE 35%, ipocinesia anteriore, insufficienza mitralica moderata.\n\nAvviata terapia diuretica endovenosa con progressivo miglioramento del compenso e calo ponderale di 5\nkg. Ottimizzata la terapia per lo scompenso. Buon controllo della frequenza ventricolare. Alla dimissione\npaziente eupnoico a riposo, PA 125/75 mmHg, FC 76 bpm, SpO2 96% in aria ambiente, peso 77 kg,\napiretico.\n\nAzienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2 — documento di prova senza valore clinico\n\nLD-2026-004471 — pag. 1/2\n\nAzienda Ospedaliera Santa Chiara (dati di prova)\n\nU.O. Medicina Interna 2 — Direttore: Dott. P. Ferri\n\nVia dei Tigli 14, 40100 Bologna — Tel. 051 5550100\n\nCod. documento LD-2026-004471\n\nStampato il 18/11/2026 10:42\n\n--- Pagina 2/2 ---\n\nPaziente: BIANCHI GIOVANNI — nato il 07/10/1941 — CF BNCGNN41R07A944W\n\nTERAPIA DOMICILIARE CONSIGLIATA\n\n|  Farmaco | Dose | Posologia | Via | Note  |\n| --- | --- | --- | --- | --- |\n|  Furosemide (Lasix) 25 mg cpr | 50 mg | 2 cpr ore 8, 1 cpr ore 14 | os | controllo peso quotidiano  |\n|  Bisoprololo 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 | os |   |\n|  Ramipril 5 mg cpr | 5 mg | 1 cpr ore 20 | os | controllo creatinina e potassio  |\n|  Apixaban (Eliquis) 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 e ore 20 | os |   |\n|  Spironolattone 25 mg cpr | 25 mg | 1 cpr ore 12 | os |   |\n|  Atorvastatina 40 mg cpr | 40 mg | 1 cpr ore 22 | os |   |\n|  Insulina glargine (Lantus) | 18 UI | ore 22 | sc | secondo glicemie  |\n|  Insulina lispro (Humalog) | 6 UI | ai tre pasti principali | sc | secondo schema  |\n|  Pantoprazolo 20 mg cpr | 20 mg | 1 cpr ore 7 a digiuno | os |   |\n|  Tiotropio 18 mcg cps inalatoria | 18 mcg | 1 inalazione ore 8 | inalatoria |   |\n\n# CONSIGLI E CONTROLLI\n\nDieta iposodica e ipoglucidica, restrizione idrica a 1,5 litri al giorno. Controllo del peso corporeo ogni mattina: contattare il medico se aumento superiore a 2 kg in tre giorni. Esami ematici (creatinina, elettroliti, emocromo) tra 7 giorni. Visita cardiologica di controllo il 02/12/2026 ore 9:30 presso Ambulatorio Scompenso. Visita diabetologica entro un mese.\n\n# CONDIZIONI ALLA DIMISSIONE\n\nPaziente vigile, orientato, deambula con deambulatore, parzialmente autonomo nelle attività quotidiane (Barthel 60/100). Non lesioni da pressione. Rischio di caduta moderato. Si dimette verso struttura residenziale per riabilitazione.\n\nBologna, 18/11/2026\n\nIl medico dimettente: Dott. Andrea Morelli\n\nAzienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2 — documento di prova senza valore clinico\n\nLD-2026-004471 — pag. 2/2"
+ }
+}

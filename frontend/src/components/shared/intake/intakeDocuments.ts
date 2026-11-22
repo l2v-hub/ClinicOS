@@ -60,10 +60,21 @@ export const AI_FIELD_LABELS: Record<string, string> = {
   'anagrafica.firstName': 'Nome',
   'anagrafica.dateOfBirth': 'Data di nascita',
   'anagrafica.sex': 'Sesso',
+  'anagrafica.comuneNascita': 'Comune di nascita',
+  'anagrafica.provinciaNascita': 'Provincia di nascita',
   'anagrafica.codiceFiscale': 'Codice fiscale',
   'anagrafica.phone': 'Telefono',
   'anagrafica.email': 'Email',
   'anagrafica.address': 'Indirizzo',
+  'anagrafica.comune': 'Comune',
+  'anagrafica.provincia': 'Provincia',
+  'anagrafica.cap': 'CAP',
+  'anagrafica.referenteNome': 'Nome e cognome referente',
+  'anagrafica.referenteRelazione': 'Relazione con il paziente',
+  'anagrafica.referenteTelefono': 'Telefono referente',
+  'ingresso.provenienza': 'Provenienza',
+  'ingresso.centroInviante': 'Centro inviante',
+  'ingresso.motivoIngresso': 'Motivo di ingresso',
   'anamnesi.patologicaProssima': 'Anamnesi patologica prossima',
   'anamnesi.patologicaRemota': 'Anamnesi patologica remota',
   diagnosi: 'Diagnosi',
@@ -129,8 +140,30 @@ const ALLERGY_STATUS: Record<string, string> = {
 };
 
 /** Valore leggibile di una proposta: testo intero, mai troncato. */
+/** Voci degli elenchi a scelta della scheda, per mostrare l'etichetta e non il codice. */
+const CHOICE_LABELS: Record<string, Record<string, string>> = {
+  'anagrafica.referenteRelazione': {
+    coniuge: 'Coniuge / Partner',
+    figlio: 'Figlio / Figlia',
+    genitore: 'Genitore',
+    fratello_sorella: 'Fratello / Sorella',
+    nipote: 'Nipote',
+    amico_caregiver: 'Amico / Caregiver',
+    tutore: 'Tutore legale',
+    altro: 'Altro',
+  },
+  'ingresso.provenienza': {
+    accesso_diretto: 'Accesso diretto',
+    ospedale: 'Ospedale',
+    centro_medico: 'Centro medico / MMG',
+    altra_struttura: 'Altra struttura sanitaria',
+    familiare_caregiver: 'Familiare / Caregiver',
+  },
+};
+
 export function formatFieldValue(path: string, value: unknown): string {
   if (!filled(value)) return 'vuoto';
+  if (typeof value === 'string' && CHOICE_LABELS[path]) return CHOICE_LABELS[path][value] ?? value;
   if (path === 'allergieStatus' && typeof value === 'string') return ALLERGY_STATUS[value] ?? value;
   if (path === 'anagrafica.sex' && typeof value === 'string')
     return value === 'M' ? 'Maschio' : value === 'F' ? 'Femmina' : value;

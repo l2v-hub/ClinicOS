@@ -1,0 +1,351 @@
+Nuovo ingresso
+
+Da lettera di dimissione, foto o a mano: l’AI compila i dati, tu li verifichi.
+
+Importa dimissione
+← Torna ai documenti
+Revisione delle lettere
+×
+Consulta lettera
+Lettera 1
+Pagina
+1
+2
+3
+4
+Mostra testo OCR della lettera
+Scarica originale
+Anagrafica
+ANAGRAFICA
+Nome *
+Cognome *
+Data di nascita · consigliato
+Sesso · consigliato
+Codice fiscale *
+Indirizzo · consigliato
+Telefono · consigliato
+Email · consigliato
+⚠ Allergie
+ALLERGIE RILEVATE
+# ALLERGIE
+
+Allergia nota a PENICILLINA (rash cutaneo). Intolleranza a FANS (gastralgia).
+# ALLERGIE
+
+Allergia nota a PENICILLINA (rash cutaneo). Intolleranza a FANS (gastralgia).
+
+Fonte: Lettera 1Vai alla fonte
+
+Diagnosi
+CARTELLA CLINICA
+Accetta
+Modifica
+Escludi
+Confronta con la fonte
+# DIAGNOSI ALLA DIMISSIONE
+
+Scompenso cardiaco acuto in cardiopatia ischemica cronica (FE 35%). Fibrillazione atriale permanente.
+Insufficienza renale cronica stadio IIIb. Diabete mellito tipo 2 in terapia insulinica. Ipertensione arteriosa.
+# DIAGNOSI ALLA DIMISSIONE
+
+Scompenso cardiaco acuto in cardiopatia ischemica cronica (FE 35%). Fibrillazione atriale permanente.
+Insufficienza renale cronica stadio IIIb. Diabete mellito tipo 2 in terapia insulinica. Ipertensione arteriosa.
+
+Fonte: Lettera 1
+
+Anamnesi
+CARTELLA CLINICA
+Accetta
+Modifica
+Escludi
+Confronta con la fonte
+# ANAMNESI PATOLOGICA REMOTA
+
+Infarto miocardico anteriore nel 2015 trattato con PTCA e stent su IVA. Diabete mellito tipo 2 dal 2004.
+Ipertensione arteriosa dal 1998. Protesi d'anca destra nel 2019. BPCO lieve, ex fumatore (40 pack/years).
+
+# ANAMNESI PATOLOGICA PROSSIMA
+
+Il paziente giunge in Pronto Soccorso il 09/11/2026 per dispnea ingravescente da circa cinque giorni,
+ortopnea ed edemi declivi. Riferisce incremento ponderale di 4 kg nell'ultima settimana e ridotta aderenza
+alla terapia diuretica.
+# ANAMNESI PATOLOGICA REMOTA
+
+Infarto miocardico anteriore nel 2015 trattato con PTCA e stent su IVA. Diabete mellito tipo 2 dal 2004.
+Ipertensione arteriosa dal 1998. Protesi d'anca destra nel 2019. BPCO lieve, ex fumatore (40 pack/years).
+
+# ANAMNESI PATOLOGICA PROSSIMA
+
+Il paziente giunge in Pronto Soccorso il 09/11/2026 per dispnea ingravescente da circa cinque giorni,
+ortopnea ed edemi declivi. Riferisce incremento ponderale di 4 kg nell'ultima settimana e ridotta aderenza
+alla terapia diuretica.
+
+Fonte: Lettera 1
+
+Decorso ospedaliero
+DIARIO
+Accetta
+Modifica
+Escludi
+Confronta con la fonte
+# DECORSO CLINICO
+
+All'ingresso paziente dispnoico, PA 150/90 mmHg, FC 104 bpm aritmico, SpO2 89% in aria ambiente,
+peso 82 kg. Agli esami: NT-proBNP 6.840 pg/mL, creatinina 1,9 mg/dL, eGFR 34 mL/min, HbA1c 7,8%,
+K 4,4 mEq/L. Rx torace: congestione polmonare bilaterale con versamento pleurico basale destro.
+Ecocardiogramma: FE 35%, ipocinesia anteriore, insufficienza mitralica moderata.
+
+--- Pagina 2/2 ---
+
+Paziente: BIANCHI GIOVANNI — nato il 07/10/1941 — CF BNCGNN41R07A944W
+# DECORSO CLINICO
+
+All'ingresso paziente dispnoico, PA 150/90 mmHg, FC 104 bpm aritmico, SpO2 89% in aria ambiente,
+peso 82 kg. Agli esami: NT-proBNP 6.840 pg/mL, creatinina 1,9 mg/dL, eGFR 34 mL/min, HbA1c 7,8%,
+K 4,4 mEq/L. Rx torace: congestione polmonare bilaterale con versamento pleurico basale destro.
+Ecocardiogramma: FE 35%, ipocinesia anteriore, insufficienza mitralica moderata.
+
+Avviata terapia diuretica endovenosa con progressivo miglioramento del compenso e calo ponderale di 5
+kg. Ottimizzata la terapia per lo scompenso. Buon controllo della frequenza ventricolare. Alla dimissione
+paziente eupnoico a riposo, PA 125/75 mmHg, FC 76 bpm, SpO2 96% in aria ambiente, peso 77 kg,
+apiretico.
+
+--- Pagina 2/2 ---
+
+| --- | --- | --- | --- | --- |
+|  Furosemide (Lasix) 25 mg cpr | 50 mg | 2 cpr ore 8, 1 cpr ore 14 | os | controllo peso quotidiano  |
+|  Bisoprololo 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 | os |   |
+|  Ramipril 5 mg cpr | 5 mg | 1 cpr ore 20 | os | controllo creatinina e potassio  |
+|  Apixaban (Eliquis) 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 e ore 20 | os |   |
+|  Spironolattone 25 mg cpr | 25 mg | 1 cpr ore 12 | os |   |
+|  Atorvastatina 40 mg cpr | 40 mg | 1 cpr ore 22 | os |   |
+|  Insulina glargine (Lantus) | 18 UI | ore 22 | sc | secondo glicemie  |
+|  Insulina lispro (Humalog) | 6 UI | ai tre pasti principali | sc | secondo schema  |
+|  Pantoprazolo 20 mg cpr | 20 mg | 1 cpr ore 7 a digiuno | os |   |
+|  Tiotropio 18 mcg cps inalatoria | 18 mcg | 1 inalazione ore 8 | inalatoria |   |
+
+Fonte: Lettera 1
+
+Consulenze
+DIARIO
+Accetta
+Modifica
+Escludi
+Confronta con la fonte
+
+Fonte non identificata
+
+Diagnostica per immagini
+DIARIO
+Accetta
+Modifica
+Escludi
+Confronta con la fonte
+
+Fonte non identificata
+
+Prestazioni e interventi
+DIARIO
+Accetta
+Modifica
+Escludi
+Confronta con la fonte
+
+Fonte non identificata
+
+Terapia domiciliare
+TERAPIE
+Accetta
+Modifica
+Escludi
+Confronta con la fonte
+TERAPIA DOMICILIARE CONSIGLIATA
+
+|  Farmaco | Dose | Posologia | Via | Note  |
+| --- | --- | --- | --- | --- |
+|  Furosemide (Lasix) 25 mg cpr | 50 mg | 2 cpr ore 8, 1 cpr ore 14 | os | controllo peso quotidiano  |
+|  Bisoprololo 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 | os |   |
+|  Ramipril 5 mg cpr | 5 mg | 1 cpr ore 20 | os | controllo creatinina e potassio  |
+|  Apixaban (Eliquis) 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 e ore 20 | os |   |
+|  Spironolattone 25 mg cpr | 25 mg | 1 cpr ore 12 | os |   |
+|  Atorvastatina 40 mg cpr | 40 mg | 1 cpr ore 22 | os |   |
+|  Insulina glargine (Lantus) | 18 UI | ore 22 | sc | secondo glicemie  |
+|  Insulina lispro (Humalog) | 6 UI | ai tre pasti principali | sc | secondo schema  |
+|  Pantoprazolo 20 mg cpr | 20 mg | 1 cpr ore 7 a digiuno | os |   |
+|  Tiotropio 18 mcg cps inalatoria | 18 mcg | 1 inalazione ore 8 | inalatoria |   |
+
+Fonte: Lettera 1
+
+Consigli e controlli
+CARTELLA CLINICA
+Accetta
+Modifica
+Escludi
+Confronta con la fonte
+# CONSIGLI E CONTROLLI
+
+Dieta iposodica e ipoglucidica, restrizione idrica a 1,5 litri al giorno. Controllo del peso corporeo ogni mattina: contattare il medico se aumento superiore a 2 kg in tre giorni. Esami ematici (creatinina, elettroliti, emocromo) tra 7 giorni. Visita cardiologica di controllo il 02/12/2026 ore 9:30 presso Ambulatorio Scompenso. Visita diabetologica entro un mese.
+
+--- Pagina 1/2 ---
+
+Medico curante: Dott.ssa Laura Conti
+
+Data ricovero: 09/11/2026
+
+Sesso: M
+
+Codice fiscale: BNCGNN41R07A944W
+
+Telefono: 051 5550177
+
+Familiare di riferimento: Bianchi Marta (figlia)
+333 5550123
+
+Data dimissione: 18/11/2026
+# CONSIGLI E CONTROLLI
+
+Dieta iposodica e ipoglucidica, restrizione idrica a 1,5 litri al giorno. Controllo del peso corporeo ogni mattina: contattare il medico se aumento superiore a 2 kg in tre giorni. Esami ematici (creatinina, elettroliti, emocromo) tra 7 giorni. Visita cardiologica di controllo il 02/12/2026 ore 9:30 presso Ambulatorio Scompenso. Visita diabetologica entro un mese.
+
+# CONDIZIONI ALLA DIMISSIONE
+
+Paziente vigile, orientato, deambula con deambulatore, parzialmente autonomo nelle attività quotidiane (Barthel 60/100). Non lesioni da pressione. Rischio di caduta moderato. Si dimette verso struttura residenziale per riabilitazione.
+
+Bologna, 18/11/2026
+
+Il medico dimettente: Dott. Andrea Morelli
+
+Azienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2 — documento di prova senza valore clinico
+
+LD-2026-004471 — pag. 2/2
+
+Fonte: Lettera 1
+
+Indietro
+Salva bozza e chiudi
+Crea paziente
+Chiudendo puoi riprendere le pagine già salvate finché la sessione resta disponibile.
+Scadenza sessione: 22/11/2026, 02:24:22. Le operazioni salvate rinnovano la scadenza.
+Chiudi importazione
+Elimina sessione
+Nuovo ingresso
+Ingressi in bozza · dati da completare
+Riprendi bozza · Bianchi Giovanni
+A mano · aggiornata oggi alle 01:13
+1 bozza precedente dello stesso paziente
+Riprendi bozza · Identità da completare
+A mano · aggiornata il 19 novembre alle 20:38
+Riprendi bozza · Riaprolloa Unica
+Da documenti · aggiornata il 15 novembre alle 21:13
+Riprendi bozza · Sempreze6j Unica
+Da documenti · aggiornata il 15 novembre alle 21:13
+Riprendi bozza · Esempio Teresa
+A mano · aggiornata il 15 novembre alle 18:06
+Non dimessi
+Dimessi e archivio
+Tutti
+12
+Filtra anagrafiche da completare
+Filtri e ordine
+Cognome: crescente
+Verifica farmaci di reparto incompleta: alcune segnalazioni potrebbero non essere disponibili.
+Elenco pazienti caricati
+Letto	
+Paziente
+	
+Regime
+	NEWS2	
+Segnalazioni
+	Azione
+201 · A	
+Bassi, Giorgio
+84 anni · CF BSSGRG42S03L219O
+	—	
+NEWS2 10 · 17/11 16:00 · da aggiornare
+	
+Da verificare
+	
+
+101 · A	
+Ferrioli, Mario
+78 anni · CF FRRMRA48C15F205N
+	—	
+NEWS2 5 · 17/11 16:00 · da aggiornare
+	
+Da verificare
+	
+
+12 · A	
+Forlano, Fabio
+Dalla cartella
+78 anni
+	Ricoverato		
+Da verificare
+Allergie 1
+	
+
+301 · B	
+Gatti, Lucia
+56 anni · CF GTTLCU70B54D612J
+	—		
+Da verificare
+	
+
+201 · B	
+Lombardi, Teresa
+65 anni · CF LMBTRS61E48A944N
+	—		
+Da verificare
+	
+
+102 · A	
+Mancini, Roberto
+67 anni · CF MNCRRT58T01F205I
+	—		
+Da verificare
+	
+
+101 · B	
+Martini, Anna
+71 anni · CF MRTNNA55L62F205I
+	—		
+Da verificare
+	
+
+102 · B	
+Moretti, Elena
+41 anni · CF MRTLNE85H70F205A
+	—		
+Da verificare
+	
+
+301 · A	
+Neri, Carlo
+88 anni · CF NRECRL38P27H501U
+	—		
+Da verificare
+	
+
+—	
+Rossi, Mario
+46 anni
+	—		
+Da verificare
+	
+
+—	
+Secondo, Apicheck
+83 anni · CF SCNPHC43H49H501M
+	Ricoverato		
+Da verificare
+	
+
+—	
+Verdi, Luigi
+36 anni
+	—		
+Da verificare
+	
+
+Segnalazioni non disponibili per tutti i pazienti: verifica le cartelle.
+
+3 pazienti hanno l’anagrafica incompleta · Vedi quali (tra 12 caricati)

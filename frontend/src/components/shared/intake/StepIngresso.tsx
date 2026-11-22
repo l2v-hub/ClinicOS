@@ -5,6 +5,8 @@
 
 import { cloneElement, isValidElement, useEffect, useId, useRef, type ReactElement } from 'react';
 import { localIsoDate } from '../../../lib/appointmentRange';
+import { useAiField } from './intakeAiOrigin';
+import { AiBadge } from './IntakeAiBadge';
 
 /** Giorno locale di elaborazione (non UTC: fra mezzanotte e le 2 darebbe il giorno prima). */
 function today(): string {
@@ -63,14 +65,18 @@ function NpmField({
   required,
   hint,
   span2,
+  path,
   children,
 }: {
   label: string;
   required?: boolean;
   hint?: string;
   span2?: boolean;
+  /** Percorso nella bozza (es. 'ingresso.centroInviante'): stile ed etichetta AI da `_fieldOrigin`. */
+  path?: string;
   children: React.ReactNode;
 }) {
+  const ai = useAiField(path);
   // L'etichetta nomina il campo anche per i lettori di schermo (data, ora ed elenchi non hanno
   // un segnaposto che li descriva).
   const inputId = useId();
@@ -81,11 +87,17 @@ function NpmField({
       })
     : children;
   return (
-    <div className={`npm-field${span2 ? ' npm-span-2' : ''}`}>
-      <label className="npm-label" htmlFor={inputId}>
-        {label}
-        {required && <span className="npm-required"> *</span>}
-      </label>
+    <div
+      className={`npm-field${span2 ? ' npm-span-2' : ''}${ai ? ' intake-field--ai' : ''}`}
+      data-ai-field={ai ? path : undefined}
+    >
+      <div className="intake-field__head">
+        <label className="npm-label" htmlFor={inputId}>
+          {label}
+          {required && <span className="npm-required"> *</span>}
+        </label>
+        {ai && path && <AiBadge paths={[path]} />}
+      </div>
       {control}
       {hint && <span className="npm-hint">{hint}</span>}
     </div>
@@ -139,7 +151,7 @@ export function StepIngresso({ value, onChange }: StepIngressoProps) {
               onFocus={handleTimeFocus}
             />
           </NpmField>
-          <NpmField label="Provenienza">
+          <NpmField label="Provenienza" path="ingresso.provenienza">
             <select
               className="npm-input npm-select"
               value={value.provenienza ?? ''}
@@ -153,7 +165,7 @@ export function StepIngresso({ value, onChange }: StepIngressoProps) {
               <option value="familiare_caregiver">Familiare / Caregiver</option>
             </select>
           </NpmField>
-          <NpmField label="Centro inviante">
+          <NpmField label="Centro inviante" path="ingresso.centroInviante">
             <input
               className="npm-input"
               value={value.centroInviante ?? ''}
@@ -187,7 +199,7 @@ export function StepIngresso({ value, onChange }: StepIngressoProps) {
 
       <NpmCard title="Motivo e note" desc="Motivo di ingresso e osservazioni iniziali">
         <div className="npm-grid">
-          <NpmField label="Motivo di ingresso" required span2>
+          <NpmField label="Motivo di ingresso" path="ingresso.motivoIngresso" required span2>
             <textarea
               className="npm-input npm-textarea"
               rows={3}

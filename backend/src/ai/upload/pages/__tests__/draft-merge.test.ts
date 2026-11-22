@@ -160,6 +160,7 @@ describe('mergeAiIntoDraft — per-letter merge', () => {
     const { data, changed } = letter(reset);
     assert.deepEqual(changed, {
       anagrafica: false,
+      ingresso: false,
       anamnesi: false,
       diagnosi: false,
       allergie: false,
@@ -486,5 +487,117 @@ describe('B1 — allergy rows and status are one unit', () => {
     };
     const applied = merge.decideFieldProposal(both, String(rows.id), 'apply');
     assert.equal(merge.pendingFieldProposals(applied), 0);
+  });
+});
+
+// Campi dell'ingresso oltre la narrativa: luogo di nascita, residenza, referente, provenienza.
+const RAW_FULL = {
+  anagrafica: {
+    ...RAW.anagrafica,
+    indirizzo: 'Via Mazzini 22',
+    comune: 'Bologna',
+    provincia: 'bo',
+    cap: '40137',
+    comuneNascita: 'Imola',
+    provinciaNascita: 'BO',
+    contattoEmergenzaNome: 'Rossi Marta (figlia)',
+    contattoEmergenzaRelazione: 'figlio',
+    contattoEmergenzaTel: '333 5550123',
+  },
+  cartella: {
+    ...RAW.cartella,
+    strutturaDimettente: 'Azienda Ospedaliera Santa Chiara',
+    repartoDimettente: 'Medicina Interna 2',
+    motivoRicovero: 'Dispnea ingravescente',
+  },
+};
+
+describe('mergeAiIntoDraft — intake fields beyond the narrative', () => {
+  test('a letter fills residence, birthplace, contact person and where the patient comes from', () => {
+    const { data, changed } = letter({}, 'g1', RAW_FULL);
+    assert.deepEqual(
+      {
+        address: ana(data).address,
+        comune: ana(data).comune,
+        provincia: ana(data).provincia,
+        cap: ana(data).cap,
+        comuneNascita: ana(data).comuneNascita,
+        provinciaNascita: ana(data).provinciaNascita,
+        referenteNome: ana(data).referenteNome,
+        referenteRelazione: ana(data).referenteRelazione,
+        referenteTelefono: ana(data).referenteTelefono,
+      },
+      {
+        address: 'Via Mazzini 22',
+        comune: 'Bologna',
+        provincia: 'BO',
+        cap: '40137',
+        comuneNascita: 'Imola',
+        provinciaNascita: 'BO',
+        referenteNome: 'Rossi Marta',
+        referenteRelazione: 'figlio',
+        referenteTelefono: '333 5550123',
+      },
+    );
+    assert.deepEqual(data.ingresso, {
+      provenienza: 'ospedale',
+      centroInviante: 'Azienda Ospedaliera Santa Chiara — Medicina Interna 2',
+      motivoIngresso: 'Dispnea ingravescente',
+    });
+    const origin = data._fieldOrigin as Record<string, Json>;
+    for (const path of ['anagrafica.cap', 'anagrafica.referenteNome', 'ingresso.centroInviante'])
+      assert.equal(origin[path].by, 'ai', path);
+    assert.equal(changed.ingresso, true);
+  });
+
+  test('values the intake cannot hold are left out, and a non-hospital is not called a hospital', () => {
+    const raw = {
+      anagrafica: {
+        ...RAW_FULL.anagrafica,
+        provincia: 'Bologna',
+        cap: '4013',
+        contattoEmergenzaRelazione: 'vicina di casa',
+      },
+      cartella: { ...RAW_FULL.cartella, strutturaDimettente: 'Casa di cura Villa Serena' },
+    };
+    const { data } = letter({}, 'g1', raw);
+    assert.equal(ana(data).provincia, undefined);
+    assert.equal(ana(data).cap, undefined);
+    assert.equal(ana(data).referenteRelazione, undefined);
+    assert.equal((data.ingresso as Json).provenienza, undefined);
+    assert.equal(
+      (data.ingresso as Json).centroInviante,
+      'Casa di cura Villa Serena — Medicina Interna 2',
+    );
+  });
+
+  test('what the operator wrote is never replaced: the letter only proposes', () => {
+    const existing = {
+      anagrafica: { comune: 'Imola' },
+      ingresso: { dataPresa: '2026-11-22', motivoIngresso: 'Riabilitazione' },
+    };
+    const { data } = letter(existing, 'g1', RAW_FULL);
+    assert.equal(ana(data).comune, 'Imola');
+    assert.equal((data.ingresso as Json).motivoIngresso, 'Riabilitazione');
+    assert.equal((data.ingresso as Json).dataPresa, '2026-11-22');
+    // The untouched fields of the same sections are still filled.
+    assert.equal((data.ingresso as Json).centroInviante?.toString().startsWith('Azienda'), true);
+    assert.deepEqual(
+      pending(data)
+        .map((p) => p.path)
+        .sort(),
+      ['anagrafica.comune', 'ingresso.motivoIngresso'],
+    );
+  });
+
+  test('the review of a single letter shows the phone, email and address it extracted', () => {
+    const result = finalResult({
+      anagrafica: { ...RAW_FULL.anagrafica, email: 'mario.rossi@example.test' },
+      cartella: RAW_FULL.cartella,
+    });
+    const narrative = result._narrative as Json;
+    assert.equal(narrative.phone, '+39 333 1111111');
+    assert.equal(narrative.email, 'mario.rossi@example.test');
+    assert.equal(narrative.address, 'Via Mazzini 22');
   });
 });

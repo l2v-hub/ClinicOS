@@ -1,0 +1,174 @@
+{
+ "id": "cmwr5m3vk0010e27d7j8zpnql",
+ "status": "review_ready",
+ "stage": "completed",
+ "completedFiles": 4,
+ "totalFiles": 4,
+ "currentFileName": null,
+ "elapsedSeconds": 9,
+ "canRetry": false,
+ "canCancel": true,
+ "maxFiles": 30,
+ "maxTotalBytes": 26214400,
+ "totalBytes": 1288360,
+ "fileCount": 4,
+ "error": null,
+ "model": "replay:demo-ocr+expected-extraction",
+ "expiresAt": "2026-11-22T02:24:22.841Z",
+ "createdAt": "2026-11-22T01:24:21.152Z",
+ "documents": [
+  {
+   "id": "cmwr5m4pj0012e27d1phsmwe2",
+   "filename": "telefono-1.jpg",
+   "mimeType": "image/jpeg",
+   "sizeBytes": 266158,
+   "sha256": "9fb3e841b174e13db21007c86d975bc5b6a179cfd89af651f475b46272429c19",
+   "sortOrder": 0,
+   "logicalDoc": null,
+   "status": "uploaded",
+   "rejectReason": null,
+   "pageCount": 1,
+   "contentUrl": "/ai/extraction/jobs/cmwr5m3vk0010e27d7j8zpnql/files/cmwr5m4pj0012e27d1phsmwe2/content"
+  },
+  {
+   "id": "cmwr5m4qu0015e27d4pigkno6",
+   "filename": "telefono-2.jpg",
+   "mimeType": "image/jpeg",
+   "sizeBytes": 242277,
+   "sha256": "86a6034b14c226e224c8810affa0a79fcc7570477c2d10f86a680848cc033998",
+   "sortOrder": 1,
+   "logicalDoc": null,
+   "status": "uploaded",
+   "rejectReason": null,
+   "pageCount": 1,
+   "contentUrl": "/ai/extraction/jobs/cmwr5m3vk0010e27d7j8zpnql/files/cmwr5m4qu0015e27d4pigkno6/content"
+  },
+  {
+   "id": "cmwr5m4sf0018e27d5izglxup",
+   "filename": "foto-1.jpg",
+   "mimeType": "image/jpeg",
+   "sizeBytes": 422192,
+   "sha256": "ea61f53bde9862e724cc521f4ffde320e302f107a355eaeb7ed3f76db4b2b2c9",
+   "sortOrder": 2,
+   "logicalDoc": null,
+   "status": "uploaded",
+   "rejectReason": null,
+   "pageCount": 1,
+   "contentUrl": "/ai/extraction/jobs/cmwr5m3vk0010e27d7j8zpnql/files/cmwr5m4sf0018e27d5izglxup/content"
+  },
+  {
+   "id": "cmwr5m4up001be27d0wpf1cfx",
+   "filename": "foto-2.jpg",
+   "mimeType": "image/jpeg",
+   "sizeBytes": 357733,
+   "sha256": "cbdf4bed5a97fcb5a781d065a297cdac71170c31bd671fbfd21ff7dcf56d034b",
+   "sortOrder": 3,
+   "logicalDoc": null,
+   "status": "uploaded",
+   "rejectReason": null,
+   "pageCount": 1,
+   "contentUrl": "/ai/extraction/jobs/cmwr5m3vk0010e27d7j8zpnql/files/cmwr5m4up001be27d0wpf1cfx/content"
+  }
+ ],
+ "capabilities": {
+  "sessionVersion": 1,
+  "pageEditing": true,
+  "atomicReplacement": true
+ },
+ "manifest": {
+  "pages": [
+   {
+    "id": "179cded9-6ab3-428e-8c96-3104c9317a57",
+    "groupId": "a83b39d1-67f9-469d-beda-6ee962560dfe",
+    "sortOrder": 0,
+    "documentId": "cmwr5m4pj0012e27d1phsmwe2",
+    "sourcePageNumber": 1,
+    "status": "completed",
+    "canRetry": false,
+    "errorCode": null,
+    "error": null
+   },
+   {
+    "id": "feb71bd3-873b-4653-bd5f-27c7523ebb08",
+    "groupId": "a83b39d1-67f9-469d-beda-6ee962560dfe",
+    "sortOrder": 1,
+    "documentId": "cmwr5m4qu0015e27d4pigkno6",
+    "sourcePageNumber": 1,
+    "status": "completed",
+    "canRetry": false,
+    "errorCode": null,
+    "error": null
+   },
+   {
+    "id": "be9a24c3-bf8c-4b06-a2f4-af0139c7bfcb",
+    "groupId": "a83b39d1-67f9-469d-beda-6ee962560dfe",
+    "sortOrder": 2,
+    "documentId": "cmwr5m4sf0018e27d5izglxup",
+    "sourcePageNumber": 1,
+    "status": "completed",
+    "canRetry": false,
+    "errorCode": null,
+    "error": null
+   },
+   {
+    "id": "e0ea7838-e71e-4c88-a844-7ad42f141369",
+    "groupId": "a83b39d1-67f9-469d-beda-6ee962560dfe",
+    "sortOrder": 3,
+    "documentId": "cmwr5m4up001be27d0wpf1cfx",
+    "sourcePageNumber": 1,
+    "status": "completed",
+    "canRetry": false,
+    "errorCode": null,
+    "error": null
+   }
+  ],
+  "groups": [
+   {
+    "id": "a83b39d1-67f9-469d-beda-6ee962560dfe",
+    "label": "Lettera 1",
+    "sortOrder": 0,
+    "status": "completed",
+    "pageCount": 4,
+    "completedPages": 4,
+    "errorCode": null,
+    "error": null,
+    "resultHash": "0a6a4d3d2f174b27c1628a1ed1407a5a03246ae30519209aba9b852b4b8f482a",
+    "pdfUrl": "/ai/extraction/jobs/cmwr5m3vk0010e27d7j8zpnql/groups/a83b39d1-67f9-469d-beda-6ee962560dfe/pdf"
+   }
+  ],
+  "version": 1,
+  "revision": 4
+ },
+ "limits": {
+  "maxPages": 30,
+  "maxSourceFiles": 30,
+  "maxGroups": 30,
+  "maxTotalBytes": 26214400,
+  "maxFileBytes": 26214400,
+  "maxFilesPerRequest": 10,
+  "maxRequestBytes": 26476544,
+  "acceptedMimeTypes": [
+   "application/pdf",
+   "image/jpeg",
+   "image/png"
+  ]
+ },
+ "progress": {
+  "phase": "review",
+  "totalPages": 4,
+  "completedPages": 4,
+  "failedPages": 0,
+  "totalGroups": 1,
+  "completedGroups": 1,
+  "currentPageId": null,
+  "currentGroupId": null
+ },
+ "review": {
+  "manifestRevision": 4,
+  "resultHash": "bf9e9d9cd7c33aa15bf6522e42cc6288a2d33ca6df906240dea100b2a9b15064",
+  "unresolvedConflicts": 0,
+  "canProceed": true,
+  "draftId": null,
+  "draftSourceIsCurrent": true
+ }
+}

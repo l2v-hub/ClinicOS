@@ -3,7 +3,7 @@
 // avvia la lettura, interroga il job e unisce i risultati (per lettera e finale) una sola volta.
 // Le decisioni pure (quando unire, testi, errori) sono in intakeDocuments.ts.
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { ImportApiError } from '../import/importSessionApi';
+import { ImportApiError, importPollDelayMs } from '../import/importSessionApi';
 import { operatorImportApi } from '../import/operatorImportApi';
 import { ImportUploadQueue, prepareUploadGroup } from '../import/importUploadQueue';
 import { opaqueKey, type ImportActor, type ImportJob } from '../import/importSessionTypes';
@@ -179,6 +179,7 @@ export function useIntakeDocuments(
   useEffect(() => {
     if (!jobId) return;
     let active = true;
+    let attempt = 0;
     let timer: ReturnType<typeof setTimeout> | undefined;
     async function tick() {
       if (!active) return;
@@ -206,7 +207,7 @@ export function useIntakeDocuments(
       }
       if (!active) return;
       if (shouldPoll(jobRef.current, bridgeRef.current.getData(), done.current))
-        timer = setTimeout(() => void tick(), DOCUMENTS_POLL_MS);
+        timer = setTimeout(() => void tick(), importPollDelayMs(attempt++));
     }
     void tick();
     const onVisible = () => {

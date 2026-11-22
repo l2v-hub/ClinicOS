@@ -1,0 +1,25 @@
+0.1s  stato: Aggiungi le pagine della lettera: l’AI compila i campi vuoti della scheda.
+0.6s  stato: L’AI sta leggendo: puoi già scrivere. I campi che hai compilato tu non vengono mai sovrascritti.
+9.2s  stato: Lettura completata: i campi letti dall’AI sono segnati con «AI».
+9.3s  campi compilati nella scheda
+## Campi con il segno «AI» (scritti dai documenti)
+  [AI] Nome                         "Giovanni"   (anagrafica.firstName)
+  [AI] Cognome                      "Bianchi"   (anagrafica.lastName)
+  [AI] Data di nascita              "1941-10-07"   (anagrafica.dateOfBirth)
+  [AI] Sesso                        "Maschio"   (anagrafica.sex)
+  [AI] Comune di nascita            "Bologna"   (anagrafica.comuneNascita)
+  [AI] Provincia di nascita         "BO"   (anagrafica.provinciaNascita)
+  [AI] Codice fiscale               "BNCGNN41R07A944W"   (anagrafica.codiceFiscale)
+  [AI] Telefono                     "051 5550177"   (anagrafica.phone)
+  [AI] Indirizzo                    "Via Mazzini 22"   (anagrafica.address)
+  [AI] CAP                          "40137"   (anagrafica.cap)
+  [AI] Nome e cognome referente     "Bianchi Marta"   (anagrafica.referenteNome)
+  [AI] Relazione con il paziente    "Figlio / Figlia"   (anagrafica.referenteRelazione)
+  [AI] Telefono referente           "333 5550123"   (anagrafica.referenteTelefono)
+  [AI] Provenienza                  "Ospedale"   (ingresso.provenienza)
+  [AI] Centro inviante              "Azienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2"   (ingresso.centroInviante)
+  [AI] Motivo di ingresso           "Dispnea ingravescente, ortopnea ed edemi declivi"   (ingresso.motivoIngresso)
+campi «AI»: 16
+## Comune scritto dall'operatore: "Imola" — segno AI: false
+## Proposte mostrate: "Proposte dei documenti Una proposta dei documenti da decidere L’AI ha letto valori diversi da quelli che hai scritto: il campo resta com’è finché non scegli. Finché restano proposte, «Crea paziente» è bloccato. Comune L’AI ha letto Bologna Il tuo valore: Imola Usa questo valore Tieni il mio | Una proposta dei documenti da decidere | Comune L’AI ha letto Bologna Il tuo valore: Imola Usa questo valo"
+errori console/API: []

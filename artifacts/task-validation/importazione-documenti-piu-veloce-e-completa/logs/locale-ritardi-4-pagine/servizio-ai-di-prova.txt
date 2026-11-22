@@ -1,0 +1,7 @@
+unita modo inizio_ms fine_ms caratteri_prompt caratteri_schema
+capabilities  19837 None None None
+179cded9 ocr 19912 22913 338 112
+e0ea7838 ocr 19913 22914 338 112
+be9a24c3 ocr 19916 22917 338 112
+feb71bd3 ocr 19928 22929 338 112
+a83b39d1 extraction 23390 27391 8080 5256

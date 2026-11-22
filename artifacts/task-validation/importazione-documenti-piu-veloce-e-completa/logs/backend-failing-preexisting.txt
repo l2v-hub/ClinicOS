@@ -1,0 +1,150 @@
+/home/user/ClinicOS/backend/src/consegne/__tests__/creation-db.test.ts
+/home/user/ClinicOS/backend/src/consegne/__tests__/patient-summary-db.test.ts
+/home/user/ClinicOS/backend/src/consegne/__tests__/voice-creation-db.test.ts
+/home/user/ClinicOS/backend/src/patients/__tests__/room-filter-db.test.ts
+/home/user/ClinicOS/backend/src/roster/__tests__/order-key-db.test.ts
+/home/user/ClinicOS/backend/src/roster/__tests__/preferences-db.test.ts
+/home/user/ClinicOS/backend/src/routes/__tests__/patient-diary-therapy-db.test.ts
+AC2: anteprima 200 con la forma attesa
+AC2: paziente fuori ambito o inesistente → 404 su anteprima e creazione, nessuna scrittura
+AC2: terapia non valida, voce non valida o conflitto di fascia → 400 senza voce né terapia
+AC3: creazione collegata, poi stesso requestId → 200 con la stessa coppia e una sola terapia
+AC3: doppio POST in parallelo con lo stesso requestId → una sola terapia
+AC3: la lettura del diario espone therapy.stato (anche sospesa); cancellata → therapyId null
+AC3: se la voce di diario fallisce non resta nessuna terapia (transazione atomica)
+AC486: exact legacy replay without route is read-only; missing-route new and cross-patient requests fail closed
+CAS permits one writer and incomplete finalization remains a draft
+Cartella PUT preserves absent/equal legacy branches and refuses changes atomically
+DB validation rejects malformed and incomplete Transfers without weakening PAINAD
+GDS15 PDF failure/concurrent retry creates one typed document and unsupported free-text glyphs preserve the final snapshot
+GDS15 PDF renders frozen questions/source and a long corrected assessment with supported Unicode notes
+GDS15 PostgreSQL independently enforces all fifteen boolean/null domains, complete finals and note boundaries
+GDS15 final freezes fifteen answers, clinical identity and source; correction/current/history preserve the original
+GDS15 final snapshot SQL rejects missing, reordered, coerced or inconsistent answers/scores/source without altering old types
+GDS15 replay binds each answer and notes; incomplete final is atomic and concurrent patches/finalization retain CAS
+HTTP current and attestations expose the agreed status and identity-bound response
+HTTP draft/final/PDF metadata flow preserves status codes, identity, bounds and current scope
+HTTP personal/admin endpoints enforce roles, bounded envelopes, validation and conflict codes
+HTTP retains record envelope, validates requestId and returns explicit conflict/deleted outcomes
+HTTP summary is private, bounded and rejects malformed IDs without leaking inaccessible patient existence
+MNA PostgreSQL matches finite numeric/date/note boundaries and rejects direct malformed clinical writes
+MNA PostgreSQL validates every option, three K booleans, selected-extent completeness and canonical object shape
+MNA create replay binds all answers/dates/methods/extent, CAS serializes patches and incomplete finalization is atomic
+MNA editorial typography preserves free text and reports unsupported glyphs without changing the snapshot
+MNA full PDFs retain measured units, source/copyright, all K questions and long Unicode notes
+MNA presentation matches UI BMI precision at every threshold without changing snapshot values
+MNA screening PDF preserves partial G–R and frozen K sublabels; failed/concurrent retry archives one typed document
+MNA screening final preserves partial G–R, authoritative demographics and immutable source-bound snapshot
+Migrazione: voci senza terapia (colonne nuove a NULL) convivono con quelle collegate
+NRS comparison reads the locked latest history before permitting an update
+NRS import has no absent/empty exception and rejected new-patient writes fully roll back
+NRS omission/equality preserves both histories while vital-sign NRS remains writable
+PDF claim and callbacks read the clock after database lock waits
+PDF failure preserves the final and concurrent retries archive exactly one immutable document
+QA2-3: una tantum (data+ora) e al bisogno senza orari si creano, senza fasce inventate
+QA3-D: una menzione non blocca — "PA ridotta, si inizia ..." crea voce e terapia
+QA4: clausole — una menzione in un altro inciso crea, un participio in coda blocca
+QA5: tutto o niente anche via route — una parola non classificata svuota i campi
+REST, typed Agnos and voice share receipt semantics and preserve their error envelopes
+SQL validates all 48 domains, null completeness and note bounds and blocks direct malformed writes
+SQL validators reject malformed answers for the new versions and keep v1 shapes valid
+Tinetti PDF renders all frozen items and Unicode notes, and archives under its own type
+Transfers CAS, replay and immutable final preserve answers, source and Cartella independence
+Transfers PDF freezes all groups, source signature spaces and long Unicode paragraphs without scores
+Transfers document metadata keeps its type and existing archive scope and retries remain intact
+UTF-8 JSON byte limit includes quotes and overflow never materializes pain in therapy projection
+a new process replays the persisted creation and finalization after response loss
+a response lost with the first process is replayed from PostgreSQL by a new process
+a second operator cannot enumerate or mutate a foreign note; actor spoof is ignored
+absent/null/empty remain distinct and out-of-scope writes are rejected
+all archive/AI readers intersect generated documents with live patient scope before bounds; legacy stays accessible
+all five forms use terminal clinical order and hide colleague drafts
+attestation counts, personal state and pages are bounded and current-scope protected
+attestations are append-only and never rewrite the PDF or transfer to a correction
+authoritative location handles active/history/conflicts/legacy without mixed labels or private data
+barthel paper version: draft → patch → finalize → replay → correction → current/history → PDF
+batch IDs are deduplicated and both scope restrictions apply to identity
+catalog is exactly one empty metadata row per catalog form (7) and rejects query/scope without writes
+clinical notes/administration do not invalidate roster; therapy and schedule do
+concurrent create uses one immutable initial receipt and replays the edited current draft
+concurrent identical requests create one open row and one durable receipt
+concurrent ownership change fences creation before a stale patient permission can write
+confirmed pain retains original JSON/presence and never exposes other patients or pending drafts
+confirming an old intake draft retains pain JSON without promoting it to Cartella
+consegne feed is private, bounded, keyset paged and scoped before limit
+count limit admits exactly100 and returns a distinct error at101 while preserving therapies
+current resolves terminal chains by clinical time and never picks late old corrections or drafts
+cursor binds normalized room and epoch; malformed room cannot become a silent broad query
+cursors bind view, day, order and authenticated scope, with no external anchor disclosure
+department changes invalidate cursor and stale preference context without changing patient scope
+department defaults, independent personal overrides, reset and CAS preserve revisions
+draft privacy and patient scope apply to reads, writes, create replay and revocation
+exact badge/list/per-patient counts agree for both sources beyond 50 and tie dates; GET writes no receipt
+exact counts exceed history page size; one metadata query returns no clinical JSON
+exact department contexts, no-department and absent profile remain distinct without implicit profile creation
+existing import rejects NRS mutation atomically and preserves both legacy arrays on equal/omitted input
+existing import rejects altered history without confirming, then omission retries safely and idempotently
+expired lease is recoverable and late success/failure tokens cannot overwrite the new attempt
+explicit identity asOf matches parameter bootstrap and excludes current-only legacy locations
+failed creation rolls back its receipt and absent legacy requestId remains compatible
+finalize replay persists once with Rome-date identity and immutable clinical data independent of Cartella
+gateway SQL keeps legacy/relational filters, accents and ACL before limit
+gds15 paper version: draft → patch → finalize → replay → correction → current/history → PDF
+global role sees all requested patient counts; other operator sees only their patient
+historical lookup ignores legacy, preserves inclusive intervals and validates calendar dates
+history is bounded, scoped, stable across draft edits and excludes snapshots and answers
+identity, ownership, assignment, room, bed and legacy changes invalidate subsequent pages
+intake review restarts its read-only snapshot after an actual concurrent Patient row version
+legacy intake parses its larger compatibility envelope only after privileged auth
+legacy intake rejects payloads above its 8 MiB compatibility limit
+location/asc keeps missing keys last, canonical numeric ties stable and arbitrary-length numbers exact
+location/asc: patients and parameters sort globally before limit with stable boundaries
+location/asc: therapy candidates preserve patient order and partial-patient continuation
+location/desc keeps missing keys last, canonical numeric ties stable and arbitrary-length numbers exact
+location/desc: patients and parameters sort globally before limit with stable boundaries
+location/desc: therapy candidates preserve patient order and partial-patient continuation
+locked latest legacy and patient ownership defeat stale PUT and scope races
+missing/null/empty stay distinct and denied scope cannot write a cartella
+mna paper version: draft → patch → finalize → replay → correction → current/history → PDF
+name/asc: patients and parameters sort globally before limit with stable boundaries
+name/asc: therapy candidates preserve patient order and partial-patient continuation
+name/desc: patients and parameters sort globally before limit with stable boundaries
+name/desc: therapy candidates preserve patient order and partial-patient continuation
+new MNA v2 archives readable 1 punto, 27,5 and 25 while retaining raw BMI and snapshot digest
+new-patient import cannot inject historical assessments and empty defaults leave the branch absent
+non-string legacy scalars are unavailable and a roomless valid bed remains explicit
+notes keyset pagination, exact summary, indexed search and malformed queries
+notes mailbox is authenticated, no-store, bounded and private per operator
+omitted defaults remain stable across midnight and inactive assignee does not break replay
+one Tinetti lifecycle retains CAS/replay, immutable snapshot, typed current/history and legacy JSON
+only declared transaction conflicts retry, with three fresh RepeatableRead attempts at most
+only one concurrent final correction may reference a predecessor of the same patient
+parameter room search is authoritative before limit+1 and identity page keeps its cursor
+pause/continue and return persist; retries preserve exact history and valid dose receipts
+personal confirmations use exact DB qualification and frozen server identity, with durable replay
+real archived PO15 MNA v1 ready retry invokes no renderer and preserves every persisted value
+real row-lock interleaving prevents scheduled/PRN dose after committed pause, with absent and present charts
+receipt survives edits/deletion and immutable hash rejects later rewrites
+renderer preserves Unicode and long text, emits readable PDF metadata and rejects unsupported glyphs
+repeatable snapshot survives historical reconciliation between budget and pain read
+repeated IDs use one minimal batch and database errors never become unassigned
+revoked qualification is re-read after the real operator lock before a new confirmation
+rollback leaves epoch unchanged and RepeatableRead keeps epoch and enrichment coherent
+room and POST name search intersect; ownership applies before either filter
+room filter precedes limit for all pages under location/asc
+room filter precedes limit for all pages under location/desc
+room filter precedes limit for all pages under name/asc
+room filter precedes limit for all pages under name/desc
+room is literal, normalized, camera-only and respects historical legacy rules
+same key with different payload conflicts; actor namespaces remain independent
+scope is checked for new creation and replay, including ownership changed while create waits
+summary intersects patient scope and handover visibility while preserving visible zeros/history
+summary reads one minimal statement and never turns database failures into zero counts
+therapy detail, location and exact totals intersect requested IDs with patient ownership
+tinetti paper version: draft → patch → finalize → replay → correction → current/history → PDF
+typed history is bounded and draft-private, with cursor type binding before pagination
+ucla_npi_sleep paper version: draft → patch → finalize → replay → correction → current/history → PDF
+v1 Tinetti, GDS-15, MNA and PAINAD records still finalize, keep their wording and render with the legacy/PAINAD renderer
+visible handover does not grant patient identity access, including overview previews
+voice replay always reaches the durable service despite stale memory and concurrent confirmations
+voice still requires confirmation and current patient scope even for a previously saved key

@@ -338,7 +338,7 @@ export function StepAnagrafica({
               valore esplicito viene mantenuto.
             </p>
           )}
-          <NpmField label="Comune di nascita">
+          <NpmField label="Comune di nascita" path="anagrafica.comuneNascita">
             <input
               className="npm-input"
               value={value.comuneNascita ?? ''}
@@ -346,7 +346,7 @@ export function StepAnagrafica({
               placeholder="Roma"
             />
           </NpmField>
-          <NpmField label="Provincia di nascita">
+          <NpmField label="Provincia di nascita" path="anagrafica.provinciaNascita">
             <input
               className="npm-input"
               value={value.provinciaNascita ?? ''}
@@ -434,7 +434,7 @@ export function StepAnagrafica({
               autoComplete="street-address"
             />
           </NpmField>
-          <NpmField label="Comune">
+          <NpmField label="Comune" path="anagrafica.comune">
             <input
               className="npm-input"
               value={value.comune ?? ''}
@@ -442,7 +442,7 @@ export function StepAnagrafica({
               placeholder="Milano"
             />
           </NpmField>
-          <NpmField label="Provincia">
+          <NpmField label="Provincia" path="anagrafica.provincia">
             <input
               className="npm-input"
               value={value.provincia ?? ''}
@@ -452,7 +452,7 @@ export function StepAnagrafica({
               style={{ textTransform: 'uppercase' }}
             />
           </NpmField>
-          <NpmField label="CAP">
+          <NpmField label="CAP" path="anagrafica.cap">
             <input
               className="npm-input"
               value={value.cap ?? ''}
@@ -474,7 +474,7 @@ export function StepAnagrafica({
         defaultOpen={referenceCompleted > 0}
       >
         <div className="npm-grid">
-          <NpmField label="Nome e cognome referente">
+          <NpmField label="Nome e cognome referente" path="anagrafica.referenteNome">
             <input
               className="npm-input"
               value={value.referenteNome ?? ''}
@@ -482,7 +482,7 @@ export function StepAnagrafica({
               placeholder="Anna Rossi"
             />
           </NpmField>
-          <NpmField label="Relazione con il paziente">
+          <NpmField label="Relazione con il paziente" path="anagrafica.referenteRelazione">
             <select
               className="npm-input npm-select"
               value={value.referenteRelazione ?? ''}
@@ -499,7 +499,7 @@ export function StepAnagrafica({
               <option value="altro">Altro</option>
             </select>
           </NpmField>
-          <NpmField label="Telefono referente">
+          <NpmField label="Telefono referente" path="anagrafica.referenteTelefono">
             <input
               type="tel"
               className="npm-input"

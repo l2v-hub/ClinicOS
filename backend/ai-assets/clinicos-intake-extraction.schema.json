@@ -1,0 +1,219 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://clinicos/extraction/intake.schema.json",
+  "title": "ClinicOS intake extraction",
+  "description": "Campi che la scheda d'ingresso ClinicOS usa davvero, e solo quelli. Ogni oggetto elenca tutte le sue proprieta' ed esclude le altre (sottoinsieme strict degli output strutturati). Dato assente = stringa vuota o array vuoto, mai inventato.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["anagrafica", "cartella"],
+  "properties": {
+    "anagrafica": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nome",
+        "cognome",
+        "dataNascita",
+        "comuneNascita",
+        "provinciaNascita",
+        "sesso",
+        "telefono",
+        "email",
+        "indirizzo",
+        "comune",
+        "provincia",
+        "cap",
+        "contattoEmergenzaNome",
+        "contattoEmergenzaRelazione",
+        "contattoEmergenzaTel"
+      ],
+      "properties": {
+        "nome": {
+          "type": "string",
+          "description": "Nome di battesimo del PAZIENTE (non del medico, del familiare o di chi firma). Iniziale maiuscola."
+        },
+        "cognome": {
+          "type": "string",
+          "description": "Cognome del PAZIENTE. Iniziale maiuscola."
+        },
+        "dataNascita": {
+          "type": "string",
+          "description": "Data di nascita del paziente, formato AAAA-MM-GG."
+        },
+        "comuneNascita": {
+          "type": "string",
+          "description": "Comune (o Stato estero) di nascita del paziente, senza la provincia."
+        },
+        "provinciaNascita": {
+          "type": "string",
+          "description": "Sigla di due lettere della provincia di nascita, solo se scritta nel documento."
+        },
+        "sesso": {
+          "type": "string",
+          "enum": ["", "M", "F"],
+          "description": "Sesso del paziente, solo se scritto nel documento."
+        },
+        "telefono": {
+          "type": "string",
+          "description": "Telefono del PAZIENTE (non del reparto, dell'ospedale o del familiare)."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email del paziente."
+        },
+        "indirizzo": {
+          "type": "string",
+          "description": "Via e numero civico di residenza o domicilio del paziente, senza CAP e comune."
+        },
+        "comune": {
+          "type": "string",
+          "description": "Comune di residenza o domicilio del paziente."
+        },
+        "provincia": {
+          "type": "string",
+          "description": "Sigla di due lettere della provincia di residenza, solo se scritta nel documento."
+        },
+        "cap": {
+          "type": "string",
+          "description": "CAP di residenza, cinque cifre."
+        },
+        "contattoEmergenzaNome": {
+          "type": "string",
+          "description": "Nome e cognome del familiare o della persona di riferimento, senza la relazione."
+        },
+        "contattoEmergenzaRelazione": {
+          "type": "string",
+          "enum": [
+            "",
+            "coniuge",
+            "figlio",
+            "genitore",
+            "fratello_sorella",
+            "nipote",
+            "amico_caregiver",
+            "tutore",
+            "altro"
+          ],
+          "description": "Relazione della persona di riferimento con il paziente (figlia -> figlio, moglie/marito -> coniuge)."
+        },
+        "contattoEmergenzaTel": {
+          "type": "string",
+          "description": "Telefono della persona di riferimento."
+        }
+      }
+    },
+    "cartella": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "codiceFiscale",
+        "strutturaDimettente",
+        "repartoDimettente",
+        "dataRicovero",
+        "dataDimissione",
+        "motivoRicovero",
+        "medicoCurante",
+        "diagnosi",
+        "allergie",
+        "farmaci"
+      ],
+      "properties": {
+        "codiceFiscale": {
+          "type": "string",
+          "description": "Codice fiscale del paziente, 16 caratteri, come scritto."
+        },
+        "strutturaDimettente": {
+          "type": "string",
+          "description": "Ospedale o struttura che ha redatto il documento (dall'intestazione)."
+        },
+        "repartoDimettente": {
+          "type": "string",
+          "description": "Reparto o unita' operativa che dimette."
+        },
+        "dataRicovero": {
+          "type": "string",
+          "description": "Data di ricovero in ospedale, formato AAAA-MM-GG."
+        },
+        "dataDimissione": {
+          "type": "string",
+          "description": "Data di dimissione, formato AAAA-MM-GG."
+        },
+        "motivoRicovero": {
+          "type": "string",
+          "description": "Motivo del ricovero in una frase breve, con le parole del documento."
+        },
+        "medicoCurante": {
+          "type": "string",
+          "description": "Medico curante o di medicina generale del paziente."
+        },
+        "diagnosi": {
+          "type": "array",
+          "description": "Solo le diagnosi scritte nella sezione delle diagnosi (di dimissione o principale). Le voci dell'anamnesi NON sono diagnosi. Una voce per diagnosi.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["descrizione", "codiceICD", "tipo"],
+            "properties": {
+              "descrizione": {
+                "type": "string",
+                "description": "Diagnosi con le parole del documento."
+              },
+              "codiceICD": {
+                "type": "string",
+                "description": "Codice ICD solo se scritto accanto alla diagnosi."
+              },
+              "tipo": {
+                "type": "string",
+                "enum": ["", "principale", "comorbidita"],
+                "description": "principale = prima diagnosi o diagnosi principale; comorbidita = le altre."
+              }
+            }
+          }
+        },
+        "allergie": {
+          "type": "array",
+          "description": "Allergie e intolleranze dichiarate PRESENTI. Se il documento dice che non ci sono allergie note, array vuoto. Una voce per sostanza.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["allergene", "reazione", "gravita"],
+            "properties": {
+              "allergene": {
+                "type": "string",
+                "description": "Sostanza o farmaco, breve (es. Penicillina)."
+              },
+              "reazione": {
+                "type": "string",
+                "description": "Reazione riferita, con le parole del documento."
+              },
+              "gravita": {
+                "type": "string",
+                "enum": ["", "lieve", "moderata", "grave"],
+                "description": "Solo se scritta nel documento."
+              }
+            }
+          }
+        },
+        "farmaci": {
+          "type": "array",
+          "description": "Farmaci della terapia alla dimissione, domiciliare o in corso. Una voce per farmaco, nell'ordine del documento. Posologia, orari e via NON servono: li legge un altro passaggio dal testo.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["nome", "dose"],
+            "properties": {
+              "nome": {
+                "type": "string",
+                "description": "Solo il nome del farmaco come scritto (principio attivo o nome commerciale), senza dose, forma o posologia."
+              },
+              "dose": {
+                "type": "string",
+                "description": "Dosaggio o concentrazione scritti accanto al nome (es. 25 mg), senza quantita' e orari."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

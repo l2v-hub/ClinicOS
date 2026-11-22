@@ -20,7 +20,12 @@
 // letter). Otherwise, or with no certain match: no `pages` and the letter-level `groupIds`.
 import { mergeExtractions } from '../../merge.js';
 import { buildImportDraftData } from '../../../intake/draft-service.js';
-import { attachPageDraftSource, pageDraftNarrative, refreshedPageData } from './draft-source.js';
+import {
+  attachPageDraftSource,
+  pageDraftExtras,
+  pageDraftNarrative,
+  refreshedPageData,
+} from './draft-source.js';
 import { ImportSessionError, canonical, hash, object, sourcePair, type Json } from './model.js';
 import type { GroupResult } from './results.js';
 import { locateFieldPages, type PageRef, type PageText } from './page-locate.js';
@@ -37,6 +42,17 @@ export const MERGE_FIELD_PATHS = [
   'anagrafica.phone',
   'anagrafica.email',
   'anagrafica.address',
+  'anagrafica.comune',
+  'anagrafica.provincia',
+  'anagrafica.cap',
+  'anagrafica.comuneNascita',
+  'anagrafica.provinciaNascita',
+  'anagrafica.referenteNome',
+  'anagrafica.referenteRelazione',
+  'anagrafica.referenteTelefono',
+  'ingresso.provenienza',
+  'ingresso.centroInviante',
+  'ingresso.motivoIngresso',
   'anamnesi.patologicaProssima',
   'anamnesi.patologicaRemota',
   'diagnosi',
@@ -59,6 +75,7 @@ export type MergeContext = {
 };
 export type MergeChanges = {
   anagrafica: boolean;
+  ingresso: boolean;
   anamnesi: boolean;
   diagnosi: boolean;
   allergie: boolean;
@@ -146,7 +163,12 @@ export function letterResult(group: GroupResult): Json {
 /** Covered draft fields proposed by a page result, built exactly as import seeding builds them. */
 export function aiDraftFields(result: Json): Json {
   const narrative = pageDraftNarrative(result);
-  const seeded = buildImportDraftData(narrative, result._sections ?? null);
+  const seeded = buildImportDraftData(
+    narrative,
+    result._sections ?? null,
+    undefined,
+    pageDraftExtras(result),
+  );
   // allergieStatus uses the intake vocabulary; only unambiguous statuses are proposed.
   const allergieStatus =
     narrative.allergyStatus === 'present' && filled(seeded.allergie)
@@ -156,6 +178,7 @@ export function aiDraftFields(result: Json): Json {
         : undefined;
   return {
     anagrafica: seeded.anagrafica,
+    ingresso: seeded.ingresso,
     anamnesi: seeded.anamnesi,
     diagnosi: seeded.diagnosi,
     allergie: seeded.allergie,
@@ -191,6 +214,7 @@ export function mergeAiIntoDraft(
     : [];
   const changed: MergeChanges = {
     anagrafica: false,
+    ingresso: false,
     anamnesi: false,
     diagnosi: false,
     allergie: false,
@@ -332,7 +356,7 @@ export function mergeAiIntoDraft(
         : refreshedPageData(data, result);
     changed.therapy = therapySignature(data) !== before;
     const imported = new Set(Array.isArray(data._importedFields) ? data._importedFields : []);
-    for (const section of ['anagrafica', 'anamnesi', 'diagnosi', 'allergie'] as const)
+    for (const section of ['anagrafica', 'ingresso', 'anamnesi', 'diagnosi', 'allergie'] as const)
       if (changed[section]) imported.add(section);
     if (filled(data.terapiaImport)) imported.add('terapiaImport');
     data._importedFields = [...imported];

@@ -1,0 +1,399 @@
+TAP version 13
+# Subtest: confirmDraft creates patient transactionally + is idempotent
+ok 1 - confirmDraft creates patient transactionally + is idempotent
+  ---
+  duration_ms: 265.758127
+  type: 'test'
+  ...
+# Subtest: confirmDraft permits a manager to recover a stale legacy owner
+ok 2 - confirmDraft permits a manager to recover a stale legacy owner
+  ---
+  duration_ms: 38.308079
+  type: 'test'
+  ...
+# Subtest: confirmJob permits a manager to recover an ownerless legacy job
+ok 3 - confirmJob permits a manager to recover an ownerless legacy job
+  ---
+  duration_ms: 65.266547
+  type: 'test'
+  ...
+# Subtest: confirmDraft: accepts a missing CF but blocks a duplicate CF (not forcible)
+ok 4 - confirmDraft: accepts a missing CF but blocks a duplicate CF (not forcible)
+  ---
+  duration_ms: 76.004816
+  type: 'test'
+  ...
+# Subtest: confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConflict
+ok 5 - confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConflict
+  ---
+  duration_ms: 112.097233
+  type: 'test'
+  ...
+# Subtest: confirmDraft: persists therapies + vitals/pain into Cartella.data
+ok 6 - confirmDraft: persists therapies + vitals/pain into Cartella.data
+  ---
+  duration_ms: 180.282783
+  type: 'test'
+  ...
+# Subtest: bounded PDF reader verifies once, preserves deterministic page bytes/order and evicts
+ok 7 - bounded PDF reader verifies once, preserves deterministic page bytes/order and evicts
+  ---
+  duration_ms: 2014.068588
+  type: 'test'
+  ...
+# Subtest: page 17 failure preserves 29 OCR checkpoints; retry performs one page and one extraction
+ok 8 - page 17 failure preserves 29 OCR checkpoints; retry performs one page and one extraction
+  ---
+  duration_ms: 1757.066826
+  type: 'test'
+  ...
+# Subtest: lost create/run/retry responses and runtime 404 recover without duplicate application units
+ok 9 - lost create/run/retry responses and runtime 404 recover without duplicate application units
+  ---
+  duration_ms: 959.616844
+  type: 'test'
+  ...
+# Subtest: attempt mismatch, disguised truncation and invalid extraction schema never complete
+ok 10 - attempt mismatch, disguised truncation and invalid extraction schema never complete
+  ---
+  duration_ms: 354.793878
+  type: 'test'
+  ...
+# Subtest: only expired leases are reclaimed; concurrent workers claim once and stale run cannot persist
+ok 11 - only expired leases are reclaimed; concurrent workers claim once and stale run cannot persist
+  ---
+  duration_ms: 136.023481
+  type: 'test'
+  ...
+# Subtest: duplicate/rejected replay and identical manifest preserve ready revision, source and token
+ok 12 - duplicate/rejected replay and identical manifest preserve ready revision, source and token
+  ---
+  duration_ms: 91.49898
+  type: 'test'
+  ...
+# Subtest: pages are read in parallel; a failed page keeps the others and only it is read again
+ok 13 - pages are read in parallel; a failed page keeps the others and only it is read again
+  ---
+  duration_ms: 651.703192
+  type: 'test'
+  ...
+# Subtest: native PostgreSQL concurrent draft/job confirmations share one patient for legacy and page sessions
+ok 14 - native PostgreSQL concurrent draft/job confirmations share one patient for legacy and page sessions
+  ---
+  duration_ms: 1944.739213
+  type: 'test'
+  ...
+# Subtest: conflict defer cannot prescribe; selecting a candidate never imports the other therapy
+not ok 15 - conflict defer cannot prescribe; selecting a candidate never imports the other therapy
+  ---
+  duration_ms: 95.023469
+  type: 'test'
+  location: '/home/user/ClinicOS/tests/integration/po05-draft-archive.test.mts:1:1320'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    4 !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 4
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/home/user/ClinicOS/tests/integration/po05-draft-archive.test.mts:85:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: refresh preserves edits, makes changed rows stale, CAS/replay protects autosave and proposals add once
+ok 16 - refresh preserves edits, makes changed rows stale, CAS/replay protects autosave and proposals add once
+  ---
+  duration_ms: 149.1282
+  type: 'test'
+  ...
+# Subtest: reordering equal therapies across groups preserves one reviewed row and creates no proposal
+ok 17 - reordering equal therapies across groups preserves one reviewed row and creates no proposal
+  ---
+  duration_ms: 91.415619
+  type: 'test'
+  ...
+# Subtest: archive binds prepared sources, atomically stores original/group PDFs, replay creates no duplicates
+ok 18 - archive binds prepared sources, atomically stores original/group PDFs, replay creates no duplicates
+  ---
+  duration_ms: 172.027804
+  type: 'test'
+  ...
+# Subtest: cleanup removes temporary PHI and receipts, preserves draft, and skips active leases
+ok 19 - cleanup removes temporary PHI and receipts, preserves draft, and skips active leases
+  ---
+  duration_ms: 149.993114
+  type: 'test'
+  ...
+# Subtest: an archive ID collision rolls back patient and document writes inside the confirmation transaction
+ok 20 - an archive ID collision rolls back patient and document writes inside the confirmation transaction
+  ---
+  duration_ms: 90.64186
+  type: 'test'
+  ...
+# Subtest: thirty-page PDF is counted; page replacement at the cap is atomic and replay-safe
+ok 21 - thirty-page PDF is counted; page replacement at the cap is atomic and replay-safe
+  ---
+  duration_ms: 2090.462487
+  type: 'test'
+  ...
+# Subtest: simultaneous uploads use revision CAS on real PostgreSQL; retry does not overwrite the winner
+ok 22 - simultaneous uploads use revision CAS on real PostgreSQL; retry does not overwrite the winner
+  ---
+  duration_ms: 91.475374
+  type: 'test'
+  ...
+# Subtest: page omission cannot delete a source; foreign operator cannot read metadata or bytes
+ok 23 - page omission cannot delete a source; foreign operator cannot read metadata or bytes
+  ---
+  duration_ms: 80.196814
+  type: 'test'
+  ...
+# Subtest: chunked multipart is bounded by aggregate request bytes before any source is stored
+ok 24 - chunked multipart is bounded by aggregate request bytes before any source is stored
+  ---
+  duration_ms: 171.618511
+  type: 'test'
+  ...
+# Subtest: createDraft + patch autosave merges data
+ok 25 - createDraft + patch autosave merges data
+  ---
+  duration_ms: 184.550633
+  type: 'test'
+  ...
+# Subtest: autosave rejects extraction metadata replacement atomically and preserves it on ordinary edits
+ok 26 - autosave rejects extraction metadata replacement atomically and preserves it on ordinary edits
+  ---
+  duration_ms: 26.567214
+  type: 'test'
+  ...
+# Subtest: seedDraftFromImport: creates draft seeded from narrative
+ok 27 - seedDraftFromImport: creates draft seeded from narrative
+  ---
+  duration_ms: 48.417707
+  type: 'test'
+  ...
+# Subtest: seedDraftFromImport: does NOT seed allergie when allergyStatus is explicitly_absent
+ok 28 - seedDraftFromImport: does NOT seed allergie when allergyStatus is explicitly_absent
+  ---
+  duration_ms: 14.795235
+  type: 'test'
+  ...
+# Subtest: seedDraftFromImport: throws when job has no _narrative
+ok 29 - seedDraftFromImport: throws when job has no _narrative
+  ---
+  duration_ms: 11.997886
+  type: 'test'
+  ...
+# Subtest: isPlausibleAllergenText: rejects a multi-section narrative blob, accepts concise text
+ok 30 - isPlausibleAllergenText: rejects a multi-section narrative blob, accepts concise text
+  ---
+  duration_ms: 0.529843
+  type: 'test'
+  ...
+# Subtest: deriveAllergens: [] for a blob; one entry per concise allergen otherwise
+ok 31 - deriveAllergens: [] for a blob; one entry per concise allergen otherwise
+  ---
+  duration_ms: 0.205769
+  type: 'test'
+  ...
+# Subtest: buildImportDraftData: blob allergiesText does NOT seed a false allergy row
+ok 32 - buildImportDraftData: blob allergiesText does NOT seed a false allergy row
+  ---
+  duration_ms: 0.634489
+  type: 'test'
+  ...
+# Subtest: buildImportDraftData: concise multi-allergen text → one row per allergen
+ok 33 - buildImportDraftData: concise multi-allergen text → one row per allergen
+  ---
+  duration_ms: 0.764948
+  type: 'test'
+  ...
+# Subtest: buildImportDraftData: therapyText parsed into structured terapia rows (one per drug)
+ok 34 - buildImportDraftData: therapyText parsed into structured terapia rows (one per drug)
+  ---
+  duration_ms: 12.678316
+  type: 'test'
+  ...
+# Subtest: \#473: validated CF derives only an unambiguous encoded sex
+ok 35 - \#473: validated CF derives only an unambiguous encoded sex
+  ---
+  duration_ms: 0.463048
+  type: 'test'
+  ...
+# Subtest: \#473: missing imported sex is an editable derived field with retained source
+ok 36 - \#473: missing imported sex is an editable derived field with retained source
+  ---
+  duration_ms: 1.008639
+  type: 'test'
+  ...
+# Subtest: \#473: invalid CF cannot invent sex and contradictory explicit sex remains untouched
+ok 37 - \#473: invalid CF cannot invent sex and contradictory explicit sex remains untouched
+  ---
+  duration_ms: 1.528314
+  type: 'test'
+  ...
+# Subtest: \#473: unheaded medication source remains a review inventory, not an administration
+ok 38 - \#473: unheaded medication source remains a review inventory, not an administration
+  ---
+  duration_ms: 2.305707
+  type: 'test'
+  ...
+# Subtest: manual and OCR intake preserve unknown DOB/CF/phone and archive source atomically
+ok 39 - manual and OCR intake preserve unknown DOB/CF/phone and archive source atomically
+  ---
+  duration_ms: 3173.158747
+  type: 'test'
+  ...
+# Subtest: supplied malformed values fail with no materialization and no placeholders
+ok 40 - supplied malformed values fail with no materialization and no placeholders
+  ---
+  duration_ms: 160.312936
+  type: 'test'
+  ...
+# Subtest: concurrent confirms and response replay converge on one identity
+ok 41 - concurrent confirms and response replay converge on one identity
+  ---
+  duration_ms: 71.978518
+  type: 'test'
+  ...
+# Subtest: draft/job race shares identity, document and confirmation even without CF
+ok 42 - draft/job race shares identity, document and confirmation even without CF
+  ---
+  duration_ms: 70.45816
+  type: 'test'
+  ...
+# PATCH /patients/cmwrlgl1t0011g17dogog5msu → aggiornato
+# PATCH /patients/cmwrlgl1t0011g17dogog5msu → aggiornato
+# Subtest: completion preserves patient/document IDs; duplicate CF and malformed updates are atomic
+ok 43 - completion preserves patient/document IDs; duplicate CF and malformed updates are atomic
+  ---
+  duration_ms: 157.463187
+  type: 'test'
+  ...
+# Subtest: homonyms require review only within actor scope; absent DOB includes known birth dates
+not ok 44 - homonyms require review only within actor scope; absent DOB includes known birth dates
+  ---
+  duration_ms: 38.470949
+  type: 'test'
+  location: '/home/user/ClinicOS/tests/integration/progressive-intake-db.test.mts:1:6950'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'duplicate'
+    - 'created'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'created'
+  actual: 'duplicate'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/home/user/ClinicOS/tests/integration/progressive-intake-db.test.mts:238:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: scope prevents direct-service and HTTP access, including existing-patient import
+not ok 45 - scope prevents direct-service and HTTP access, including existing-patient import
+  ---
+  duration_ms: 33.661417
+  type: 'test'
+  location: '/home/user/ClinicOS/tests/integration/progressive-intake-db.test.mts:1:7558'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (/home/user/ClinicOS/tests/integration/progressive-intake-db.test.mts:251:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: selected reviewed therapy is materialized; excluded OCR therapy remains readable and not scheduled
+ok 46 - selected reviewed therapy is materialized; excluded OCR therapy remains readable and not scheduled
+  ---
+  duration_ms: 76.200803
+  type: 'test'
+  ...
+# Subtest: omitting an included or unverified OCR row cannot silently activate or discard it
+not ok 47 - omitting an included or unverified OCR row cannot silently activate or discard it
+  ---
+  duration_ms: 25.167584
+  type: 'test'
+  location: '/home/user/ClinicOS/tests/integration/progressive-intake-db.test.mts:1:9925'
+  failureType: 'testCodeFailure'
+  error: |-
+    The "invalid" validation function is expected to return "true". Received false
+    
+    Caught error:
+    
+    Error: Aggiungi le nuove terapie tramite le proposte della revisione
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (/home/user/ClinicOS/tests/integration/progressive-intake-db.test.mts:345:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: missing original rolls back identity, job and draft confirmation
+ok 48 - missing original rolls back identity, job and draft confirmation
+  ---
+  duration_ms: 71.893759
+  type: 'test'
+  ...
+# Subtest: an already confirmed import cannot create an editable draft; concurrent seeds converge
+ok 49 - an already confirmed import cannot create an editable draft; concurrent seeds converge
+  ---
+  duration_ms: 121.39174
+  type: 'test'
+  ...
+# Subtest: job narrative fallback and clinical allergy guards survive a legacy empty linked draft
+ok 50 - job narrative fallback and clinical allergy guards survive a legacy empty linked draft
+  ---
+  duration_ms: 104.589534
+  type: 'test'
+  ...
+# Subtest: confirmed replay respects changed patient scope and refuses contradictory legacy references
+not ok 51 - confirmed replay respects changed patient scope and refuses contradictory legacy references
+  ---
+  duration_ms: 55.830959
+  type: 'test'
+  location: '/home/user/ClinicOS/tests/integration/progressive-intake-db.test.mts:1:12903'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (/home/user/ClinicOS/tests/integration/progressive-intake-db.test.mts:456:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: fiscal uniqueness under concurrent distinct drafts stays global without leaking names
+ok 52 - fiscal uniqueness under concurrent distinct drafts stays global without leaking names
+  ---
+  duration_ms: 38.115506
+  type: 'test'
+  ...
+1..52
+# tests 52
+# suites 0
+# pass 47
+# fail 5
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 93896.131492
