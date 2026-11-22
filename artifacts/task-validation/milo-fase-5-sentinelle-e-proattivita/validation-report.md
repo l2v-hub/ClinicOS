@@ -59,7 +59,7 @@ Il catalogo eventi/segnali/ruoli è rigenerato dal codice (`scripts/proactive/ex
 | AC  |  Result | Evidence                                                                                                                                                                                                                                     |
 | --- | ------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | AC1 |    PASS | `logs/proactive-suite.log`, scenario V: NEWS2 6 → `ATTENTION_REQUIRED`, alta, «NEWS2 6 — rischio medio», «FR 2 · SpO₂ 2 · FC 2 · Risposta prevista: Valutazione medica urgente (promemoria, … RCP 2017 …)»; il segnale non contiene i valori |
-| AC2 | PARTIAL | lato server il segnale è nel conteggio `?view=count` subito dopo la scrittura (meno di 5 s, scenario V); il badge si aggiorna ogni 15 s e dopo un salvataggio (`logs/frontend-badge.log`); nel browser sul sito non è ancora verificato      |
+| AC2 |    PASS | sul sito: badge con anello e «1 promemoria clinico da vedere» sul pulsante Milo 6 s dopo la conferma della misura, senza aprire il pannello (`logs/demo-live.log`, `screenshots/04-badge-topbar.png`) |
 | AC3 |    PASS | scenario V: presa visione nell'audit con l'ospite, conteggio −1, misura normale non riapre, NEWS2 8 → nuova revisione urgente di nuovo da vedere; personale (scenario K esistente)                                                           |
 | AC4 |    PASS | `logs/unit-sentinels.log`: incompleta → nessun NEWS2; soglie 3–5 o spegnimento; amministratore senza il segnale (scenario V)                                                                                                                 |
 | AC5 |    PASS | catalogo rigenerato; proattiva 31/0, frontend 1623/0, typecheck e build backend e frontend                                                                                                                                                   |
@@ -71,7 +71,7 @@ Il catalogo eventi/segnali/ruoli è rigenerato dal codice (`scripts/proactive/ex
 | Unit             |    PASS | `logs/unit-sentinels.log` (3/3), `logs/frontend-badge.log` (2/2)                   |
 | Integration      |    PASS | `logs/proactive-suite.log` (31/0, Express + PostgreSQL reali)                      |
 | API              |    PASS | `/skills/proactive/inbox`, `?view=count`, `/skills/proactive/ack` nello scenario V |
-| Playwright       | NOT RUN | sul sito dopo il rilascio                                                          |
+| Playwright       |    PASS | sul sito: badge, segnale «NEWS2 6 — rischio medio» con il perché, «Preso visione» dall'interfaccia, conteggio dei promemoria a 0 (`logs/demo-live.log`, screenshot 04–06) |
 | Persistence      |    PASS | presa visione letta dall'audit (scenario V)                                        |
 | Agnos AI         |      NA |                                                                                    |
 | Voice            |      NA |                                                                                    |
@@ -79,6 +79,10 @@ Il catalogo eventi/segnali/ruoli è rigenerato dal codice (`scripts/proactive/ex
 | Security/privacy |    PASS | ambito dell'ospite, amministratore escluso, niente valori nel segnale              |
 
 ## Runtime Evidence
+
+Sul sito (demo, commit `cdc409f`): `logs/demo-live.log`, `screenshots/04-badge-topbar.png`,
+`05-assistente-segnali.png`, `06-dopo-presa-visione.png`.
+
 
 `screenshots/badge-milo-render-locale.png`: pulsante Milo con le novità e con un promemoria
 clinico. È un render statico con gli stili dell'app, non il sito.
@@ -98,4 +102,4 @@ clinico. È un render statico con gli stili dell'app, non il sito.
 
 ## Final Decision
 
-IMPLEMENTED — NOT VERIFIED
+CLOSED — VERIFIED

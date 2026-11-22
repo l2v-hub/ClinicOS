@@ -1,0 +1,12 @@
+Verifica sul sito https://clinicos-eosin.vercel.app (backend deployment ffb794d8, commit cdc409f),
+2026-11-22, Playwright headless; misura NEWS2 6 registrata dall'Infermiere 1 alle 18:33:11 (giro visita).
+
+Profilo Medico 1 (badge osservato senza aprire il pannello):
+18:33:12 badge promemoria visibile dopo 6 s | conteggi: {"total":2,"toSee":2,"new":2,"changed":2,"attention":1,
+  "byType":{"ATTENTION_REQUIRED":1,"NEW_INFORMATION":1}} | etichetta: 1 promemoria clinico da vedere · 2 novità da vedere
+18:33:13 segnale: {"type":"ATTENTION_REQUIRED","priority":"alta","title":"NEWS2 6 — rischio medio",
+  "detail":"FR 2 · SpO₂ 2 · FC 2 · Risposta prevista: Valutazione medica urgente (promemoria, NEWS2 — RCP 2017 — scala SpO₂ 1)",
+  "reason":"Sentinella NEWS2 sulle misure nuove del tuo ambito: promemoria, la valutazione resta del professionista","status":"nuovo"}
+18:33:16 presa visione: dal pulsante «Preso visione» dell'interfaccia (Milo a schermo intero, «Per te»)
+18:33:18 conteggi dopo presa visione: {"total":2,"toSee":1,"new":1,"changed":2,"attention":0,...}
+Prima della misura (Supervisore 1): conteggi con attention 0, badge assente.

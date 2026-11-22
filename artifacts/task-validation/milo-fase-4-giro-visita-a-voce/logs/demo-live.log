@@ -1,0 +1,18 @@
+Verifica sul sito https://clinicos-eosin.vercel.app (frontend dpl_CKXA2bRqAnLn4wFRvWj6Dbdgfpoh,
+backend deployment ffb794d8, commit cdc409f), 2026-11-22, Playwright headless.
+Paziente di prova creato con POST /patients dal profilo Medico 1: «Prova Milo», CF fittizio
+PRVMLI40C15H501Y, id cmws6cotz000e01rwl1jqb6u4 (su richiesta dell'utente).
+
+Profilo Infermiere 1, pannello di Milo, comando «giro visita», testo dettato:
+18:33:02 bozza 1: ["Prova Milo [Bozza] PA=125/80,SpO₂=97,FC=72,FR=16,Temperatura=36,6,Ossigeno=no,Coscienza=A"]
+18:33:06 dopo conferma 1: ["Prova Milo [Registrato] PA=125/80,SpO₂=97,FC=72,FR=16,Temperatura=36,6,Ossigeno=no,Coscienza=A"]
+18:33:07 bozza 2: [... registrato ..., "Prova Milo [Bozza] PA=150/90,SpO₂=93,FC=115,FR=22,Temperatura=37,Ossigeno=no,Coscienza=A"]
+18:33:11 dopo conferma 2: entrambe [Registrato]
+18:33:11 riepilogo: Registrati 2 · in bozza 0 · non attribuiti 0
+Persistenza: nella scheda del paziente (Medico 1) «2 rilevazioni oggi · ultima 22/11/2026 19:33 ·
+PA 150/90 mmHg · SpO₂ 93 % · O₂ No · FC 115 bpm · FR 22 atti/min · TC 37 °C» (screenshot 07).
+Testi dettati: «Prova pressione 125 su 80 frequenza 72 saturazione 97 frequenza respiratoria 16
+temperatura 36 e 6 in aria ambiente vigile» e «Prova pressione 150 su 90 frequenza 115
+saturazione 93 frequenza respiratoria 22 temperatura 37 in aria ambiente vigile».
+Profilo Supervisore 1 prima della creazione del paziente: «Rossi pressione …» → nessuna bozza,
+frammento «da attribuire» con «Testo senza paziente» (nessun paziente nel perimetro).
