@@ -42,4 +42,19 @@ test('raw source ids in the prose become numbered references in source order', (
     'Il NEWS2 è 6 [1]. La PA era 125/80 [2].',
   );
   assert.equal(numberSourceIds('Nessun id qui.', sources as never), 'Nessun id qui.');
+  // Forme viste sulla demo: nessuna parentesi spuria («[ [1]»).
+  const id1 = 'c3743db8-21d7-4175-8830-7c724632eb01';
+  for (const form of [
+    `[${id1}]`,
+    `[fonte: ${id1}]`,
+    `(fonte: ${id1})`,
+    `fonte: ${id1}`,
+    `(${id1})`,
+  ]) {
+    assert.equal(
+      numberSourceIds(`Coscienza: A. ${form}`, sources as never),
+      'Coscienza: A. [1]',
+      form,
+    );
+  }
 });

@@ -319,7 +319,9 @@ def _team_model_factory():
     if builder is None:
         raise RuntimeError_(ErrorKind.CAPABILITY, "Il modello configurato non supporta il team di agenti")
     spec = built.spec
-    return (lambda: builder().model), f"{getattr(spec, 'provider', '')}:{getattr(spec, 'model_id', spec)}"
+    from ..models.providers.agno_team import team_model
+
+    return (lambda: team_model(builder().model)), f"{getattr(spec, 'provider', '')}:{getattr(spec, 'model_id', spec)}"
 
 
 @app.post("/v1/assistant/team", response_model=TeamResponse)

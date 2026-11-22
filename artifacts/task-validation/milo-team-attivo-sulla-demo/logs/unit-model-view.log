@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: ISO instants become facility time for the model; other strings and the original stay
+ok 1 - ISO instants become facility time for the model; other strings and the original stay
+  ---
+  duration_ms: 1.390511
+  type: 'test'
+  ...
+# Subtest: raw source ids in the prose become numbered references in source order
+ok 2 - raw source ids in the prose become numbered references in source order
+  ---
+  duration_ms: 2.694459
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 190.748734

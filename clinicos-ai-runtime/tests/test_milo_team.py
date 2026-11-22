@@ -57,6 +57,7 @@ class FakeModel(BaseHTTPRequestHandler):
     """Risponde come un modello: delega, poi usa lo strumento, poi conclude citando [S1]."""
 
     seen_tools: list = []
+    bodies: list = []
 
     def log_message(self, *a):
         pass
@@ -74,6 +75,7 @@ class FakeModel(BaseHTTPRequestHandler):
 
     def do_POST(self):  # noqa: N802
         req = json.loads(self.rfile.read(int(self.headers.get("content-length") or 0)))
+        FakeModel.bodies.append(req)
         tools = {t["function"]["name"]: t["function"] for t in req.get("tools") or []}
         FakeModel.seen_tools.append(sorted(tools))
         answered = any(m.get("role") == "tool" for m in req.get("messages") or [])
@@ -187,6 +189,24 @@ class MiloTeamTests(unittest.TestCase):
         text, cited = team_mod.renumber_citations("Uno [S3], due [S1], ancora [S3] e falso [S7].", ledger)
         self.assertEqual(text, "Uno [1], due [2], ancora [1] e falso.")
         self.assertEqual([c["recordId"] for c in cited], ["3", "1"])
+
+    def test_team_models_ask_for_no_reasoning_so_tools_work(self):
+        """Azure gpt-6.1-sol su chat/completions rifiuta gli strumenti col ragionamento attivo."""
+        from clinicos_ai.models.providers.agno_team import team_model
+
+        FakeModel.bodies.clear()
+        factory = self._factory()
+        asyncio.run(team_mod.run_milo_team(self._req(), lambda: team_model(factory()), timeout_seconds=30,
+                                           env=self._env()))
+        self.assertTrue(FakeModel.bodies)
+        self.assertTrue(all(b.get("reasoning_effort") == "none" for b in FakeModel.bodies))
+        # Configurabile, con ripiego su «none» per valori non ammessi.
+        self.assertEqual(team_model(factory(), env={"AI_TEAM_REASONING_EFFORT": "low"}).reasoning_effort, "low")
+        self.assertEqual(team_model(factory(), env={"AI_TEAM_REASONING_EFFORT": "boh"}).reasoning_effort, "none")
+        # Un valore già impostato dal provider non viene toccato.
+        m = factory()
+        m.reasoning_effort = "high"
+        self.assertEqual(team_model(m).reasoning_effort, "high")
 
 
 if __name__ == "__main__":
