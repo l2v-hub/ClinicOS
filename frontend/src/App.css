@@ -5784,6 +5784,13 @@ textarea.form-input {
 .ai-asst__answer p {
   margin: 0 0 6px;
 }
+.ai-asst__answer-list {
+  margin: 0 0 6px;
+  padding-left: 18px;
+}
+.ai-asst__answer-list li {
+  margin: 2px 0;
+}
 .ai-asst__team {
   font-size: 12px;
   color: var(--ds-ai-strong, #5329b3);

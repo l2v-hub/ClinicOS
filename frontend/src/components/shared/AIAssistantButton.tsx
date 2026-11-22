@@ -5,6 +5,7 @@ import { isSimulatorSession, operatorHeaders } from '../../lib/operatorSession';
 import { NavChips } from './agnos/NavChips';
 import { PARTIAL_RESULTS_MESSAGE } from './agnos/assistantFeedback';
 import { MiloBlocks, type MiloBlock } from './agnos/MiloBlocks';
+import { MiloText } from './agnos/MiloText';
 
 // REQ-040: global "Assistente ClinicOS" — a SOURCE_ONLY search/correlation assistant.
 // It calls the operator-authenticated /ai/assistant/query (NEVER the token-gated internal route);
@@ -339,9 +340,7 @@ export function AnswerView({
       ) : null}
       {answer.answerText && (
         <div className="ai-asst__answer" data-testid="assistant-answer-text">
-          {answer.answerText.split(/\n{2,}/).map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
-          ))}
+          <MiloText text={answer.answerText} />
           {numbered && answer.team?.members.length ? (
             <div className="ai-asst__team" data-testid="assistant-team-members">
               Milo · {answer.team.members.map((m) => TEAM_MEMBER_LABELS[m] ?? m).join(', ')}

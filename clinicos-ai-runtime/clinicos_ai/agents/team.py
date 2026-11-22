@@ -96,6 +96,8 @@ COORDINATOR_INSTRUCTIONS = [
     "componi la risposta finale in italiano, breve e concreta.",
     "Usa SOLO dati restituiti dagli strumenti. Ogni valore citato deve avere la sua fonte [S#] "
     "esattamente come compare nei risultati. Se un dato manca, dillo.",
+    "Scrivi in testo semplice: frasi brevi o un elenco con trattini «- ». Niente markdown (niente "
+    "asterischi, titoli o tabelle).",
     "Quando riassumi la risposta di uno specialista CONSERVA i suoi riferimenti [S#] accanto ai "
     "valori: senza riferimenti la risposta non può essere mostrata.",
     "Non fornire diagnosi, prognosi, terapie o valutazioni cliniche personali: riporti i dati e, "

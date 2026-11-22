@@ -11,7 +11,7 @@
 
 | Area                 | Impacted |
 | -------------------- | -------: |
-| Frontend/UI          |       no |
+| Frontend/UI          |      yes |
 | Backend/API          |      yes |
 | Database/Persistence |       no |
 | Agnos AI / Chatbot   |      yes |
@@ -57,6 +57,9 @@ deploy precedente aveva ridistribuito l'immagine vecchia. Ricaricato da `main` (
 - AC3: test del servizio AI e del backend, typecheck.
 - AC5: i motivi di scarto (no_text, no_reads, no_citations, ungrounded, action_claim) sono distinti
   e registrati; una risposta senza [S#] dopo letture riuscite cita le fonti lette.
+- AC6: il testo del team è mostrato senza simboli markdown grezzi (grassetto come grassetto,
+  elenchi come elenchi, righe di tabella leggibili), senza HTML grezzo; il coordinatore risponde in
+  testo semplice.
 - AC4 (dopo il rilascio): sulla demo almeno una domanda risponde in modalità team con fonti
   numerate; tempi registrati; altrimenti il team viene spento.
 
