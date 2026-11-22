@@ -52,7 +52,7 @@ Si aggiungono due azioni sotto la risposta:
 | AC2 |    PASS | `logs/integration-milo-phase3.log` (percorso classico su PGlite: parametri e NEWS2 6; team: blocchi dalle letture della delega) |
 | AC3 |    PASS | `logs/frontend-milo-phase3.log`; render locale `screenshots/milo-blocks-render-locale.png`                                      |
 | AC4 |    PASS | `logs/frontend-milo-phase3.log` (solo domanda + id paziente, per operatore, riletti dall'archivio)                              |
-| AC5 | PARTIAL | intestazione di stampa e pulsante verificati nel render; la stampa vera del browser non è stata eseguita                        |
+| AC5 |    PASS | sul sito: «Stampa report» isola la risposta a tutta pagina con intestazione (domanda, data in ora italiana), senza pulsanti (`screenshots/15-stampa-a-tutta-pagina-sul-sito.png`) |
 | AC6 |    PASS | frontend 1612/0, build frontend, typecheck e build backend                                                                      |
 
 ## Test Results
@@ -62,7 +62,7 @@ Si aggiungono due azioni sotto la risposta:
 | Unit             |    PASS | `logs/unit-milo-phase3.log` (4/4), `logs/frontend-milo-phase3.log` (6/6)                  |
 | Integration      |    PASS | `logs/integration-milo-phase3.log` (3/3)                                                  |
 | API              |    PASS | campo `blocks` in `assistantQuery` (integrazione)                                         |
-| Playwright       | NOT RUN | sul sito: previsto dopo il rilascio; in locale solo render statico del componente         |
+| Playwright       |    PASS | sul sito con il paziente di prova: blocchi parametri e NEWS2, cruscotto fissato dopo ricarica, stampa (`screenshots/07…09`, `15…`, `13-ore-italiane-fonti-numerate.png`) |
 | Persistence      |    PASS | cruscotti riletti dall'archivio del browser (unit)                                        |
 | Agnos AI         |      NA | nessuna azione nuova                                                                      |
 | Voice            |      NA |                                                                                           |
@@ -71,7 +71,21 @@ Si aggiungono due azioni sotto la risposta:
 
 ## Runtime Evidence
 
-`screenshots/milo-blocks-render-locale.png`: `AnswerView` reso con gli stili reali dell'app e dati
+Sul sito (demo), con il paziente di prova «Prova Milo»:
+- indicatori e andamento delle 2 misure;
+- NEWS2 6 «rischio medio», con risposta del protocollo, fonte e storico;
+- «Fissa come cruscotto» che resta dopo il ricaricamento;
+- «Stampa report» a tutta pagina.
+
+Difetti trovati e corretti prima della chiusura:
+- prosa in UTC con identificativi grezzi;
+- stampa nel pannello;
+- parentesi spurie;
+- markdown grezzo.
+
+Correzioni nelle PR #545, #546 e #550.
+
+In locale: `screenshots/milo-blocks-render-locale.png`: `AnswerView` reso con gli stili reali dell'app e dati
 sintetici. Non è il sito.
 
 ## Logs
@@ -81,11 +95,11 @@ sintetici. Non è il sito.
 
 ## Residual Risks
 
-- Il grafico nel pannello stretto si adatta alla larghezza solo nel browser (ResizeObserver): da
-  vedere sul sito.
+- Il grafico nel pannello stretto si adatta alla larghezza nel browser (ResizeObserver): visto sul
+  sito, leggibile.
 - Rinviata la navigazione verso la scheda Parametri già impostata sul periodo della risposta: resta
   la navigazione esistente.
 
 ## Final Decision
 
-IMPLEMENTED — NOT VERIFIED
+CLOSED — VERIFIED

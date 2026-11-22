@@ -1,0 +1,28 @@
+Verifica sul sito https://clinicos-eosin.vercel.app dopo #549 (backend d8fde0b1, servizio AI 26aca6ac,
+AI_ASSISTANT_TEAM_ENABLED=true), 2026-11-22 21:48–21:51, Playwright headless, paziente di prova «Prova Milo».
+
+Prima di #549 (stessa prova, 21:05): «[ai-team] rejected reason=no_reads», servizio AI «calls>0 ok=0»
+per ogni domanda: la rotta /internal/ai/tools/:tool era respinta come «Operazione non catalogata».
+
+Dopo #549 — log del backend:
+21:48:48 [ai-team] {"outcome":"rejected","reason":"no_reads","reads":1,"sources":0,...,"members":"struttura","ms":12843}   (turni: nessun dato)
+21:49:02 [ai-team] {"outcome":"accepted","reads":5,"sources":7,"cited":4,"members":"struttura,sorveglianza","ms":30077}
+21:49:07 [ai-team] {"outcome":"rejected","reason":"no_reads","reads":1,"sources":0,...,"members":"struttura","ms":16502}  (agenda vuota)
+21:49:41 [ai-team] {"outcome":"accepted","reads":2,"sources":2,"cited":2,"members":"struttura","ms":17005}
+21:49:44 [ai-team] {"outcome":"accepted","reads":1,"sources":2,"cited":2,"members":"clinico","ms":18573}
+21:50:06 [ai-team] {"outcome":"accepted","reads":1,"sources":2,"cited":2,"members":"sorveglianza","ms":21024}
+21:50:49 [ai-team] {"outcome":"accepted","reads":5,"sources":4,"cited":2,"members":"clinico","ms":31729}
+
+Risposte (pannello di Milo):
+- Supervisore «com'è l'agenda della settimana?» → mode team, Struttura + Sorveglianza: letti 16 liberi,
+  nessun appuntamento oggi, nessuna consegna urgente [1][2]… (13,6 s lato pagina).
+- Medico «come sono i parametri?» → mode team, Clinico paziente: le due rilevazioni del 22/11 19:33
+  messe a confronto [1][2] (18,2 s).
+- Medico «qual è il NEWS2 di oggi?» → mode team, Sorveglianza clinica: «Il NEWS2 più recente di oggi è 6,
+  nella rilevazione delle 19:33… un'altra rilevazione nello stesso minuto con NEWS2 0» [1][2] (23,3 s),
+  con i blocchi NEWS2 e storico.
+- Medico «com'è andata la pressione questa settimana e cosa è cambiato tra le due rilevazioni?» → mode
+  team, Clinico paziente: «solo due rilevazioni, entrambe del 22/11… La pressione è passata da 125/80 a
+  150/90 mmHg: +25 di sistolica e +10 di diastolica» [1][2] (34,0 s), con andamento e indicatori.
+- Domande senza dati (turni): team scartato con «no_reads», risposta classica «non trovato».
+Difetto visto: il testo contiene markdown grezzo (**, tabelle |) → corretto in questo commit.

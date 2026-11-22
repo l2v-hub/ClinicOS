@@ -47,7 +47,7 @@ Backend: `ai/assistant/{agent-grants,team,config,runtime-client,service}.ts`,
 | AC5 |    PASS | `logs/frontend-tests.log` (`miloTeamAnswer.test.ts`), `parseConversationHistory` (unit)                                                                                   |
 | AC6 |    PASS | `logs/unit-milo-phase2.log`                                                                                                                                               |
 | AC7 |    PASS | `logs/backend-suite-summary.log` (0 fallimenti nuovi), runtime 255 OK, frontend 1606 OK, build                                                                            |
-| AC8 | NOT RUN | richiede il rilascio sulla demo e l'attivazione dell'interruttore: non ancora fatto                                                                                       |
+| AC8 |    PASS | sulla demo, dopo le correzioni #546–#550: domande di paziente e struttura con risposta del team e fonti verificate; tempi 13–34 s (`logs/demo-live-team.log`, screenshot) |
 
 ## Test Results
 
@@ -56,7 +56,7 @@ Backend: `ai/assistant/{agent-grants,team,config,runtime-client,service}.ts`,
 | Unit             |    PASS | `logs/unit-milo-phase2.log`                                                                            |
 | Integration      |    PASS | `logs/integration-milo-phase2.log` (5/5)                                                               |
 | API              |    PASS | `/internal/ai/tools/:tool` su Express reale in integrazione; `/v1/assistant/team` nei test del runtime |
-| Playwright       | NOT RUN | previsto dopo il rilascio (pannello con risposta del team)                                             |
+| Playwright       |    PASS | sul sito: `logs/demo-live-team.log`, `screenshots/team-*-sul-sito.png` |
 | Persistence      |      NA | sola lettura                                                                                           |
 | Agnos AI         |    PASS | strumenti del team = strumenti consentiti al ruolo                                                     |
 | Voice            |      NA |                                                                                                        |
@@ -65,7 +65,16 @@ Backend: `ai/assistant/{agent-grants,team,config,runtime-client,service}.ts`,
 
 ## Runtime Evidence
 
-Solo locale (PGlite, modello simulato). Nessuna misura con il modello reale.
+Sul sito (demo), dopo le correzioni emerse dalla verifica (task `milo-team-attivo-sulla-demo`):
+- servizio AI aggiornato caricando i sorgenti;
+- Responses API per il modello Azure;
+- rotta interna catalogata;
+- testo leggibile.
+
+Con il paziente di prova le risposte sono in modalità team, con specialisti e fonti numerate:
+`logs/demo-live-team.log`, `screenshots/team-news2-testo-sul-sito.png`, `screenshots/team-correlazione-sul-sito.png`.
+
+In locale: PGlite e modello simulato (test di integrazione e del servizio AI).
 
 ## Logs
 
@@ -74,9 +83,9 @@ Solo locale (PGlite, modello simulato). Nessuna misura con il modello reale.
 
 ## Residual Risks
 
-- Comportamento e tempi con il modello reale: da misurare sulla demo (AC8).
+- Tempi con il modello reale misurati sulla demo: 13–34 s per risposta del team (5–13 s il percorso classico).
 - La delega è in memoria del processo: valida con una sola istanza del backend.
 
 ## Final Decision
 
-IMPLEMENTED — NOT VERIFIED
+CLOSED — VERIFIED

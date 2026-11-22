@@ -35,7 +35,7 @@
 | AC1 |    PASS | `logs/unit-fixes.log`: piano LLM di panoramica → turni con la data di domani; `query_data` → `query_agenda`; allergie restano al modello                                                                                                |
 | AC2 |    PASS | `logs/integration-query-data.log`: `scheduledAt lt "<data>T00:00:00"` trova l'appuntamento su PGlite; «dopodomani» → risposta vuota. Senza la correzione lo stesso test fallisce con l'errore della demo («Expected ISO-8601 DateTime») |
 | AC3 |    PASS | `logs/backend-suite-summary.log`: 150 file in errore come la baseline, 0 nuovi; typecheck                                                                                                                                               |
-| AC4 | NOT RUN | dopo il rilascio del backend: le due domande sulla demo                                                                                                                                                                                 |
+| AC4 |    PASS | sul sito: «chi è di turno domani?» → `staff_shifts` (nessun orario sulla demo: «non trovato»), agenda senza errore 500 (`screenshots/10-turni-domani.png`, `11-agenda-settimana.png`) |
 
 ## Test Results
 
@@ -43,8 +43,8 @@
 | ---------------- | ------: | ------------------------------------------------------------------------- |
 | Unit             |    PASS | `logs/unit-fixes.log` (27/27, con i test esistenti del pianificatore LLM e delle fasi 2–3) |
 | Integration      |    PASS | `logs/integration-query-data.log` (8/8)                                   |
-| API              | NOT RUN | dopo il rilascio                                                          |
-| Playwright       | NOT RUN | dopo il rilascio                                                          |
+| API              |    PASS | sul sito: `/ai/actions/plan` 200 per turni e agenda |
+| Playwright       |    PASS | sul sito: screenshot 10, 11; ore italiane e fonti numerate nella prosa (task fase 3) |
 | Persistence      |      NA |                                                                           |
 | Agnos AI         |    PASS | pianificatore                                                             |
 | Voice            |      NA |                                                                           |
@@ -67,4 +67,4 @@ Errore osservato sulla demo prima della correzione: `query_data` con
 
 ## Final Decision
 
-IMPLEMENTED — NOT VERIFIED
+CLOSED — VERIFIED
