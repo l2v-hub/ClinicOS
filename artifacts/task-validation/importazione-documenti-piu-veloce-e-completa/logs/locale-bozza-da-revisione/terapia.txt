@@ -1,0 +1,1338 @@
+Terapia
+Conferma la terapia
+Terapie rilevate dalla lettera di dimissioni
+
+10 righe da verificare: dati incompleti, controlla prima di salvare.
+
+Confronta con il testo completo della terapia
+
+Verifica anche i farmaci non riconosciuti. Usa il collegamento alla fonte per aprire le pagine originali della dimissione.
+
+TERAPIA DOMICILIARE CONSIGLIATA
+
+|  Farmaco | Dose | Posologia | Via | Note  |
+| --- | --- | --- | --- | --- |
+|  Furosemide (Lasix) 25 mg cpr | 50 mg | 2 cpr ore 8, 1 cpr ore 14 | os | controllo peso quotidiano  |
+|  Bisoprololo 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 | os |   |
+|  Ramipril 5 mg cpr | 5 mg | 1 cpr ore 20 | os | controllo creatinina e potassio  |
+|  Apixaban (Eliquis) 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 e ore 20 | os |   |
+|  Spironolattone 25 mg cpr | 25 mg | 1 cpr ore 12 | os |   |
+|  Atorvastatina 40 mg cpr | 40 mg | 1 cpr ore 22 | os |   |
+|  Insulina glargine (Lantus) | 18 UI | ore 22 | sc | secondo glicemie  |
+|  Insulina lispro (Humalog) | 6 UI | ai tre pasti principali | sc | secondo schema  |
+|  Pantoprazolo 20 mg cpr | 20 mg | 1 cpr ore 7 a digiuno | os |   |
+|  Tiotropio 18 mcg cps inalatoria | 18 mcg | 1 inalazione ore 8 | inalatoria |   |
+1. FUROSEMIDE
+da verificare
+Vedi documento L1
+Lascia in bozza
+
+Orario 1: indica un’ora valida (00:00–23:59); Verifica i dati estratti confrontandoli con il documento.
+
+Dal documento: |  Furosemide (Lasix) 25 mg cpr | 50 mg | 2 cpr ore 8, 1 cpr ore 14 | os | controllo peso quotidiano  |
+Dati estratti automaticamente — confronta il documento
+
+Questa voce può coincidere con una riga già rilevata. Verifica farmaco, dose, frequenza e stato; lascia in bozza i duplicati o i dati non confermati.
+
+{
+  "dose": "25 mg",
+  "nome": "Furosemide"
+}
+1
+Farmaco
+Prodotto medicinale *
+
+FUROSEMIDE
+
+Nome già presente in terapia: non verificato in questa maschera
+
+Cambia
+Forma farmaceutica
+Seleziona forma
+compressa
+capsula
+sciroppo
+fiala
+flacone
+bustina
+gocce
+inalatore
+cerotto
+crema
+Dosaggio commerciale
+Unità
+mg
+g
+mcg
+ml
+UI
+%
+Via di somministrazione
+orale
+IM
+SC
+IV
+sublinguale
+topico
+transdermica
+inalatoria
+rettale
+oftalmica
+otologica
+nasale
+vaginale
+2
+Programmazione
+Periodica
+A orari e giorni stabiliti
+Una tantum
+Una sola somministrazione
+Al bisogno
+Secondo le indicazioni
+Data inizio *
+Data fine (facoltativa)
+Stato terapia
+Attiva
+Sospesa
+Conclusa
+Ripeti
+Tutti i giorni
+Lun
+Mar
+Mer
+Gio
+Ven
+Sab
+Dom
+3
+Orari e dosi
+Dose fissa
+Schema glicemico
+Divisibilità Frazioni consentite
+Orario 1
+
+Orario 1: indica un’ora valida (00:00–23:59).
+
+Quantità
+orario 1
+1
+Unità
+orario 1
+Seleziona unità
+compressa
+capsula
+cerotto
+ml
+gocce
+unità
+bustina
+fiala
+puff
+— 2 compressa — equivalente a 50 mg
++ Aggiungi orario
+Prescrittore e note Dettagli aggiuntivi
+Prescrittore
+Dimissione ospedaliera
+Note e indicazioni
+Riepilogo della terapia
+
+FUROSEMIDE · orari da indicare · orale · dal 2026-11-22, senza fine.
+
+FUROSEMIDE
+Tipo terapia: Periodica · attiva
+
+Via: orale · Inizio: 22/11/2026
+
+Tutti i giorni
+
+Orario da indicare
+2 compressa
+
+Verifica i dati estratti confrontandoli con il documento.
+
+Ho verificato questa terapia
+2. BISOPROLOLO
+da verificare
+Vedi documento L1
+Lascia in bozza
+
+Orario 1: indica un’ora valida (00:00–23:59); Verifica i dati estratti confrontandoli con il documento.
+
+Dal documento: |  Bisoprololo 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 | os |   |
+Dati estratti automaticamente — confronta il documento
+
+Questa voce può coincidere con una riga già rilevata. Verifica farmaco, dose, frequenza e stato; lascia in bozza i duplicati o i dati non confermati.
+
+{
+  "dose": "2,5 mg",
+  "nome": "Bisoprololo"
+}
+1
+Farmaco
+Prodotto medicinale *
+
+BISOPROLOLO
+
+Nome già presente in terapia: non verificato in questa maschera
+
+Cambia
+Forma farmaceutica
+Seleziona forma
+compressa
+capsula
+sciroppo
+fiala
+flacone
+bustina
+gocce
+inalatore
+cerotto
+crema
+Dosaggio commerciale
+Unità
+mg
+g
+mcg
+ml
+UI
+%
+Via di somministrazione
+orale
+IM
+SC
+IV
+sublinguale
+topico
+transdermica
+inalatoria
+rettale
+oftalmica
+otologica
+nasale
+vaginale
+2
+Programmazione
+Periodica
+A orari e giorni stabiliti
+Una tantum
+Una sola somministrazione
+Al bisogno
+Secondo le indicazioni
+Data inizio *
+Data fine (facoltativa)
+Stato terapia
+Attiva
+Sospesa
+Conclusa
+Ripeti
+Tutti i giorni
+Lun
+Mar
+Mer
+Gio
+Ven
+Sab
+Dom
+3
+Orari e dosi
+Dose fissa
+Schema glicemico
+Divisibilità Frazioni consentite
+Orario 1
+
+Orario 1: indica un’ora valida (00:00–23:59).
+
+Quantità
+orario 1
+1
+Unità
+orario 1
+Seleziona unità
+compressa
+capsula
+cerotto
+ml
+gocce
+unità
+bustina
+fiala
+puff
+— 1 compressa — equivalente a ≈ 2.5 mg
++ Aggiungi orario
+Prescrittore e note Dettagli aggiuntivi
+Prescrittore
+Dimissione ospedaliera
+Note e indicazioni
+Riepilogo della terapia
+
+BISOPROLOLO · orari da indicare · orale · dal 2026-11-22, senza fine.
+
+BISOPROLOLO
+Tipo terapia: Periodica · attiva
+
+Via: orale · Inizio: 22/11/2026
+
+Tutti i giorni
+
+Orario da indicare
+1 compressa
+
+Verifica i dati estratti confrontandoli con il documento.
+
+Ho verificato questa terapia
+3. RAMIPRIL
+da verificare
+Vedi documento L1
+Lascia in bozza
+
+Orario 1: indica un’ora valida (00:00–23:59); Verifica i dati estratti confrontandoli con il documento.
+
+Dal documento: |  Ramipril 5 mg cpr | 5 mg | 1 cpr ore 20 | os | controllo creatinina e potassio  |
+Dati estratti automaticamente — confronta il documento
+
+Questa voce può coincidere con una riga già rilevata. Verifica farmaco, dose, frequenza e stato; lascia in bozza i duplicati o i dati non confermati.
+
+{
+  "dose": "5 mg",
+  "nome": "Ramipril"
+}
+1
+Farmaco
+Prodotto medicinale *
+
+RAMIPRIL
+
+Nome già presente in terapia: non verificato in questa maschera
+
+Cambia
+Forma farmaceutica
+Seleziona forma
+compressa
+capsula
+sciroppo
+fiala
+flacone
+bustina
+gocce
+inalatore
+cerotto
+crema
+Dosaggio commerciale
+Unità
+mg
+g
+mcg
+ml
+UI
+%
+Via di somministrazione
+orale
+IM
+SC
+IV
+sublinguale
+topico
+transdermica
+inalatoria
+rettale
+oftalmica
+otologica
+nasale
+vaginale
+2
+Programmazione
+Periodica
+A orari e giorni stabiliti
+Una tantum
+Una sola somministrazione
+Al bisogno
+Secondo le indicazioni
+Data inizio *
+Data fine (facoltativa)
+Stato terapia
+Attiva
+Sospesa
+Conclusa
+Ripeti
+Tutti i giorni
+Lun
+Mar
+Mer
+Gio
+Ven
+Sab
+Dom
+3
+Orari e dosi
+Dose fissa
+Schema glicemico
+Divisibilità Frazioni consentite
+Orario 1
+
+Orario 1: indica un’ora valida (00:00–23:59).
+
+Quantità
+orario 1
+1
+Unità
+orario 1
+Seleziona unità
+compressa
+capsula
+cerotto
+ml
+gocce
+unità
+bustina
+fiala
+puff
+— 1 compressa — equivalente a 5 mg
++ Aggiungi orario
+Prescrittore e note Dettagli aggiuntivi
+Prescrittore
+Dimissione ospedaliera
+Note e indicazioni
+Riepilogo della terapia
+
+RAMIPRIL · orari da indicare · orale · dal 2026-11-22, senza fine.
+
+RAMIPRIL
+Tipo terapia: Periodica · attiva
+
+Via: orale · Inizio: 22/11/2026
+
+Tutti i giorni
+
+Orario da indicare
+1 compressa
+
+Verifica i dati estratti confrontandoli con il documento.
+
+Ho verificato questa terapia
+4. APIXABAN
+da verificare
+Vedi documento L1
+Lascia in bozza
+
+Orario 1: indica un’ora valida (00:00–23:59); Verifica i dati estratti confrontandoli con il documento.
+
+Dal documento: |  Apixaban (Eliquis) 2,5 mg cpr | 2,5 mg | 1 cpr ore 8 e ore 20 | os |   |
+Dati estratti automaticamente — confronta il documento
+
+Questa voce può coincidere con una riga già rilevata. Verifica farmaco, dose, frequenza e stato; lascia in bozza i duplicati o i dati non confermati.
+
+{
+  "dose": "2,5 mg",
+  "nome": "Apixaban"
+}
+1
+Farmaco
+Prodotto medicinale *
+
+APIXABAN
+
+Nome già presente in terapia: non verificato in questa maschera
+
+Cambia
+Forma farmaceutica
+Seleziona forma
+compressa
+capsula
+sciroppo
+fiala
+flacone
+bustina
+gocce
+inalatore
+cerotto
+crema
+Dosaggio commerciale
+Unità
+mg
+g
+mcg
+ml
+UI
+%
+Via di somministrazione
+orale
+IM
+SC
+IV
+sublinguale
+topico
+transdermica
+inalatoria
+rettale
+oftalmica
+otologica
+nasale
+vaginale
+2
+Programmazione
+Periodica
+A orari e giorni stabiliti
+Una tantum
+Una sola somministrazione
+Al bisogno
+Secondo le indicazioni
+Data inizio *
+Data fine (facoltativa)
+Stato terapia
+Attiva
+Sospesa
+Conclusa
+Ripeti
+Tutti i giorni
+Lun
+Mar
+Mer
+Gio
+Ven
+Sab
+Dom
+3
+Orari e dosi
+Dose fissa
+Schema glicemico
+Divisibilità Frazioni consentite
+Orario 1
+
+Orario 1: indica un’ora valida (00:00–23:59).
+
+Quantità
+orario 1
+1
+Unità
+orario 1
+Seleziona unità
+compressa
+capsula
+cerotto
+ml
+gocce
+unità
+bustina
+fiala
+puff
+— 1 compressa — equivalente a ≈ 2.5 mg
++ Aggiungi orario
+Prescrittore e note Dettagli aggiuntivi
+Prescrittore
+Dimissione ospedaliera
+Note e indicazioni
+Riepilogo della terapia
+
+APIXABAN · orari da indicare · orale · dal 2026-11-22, senza fine.
+
+APIXABAN
+Tipo terapia: Periodica · attiva
+
+Via: orale · Inizio: 22/11/2026
+
+Tutti i giorni
+
+Orario da indicare
+1 compressa
+
+Verifica i dati estratti confrontandoli con il documento.
+
+Ho verificato questa terapia
+5. SPIRONOLATTONE
+da verificare
+Vedi documento L1
+Lascia in bozza
+
+Orario 1: indica un’ora valida (00:00–23:59); Verifica i dati estratti confrontandoli con il documento.
+
+Dal documento: |  Spironolattone 25 mg cpr | 25 mg | 1 cpr ore 12 | os |   |
+Dati estratti automaticamente — confronta il documento
+
+Questa voce può coincidere con una riga già rilevata. Verifica farmaco, dose, frequenza e stato; lascia in bozza i duplicati o i dati non confermati.
+
+{
+  "dose": "25 mg",
+  "nome": "Spironolattone"
+}
+1
+Farmaco
+Prodotto medicinale *
+
+SPIRONOLATTONE
+
+Nome già presente in terapia: non verificato in questa maschera
+
+Cambia
+Forma farmaceutica
+Seleziona forma
+compressa
+capsula
+sciroppo
+fiala
+flacone
+bustina
+gocce
+inalatore
+cerotto
+crema
+Dosaggio commerciale
+Unità
+mg
+g
+mcg
+ml
+UI
+%
+Via di somministrazione
+orale
+IM
+SC
+IV
+sublinguale
+topico
+transdermica
+inalatoria
+rettale
+oftalmica
+otologica
+nasale
+vaginale
+2
+Programmazione
+Periodica
+A orari e giorni stabiliti
+Una tantum
+Una sola somministrazione
+Al bisogno
+Secondo le indicazioni
+Data inizio *
+Data fine (facoltativa)
+Stato terapia
+Attiva
+Sospesa
+Conclusa
+Ripeti
+Tutti i giorni
+Lun
+Mar
+Mer
+Gio
+Ven
+Sab
+Dom
+3
+Orari e dosi
+Dose fissa
+Schema glicemico
+Divisibilità Frazioni consentite
+Orario 1
+
+Orario 1: indica un’ora valida (00:00–23:59).
+
+Quantità
+orario 1
+1
+Unità
+orario 1
+Seleziona unità
+compressa
+capsula
+cerotto
+ml
+gocce
+unità
+bustina
+fiala
+puff
+— 1 compressa — equivalente a 25 mg
++ Aggiungi orario
+Prescrittore e note Dettagli aggiuntivi
+Prescrittore
+Dimissione ospedaliera
+Note e indicazioni
+Riepilogo della terapia
+
+SPIRONOLATTONE · orari da indicare · orale · dal 2026-11-22, senza fine.
+
+SPIRONOLATTONE
+Tipo terapia: Periodica · attiva
+
+Via: orale · Inizio: 22/11/2026
+
+Tutti i giorni
+
+Orario da indicare
+1 compressa
+
+Verifica i dati estratti confrontandoli con il documento.
+
+Ho verificato questa terapia
+6. ATORVASTATINA
+da verificare
+Vedi documento L1
+Lascia in bozza
+
+Orario 1: indica un’ora valida (00:00–23:59); Verifica i dati estratti confrontandoli con il documento.
+
+Dal documento: |  Atorvastatina 40 mg cpr | 40 mg | 1 cpr ore 22 | os |   |
+Dati estratti automaticamente — confronta il documento
+
+Questa voce può coincidere con una riga già rilevata. Verifica farmaco, dose, frequenza e stato; lascia in bozza i duplicati o i dati non confermati.
+
+{
+  "dose": "40 mg",
+  "nome": "Atorvastatina"
+}
+1
+Farmaco
+Prodotto medicinale *
+
+ATORVASTATINA
+
+Nome già presente in terapia: non verificato in questa maschera
+
+Cambia
+Forma farmaceutica
+Seleziona forma
+compressa
+capsula
+sciroppo
+fiala
+flacone
+bustina
+gocce
+inalatore
+cerotto
+crema
+Dosaggio commerciale
+Unità
+mg
+g
+mcg
+ml
+UI
+%
+Via di somministrazione
+orale
+IM
+SC
+IV
+sublinguale
+topico
+transdermica
+inalatoria
+rettale
+oftalmica
+otologica
+nasale
+vaginale
+2
+Programmazione
+Periodica
+A orari e giorni stabiliti
+Una tantum
+Una sola somministrazione
+Al bisogno
+Secondo le indicazioni
+Data inizio *
+Data fine (facoltativa)
+Stato terapia
+Attiva
+Sospesa
+Conclusa
+Ripeti
+Tutti i giorni
+Lun
+Mar
+Mer
+Gio
+Ven
+Sab
+Dom
+3
+Orari e dosi
+Dose fissa
+Schema glicemico
+Divisibilità Frazioni consentite
+Orario 1
+
+Orario 1: indica un’ora valida (00:00–23:59).
+
+Quantità
+orario 1
+1
+Unità
+orario 1
+Seleziona unità
+compressa
+capsula
+cerotto
+ml
+gocce
+unità
+bustina
+fiala
+puff
+— 1 compressa — equivalente a 40 mg
++ Aggiungi orario
+Prescrittore e note Dettagli aggiuntivi
+Prescrittore
+Dimissione ospedaliera
+Note e indicazioni
+Riepilogo della terapia
+
+ATORVASTATINA · orari da indicare · orale · dal 2026-11-22, senza fine.
+
+ATORVASTATINA
+Tipo terapia: Periodica · attiva
+
+Via: orale · Inizio: 22/11/2026
+
+Tutti i giorni
+
+Orario da indicare
+1 compressa
+
+Verifica i dati estratti confrontandoli con il documento.
+
+Ho verificato questa terapia
+7. INSULINA
+da verificare
+Vedi documento L1
+Lascia in bozza
+
+Orario 1: indica un’ora valida (00:00–23:59); Orario 1: indica una quantità valida; Orario 1: scegli l’unità di somministrazione; Verifica i dati estratti confrontandoli con il documento.
+
+Dal documento: |  Insulina glargine (Lantus) | 18 UI | ore 22 | sc | secondo glicemie  |
+Dati estratti automaticamente — confronta il documento
+
+Questa voce può coincidere con una riga già rilevata. Verifica farmaco, dose, frequenza e stato; lascia in bozza i duplicati o i dati non confermati.
+
+{
+  "dose": "18 UI",
+  "nome": "Insulina glargine"
+}
+1
+Farmaco
+Prodotto medicinale *
+
+INSULINA
+
+Nome già presente in terapia: non verificato in questa maschera
+
+Cambia
+Forma farmaceutica
+Seleziona forma
+compressa
+capsula
+sciroppo
+fiala
+flacone
+bustina
+gocce
+inalatore
+cerotto
+crema
+Dosaggio commerciale
+Unità
+mg
+g
+mcg
+ml
+UI
+%
+Via di somministrazione
+orale
+IM
+SC
+IV
+sublinguale
+topico
+transdermica
+inalatoria
+rettale
+oftalmica
+otologica
+nasale
+vaginale
+2
+Programmazione
+Periodica
+A orari e giorni stabiliti
+Una tantum
+Una sola somministrazione
+Al bisogno
+Secondo le indicazioni
+Data inizio *
+Data fine (facoltativa)
+Stato terapia
+Attiva
+Sospesa
+Conclusa
+Ripeti
+Tutti i giorni
+Lun
+Mar
+Mer
+Gio
+Ven
+Sab
+Dom
+3
+Orari e dosi
+Dose fissa
+Schema glicemico
+Divisibilità Frazioni consentite
+Orario 1
+
+Orario 1: indica un’ora valida (00:00–23:59).
+
+Quantità
+orario 1
+
+Orario 1: indica una quantità valida.
+
+Unità
+orario 1
+Seleziona unità
+compressa
+capsula
+cerotto
+ml
+gocce
+unità
+bustina
+fiala
+puff
+
+Orario 1: scegli l’unità di somministrazione.
+
+— Quantità da correggere
++ Aggiungi orario
+Prescrittore e note Dettagli aggiuntivi
+Prescrittore
+Dimissione ospedaliera
+Note e indicazioni
+Riepilogo della terapia
+
+INSULINA · orari da indicare · SC · dal 2026-11-22, senza fine.
+
+INSULINA
+Tipo terapia: Periodica · attiva
+
+Via: SC · Inizio: 22/11/2026
+
+Tutti i giorni
+
+Orario da indicare
+Quantità da indicare · unità da indicare
+
+Verifica i dati estratti confrontandoli con il documento.
+
+Ho verificato questa terapia
+8. INSULINA
+da verificare
+Vedi documento L1
+Lascia in bozza
+
+Orario 1: indica un’ora valida (00:00–23:59); Orario 1: indica una quantità valida; Orario 1: scegli l’unità di somministrazione; Verifica i dati estratti confrontandoli con il documento.
+
+Dal documento: |  Insulina lispro (Humalog) | 6 UI | ai tre pasti principali | sc | secondo schema  |
+Dati estratti automaticamente — confronta il documento
+
+Questa voce può coincidere con una riga già rilevata. Verifica farmaco, dose, frequenza e stato; lascia in bozza i duplicati o i dati non confermati.
+
+{
+  "dose": "6 UI",
+  "nome": "Insulina lispro"
+}
+1
+Farmaco
+Prodotto medicinale *
+
+INSULINA
+
+Nome già presente in terapia: non verificato in questa maschera
+
+Cambia
+Forma farmaceutica
+Seleziona forma
+compressa
+capsula
+sciroppo
+fiala
+flacone
+bustina
+gocce
+inalatore
+cerotto
+crema
+Dosaggio commerciale
+Unità
+mg
+g
+mcg
+ml
+UI
+%
+Via di somministrazione
+orale
+IM
+SC
+IV
+sublinguale
+topico
+transdermica
+inalatoria
+rettale
+oftalmica
+otologica
+nasale
+vaginale
+2
+Programmazione
+Periodica
+A orari e giorni stabiliti
+Una tantum
+Una sola somministrazione
+Al bisogno
+Secondo le indicazioni
+Data inizio *
+Data fine (facoltativa)
+Stato terapia
+Attiva
+Sospesa
+Conclusa
+Ripeti
+Tutti i giorni
+Lun
+Mar
+Mer
+Gio
+Ven
+Sab
+Dom
+3
+Orari e dosi
+Dose fissa
+Schema glicemico
+Divisibilità Frazioni consentite
+Orario 1
+
+Orario 1: indica un’ora valida (00:00–23:59).
+
+Quantità
+orario 1
+
+Orario 1: indica una quantità valida.
+
+Unità
+orario 1
+Seleziona unità
+compressa
+capsula
+cerotto
+ml
+gocce
+unità
+bustina
+fiala
+puff
+
+Orario 1: scegli l’unità di somministrazione.
+
+— Quantità da correggere
++ Aggiungi orario
+Prescrittore e note Dettagli aggiuntivi
+Prescrittore
+Dimissione ospedaliera
+Note e indicazioni
+Riepilogo della terapia
+
+INSULINA · orari da indicare · SC · dal 2026-11-22, senza fine.
+
+INSULINA
+Tipo terapia: Periodica · attiva
+
+Via: SC · Inizio: 22/11/2026
+
+Tutti i giorni
+
+Orario da indicare
+Quantità da indicare · unità da indicare
+
+Verifica i dati estratti confrontandoli con il documento.
+
+Ho verificato questa terapia
+9. PANTOPRAZOLO
+da verificare
+Vedi documento L1
+Lascia in bozza
+
+Orario 1: indica un’ora valida (00:00–23:59); Verifica i dati estratti confrontandoli con il documento.
+
+Dal documento: |  Pantoprazolo 20 mg cpr | 20 mg | 1 cpr ore 7 a digiuno | os |   |
+Dati estratti automaticamente — confronta il documento
+
+Questa voce può coincidere con una riga già rilevata. Verifica farmaco, dose, frequenza e stato; lascia in bozza i duplicati o i dati non confermati.
+
+{
+  "dose": "20 mg",
+  "nome": "Pantoprazolo"
+}
+1
+Farmaco
+Prodotto medicinale *
+
+PANTOPRAZOLO
+
+Nome già presente in terapia: non verificato in questa maschera
+
+Cambia
+Forma farmaceutica
+Seleziona forma
+compressa
+capsula
+sciroppo
+fiala
+flacone
+bustina
+gocce
+inalatore
+cerotto
+crema
+Dosaggio commerciale
+Unità
+mg
+g
+mcg
+ml
+UI
+%
+Via di somministrazione
+orale
+IM
+SC
+IV
+sublinguale
+topico
+transdermica
+inalatoria
+rettale
+oftalmica
+otologica
+nasale
+vaginale
+2
+Programmazione
+Periodica
+A orari e giorni stabiliti
+Una tantum
+Una sola somministrazione
+Al bisogno
+Secondo le indicazioni
+Data inizio *
+Data fine (facoltativa)
+Stato terapia
+Attiva
+Sospesa
+Conclusa
+Ripeti
+Tutti i giorni
+Lun
+Mar
+Mer
+Gio
+Ven
+Sab
+Dom
+3
+Orari e dosi
+Dose fissa
+Schema glicemico
+Divisibilità Frazioni consentite
+Orario 1
+
+Orario 1: indica un’ora valida (00:00–23:59).
+
+Quantità
+orario 1
+1
+Unità
+orario 1
+Seleziona unità
+compressa
+capsula
+cerotto
+ml
+gocce
+unità
+bustina
+fiala
+puff
+— 1 compressa — equivalente a 20 mg
++ Aggiungi orario
+Prescrittore e note Dettagli aggiuntivi
+Prescrittore
+Dimissione ospedaliera
+Note e indicazioni
+Riepilogo della terapia
+
+PANTOPRAZOLO · orari da indicare · orale · dal 2026-11-22, senza fine.
+
+PANTOPRAZOLO
+Tipo terapia: Periodica · attiva
+
+Via: orale · Inizio: 22/11/2026
+
+Tutti i giorni
+
+Orario da indicare
+1 compressa
+
+Verifica i dati estratti confrontandoli con il documento.
+
+Ho verificato questa terapia
+10. TIOTROPIO
+da verificare
+Vedi documento L1
+Lascia in bozza
+
+Orario 1: indica un’ora valida (00:00–23:59); Orario 1: indica una quantità valida; Orario 1: scegli l’unità di somministrazione; Verifica i dati estratti confrontandoli con il documento.
+
+Dal documento: |  Tiotropio 18 mcg cps inalatoria | 18 mcg | 1 inalazione ore 8 | inalatoria |   |
+Dati estratti automaticamente — confronta il documento
+
+Questa voce può coincidere con una riga già rilevata. Verifica farmaco, dose, frequenza e stato; lascia in bozza i duplicati o i dati non confermati.
+
+{
+  "dose": "18 mcg",
+  "nome": "Tiotropio"
+}
+1
+Farmaco
+Prodotto medicinale *
+
+TIOTROPIO
+
+Nome già presente in terapia: non verificato in questa maschera
+
+Cambia
+Forma farmaceutica
+Seleziona forma
+compressa
+capsula
+sciroppo
+fiala
+flacone
+bustina
+gocce
+inalatore
+cerotto
+crema
+Dosaggio commerciale
+Unità
+mg
+g
+mcg
+ml
+UI
+%
+Via di somministrazione
+orale
+IM
+SC
+IV
+sublinguale
+topico
+transdermica
+inalatoria
+rettale
+oftalmica
+otologica
+nasale
+vaginale
+2
+Programmazione
+Periodica
+A orari e giorni stabiliti
+Una tantum
+Una sola somministrazione
+Al bisogno
+Secondo le indicazioni
+Data inizio *
+Data fine (facoltativa)
+Stato terapia
+Attiva
+Sospesa
+Conclusa
+Ripeti
+Tutti i giorni
+Lun
+Mar
+Mer
+Gio
+Ven
+Sab
+Dom
+3
+Orari e dosi
+Dose fissa
+Schema glicemico
+Divisibilità Frazioni consentite
+Orario 1
+
+Orario 1: indica un’ora valida (00:00–23:59).
+
+Quantità
+orario 1
+
+Orario 1: indica una quantità valida.
+
+Unità
+orario 1
+Seleziona unità
+compressa
+capsula
+cerotto
+ml
+gocce
+unità
+bustina
+fiala
+puff
+
+Orario 1: scegli l’unità di somministrazione.
+
+— Quantità da correggere
++ Aggiungi orario
+Prescrittore e note Dettagli aggiuntivi
+Prescrittore
+Dimissione ospedaliera
+Note e indicazioni
+Riepilogo della terapia
+
+TIOTROPIO · orari da indicare · inalatoria · dal 2026-11-22, senza fine.
+
+TIOTROPIO
+Tipo terapia: Periodica · attiva
+
+Via: inalatoria · Inizio: 22/11/2026
+
+Tutti i giorni
+
+Orario da indicare
+Quantità da indicare · unità da indicare
+
+Verifica i dati estratti confrontandoli con il documento.
+
+Ho verificato questa terapia
+
+Verranno create solo le terapie incluse e verificate. «Lascia in bozza» conserva la riga originale senza creare una prescrizione somministrabile.
+
+Farmaci aggiunti: 0
++ Aggiungi farmaco
+
+Puoi aggiungere più farmaci. Le modifiche restano nella bozza anche passando alla verifica.
+
+Nessun farmaco aggiunto manualmente.

@@ -14,11 +14,46 @@ import { lockJob } from './repository.js';
 import { extractionConfig, groupHash, OCR_PROMPT, OCR_SCHEMA, pageHash } from './inputs.js';
 import { createPageReader } from './pdf.js';
 import { validateExtraction } from '../../extraction-validate.js';
-import { executeRuntimeUnit, type RuntimeUnit } from './runtime.js';
+import { joinPagesWithoutFurniture, pageOffsets } from '../../sections/page-furniture.js';
+import { executeRuntimeUnit, type RuntimeContext, type RuntimeUnit } from './runtime.js';
 import { assembleResult, buildGroupResult, type GroupResult } from './results.js';
 import { reviewHash } from './review.js';
 const LEASE_MS = 60000;
 export class SupersededRun extends Error {}
+const limitEnv = (name: string, fallback: number) => {
+  const n = Number(process.env[name]);
+  return Number.isInteger(n) && n > 0 ? Math.min(n, 16) : fallback;
+};
+/** Pages read at the same time: independent units, so the OCR time is the slowest page, not the sum. */
+export const ocrPageConcurrency = () => limitEnv('AI_OCR_PAGE_CONCURRENCY', 4);
+/** Letters extracted at the same time. */
+export const extractionGroupConcurrency = () => limitEnv('AI_EXTRACTION_GROUP_CONCURRENCY', 2);
+/**
+ * Runs `fn` over `items` with at most `limit` in flight, results in input order. Every started
+ * item settles before this returns, then the first failure (in input order) is rethrown: no unit
+ * keeps writing after the run has been closed.
+ */
+async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>) {
+  const settled: PromiseSettledResult<R>[] = new Array(items.length);
+  let next = 0;
+  let stop = false;
+  const lane = async () => {
+    while (!stop && next < items.length) {
+      const index = next++;
+      try {
+        settled[index] = { status: 'fulfilled', value: await fn(items[index]) };
+      } catch (reason) {
+        settled[index] = { status: 'rejected', reason };
+        stop = true;
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: Math.max(1, Math.min(limit, items.length)) }, lane));
+  const failure = settled.find((r) => r?.status === 'rejected') as
+    PromiseRejectedResult | undefined;
+  if (failure) throw failure.reason;
+  return settled.map((r) => (r as PromiseFulfilledResult<R>).value);
+}
 export async function reclaimPageRuns() {
   const result = await prisma.importJob.updateMany({
     where: { status: 'processing_pages', leaseExpiresAt: { lt: new Date() } },
@@ -61,6 +96,16 @@ export async function runClaimedPageJob(
   const reader = createPageReader((documentId) =>
     prisma.importDocument.findFirstOrThrow({ where: { id: documentId, jobId } }),
   );
+  // The reader keeps one document in memory: page bytes are read one at a time (local and fast);
+  // only the calls to the runtime run in parallel.
+  let reading: Promise<unknown> = Promise.resolve();
+  const readPage = (doc: Parameters<typeof reader.read>[0], number: number) => {
+    const result = reading.then(() => reader.read(doc, number));
+    reading = result.catch(() => undefined);
+    return result;
+  };
+  // Asked once per run instead of once per unit.
+  const runtime: RuntimeContext = {};
   async function fenced<T>(fn: (tx: Tx) => Promise<T>) {
     if (lost) throw new SupersededRun();
     return prisma.$transaction(
@@ -151,6 +196,7 @@ export async function runClaimedPageJob(
         },
         current,
         options.pollMs,
+        runtime,
       );
       const result = validate(response.data, response.model);
       await fenced(async (tx) => {
@@ -194,7 +240,7 @@ export async function runClaimedPageJob(
     const shas = new Map(job.documents.map((d) => [d.id, d.sha256]));
     const ocr = new Map<string, string>();
     let failed = false;
-    for (const p of orderPages(m)) {
+    await mapLimit(orderPages(m), ocrPageConcurrency(), async (p) => {
       await current();
       const inputHash = pageHash(p, shas.get(p.documentId) ?? '');
       const result = await unit(
@@ -205,7 +251,7 @@ export async function runClaimedPageJob(
           const doc = job.documents.find((d) => d.id === p.documentId);
           if (!doc)
             throw new ImportSessionError(422, 'source_missing', 'Documento non disponibile');
-          const data = await reader.read(doc, p.sourcePageNumber);
+          const data = await readPage(doc, p.sourcePageNumber);
           return {
             mode: 'ocr',
             files: [
@@ -224,18 +270,20 @@ export async function runClaimedPageJob(
       );
       if (result) ocr.set(p.id, String(object(result).rawText));
       else failed = true;
-    }
+    });
     await fenced(async (tx) => {
       await tx.importJob.update({ where: { id: jobId }, data: { stage: 'extraction' } });
     });
-    const groups: GroupResult[] = [];
-    for (const g of [...m.groups].sort((a, b) => a.sortOrder - b.sortOrder)) {
+    const orderedGroups = [...m.groups].sort((a, b) => a.sortOrder - b.sortOrder);
+    const extracted = await mapLimit(orderedGroups, extractionGroupConcurrency(), async (g) => {
       const pages = orderPages(m, g.id);
-      if (pages.some((p) => !ocr.has(p.id))) {
-        failed = true;
-        continue;
-      }
-      const rawText = pages.map((p) => ocr.get(p.id)!).join('\n\n');
+      if (pages.some((p) => !ocr.has(p.id))) return null;
+      const pageTexts = pages.map((p) => ocr.get(p.id)!);
+      // `rawText` stays the integral transcription; the model reads the same pages without the
+      // headers and footers repeated on every sheet.
+      const rawText = pageTexts.join('\n\n');
+      const offsets = pageOffsets(pageTexts);
+      const modelText = joinPagesWithoutFurniture(pageTexts);
       const inputHash = groupHash(
         m,
         g.id,
@@ -251,7 +299,7 @@ export async function runClaimedPageJob(
           mode: 'extraction',
           files: [],
           schema: cfg.schema,
-          prompt: `${cfg.prompt}\n\nTESTO INTEGRALE DELLA LETTERA, PAGINE IN ORDINE:\n${rawText}`,
+          prompt: `${cfg.prompt}\n\nTESTO DELLA LETTERA, PAGINE IN ORDINE:\n${modelText}`,
         }),
         (raw, model) => {
           if (!validateExtraction(raw).valid)
@@ -260,16 +308,23 @@ export async function runClaimedPageJob(
               'extraction_schema',
               'I dati estratti non rispettano il formato clinico previsto. Verifica la lettera.',
             );
-          return buildGroupResult(m, g.id, inputHash, rawText, raw, model);
+          return buildGroupResult(m, g.id, inputHash, rawText, raw, model, offsets);
         },
       );
-      if (result) {
-        const cached = result as GroupResult;
-        groups.push(
-          buildGroupResult(m, g.id, inputHash, cached.rawText, cached._full, cached.model),
-        );
-      } else failed = true;
-    }
+      if (!result) return null;
+      const cached = result as GroupResult;
+      return buildGroupResult(
+        m,
+        g.id,
+        inputHash,
+        cached.rawText,
+        cached._full,
+        cached.model,
+        cached.pageOffsets ?? offsets,
+      );
+    });
+    const groups = extracted.filter((g): g is GroupResult => g !== null);
+    if (groups.length !== orderedGroups.length) failed = true;
     await fenced(async (tx) => {
       if (failed || groups.length !== m.groups.length) {
         await tx.importJob.update({

@@ -10,7 +10,11 @@ import { AiExtractionError } from '../ai/types.js';
 import { hasClinicalPassage, importedPastHistory, splitPastHistory } from './clinical-history.js';
 import { ImportSessionError, object, renewedExpiry } from '../ai/upload/pages/model.js';
 import { assertCurrentReview, assertDraftSource } from '../ai/upload/pages/review.js';
-import { attachPageDraftSource, pageDraftNarrative } from '../ai/upload/pages/draft-source.js';
+import {
+  attachPageDraftSource,
+  pageDraftExtras,
+  pageDraftNarrative,
+} from '../ai/upload/pages/draft-source.js';
 import {
   IMMUTABLE_DRAFT_FIELDS,
   SERVER_DRAFT_KEYS,
@@ -290,6 +294,8 @@ export function buildImportDraftData(
   narrative: DischargeNarrativeDraft,
   rawSections: unknown,
   structuredExtraction?: unknown,
+  /** Page sessions: intake fields beyond the narrative (see pageDraftExtras). */
+  extras?: { anagrafica?: Record<string, unknown>; ingresso?: Record<string, unknown> },
 ): Record<string, unknown> {
   const seeded: Record<string, unknown> = {};
 
@@ -306,8 +312,11 @@ export function buildImportDraftData(
     ...(narrative.phone ? { phone: narrative.phone } : {}),
     ...(narrative.email ? { email: narrative.email } : {}),
     ...(narrative.address ? { address: narrative.address } : {}),
+    ...(extras?.anagrafica ?? {}),
   };
   seeded.anagrafica = anagrafica;
+  if (extras?.ingresso && Object.keys(extras.ingresso).length)
+    seeded.ingresso = { ...extras.ingresso };
   if (derivedSex) {
     seeded._derivedFields = {
       anagrafica: { sex: { source: 'codiceFiscale', value: derivedSex, reviewRequired: true } },
@@ -387,7 +396,7 @@ export function buildImportDraftData(
   seeded._narrative = narrative;
   seeded._sections = rawSections ?? null;
   seeded._importedFields = (
-    ['anagrafica', 'anamnesi', 'diagnosi', 'allergie', 'terapiaImport'] as const
+    ['anagrafica', 'ingresso', 'anamnesi', 'diagnosi', 'allergie', 'terapiaImport'] as const
   ).filter((k) => seeded[k] !== undefined);
 
   return seeded;
@@ -449,6 +458,7 @@ export async function seedDraftFromImport(jobId: string, opts: SeedDraftFromImpo
         pageResult ? pageDraftNarrative(pageResult) : narrative,
         resultData?._sections ?? null,
         resultData?._full ?? resultData,
+        pageResult ? pageDraftExtras(pageResult) : undefined,
       );
       const data = pageResult ? attachPageDraftSource(seeded, pageResult) : seeded;
       if (pageResult)

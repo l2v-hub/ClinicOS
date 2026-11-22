@@ -1,0 +1,18 @@
+Estrai dal testo di una lettera di dimissione o di altra documentazione sanitaria italiana i dati
+che servono alla scheda d'ingresso ClinicOS. Il testo e' la trascrizione delle pagine, in ordine.
+
+REGOLE
+- Riporta SOLO cio' che e' scritto nel testo. Non inventare, non dedurre, non completare.
+- Dato assente: stringa vuota "" oppure array vuoto []. Compila sempre tutti i campi dello schema.
+- Ogni campo dello schema ha una descrizione: seguila alla lettera.
+- Date nel formato AAAA-MM-GG. Nomi propri con l'iniziale maiuscola (BIANCHI GIOVANNI -> Bianchi, Giovanni).
+- I dati anagrafici sono quelli del PAZIENTE: non confonderli con quelli dell'ospedale, del reparto,
+  dei medici o del familiare (l'indirizzo e il telefono dell'intestazione sono dell'ospedale).
+- Ignora cio' che non e' contenuto clinico o anagrafico: intestazioni e pie' di pagina, numeri di
+  pagina, codici del documento, date di stampa, loghi, firme, timbri, informative sulla privacy.
+  Dall'intestazione prendi solo il nome della struttura e del reparto che dimette.
+- Diagnosi: solo quelle della sezione delle diagnosi. L'anamnesi non e' una diagnosi.
+- Allergie: solo quelle dichiarate presenti. "Nessuna allergia nota" -> array vuoto.
+- Farmaci: uno per riga della terapia (anche se scritta in tabella), solo nome e dosaggio.
+- Non riassumere e non riformulare: usa le parole del documento.
+- Rispondi solo con l'oggetto JSON dello schema.

@@ -1,0 +1,19 @@
+base=http://localhost:5173 ruolo=Operatore file=telefono-1.jpg,telefono-2.jpg
+caricamento pagine: 0.4s
+da «Avvia elaborazione» alla scheda di revisione: 0.8s (review)
+stati:
+  0.1s uploaded/ {"phase":"documents","totalPages":1,"completedPages":0,"failedPages":0,"totalGroups":1,"completedGroups":0,"currentPageId":null,"currentGroupId":null}
+  0.2s uploaded/ {"phase":"documents","totalPages":2,"completedPages":0,"failedPages":0,"totalGroups":1,"completedGroups":0,"currentPageId":null,"currentGroupId":null}
+  0.7s queued/queued {"phase":"documents","totalPages":2,"completedPages":0,"failedPages":0,"totalGroups":1,"completedGroups":0,"currentPageId":null,"currentGroupId":null}
+  0.7s processing/ocr {"phase":"ocr","totalPages":2,"completedPages":0,"failedPages":0,"totalGroups":1,"completedGroups":0,"currentPageId":"6fc91d3f-92a7-4c03-a1f7-4e71927aecaf","currentGroupId":null}
+  1.3s review_ready/completed {"phase":"review","totalPages":2,"completedPages":2,"failedPages":0,"totalGroups":1,"completedGroups":1,"currentPageId":null,"currentGroupId":null}
+
+chiamate:
+0.1s POST /ai/extraction/jobs/:id/files 200
+0.2s GET /ai/extraction/jobs/:id/files/:id/content 200
+0.2s POST /ai/extraction/jobs/:id/files 200
+0.3s GET /ai/extraction/jobs/:id/files/:id/content 200
+0.7s POST /ai/extraction/jobs/:id/process 202
+0.7s GET /ai/extraction/jobs/:id 200
+1.3s GET /ai/extraction/jobs/:id 200
+1.3s GET /ai/extraction/jobs/:id/result 200

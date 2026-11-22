@@ -159,5 +159,92 @@ class TestStructuredCall(unittest.TestCase):
                 asyncio.run(_runner().run_structured("estrai", SCHEMA, []))
 
 
+
+
+STRICT_SCHEMA = {
+    "type": "object", "additionalProperties": False, "required": ["anagrafica", "farmaci"],
+    "properties": {
+        "anagrafica": {"type": "object", "additionalProperties": False, "required": ["nome"],
+                       "properties": {"nome": {"type": "string", "description": "Nome"}}},
+        "farmaci": {"type": "array", "items": {
+            "type": "object", "additionalProperties": False, "required": ["nome", "dose"],
+            "properties": {"nome": {"type": "string"}, "dose": {"type": "string"}}}},
+    },
+}
+
+
+class _Resp(io.BytesIO):
+    def __enter__(self): return self
+    def __exit__(self, *a): return False
+
+
+class TestStrictAndReasoningEffort(unittest.TestCase):
+    """Modalita' vincolata e sforzo di ragionamento: facoltativi, con ricaduta alla richiesta di sempre."""
+
+    def _vision(self):
+        return _AzureRunner(ModelSpec.parse("azure:gpt-5.5"), temperature=1.0, timeout_seconds=5,
+                            role="vision")
+
+    def test_strict_only_for_a_strict_compatible_schema(self):
+        from clinicos_ai.models.providers.azure import strict_compatible
+        self.assertTrue(strict_compatible(STRICT_SCHEMA))
+        self.assertFalse(strict_compatible(SCHEMA))  # proprieta' facoltative, additionalProperties assente
+        loose = json.loads(json.dumps(STRICT_SCHEMA))
+        loose["properties"]["farmaci"]["items"]["required"] = ["nome"]
+        self.assertFalse(strict_compatible(loose))
+        self.assertTrue(self._vision()._structured_body("estrai", STRICT_SCHEMA, [])
+                        ["response_format"]["json_schema"]["strict"])
+        self.assertFalse(self._vision()._structured_body("estrai", SCHEMA, [])
+                         ["response_format"]["json_schema"]["strict"])
+
+    def test_without_the_variable_the_request_is_unchanged(self):
+        with mock.patch.dict("os.environ", {}, clear=False) as env:
+            env.pop("AI_EXTRACTION_REASONING_EFFORT", None)
+            self.assertNotIn("reasoning_effort", self._vision()._structured_body("estrai", SCHEMA, []))
+
+    def test_effort_is_sent_only_for_the_extraction_role_and_only_known_values(self):
+        with mock.patch.dict("os.environ", {"AI_EXTRACTION_REASONING_EFFORT": "Low"}):
+            self.assertEqual(self._vision()._structured_body("estrai", SCHEMA, [])["reasoning_effort"], "low")
+            other = _AzureRunner(ModelSpec.parse("azure:gpt-5.5"), 1.0, 5, role="command_parser")
+            self.assertNotIn("reasoning_effort", other._structured_body("estrai", SCHEMA, []))
+        with mock.patch.dict("os.environ", {"AI_EXTRACTION_REASONING_EFFORT": "turbo"}):
+            self.assertNotIn("reasoning_effort", self._vision()._structured_body("estrai", SCHEMA, []))
+
+    def test_a_refused_strict_or_effort_request_is_repeated_once_in_the_plain_form(self):
+        bodies = []
+        ok = json.dumps({"choices": [{"message": {"content": '{"anagrafica":{"nome":""},"farmaci":[]}'}}]}).encode()
+
+        def fake(req, timeout=None):
+            bodies.append(json.loads(req.data.decode()))
+            if len(bodies) == 1:
+                raise urllib.error.HTTPError(req.full_url, 400, "Bad Request", {},
+                                             io.BytesIO(b'{"error":"unsupported"}'))
+            return _Resp(ok)
+
+        with mock.patch.dict("os.environ", {**ENV, "AI_EXTRACTION_REASONING_EFFORT": "low"}), \
+             mock.patch("urllib.request.urlopen", fake):
+            out = asyncio.run(self._vision().run_structured("estrai", STRICT_SCHEMA, []))
+        self.assertEqual(json.loads(out)["farmaci"], [])
+        self.assertEqual(len(bodies), 2)
+        self.assertTrue(bodies[0]["response_format"]["json_schema"]["strict"])
+        self.assertEqual(bodies[0]["reasoning_effort"], "low")
+        self.assertFalse(bodies[1]["response_format"]["json_schema"]["strict"])
+        self.assertNotIn("reasoning_effort", bodies[1])
+
+    def test_a_plain_request_refused_is_not_repeated(self):
+        calls = []
+
+        def fake(req, timeout=None):
+            calls.append(1)
+            raise urllib.error.HTTPError(req.full_url, 400, "Bad Request", {}, io.BytesIO(b"{}"))
+
+        with mock.patch.dict("os.environ", ENV), mock.patch("urllib.request.urlopen", fake):
+            os_env = __import__("os").environ
+            os_env.pop("AI_EXTRACTION_REASONING_EFFORT", None)
+            with self.assertRaises(RuntimeError_):
+                asyncio.run(self._vision().run_structured("estrai", SCHEMA, []))
+        self.assertEqual(len(calls), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

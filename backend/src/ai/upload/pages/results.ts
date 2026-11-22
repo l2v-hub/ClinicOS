@@ -6,6 +6,7 @@ import {
   type MergedProposal,
 } from '../../merge.js';
 import { filterRepeatedHeaders } from '../../sections/header-filter.js';
+import { joinPagesWithoutFurniture, splitPages } from '../../sections/page-furniture.js';
 import { parseNarrativeFromMarkdown } from '../../sections/markdown-parse.js';
 import { narrativeFromRawText, type DischargeNarrativeDraft } from '../../sections/narrative.js';
 import { hash, object, orderPages, type Json, type Manifest } from './model.js';
@@ -18,6 +19,8 @@ export type GroupResult = {
   _full: Json;
   _narrative: DischargeNarrativeDraft;
   rawText: string;
+  /** Where each page starts inside `rawText` (absent in results stored before this field). */
+  pageOffsets?: number[];
   cleanedRawText: string;
   _sections: unknown;
 };
@@ -62,6 +65,7 @@ export function buildGroupResult(
   rawText: string,
   raw: unknown,
   model: string,
+  pageOffsets?: number[],
 ): GroupResult {
   const group = m.groups.find((g) => g.id === groupId)!;
   const data = object(raw);
@@ -73,8 +77,16 @@ export function buildGroupResult(
     dateOfBirth: String(ana.dataNascita ?? ''),
     sex: String(ana.sesso ?? ''),
     fiscalCode: String(cart.codiceFiscale ?? ''),
+    // Shown in the review of a single letter, where the narrative is the letter's own.
+    phone: String(ana.telefono ?? ''),
+    email: String(ana.email ?? ''),
+    address: String(ana.indirizzo ?? ''),
   };
-  const cleaned = filterRepeatedHeaders(rawText).cleanedText;
+  // Page headers/footers repeated across the letter's pages go first (they need the page
+  // boundaries), then the patient header block repeated inside the text.
+  const cleaned = filterRepeatedHeaders(
+    joinPagesWithoutFurniture(splitPages(rawText, pageOffsets)),
+  ).cleanedText;
   const narrative = parseNarrativeFromMarkdown(cleaned, demo, {
     id: groupId,
     filename: group.label,
@@ -88,6 +100,7 @@ export function buildGroupResult(
     _full: data,
     _narrative: narrative,
     rawText,
+    ...(pageOffsets?.length ? { pageOffsets } : {}),
     cleanedRawText: cleaned,
     _sections: null,
   };
@@ -110,6 +123,16 @@ const LABELS: Record<string, string> = {
   dataRicovero: 'Data del ricovero',
   noteGenerali: 'Note',
   medicoCurante: 'Medico curante',
+  comuneNascita: 'Comune di nascita',
+  provinciaNascita: 'Provincia di nascita',
+  comune: 'Comune',
+  provincia: 'Provincia',
+  cap: 'CAP',
+  contattoEmergenzaRelazione: 'Relazione del referente',
+  strutturaDimettente: 'Struttura che dimette',
+  repartoDimettente: 'Reparto che dimette',
+  dataDimissione: 'Data di dimissione',
+  motivoRicovero: 'Motivo del ricovero',
   diagnosi: 'Diagnosi',
   allergie: 'Allergie',
   farmaci: 'Farmaci',

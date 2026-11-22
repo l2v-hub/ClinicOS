@@ -231,6 +231,13 @@ const ANAGRAFICA_FIELDS = [
   'indirizzo',
   'contattoEmergenzaNome',
   'contattoEmergenzaTel',
+  // Intake fields asked since the lean intake schema.
+  'comuneNascita',
+  'provinciaNascita',
+  'comune',
+  'provincia',
+  'cap',
+  'contattoEmergenzaRelazione',
 ];
 const CARTELLA_SCALARS = [
   'statoRicovero',
@@ -241,6 +248,10 @@ const CARTELLA_SCALARS = [
   'dataRicovero',
   'noteGenerali',
   'medicoCurante',
+  'strutturaDimettente',
+  'repartoDimettente',
+  'dataDimissione',
+  'motivoRicovero',
 ];
 
 /** Deterministically merge per-document extractions into one proposal. */

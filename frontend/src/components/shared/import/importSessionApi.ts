@@ -9,6 +9,13 @@ import {
 } from './importSessionTypes';
 
 export type ImportFetch = (path: string, init?: RequestInit) => Promise<Response>;
+/**
+ * Attesa prima della prossima lettura dello stato: ravvicinata all'inizio, ogni secondo per il
+ * primo mezzo minuto (il tempo di una lettera), poi ogni 2 s per i lavori lunghi. Un risultato
+ * pronto non resta in attesa di essere letto.
+ */
+export const importPollDelayMs = (attempt: number) =>
+  attempt === 0 ? 600 : attempt === 1 ? 800 : attempt < 30 ? 1000 : 2000;
 export class ImportApiError extends Error {
   status: number;
   code?: string;

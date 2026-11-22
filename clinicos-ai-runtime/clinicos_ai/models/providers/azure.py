@@ -27,14 +27,49 @@ from ._common import classify_provider_exception, sdk_retry_kwargs
 from .completion import CompletionMetadataMixin, agent_completion, completion_text, response_reason
 
 
+# Sforzo di ragionamento dell'estrazione dai documenti (ruolo vision). Facoltativo: senza la
+# variabile la richiesta resta identica a prima. Compilare campi da un testo gia' trascritto non
+# richiede il ragionamento pieno di un modello di fascia alta, che e' la parte lenta della chiamata.
+_REASONING_EFFORTS = ("minimal", "low", "medium", "high")
+_EXTRACTION_ROLES = ("vision", "extraction")
+
+
+def extraction_reasoning_effort(role: str, env=os.environ) -> str | None:
+    if role not in _EXTRACTION_ROLES:
+        return None
+    value = (env.get("AI_EXTRACTION_REASONING_EFFORT") or "").strip().lower()
+    return value if value in _REASONING_EFFORTS else None
+
+
+def strict_compatible(schema: object) -> bool:
+    """True quando lo schema rispetta il sottoinsieme «strict» degli output strutturati: ogni
+    oggetto dichiara `additionalProperties: false` ed elenca in `required` tutte le sue proprieta'.
+    In quel caso il modello e' VINCOLATO allo schema (niente JSON malformato, niente campi omessi)."""
+    if not isinstance(schema, dict):
+        return False
+    kind = schema.get("type")
+    if kind == "object":
+        props = schema.get("properties")
+        if not isinstance(props, dict) or schema.get("additionalProperties") is not False:
+            return False
+        if sorted(schema.get("required") or []) != sorted(props):
+            return False
+        return all(strict_compatible(child) for child in props.values())
+    if kind == "array":
+        return strict_compatible(schema.get("items"))
+    return kind in ("string", "number", "integer", "boolean")
+
+
 class _AzureRunner:
     """Runner multimodale: gli allegati dell'import (foto/PDF) vengono passati ad Agno
     come Image/File — il runner generico di _common li scarterebbe (solo testo)."""
 
-    def __init__(self, spec: ModelSpec, temperature: float, timeout_seconds: int) -> None:
+    def __init__(self, spec: ModelSpec, temperature: float, timeout_seconds: int,
+                 role: str = "") -> None:
         self._spec = spec
         self._temperature = temperature
         self._timeout = timeout_seconds
+        self._role = role
 
     def _build_agent(self):
         try:
@@ -98,12 +133,15 @@ class _AzureRunner:
             "type" in schema or "properties" in schema or "$schema" in schema
         )
 
-    def _structured_body(self, prompt: str, schema: object, attachments: list[Attachment]) -> dict:
+    def _structured_body(self, prompt: str, schema: object, attachments: list[Attachment],
+                         strict: bool | None = None) -> dict:
         text = prompt
         if self._looks_like_json_schema(schema):
+            # Lo schema storico ClinicOS (draft-07, proprieta' facoltative) resta non vincolato;
+            # uno schema che rispetta il sottoinsieme strict viene chiesto in modalita' vincolata.
             response_format: dict = {"type": "json_schema",
                                      "json_schema": {"name": "clinicos_extraction",
-                                                     "strict": False,
+                                                     "strict": strict_compatible(schema) if strict is None else strict,
                                                      "schema": schema}}
         else:
             # Esempio di output invece di uno schema: niente json_schema (sarebbe un 400),
@@ -120,11 +158,15 @@ class _AzureRunner:
                 content.append({"type": "file",
                                 "file": {"filename": a.filename,
                                          "file_data": f"data:{a.mime_type};base64,{b64}"}})
-        return {
+        body = {
             "model": self._spec.model_id,
             "messages": [{"role": "user", "content": content}],
             "response_format": response_format,
         }
+        effort = extraction_reasoning_effort(self._role)
+        if effort:
+            body["reasoning_effort"] = effort
+        return body
 
     async def run_structured(self, prompt: str, schema: object, attachments: list[Attachment]) -> str:
         endpoint = (os.environ.get("AZURE_OPENAI_ENDPOINT") or "").strip().rstrip("/")
@@ -134,15 +176,31 @@ class _AzureRunner:
                 "AZURE_OPENAI_ENDPOINT / AZURE_OPENAI_API_KEY non configurati")
         url = f"{endpoint}/openai/v1/chat/completions"
 
-        def _call() -> str:
-            # base64 + serializzazione stanno DENTRO il thread: su un import multi-foto
-            # l'encoding degli allegati non deve bloccare l'event loop.
-            payload = json.dumps(self._structured_body(prompt, schema, attachments)).encode("utf-8")
+        def _post(body: dict) -> dict:
+            payload = json.dumps(body).encode("utf-8")
             req = urllib.request.Request(
                 url, data=payload, method="POST",
                 headers={"Content-Type": "application/json", "api-key": key})
             with urllib.request.urlopen(req, timeout=self._timeout) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
+                return json.loads(resp.read().decode("utf-8"))
+
+        def _call() -> str:
+            # base64 + serializzazione stanno DENTRO il thread: su un import multi-foto
+            # l'encoding degli allegati non deve bloccare l'event loop.
+            body = self._structured_body(prompt, schema, attachments)
+            optional = body["response_format"].get("json_schema", {}).get("strict") or "reasoning_effort" in body
+            try:
+                data = _post(body)
+            except urllib.error.HTTPError as ex:
+                # La modalita' vincolata e lo sforzo di ragionamento dipendono dal modello
+                # distribuito: se il fornitore rifiuta la richiesta (400) si ripete UNA volta
+                # nella forma di sempre, invece di far fallire l'importazione.
+                if ex.code != 400 or not optional:
+                    raise
+                ex.close()
+                plain = self._structured_body(prompt, schema, attachments, strict=False)
+                plain.pop("reasoning_effort", None)
+                data = _post(plain)
             choice = (data.get("choices") or [{}])[0]
             message = choice.get("message") or {}
             if message.get("refusal"):
@@ -182,6 +240,6 @@ class _AzureRunner:
             raise RuntimeError_(kind, f"Azure structured: {msg[:200]}") from ex
 
 
-def build(spec: ModelSpec, role: str, temperature: float, timeout_seconds: int) -> BuiltModel:  # noqa: ARG001
+def build(spec: ModelSpec, role: str, temperature: float, timeout_seconds: int) -> BuiltModel:
     return BuiltModel(spec=spec, capabilities=capabilities_for(spec),
-                      runner=_AzureRunner(spec, temperature, timeout_seconds))
+                      runner=_AzureRunner(spec, temperature, timeout_seconds, role))

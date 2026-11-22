@@ -1,0 +1,126 @@
+{
+ "id": "cmwr492x0000z01lbcq6pqx94",
+ "status": "review_ready",
+ "stage": "completed",
+ "completedFiles": 2,
+ "totalFiles": 2,
+ "currentFileName": null,
+ "elapsedSeconds": 50,
+ "canRetry": false,
+ "canCancel": true,
+ "maxFiles": 30,
+ "maxTotalBytes": 26214400,
+ "totalBytes": 508435,
+ "fileCount": 2,
+ "error": null,
+ "model": "azure:gpt-6.1-sol",
+ "expiresAt": "2026-11-22T01:46:56.514Z",
+ "createdAt": "2026-11-22T00:46:13.764Z",
+ "documents": [
+  {
+   "id": "cmwr493rx001101lbjafbkj8k",
+   "filename": "telefono-1.jpg",
+   "mimeType": "image/jpeg",
+   "sizeBytes": 266158,
+   "sha256": "9fb3e841b174e13db21007c86d975bc5b6a179cfd89af651f475b46272429c19",
+   "sortOrder": 0,
+   "logicalDoc": null,
+   "status": "uploaded",
+   "rejectReason": null,
+   "pageCount": 1,
+   "contentUrl": "/ai/extraction/jobs/cmwr492x0000z01lbcq6pqx94/files/cmwr493rx001101lbjafbkj8k/content"
+  },
+  {
+   "id": "cmwr493wa001401lbmwh1fknd",
+   "filename": "telefono-2.jpg",
+   "mimeType": "image/jpeg",
+   "sizeBytes": 242277,
+   "sha256": "86a6034b14c226e224c8810affa0a79fcc7570477c2d10f86a680848cc033998",
+   "sortOrder": 1,
+   "logicalDoc": null,
+   "status": "uploaded",
+   "rejectReason": null,
+   "pageCount": 1,
+   "contentUrl": "/ai/extraction/jobs/cmwr492x0000z01lbcq6pqx94/files/cmwr493wa001401lbmwh1fknd/content"
+  }
+ ],
+ "capabilities": {
+  "sessionVersion": 1,
+  "pageEditing": true,
+  "atomicReplacement": true
+ },
+ "manifest": {
+  "pages": [
+   {
+    "id": "1cb1aae6-b6c1-4ba8-83c3-e8d26c35a71b",
+    "groupId": "bdc6b144-17a7-440d-8026-a732501a316d",
+    "sortOrder": 0,
+    "documentId": "cmwr493rx001101lbjafbkj8k",
+    "sourcePageNumber": 1,
+    "status": "completed",
+    "canRetry": false,
+    "errorCode": null,
+    "error": null
+   },
+   {
+    "id": "3c5f9979-d8e1-4a4a-9180-b4d54615e418",
+    "groupId": "bdc6b144-17a7-440d-8026-a732501a316d",
+    "sortOrder": 1,
+    "documentId": "cmwr493wa001401lbmwh1fknd",
+    "sourcePageNumber": 1,
+    "status": "completed",
+    "canRetry": false,
+    "errorCode": null,
+    "error": null
+   }
+  ],
+  "groups": [
+   {
+    "id": "bdc6b144-17a7-440d-8026-a732501a316d",
+    "label": "Lettera 1",
+    "sortOrder": 0,
+    "status": "completed",
+    "pageCount": 2,
+    "completedPages": 2,
+    "errorCode": null,
+    "error": null,
+    "resultHash": "273153324b18da131a1d79a301d2c579917933503bc0ab94c40a8dafb5d185ca",
+    "pdfUrl": "/ai/extraction/jobs/cmwr492x0000z01lbcq6pqx94/groups/bdc6b144-17a7-440d-8026-a732501a316d/pdf"
+   }
+  ],
+  "version": 1,
+  "revision": 2
+ },
+ "limits": {
+  "maxPages": 30,
+  "maxSourceFiles": 30,
+  "maxGroups": 30,
+  "maxTotalBytes": 26214400,
+  "maxFileBytes": 26214400,
+  "maxFilesPerRequest": 10,
+  "maxRequestBytes": 26476544,
+  "acceptedMimeTypes": [
+   "application/pdf",
+   "image/jpeg",
+   "image/png"
+  ]
+ },
+ "progress": {
+  "phase": "review",
+  "totalPages": 2,
+  "completedPages": 2,
+  "failedPages": 0,
+  "totalGroups": 1,
+  "completedGroups": 1,
+  "currentPageId": null,
+  "currentGroupId": null
+ },
+ "review": {
+  "manifestRevision": 2,
+  "resultHash": "44df2e7c652e6ec24ad2a92c69b0c191041ce066fc34cf97df63c4b15faf5804",
+  "unresolvedConflicts": 0,
+  "canProceed": true,
+  "draftId": null,
+  "draftSourceIsCurrent": true
+ }
+}

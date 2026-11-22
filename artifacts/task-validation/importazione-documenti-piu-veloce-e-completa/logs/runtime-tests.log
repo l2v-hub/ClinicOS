@@ -1,0 +1,104 @@
+/home/user/ClinicOS/clinicos-ai-runtime/clinicos_ai/domain/contracts.py:36: UserWarning: Field name "schema" in "CreateJobRequest" shadows an attribute in parent "BaseModel"
+  class CreateJobRequest(BaseModel):
+.......................................................................................................................................................Executing <Task finished name='Task-302' coro=<CutoverFlowTests.test_ai_disabled_makes_no_provider_call() done, defined at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_openai_cutover.py:141> result=None created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.504 seconds
+.Executing <Task pending name='Task-307' coro=<CutoverFlowTests.test_cost_estimate_and_soft_budget_alert() running at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_openai_cutover.py:159> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /usr/local/lib/python3.13/asyncio/futures.py:384, Task.task_wakeup()] created at /usr/local/lib/python3.13/asyncio/base_events.py:460> cb=[_run_until_complete_cb() at /usr/local/lib/python3.13/asyncio/base_events.py:181] created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.395 seconds
+Executing <Task finished name='Task-307' coro=<CutoverFlowTests.test_cost_estimate_and_soft_budget_alert() done, defined at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_openai_cutover.py:152> result=None created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.500 seconds
+.Executing <Task finished name='Task-312' coro=<CutoverFlowTests.test_role_mapping_on_the_wire_and_switch_openai_test_openai() done, defined at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_openai_cutover.py:101> result=None created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.500 seconds
+.Executing <Task finished name='Task-317' coro=<CutoverFlowTests.test_secret_never_in_logs_or_responses() done, defined at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_openai_cutover.py:171> result=None created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.496 seconds
+............assistant plan failed: RuntimeError
+.skill route failed: ValueError
+.............Executing <Task finished name='Task-331' coro=<ErrorAndUsageNormalizationTests.test_cancellation_is_real() done, defined at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:220> result=None created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.216 seconds
+.Executing <Task finished name='Task-337' coro=<ErrorAndUsageNormalizationTests.test_fallback_only_when_enabled_and_allowed() done, defined at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:252> result=None created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.498 seconds
+.Executing <Task pending name='Task-342' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/local/lib/python3.13/asyncio/base_events.py:460> cb=[_run_until_complete_cb() at /usr/local/lib/python3.13/asyncio/base_events.py:181] created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.517 seconds
+Executing <Task pending name='Task-342' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/local/lib/python3.13/asyncio/base_events.py:460> cb=[_run_until_complete_cb() at /usr/local/lib/python3.13/asyncio/base_events.py:181] created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.514 seconds
+Executing <Task pending name='Task-342' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/local/lib/python3.13/asyncio/base_events.py:460> cb=[_run_until_complete_cb() at /usr/local/lib/python3.13/asyncio/base_events.py:181] created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.532 seconds
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 55022)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 451, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 439, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/user/ClinicOS/clinicos-ai-runtime/tests/openai_stub.py", line 113, in do_POST
+    return self._send(200, {
+           ~~~~~~~~~~^^^^^^^
+        "id": "resp_stub", "object": "response", "created_at": int(time.time()),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+                  "output_tokens_details": {"reasoning_tokens": 5}},
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    })
+    ^^
+  File "/home/user/ClinicOS/clinicos-ai-runtime/tests/openai_stub.py", line 55, in _send
+    self.wfile.write(body)
+    ~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+Executing <Task pending name='Task-342' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /usr/local/lib/python3.13/asyncio/futures.py:384, Task.task_wakeup()] created at /usr/local/lib/python3.13/asyncio/base_events.py:460> cb=[_run_until_complete_cb() at /usr/local/lib/python3.13/asyncio/base_events.py:181] created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.522 seconds
+Executing <Task pending name='Task-342' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/local/lib/python3.13/asyncio/base_events.py:460> cb=[_run_until_complete_cb() at /usr/local/lib/python3.13/asyncio/base_events.py:181] created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.523 seconds
+Executing <Task pending name='Task-342' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/local/lib/python3.13/asyncio/base_events.py:460> cb=[_run_until_complete_cb() at /usr/local/lib/python3.13/asyncio/base_events.py:181] created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.532 seconds
+Executing <Task pending name='Task-342' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/local/lib/python3.13/asyncio/base_events.py:460> cb=[_run_until_complete_cb() at /usr/local/lib/python3.13/asyncio/base_events.py:181] created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.524 seconds
+Executing <Task pending name='Task-342' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:218> wait_for=<Future pending cb=[Task.task_wakeup()] created at /usr/local/lib/python3.13/asyncio/base_events.py:460> cb=[_run_until_complete_cb() at /usr/local/lib/python3.13/asyncio/base_events.py:181] created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.517 seconds
+Executing <Task finished name='Task-342' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() done, defined at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:212> result=None created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.499 seconds
+...Executing <Task finished name='Task-357' coro=<ErrorAndUsageNormalizationTests.test_usage_normalized() done, defined at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:242> result=None created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.498 seconds
+.Executing <Task finished name='Task-362' coro=<ProviderSwitchTests.test_openai_then_test_provider_same_workflows() done, defined at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:165> result=None created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.490 seconds
+.----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 44118)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 451, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/http/server.py", line 439, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "/home/user/ClinicOS/clinicos-ai-runtime/tests/openai_stub.py", line 113, in do_POST
+    return self._send(200, {
+           ~~~~~~~~~~^^^^^^^
+        "id": "resp_stub", "object": "response", "created_at": int(time.time()),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+                  "output_tokens_details": {"reasoning_tokens": 5}},
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    })
+    ^^
+  File "/home/user/ClinicOS/clinicos-ai-runtime/tests/openai_stub.py", line 55, in _send
+    self.wfile.write(body)
+    ~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+Executing <Task finished name='Task-367' coro=<ProviderSwitchTests.test_stt_switch() done, defined at /home/user/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:186> result=None created at /usr/local/lib/python3.13/asyncio/runners.py:101> took 0.502 seconds
+....................................................stt realtime outcome=budget_exceeded
+.......stt provider=google model=m bytes=4 durationMs=0 outcome=timeout correlationId=-
+./home/user/ClinicOS/clinicos-ai-runtime/tests/test_voice_stt.py:118: StarletteDeprecationWarning: 'HTTP_413_REQUEST_ENTITY_TOO_LARGE' is deprecated. Use 'HTTP_413_CONTENT_TOO_LARGE' instead.
+  await voice_transcribe(FakeRequest({}, {"content-length": str(10_000_000)}),
+..
+----------------------------------------------------------------------
+Ran 249 tests in 12.325s
+
+OK

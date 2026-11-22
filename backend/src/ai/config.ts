@@ -125,6 +125,32 @@ export function loadOutputSchema(cfg = loadAiConfig()): object {
   return JSON.parse(readFileSync(cfg.outputSchemaPath, 'utf8'));
 }
 
+// Page sessions (the intake import) ask the model for the intake fields only, each described,
+// in the strict structured-output subset. The wide schema above stays the VALIDATION contract.
+const DEFAULT_INTAKE_SCHEMA_PATH = resolve(
+  DEFAULT_ASSET_DIR,
+  'clinicos-intake-extraction.schema.json',
+);
+const DEFAULT_INTAKE_PROMPT_PATH = resolve(DEFAULT_ASSET_DIR, 'intake-extraction-prompt.it.txt');
+
+/** JSON Schema sent to the model for a page-session letter (metadata keys removed). */
+export function loadIntakeExtractionSchema(): object {
+  const path = process.env.AI_INTAKE_EXTRACTION_SCHEMA_PATH?.trim() || DEFAULT_INTAKE_SCHEMA_PATH;
+  const {
+    $schema: _schema,
+    $id: _id,
+    title: _title,
+    ...schema
+  } = JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>;
+  return schema;
+}
+
+/** Italian instructions sent with a page-session letter. */
+export function loadIntakeExtractionPrompt(): string {
+  const path = process.env.AI_INTAKE_EXTRACTION_PROMPT_PATH?.trim() || DEFAULT_INTAKE_PROMPT_PATH;
+  return readFileSync(path, 'utf8');
+}
+
 /** Load the versioned extraction schema asset. */
 export function loadExtractionSchema(cfg = loadAiConfig()): unknown {
   return JSON.parse(readFileSync(cfg.schemaPath, 'utf8'));

@@ -67,6 +67,58 @@ export function pageDraftNarrative(result: Json): DischargeNarrativeDraft {
   return narrative;
 }
 
+const REFERENT_RELATIONS = [
+  'coniuge',
+  'figlio',
+  'genitore',
+  'fratello_sorella',
+  'nipote',
+  'amico_caregiver',
+  'tutore',
+  'altro',
+];
+// A structure whose own name says it is a hospital; anything else is left to the operator.
+const HOSPITAL_NAME =
+  /\b(?:ospedal\w*|policlinic\w*|nosocomi\w*|irccs|ausl|aulss|asst|azienda\s+(?:ospedalier\w*|sanitaria)|presidio\s+ospedalier\w*)\b/i;
+const text = (v: unknown) => (typeof v === 'string' ? v.trim() : '');
+const province = (v: unknown) => (/^[a-z]{2}$/i.test(text(v)) ? text(v).toUpperCase() : '');
+const filledOnly = (o: Record<string, string>): Json =>
+  Object.fromEntries(Object.entries(o).filter(([, v]) => v));
+
+/**
+ * Intake fields the letter fills beyond the narrative: birthplace, residence, the person to
+ * contact and where the patient comes from. Same rule as every other field: only values the
+ * extraction returned (and, across letters, the candidate the operator selected); a value that
+ * does not have the form the intake expects (province, CAP, relation) is left out, not adapted.
+ */
+export function pageDraftExtras(result: Json): { anagrafica: Json; ingresso: Json } {
+  const ana = (key: string) => text(selectedValue(result, `anagrafica.${key}`));
+  const cart = (key: string) => text(selectedValue(result, `cartella.${key}`));
+  const relation = ana('contattoEmergenzaRelazione');
+  const structure = cart('strutturaDimettente');
+  const ward = cart('repartoDimettente');
+  return {
+    anagrafica: filledOnly({
+      comuneNascita: ana('comuneNascita'),
+      provinciaNascita: province(ana('provinciaNascita')),
+      comune: ana('comune'),
+      provincia: province(ana('provincia')),
+      cap: /^\d{5}$/.test(ana('cap')) ? ana('cap') : '',
+      // "Bianchi Marta (figlia)": the relation has its own field.
+      referenteNome: ana('contattoEmergenzaNome')
+        .replace(/\s*\([^)]*\)\s*$/, '')
+        .trim(),
+      referenteRelazione: REFERENT_RELATIONS.includes(relation) ? relation : '',
+      referenteTelefono: ana('contattoEmergenzaTel'),
+    }),
+    ingresso: filledOnly({
+      provenienza: HOSPITAL_NAME.test(structure) ? 'ospedale' : '',
+      centroInviante: [structure, ward].filter(Boolean).join(' — '),
+      motivoIngresso: cart('motivoRicovero'),
+    }),
+  };
+}
+
 /** Parse per letter, avoiding synthetic group headings and retaining exact original row text. */
 export function pageTherapyRows(result: Json): Json[] {
   const groups = result._groups as GroupResult[];

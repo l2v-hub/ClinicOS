@@ -8,7 +8,7 @@ import { abandonDraft, getDraft } from './intake/intakeDraftApi';
 import { IntakeWorkspace } from './intake/IntakeWorkspace';
 import { ImportDocumentsWorkspace } from './import/ImportDocumentsWorkspace';
 import { ImportReviewWorkspace } from './import/ImportReviewWorkspace';
-import { ImportApiError, ImportSessionApi } from './import/importSessionApi';
+import { ImportApiError, ImportSessionApi, importPollDelayMs } from './import/importSessionApi';
 import {
   importFailureMessage,
   importRecoveryPresentation,
@@ -235,6 +235,7 @@ function ImportSession({
   useEffect(() => {
     if (!processing || !jobId) return;
     let alive = true;
+    let attempt = 0;
     let timer: ReturnType<typeof setTimeout> | undefined;
     async function poll() {
       let sessionRead = true;
@@ -264,7 +265,7 @@ function ImportSession({
           }
         }
       } finally {
-        if (alive) timer = setTimeout(() => void poll(), 2000);
+        if (alive) timer = setTimeout(() => void poll(), importPollDelayMs(attempt++));
       }
     }
     void poll();

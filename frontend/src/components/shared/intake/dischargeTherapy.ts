@@ -230,8 +230,7 @@ export function therapyFormToDischargeRow(
       v.doseMode === 'glucose_scale'
         ? validateGlucoseScaleRows(v.glucoseScale ?? [], v.glucoseDoseUnit).protocol?.rules
         : undefined,
-    glucoseDoseUnit:
-      v.doseMode === 'glucose_scale' ? (v.glucoseDoseUnit ?? 'unità') : undefined,
+    glucoseDoseUnit: v.doseMode === 'glucose_scale' ? (v.glucoseDoseUnit ?? 'unità') : undefined,
     quantita:
       v.doseMode === 'glucose_scale'
         ? ''

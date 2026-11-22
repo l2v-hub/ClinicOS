@@ -10,11 +10,17 @@ export type RuntimeUnit = {
   runtimeJobId: string | null;
   runtimeAttempt: number;
 };
+/** Shared by the units of one run: what the runtime declares is asked once, not once per page. */
+export type RuntimeContext = { capabilities?: Promise<Json | null> };
+// A unit that answers fast (cached OCR, short page) must not wait a full second to be noticed:
+// the first checks are close together, then they settle at `pollMs`.
+const POLL_STEPS_MS = [150, 250, 400, ...Array<number>(10).fill(500)];
 export async function executeRuntimeUnit(
   unit: RuntimeUnit,
   checkpoint: (id: string, attempt: number) => Promise<void>,
   current: () => Promise<void>,
   pollMs = 1000,
+  context: RuntimeContext = {},
 ): Promise<{ data: unknown; model: string }> {
   const cfg = loadAiConfig();
   const base = process.env.AI_RUNTIME_URL?.replace(/\/$/, '');
@@ -87,7 +93,12 @@ export async function executeRuntimeUnit(
       schema: unit.schema,
       prompt: unit.prompt,
     };
-    const capabilities = await request('/v1/runtime/capabilities');
+    // A failed read is not kept: the next unit asks again.
+    const pending = (context.capabilities ??= request('/v1/runtime/capabilities'));
+    const capabilities = await pending.catch((error) => {
+      if (context.capabilities === pending) context.capabilities = undefined;
+      throw error;
+    });
     if (capabilities?.document_job_contract_version !== 2)
       throw new ImportSessionError(
         503,
@@ -135,6 +146,7 @@ export async function executeRuntimeUnit(
   assertEcho(state, expectedAttempt);
   assertComplete(state);
   const deadline = Date.now() + cfg.jobMaxDurationMs;
+  let polls = 0;
   while (Date.now() < deadline) {
     await current();
     if (state.status === 'review_ready') {
@@ -159,7 +171,8 @@ export async function executeRuntimeUnit(
           : 'Elaborazione non riuscita. Le altre pagine sono conservate.',
       );
     }
-    await new Promise((resolve) => setTimeout(resolve, pollMs));
+    const wait = Math.min(pollMs, POLL_STEPS_MS[polls++] ?? pollMs);
+    await new Promise((resolve) => setTimeout(resolve, wait));
     state = (await request(`/v1/document-jobs/${encodeURIComponent(runtimeId!)}`))!;
     assertEcho(state, expectedAttempt);
     assertComplete(state);

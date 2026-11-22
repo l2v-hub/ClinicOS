@@ -1,0 +1,45 @@
+base=https://clinicos-eosin.vercel.app ruolo=Infermiere 1 file=telefono-1.jpg,telefono-2.jpg
+caricamento pagine: 0.5s
+da «Avvia elaborazione» alla scheda di revisione: 51.1s (review)
+stati:
+  0.2s uploaded/ {"phase":"documents","totalPages":1,"completedPages":0,"failedPages":0,"totalGroups":1,"completedGroups":0,"currentPageId":null,"currentGroupId":null}
+  0.4s uploaded/ {"phase":"documents","totalPages":2,"completedPages":0,"failedPages":0,"totalGroups":1,"completedGroups":0,"currentPageId":null,"currentGroupId":null}
+  0.9s queued/queued {"phase":"documents","totalPages":2,"completedPages":0,"failedPages":0,"totalGroups":1,"completedGroups":0,"currentPageId":null,"currentGroupId":null}
+  3.1s processing/ocr {"phase":"ocr","totalPages":2,"completedPages":0,"failedPages":0,"totalGroups":1,"completedGroups":0,"currentPageId":"1cb1aae6-b6c1-4ba8-83c3-e8d26c35a71b","currentGroupId":null}
+  7.3s processing/ocr {"phase":"ocr","totalPages":2,"completedPages":1,"failedPages":0,"totalGroups":1,"completedGroups":0,"currentPageId":"3c5f9979-d8e1-4a4a-9180-b4d54615e418","currentGroupId":null}
+  13.6s processing/extraction {"phase":"extraction","totalPages":2,"completedPages":2,"failedPages":0,"totalGroups":1,"completedGroups":0,"currentPageId":null,"currentGroupId":"bdc6b144-17a7-440d-8026-a732501a316d"}
+  51.6s review_ready/completed {"phase":"review","totalPages":2,"completedPages":2,"failedPages":0,"totalGroups":1,"completedGroups":1,"currentPageId":null,"currentGroupId":null}
+
+chiamate:
+0.2s POST /ai/extraction/jobs/:id/files 200
+0.3s GET /ai/extraction/jobs/:id/files/:id/content 200
+0.4s POST /ai/extraction/jobs/:id/files 200
+0.5s GET /ai/extraction/jobs/:id/files/:id/content 200
+0.9s POST /ai/extraction/jobs/:id/process 202
+1.0s GET /ai/extraction/jobs/:id 200
+3.1s GET /ai/extraction/jobs/:id 200
+5.2s GET /ai/extraction/jobs/:id 200
+7.3s GET /ai/extraction/jobs/:id 200
+9.4s GET /ai/extraction/jobs/:id 200
+11.5s GET /ai/extraction/jobs/:id 200
+13.6s GET /ai/extraction/jobs/:id 200
+15.7s GET /ai/extraction/jobs/:id 200
+17.8s GET /ai/extraction/jobs/:id 200
+19.9s GET /ai/extraction/jobs/:id 200
+22.1s GET /ai/extraction/jobs/:id 200
+23.9s GET /patients/diary-unread-count 200
+24.1s GET /ai/extraction/jobs/:id 200
+26.2s GET /ai/extraction/jobs/:id 200
+28.4s GET /ai/extraction/jobs/:id 200
+30.5s GET /ai/extraction/jobs/:id 200
+32.6s GET /ai/extraction/jobs/:id 200
+34.7s GET /ai/extraction/jobs/:id 200
+36.8s GET /ai/extraction/jobs/:id 200
+39.0s GET /ai/extraction/jobs/:id 200
+41.1s GET /ai/extraction/jobs/:id 200
+43.2s GET /ai/extraction/jobs/:id 200
+45.3s GET /ai/extraction/jobs/:id 200
+47.4s GET /ai/extraction/jobs/:id 200
+49.5s GET /ai/extraction/jobs/:id 200
+51.6s GET /ai/extraction/jobs/:id 200
+51.7s GET /ai/extraction/jobs/:id/result 200

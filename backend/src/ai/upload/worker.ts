@@ -23,12 +23,21 @@ const ORPHAN_STATES = [
 
 let timer: ReturnType<typeof setInterval> | null = null;
 let busy = false;
+let again = false;
 
 async function claimAndRun(): Promise<void> {
-  if (busy) return; // single-flight worker (AI_MAX_CONCURRENCY=1)
+  if (busy) {
+    // A request that arrives while a job runs is served right after it, not at the next tick.
+    again = true;
+    return;
+  }
   busy = true;
+  again = false;
   try {
-    if (await runNextPageJob()) return;
+    if (await runNextPageJob()) {
+      again = true; // another session may be waiting behind the one just finished
+      return;
+    }
     const next = await prisma.importJob.findFirst({
       where: { status: 'queued' },
       orderBy: { updatedAt: 'asc' },
@@ -48,7 +57,18 @@ async function claimAndRun(): Promise<void> {
     }
   } finally {
     busy = false;
+    if (again && timer) setImmediate(() => void claimAndRun().catch(() => {}));
   }
+}
+
+/**
+ * Wake the worker now instead of at its next poll: called when a session is queued, so the
+ * operator does not wait up to a full poll interval before anything starts. No-op when the
+ * worker is not running in this process (tests, split deployments keep polling).
+ */
+export function kickWorker(): void {
+  if (!timer) return;
+  setImmediate(() => void claimAndRun().catch(() => {}));
 }
 
 /** Reset jobs that were in-flight when a previous worker died back to `queued`. */

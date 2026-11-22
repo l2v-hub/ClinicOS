@@ -220,7 +220,11 @@ test('only expired leases are reclaimed; concurrent workers claim once and stale
         await prisma.importProcessingUnit.count({ where: { jobId: job.id, status: 'completed' } }),
         0,
       );
-      assert.equal(rt.events.filter((e: any) => e.action === 'start').length, 1);
+      // Pages are read in parallel: both pages of the session may be in flight when the run is
+      // superseded. Neither is run twice and neither result is persisted (asserted above).
+      const starts = rt.events.filter((e: any) => e.action === 'start');
+      assert.ok(starts.length >= 1 && starts.length <= 2, `starts: ${starts.length}`);
+      assert.equal(new Set(starts.map((e: any) => e.unit)).size, starts.length);
     },
   );
   await prisma.importJob.update({
@@ -271,4 +275,57 @@ test('duplicate/rejected replay and identical manifest preserve ready revision, 
     uploads.addPageFiles(job.id, [{ ...file, data: Buffer.from('invalid2') }], invalidMeta),
     errorCode('idempotency_conflict'),
   );
+});
+
+test('pages are read in parallel; a failed page keeps the others and only it is read again', async () => {
+  const job = await session(4);
+  let active = 0;
+  let peak = 0;
+  let failOnce = true;
+  await withRuntime(
+    async (u: any) => {
+      if (u.mode !== 'ocr') return { data: { anagrafica: { nome: 'Persona' }, cartella: {} } };
+      active++;
+      peak = Math.max(peak, active);
+      await new Promise((r) => setTimeout(r, 150));
+      active--;
+      if (failOnce) {
+        failOnce = false;
+        throw new Error('synthetic page failure');
+      }
+      return { data: { rawText: '## DIAGNOSI\nOsservazione sintetica.' } };
+    },
+    async (rt) => {
+      await lifecycle.processPages(job.id, { expectedRevision: job.manifest.revision });
+      const started = Date.now();
+      assert.equal(await worker.runNextPageJob({ pollMs: 5 }), true);
+      const elapsed = Date.now() - started;
+      // Four pages of 150 ms each: together, not one after the other.
+      assert.ok(peak >= 2, `pages in flight together: ${peak}`);
+      assert.ok(elapsed < 4 * 150 + 400, `elapsed ${elapsed} ms`);
+      let view = await repo.getPageJob(job.id);
+      assert.equal(view.status, 'retryable_error');
+      const units = () =>
+        prisma.importProcessingUnit.groupBy({
+          by: ['kind', 'status'],
+          where: { jobId: job.id },
+          _count: true,
+        });
+      assert.deepEqual((await units()).map((u: any) => [u.kind, u.status, u._count]).sort(), [
+        ['ocr', 'completed', 3],
+        ['ocr', 'failed', 1],
+      ]);
+      // Retry: the three pages already read are not sent again.
+      const before = rt.events.filter((e: any) => e.action === 'start' && e.mode === 'ocr').length;
+      await lifecycle.processPages(job.id, { expectedRevision: job.manifest.revision }, true);
+      assert.equal(await worker.runNextPageJob({ pollMs: 5 }), true);
+      view = await repo.getPageJob(job.id);
+      assert.equal(view.status, 'review_ready');
+      assert.equal(
+        rt.events.filter((e: any) => e.action === 'start' && e.mode === 'ocr').length - before,
+        1,
+      );
+    },
+  );
+  await lifecycle.cancelPages(job.id);
 });

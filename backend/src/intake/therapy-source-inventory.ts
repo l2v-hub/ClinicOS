@@ -12,10 +12,24 @@ const meaningful = (value: unknown): boolean => {
 };
 
 /** Conservative exact-field agreement only. No clinical synonym/frequency inference. */
+/**
+ * The extracted name is the row's own name: either exactly its drug name, or that name followed
+ * by the first words the row itself reads after it ("Insulina glargine" for the row INSULINA +
+ * "glargine (Lantus)"). Text agreement only — never a synonym or a brand/active-substance match.
+ */
+function sameDrugName(row: Json, item: Json): boolean {
+  const name = norm(item.nome);
+  const drug = norm(row.farmacoNome);
+  if (!name || !drug) return false;
+  if (name === drug) return true;
+  const written = norm(`${text(row.farmacoNome)} ${text(row.forma)}`);
+  return name.startsWith(`${drug} `) && (written === name || written.startsWith(`${name} `));
+}
+
 export function representsStructuredItem(row: Json, item: Json): boolean {
-  if (!norm(item.nome) || norm(item.nome) !== norm(row.farmacoNome)) return false;
+  if (!sameDrugName(row, item)) return false;
   const fields: Json = {
-    nome: row.farmacoNome,
+    nome: item.nome,
     dose: row.dosaggio,
     frequenza: Array.isArray(row.orari) ? row.orari.join(', ') : '',
     via: row.viaSomministrazione,
