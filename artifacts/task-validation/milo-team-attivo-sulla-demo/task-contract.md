@@ -42,6 +42,11 @@ deploy precedente aveva ridistribuito l'immagine vecchia. Ricaricato da `main` (
   livello `AI_TEAM_REASONING_EFFORT` (default `low`, valori minimal/low/medium/high/xhigh). Gli altri
   provider restano invariati.
 - Le forme «[id]», «[fonte: id]», «(fonte: id)» diventano un solo «[n]».
+- Dopo #547 il team risponde senza errori ma le sue risposte sono scartate dal backend e i tempi
+  salgono a 20–37 s: team spento sulla demo. Il backend registra il motivo dello scarto
+  (`[ai-team]`, senza contenuti) e il servizio AI un riepilogo di ogni esecuzione; se il testo
+  finale non riporta i [S#] ma il team ha letto dati, si citano le fonti lette (fondate per
+  costruzione, verificate dal backend).
 
 ## Acceptance Criteria
 
@@ -50,6 +55,8 @@ deploy precedente aveva ridistribuito l'immagine vecchia. Ricaricato da `main` (
   endpoint `/v1/responses` e le richieste portano il livello di ragionamento.
 - AC2: `numberSourceIds` non lascia parentesi spurie per «[id]», «[fonte: id]», «(fonte: id)».
 - AC3: test del servizio AI e del backend, typecheck.
+- AC5: i motivi di scarto (no_text, no_reads, no_citations, ungrounded, action_claim) sono distinti
+  e registrati; una risposta senza [S#] dopo letture riuscite cita le fonti lette.
 - AC4 (dopo il rilascio): sulla demo almeno una domanda risponde in modalità team con fonti
   numerate; tempi registrati; altrimenti il team viene spento.
 

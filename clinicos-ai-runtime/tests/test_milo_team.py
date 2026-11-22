@@ -58,6 +58,7 @@ class FakeModel(BaseHTTPRequestHandler):
 
     seen_tools: list = []
     bodies: list = []
+    final_text = "La sistolica è salita da 130 a 150 mmHg in 7 giorni [S1]. Valore inventato [S9]."
 
     def log_message(self, *a):
         pass
@@ -100,9 +101,7 @@ class FakeModel(BaseHTTPRequestHandler):
                  "function": {"name": "get_patient_parameters", "arguments": json.dumps({"days": 7})}}]},
                 "tool_calls")
             return
-        self._reply({"role": "assistant",
-                     "content": "La sistolica è salita da 130 a 150 mmHg in 7 giorni [S1]. Valore inventato [S9]."},
-                    "stop")
+        self._reply({"role": "assistant", "content": FakeModel.final_text}, "stop")
 
 
 class MiloTeamTests(unittest.TestCase):
@@ -189,6 +188,17 @@ class MiloTeamTests(unittest.TestCase):
         text, cited = team_mod.renumber_citations("Uno [S3], due [S1], ancora [S3] e falso [S7].", ledger)
         self.assertEqual(text, "Uno [1], due [2], ancora [1] e falso.")
         self.assertEqual([c["recordId"] for c in cited], ["3", "1"])
+
+    def test_answer_without_markers_cites_the_sources_actually_read(self):
+        """Il modello vero può riassumere senza riportare i [S#]: si citano le fonti lette dal backend."""
+        FakeModel.final_text = "La sistolica è salita da 130 a 150 mmHg negli ultimi 7 giorni."
+        try:
+            out = asyncio.run(team_mod.run_milo_team(self._req(), self._factory(), timeout_seconds=30,
+                                                     env=self._env()))
+        finally:
+            FakeModel.final_text = "La sistolica è salita da 130 a 150 mmHg in 7 giorni [S1]. Valore inventato [S9]."
+        self.assertEqual(out["citedSources"], [SOURCE])
+        self.assertEqual(out["answerText"], "La sistolica è salita da 130 a 150 mmHg negli ultimi 7 giorni.")
 
     def test_azure_chat_model_becomes_responses_model_for_the_team(self):
         """Azure gpt-6.1-sol: su chat/completions niente strumenti col ragionamento, e il ragionamento
