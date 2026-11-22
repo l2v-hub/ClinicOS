@@ -325,7 +325,8 @@ export function AnswerView({
   if (answer.refusal) return <div className="ai-asst__a ai-asst__refusal">{answer.refusal}</div>;
   if (answer.notFound)
     return <div className="ai-asst__a ai-asst__muted">Informazione non trovata.</div>;
-  const numbered = answer.mode === 'team' && !!answer.answerText;
+  // Prosa verificata (team o compositore): cita le fonti come [n], nell'ordine dell'elenco sotto.
+  const numbered = !!answer.answerText && (answer.mode === 'team' || answer.composed === true);
   const hasTrendBlock = !!answer.blocks?.some((b) => b.type === 'parameter_trend');
   return (
     <div className="ai-asst__a" ref={root}>
@@ -350,7 +351,7 @@ export function AnswerView({
       )}
       <div className="ai-asst__count">
         {numbered
-          ? `${answer.sources.length} font${answer.sources.length === 1 ? 'e' : 'i'} citat${answer.sources.length === 1 ? 'a' : 'e'}`
+          ? `${answer.sources.length} font${answer.sources.length === 1 ? 'e' : 'i'}${answer.mode === 'team' ? ` citat${answer.sources.length === 1 ? 'a' : 'e'}` : ''}`
           : `${answer.results.length} risultat${answer.results.length === 1 ? 'o' : 'i'}`}
       </div>
       {answer.truncated && (

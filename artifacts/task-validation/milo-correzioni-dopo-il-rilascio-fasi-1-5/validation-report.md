@@ -18,6 +18,9 @@
   - solo data = mezzanotte di Roma;
   - data o ora impossibile = `bad_request`, che `dispatchQueryData` trasforma in risultato vuoto.
 - `service.ts`: un `bad_request` di qualunque lettura dà «non trovato», non 500.
+- `model-view.ts` (nuovo): al modello, compositore e team, gli istanti arrivano in ora della
+  struttura («22/11/2026 19:33»). Nella prosa del compositore gli identificativi delle fonti
+  diventano [n]. Il pannello numera le fonti anche per la prosa del compositore.
 
 ## Files Changed
 
@@ -38,7 +41,7 @@
 
 | Test             |  Result | Evidence                                                                  |
 | ---------------- | ------: | ------------------------------------------------------------------------- |
-| Unit             |    PASS | `logs/unit-fixes.log` (17/17, con i test esistenti del pianificatore LLM) |
+| Unit             |    PASS | `logs/unit-fixes.log` (27/27, con i test esistenti del pianificatore LLM e delle fasi 2–3) |
 | Integration      |    PASS | `logs/integration-query-data.log` (8/8)                                   |
 | API              | NOT RUN | dopo il rilascio                                                          |
 | Playwright       | NOT RUN | dopo il rilascio                                                          |
@@ -55,7 +58,8 @@ Errore osservato sulla demo prima della correzione: `query_data` con
 
 ## Logs
 
-`logs/unit-fixes.log`, `logs/integration-query-data.log`, `logs/backend-suite-summary.log`.
+`logs/unit-fixes.log`, `logs/integration-query-data.log`, `logs/integration-team-blocks.log`,
+`logs/backend-suite-summary.log`, `logs/frontend-tests.log`, `logs/frontend-build.log`.
 
 ## Residual Risks
 

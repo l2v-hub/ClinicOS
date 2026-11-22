@@ -11,7 +11,7 @@
 
 | Area                 | Impacted |
 | -------------------- | -------: |
-| Frontend/UI          |       no |
+| Frontend/UI          |      yes |
 | Backend/API          |      yes |
 | Database/Persistence |       no |
 | Agnos AI / Chatbot   |      yes |
@@ -50,6 +50,9 @@ Sulla demo, con il pianificatore LLM attivo:
   mezzanotte a Roma; con un valore non valido rifiuta senza errore 500.
 - AC3: test nuovi, suite dei pianificatori e del motore di query, typecheck e build.
 - AC4 (dopo il rilascio): sulla demo le due domande rispondono senza errore con lo strumento giusto.
+- AC5: la prosa del compositore e del team usa l'ora della struttura (mai «UTC») e cita le fonti
+  come [n] coerenti con l'elenco sotto la risposta, non con identificativi grezzi (trovato sulla
+  demo con il paziente di prova: «18:33:06 UTC», «fonte: c3743db8-…»).
 
 ## Test Plan
 
