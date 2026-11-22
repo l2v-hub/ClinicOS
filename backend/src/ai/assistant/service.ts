@@ -7,6 +7,8 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 import { getFacilityOccupancy } from '../../rooms/occupancy-service.js';
 import * as svc from '../gateway/services.js';
+import * as clinical from '../gateway/clinical-reads.js';
+import { facilityToday } from '../../patients/parameter-reading-input.js';
 import { canCrossPatientSearch, canFacilityRead } from '../gateway/context.js';
 import { GatewayError, type SourceReference, type UserContext } from '../gateway/types.js';
 import {
@@ -31,10 +33,12 @@ import {
 import { resolveAgent, type AgentId } from './agents.js';
 import { planQueryLLM, injectPatientId } from './llm-planner.js';
 import { composeAnswer } from './composer.js';
-import { callPlanRuntime, callComposeRuntime } from './runtime-client.js';
+import { callPlanRuntime, callComposeRuntime, callTeamRuntime } from './runtime-client.js';
+import { teamAnswer } from './team.js';
 import { loadAssistantLlmConfig } from './config.js';
 import { validateQueryPlan } from '../gateway/query/validate.js';
 import { dedupeNav, navFromSource, type NavAction } from './nav.js';
+import { blocksFromResults, type MiloBlock } from './blocks.js';
 import { runQueryPlan } from '../gateway/query/engine.js';
 import { boundStaffList, MAX_STAFF_RESULTS } from './staff-window.js';
 import { boundTodayAppointments, todayAppointmentLimit } from './appointments-today-window.js';
@@ -51,11 +55,16 @@ export interface AssistantAnswer {
   refusal?: string;
   truncated: boolean;
   // 016: modalità dell'interprete (F0 = deterministic) e risposta discorsiva opzionale (F2).
-  mode?: 'deterministic' | 'llm';
+  // Milo fase 2: 'team' = risposta del team di agenti, verificata contro le fonti restituite.
+  mode?: 'deterministic' | 'llm' | 'team';
   answerText?: string;
   composed?: boolean;
   /** Sub-agent che ha prodotto la risposta: lo decide l'intent, non la scelta dell'utente. */
   agent?: AgentId;
+  /** Milo fase 2: specialisti coinvolti e strumenti usati dal team (nessun contenuto). */
+  team?: { members: string[]; tools: string[] };
+  /** Milo fase 3: blocchi visivi (indicatori, tabelle, andamenti) costruiti dal backend dai dati letti. */
+  blocks?: MiloBlock[];
 }
 
 function limits(env: NodeJS.ProcessEnv = process.env) {
@@ -477,6 +486,16 @@ async function operatorQueue(
 }
 
 /** Run the assistant for a question. Pure orchestration over the gateway; SOURCE_ONLY. */
+/** Nome del paziente aperto, solo se nel perimetro: contesto per il team (mai fuori perimetro). */
+async function patientLabel(patientId: string, ctx: UserContext): Promise<string | undefined> {
+  if (ctx.permittedPatientIds && !ctx.permittedPatientIds.includes(patientId)) return undefined;
+  const p = await prisma.patient.findUnique({
+    where: { id: patientId },
+    select: { firstName: true, lastName: true },
+  });
+  return p ? `${p.lastName} ${p.firstName}`.trim() : undefined;
+}
+
 export async function assistantQuery(
   question: string,
   ctx: UserContext,
@@ -488,21 +507,63 @@ export async function assistantQuery(
   // 016 F0: se nessun paziente è aperto ma la domanda ne nomina uno, risolverlo per nome
   // riusando il tool gateway `search_patients` (authz applicata). Univoco ⇒ scope su quel paziente;
   // ambiguo/assente ⇒ nessuna invenzione (si continua e l'intent cadrà su unknown/not-found).
-  let effectiveCtx = planCtx;
+  // Giorno di struttura per «oggi/domani/lunedì» (turni, agenda): il pianificatore resta puro.
+  let effectiveCtx: PlanContext = { ...planCtx, today: planCtx.today ?? facilityToday() };
   if (!planCtx.currentPatientId) {
     const name = extractPatientName(question);
     if (name) {
       const matches = await svc.searchPatients({ query: name } as never, ctx);
       const resolved = pickResolvedPatient(matches.map((m) => ({ patientId: m.patientId })));
       if (resolved !== 'none' && resolved !== 'ambiguous') {
-        effectiveCtx = { ...planCtx, currentPatientId: resolved.patientId };
+        effectiveCtx = { ...effectiveCtx, currentPatientId: resolved.patientId };
       }
+    }
+  }
+
+  const cfg = loadAssistantLlmConfig(env);
+  // Milo fase 2: il team di agenti risponde per primo quando è attivo. Le richieste di giudizio
+  // clinico restano rifiutate PRIMA di qualunque lettura (stesso controllo del pianificatore). Se il
+  // team non risponde, risponde male o cita fonti non sue, si prosegue con il percorso classico.
+  const guard = planQuery(question, effectiveCtx);
+  if (cfg.teamEnabled && cfg.runtimeUrl && guard.intent !== 'refuse_clinical') {
+    const label = effectiveCtx.currentPatientId
+      ? await patientLabel(effectiveCtx.currentPatientId, ctx)
+      : undefined;
+    const team = await teamAnswer(
+      question,
+      ctx,
+      {
+        today: effectiveCtx.today ?? facilityToday(),
+        currentPatientId: effectiveCtx.currentPatientId,
+        currentPatientLabel: label ?? effectiveCtx.currentPatientLabel,
+        operatorName: effectiveCtx.operatorName,
+        history: effectiveCtx.history,
+        cfg,
+      },
+      { callTeamRuntime: (req) => callTeamRuntime(req, cfg) },
+    );
+    if (team) {
+      const navigationTeam = dedupeNav(team.citedSources.map(navFromSource));
+      return {
+        intent: guard.intent,
+        scope: guard.scope,
+        plan: guard,
+        results: team.results.slice(0, lim.maxResults),
+        sources: team.citedSources,
+        navigation: navigationTeam,
+        notFound: false,
+        truncated: team.results.length > lim.maxResults,
+        mode: 'team',
+        answerText: team.answerText,
+        composed: true,
+        team: { members: team.members, tools: team.tools },
+        blocks: blocksFromResults(team.reads),
+      };
     }
   }
 
   // 016 F1: se il planner LLM è attivo e il runtime è configurato, l'LLM propone il piano
   // (validato + fallback deterministico garantito); altrimenti percorso deterministico (default).
-  const cfg = loadAssistantLlmConfig(env);
   let plan: QueryPlan;
   let mode: 'deterministic' | 'llm';
   if (cfg.planEnabled && cfg.runtimeUrl) {
@@ -559,6 +620,7 @@ export async function assistantQuery(
   }
 
   const results: unknown[] = [];
+  const reads: Array<{ tool: string; data: unknown[] }> = [];
   const sources: SourceReference[] = [];
   let sourceTruncated = false;
   let calls = 0;
@@ -573,13 +635,21 @@ export async function assistantQuery(
       return empty({ notFound: false, refusal: 'Dato non consentito al tuo ruolo.' });
     }
     try {
-      const r = await dispatch(call.tool, call.args, ctx, env, effectiveCtx.operatorName);
+      const r = await dispatch(
+        call.tool,
+        call.args,
+        ctx,
+        env,
+        effectiveCtx.operatorName,
+        effectiveCtx.currentPatientId,
+      );
       sourceTruncated ||= r.truncated === true;
       const remaining = Math.max(0, lim.maxResults - results.length);
       if (r.data.length > remaining) sourceTruncated = true;
       for (const item of r.data.slice(0, remaining)) {
         results.push(item);
       }
+      reads.push({ tool: call.tool, data: r.data.slice(0, remaining) });
       sources.push(...r.sourceRefs);
     } catch (e) {
       if (
@@ -623,6 +693,7 @@ export async function assistantQuery(
     answerText,
     composed,
     agent: answeringAgent,
+    blocks: blocksFromResults(reads),
   };
 }
 
@@ -632,6 +703,7 @@ async function dispatch(
   ctx: UserContext,
   env: NodeJS.ProcessEnv = process.env,
   operatorName?: string,
+  currentPatientId?: string,
 ): Promise<{ data: unknown[]; sourceRefs: SourceReference[]; truncated?: boolean }> {
   const pid = String(args.patientId ?? '');
   switch (tool) {
@@ -644,9 +716,34 @@ async function dispatch(
       return r;
     }
     case 'get_patient_vital_signs': {
-      const r = await svc.getPatientVitalSigns(args as never, ctx);
-      return r;
+      // Milo fase 1: JSON storico della cartella + tabella della pagina Parametri, dal più recente.
+      const [legacy, table] = await Promise.all([
+        svc.getPatientVitalSigns(args as never, ctx),
+        clinical.getTableVitalItems(args as never, ctx),
+      ]);
+      const data = [...(table.data as Array<Record<string, unknown>>), ...(legacy.data as never[])]
+        .map((item, index) => ({ item, ref: [...table.sourceRefs, ...legacy.sourceRefs][index] }))
+        .sort((a, b) => String(b.item.rilevato ?? '').localeCompare(String(a.item.rilevato ?? '')));
+      return {
+        data: data.map((d) => d.item),
+        sourceRefs: data.map((d) => d.ref).filter(Boolean),
+        truncated: legacy.truncated || table.truncated,
+      };
     }
+    case 'get_patient_parameters':
+      return await clinical.getPatientParameters({ ...args, patientId: pid }, ctx);
+    case 'get_patient_news2':
+      return await clinical.getPatientNews2({ ...args, patientId: pid }, ctx);
+    case 'get_patient_diary':
+      return await clinical.getPatientDiaryEntries({ ...args, patientId: pid }, ctx);
+    case 'get_patient_assessments':
+      return await clinical.getPatientAssessments({ ...args, patientId: pid }, ctx);
+    case 'get_patient_administrations':
+      return await clinical.getPatientAdministrations({ ...args, patientId: pid }, ctx);
+    case 'query_staff_shifts':
+      return await clinical.queryStaffShifts(args, ctx, env);
+    case 'query_agenda':
+      return await clinical.queryAgenda(args, ctx, env);
     case 'get_patient_timeline': {
       const r = await svc.getPatientTimeline(pid, ctx);
       return r;
@@ -699,7 +796,8 @@ async function dispatch(
     case 'get_operator_queue':
       return await operatorQueue(ctx, env, operatorName);
     case 'query_data':
-      return await dispatchQueryData((args as { plan?: unknown }).plan, ctx);
+      // Il paziente «current» del linguaggio di query è quello aperto o risolto dal nome.
+      return await dispatchQueryData((args as { plan?: unknown }).plan, ctx, env, currentPatientId);
     default:
       return { data: [], sourceRefs: [] };
   }
@@ -709,6 +807,80 @@ async function dispatch(
  *  whitelist and executes it via the trusted engine. Invalid plan → empty (composer degrades). A
  *  bad_request (patient not resolved) → empty; forbidden/tenant errors propagate so assistantQuery
  *  reports a clean refusal. */
+// Milo fase 2: strumenti di lettura che comportano un accesso a più pazienti (stessa regola del
+// pianificatore LLM): ammessi solo con la ricerca fra pazienti abilitata per il ruolo verificato.
+const CROSS_PATIENT_TOOLS = new Set([
+  'search_across_patients',
+  'correlate_structured_data',
+  'query_appointments_today',
+]);
+// Strumenti legati a un paziente: senza patientId si usa il paziente aperto o risolto dal nome.
+const PATIENT_TOOLS = new Set([
+  'get_patient_allergies',
+  'get_patient_therapies',
+  'get_patient_vital_signs',
+  'get_patient_timeline',
+  'get_patient_appointments',
+  'search_clinical_sections',
+  'get_patient_parameters',
+  'get_patient_news2',
+  'get_patient_diary',
+  'get_patient_assessments',
+  'get_patient_administrations',
+]);
+
+export class ReadToolRefused extends Error {
+  constructor(
+    public readonly code:
+      'unknown_tool' | 'not_allowed' | 'cross_patient' | 'budget' | 'bad_request',
+    message: string,
+  ) {
+    super(message);
+  }
+}
+
+/**
+ * Esegue UNO strumento di lettura per conto del team di agenti, con gli stessi controlli della
+ * pipeline di Milo: allowlist di sola lettura, permesso del ruolo per lo strumento, gate fra più
+ * pazienti, perimetro del paziente (dentro ogni lettura del gateway), limite di chiamate.
+ * Il paziente di default è quello della delega; un patientId esplicito resta soggetto al perimetro.
+ */
+export async function executeReadTool(
+  tool: string,
+  rawArgs: unknown,
+  grant: import('./agent-grants.js').AgentGrant,
+  env: NodeJS.ProcessEnv = process.env,
+): Promise<{ data: unknown[]; sourceRefs: SourceReference[]; truncated: boolean }> {
+  const { isReadTool } = await import('./read-tools.js');
+  if (!isReadTool(tool)) throw new ReadToolRefused('unknown_tool', 'Strumento non disponibile');
+  if (grant.calls >= grant.maxCalls)
+    throw new ReadToolRefused('budget', 'Limite di letture per questa domanda raggiunto');
+  const ctx = grant.ctx;
+  if (ctx.readToolAllowed && !ctx.readToolAllowed(tool))
+    throw new ReadToolRefused('not_allowed', 'Dato non consentito al ruolo');
+  if (CROSS_PATIENT_TOOLS.has(tool) && !canCrossPatientSearch(ctx, env))
+    throw new ReadToolRefused('cross_patient', 'Ricerca tra più pazienti non autorizzata');
+  if (
+    rawArgs !== undefined &&
+    (typeof rawArgs !== 'object' || rawArgs === null || Array.isArray(rawArgs))
+  )
+    throw new ReadToolRefused('bad_request', 'Argomenti non validi');
+  const args = { ...((rawArgs as Record<string, unknown>) ?? {}) };
+  if (PATIENT_TOOLS.has(tool) && !args.patientId && grant.currentPatientId)
+    args.patientId = grant.currentPatientId;
+  grant.calls++;
+  const r = await dispatch(tool, args, ctx, env, grant.operatorName, grant.currentPatientId);
+  const limit = limits(env).maxResults;
+  const data = r.data.slice(0, limit);
+  grant.results.push({ tool, data });
+  grant.sources.push(...r.sourceRefs);
+  return {
+    data,
+    sourceRefs: r.sourceRefs,
+    truncated: r.truncated === true || r.data.length > limit,
+  };
+}
+
 export async function dispatchQueryData(
   rawPlan: unknown,
   ctx: UserContext,

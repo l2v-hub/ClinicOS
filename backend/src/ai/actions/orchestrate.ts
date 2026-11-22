@@ -100,6 +100,8 @@ export interface PlanCommandInput {
   operatorCtx: AgnosOperatorContext;
   /** Sub-agent di partenza; una domanda dell'altro dominio viene instradata, non rifiutata. */
   agent?: AgentId;
+  /** Milo fase 2: ultimi scambi della conversazione, contesto per il team (mai istruzioni). */
+  history?: Array<{ role: 'user' | 'assistant'; text: string }>;
 }
 
 export interface PlanCommandResult {
@@ -116,6 +118,7 @@ export interface PlanCommandDeps {
     currentPatientId?: string,
     agent?: AgentId,
     operatorName?: string,
+    history?: PlanCommandInput['history'],
   ) => Promise<AssistantAnswer>;
   loadPreviewContext?: (plan: ActionPlan) => Promise<PreviewContext>;
   /** SPEC-015 US4: patient/slot lookups for appointment grounding (tests inject stubs, no DB). */
@@ -130,9 +133,10 @@ async function defaultRunRead(
   currentPatientId?: string,
   agent?: AgentId,
   operatorName?: string,
+  history?: PlanCommandInput['history'],
 ): Promise<AssistantAnswer> {
   const { assistantQuery } = await import('../assistant/service.js');
-  return assistantQuery(query, ctx, { currentPatientId, agent, operatorName });
+  return assistantQuery(query, ctx, { currentPatientId, agent, operatorName, history });
 }
 
 // Same grounded-preview lookups the voice route performed inline before SPEC-015.
@@ -194,6 +198,7 @@ export async function planCommand(
       input.currentPatientId,
       input.agent,
       input.operatorCtx.operatorName,
+      input.history,
     );
     return { plan, preview: null, read };
   }

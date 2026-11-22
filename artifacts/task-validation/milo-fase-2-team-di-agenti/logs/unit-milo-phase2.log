@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: the team is off unless explicitly enabled, and off when clinical data may not reach the model
+ok 1 - the team is off unless explicitly enabled, and off when clinical data may not reach the model
+  ---
+  duration_ms: 0.804824
+  type: 'test'
+  ...
+# Subtest: conversation history: role and text only, at most six turns of 600 characters
+ok 2 - conversation history: role and text only, at most six turns of 600 characters
+  ---
+  duration_ms: 0.301129
+  type: 'test'
+  ...
+# Subtest: grants: random, single question, constant-time lookup, revocable
+ok 3 - grants: random, single question, constant-time lookup, revocable
+  ---
+  duration_ms: 0.545548
+  type: 'test'
+  ...
+# Subtest: team answers are accepted only when every cited source was handed out
+ok 4 - team answers are accepted only when every cited source was handed out
+  ---
+  duration_ms: 2.485878
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 575.688568

@@ -1370,6 +1370,293 @@
       "notes": "Servizio invocato su DB dal test esistente."
     },
     {
+      "capability_id": "ai.read.get_patient_administrations",
+      "name": "Agnos read tool — get_patient_administrations",
+      "description": "Tool di sola lettura del gateway Agnos (READ_TOOLS, backend/src/ai/assistant/read-tools.ts); args: patientId, days?. Somministrazioni programmate e al bisogno di un periodo.",
+      "domain": "ai_read",
+      "type": "read",
+      "feature_ui": "Agnos (via assistant.query / agnos.plan_command)",
+      "entry_point": "ai/assistant/service.ts dispatch('get_patient_administrations') ← POST /ai/assistant/query, POST /ai/actions/plan",
+      "services": ["backend/src/ai/gateway/clinical-reads.ts#getPatientAdministrations"],
+      "input": "patientId, days?",
+      "output": "SourcedResult {data, sourceRefs, truncated}",
+      "validations": [
+        "backend/src/ai/gateway/context.ts#assertTenant/assertPatientAllowed",
+        "backend/src/ai/assistant/read-tools.ts#isReadTool"
+      ],
+      "side_effects": ["AiAuditEvent (gatewayAudit)"],
+      "dependencies": ["prisma"],
+      "sensitivity": "high",
+      "risk": "Patient-scoped: assertTenant/assertPatientAllowed.",
+      "agno_integration": "Agnos read tool get_patient_administrations (gateway impl, not REST handlers)",
+      "tool_candidate": null,
+      "files": [
+        "backend/src/ai/gateway/clinical-reads.ts",
+        "backend/src/ai/assistant/service.ts",
+        "backend/src/ai/assistant/read-tools.ts"
+      ],
+      "technical_state": "READY",
+      "rationale": "Milo fase 1 (docs/architecture/milo-ai-first.md): lettura nuova del gateway, raggiungibile solo tramite il dispatcher di assistantQuery.",
+      "exposure": "AGNOS_INTERNAL",
+      "invocability": "TESTED",
+      "legacy_roles": [],
+      "patient_scoped": true,
+      "idempotency": "natural",
+      "test": {
+        "file": "backend/src/ai/__tests__/milo-phase1-reads.test.ts",
+        "cases": ["planner and dispatch of the Milo phase 1 reads"],
+        "result": "pass",
+        "gui_parity": false
+      },
+      "notes": "Milo fase 1."
+    },
+    {
+      "capability_id": "ai.read.get_patient_assessments",
+      "name": "Agnos read tool — get_patient_assessments",
+      "description": "Tool di sola lettura del gateway Agnos (READ_TOOLS, backend/src/ai/assistant/read-tools.ts); args: patientId, type?, days?. Scale e valutazioni finalizzate con punteggio.",
+      "domain": "ai_read",
+      "type": "read",
+      "feature_ui": "Agnos (via assistant.query / agnos.plan_command)",
+      "entry_point": "ai/assistant/service.ts dispatch('get_patient_assessments') ← POST /ai/assistant/query, POST /ai/actions/plan",
+      "services": ["backend/src/ai/gateway/clinical-reads.ts#getPatientAssessments"],
+      "input": "patientId, type?, days?",
+      "output": "SourcedResult {data, sourceRefs, truncated}",
+      "validations": [
+        "backend/src/ai/gateway/context.ts#assertTenant/assertPatientAllowed",
+        "backend/src/ai/assistant/read-tools.ts#isReadTool"
+      ],
+      "side_effects": ["AiAuditEvent (gatewayAudit)"],
+      "dependencies": ["prisma"],
+      "sensitivity": "high",
+      "risk": "Patient-scoped: assertTenant/assertPatientAllowed.",
+      "agno_integration": "Agnos read tool get_patient_assessments (gateway impl, not REST handlers)",
+      "tool_candidate": null,
+      "files": [
+        "backend/src/ai/gateway/clinical-reads.ts",
+        "backend/src/ai/assistant/service.ts",
+        "backend/src/ai/assistant/read-tools.ts"
+      ],
+      "technical_state": "READY",
+      "rationale": "Milo fase 1 (docs/architecture/milo-ai-first.md): lettura nuova del gateway, raggiungibile solo tramite il dispatcher di assistantQuery.",
+      "exposure": "AGNOS_INTERNAL",
+      "invocability": "TESTED",
+      "legacy_roles": [],
+      "patient_scoped": true,
+      "idempotency": "natural",
+      "test": {
+        "file": "backend/src/ai/__tests__/milo-phase1-reads.test.ts",
+        "cases": ["planner and dispatch of the Milo phase 1 reads"],
+        "result": "pass",
+        "gui_parity": false
+      },
+      "notes": "Milo fase 1."
+    },
+    {
+      "capability_id": "ai.read.get_patient_diary",
+      "name": "Agnos read tool — get_patient_diary",
+      "description": "Tool di sola lettura del gateway Agnos (READ_TOOLS, backend/src/ai/assistant/read-tools.ts); args: patientId, days?, authorType?. Voci del diario clinico di un periodo.",
+      "domain": "ai_read",
+      "type": "read",
+      "feature_ui": "Agnos (via assistant.query / agnos.plan_command)",
+      "entry_point": "ai/assistant/service.ts dispatch('get_patient_diary') ← POST /ai/assistant/query, POST /ai/actions/plan",
+      "services": ["backend/src/ai/gateway/clinical-reads.ts#getPatientDiaryEntries"],
+      "input": "patientId, days?, authorType?",
+      "output": "SourcedResult {data, sourceRefs, truncated}",
+      "validations": [
+        "backend/src/ai/gateway/context.ts#assertTenant/assertPatientAllowed",
+        "backend/src/ai/assistant/read-tools.ts#isReadTool"
+      ],
+      "side_effects": ["AiAuditEvent (gatewayAudit)"],
+      "dependencies": ["prisma"],
+      "sensitivity": "high",
+      "risk": "Patient-scoped: assertTenant/assertPatientAllowed.",
+      "agno_integration": "Agnos read tool get_patient_diary (gateway impl, not REST handlers)",
+      "tool_candidate": null,
+      "files": [
+        "backend/src/ai/gateway/clinical-reads.ts",
+        "backend/src/ai/assistant/service.ts",
+        "backend/src/ai/assistant/read-tools.ts"
+      ],
+      "technical_state": "READY",
+      "rationale": "Milo fase 1 (docs/architecture/milo-ai-first.md): lettura nuova del gateway, raggiungibile solo tramite il dispatcher di assistantQuery.",
+      "exposure": "AGNOS_INTERNAL",
+      "invocability": "TESTED",
+      "legacy_roles": [],
+      "patient_scoped": true,
+      "idempotency": "natural",
+      "test": {
+        "file": "backend/src/ai/__tests__/milo-phase1-reads.test.ts",
+        "cases": ["planner and dispatch of the Milo phase 1 reads"],
+        "result": "pass",
+        "gui_parity": false
+      },
+      "notes": "Milo fase 1."
+    },
+    {
+      "capability_id": "ai.read.get_patient_news2",
+      "name": "Agnos read tool — get_patient_news2",
+      "description": "Tool di sola lettura del gateway Agnos (READ_TOOLS, backend/src/ai/assistant/read-tools.ts); args: patientId, days?. NEWS2 calcolato nel backend (RCP 2017) dalle rilevazioni complete.",
+      "domain": "ai_read",
+      "type": "read",
+      "feature_ui": "Agnos (via assistant.query / agnos.plan_command)",
+      "entry_point": "ai/assistant/service.ts dispatch('get_patient_news2') ← POST /ai/assistant/query, POST /ai/actions/plan",
+      "services": ["backend/src/ai/gateway/clinical-reads.ts#getPatientNews2"],
+      "input": "patientId, days?",
+      "output": "SourcedResult {data, sourceRefs, truncated}",
+      "validations": [
+        "backend/src/ai/gateway/context.ts#assertTenant/assertPatientAllowed",
+        "backend/src/ai/assistant/read-tools.ts#isReadTool"
+      ],
+      "side_effects": ["AiAuditEvent (gatewayAudit)"],
+      "dependencies": ["prisma"],
+      "sensitivity": "high",
+      "risk": "Patient-scoped: assertTenant/assertPatientAllowed.",
+      "agno_integration": "Agnos read tool get_patient_news2 (gateway impl, not REST handlers)",
+      "tool_candidate": null,
+      "files": [
+        "backend/src/ai/gateway/clinical-reads.ts",
+        "backend/src/ai/assistant/service.ts",
+        "backend/src/ai/assistant/read-tools.ts"
+      ],
+      "technical_state": "READY",
+      "rationale": "Milo fase 1 (docs/architecture/milo-ai-first.md): lettura nuova del gateway, raggiungibile solo tramite il dispatcher di assistantQuery.",
+      "exposure": "AGNOS_INTERNAL",
+      "invocability": "TESTED",
+      "legacy_roles": [],
+      "patient_scoped": true,
+      "idempotency": "natural",
+      "test": {
+        "file": "backend/src/ai/__tests__/milo-phase1-reads.test.ts",
+        "cases": ["planner and dispatch of the Milo phase 1 reads"],
+        "result": "pass",
+        "gui_parity": false
+      },
+      "notes": "Milo fase 1."
+    },
+    {
+      "capability_id": "ai.read.get_patient_parameters",
+      "name": "Agnos read tool — get_patient_parameters",
+      "description": "Tool di sola lettura del gateway Agnos (READ_TOOLS, backend/src/ai/assistant/read-tools.ts); args: patientId, days?, from?, to?, params?. Parametri unificati (tabella Parametri + JSON storico) con serie e aggregati per giorno.",
+      "domain": "ai_read",
+      "type": "read",
+      "feature_ui": "Agnos (via assistant.query / agnos.plan_command)",
+      "entry_point": "ai/assistant/service.ts dispatch('get_patient_parameters') ← POST /ai/assistant/query, POST /ai/actions/plan",
+      "services": ["backend/src/ai/gateway/clinical-reads.ts#getPatientParameters"],
+      "input": "patientId, days?, from?, to?, params?",
+      "output": "SourcedResult {data, sourceRefs, truncated}",
+      "validations": [
+        "backend/src/ai/gateway/context.ts#assertTenant/assertPatientAllowed",
+        "backend/src/ai/assistant/read-tools.ts#isReadTool"
+      ],
+      "side_effects": ["AiAuditEvent (gatewayAudit)"],
+      "dependencies": ["prisma"],
+      "sensitivity": "high",
+      "risk": "Patient-scoped: assertTenant/assertPatientAllowed.",
+      "agno_integration": "Agnos read tool get_patient_parameters (gateway impl, not REST handlers)",
+      "tool_candidate": null,
+      "files": [
+        "backend/src/ai/gateway/clinical-reads.ts",
+        "backend/src/ai/assistant/service.ts",
+        "backend/src/ai/assistant/read-tools.ts"
+      ],
+      "technical_state": "READY",
+      "rationale": "Milo fase 1 (docs/architecture/milo-ai-first.md): lettura nuova del gateway, raggiungibile solo tramite il dispatcher di assistantQuery.",
+      "exposure": "AGNOS_INTERNAL",
+      "invocability": "TESTED",
+      "legacy_roles": [],
+      "patient_scoped": true,
+      "idempotency": "natural",
+      "test": {
+        "file": "backend/src/ai/__tests__/milo-phase1-reads.test.ts",
+        "cases": ["planner and dispatch of the Milo phase 1 reads"],
+        "result": "pass",
+        "gui_parity": false
+      },
+      "notes": "Milo fase 1."
+    },
+    {
+      "capability_id": "ai.read.query_agenda",
+      "name": "Agnos read tool — query_agenda",
+      "description": "Tool di sola lettura del gateway Agnos (READ_TOOLS, backend/src/ai/assistant/read-tools.ts); args: from?, to?, ruolo?. Appuntamenti di un periodo con l operatore, senza motivo e note.",
+      "domain": "ai_read",
+      "type": "read",
+      "feature_ui": "Agnos (via assistant.query / agnos.plan_command)",
+      "entry_point": "ai/assistant/service.ts dispatch('query_agenda') ← POST /ai/assistant/query, POST /ai/actions/plan",
+      "services": ["backend/src/ai/gateway/clinical-reads.ts#queryAgenda"],
+      "input": "from?, to?, ruolo?",
+      "output": "SourcedResult {data, sourceRefs, truncated}",
+      "validations": [
+        "backend/src/ai/gateway/context.ts#assertTenant/assertPatientAllowed",
+        "backend/src/ai/assistant/read-tools.ts#isReadTool"
+      ],
+      "side_effects": ["AiAuditEvent (gatewayAudit)"],
+      "dependencies": ["prisma"],
+      "sensitivity": "medium",
+      "risk": "Facility read: gated da canFacilityRead; nessun dato clinico.",
+      "agno_integration": "Agnos read tool query_agenda (gateway impl, not REST handlers)",
+      "tool_candidate": null,
+      "files": [
+        "backend/src/ai/gateway/clinical-reads.ts",
+        "backend/src/ai/assistant/service.ts",
+        "backend/src/ai/assistant/read-tools.ts"
+      ],
+      "technical_state": "READY",
+      "rationale": "Milo fase 1 (docs/architecture/milo-ai-first.md): lettura nuova del gateway, raggiungibile solo tramite il dispatcher di assistantQuery.",
+      "exposure": "AGNOS_INTERNAL",
+      "invocability": "TESTED",
+      "legacy_roles": [],
+      "patient_scoped": false,
+      "idempotency": "natural",
+      "test": {
+        "file": "backend/src/ai/__tests__/milo-phase1-reads.test.ts",
+        "cases": ["planner and dispatch of the Milo phase 1 reads"],
+        "result": "pass",
+        "gui_parity": false
+      },
+      "notes": "Milo fase 1."
+    },
+    {
+      "capability_id": "ai.read.query_staff_shifts",
+      "name": "Agnos read tool — query_staff_shifts",
+      "description": "Tool di sola lettura del gateway Agnos (READ_TOOLS, backend/src/ai/assistant/read-tools.ts); args: date?, ruolo?. Turni settimanali del personale attivo (solo dati organizzativi).",
+      "domain": "ai_read",
+      "type": "read",
+      "feature_ui": "Agnos (via assistant.query / agnos.plan_command)",
+      "entry_point": "ai/assistant/service.ts dispatch('query_staff_shifts') ← POST /ai/assistant/query, POST /ai/actions/plan",
+      "services": ["backend/src/ai/gateway/clinical-reads.ts#queryStaffShifts"],
+      "input": "date?, ruolo?",
+      "output": "SourcedResult {data, sourceRefs, truncated}",
+      "validations": [
+        "backend/src/ai/gateway/context.ts#assertTenant/assertPatientAllowed",
+        "backend/src/ai/assistant/read-tools.ts#isReadTool"
+      ],
+      "side_effects": ["AiAuditEvent (gatewayAudit)"],
+      "dependencies": ["prisma"],
+      "sensitivity": "medium",
+      "risk": "Facility read: gated da canFacilityRead; nessun dato clinico.",
+      "agno_integration": "Agnos read tool query_staff_shifts (gateway impl, not REST handlers)",
+      "tool_candidate": null,
+      "files": [
+        "backend/src/ai/gateway/clinical-reads.ts",
+        "backend/src/ai/assistant/service.ts",
+        "backend/src/ai/assistant/read-tools.ts"
+      ],
+      "technical_state": "READY",
+      "rationale": "Milo fase 1 (docs/architecture/milo-ai-first.md): lettura nuova del gateway, raggiungibile solo tramite il dispatcher di assistantQuery.",
+      "exposure": "AGNOS_INTERNAL",
+      "invocability": "TESTED",
+      "legacy_roles": [],
+      "patient_scoped": false,
+      "idempotency": "natural",
+      "test": {
+        "file": "backend/src/ai/__tests__/milo-phase1-reads.test.ts",
+        "cases": ["planner and dispatch of the Milo phase 1 reads"],
+        "result": "pass",
+        "gui_parity": false
+      },
+      "notes": "Milo fase 1."
+    },
+    {
       "capability_id": "appointments.create",
       "name": "Agenda — crea appuntamento",
       "description": "Crea appuntamento con controllo conflitto slot 30 min (advisory lock).",

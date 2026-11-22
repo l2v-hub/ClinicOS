@@ -117,6 +117,26 @@ actionsRouter.get('/catalog', async (req: AuthedRequest, res) => {
     );
 });
 
+/** Milo fase 2: ultimi scambi della conversazione dal pannello. Testo e ruolo soltanto, al massimo
+ *  6 voci da 600 caratteri: per il team sono contesto racchiuso come dato non attendibile. */
+export function parseConversationHistory(
+  value: unknown,
+): Array<{ role: 'user' | 'assistant'; text: string }> | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const turns = value
+    .filter(
+      (t): t is { role: string; text: string } =>
+        !!t &&
+        typeof t === 'object' &&
+        ((t as { role?: unknown }).role === 'user' ||
+          (t as { role?: unknown }).role === 'assistant') &&
+        typeof (t as { text?: unknown }).text === 'string',
+    )
+    .map((t) => ({ role: t.role as 'user' | 'assistant', text: t.text.trim().slice(0, 600) }))
+    .filter((t) => t.text);
+  return turns.length ? turns.slice(-6) : undefined;
+}
+
 // POST /ai/actions/plan  { text, channel, currentPatientId? } → { plan, preview, read }
 actionsRouter.post('/plan', async (req: AuthedRequest, res) => {
   try {
@@ -138,6 +158,7 @@ actionsRouter.post('/plan', async (req: AuthedRequest, res) => {
       channel: parseChannel(req.body?.channel),
       currentPatientId,
       agent: isAgentId(req.body?.agent) ? req.body.agent : undefined,
+      history: parseConversationHistory(req.body?.history),
       operatorCtx: await agnosOperatorFrom(req),
     });
     return res.status(200).json(result);

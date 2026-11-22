@@ -13,6 +13,10 @@ interface TurnViewProps {
   onCancel: () => void;
   onNavigate?: (nav: AssistantNav) => void;
   formatNavLabel?: (nav: AssistantNav) => string;
+  /** Milo fase 3: domanda della risposta, cruscotto già fissato, azione «Fissa». */
+  question?: string;
+  pinned?: boolean;
+  onPin?: () => void;
 }
 
 export function TurnView({
@@ -27,11 +31,16 @@ export function TurnView({
   onCancel,
   onNavigate,
   formatNavLabel,
+  question,
+  pinned,
+  onPin,
 }: TurnViewProps) {
   if (turn.role === 'utente') {
     return (
       <div className="ai-asst__turn agnos-turn agnos-turn--utente">
-        {turn.channel === 'voce' && <span className="agnos-transcript-label">Ho capito · trascrizione vocale</span>}
+        {turn.channel === 'voce' && (
+          <span className="agnos-transcript-label">Ho capito · trascrizione vocale</span>
+        )}
         <div className="ai-asst__q">{turn.text}</div>
       </div>
     );
@@ -57,9 +66,18 @@ export function TurnView({
         </div>
       )}
       {turn.status === 'successo' && <div className="voice-done">✓ {turn.text}</div>}
-      {turn.status === 'annullato' && !turn.preview && <p className="ai-asst__muted">{turn.text}</p>}
+      {turn.status === 'annullato' && !turn.preview && (
+        <p className="ai-asst__muted">{turn.text}</p>
+      )}
       {turn.read && (
-        <AnswerView answer={turn.read} onNavigate={onNavigate} formatNavLabel={formatNavLabel} />
+        <AnswerView
+          answer={turn.read}
+          onNavigate={onNavigate}
+          formatNavLabel={formatNavLabel}
+          question={question}
+          pinned={pinned}
+          onPin={onPin}
+        />
       )}
       {turn.preview && (
         <div
@@ -87,9 +105,12 @@ export function TurnView({
             <div className="agnos-proposed-text">
               <strong>Testo da aggiungere</strong>
               <p>{turn.preview.diff.proposed}</p>
-              <details><summary>Confronta con il testo attuale</summary>
-                <strong>Attuale</strong><p>{turn.preview.diff.current || 'Nessun testo presente.'}</p>
-                <strong>Dopo il salvataggio</strong><p>{turn.preview.diff.resulting}</p>
+              <details>
+                <summary>Confronta con il testo attuale</summary>
+                <strong>Attuale</strong>
+                <p>{turn.preview.diff.current || 'Nessun testo presente.'}</p>
+                <strong>Dopo il salvataggio</strong>
+                <p>{turn.preview.diff.resulting}</p>
               </details>
             </div>
           )}
@@ -106,26 +127,30 @@ export function TurnView({
 
           {turn.status === 'in-conferma' && isPending && (
             <>
-            <p className="agnos-approval-hint">Controlla paziente e dati. Verranno salvati solo con la tua conferma.</p>
-            {destination && <button type="button" className="link-btn" disabled={busy} onClick={onOpenPage}>
-              {navigationReady ? `Mostra ${destination}` : `Apri ${destination} per verificare`}
-            </button>}
-            <div className="voice-actions">
-              <button
-                type="button"
-                className="btn-primary"
-                disabled={!turn.preview.canExecute || !navigationReady || busy}
-                onClick={onConfirm}
-              >
-                {busy ? 'Attendi…' : 'Conferma e salva'}
-              </button>
-              <button type="button" className="btn-secondary" disabled={busy} onClick={onEdit}>
-                Modifica
-              </button>
-              <button type="button" className="btn-secondary" disabled={busy} onClick={onCancel}>
-                Annulla
-              </button>
-            </div>
+              <p className="agnos-approval-hint">
+                Controlla paziente e dati. Verranno salvati solo con la tua conferma.
+              </p>
+              {destination && (
+                <button type="button" className="link-btn" disabled={busy} onClick={onOpenPage}>
+                  {navigationReady ? `Mostra ${destination}` : `Apri ${destination} per verificare`}
+                </button>
+              )}
+              <div className="voice-actions">
+                <button
+                  type="button"
+                  className="btn-primary"
+                  disabled={!turn.preview.canExecute || !navigationReady || busy}
+                  onClick={onConfirm}
+                >
+                  {busy ? 'Attendi…' : 'Conferma e salva'}
+                </button>
+                <button type="button" className="btn-secondary" disabled={busy} onClick={onEdit}>
+                  Modifica
+                </button>
+                <button type="button" className="btn-secondary" disabled={busy} onClick={onCancel}>
+                  Annulla
+                </button>
+              </div>
             </>
           )}
           {turn.status === 'eseguito' && (

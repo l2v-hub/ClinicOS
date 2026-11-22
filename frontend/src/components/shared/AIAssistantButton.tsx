@@ -4,6 +4,7 @@ import { API_URL } from '../../config';
 import { isSimulatorSession, operatorHeaders } from '../../lib/operatorSession';
 import { NavChips } from './agnos/NavChips';
 import { PARTIAL_RESULTS_MESSAGE } from './agnos/assistantFeedback';
+import { MiloBlocks, type MiloBlock } from './agnos/MiloBlocks';
 
 // REQ-040: global "Assistente ClinicOS" — a SOURCE_ONLY search/correlation assistant.
 // It calls the operator-authenticated /ai/assistant/query (NEVER the token-gated internal route);
@@ -39,7 +40,20 @@ export interface AssistantAnswer {
   notFound: boolean;
   refusal?: string;
   truncated?: boolean;
+  /** Risposta discorsiva verificata dal backend (compositore o team): cita le fonti come [n]. */
+  answerText?: string;
+  composed?: boolean;
+  mode?: 'deterministic' | 'llm' | 'team';
+  /** Milo fase 2: specialisti del team che hanno risposto. */
+  team?: { members: string[]; tools: string[] };
+  /** Milo fase 3: indicatori, tabelle e andamenti costruiti dal backend dai dati letti. */
+  blocks?: MiloBlock[];
 }
+const TEAM_MEMBER_LABELS: Record<string, string> = {
+  clinico: 'Clinico paziente',
+  sorveglianza: 'Sorveglianza clinica',
+  struttura: 'Struttura e personale',
+};
 interface Turn {
   question: string;
   answer?: AssistantAnswer;
@@ -276,34 +290,105 @@ function VitalsSparkline({ results }: { results: unknown[] }) {
   );
 }
 
+/** Stampa solo la risposta indicata (domanda, testo, blocchi, fonti) come report. */
+export function printMiloAnswer(target: HTMLElement | null) {
+  if (!target || typeof window === 'undefined' || typeof window.print !== 'function') return;
+  const cleanup = () => {
+    target.classList.remove('milo-print-target');
+    document.body.classList.remove('milo-printing');
+  };
+  target.classList.add('milo-print-target');
+  document.body.classList.add('milo-printing');
+  window.addEventListener('afterprint', cleanup, { once: true });
+  window.print();
+  window.setTimeout(cleanup, 1000);
+}
+
 export function AnswerView({
   answer,
   onNavigate,
   formatNavLabel,
+  question,
+  pinned,
+  onPin,
 }: {
   answer: AssistantAnswer;
   onNavigate?: (n: AssistantNav) => void;
   /** Etichetta ricomposta dai campi strutturati della NavAction (usata dal pannello Agnos). */
   formatNavLabel?: (n: AssistantNav) => string;
+  /** Milo fase 3: domanda che ha prodotto la risposta (titolo del report e del cruscotto). */
+  question?: string;
+  pinned?: boolean;
+  onPin?: () => void;
 }) {
+  const root = useRef<HTMLDivElement>(null);
   if (answer.refusal) return <div className="ai-asst__a ai-asst__refusal">{answer.refusal}</div>;
   if (answer.notFound)
     return <div className="ai-asst__a ai-asst__muted">Informazione non trovata.</div>;
+  const numbered = answer.mode === 'team' && !!answer.answerText;
+  const hasTrendBlock = !!answer.blocks?.some((b) => b.type === 'parameter_trend');
   return (
-    <div className="ai-asst__a">
+    <div className="ai-asst__a" ref={root}>
+      {question ? (
+        <div className="milo-print-only milo-print-header">
+          <strong>ClinicOS · Milo</strong>
+          <span>{question}</span>
+          <span>{new Date().toLocaleString('it-IT')}</span>
+        </div>
+      ) : null}
+      {answer.answerText && (
+        <div className="ai-asst__answer" data-testid="assistant-answer-text">
+          {answer.answerText.split(/\n{2,}/).map((paragraph, i) => (
+            <p key={i}>{paragraph}</p>
+          ))}
+          {numbered && answer.team?.members.length ? (
+            <div className="ai-asst__team" data-testid="assistant-team-members">
+              Milo · {answer.team.members.map((m) => TEAM_MEMBER_LABELS[m] ?? m).join(', ')}
+            </div>
+          ) : null}
+        </div>
+      )}
       <div className="ai-asst__count">
-        {answer.results.length} risultat{answer.results.length === 1 ? 'o' : 'i'}
+        {numbered
+          ? `${answer.sources.length} font${answer.sources.length === 1 ? 'e' : 'i'} citat${answer.sources.length === 1 ? 'a' : 'e'}`
+          : `${answer.results.length} risultat${answer.results.length === 1 ? 'o' : 'i'}`}
       </div>
       {answer.truncated && (
         <div className="ai-asst__partial" role="status" aria-live="polite">
           {PARTIAL_RESULTS_MESSAGE}
         </div>
       )}
-      {answer.intent === 'vitals_trend' && <VitalsSparkline results={answer.results} />}
+      {answer.intent === 'vitals_trend' && answer.mode !== 'team' && !hasTrendBlock && (
+        <VitalsSparkline results={answer.results} />
+      )}
+      <MiloBlocks blocks={answer.blocks} />
+      {question && (onPin || answer.blocks?.length) ? (
+        <div className="milo-answer-tools" role="group" aria-label="Azioni sulla risposta">
+          {onPin ? (
+            <button
+              type="button"
+              className="btn-secondary btn-sm"
+              onClick={onPin}
+              disabled={pinned}
+              aria-pressed={pinned}
+            >
+              {pinned ? 'Fissato tra i cruscotti' : 'Fissa come cruscotto'}
+            </button>
+          ) : null}
+          <button
+            type="button"
+            className="btn-secondary btn-sm"
+            onClick={() => printMiloAnswer(root.current)}
+          >
+            Stampa report
+          </button>
+        </div>
+      ) : null}
       <ul className="ai-asst__sources">
         {answer.sources.slice(0, 25).map((s, i) => (
           <li key={i} className="ai-asst__source">
             <div className="ai-asst__source-label">
+              {numbered ? `[${i + 1}] ` : ''}
               {s.label}
               {s.recordedAt ? ` · ${s.recordedAt.slice(0, 10)}` : ''}
             </div>

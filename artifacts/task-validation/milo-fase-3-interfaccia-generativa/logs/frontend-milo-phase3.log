@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: kpi, tables and the parameter trend are rendered from the blocks, as text
+ok 1 - kpi, tables and the parameter trend are rendered from the blocks, as text
+  ---
+  duration_ms: 16.864398
+  type: 'test'
+  ...
+# Subtest: pin and print appear only with the question; a pinned answer says so
+ok 2 - pin and print appear only with the question; a pinned answer says so
+  ---
+  duration_ms: 13.119154
+  type: 'test'
+  ...
+# Subtest: no blocks: nothing new is drawn
+ok 3 - no blocks: nothing new is drawn
+  ---
+  duration_ms: 0.64841
+  type: 'test'
+  ...
+# Subtest: only the question and the patient id are stored, per operator
+ok 4 - only the question and the patient id are stored, per operator
+  ---
+  duration_ms: 3.221052
+  type: 'test'
+  ...
+# Subtest: patient pins show only with that patient open; facility pins always; no duplicates
+ok 5 - patient pins show only with that patient open; facility pins always; no duplicates
+  ---
+  duration_ms: 0.432729
+  type: 'test'
+  ...
+# Subtest: pins can be removed and survive a reload (read back from storage)
+ok 6 - pins can be removed and survive a reload (read back from storage)
+  ---
+  duration_ms: 0.35123
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 405.483189

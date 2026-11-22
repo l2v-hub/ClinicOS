@@ -26,6 +26,8 @@ function facilityNav(s: SourceReference): NavAction | null {
       return { type: 'open_consegne', label: 'Apri consegne', recordId: s.recordId };
     case 'OCCUPANCY':
       return { type: 'open_beds', label: 'Apri posti letto' };
+    case 'SHIFT':
+      return { type: 'open_staff_schedule', label: 'Apri orari operatori' };
     default:
       return null;
   }
@@ -73,9 +75,24 @@ export function navFromSource(s: SourceReference): NavAction {
         recordId: s.recordId,
       };
     case 'THERAPY':
+    case 'ADMINISTRATION':
       return {
         type: 'open_therapy',
         label: 'Apri terapia',
+        patientId: s.patientId,
+        recordId: s.sourceType === 'THERAPY' ? s.recordId : undefined,
+      };
+    case 'DIARY_ENTRY':
+      return {
+        type: 'open_diary',
+        label: 'Apri diario',
+        patientId: s.patientId,
+        recordId: s.recordId,
+      };
+    case 'CLINICAL_SCORE':
+      return {
+        type: 'open_parameter',
+        label: `Apri ${s.label}`,
         patientId: s.patientId,
         recordId: s.recordId,
       };

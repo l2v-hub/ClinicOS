@@ -17,6 +17,13 @@ import {
   agnosHistoryWindow,
   revealPreviousAgnosTurns,
 } from './agnos/agnosHistory';
+import {
+  addMiloPin,
+  isMiloPinned,
+  loadMiloPins,
+  removeMiloPin,
+  type MiloPin,
+} from '../../lib/miloPins';
 
 // 015 — chatbot unificato (testo + voce): read answers (with sources) +
 // CRU write actions with preview/confirm. Replaces AIAssistantButton as THE
@@ -79,6 +86,10 @@ export function AgnosPanel({
   const [workspace, setWorkspace] = useState(false);
   const [minimized, setMinimized] = useState(false);
   const [visibleTurnCount, setVisibleTurnCount] = useState(AGNOS_TURN_WINDOW);
+  // Milo fase 3: cruscotti fissati (solo la domanda, nel browser dell'operatore).
+  const pinOwner = operatorId ?? '';
+  const [pins, setPins] = useState<MiloPin[]>(() => loadMiloPins(pinOwner, currentPatientId));
+  useEffect(() => setPins(loadMiloPins(pinOwner, currentPatientId)), [pinOwner, currentPatientId]);
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   /** true se il testo in input proviene da dettatura (anche dopo modifica: FR-016 → channel:'voce'). */
@@ -108,7 +119,7 @@ export function AgnosPanel({
     onExecuted,
     onNavigate: async (nav, signal) => {
       setWorkspace(true);
-      return await onNavigate?.(nav, signal) ?? false;
+      return (await onNavigate?.(nav, signal)) ?? false;
     },
   });
 
@@ -117,31 +128,56 @@ export function AgnosPanel({
     onFinalTranscript: (text) => {
       const session = voiceSession.current;
       voiceSession.current = null;
-      if (!session || session.scope !== liveVoiceContext.current.scope || !liveVoiceContext.current.visible) return;
+      if (
+        !session ||
+        session.scope !== liveVoiceContext.current.scope ||
+        !liveVoiceContext.current.visible
+      )
+        return;
       const command = [session.draft.trim(), text.trim()].filter(Boolean).join(' ');
       if (!command) return;
       // Planning is read-only. Only confirmPending can execute the displayed proposal.
-      if (busy || pending?.uncertain) { setInput(command); dictatedRef.current = true; return; }
-      setInput(''); dictatedRef.current = false;
+      if (busy || pending?.uncertain) {
+        setInput(command);
+        dictatedRef.current = true;
+        return;
+      }
+      setInput('');
+      dictatedRef.current = false;
       setVisibleTurnCount(AGNOS_TURN_WINDOW);
       void sendCommand(command, 'voce');
     },
   });
-  useEffect(() => { if (!voice.active) voiceSession.current = null; }, [voice.active]);
+  useEffect(() => {
+    if (!voice.active) voiceSession.current = null;
+  }, [voice.active]);
   const cancelVoice = voice.cancel;
   const stopSpeech = tts.stop;
   useEffect(() => {
     voiceSession.current = null;
-    cancelVoice(); stopSpeech(); setConsentPrompt(false); setInput(''); dictatedRef.current = false;
+    cancelVoice();
+    stopSpeech();
+    setConsentPrompt(false);
+    setInput('');
+    dictatedRef.current = false;
   }, [scope, cancelVoice, stopSpeech]);
   const revokeVoiceConsent = voice.revokeConsent;
-  useEffect(() => { revokeVoiceConsent(); }, [operatorId, operatorRole, revokeVoiceConsent]);
+  useEffect(() => {
+    revokeVoiceConsent();
+  }, [operatorId, operatorRole, revokeVoiceConsent]);
 
   useEffect(() => {
     // `forceOpen` is an external imperative signal, so mirroring it is intentional.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (forceOpen) { setOpen(true); setMinimized(false); }
-    else { cancelDictationRef.current(); stopSpeech(); setOpen(false); setMinimized(false); }
+    if (forceOpen) {
+      setOpen(true);
+      setMinimized(false);
+    } else {
+      cancelDictationRef.current();
+      stopSpeech();
+      setOpen(false);
+      setMinimized(false);
+    }
   }, [forceOpen, openRequestId, stopSpeech]);
   // Il pannello non si smonta più alla chiusura: la messa a fuoco alla riapertura va rifatta a
   // mano, altrimenti un dialog che resta nel DOM riapre senza dare il focus a nulla.
@@ -156,7 +192,9 @@ export function AgnosPanel({
   // pannello (es. dopo il consenso vocale). Con il consenso aperto Esc lo chiude come "Annulla".
   const asideRef = useRef<HTMLElement>(null);
   const focusMic = () =>
-    requestAnimationFrame(() => asideRef.current?.querySelector<HTMLElement>('.agnos-mic')?.focus());
+    requestAnimationFrame(() =>
+      asideRef.current?.querySelector<HTMLElement>('.agnos-mic')?.focus(),
+    );
   const escRef = useRef<() => void>(() => {});
   useEffect(() => {
     if (!visible) return;
@@ -193,7 +231,12 @@ export function AgnosPanel({
     const onDown = (event: PointerEvent) => {
       const target = event.target as Element | null;
       if (!target || asideRef.current?.contains(target)) return;
-      if (target.closest('.teams-sidebar__item--ai, [role="dialog"], [role="alertdialog"], .agnos-workflow-dock')) return;
+      if (
+        target.closest(
+          '.teams-sidebar__item--ai, [role="dialog"], [role="alertdialog"], .agnos-workflow-dock',
+        )
+      )
+        return;
       closeRef.current();
     };
     document.addEventListener('pointerdown', onDown, true);
@@ -206,15 +249,22 @@ export function AgnosPanel({
     const latestRequest = requests.item(requests.length - 1);
     // Keep what was understood visible alongside the proposal, including after automatic dictation.
     const reviewing = phase === 'planning' || phase === 'approval';
-    body.scrollTo({ top: reviewing && latestRequest
-      ? body.scrollTop + latestRequest.getBoundingClientRect().top - body.getBoundingClientRect().top
-      : body.scrollHeight });
+    body.scrollTo({
+      top:
+        reviewing && latestRequest
+          ? body.scrollTop +
+            latestRequest.getBoundingClientRect().top -
+            body.getBoundingClientRect().top
+          : body.scrollHeight,
+    });
   }, [turns, busy, phase]);
 
   // TTS: every state transition affects the newest assistant turn. Inspect only that turn instead
   // of rescanning the entire conversation after every patch/append.
   const lastSpokenIndexRef = useRef(-1);
-  useEffect(() => { lastSpokenIndexRef.current = -1; }, [operatorId, operatorRole]);
+  useEffect(() => {
+    lastSpokenIndexRef.current = -1;
+  }, [operatorId, operatorRole]);
   const speak = tts.speak;
   useEffect(() => {
     const latestIndex = turns.length - 1;
@@ -262,6 +312,23 @@ export function AgnosPanel({
     void sendCommand(text, channel);
   }
 
+  function askPinned(question: string) {
+    if (busy || voiceSession.current || consentPrompt || pending?.uncertain) return;
+    tts.stop();
+    setVisibleTurnCount(AGNOS_TURN_WINDOW);
+    void sendCommand(question, 'testo');
+  }
+
+  function pinQuestion(question: string) {
+    addMiloPin(pinOwner, question, currentPatientId);
+    setPins(loadMiloPins(pinOwner, currentPatientId));
+  }
+
+  function unpin(id: string) {
+    removeMiloPin(pinOwner, id);
+    setPins(loadMiloPins(pinOwner, currentPatientId));
+  }
+
   function prefillSuggestedQuestion(text: string) {
     dictatedRef.current = false;
     setInput(text);
@@ -278,7 +345,8 @@ export function AgnosPanel({
   }
 
   function startDictation(grantConsent = false) {
-    if (busy || pending?.uncertain || !liveVoiceContext.current.visible || voiceSession.current) return;
+    if (busy || pending?.uncertain || !liveVoiceContext.current.visible || voiceSession.current)
+      return;
     setConsentPrompt(false);
     tts.stop();
     voiceSession.current = { scope, draft: input };
@@ -287,12 +355,32 @@ export function AgnosPanel({
   }
 
   function toggleMic() {
-    if (voice.active) { voice.stop(); return; }
+    if (voice.active) {
+      voice.stop();
+      return;
+    }
     // A completed error/silence session has no result callback; allow a fresh attempt.
     voiceSession.current = null;
     if (busy || pending?.uncertain) return;
-    if (!voice.consentGranted) { setConsentPrompt(true); return; }
+    if (!voice.consentGranted) {
+      setConsentPrompt(true);
+      return;
+    }
     startDictation();
+  }
+
+  /** Domanda dell'utente che ha prodotto una risposta di lettura: titolo di report e cruscotto. */
+  function readPinProps(turn: AgnosTurn, index: number) {
+    const asked = turns[index - 1];
+    if (!turn.read || !asked || asked.role !== 'utente' || !asked.text) return {};
+    const question = asked.text;
+    return {
+      question,
+      pinned:
+        pins.some((p) => p.question === question) ||
+        isMiloPinned(pinOwner, question, currentPatientId),
+      onPin: () => pinQuestion(question),
+    };
   }
 
   const scopeLabel = currentPatientId
@@ -307,10 +395,14 @@ export function AgnosPanel({
 
   return (
     <>
-      {open && minimized && <div className="agnos-workflow-dock" role="status">
-        <span>{statusText || 'Assistente in attesa'}</span>
-        <button className="btn-primary" onClick={() => setMinimized(false)}>Torna all’assistente</button>
-      </div>}
+      {open && minimized && (
+        <div className="agnos-workflow-dock" role="status">
+          <span>{statusText || 'Assistente in attesa'}</span>
+          <button className="btn-primary" onClick={() => setMinimized(false)}>
+            Torna all’assistente
+          </button>
+        </div>
+      )}
       {/* AC6: il pannello resta montato anche da chiuso, così la conversazione sopravvive alla
           navigazione. `inert` è ciò che lo toglie dal tab order e dagli screen reader ora che
           non è più lo smontaggio a farlo. */}
@@ -366,25 +458,66 @@ export function AgnosPanel({
             {scopeLabel}
           </p>
         </div>
-        {statusText && <div className="agnos-workflow-status" data-phase={phase} role="status" aria-live="polite" aria-busy={busy}>
-          {busy && <span className="agnos-workflow-spinner" aria-hidden="true" />}
-          <span>{statusText}</span>
-          {workspace && <button className="link-btn" type="button" onClick={showPage}>Mostra pagina</button>}
-        </div>}
+        {statusText && (
+          <div
+            className="agnos-workflow-status"
+            data-phase={phase}
+            role="status"
+            aria-live="polite"
+            aria-busy={busy}
+          >
+            {busy && <span className="agnos-workflow-spinner" aria-hidden="true" />}
+            <span>{statusText}</span>
+            {workspace && (
+              <button className="link-btn" type="button" onClick={showPage}>
+                Mostra pagina
+              </button>
+            )}
+          </div>
+        )}
 
         <div className="ai-drawer__body ai-asst__body" ref={bodyRef}>
           {/* AC7: il brief NON è un turno — niente lettura TTS, niente conferma, niente indice. */}
-          <div hidden={turns.length > 0}><AgnosBrief
-            active={open && turns.length === 0}
-            kind={operatorRole === 'admin' ? 'facility' : 'operator'}
-            operatorId={operatorId}
-            operatorRole={operatorRole}
-            operatorName={operatorName}
-            navKey={navKey}
-            showHint={turns.length === 0}
-            onNavigate={onNavigate}
-            formatNavLabel={formatNavLabel}
-          /></div>
+          <div hidden={turns.length > 0}>
+            <AgnosBrief
+              active={open && turns.length === 0}
+              kind={operatorRole === 'admin' ? 'facility' : 'operator'}
+              operatorId={operatorId}
+              operatorRole={operatorRole}
+              operatorName={operatorName}
+              navKey={navKey}
+              showHint={turns.length === 0}
+              onNavigate={onNavigate}
+              formatNavLabel={formatNavLabel}
+            />
+          </div>
+          {turns.length === 0 && !pending && pins.length > 0 && (
+            <section className="milo-pins" aria-label="Cruscotti fissati">
+              <h4 className="milo-block__title">Cruscotti fissati</h4>
+              <ul>
+                {pins.map((pin) => (
+                  <li key={pin.id}>
+                    <button
+                      type="button"
+                      className="milo-pins__open"
+                      disabled={busy || voice.active || consentPrompt}
+                      onClick={() => askPinned(pin.question)}
+                    >
+                      {pin.question}
+                    </button>
+                    <button
+                      type="button"
+                      className="milo-pins__remove"
+                      aria-label={`Togli il cruscotto «${pin.question}»`}
+                      onClick={() => unpin(pin.id)}
+                    >
+                      <IcoX />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
           {turns.length === 0 && !pending && (
             <AgnosSuggestedPrompts
               operatorRole={operatorRole}
@@ -416,7 +549,11 @@ export function AgnosPanel({
               busy={busy || voice.active || consentPrompt}
               navigationReady={pending?.navigationReady === true}
               destination={pending?.turnIndex === i ? pending.navigation?.label : undefined}
-              onOpenPage={() => { void retryNavigation().then((opened) => { if (opened) showPage(); }); }}
+              onOpenPage={() => {
+                void retryNavigation().then((opened) => {
+                  if (opened) showPage();
+                });
+              }}
               onConfirm={() => {
                 if (voiceSession.current || consentPrompt) return;
                 setVisibleTurnCount(AGNOS_TURN_WINDOW);
@@ -427,19 +564,44 @@ export function AgnosPanel({
                 setVisibleTurnCount(AGNOS_TURN_WINDOW);
                 cancelPending();
               }}
-              onNavigate={(nav) => { setWorkspace(true); void onNavigate?.(nav); }}
+              onNavigate={(nav) => {
+                setWorkspace(true);
+                void onNavigate?.(nav);
+              }}
               formatNavLabel={formatNavLabel}
+              {...readPinProps(t, i)}
             />
           ))}
         </div>
 
-        <AgnosComposer inputRef={inputRef} input={input} dictated={dictatedRef.current}
-          busy={busy || pending?.uncertain === true} voice={voice} tts={tts} consentPrompt={consentPrompt}
-          onAcceptConsent={() => { startDictation(true); focusMic(); }} onDismissConsent={() => { setConsentPrompt(false); focusMic(); }}
-          onCancelVoice={cancelDictation} onRevokeConsent={() => { cancelDictation(); voice.revokeConsent(); }}
+        <AgnosComposer
+          inputRef={inputRef}
+          input={input}
+          dictated={dictatedRef.current}
+          busy={busy || pending?.uncertain === true}
+          voice={voice}
+          tts={tts}
+          consentPrompt={consentPrompt}
+          onAcceptConsent={() => {
+            startDictation(true);
+            focusMic();
+          }}
+          onDismissConsent={() => {
+            setConsentPrompt(false);
+            focusMic();
+          }}
+          onCancelVoice={cancelDictation}
+          onRevokeConsent={() => {
+            cancelDictation();
+            voice.revokeConsent();
+          }}
           onInput={(value) => {
-            setInput(value); if (!value.trim()) dictatedRef.current = false;
-          }} onSend={send} onMic={toggleMic} />
+            setInput(value);
+            if (!value.trim()) dictatedRef.current = false;
+          }}
+          onSend={send}
+          onMic={toggleMic}
+        />
       </aside>
     </>
   );

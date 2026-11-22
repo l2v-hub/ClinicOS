@@ -42,6 +42,7 @@ const DESTINATION_LABEL: Record<string, string> = {
   open_therapies_today: 'Terapie di oggi',
   open_agenda: 'Agenda',
   open_beds: 'Posti letto',
+  open_staff_schedule: 'Orari operatori',
   open_appointment: 'Agenda',
   open_patient: 'Scheda paziente',
 };

@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: new patient questions are planned to the new tools with the open patient
+ok 1 - new patient questions are planned to the new tools with the open patient
+  ---
+  duration_ms: 8.496142
+  type: 'test'
+  ...
+# Subtest: facility questions resolve the day and never become cross-patient
+ok 2 - facility questions resolve the day and never become cross-patient
+  ---
+  duration_ms: 1.72751
+  type: 'test'
+  ...
+# Subtest: dates of the facility calendar
+ok 3 - dates of the facility calendar
+  ---
+  duration_ms: 0.253037
+  type: 'test'
+  ...
+# Subtest: series: both stores, blood pressure split, daily aggregates, unreadable values skipped
+ok 4 - series: both stores, blood pressure split, daily aggregates, unreadable values skipped
+  ---
+  duration_ms: 24.254795
+  type: 'test'
+  ...
+# Subtest: the LLM planner, the runtime prompt and the permission registry know every read tool
+ok 5 - the LLM planner, the runtime prompt and the permission registry know every read tool
+  ---
+  duration_ms: 1.88379
+  type: 'test'
+  ...
+# Subtest: the open patient is imposed on every new patient tool; facility tools keep their args
+ok 6 - the open patient is imposed on every new patient tool; facility tools keep their args
+  ---
+  duration_ms: 0.295492
+  type: 'test'
+  ...
+# Subtest: navigation of the new sources
+ok 7 - navigation of the new sources
+  ---
+  duration_ms: 0.494064
+  type: 'test'
+  ...
+# Subtest: the server NEWS2 equals the chart NEWS2 on every case
+ok 8 - the server NEWS2 equals the chart NEWS2 on every case
+  ---
+  duration_ms: 3.23593
+  type: 'test'
+  ...
+# Subtest: risk bands and the cited source
+ok 9 - risk bands and the cited source
+  ---
+  duration_ms: 0.299122
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 197.334059

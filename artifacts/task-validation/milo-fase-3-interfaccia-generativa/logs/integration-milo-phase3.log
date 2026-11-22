@@ -1,0 +1,32 @@
+TAP version 13
+# [ai-gateway] {"requestId":"milo-phase3-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_vital_signs","patientIds":["vitals-qa-anna"],"resultCount":0,"outcome":"empty","at":"2026-11-22T17:10:09.401Z"}
+# [ai-gateway] {"requestId":"milo-phase3-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_parameters","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T17:10:09.403Z"}
+# Subtest: classic path: parameters question returns kpi + trend with the database values
+ok 1 - classic path: parameters question returns kpi + trend with the database values
+  ---
+  duration_ms: 3017.314374
+  type: 'test'
+  ...
+# [ai-gateway] {"requestId":"milo-phase3-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_news2","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T17:10:09.430Z"}
+# Subtest: classic path: NEWS2 block carries the backend score (6, medio) and its protocol source
+ok 2 - classic path: NEWS2 block carries the backend score (6, medio) and its protocol source
+  ---
+  duration_ms: 21.462048
+  type: 'test'
+  ...
+# [ai-gateway] {"requestId":"milo-phase3-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_news2","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T17:10:09.440Z"}
+# Subtest: team path: blocks come from the reads the team made with its grant
+ok 3 - team path: blocks come from the reads the team made with its grant
+  ---
+  duration_ms: 8.970462
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14432.261403

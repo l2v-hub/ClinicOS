@@ -21,6 +21,14 @@ export type AssistantIntent =
   | 'operator_queue'
   | 'refuse_clinical'
   | 'data_query'
+  // Milo fase 1
+  | 'parameters_overview'
+  | 'clinical_score'
+  | 'diary'
+  | 'assessments'
+  | 'administrations'
+  | 'staff_shifts'
+  | 'agenda'
   | 'unknown';
 
 export type QueryScope = 'current_patient' | 'cross_patient';
@@ -38,6 +46,8 @@ export interface QueryPlan {
   /** Why the assistant refuses (clinical advice) — set only for refuse_clinical. */
   refusalReason?: string;
 }
+
+import { addDays, dayFromText, type SeriesKey } from '../gateway/clinical-series.js';
 
 const norm = (s: string) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
@@ -138,6 +148,50 @@ export interface PlanContext {
   /** Nome dell'operatore chiamante (header, non verificato): serve SOLO a ordinare la coda
    *  operatore per probabile assegnatario, mai a filtrare o ad allargare un permesso. */
   operatorName?: string;
+  /** Giorno di struttura (YYYY-MM-DD) per «oggi/domani/lunedì»: iniettato da chi chiama, il
+   *  pianificatore resta puro e senza orologio. Assente ⇒ le date relative non sono risolte. */
+  today?: string;
+  /** Milo fase 2: ultimi scambi della conversazione (testo, non istruzioni) per il team. */
+  history?: Array<{ role: 'user' | 'assistant'; text: string }>;
+  /** Etichetta del paziente aperto (nome) per il contesto del team. */
+  currentPatientLabel?: string;
+}
+
+// ── Milo fase 1: parole che indicano le nuove letture ──
+const SERIES_WORDS: Array<{ re: RegExp; key: SeriesKey }> = [
+  { re: /pression|sistolic|diastolic|\bpa\b/, key: 'pa' },
+  { re: /frequenza cardiaca|battit|\bfc\b|polso/, key: 'fc' },
+  { re: /satur|spo2|ossigen/, key: 'spo2' },
+  { re: /temperatur|febbre|\btc\b/, key: 'temperatura' },
+  { re: /frequenza respiratoria|respir|\bfr\b/, key: 'fr' },
+  { re: /glicem|\bdtx\b|zucchero/, key: 'dtx' },
+  { re: /\bpeso\b/, key: 'peso' },
+];
+function seriesKeysIn(q: string): SeriesKey[] {
+  return SERIES_WORDS.filter((w) => w.re.test(q)).map((w) => w.key);
+}
+const NEWS2_WORDS =
+  /news ?2|early warning|punteggio di (allerta|allarme|rischio)|deterioramento|score di allerta/;
+const DIARY_WORDS =
+  /\bdiari\w*|osservazion\w* (infermier|medic)|annotazion\w*|cosa (e|è) stato (scritto|annotato)/;
+const ASSESSMENT_WORDS =
+  /\bscal[ae]\b|valutazion\w*|\btinetti\b|\bmna\b|\bgds\b|painad|nutrizional|equilibrio|rischio (di )?cadut/;
+const ADMINISTRATION_WORDS =
+  /somministr\w*|erogat\w*|(ha|hanno) (preso|assunto|ricevuto)|dose (data|somministrata)/;
+const SHIFT_WORDS =
+  /\bturn[oi]\b|di turno|chi (lavora|e in servizio|è in servizio|c'?e|c'è)|in servizio|reperibil\w*/;
+const AGENDA_WORDS =
+  /visit\w* (del|dei|della) (medic|dottor|special)|quando (passa|viene) il (medico|dottore)|agenda (di |della )?(domani|settimana|dopodomani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica)|appuntament\w* (di |per )?(domani|dopodomani|settimana|questa settimana|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica)/;
+const DOCTOR = /medic|dottor/;
+/** Periodo in giorni chiesto per un andamento: «N giorni», settimana, mese, default 7. */
+function periodDays(q: string): number {
+  const m = /(\d{1,3})\s*giorni/.exec(q);
+  if (m) return Math.min(90, Math.max(1, parseInt(m[1], 10)));
+  if (/\bmese\b|mensile|30 giorni/.test(q)) return 30;
+  if (/due settimane|quindic/.test(q)) return 15;
+  if (/\bsettiman/.test(q)) return 7;
+  if (/\boggi\b|ultime 24|ultimo giorno/.test(q)) return 1;
+  return 7;
 }
 
 /** Produce a typed, validated plan for a question. Never executes anything. */
@@ -176,12 +230,80 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
   if (OPERATOR_QUEUE.some((re) => re.test(q))) {
     return base('operator_queue', [{ tool: 'get_operator_queue', args: {} }]);
   }
+  // Milo fase 1 — struttura: turni del personale e agenda di un giorno (letture di struttura,
+  // gated da canFacilityRead; nessun dato clinico).
+  const day = ctx.today ? dayFromText(original, ctx.today) : null;
+  if (SHIFT_WORDS.test(q) && !/terapi|farmac/.test(q)) {
+    const ruolo = DOCTOR.test(q)
+      ? 'medico'
+      : /infermier/.test(q)
+        ? 'infermier'
+        : /\boss\b/.test(q)
+          ? 'oss'
+          : undefined;
+    return base('staff_shifts', [
+      {
+        tool: 'query_staff_shifts',
+        args: { ...(day ? { date: day } : {}), ...(ruolo ? { ruolo } : {}) },
+      },
+    ]);
+  }
+  if (AGENDA_WORDS.test(q)) {
+    const from = day ?? ctx.today;
+    const to = /settiman/.test(q) && from ? addDays(from, 6) : from;
+    return base('agenda', [
+      {
+        tool: 'query_agenda',
+        args: { ...(from ? { from, to } : {}), ...(DOCTOR.test(q) ? { ruolo: 'medico' } : {}) },
+      },
+    ]);
+  }
 
   const pid = ctx.currentPatientId;
   // ── current-patient retrieval intents (need a patient in context) ──
   if (scope === 'current_patient' && pid) {
     if (/\ballerg/.test(q))
       return base('allergies', [{ tool: 'get_patient_allergies', args: { patientId: pid } }]);
+    // Milo fase 1 — letture del paziente che prima non esistevano.
+    if (NEWS2_WORDS.test(q))
+      return base('clinical_score', [
+        { tool: 'get_patient_news2', args: { patientId: pid, days: periodDays(q) } },
+      ]);
+    if (ADMINISTRATION_WORDS.test(q))
+      return base('administrations', [
+        { tool: 'get_patient_administrations', args: { patientId: pid, days: periodDays(q) } },
+      ]);
+    if (ASSESSMENT_WORDS.test(q)) {
+      const type = /tinetti|equilibrio|cadut/.test(q)
+        ? 'tinetti'
+        : /\bmna\b|nutrizional/.test(q)
+          ? 'mna'
+          : /\bgds\b|depress/.test(q)
+            ? 'gds15'
+            : /painad|dolore/.test(q)
+              ? 'painad'
+              : undefined;
+      return base('assessments', [
+        { tool: 'get_patient_assessments', args: { patientId: pid, ...(type ? { type } : {}) } },
+      ]);
+    }
+    if (DIARY_WORDS.test(q))
+      return base('diary', [
+        { tool: 'get_patient_diary', args: { patientId: pid, days: periodDays(q) } },
+      ]);
+    // Andamento di più parametri, o «come sono i parametri»: serie unificate con aggregati.
+    const keys = seriesKeysIn(q);
+    if (
+      (/andamento|trend|grafic|storico|evoluzion|correl|confront|insieme|e la|e il/.test(q) &&
+        keys.length >= 2) ||
+      /(come (sono|vanno|stanno)|riepilogo|quadro|sintesi) (i |dei )?parametri/.test(q)
+    )
+      return base('parameters_overview', [
+        {
+          tool: 'get_patient_parameters',
+          args: { patientId: pid, days: periodDays(q), ...(keys.length ? { params: keys } : {}) },
+        },
+      ]);
     // Fase 1a: andamento di un parametro su finestra (7/15/30gg). Prima di vitals_recent, così una
     // domanda di "andamento" non viene assorbita dalla lettura recente. Solo lettura, SOURCE_ONLY.
     if (/andamento|trend|grafic|storico|evoluzion/.test(q)) {

@@ -45,6 +45,11 @@ const PATIENT_SCOPED = new Set([
   'get_patient_timeline',
   'get_patient_appointments',
   'search_clinical_sections',
+  'get_patient_parameters',
+  'get_patient_news2',
+  'get_patient_diary',
+  'get_patient_assessments',
+  'get_patient_administrations',
 ]);
 
 /**
@@ -76,6 +81,19 @@ const INTENTS = new Set<AssistantIntent>([
   'refuse_clinical',
   'data_query',
   'unknown',
+  // Erano validi nel pianificatore deterministico ma scartati da quello LLM.
+  'vitals_trend',
+  'rooms_occupancy',
+  'facility_snapshot',
+  'operator_queue',
+  // Milo fase 1
+  'parameters_overview',
+  'clinical_score',
+  'diary',
+  'assessments',
+  'administrations',
+  'staff_shifts',
+  'agenda',
 ]);
 
 /** Valida la forma del piano LLM e i tool contro l'allowlist read. Ritorna null se non valido. */

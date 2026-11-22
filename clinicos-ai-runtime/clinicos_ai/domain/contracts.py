@@ -154,3 +154,24 @@ class AssistantComposeResponse(BaseModel):
     model: str = ""
     # Phase 9: provider-agnostic call metadata (provider, model, role, latency, usage) — never content.
     ai: dict[str, Any] | None = None
+
+
+# Milo fase 2: team di agenti. Il runtime riceve la domanda, lo schema degli strumenti CONSENTITI al
+# ruolo (deciso dal backend) e il codice di delega; legge i dati solo tramite il backend.
+class TeamRequest(BaseModel):
+    question: str = Field(default="", max_length=2000)
+    grant: str = Field(default="", max_length=128)
+    toolSchema: list[dict[str, Any]] = Field(default_factory=list)
+    today: str = Field(default="", max_length=10)
+    currentPatient: Optional[dict[str, Any]] = None
+    history: list[dict[str, Any]] = Field(default_factory=list, max_length=12)
+    maxToolCalls: int = Field(default=10, ge=1, le=12)
+    timeoutSeconds: float = Field(default=60.0, gt=0, le=120)
+
+
+class TeamResponse(BaseModel):
+    answerText: str = ""
+    citedSources: list[dict[str, Any]] = Field(default_factory=list)
+    members: list[str] = Field(default_factory=list)
+    toolCalls: list[dict[str, Any]] = Field(default_factory=list)
+    model: str = ""

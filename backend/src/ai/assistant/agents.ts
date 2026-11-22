@@ -29,6 +29,9 @@ const FACILITY_ONLY: ReadonlySet<AssistantIntent> = new Set([
   'data_query',
   'staff_list',
   'facility_snapshot',
+  // Milo fase 1
+  'staff_shifts',
+  'agenda',
 ]);
 
 // Clinical/nursing domain: the patient-centric reads.
@@ -42,6 +45,12 @@ const CLINICAL_ONLY: ReadonlySet<AssistantIntent> = new Set([
   'narrative_search',
   'document_search',
   'correlate',
+  // Milo fase 1
+  'parameters_overview',
+  'clinical_score',
+  'diary',
+  'assessments',
+  'administrations',
 ]);
 
 export interface AgentProfile {

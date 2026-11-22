@@ -40,6 +40,20 @@ export interface AgnosTurn {
   plan?: AgnosPlan;
   status?: AgnosTurnStatus;
 }
+/**
+ * Milo fase 2: ultimi scambi della conversazione da inviare con la domanda (contesto per il team,
+ * il backend li tratta come dato e non come istruzione). Solo testo: niente dati strutturati.
+ */
+export function conversationHistory(turns: AgnosTurn[], max = 6) {
+  return turns
+    .map((t) => ({
+      role: t.role === 'utente' ? ('user' as const) : ('assistant' as const),
+      text: (t.role === 'utente' ? t.text : (t.read?.answerText ?? t.text)) ?? '',
+    }))
+    .filter((t) => t.text.trim())
+    .slice(-max)
+    .map((t) => ({ ...t, text: t.text.trim().slice(0, 600) }));
+}
 export interface AgnosPending {
   text: string;
   channel: AgnosChannel;
@@ -290,6 +304,7 @@ export function useAgnosChat(options: UseAgnosChatOptions) {
           channel,
           currentPatientId: snapshot.currentPatientId,
           navKey: snapshot.navKey,
+          history: conversationHistory(base),
         }),
       });
       const data = (await res.json()) as ApiError & {

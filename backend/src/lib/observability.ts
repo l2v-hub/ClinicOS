@@ -127,7 +127,13 @@ export function renderMetrics(): string {
 // ── Domain-level helpers used at the few AI / authorization call sites ──────────────────────────
 
 export type AiCallKind =
-  'skill_route' | 'assistant_plan' | 'assistant_compose' | 'briefing' | 'stt' | 'diary_therapy';
+  | 'skill_route'
+  | 'assistant_plan'
+  | 'assistant_compose'
+  | 'assistant_team'
+  | 'briefing'
+  | 'stt'
+  | 'diary_therapy';
 export type AiCallOutcome =
   | 'ok'
   | 'timeout'

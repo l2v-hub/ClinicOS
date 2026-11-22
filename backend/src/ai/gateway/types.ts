@@ -15,7 +15,11 @@ export type SourceType =
   | 'ROOM'
   | 'OCCUPANCY'
   | 'STAFF'
-  | 'CONSEGNA';
+  | 'CONSEGNA'
+  | 'ASSESSMENT'
+  | 'ADMINISTRATION'
+  | 'SHIFT'
+  | 'CLINICAL_SCORE';
 
 /** A verifiable pointer back to the exact record a value came from. Never omit on a result. */
 export interface SourceReference {

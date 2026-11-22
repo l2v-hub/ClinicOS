@@ -244,6 +244,34 @@
     {
       "capability_id": "import_pages.retry",
       "governed_by": "import_jobs.retry"
+    },
+    {
+      "capability_id": "ai.read.get_patient_administrations",
+      "governed_by": "administration.history"
+    },
+    {
+      "capability_id": "ai.read.get_patient_assessments",
+      "governed_by": "assessments.list"
+    },
+    {
+      "capability_id": "ai.read.get_patient_diary",
+      "governed_by": "diary.list"
+    },
+    {
+      "capability_id": "ai.read.get_patient_news2",
+      "governed_by": "parameters.list_readings"
+    },
+    {
+      "capability_id": "ai.read.get_patient_parameters",
+      "governed_by": "parameters.list_readings"
+    },
+    {
+      "capability_id": "ai.read.query_agenda",
+      "governed_by": "appointments.list"
+    },
+    {
+      "capability_id": "ai.read.query_staff_shifts",
+      "governed_by": "operators.schedules"
     }
   ],
   "outside_role_policy": [

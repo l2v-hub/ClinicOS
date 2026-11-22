@@ -5,7 +5,8 @@ import { Router, type Request, type Response } from 'express';
 import { checkServiceToken, parseUserContext } from '../ai/gateway/context.js';
 import { GatewayError } from '../ai/gateway/types.js';
 import * as svc from '../ai/gateway/services.js';
-import { assistantQuery } from '../ai/assistant/service.js';
+import { assistantQuery, executeReadTool, ReadToolRefused } from '../ai/assistant/service.js';
+import { resolveAgentGrant } from '../ai/assistant/agent-grants.js';
 
 const internalAiRouter = Router();
 
@@ -45,6 +46,32 @@ const handle = (fn: (req: Request) => Promise<unknown>) => async (req: Request, 
     return fail(res, err);
   }
 };
+
+// ── Milo fase 2: letture del team di agenti ──
+// Il servizio AI presenta il token di servizio (gate 1) e il codice della delega creata dal backend
+// per QUESTA domanda (X-AI-Grant). Il contesto dell'operatore non viaggia mai: lo risolve il
+// backend dalla delega, che scade in pochi minuti e conta le letture.
+internalAiRouter.post('/tools/:tool', async (req: Request, res: Response) => {
+  const grant = resolveAgentGrant(req.header('x-ai-grant'));
+  if (!grant) return res.status(401).json({ error: 'Delega non valida o scaduta' });
+  try {
+    const out = await executeReadTool(String(req.params.tool), req.body?.args ?? {}, grant);
+    return res.status(200).json(out);
+  } catch (err) {
+    if (err instanceof ReadToolRefused) {
+      const status =
+        err.code === 'unknown_tool'
+          ? 404
+          : err.code === 'bad_request'
+            ? 400
+            : err.code === 'budget'
+              ? 429
+              : 403;
+      return res.status(status).json({ error: err.message, code: err.code });
+    }
+    return fail(res, err);
+  }
+});
 
 // ── Search ──
 internalAiRouter.post(
