@@ -12,6 +12,7 @@ import { AgnosBrief } from './agnos/AgnosBrief';
 import { navChipLabel } from './agnos/agnosNav';
 import { spokenAssistantSummary } from './agnos/assistantFeedback';
 import { AgnosSuggestedPrompts } from './agnos/AgnosSuggestedPrompts';
+import { WardRound, useWardRound } from './agnos/WardRound';
 import {
   AGNOS_TURN_WINDOW,
   agnosHistoryWindow,
@@ -65,6 +66,10 @@ function spokenTextFor(turn: AgnosTurn): string | null {
   return null;
 }
 
+/** «giro visita», «inizia il giro», «riprendi il giro visite»: apre il giro, non è una domanda. */
+const WARD_ROUND_COMMAND =
+  /^(?:(?:inizia|avvia|apri|riprendi|fai|facciamo)\s+)?(?:il\s+)?giro(?:\s+(?:visita|visite|parametri))?[.!]?$/i;
+
 export function AgnosPanel({
   forceOpen,
   openRequestId,
@@ -86,6 +91,9 @@ export function AgnosPanel({
   const [workspace, setWorkspace] = useState(false);
   const [minimized, setMinimized] = useState(false);
   const [visibleTurnCount, setVisibleTurnCount] = useState(AGNOS_TURN_WINDOW);
+  // Milo fase 4: giro visita a voce (bozze in memoria, scritture solo alla conferma).
+  const activeRound = useWardRound();
+  const [roundOpen, setRoundOpen] = useState(false);
   // Milo fase 3: cruscotti fissati (solo la domanda, nel browser dell'operatore).
   const pinOwner = operatorId ?? '';
   const [pins, setPins] = useState<MiloPin[]>(() => loadMiloPins(pinOwner, currentPatientId));
@@ -304,6 +312,11 @@ export function AgnosPanel({
   function send() {
     const text = input.trim();
     if (!text || busy || voiceSession.current || consentPrompt || pending?.uncertain) return;
+    if (WARD_ROUND_COMMAND.test(text)) {
+      setInput('');
+      setRoundOpen(true);
+      return;
+    }
     tts.stop(); // FR-017: nuovo invio interrompe la riproduzione
     const channel = dictatedRef.current ? ('voce' as const) : ('testo' as const);
     dictatedRef.current = false;
@@ -477,131 +490,165 @@ export function AgnosPanel({
         )}
 
         <div className="ai-drawer__body ai-asst__body" ref={bodyRef}>
-          {/* AC7: il brief NON è un turno — niente lettura TTS, niente conferma, niente indice. */}
-          <div hidden={turns.length > 0}>
-            <AgnosBrief
-              active={open && turns.length === 0}
-              kind={operatorRole === 'admin' ? 'facility' : 'operator'}
-              operatorId={operatorId}
-              operatorRole={operatorRole}
-              operatorName={operatorName}
-              navKey={navKey}
-              showHint={turns.length === 0}
-              onNavigate={onNavigate}
-              formatNavLabel={formatNavLabel}
-            />
-          </div>
-          {turns.length === 0 && !pending && pins.length > 0 && (
-            <section className="milo-pins" aria-label="Cruscotti fissati">
-              <h4 className="milo-block__title">Cruscotti fissati</h4>
-              <ul>
-                {pins.map((pin) => (
-                  <li key={pin.id}>
-                    <button
-                      type="button"
-                      className="milo-pins__open"
-                      disabled={busy || voice.active || consentPrompt}
-                      onClick={() => askPinned(pin.question)}
-                    >
-                      {pin.question}
-                    </button>
-                    <button
-                      type="button"
-                      className="milo-pins__remove"
-                      aria-label={`Togli il cruscotto «${pin.question}»`}
-                      onClick={() => unpin(pin.id)}
-                    >
-                      <IcoX />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </section>
+          {roundOpen ? (
+            <WardRound onClose={() => setRoundOpen(false)} />
+          ) : (
+            <>
+              {activeRound && (
+                <div className="ward-round__resume" role="status">
+                  <span>Giro visita in corso.</span>
+                  <button
+                    type="button"
+                    className="ds-btn ds-btn--secondary"
+                    onClick={() => setRoundOpen(true)}
+                  >
+                    Riprendi il giro
+                  </button>
+                </div>
+              )}
+              {turns.length === 0 && !pending && !activeRound && (
+                <div className="ward-round__start">
+                  <button
+                    type="button"
+                    className="ds-btn ds-btn--secondary"
+                    onClick={() => setRoundOpen(true)}
+                  >
+                    Inizia giro visita
+                  </button>
+                  <span>
+                    Detta parametri di più pazienti in una volta; registri dopo aver controllato.
+                  </span>
+                </div>
+              )}
+              {/* AC7: il brief NON è un turno — niente lettura TTS, niente conferma, niente indice. */}
+              <div hidden={turns.length > 0}>
+                <AgnosBrief
+                  active={open && turns.length === 0}
+                  kind={operatorRole === 'admin' ? 'facility' : 'operator'}
+                  operatorId={operatorId}
+                  operatorRole={operatorRole}
+                  operatorName={operatorName}
+                  navKey={navKey}
+                  showHint={turns.length === 0}
+                  onNavigate={onNavigate}
+                  formatNavLabel={formatNavLabel}
+                />
+              </div>
+              {turns.length === 0 && !pending && pins.length > 0 && (
+                <section className="milo-pins" aria-label="Cruscotti fissati">
+                  <h4 className="milo-block__title">Cruscotti fissati</h4>
+                  <ul>
+                    {pins.map((pin) => (
+                      <li key={pin.id}>
+                        <button
+                          type="button"
+                          className="milo-pins__open"
+                          disabled={busy || voice.active || consentPrompt}
+                          onClick={() => askPinned(pin.question)}
+                        >
+                          {pin.question}
+                        </button>
+                        <button
+                          type="button"
+                          className="milo-pins__remove"
+                          aria-label={`Togli il cruscotto «${pin.question}»`}
+                          onClick={() => unpin(pin.id)}
+                        >
+                          <IcoX />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+              {turns.length === 0 && !pending && (
+                <AgnosSuggestedPrompts
+                  operatorRole={operatorRole}
+                  hasCurrentPatient={!!currentPatientId}
+                  selectedText={input}
+                  disabled={busy || voice.active || consentPrompt}
+                  onSelect={prefillSuggestedQuestion}
+                />
+              )}
+              {visibleHistory.hiddenCount > 0 && (
+                <div className="ai-asst__scope agnos-history-control" role="status">
+                  <span>
+                    Cronologia precedente non visualizzata ({visibleHistory.hiddenCount} turni).
+                  </span>
+                  <button
+                    type="button"
+                    className="btn-secondary btn-sm"
+                    onClick={() => setVisibleTurnCount(revealPreviousAgnosTurns)}
+                  >
+                    Mostra i precedenti
+                  </button>
+                </div>
+              )}
+              {visibleHistory.items.map(({ turn: t, index: i }) => (
+                <TurnView
+                  key={i}
+                  turn={t}
+                  isPending={pending?.turnIndex === i}
+                  busy={busy || voice.active || consentPrompt}
+                  navigationReady={pending?.navigationReady === true}
+                  destination={pending?.turnIndex === i ? pending.navigation?.label : undefined}
+                  onOpenPage={() => {
+                    void retryNavigation().then((opened) => {
+                      if (opened) showPage();
+                    });
+                  }}
+                  onConfirm={() => {
+                    if (voiceSession.current || consentPrompt) return;
+                    setVisibleTurnCount(AGNOS_TURN_WINDOW);
+                    void confirmPending();
+                  }}
+                  onEdit={handleEdit}
+                  onCancel={() => {
+                    setVisibleTurnCount(AGNOS_TURN_WINDOW);
+                    cancelPending();
+                  }}
+                  onNavigate={(nav) => {
+                    setWorkspace(true);
+                    void onNavigate?.(nav);
+                  }}
+                  formatNavLabel={formatNavLabel}
+                  {...readPinProps(t, i)}
+                />
+              ))}
+            </>
           )}
-          {turns.length === 0 && !pending && (
-            <AgnosSuggestedPrompts
-              operatorRole={operatorRole}
-              hasCurrentPatient={!!currentPatientId}
-              selectedText={input}
-              disabled={busy || voice.active || consentPrompt}
-              onSelect={prefillSuggestedQuestion}
-            />
-          )}
-          {visibleHistory.hiddenCount > 0 && (
-            <div className="ai-asst__scope agnos-history-control" role="status">
-              <span>
-                Cronologia precedente non visualizzata ({visibleHistory.hiddenCount} turni).
-              </span>
-              <button
-                type="button"
-                className="btn-secondary btn-sm"
-                onClick={() => setVisibleTurnCount(revealPreviousAgnosTurns)}
-              >
-                Mostra i precedenti
-              </button>
-            </div>
-          )}
-          {visibleHistory.items.map(({ turn: t, index: i }) => (
-            <TurnView
-              key={i}
-              turn={t}
-              isPending={pending?.turnIndex === i}
-              busy={busy || voice.active || consentPrompt}
-              navigationReady={pending?.navigationReady === true}
-              destination={pending?.turnIndex === i ? pending.navigation?.label : undefined}
-              onOpenPage={() => {
-                void retryNavigation().then((opened) => {
-                  if (opened) showPage();
-                });
-              }}
-              onConfirm={() => {
-                if (voiceSession.current || consentPrompt) return;
-                setVisibleTurnCount(AGNOS_TURN_WINDOW);
-                void confirmPending();
-              }}
-              onEdit={handleEdit}
-              onCancel={() => {
-                setVisibleTurnCount(AGNOS_TURN_WINDOW);
-                cancelPending();
-              }}
-              onNavigate={(nav) => {
-                setWorkspace(true);
-                void onNavigate?.(nav);
-              }}
-              formatNavLabel={formatNavLabel}
-              {...readPinProps(t, i)}
-            />
-          ))}
         </div>
 
-        <AgnosComposer
-          inputRef={inputRef}
-          input={input}
-          dictated={dictatedRef.current}
-          busy={busy || pending?.uncertain === true}
-          voice={voice}
-          tts={tts}
-          consentPrompt={consentPrompt}
-          onAcceptConsent={() => {
-            startDictation(true);
-            focusMic();
-          }}
-          onDismissConsent={() => {
-            setConsentPrompt(false);
-            focusMic();
-          }}
-          onCancelVoice={cancelDictation}
-          onRevokeConsent={() => {
-            cancelDictation();
-            voice.revokeConsent();
-          }}
-          onInput={(value) => {
-            setInput(value);
-            if (!value.trim()) dictatedRef.current = false;
-          }}
-          onSend={send}
-          onMic={toggleMic}
-        />
+        {!roundOpen && (
+          <AgnosComposer
+            inputRef={inputRef}
+            input={input}
+            dictated={dictatedRef.current}
+            busy={busy || pending?.uncertain === true}
+            voice={voice}
+            tts={tts}
+            consentPrompt={consentPrompt}
+            onAcceptConsent={() => {
+              startDictation(true);
+              focusMic();
+            }}
+            onDismissConsent={() => {
+              setConsentPrompt(false);
+              focusMic();
+            }}
+            onCancelVoice={cancelDictation}
+            onRevokeConsent={() => {
+              cancelDictation();
+              voice.revokeConsent();
+            }}
+            onInput={(value) => {
+              setInput(value);
+              if (!value.trim()) dictatedRef.current = false;
+            }}
+            onSend={send}
+            onMic={toggleMic}
+          />
+        )}
       </aside>
     </>
   );

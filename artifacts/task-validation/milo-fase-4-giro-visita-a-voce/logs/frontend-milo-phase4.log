@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: dictating fills drafts on screen and writes nothing
+ok 1 - dictating fills drafts on screen and writes nothing
+  ---
+  duration_ms: 16.733452
+  type: 'test'
+  ...
+# Subtest: confirming one patient sends only that reading; an error keeps the draft and its id
+ok 2 - confirming one patient sends only that reading; an error keeps the draft and its id
+  ---
+  duration_ms: 2.059476
+  type: 'test'
+  ...
+# Subtest: Italian number words become digits (as the browser may transcribe them)
+ok 3 - Italian number words become digits (as the browser may transcribe them)
+  ---
+  duration_ms: 2.062407
+  type: 'test'
+  ...
+# Subtest: AC1: five patients dictated in one session, in fragments, give five drafts with the right values
+ok 4 - AC1: five patients dictated in one session, in fragments, give five drafts with the right values
+  ---
+  duration_ms: 10.073526
+  type: 'test'
+  ...
+# Subtest: AC3: ambiguous surname, unknown patient, text without patient and impossible values
+ok 5 - AC3: ambiguous surname, unknown patient, text without patient and impossible values
+  ---
+  duration_ms: 1.715971
+  type: 'test'
+  ...
+# Subtest: unassigned fragments go to the summary; a corrected value is noted
+ok 6 - unassigned fragments go to the summary; a corrected value is noted
+  ---
+  duration_ms: 0.670053
+  type: 'test'
+  ...
+# Subtest: AC2/AC4: confirmation request carries only that patient values and a stable requestId
+ok 7 - AC2/AC4: confirmation request carries only that patient values and a stable requestId
+  ---
+  duration_ms: 1.075949
+  type: 'test'
+  ...
+# Subtest: a hand-edited value goes through the Parametri page checks before confirmation
+ok 8 - a hand-edited value goes through the Parametri page checks before confirmation
+  ---
+  duration_ms: 0.324683
+  type: 'test'
+  ...
+# Subtest: an ambiguous fragment can be assigned by hand to one of the candidates
+ok 9 - an ambiguous fragment can be assigned by hand to one of the candidates
+  ---
+  duration_ms: 2.618056
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 434.167532
