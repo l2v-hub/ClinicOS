@@ -179,7 +179,7 @@ def _schema_for(args: dict) -> dict:
 
 def make_tool(name: str, args: dict, description: str, gateway: GatewayClient, ledger: SourceLedger):
     """Uno strumento Agno che legge dal backend e restituisce dati compatti con le fonti [S#]."""
-    from agno.tools.function import Function
+    from ..models.providers.agno_team import team_tool
 
     def run(**kwargs) -> str:
         clean = {k: v for k, v in kwargs.items() if v not in (None, "", [])}
@@ -203,8 +203,7 @@ def make_tool(name: str, args: dict, description: str, gateway: GatewayClient, l
         # Il contenuto viene dai dati dell'applicazione (testo libero compreso): non sono istruzioni.
         return fence("DATI_APPLICAZIONE", text)
 
-    return Function(name=name, description=description, parameters=_schema_for(args),
-                    entrypoint=run, skip_entrypoint_processing=True)
+    return team_tool(name, description, _schema_for(args), run)
 
 
 TOOL_DESCRIPTIONS = {
@@ -234,26 +233,22 @@ def build_tools(names: list[str], schema: list[dict], gateway: GatewayClient, le
 def build_team(model_factory: Callable[[], Any], schema: list[dict], gateway: GatewayClient,
                ledger: SourceLedger, context_lines: list[str], max_tool_calls: int = 10):
     """Coordinatore + specialisti. Uno specialista senza strumenti consentiti non entra nel team."""
-    from agno.agent import Agent
-    from agno.team import Team
+    from ..models.providers.agno_team import team_member, team_object
 
     members = []
     for key, spec in SPECIALISTS.items():
         tools = build_tools(spec["tools"], schema, gateway, ledger)
         if not tools:
             continue
-        members.append(Agent(
-            name=spec["name"], id=key, role=spec["role"], model=model_factory(),
+        members.append(team_member(
+            key=key, name=spec["name"], role=spec["role"], model=model_factory(),
             instructions=spec["instructions"] + context_lines, tools=tools,
-            tool_call_limit=max_tool_calls, markdown=False, telemetry=False,
+            tool_call_limit=max_tool_calls,
         ))
     if not members:
         raise RuntimeError_(ErrorKind.CAPABILITY, "Nessuno strumento consentito per questo ruolo")
-    return Team(
-        name="Milo", members=members, model=model_factory(), mode="coordinate",
-        instructions=COORDINATOR_INSTRUCTIONS + context_lines, markdown=False, telemetry=False,
-        max_iterations=4,
-    )
+    return team_object(name="Milo", members=members, model=model_factory(),
+                     instructions=COORDINATOR_INSTRUCTIONS + context_lines, max_iterations=4)
 
 
 def context_lines_for(req: dict) -> list[str]:
