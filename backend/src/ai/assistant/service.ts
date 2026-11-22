@@ -660,6 +660,9 @@ export async function assistantQuery(
       ) {
         return empty({ notFound: false, refusal: 'Accesso non autorizzato per questa richiesta.' });
       }
+      // Una lettura con parametri non validi (es. una data proposta dal modello e non
+      // interpretabile) non è un errore del servizio: la risposta è «non trovato», mai un 500.
+      if (e instanceof GatewayError && e.kind === 'bad_request') return empty();
       throw e;
     }
   }

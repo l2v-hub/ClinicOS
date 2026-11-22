@@ -11,6 +11,7 @@ import { getEntity } from './schema.js';
 import { MAX_ROWS, type ValidatedPlan, type ValidatedStep } from './validate.js';
 import type { RawFilter } from './dsl.js';
 import { resolvePatientFilter } from './patient-scope.js';
+import { romeInstant } from '../../../proactive/time.js';
 
 export interface QueryAnswer {
   rows: unknown[];
@@ -122,12 +123,57 @@ function opToPrisma(f: RawFilter): unknown {
   }
 }
 
-function whereFromFilters(filters: RawFilter[]): Record<string, unknown> {
+const ISO_LIKE =
+  /^(\d{4}-\d{2}-\d{2})(?:[T ](\d{2}):(\d{2})(?::(\d{2})(?:\.\d{1,3})?)?)?(Z|[+-]\d{2}:?\d{2})?$/;
+
+/**
+ * Valore di un filtro su un campo data → istante. Data e ora senza fuso = ora della struttura
+ * (Europe/Rome); solo data = mezzanotte della struttura. Un valore non interpretabile è una
+ * richiesta non valida (mai passata al database).
+ */
+export function coerceDateValue(value: unknown): Date {
+  if (value instanceof Date && Number.isFinite(value.getTime())) return value;
+  const text = typeof value === 'string' ? value.trim() : '';
+  const m = ISO_LIKE.exec(text);
+  const bad = () => new GatewayError('bad_request', 'Data del filtro non valida');
+  if (!m) throw bad();
+  const [, day, hh = '00', mm = '00', ss = '00', zone] = m;
+  const calendar = new Date(`${day}T00:00:00.000Z`);
+  if (!Number.isFinite(calendar.getTime()) || calendar.toISOString().slice(0, 10) !== day)
+    throw bad();
+  if (Number(hh) > 23 || Number(mm) > 59 || Number(ss) > 59) throw bad();
+  const d = zone ? new Date(text.replace(' ', 'T')) : romeInstant(day, `${hh}:${mm}`);
+  if (!zone && ss !== '00') d.setUTCSeconds(Number(ss));
+  if (!Number.isFinite(d.getTime()) || Number(hh) > 23 || Number(mm) > 59) throw bad();
+  return d;
+}
+
+function fieldType(entityName: string | undefined, field: string): string | undefined {
+  if (!entityName) return undefined;
+  const entity = getEntity(entityName);
+  const [rel, sub] = field.split('.');
+  if (!sub) return entity?.fields[rel]?.type;
+  const target = entity?.relations[rel]?.target;
+  return target ? getEntity(target)?.fields[sub]?.type : undefined;
+}
+
+function coerceFilter(f: RawFilter, entityName?: string): RawFilter {
+  if (fieldType(entityName, f.field) !== 'date') return f;
+  if (['lt', 'lte', 'gt', 'gte', 'eq'].includes(f.op))
+    return { ...f, value: coerceDateValue(f.value) };
+  if (f.op === 'between' && Array.isArray(f.value))
+    return { ...f, value: f.value.map(coerceDateValue) as never };
+  if (f.op === 'in' && Array.isArray(f.value))
+    return { ...f, value: f.value.map(coerceDateValue) as never };
+  return f;
+}
+
+function whereFromFilters(filters: RawFilter[], entityName?: string): Record<string, unknown> {
   const where: Record<string, unknown> = {};
   for (const f of filters) {
     if (f.field === 'patient') continue; // patient-scoped: injected after resolution
     const [rel, sub] = f.field.split('.');
-    const cond = opToPrisma(f);
+    const cond = opToPrisma(coerceFilter(f, entityName));
     if (sub) {
       const existing = (where[rel] as { is?: Record<string, unknown> } | undefined) ?? {};
       where[rel] = { is: { ...(existing.is ?? {}), [sub]: cond } };
@@ -233,7 +279,7 @@ async function runStep(
   }
 
   const delegate = (prisma as unknown as Record<string, any>)[entity.prismaModel!];
-  const where = scopeToPermittedPatients(entity, whereFromFilters(filters), ctx);
+  const where = scopeToPermittedPatients(entity, whereFromFilters(filters, step.entity), ctx);
 
   if (step.aggregate) {
     const a = step.aggregate;

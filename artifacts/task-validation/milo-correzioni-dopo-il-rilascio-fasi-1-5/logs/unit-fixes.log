@@ -1,0 +1,112 @@
+TAP version 13
+# Subtest: 016 F1: READ_TOOLS contiene solo tool di lettura del gateway
+ok 1 - 016 F1: READ_TOOLS contiene solo tool di lettura del gateway
+  ---
+  duration_ms: 0.850182
+  type: 'test'
+  ...
+# Subtest: 016 F1: nessun tool di scrittura/cancellazione è nell allowlist
+ok 2 - 016 F1: nessun tool di scrittura/cancellazione è nell allowlist
+  ---
+  duration_ms: 0.194916
+  type: 'test'
+  ...
+# Subtest: 016 F1: piano LLM valido (solo read tools) è accettato
+ok 3 - 016 F1: piano LLM valido (solo read tools) è accettato
+  ---
+  duration_ms: 1.987924
+  type: 'test'
+  ...
+# Subtest: 016 F1: piano LLM con tool FUORI allowlist → fallback deterministico
+ok 4 - 016 F1: piano LLM con tool FUORI allowlist → fallback deterministico
+  ---
+  duration_ms: 0.771034
+  type: 'test'
+  ...
+# Subtest: 016 F1: runtime che lancia/timeout → fallback deterministico (nessun errore)
+ok 5 - 016 F1: runtime che lancia/timeout → fallback deterministico (nessun errore)
+  ---
+  duration_ms: 0.952311
+  type: 'test'
+  ...
+# Subtest: 016 F1: scope=cross dichiarato dall LLM su tool patient-scoped è IGNORATO (no falso rifiuto)
+ok 6 - 016 F1: scope=cross dichiarato dall LLM su tool patient-scoped è IGNORATO (no falso rifiuto)
+  ---
+  duration_ms: 0.225886
+  type: 'test'
+  ...
+# Subtest: 016 F1: requiresCrossPatientAccess è RICALCOLATO server-side, non fidato dall LLM
+ok 7 - 016 F1: requiresCrossPatientAccess è RICALCOLATO server-side, non fidato dall LLM
+  ---
+  duration_ms: 0.510906
+  type: 'test'
+  ...
+# Subtest: 016 F1: piano LLM VUOTO ma deterministico non-vuoto → preferisci deterministico (F1 >= F0)
+ok 8 - 016 F1: piano LLM VUOTO ma deterministico non-vuoto → preferisci deterministico (F1 >= F0)
+  ---
+  duration_ms: 0.568157
+  type: 'test'
+  ...
+# Subtest: 016 F1: piano LLM vuoto E deterministico vuoto → resta vuoto (nessuna invenzione)
+ok 9 - 016 F1: piano LLM vuoto E deterministico vuoto → resta vuoto (nessuna invenzione)
+  ---
+  duration_ms: 0.929303
+  type: 'test'
+  ...
+# Subtest: 016 F1: injectPatientId riempie patientId mancante nei tool patient-scoped
+ok 10 - 016 F1: injectPatientId riempie patientId mancante nei tool patient-scoped
+  ---
+  duration_ms: 0.368049
+  type: 'test'
+  ...
+# Subtest: 016 F1: injectPatientId SOVRASCRIVE il patientId proposto dall LLM (paziente autoritativo)
+ok 11 - 016 F1: injectPatientId SOVRASCRIVE il patientId proposto dall LLM (paziente autoritativo)
+  ---
+  duration_ms: 0.134305
+  type: 'test'
+  ...
+# Subtest: 016 F1: injectPatientId sovrascrive un patientId PLACEHOLDER dell LLM
+ok 12 - 016 F1: injectPatientId sovrascrive un patientId PLACEHOLDER dell LLM
+  ---
+  duration_ms: 0.067332
+  type: 'test'
+  ...
+# Subtest: 016 F1: injectPatientId NON tocca i tool non patient-scoped (search_patients)
+ok 13 - 016 F1: injectPatientId NON tocca i tool non patient-scoped (search_patients)
+  ---
+  duration_ms: 0.053346
+  type: 'test'
+  ...
+# Subtest: 016 F1: injectPatientId senza patientId noto → piano invariato
+ok 14 - 016 F1: injectPatientId senza patientId noto → piano invariato
+  ---
+  duration_ms: 0.079694
+  type: 'test'
+  ...
+# Subtest: 016 F3: piano LLM con query_data + intent data_query è accettato (non cross-patient)
+ok 15 - 016 F3: piano LLM con query_data + intent data_query è accettato (non cross-patient)
+  ---
+  duration_ms: 0.177788
+  type: 'test'
+  ...
+# Subtest: a precise deterministic intent wins over a generic LLM plan (shifts, agenda)
+ok 16 - a precise deterministic intent wins over a generic LLM plan (shifts, agenda)
+  ---
+  duration_ms: 5.350331
+  type: 'test'
+  ...
+# Subtest: date filter values become instants in facility time; garbage is a bad request
+ok 17 - date filter values become instants in facility time; garbage is a bad request
+  ---
+  duration_ms: 1.364201
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 417.971318

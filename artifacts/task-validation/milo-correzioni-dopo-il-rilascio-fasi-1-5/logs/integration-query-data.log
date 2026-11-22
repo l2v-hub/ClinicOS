@@ -1,0 +1,74 @@
+TAP version 13
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_vital_signs","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T18:24:59.727Z"}
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_parameters","patientIds":["vitals-qa-anna"],"resultCount":3,"outcome":"ok","at":"2026-11-22T18:24:59.730Z"}
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_vital_signs","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T18:24:59.750Z"}
+# Subtest: parameters page readings and the legacy chart vitals come back together
+ok 1 - parameters page readings and the legacy chart vitals come back together
+  ---
+  duration_ms: 2494.720253
+  type: 'test'
+  ...
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_news2","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T18:24:59.766Z"}
+# Subtest: NEWS2 is computed by the backend on the latest complete reading, with its source
+ok 2 - NEWS2 is computed by the backend on the latest complete reading, with its source
+  ---
+  duration_ms: 6.708807
+  type: 'test'
+  ...
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_administrations","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T18:24:59.776Z"}
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_assessments","patientIds":["vitals-qa-anna"],"resultCount":0,"outcome":"empty","at":"2026-11-22T18:24:59.783Z"}
+# Subtest: administrations, diary and assessments stay inside the patient scope
+ok 3 - administrations, diary and assessments stay inside the patient scope
+  ---
+  duration_ms: 16.496828
+  type: 'test'
+  ...
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"query_staff_shifts","patientIds":[],"resultCount":1,"outcome":"ok","at":"2026-11-22T18:24:59.793Z"}
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"query_staff_shifts","patientIds":[],"resultCount":0,"outcome":"empty","at":"2026-11-22T18:24:59.800Z"}
+# Subtest: shifts: who works tomorrow, organisational fields only
+ok 4 - shifts: who works tomorrow, organisational fields only
+  ---
+  duration_ms: 16.622647
+  type: 'test'
+  ...
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"query_agenda","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T18:24:59.809Z"}
+# Subtest: agenda: tomorrow doctor visits in scope, never reason or notes
+ok 5 - agenda: tomorrow doctor visits in scope, never reason or notes
+  ---
+  duration_ms: 8.682547
+  type: 'test'
+  ...
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"query_staff_shifts","patientIds":[],"resultCount":1,"outcome":"ok","at":"2026-11-22T18:24:59.815Z"}
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"query_agenda","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T18:24:59.821Z"}
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_news2","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T18:24:59.825Z"}
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_administrations","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T18:24:59.830Z"}
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_vital_signs","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T18:24:59.836Z"}
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_parameters","patientIds":["vitals-qa-anna"],"resultCount":3,"outcome":"ok","at":"2026-11-22T18:24:59.837Z"}
+# Subtest: questions from the acceptance criteria reach the right tool end to end
+ok 6 - questions from the acceptance criteria reach the right tool end to end
+  ---
+  duration_ms: 32.612092
+  type: 'test'
+  ...
+# [ai-gateway] {"requestId":"milo-phase1-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_vital_signs","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T18:24:59.846Z"}
+# Subtest: query_data with patient "current" returns the open patient rows
+ok 7 - query_data with patient "current" returns the open patient rows
+  ---
+  duration_ms: 5.118962
+  type: 'test'
+  ...
+# Subtest: query_data on appointments: a date without zone is facility time, garbage is refused before the database (no 500)
+ok 8 - query_data on appointments: a date without zone is facility time, garbage is refused before the database (no 500)
+  ---
+  duration_ms: 5.061963
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13960.144789
