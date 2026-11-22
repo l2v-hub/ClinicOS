@@ -334,7 +334,7 @@ export function AnswerView({
         <div className="milo-print-only milo-print-header">
           <strong>ClinicOS · Milo</strong>
           <span>{question}</span>
-          <span>{new Date().toLocaleString('it-IT')}</span>
+          <span>{new Date().toLocaleString('it-IT', { timeZone: 'Europe/Rome' })}</span>
         </div>
       ) : null}
       {answer.answerText && (
