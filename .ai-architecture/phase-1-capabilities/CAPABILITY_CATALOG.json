@@ -5184,6 +5184,37 @@
       "test": null
     },
     {
+      "capability_id": "internal_ai.agent_tools",
+      "name": "Gateway interno — letture del team di agenti",
+      "description": "Letture di Milo per il team di agenti (servizio AI) con token di servizio e delega della domanda.",
+      "domain": "internal_ai",
+      "type": "read",
+      "feature_ui": null,
+      "entry_point": "POST /internal/ai/tools/:tool (backend/src/routes/internal-ai.ts)",
+      "services": [
+        "backend/src/ai/assistant/service.ts#executeReadTool",
+        "backend/src/ai/assistant/agent-grants.ts#resolveAgentGrant"
+      ],
+      "input": "service token + X-AI-Grant + {args}",
+      "output": "{data, sourceRefs, truncated}",
+      "validations": [],
+      "side_effects": [],
+      "dependencies": ["prisma"],
+      "sensitivity": "high",
+      "risk": "Il contesto dell'operatore viene solo dalla delega (scadenza breve, letture contate, perimetro e permessi del ruolo).",
+      "agno_integration": "Milo team (Agno Team) read path",
+      "tool_candidate": null,
+      "files": ["backend/src/routes/internal-ai.ts"],
+      "technical_state": "READY",
+      "rationale": "Servizio esportato.",
+      "exposure": "NOT_EXPOSED",
+      "invocability": "DISCOVERED",
+      "legacy_roles": [],
+      "patient_scoped": false,
+      "idempotency": "natural",
+      "test": null
+    },
+    {
       "capability_id": "internal_ai.patient_allergies",
       "name": "Gateway interno — patient/allergies",
       "description": "Endpoint service-to-service del Data Gateway (getPatientAllergies); contesto utente da header firmato.",

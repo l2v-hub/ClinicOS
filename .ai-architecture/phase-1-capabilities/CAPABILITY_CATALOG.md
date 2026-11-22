@@ -5,10 +5,10 @@
 
 ## Totals
 
-- Capabilities: **213** · exposed as tools: **56**
-- Technical state: READY 105 · GAP 59 · WRAP 49
-- Invocability: TESTED 76 · DISCOVERED 125 · EXPOSED 12
-- Exposure: TOOL 56 · NOT_EXPOSED 106 · AGNOS_INTERNAL 30 · GUI_ONLY 11 · DEV_ONLY 5 · DEPRECATED 5
+- Capabilities: **214** · exposed as tools: **56**
+- Technical state: READY 106 · GAP 59 · WRAP 49
+- Invocability: TESTED 76 · DISCOVERED 126 · EXPOSED 12
+- Exposure: TOOL 56 · NOT_EXPOSED 107 · AGNOS_INTERNAL 30 · GUI_ONLY 11 · DEV_ONLY 5 · DEPRECATED 5
 - Failed tool tests: none
 
 Legend — technical: READY (entry point/service reusable as is) · WRAP (valid logic, thin adapter) ·
@@ -400,6 +400,7 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 | capability_id                            | type | state | exposure    | invocability | entry point                                                                            | service(s)                                                                                                                              | test |
 | ---------------------------------------- | ---- | ----- | ----------- | ------------ | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---- |
 | `internal_ai.assistant_query`            | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/assistant/query (backend/src/routes/internal-ai.ts:123)              | backend/src/ai/assistant/service.ts#assistantQuery<br>backend/src/ai/gateway/context.ts#parseUserContext                                | —    |
+| `internal_ai.agent_tools`                | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/tools/:tool (backend/src/routes/internal-ai.ts)                      | backend/src/ai/assistant/service.ts#executeReadTool<br>backend/src/ai/assistant/agent-grants.ts#resolveAgentGrant                       | —    |
 | `internal_ai.patient_allergies`          | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/patient/allergies (backend/src/routes/internal-ai.ts:95)             | backend/src/ai/gateway/services.ts#getPatientAllergies<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext          | —    |
 | `internal_ai.patient_demographics`       | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/patient/demographics (backend/src/routes/internal-ai.ts:91)          | backend/src/ai/gateway/services.ts#getPatientDemographics<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext       | —    |
 | `internal_ai.patient_diary`              | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/patient/diary (backend/src/routes/internal-ai.ts:107)                | backend/src/ai/gateway/services.ts#getPatientDiary<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext              | —    |
