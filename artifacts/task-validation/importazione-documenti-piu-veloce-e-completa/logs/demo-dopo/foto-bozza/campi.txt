@@ -1,0 +1,25 @@
+revisione pronta in 19.0s
+## Campi dell'ingresso dopo «Crea paziente»
+Nome                         "Giovanni"
+Cognome                      "Bianchi"
+Data di nascita              "1941-10-07"
+Sesso                        "Maschio"
+Comune di nascita            "Bologna"
+Provincia di nascita         "BO"
+Codice fiscale               "BNCGNN41R07A944W"
+Telefono                     "051 5550177"
+Email                        ""
+Indirizzo                    "Via Mazzini 22"
+Comune                       "Bologna"
+Provincia                    ""
+CAP                          "40137"
+Nome e cognome referente     "Bianchi Marta"
+Relazione con il paziente    "Figlio / Figlia"
+Telefono referente           "333 5550123"
+Provenienza                  "Ospedale"
+Centro inviante              "Azienda Ospedaliera Santa Chiara — U.O. Medicina Interna 2"
+Motivo di ingresso           "dispnea ingravescente da circa cinque giorni, ortopnea ed edemi declivi"
+compilati 17 su 19
+## Terapia: righe 11 «da verificare»; farmaci citati: 9/9 nomi
+## Dopo ricarica e «Riprendi bozza»: campi identici = true
+errori console/API: []
