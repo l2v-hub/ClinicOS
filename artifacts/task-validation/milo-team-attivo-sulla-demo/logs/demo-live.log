@@ -26,3 +26,10 @@ Risposte (pannello di Milo):
   150/90 mmHg: +25 di sistolica e +10 di diastolica» [1][2] (34,0 s), con andamento e indicatori.
 - Domande senza dati (turni): team scartato con «no_reads», risposta classica «non trovato».
 Difetto visto: il testo contiene markdown grezzo (**, tabelle |) → corretto in questo commit.
+
+Dopo #550 (frontend dpl_2DGAjEWuPGDKjAMNA4L1XsqAsJTb, servizio AI 2527558d), 22:22–22:25:
+- tutte le domande sul paziente rispondono in modalità team con fonti numerate (Clinico paziente,
+  Sorveglianza clinica); tempi lato pagina 22–32 s; turni senza dati → percorso classico «non trovato»;
+- testo senza simboli markdown: «qual è il NEWS2 di oggi e quali parametri pesano di più?» → paragrafi
+  e un elenco di 3 voci (FR 22 → 2 punti, SpO₂ 93% → 2, FC 115 → 2), nessun «**» (screenshot 16);
+- correlazione: «Pressione: da 125/80 a 150/90 mmHg… Frequenza cardiaca: da 72 a 115 bpm, +43 bpm…».
