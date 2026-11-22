@@ -2320,6 +2320,24 @@
       ]
     },
     {
+      "id": "internal_ai.agent_tools",
+      "name": "Gateway interno — letture del team di agenti",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/tools/:tool"
+        }
+      ]
+    },
+    {
       "id": "internal_ai.patient_allergies",
       "name": "Gateway interno — patient/allergies",
       "domain": "internal_ai",
