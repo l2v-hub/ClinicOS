@@ -1,0 +1,11 @@
+Suite backend completa (npm test), albero con fasi 1+2, 2026-11-22
+# tests 1995
+# pass 1877
+# fail 112
+# tests 54
+# pass 16
+# fail 38
+
+File in errore: 150; baseline prima delle modifiche: 150
+Differenza (comm -3 baseline/attuale): 0 file
+I fallimenti pre-esistenti sono test che richiedono il database PostgreSQL di sviluppo con dati propri (es. consegne/*-db.test.ts).

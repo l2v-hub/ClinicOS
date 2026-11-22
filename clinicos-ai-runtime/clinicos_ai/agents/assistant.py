@@ -35,8 +35,10 @@ PLAN_MARKER = "ASSISTANT_PLAN_V1"
 # DEVE restare allineato: un intent fuori da questa lista fa scartare l'intero piano LLM
 # (→ fallback deterministico). Il modello va quindi vincolato a sceglierne ESATTAMENTE uno.
 _INTENTS = (
-    "allergies, therapies, vitals_range, vitals_recent, narrative_search, document_search, "
-    "timeline, appointments, correlate, patient_search, refuse_clinical, data_query, unknown"
+    "allergies, therapies, vitals_range, vitals_recent, vitals_trend, narrative_search, "
+    "document_search, timeline, appointments, correlate, patient_search, rooms_occupancy, "
+    "staff_list, facility_snapshot, operator_queue, parameters_overview, clinical_score, diary, "
+    "assessments, administrations, staff_shifts, agenda, refuse_clinical, data_query, unknown"
 )
 
 _SYSTEM = (
@@ -49,7 +51,16 @@ _SYSTEM = (
     "Scegli l'intent che meglio descrive la richiesta (allergie→allergies; terapie→therapies; "
     "parametri per intervallo→vitals_range; ultimi parametri→vitals_recent; ricerca testo in "
     "cartella→narrative_search; documenti→document_search; cronologia→timeline; appuntamenti→"
-    "appointments; correlazione o ricerca tra più pazienti→correlate; ricerca paziente→patient_search); "
+    "appointments; correlazione o ricerca tra più pazienti→correlate; ricerca paziente→patient_search; "
+    "andamento o confronto di più parametri, riepilogo dei parametri→parameters_overview con "
+    "get_patient_parameters (params e days); NEWS2 o punteggio di allerta→clinical_score con "
+    "get_patient_news2 (il punteggio lo calcola il server, MAI tu); diario→diary con get_patient_diary; "
+    "scale e valutazioni (Tinetti, MNA, GDS, PAINAD)→assessments con get_patient_assessments; "
+    "somministrazioni→administrations con get_patient_administrations; chi è di turno, turni del "
+    "personale→staff_shifts con query_staff_shifts (date YYYY-MM-DD, ruolo); visite del medico, agenda di "
+    "un giorno o di una settimana→agenda con query_agenda (from, to, ruolo); occupazione di camere e "
+    "letti→rooms_occupancy con query_rooms_occupancy; situazione della struttura→facility_snapshot con "
+    "get_facility_snapshot; cosa devo fare→operator_queue con get_operator_queue); "
     "se nessuno è applicabile usa unknown. "
     "Per domande su NUMERI/ELENCHI/CORRELAZIONI di struttura o dati strutturati (camere, letti, "
     "occupazione, appuntamenti della struttura, conteggi, andamenti, condizioni tra dati) usa intent "

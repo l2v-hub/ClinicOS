@@ -889,3 +889,87 @@ test('W — a cached AI summary never survives a scope revocation (QA re-verific
     setProactiveComposeRuntime(null);
   }
 });
+
+test('V — Milo fase 5: NEWS2 sentinel → attention signal with the why, ack recorded, new alert re-opens it', async () => {
+  const written = Date.now();
+  // NEWS2 6 (RCP 2017): FR 22 → 2, SpO₂ 93 → 2, FC 115 → 2; gli altri 0.
+  await reading(ids.nB, 'SIM-OSS-1', {
+    pa: '150/90',
+    fc: '115',
+    spo2: '93',
+    fr: '22',
+    temperatura: '37,0',
+    o2: 'no',
+    coscienza: 'A',
+  });
+  const box = await inbox(nurse);
+  const alert = box.signals.find(
+    (s) => s.eventType === 'vitals.news2_alert' && s.residentId === ids.nB,
+  );
+  assert.ok(alert, 'the sentinel signal is in the inbox at the next refresh');
+  // Il badge (conteggi soli, senza contenuto) lo vede senza aprire il pannello.
+  const badge = await call(base, nurse, 'GET', '/skills/proactive/inbox?view=count');
+  assert.ok(badge.body.counts.attention >= 1);
+  assert.equal(badge.body.signals, undefined);
+  assert.ok(Date.now() - written < 5000, 'visible within seconds of the write');
+  assert.equal(alert.type, 'ATTENTION_REQUIRED');
+  assert.equal(alert.priority, 'alta');
+  assert.equal(alert.title, 'NEWS2 6 — rischio medio');
+  assert.match(
+    alert.detail,
+    /^FR 2 · SpO₂ 2 · FC 2 · Risposta prevista: Valutazione medica urgente/,
+  );
+  assert.match(alert.detail, /RCP 2017/);
+  assert.match(alert.reason, /Sentinella NEWS2/);
+  // Nel segnale ci sono punteggi e protocollo, non i valori misurati.
+  assert.doesNotMatch(JSON.stringify(alert), /115|150\/90/);
+  // L'amministratore non riceve segnali clinici.
+  assert.ok(!(await inbox(admin)).signals.some((s) => s.eventType === 'vitals.news2_alert'));
+
+  const ack = await call(base, nurse, 'POST', '/skills/proactive/ack', {
+    acks: [{ signalId: alert.signalId, rev: alert.rev }],
+  });
+  assert.deepEqual(ack.body.acknowledged, [alert.signalId]);
+  const seen = (await inbox(nurse)).signals.find((s) => s.signalId === alert.signalId);
+  assert.equal(seen.status, 'preso_visione');
+  const badgeAfter = await call(base, nurse, 'GET', '/skills/proactive/inbox?view=count');
+  assert.equal(badgeAfter.body.counts.attention, badge.body.counts.attention - 1);
+  const row = await prisma.aiAuditEvent.findFirst({
+    where: {
+      operatorId: 'SIM-NURSE-1',
+      actionType: 'proactive:ack',
+      fields: { has: `ack:${alert.signalId}@${alert.rev}` },
+    },
+  });
+  assert.equal(row?.patientId, ids.nB, 'the acknowledgement is recorded with the resident');
+
+  // Una rilevazione normale non riapre il promemoria.
+  await new Promise((r) => setTimeout(r, 1100));
+  await reading(ids.nB, 'SIM-OSS-1', {
+    pa: '125/80',
+    fc: '72',
+    spo2: '97',
+    fr: '16',
+    temperatura: '36,6',
+    o2: 'no',
+    coscienza: 'A',
+  });
+  const still = (await inbox(nurse)).signals.find((s) => s.signalId === alert.signalId);
+  assert.equal(still.status, 'preso_visione');
+
+  // Un nuovo NEWS2 ≥ 7 è una nuova revisione, urgente, di nuovo da vedere.
+  await reading(ids.nB, 'SIM-OSS-1', {
+    pa: '150/90',
+    fc: '115',
+    spo2: '91',
+    fr: '25',
+    temperatura: '37,0',
+    o2: 'no',
+    coscienza: 'A',
+  });
+  const again = (await inbox(nurse)).signals.find((s) => s.signalId === alert.signalId);
+  assert.notEqual(again.rev, alert.rev);
+  assert.equal(again.priority, 'urgente');
+  assert.notEqual(again.status, 'preso_visione');
+  assert.match(again.title, /^NEWS2 8 — rischio alto$/);
+});

@@ -240,7 +240,14 @@ export interface ProactiveInbox {
   since: string;
   watermark: string | null;
   signals: ProactiveSignal[];
-  counts: { total: number; toSee: number; new: number; changed: number };
+  counts: {
+    total: number;
+    toSee: number;
+    new: number;
+    changed: number;
+    /** Milo fase 5: promemoria clinici (sentinelle) non ancora presi in visione. */
+    attention?: number;
+  };
   /** Event sources that failed this time: the list may be incomplete. */
   degraded?: string[];
 }

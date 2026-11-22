@@ -171,6 +171,7 @@ import { ShiftClock } from './components/shared/ShiftClock';
 import { UserMenu } from './components/shared/UserMenu';
 
 import { IcoAI, IcoSearch, IcoX } from './icons';
+import { AssistantEntryBadge } from './components/assistant/AssistantEntryBadge';
 
 // I moduli di pagina sono chunk separati. Le stesse funzioni di import alimentano sia i
 // componenti lazy sia il precaricamento dopo il login (preloadRouteModules): cosi' il primo accesso
@@ -3580,6 +3581,8 @@ export default function App() {
                 >
                   <IcoAI />
                   <span className="topbar-assistant__label">Milo</span>
+                  {/* Milo fase 5: promemoria e novità visibili senza aprire il pannello. */}
+                  <AssistantEntryBadge refreshKey={assistantModeOpen} />
                 </button>
               )}
               <button

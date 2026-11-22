@@ -23,6 +23,7 @@ export type SignalType =
 
 export type EventType =
   | 'vitals.recorded'
+  | 'vitals.news2_alert'
   | 'diary.entry_created'
   | 'handover.open'
   | 'therapy.prescribed'
@@ -78,6 +79,23 @@ export const EVENT_CATALOG: EventTypeDef[] = [
     sensitivity: 'high',
     signal: 'NEW_INFORMATION',
     priority: 'normale (no clinical scoring in this phase)',
+    skillId: 'vitals.recent',
+    starter: 'Mostrami gli ultimi parametri di questo ospite',
+    status: 'integrated',
+  },
+  {
+    // Milo fase 5: sentinella clinica sulle misure nuove (clinical/sentinels.ts), promemoria
+    // informativo con il perché; non sostituisce la valutazione del professionista.
+    type: 'vitals.news2_alert',
+    domain: 'parameters',
+    source:
+      'PatientParameterReading (createdAt) + NEWS2 calcolato dal backend (RCP 2017, scala SpO₂ 1), solo rilevazioni complete',
+    capabilities: ['parameters.list_readings', CARE_FEED_CAPABILITY],
+    audience: 'care',
+    sensitivity: 'high',
+    signal: 'ATTENTION_REQUIRED',
+    priority:
+      'protocollo NEWS2: totale ≥7 urgente; totale ≥ soglia di struttura (5, anticipabile a 3–4) o un parametro a 3 alta',
     skillId: 'vitals.recent',
     starter: 'Mostrami gli ultimi parametri di questo ospite',
     status: 'integrated',

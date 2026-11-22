@@ -121,3 +121,53 @@ export function staffSource(exactText?: string, recordedAt?: string): SourceRefe
     recordedAt,
   };
 }
+
+// Milo fase 1: scale e valutazioni finalizzate, somministrazioni, turni e punteggi calcolati.
+export function assessmentSource(
+  patientId: string,
+  recordId: string,
+  label: string,
+  exactText?: string,
+  recordedAt?: string,
+): SourceReference {
+  return { sourceType: 'ASSESSMENT', patientId, recordId, label, exactText, recordedAt };
+}
+
+export function administrationSource(
+  patientId: string,
+  recordId: string,
+  label: string,
+  exactText?: string,
+  recordedAt?: string,
+): SourceReference {
+  return { sourceType: 'ADMINISTRATION', patientId, recordId, label, exactText, recordedAt };
+}
+
+/** Turni settimanali del personale: dato organizzativo, nessun paziente lo possiede. */
+export function shiftSource(recordId: string, exactText?: string): SourceReference {
+  return {
+    sourceType: 'SHIFT',
+    patientId: '',
+    recordId,
+    label: 'Turni del personale',
+    exactText,
+  };
+}
+
+/** Punteggio calcolato dal backend su una rilevazione: la fonte è la rilevazione stessa. */
+export function clinicalScoreSource(
+  patientId: string,
+  readingId: string,
+  label: string,
+  exactText?: string,
+  recordedAt?: string,
+): SourceReference {
+  return {
+    sourceType: 'CLINICAL_SCORE',
+    patientId,
+    recordId: readingId,
+    label,
+    exactText,
+    recordedAt,
+  };
+}

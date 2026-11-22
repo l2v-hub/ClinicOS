@@ -31,6 +31,7 @@ from ..models.validation import strict_mode, validate_ai_config
 from ..agents.extraction import run_extraction
 from ..agents.assistant import run_assistant_plan, run_assistant_compose
 from ..agents.skill_router import run_skill_route
+from ..agents.team import run_milo_team
 from ..voice.stt import SttError, stt_model, stt_realtime, stt_status, transcribe as stt_transcribe
 from ..models.errors import RuntimeError_, ErrorKind
 from ..models.env_config import safe_config_summary
@@ -40,6 +41,7 @@ from ..models.registry import ModelRegistry
 from ..domain.contracts import (
     CreateJobRequest, RunRequest, RetryRequest, AssistantPlanRequest, AssistantPlanResponse,
     AssistantComposeRequest, AssistantComposeResponse, SkillRouteRequest, SkillRouteResponse,
+    TeamRequest, TeamResponse,
 )
 from .job_control import can_retry, current_attempt, existing_job
 
@@ -306,6 +308,35 @@ async def assistant_compose(req: AssistantComposeRequest, authorization: str | N
         raise HTTPException(status.HTTP_502_BAD_GATEWAY, {"error": "compose error", "code": ai_error_code(ex)})
     except Exception as ex:  # pragma: no cover
         _log.error("assistant compose failed: %s", type(ex).__name__)
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, "internal error")
+
+
+# Milo fase 2: team di agenti (coordinatore + specialisti) con strumenti che leggono dal backend.
+def _team_model_factory():
+    """Modello Agno del ruolo 'reasoning' (stessa configurazione del pianificatore)."""
+    built = _REGISTRY.build("reasoning")
+    builder = getattr(built.runner, "_build_agent", None)
+    if builder is None:
+        raise RuntimeError_(ErrorKind.CAPABILITY, "Il modello configurato non supporta il team di agenti")
+    spec = built.spec
+    return (lambda: builder().model), f"{getattr(spec, 'provider', '')}:{getattr(spec, 'model_id', spec)}"
+
+
+@app.post("/v1/assistant/team", response_model=TeamResponse)
+async def assistant_team(req: TeamRequest, authorization: str | None = Header(default=None)):
+    _auth(authorization)
+    if not ai_enabled(os.environ):
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, {"error": "AI disattivata"})
+    try:
+        factory, model = _team_model_factory()
+        out = await run_milo_team(req.model_dump(), factory, timeout_seconds=req.timeoutSeconds)
+        _log.info("assistant team ok members=%s calls=%d", ",".join(out["members"]), len(out["toolCalls"]))
+        return TeamResponse(**out, model=model)
+    except RuntimeError_ as ex:
+        _log.warning("assistant team runtime error: %s", ai_error_code(ex))
+        raise HTTPException(status.HTTP_502_BAD_GATEWAY, {"error": "team error", "code": ai_error_code(ex)})
+    except Exception as ex:  # pragma: no cover
+        _log.error("assistant team failed: %s", type(ex).__name__)
         raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, "internal error")
 
 

@@ -96,3 +96,22 @@ export async function callComposeRuntime(
     cfg.timeoutMs,
   );
 }
+
+import type { TeamRuntimeRequest, TeamRuntimeResponse } from './team.js';
+
+// Milo fase 2: il team lavora in ciclo (più chiamate al modello e al backend): il suo tempo è
+// separato da quello del pianificatore, con margine per la risposta HTTP.
+export async function callTeamRuntime(
+  req: TeamRuntimeRequest,
+  cfg: AssistantLlmConfig,
+): Promise<TeamRuntimeResponse> {
+  const token = process.env.AI_RUNTIME_SERVICE_TOKEN;
+  if (!cfg.runtimeUrl || !token) throw new Error('assistant team runtime not configured');
+  return runtimePost<TeamRuntimeResponse>(
+    'assistant_team',
+    `${cfg.runtimeUrl.replace(/\/$/, '')}/v1/assistant/team`,
+    token,
+    req,
+    cfg.teamTimeoutMs + 10_000,
+  );
+}

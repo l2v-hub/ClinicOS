@@ -1,0 +1,113 @@
+{
+ "id": "cmwrnzlgh000101pq6hl56fyl",
+ "status": "review_ready",
+ "stage": "completed",
+ "completedFiles": 1,
+ "totalFiles": 1,
+ "currentFileName": null,
+ "elapsedSeconds": 19,
+ "canRetry": false,
+ "canCancel": true,
+ "maxFiles": 30,
+ "maxTotalBytes": 26214400,
+ "totalBytes": 55389,
+ "fileCount": 1,
+ "error": null,
+ "model": "azure:gpt-6.1-sol",
+ "expiresAt": "2026-11-22T10:58:55.271Z",
+ "createdAt": "2026-11-22T09:58:43.553Z",
+ "documents": [
+  {
+   "id": "cmwrnzmbm000301pq6qucfaci",
+   "filename": "lettera.pdf",
+   "mimeType": "application/pdf",
+   "sizeBytes": 55389,
+   "sha256": "18c2026855cbaaa07a6030a38d0b184e2bdb09be2b5f6dd8a76fbc0261b67f06",
+   "sortOrder": 0,
+   "logicalDoc": null,
+   "status": "uploaded",
+   "rejectReason": null,
+   "pageCount": 2,
+   "contentUrl": "/ai/extraction/jobs/cmwrnzlgh000101pq6hl56fyl/files/cmwrnzmbm000301pq6qucfaci/content"
+  }
+ ],
+ "capabilities": {
+  "sessionVersion": 1,
+  "pageEditing": true,
+  "atomicReplacement": true
+ },
+ "manifest": {
+  "pages": [
+   {
+    "id": "60fc5a6e-0981-4185-98f1-603bc92b684b",
+    "groupId": "f6a750d9-2063-4722-9e90-cb8a5ed3c2d1",
+    "sortOrder": 0,
+    "documentId": "cmwrnzmbm000301pq6qucfaci",
+    "sourcePageNumber": 1,
+    "status": "completed",
+    "canRetry": false,
+    "errorCode": null,
+    "error": null
+   },
+   {
+    "id": "d5f1f666-dca9-4400-95ec-21fb91fd664f",
+    "groupId": "f6a750d9-2063-4722-9e90-cb8a5ed3c2d1",
+    "sortOrder": 1,
+    "documentId": "cmwrnzmbm000301pq6qucfaci",
+    "sourcePageNumber": 2,
+    "status": "completed",
+    "canRetry": false,
+    "errorCode": null,
+    "error": null
+   }
+  ],
+  "groups": [
+   {
+    "id": "f6a750d9-2063-4722-9e90-cb8a5ed3c2d1",
+    "label": "Lettera 1",
+    "sortOrder": 0,
+    "status": "completed",
+    "pageCount": 2,
+    "completedPages": 2,
+    "errorCode": null,
+    "error": null,
+    "resultHash": "057a76f51e807b334b33cb8e84796facf1874280e2918d36f31eb1a47feeee21",
+    "pdfUrl": "/ai/extraction/jobs/cmwrnzlgh000101pq6hl56fyl/groups/f6a750d9-2063-4722-9e90-cb8a5ed3c2d1/pdf"
+   }
+  ],
+  "version": 1,
+  "revision": 1
+ },
+ "limits": {
+  "maxPages": 30,
+  "maxSourceFiles": 30,
+  "maxGroups": 30,
+  "maxTotalBytes": 26214400,
+  "maxFileBytes": 26214400,
+  "maxFilesPerRequest": 10,
+  "maxRequestBytes": 26476544,
+  "acceptedMimeTypes": [
+   "application/pdf",
+   "image/jpeg",
+   "image/png"
+  ]
+ },
+ "progress": {
+  "phase": "review",
+  "totalPages": 2,
+  "completedPages": 2,
+  "failedPages": 0,
+  "totalGroups": 1,
+  "completedGroups": 1,
+  "currentPageId": null,
+  "currentGroupId": null
+ },
+ "review": {
+  "manifestRevision": 1,
+  "resultHash": "f78dbfb5f1a5fd11c2ea5de29290d6af14e415ebeb9e195fb6d6f58f6386a012",
+  "unresolvedConflicts": 0,
+  "canProceed": true,
+  "draftId": null,
+  "draftSourceIsCurrent": true
+ }
+}

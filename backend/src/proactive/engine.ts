@@ -124,7 +124,16 @@ async function collect(
   deps: ProactiveDeps,
 ): Promise<CollectResult> {
   const allowedSet = new Set(allowed);
-  const run = new Set(allowed.map((t) => (t === 'therapy.changed' ? 'therapy.prescribed' : t)));
+  // therapy.changed shares the therapies collector; vitals.news2_alert shares the vitals collector.
+  const run = new Set(
+    allowed.map((t) =>
+      t === 'therapy.changed'
+        ? 'therapy.prescribed'
+        : t === 'vitals.news2_alert'
+          ? 'vitals.recorded'
+          : t,
+    ),
+  );
   // therapy.changed shares the therapies collector; run it if either is allowed.
   const perSource: CollectResult['perSource'] = {};
   const batches = await Promise.all(
@@ -174,6 +183,8 @@ function reasonFor(type: EventType, event: ProactiveEvent): string {
       ? 'Consegna urgente assegnata a te, nessuno l’ha ancora presa in carico'
       : 'Consegna urgente visibile al tuo ruolo, nessuno l’ha ancora presa in carico';
   if (type === 'note.received') return 'Nota indirizzata a te o a tutti, non ancora letta';
+  if (type === 'vitals.news2_alert')
+    return 'Sentinella NEWS2 sulle misure nuove del tuo ambito: promemoria, la valutazione resta del professionista';
   if (type === 'workflow.pending') return 'Anteprima preparata da te, in attesa del tuo «Conferma»';
   if (def.audience === 'technical')
     return `Segnale tecnico del tuo ruolo (${def.capabilities.join(', ')})`;
@@ -213,10 +224,39 @@ interface Group {
   detail: (events: ProactiveEvent[]) => string | null;
 }
 
+const NEWS2_RISK_LABEL: Record<string, string> = {
+  nessuno: 'nessun rischio',
+  basso: 'rischio basso',
+  'basso-singolo': 'un parametro a 3',
+  medio: 'rischio medio',
+  alto: 'rischio alto',
+};
+
 function groupOf(e: ProactiveEvent): Omit<Group, 'events'> {
   const p = e.payload;
   const resident = e.residentId ?? 'none';
   switch (e.type) {
+    case 'vitals.news2_alert':
+      // Un segnale per ospite: una nuova rilevazione che fa scattare la sentinella è una nuova
+      // revisione (torna visibile anche dopo la presa visione della precedente).
+      return {
+        key: `news2:${resident}`,
+        type: e.type,
+        signal: 'ATTENTION_REQUIRED',
+        priority: sourcePriority(p.priority),
+        priorityRule:
+          'protocollo NEWS2 (RCP 2017): ≥7 urgente; soglia di struttura o un parametro a 3 alta',
+        title: (es) => {
+          const latest = [...es].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt))[0]!
+            .payload;
+          return `NEWS2 ${latest.total} — ${NEWS2_RISK_LABEL[String(latest.risk)] ?? latest.risk}`;
+        },
+        detail: (es) => {
+          const latest = [...es].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt))[0]!
+            .payload;
+          return `${latest.why} · Risposta prevista: ${latest.response} (promemoria, ${latest.source})`;
+        },
+      };
     case 'vitals.recorded':
       return {
         key: `vitals:${resident}:${day(e.occurredAt)}`,
@@ -527,6 +567,8 @@ export interface Inbox {
     toSee: number;
     new: number;
     changed: number;
+    /** Promemoria clinici (ATTENTION_REQUIRED) non ancora presi in visione. */
+    attention: number;
     byType: Record<string, number>;
   };
   /** Event sources that failed this time (fail closed: their events are omitted, never widened). */
@@ -601,6 +643,10 @@ export async function buildInbox(
       toSee: signals.filter((s) => s.status !== 'preso_visione').length,
       new: signals.filter((s) => s.status === 'nuovo').length,
       changed: signals.filter((s) => s.changedSinceLastView).length,
+      // Milo fase 5: promemoria clinici (sentinelle) non ancora presi in visione.
+      attention: signals.filter(
+        (s) => s.type === 'ATTENTION_REQUIRED' && s.status !== 'preso_visione',
+      ).length,
       byType,
     },
     degraded: Object.entries(perSource)
@@ -749,6 +795,7 @@ export function briefingTimeoutMs(env: NodeJS.ProcessEnv = process.env): number 
 /** Fixed wording per event type for the LLM (never user-written text). */
 const AI_FACT: Record<string, string> = {
   'vitals.recorded': 'nuove rilevazioni di parametri vitali',
+  'vitals.news2_alert': 'NEWS2 sopra soglia sulle misure nuove (sentinella)',
   'diary.entry_created': 'nuove voci di diario',
   'handover.open': 'urgenza da prendere in carico',
   'therapy.prescribed': 'nuova prescrizione di terapia',

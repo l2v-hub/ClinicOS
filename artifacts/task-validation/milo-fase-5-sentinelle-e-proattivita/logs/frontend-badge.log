@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: the badge refreshes within seconds and names clinical reminders apart from news
+ok 1 - the badge refreshes within seconds and names clinical reminders apart from news
+  ---
+  duration_ms: 0.625371
+  type: 'test'
+  ...
+# Subtest: the badge is mounted on the Milo button of the top bar and refreshes after a save
+ok 2 - the badge is mounted on the Milo button of the top bar and refreshes after a save
+  ---
+  duration_ms: 1.279198
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 246.582426

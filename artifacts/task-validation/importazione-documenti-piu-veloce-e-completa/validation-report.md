@@ -80,7 +80,7 @@ Backend: `ai/upload/pages/{worker,runtime,results,inputs,draft-source,draft-merg
 | AC6 |   PASS | `logs/locale-documenti-nella-scheda/campi-ai.txt`: 16 campi con segno «AI» e pagina; «Comune» scritto dall'operatore resta «Imola», l'AI lo propone soltanto; `screenshots/sezione-*.png` |
 | AC7 |   PASS | `tests/test_azure_structured.py`: senza variabile richiesta invariata; modalità vincolata solo con schema compatibile; un 400 ripete una volta nella forma di sempre |
 | AC8 |   PASS | frontend 1602/1602 + build OK; servizio AI 249/249; backend 1982 test: stessi 150 fallimenti di prima (database/ambiente di questo container), 0 nuovi (`logs/backend-tests-summary.txt`); integrazione 47 pass, stessi 5 fallimenti di prima |
-| AC9 | NON FATTO | richiede il rilascio di backend, servizio AI e frontend sulla demo |
+| AC9 |   PASS | sulla demo, stessi documenti, modelli veri: **19,4 s** dal PDF e **19,0 s** dalle foto (erano 51 s); OCR ~6 s (era ~11), estrazione ~12 s (era ~38); 17/19 campi (gli altri 2 assenti dal documento), terapia 9/9, bozza riaperta identica — `logs/demo-dopo/` |
 
 ## Test Results
 
@@ -98,18 +98,34 @@ Backend: `ai/upload/pages/{worker,runtime,results,inputs,draft-source,draft-merg
 
 ## Runtime Evidence
 
-Ambiente locale: frontend 5173, backend 3001 con Postgres locale, servizio AI **di prova**
+Demo dopo il rilascio: `logs/demo-dopo/` (tempi e campi con i modelli veri). Ambiente locale: frontend 5173, backend 3001 con Postgres locale, servizio AI **di prova**
 (`fixtures/replay-runtime.mjs`), profilo Operatore. Misure di partenza sulla demo
 (`logs/baseline/`, sessioni di prova eliminate). Nulla pubblicato.
 
+## Rilascio
+
+Unito in `main` con [l2v-hub/ClinicOS#543](https://github.com/l2v-hub/ClinicOS/pull/543) (`4db597a5`), CI verde
+(compresi browser-e2e e real-provider). Pubblicati il 2026-11-22 sulla demo:
+
+- servizio AI `clinicos-ai-runtime` al commit `4db597a5` (deployment `2a255a4e`, SUCCESS; prima era
+  la versione del 3 ottobre), variabile `AI_MAX_CONCURRENCY=10`;
+- backend `clinicos-backend` al commit `4db597a5` (deployment `d3bb7f0d`, SUCCESS, «No pending
+  migrations», worker avviato), variabili `AI_OCR_PAGE_CONCURRENCY=6`,
+  `AI_EXTRACTION_GROUP_CONCURRENCY=4`;
+- frontend `dpl_8uh2oECV9BA233uz9LWVTjGUYdRx` (READY, alias `clinicos-eosin.vercel.app`), build
+  locale con `VITE_API_URL` = backend `…-df88`.
+
+`AI_EXTRACTION_REASONING_EFFORT` non impostata: la richiesta al modello ha lo sforzo predefinito del
+modello. Sessioni e bozze di prova create dalle verifiche eliminate.
+
 ## Residual Risks
 
-- **I modelli veri non sono stati chiamati** (credenziali e host di Foundry non raggiungibili da qui):
-  il guadagno sull'estrazione (schema ridotto, testo pulito, modalità vincolata, sforzo di
-  ragionamento) e la qualità dei campi con `gpt-6.1-sol` vanno misurati sulla demo dopo il rilascio.
-- Il servizio AI sulla demo è fermo alla versione del 3 ottobre: il rilascio deve portarlo a `main`,
-  quindi include anche le modifiche successive (voce realtime, registro dei fornitori).
-- `AI_MAX_CONCURRENCY` sul servizio AI vale 2: per leggere 4 pagine insieme va portato a 4.
+- Misurato con UNA lettera sintetica: lettere vere di altri ospedali e formati vanno provate
+  dall'utente (in corso).
+- Il rilascio ha portato il servizio AI dal 3 ottobre a `main`: include anche le modifiche successive
+  (voce realtime, registro dei fornitori), verificate solo dall'avvio e dall'importazione.
+- 6 pagine in parallelo verso l'OCR di Foundry: limite di richieste del servizio non noto; una
+  pagina rifiutata resta riprovabile senza perdere le altre.
 - Il filtro di intestazioni lavora sulle righe uguali fra pagine: un'intestazione che cambia a ogni
   pagina (es. data e ora diverse) resta nel testo.
 - Le sessioni aperte prima del rilascio ricalcolano l'estrazione (schema e istruzioni nuovi).
@@ -117,4 +133,4 @@ Ambiente locale: frontend 5173, backend 3001 con Postgres locale, servizio AI **
 
 ## Final Decision
 
-PARTIAL
+CLOSED — VERIFIED

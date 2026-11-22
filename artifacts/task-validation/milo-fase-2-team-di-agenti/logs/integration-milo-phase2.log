@@ -1,0 +1,52 @@
+TAP version 13
+# [ai-gateway] {"requestId":"milo-phase2-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_vital_signs","patientIds":["vitals-qa-anna"],"resultCount":0,"outcome":"empty","at":"2026-11-22T16:42:30.762Z"}
+# [ai-gateway] {"requestId":"milo-phase2-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_parameters","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T16:42:30.764Z"}
+# Subtest: the tool route needs the service token AND a live grant; the grant decides the operator
+ok 1 - the tool route needs the service token AND a live grant; the grant decides the operator
+  ---
+  duration_ms: 3003.217259
+  type: 'test'
+  ...
+# [ai-gateway] {"requestId":"milo-phase2-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_vital_signs","patientIds":["vitals-qa-anna"],"resultCount":0,"outcome":"empty","at":"2026-11-22T16:42:30.809Z"}
+# [ai-gateway] {"requestId":"milo-phase2-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_parameters","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T16:42:30.810Z"}
+# [ai-gateway] {"requestId":"milo-phase2-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_vital_signs","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T16:42:30.824Z"}
+# Subtest: the role policy and the call budget apply to every read of the team
+ok 2 - the role policy and the call budget apply to every read of the team
+  ---
+  duration_ms: 36.229556
+  type: 'test'
+  ...
+# [ai-gateway] {"requestId":"milo-phase2-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_vital_signs","patientIds":["vitals-qa-anna"],"resultCount":0,"outcome":"empty","at":"2026-11-22T16:42:30.838Z"}
+# [ai-gateway] {"requestId":"milo-phase2-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_parameters","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T16:42:30.839Z"}
+# Subtest: a grounded team answer is returned with the sources the backend gave out
+ok 3 - a grounded team answer is returned with the sources the backend gave out
+  ---
+  duration_ms: 11.332718
+  type: 'test'
+  ...
+# [ai-gateway] {"requestId":"milo-phase2-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_vital_signs","patientIds":["vitals-qa-anna"],"resultCount":0,"outcome":"empty","at":"2026-11-22T16:42:30.851Z"}
+# [ai-gateway] {"requestId":"milo-phase2-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_parameters","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T16:42:30.852Z"}
+# [ai-gateway] {"requestId":"milo-phase2-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_vital_signs","patientIds":["vitals-qa-anna"],"resultCount":0,"outcome":"empty","at":"2026-11-22T16:42:30.861Z"}
+# [ai-gateway] {"requestId":"milo-phase2-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_parameters","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T16:42:30.862Z"}
+# [ai-gateway] {"requestId":"milo-phase2-test","userId":"VITALS-QA-OP","tenantId":"clinicos","toolName":"get_patient_vital_signs","patientIds":["vitals-qa-anna"],"resultCount":1,"outcome":"ok","at":"2026-11-22T16:42:30.883Z"}
+# Subtest: invented sources, action claims or no reads are rejected; the classic path answers
+ok 4 - invented sources, action claims or no reads are rejected; the classic path answers
+  ---
+  duration_ms: 42.187089
+  type: 'test'
+  ...
+# Subtest: clinical judgement is refused before the team is ever called
+ok 5 - clinical judgement is refused before the team is ever called
+  ---
+  duration_ms: 1.028171
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14599.904642

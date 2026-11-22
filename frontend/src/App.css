@@ -5774,6 +5774,353 @@ textarea.form-input {
   color: var(--text-muted);
   margin-bottom: 6px;
 }
+/* Milo: risposta discorsiva (compositore o team) sopra le fonti numerate. */
+.ai-asst__answer {
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.ai-asst__answer p {
+  margin: 0 0 6px;
+}
+.ai-asst__team {
+  font-size: 12px;
+  color: var(--ds-ai-strong, #5329b3);
+  font-weight: 600;
+}
+/* Milo fase 3: blocchi visivi costruiti dal backend (indicatori, tabelle, andamenti). */
+.milo-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 8px 0 12px;
+}
+.milo-block {
+  border: 1px solid var(--border);
+  border-radius: var(--ds-card-radius, 12px);
+  background: var(--surface);
+  padding: 12px;
+  min-width: 0;
+}
+.milo-block__title {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.milo-block__source {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.milo-kpi {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+.milo-kpi__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--bg);
+  border-left: 3px solid var(--border);
+  min-width: 0;
+}
+.milo-kpi__item--ok {
+  border-left-color: var(--c-success);
+}
+.milo-kpi__item--info {
+  border-left-color: var(--c-info);
+}
+.milo-kpi__item--warning {
+  border-left-color: var(--c-warning);
+  background: var(--c-warning-bg);
+}
+.milo-kpi__item--alarm {
+  border-left-color: var(--c-danger);
+  background: var(--c-danger-bg);
+}
+.milo-kpi__label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.milo-kpi__value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.milo-kpi__value--text {
+  font-size: 14px;
+  line-height: 1.35;
+}
+.milo-kpi__value small {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.milo-kpi__note {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.milo-table-wrap {
+  overflow-x: auto;
+}
+.milo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.milo-table th,
+.milo-table td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.milo-table th {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.milo-answer-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 10px;
+}
+.milo-pins {
+  margin-bottom: 12px;
+}
+.milo-pins ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.milo-pins li {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+.milo-pins__open {
+  flex: 1;
+  min-height: var(--ds-control-h, 44px);
+  text-align: left;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.milo-pins__open:hover:not(:disabled) {
+  border-color: var(--blue);
+}
+.milo-pins__remove {
+  width: var(--ds-control-h, 44px);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.milo-print-only {
+  display: none;
+}
+/* Milo fase 4: giro visita a voce nel pannello di Milo. */
+.ward-round {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ward-round__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ward-round__bar-actions,
+.ward-round__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ward-round__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+.ward-round__lead,
+.ward-round__empty {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+.ward-round__input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ward-round__input textarea {
+  width: 100%;
+  resize: vertical;
+}
+.ward-round__drafts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ward-round__draft {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--blue);
+  border-radius: var(--ds-card-radius, 12px);
+  background: var(--surface);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ward-round__draft--registrato {
+  border-left-color: var(--c-success);
+}
+.ward-round__draft--errore {
+  border-left-color: var(--c-warning);
+}
+.ward-round__draft-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 14px;
+}
+.ward-round__status {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.ward-round__draft--registrato .ward-round__status {
+  color: var(--c-success);
+  font-weight: 600;
+}
+.ward-round__values {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+}
+.ward-round__values label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+  min-width: 0;
+}
+.ward-round__values label.is-filled span {
+  color: var(--text);
+  font-weight: 600;
+}
+.ward-round__values .form-input {
+  width: 100%;
+  min-width: 0;
+}
+.ward-round__notes {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: var(--amber);
+}
+.ward-round__issue,
+.ward-round__error {
+  margin: 0;
+  font-size: 13px;
+}
+.ward-round__issue {
+  color: var(--amber);
+}
+.ward-round__error {
+  color: var(--c-danger);
+}
+.ward-round__group h4 {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.ward-round__group ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ward-round__group--warn {
+  border-left: 3px solid var(--c-warning);
+  background: var(--c-warning-bg);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.ward-round__note-inline {
+  color: var(--text-muted);
+}
+.ward-round__assign {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.ward-round__start,
+.ward-round__resume {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.ward-round__resume {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--blue-glow);
+  color: var(--text);
+}
+@media print {
+  body.milo-printing * {
+    visibility: hidden;
+  }
+  body.milo-printing .milo-print-target,
+  body.milo-printing .milo-print-target * {
+    visibility: visible;
+  }
+  body.milo-printing .milo-print-target {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+  }
+  body.milo-printing .milo-print-target .milo-print-only {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 12px;
+  }
+  body.milo-printing .milo-print-target .milo-answer-tools,
+  body.milo-printing .milo-print-target .ai-asst__actions {
+    display: none;
+  }
+}
 .ai-asst__partial {
   margin-bottom: 8px;
   border-left: 3px solid var(--c-warning);
@@ -6291,6 +6638,12 @@ textarea.form-input {
   font-weight: 700;
   line-height: 20px;
   text-align: center;
+}
+/* Milo fase 5: promemoria clinici (sentinelle) — anello per distinguerli dalle semplici novità. */
+.topbar-assistant__badge--attention {
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 4px var(--red);
 }
 .topbar-assistant__label {
   display: none;

@@ -19,6 +19,15 @@ export const READ_TOOLS = [
   'query_data',
   'get_facility_snapshot',
   'get_operator_queue',
+  'query_rooms_occupancy',
+  // Milo fase 1 (docs/architecture/milo-ai-first.md)
+  'get_patient_parameters',
+  'get_patient_news2',
+  'get_patient_diary',
+  'get_patient_assessments',
+  'get_patient_administrations',
+  'query_staff_shifts',
+  'query_agenda',
 ] as const;
 
 export type ReadTool = (typeof READ_TOOLS)[number];
@@ -60,4 +69,34 @@ export const READ_TOOL_SCHEMA: Array<{ name: string; args: Record<string, string
   // Coda di lavoro dell'operatore chiamante. Nessun argomento: l'identità dell'operatore è presa
   // dal contesto server, MAI da un argomento proposto dal modello.
   { name: 'get_operator_queue', args: {} },
+  // Occupazione aggregata di camere e letti (solo conteggi, nessun paziente).
+  { name: 'query_rooms_occupancy', args: {} },
+  // Milo fase 1. Parametri da entrambi gli archivi con serie e aggregati per giorno;
+  // params ⊂ pa, fc, spo2, temperatura, fr, dtx, peso. Periodo: days (1–90) oppure from/to YYYY-MM-DD.
+  {
+    name: 'get_patient_parameters',
+    args: {
+      patientId: 'string',
+      days: 'number?',
+      from: 'string?',
+      to: 'string?',
+      params: 'string[]?',
+    },
+  },
+  // NEWS2 calcolato dal backend (RCP 2017) sulle rilevazioni complete: mai calcolato dal modello.
+  { name: 'get_patient_news2', args: { patientId: 'string', days: 'number?' } },
+  {
+    name: 'get_patient_diary',
+    args: { patientId: 'string', days: 'number?', authorType: 'string?' },
+  },
+  // Scale finalizzate: painad, tinetti, mna, gds15, transfers.
+  {
+    name: 'get_patient_assessments',
+    args: { patientId: 'string', type: 'string?', days: 'number?' },
+  },
+  { name: 'get_patient_administrations', args: { patientId: 'string', days: 'number?' } },
+  // Turni del personale in un giorno (YYYY-MM-DD) o nella settimana; ruolo es. "medico", "infermiere".
+  { name: 'query_staff_shifts', args: { date: 'string?', ruolo: 'string?' } },
+  // Agenda della struttura in un periodo (max 31 giorni); ruolo dell'operatore, es. "medico".
+  { name: 'query_agenda', args: { from: 'string?', to: 'string?', ruolo: 'string?' } },
 ];

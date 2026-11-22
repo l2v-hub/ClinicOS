@@ -15,6 +15,7 @@ import { unreadNotesWhere } from '../routes/note.js';
 import type { WorkflowState } from '../skills/types.js';
 import type { EventType } from './catalog.js';
 import { romeInstant, romeParts } from './time.js';
+import { news2Sentinel, sentinelConfig } from '../clinical/sentinels.js';
 
 export interface ProactiveEvent {
   eventId: string;
@@ -48,7 +49,7 @@ const intEnv = (env: NodeJS.ProcessEnv | undefined, key: string, fallback: numbe
 };
 const patientSelect = { select: { lastName: true, firstName: true } } as const;
 
-const vitals: Collector = async ({ operator, since, limit }) => {
+const vitals: Collector = async ({ operator, since, limit, env }) => {
   const rows = await prisma.patientParameterReading.findMany({
     where: { createdAt: { gte: since }, patient: residentScopeWhere(operator) },
     orderBy: { createdAt: 'desc' },
@@ -64,7 +65,34 @@ const vitals: Collector = async ({ operator, since, limit }) => {
       patient: patientSelect,
     },
   });
-  return rows
+  // Milo fase 5: sentinella NEWS2 su ogni rilevazione nuova, anche registrata da chi legge (il
+  // promemoria vale per tutto il team). Nel payload solo punteggi e protocollo, non i valori.
+  const cfg = sentinelConfig(env ?? process.env);
+  const alerts: ProactiveEvent[] = rows.flatMap((r) => {
+    const hit = news2Sentinel(r.values as Record<string, unknown>, cfg);
+    if (!hit) return [];
+    return [
+      {
+        eventId: `vitals.news2_alert:${r.id}`,
+        type: 'vitals.news2_alert' as const,
+        occurredAt: r.createdAt.toISOString(),
+        residentId: r.patientId,
+        residentLabel: label(r.patient),
+        actor: { kind: 'system' as const, id: null, name: 'Sentinella NEWS2' },
+        payload: {
+          total: hit.total,
+          risk: hit.risk,
+          priority: hit.priority,
+          why: hit.why,
+          response: hit.response,
+          source: hit.source,
+          measuredAt: r.measuredAt.toISOString(),
+          readingId: r.id,
+        },
+      },
+    ];
+  });
+  const recorded = rows
     .filter((r) => r.authorOperatorId !== operator.id)
     .map((r) => ({
       eventId: `vitals.recorded:${r.id}`,
@@ -81,6 +109,7 @@ const vitals: Collector = async ({ operator, since, limit }) => {
         measuredAt: r.measuredAt.toISOString(),
       },
     }));
+  return [...alerts, ...recorded];
 };
 
 const diary: Collector = async ({ operator, since, limit }) => {
@@ -472,6 +501,7 @@ const deniedSummary: Collector = async ({ since, env, now }) => {
 
 export const COLLECTORS: Record<EventType, Collector> = {
   'vitals.recorded': vitals,
+  'vitals.news2_alert': async () => [], // prodotto dal raccoglitore dei parametri
   'diary.entry_created': diary,
   'handover.open': handovers,
   'therapy.prescribed': therapies,

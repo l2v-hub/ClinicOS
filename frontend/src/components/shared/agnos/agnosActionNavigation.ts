@@ -48,6 +48,7 @@ const SHARED_DESTINATIONS = new Set([
   'open_beds',
   'open_therapies_today',
   'open_consegne',
+  'open_staff_schedule',
 ]);
 const validId = (id: unknown): id is string => typeof id === 'string' && /^[\w-]{1,128}$/.test(id);
 
@@ -102,6 +103,11 @@ export function navigationScope(nav: AssistantNav, role?: string) {
     };
   if (nav.type === 'open_therapies_today')
     return { currentPatientId: undefined, navKey: 'terapie' };
+  if (nav.type === 'open_staff_schedule')
+    return {
+      currentPatientId: undefined,
+      navKey: role === 'admin' ? 'orari-operatori' : 'operator-dashboard',
+    };
   if (nav.type === 'open_consegne') return { currentPatientId: nav.patientId, navKey: 'consegne' };
   if (nav.patientId) return { currentPatientId: nav.patientId, navKey: 'dettaglio-paziente' };
   return { currentPatientId: undefined, navKey: 'consegne' };
@@ -134,6 +140,12 @@ export async function navigateAgnosTarget(
   if (nav.type === 'open_beds') {
     if (!handlers.isAdmin) return false;
     handlers.navigate('posti-letto');
+    return true;
+  }
+  // Orari degli operatori: pagina di amministrazione.
+  if (nav.type === 'open_staff_schedule') {
+    if (!handlers.isAdmin) return false;
+    handlers.navigate('orari-operatori');
     return true;
   }
   if (nav.type === 'open_consegne' && (nav.patientId === undefined || validId(nav.patientId))) {
