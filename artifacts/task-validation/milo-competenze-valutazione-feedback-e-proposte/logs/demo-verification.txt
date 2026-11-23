@@ -1,0 +1,43 @@
+Verifica sulla demo — 2026-11-23 (ore UTC), dopo il rilascio del commit d013f4596 (PR #553)
+Sito: https://clinicos-eosin.vercel.app · Backend: clinicos-backend-production-df88.up.railway.app
+Rilasci: servizio AI 2a1b6353 (SUCCESS), backend 87e2b4ae (SUCCESS, migrazione
+20261123220000_milo_feedback_and_skill_versions applicata all'avvio), interfaccia clinicos-ejk2uok8c.
+
+PRIMA (versione della PR #552, competenze 1.1.0) — evidence/milo-evals-demo-prima.json
+8/8 sul contenuto; caso 1 in 75,1 s dal percorso classico: il team superava i 60 s con 11–12 letture
+(log del servizio AI: «assistant team runtime error: TIMEOUT» tre volte su tre).
+
+CICLO GIUDIZIO → PROPOSTA → APPROVAZIONE (a schermo, evidence/01…07)
+22:42:18 GET /authz/milo/skills (Amministratore): clinico 1.2.0 (2 regole fisse), sorveglianza 1.2.0 (2),
+         struttura 1.2.0 (1), coordinatore 1.2.0 (4); servizio AI raggiungibile.
+22:43:02 Infermiere 1 chiede «Chi ha fatto ultimo visita e registrazione parametri del paziente Bassi…»:
+         risposta del team (clinico, struttura) in 34 s, competenze 1.2.0.
+22:43:04 Giudizio «No» con correzione («…una riga di sintesi che inizia con "In sintesi:"…»):
+         «Giudizio registrato. Servirà a migliorare le risposte di Milo.»
+22:43:05 Infermiere 1 su /authz/milo/feedback e /authz/milo/skills: 403 e 403.
+22:43:20 Amministratore, Ruoli → Competenze di Milo → Clinico paziente → «Proponi dal giudizio
+         selezionato»: proposta 1.2.0+r1 scritta da Milo. Motivo: «…È stata modificata solo
+         l'istruzione pertinente…». Confronto: 1 riga nuova, 1 tolta, le altre invariate.
+22:43:23 «Approva e metti in uso»: «Versione 1.2.0+r1 approvata: Clinico paziente la usa dalle
+         prossime risposte.» Stato: clinico 1.2.0 → 1.2.0+r1.
+22:44:18 Stessa domanda: la risposta dichiara clinico 1.2.0+r1, ma il testo non inizia con
+         «In sintesi:»: la risposta finale la compone il coordinatore, che ha riscritto quella dello
+         specialista.
+22:44:54 Proposta a mano per il coordinatore (conservare la riga «In sintesi:») → 1.2.0+r1, approvata.
+22:45:55 Stessa domanda, due volte (35 s e 35 s): entrambe le risposte iniziano con «In sintesi: …»
+         e dichiarano clinico 1.2.0+r1, coordinatore 1.2.0+r1.
+22:47:07 Clinico riportato alla versione rilasciata («Torna alla versione rilasciata»: restored true).
+         Coordinatore: regola resa generale («Conserva la forma e l'ordine della risposta dello
+         specialista…»), versione 1.2.0+r2 approvata. In uso: clinico 1.2.0, sorveglianza 1.2.0,
+         struttura 1.2.0, coordinatore 1.2.0+r2.
+
+DOPO — prove contro il sito con limiti di tempo, 9/9 — evidence/milo-evals-demo-9su9.json
+OK caso-1-come-va (team · clinico) 12/12 · 27,6 s (limite 45 s)
+OK caso-2-chi-ha-seguito (team · clinico+struttura) 13/13 · 29,9 s
+OK caso-3-camere (team · struttura) 8/8 · 13,3 s
+OK caso-4-registra-parametri 8/8 · OK caso-4-valori-mancanti 5/5
+OK caso-5-classe-di-farmaci 11/11 · OK caso-5-prescrizione-preparata 8/8
+OK caso-5-via-mancante 4/4 · OK caso-5-ruolo-senza-permesso 1/1
+Competenze: clinico 1.2.0, sorveglianza 1.2.0, struttura 1.2.0, coordinatore 1.2.0+r2
+
+Errori di console: solo i due 403 attesi del profilo Infermiere sulle rotte dell'amministratore.
