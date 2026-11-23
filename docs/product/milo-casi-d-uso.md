@@ -45,3 +45,21 @@ Le competenze del team stanno in file con versione, uno per specialista:
 `clinicos-ai-runtime/clinicos_ai/skills/{coordinatore,clinico,sorveglianza,struttura}.md`
 (`id`, `name`, `version`, `role`, `tools`, istruzioni). La versione usata compare nella risposta
 (`team.skills`). Una modifica alle istruzioni è una modifica di versione, verificata sui cinque casi.
+
+## Prove misurabili delle competenze
+
+I cinque casi sono anche una raccolta di prove con controlli oggettivi
+(`backend/src/ai/evals/milo-cases.ts`): lettura usata, blocchi attesi, fonti citate, anteprima e
+conferma delle scritture, rifiuto per il ruolo sbagliato, nessun farmaco scelto da Milo, nessun
+giudizio clinico. Le stesse prove:
+
+- girano nei test sui dati del seed (`tests/integration/milo-scenarios-seed.test.mts`);
+- si eseguono contro un sito, con i profili simulati, e riportano percorso usato (classico o team),
+  specialisti coinvolti e versione delle competenze:
+
+```bash
+node --import tsx scripts/milo-evals/run.mts --site https://clinicos-eosin.vercel.app --api https://clinicos-backend-production-df88.up.railway.app --out artifacts/milo-evals
+```
+
+Il comando fa solo letture e anteprime: non conferma nessuna scrittura. Una modifica alle competenze
+di uno specialista è una nuova versione del suo file e va rimisurata con queste prove.

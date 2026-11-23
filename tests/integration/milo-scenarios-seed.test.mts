@@ -285,3 +285,45 @@ test(
     assert.equal(row.authorName, 'Laura Bianchi');
   },
 );
+
+test(
+  'eval suite: every Milo use case passes its objective checks on the seeded data',
+  { timeout: 240000 },
+  async () => {
+    process.env.AI_DEFAULT_TENANT = 'clinicos';
+    process.env.AI_FACILITY_QUERIES_ENABLED = 'true';
+    const { planCommand } = await import('../../backend/src/ai/actions/orchestrate.js');
+    const { MILO_EVAL_CASES, evaluateCase, summarize } =
+      await import('../../backend/src/ai/evals/milo-cases.js');
+    const operator = (role: string) => {
+      const id =
+        role === 'Medico 1' ? 'SEED-OP-005' : role === 'OSS 1' ? 'SEED-OP-002' : 'SEED-OP-001';
+      return {
+        operatorId: id,
+        operatorName: role,
+        canPrescribe: role === 'Medico 1',
+        gatewayCtx: {
+          userId: id,
+          tenantId: 'clinicos',
+          roles: [role === 'Supervisore 1' ? 'manager' : 'operatore'],
+          permittedPatientIds: null,
+          requestId: `milo-eval-${role}`,
+        },
+      };
+    };
+    const results = [];
+    for (const testCase of MILO_EVAL_CASES) {
+      const response = await planCommand({
+        text: testCase.question,
+        channel: 'testo',
+        operatorCtx: operator(testCase.role) as never,
+      });
+      results.push(evaluateCase(testCase, response));
+    }
+    assert.ok(
+      results.every((r) => r.pass),
+      `\n${summarize(results)}`,
+    );
+    assert.equal(results.length, 8);
+  },
+);

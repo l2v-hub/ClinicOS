@@ -170,9 +170,7 @@ export function matchPrescriptionRequest(
     if (!parsed.row.farmacoNome || parsed.row.orari.length !== times.length) canonical = null;
   }
   if (drug && !canonical && !missing.length)
-    missing.push(
-      'una forma completa: farmaco, dose, orari (es. «Furosemide 25 mg 1 cpr ore 8 e 20»)',
-    );
+    missing.push('una forma completa: farmaco, dose e orari');
 
   return {
     canonical,
@@ -239,7 +237,7 @@ export function prescriptionHandoff(
       message: null,
       text:
         `Per preparare la prescrizione mi serve ancora: ${missing.join('; ')}. ` +
-        'Scrivila per intero, ad esempio «prescrivi a Ferrioli furosemide 25 mg 1 cpr ogni 8 ore per 5 giorni». ' +
+        'Scrivila per intero: «prescrivi a [paziente] [farmaco] [dose] ogni 8 ore per 5 giorni». ' +
         'Non scelgo io il farmaco: la prescrizione la decide e la conferma il medico.',
     };
   }
