@@ -1,7 +1,7 @@
 {
   "schema": "clinicos.phase7.signal-catalog/v1",
   "generatedBy": "scripts/proactive/export-catalog.mts",
-  "generatedAt": "2026-11-22T17:30:15.165Z",
+  "generatedAt": "2026-11-23T20:34:57.960Z",
   "rule": "Signals are deterministic projections of events; an AI summary is never a signal and never a clinical alert.",
   "signals": [
     {
@@ -43,7 +43,7 @@
     {
       "type": "FOLLOW_UP",
       "meaning": "Fatto registrato che di solito richiede una verifica (es. somministrazione non erogata).",
-      "from_events": ["administration.recorded"],
+      "from_events": ["therapy.completed", "administration.recorded"],
       "clinical_alert": false
     },
     {

@@ -46,6 +46,12 @@ export interface VoiceWriter {
     fields: Record<string, unknown>,
     meta: WriteMeta,
   ): Promise<string>;
+  /** Milo: rilevazione completa nella pagina Parametri (stesso servizio della rotta). */
+  createParameterReading(
+    patientId: string,
+    fields: Record<string, unknown>,
+    meta: WriteMeta,
+  ): Promise<{ id: string; replayed: boolean }>;
   updateDemographics(
     patientId: string,
     field: string,
@@ -81,6 +87,7 @@ export interface VoiceWriter {
 
 const SUCCESS_MESSAGE: Record<VoiceActionType, string> = {
   create_vital_sign: 'Parametro registrato.',
+  create_parameter_reading: 'Parametri registrati nella pagina Parametri.',
   update_patient_demographics: 'Dato anagrafico aggiornato.',
   update_narrative_section: 'Sezione narrativa aggiornata.',
   add_diary_note: 'Nota aggiunta al diario.',
@@ -156,8 +163,9 @@ export async function executeAction(
 
   // idempotency: a replayed confirmation returns the original result, never a duplicate write.
   // Consegne always reach their durable receipt, including payload conflicts and deleted rows.
-  const prior =
-    plan.actionType === 'create_consegna' ? null : store.get(plan.idempotencyKey, nowMs);
+  const durable =
+    plan.actionType === 'create_consegna' || plan.actionType === 'create_parameter_reading';
+  const prior = durable ? null : store.get(plan.idempotencyKey, nowMs);
   if (prior) {
     audit(prior.recordId ?? null, 'deduped');
     return prior;
@@ -176,6 +184,12 @@ export async function executeAction(
     case 'create_vital_sign':
       recordId = await writer.createVitalSign(plan.patientId, plan.fields, meta);
       break;
+    case 'create_parameter_reading': {
+      const created = await writer.createParameterReading(plan.patientId, plan.fields, meta);
+      recordId = created.id;
+      replayed = created.replayed;
+      break;
+    }
     case 'update_patient_demographics':
       recordId = await writer.updateDemographics(
         plan.patientId,
@@ -222,7 +236,7 @@ export async function executeAction(
     message: SUCCESS_MESSAGE[plan.actionType],
     deduped: replayed,
   };
-  if (plan.actionType !== 'create_consegna') store.put(plan.idempotencyKey, result, nowMs);
+  if (!durable) store.put(plan.idempotencyKey, result, nowMs);
   audit(recordId, replayed ? 'deduped' : 'ok');
   return result;
 }

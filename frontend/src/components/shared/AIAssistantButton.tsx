@@ -348,11 +348,13 @@ export function AnswerView({
           ) : null}
         </div>
       )}
-      <div className="ai-asst__count">
-        {numbered
-          ? `${answer.sources.length} font${answer.sources.length === 1 ? 'e' : 'i'}${answer.mode === 'team' ? ` citat${answer.sources.length === 1 ? 'a' : 'e'}` : ''}`
-          : `${answer.results.length} risultat${answer.results.length === 1 ? 'o' : 'i'}`}
-      </div>
+      {answer.intent === 'prescription_handoff' ? null : (
+        <div className="ai-asst__count">
+          {numbered
+            ? `${answer.sources.length} font${answer.sources.length === 1 ? 'e' : 'i'}${answer.mode === 'team' ? ` citat${answer.sources.length === 1 ? 'a' : 'e'}` : ''}`
+            : `${answer.results.length} risultat${answer.results.length === 1 ? 'o' : 'i'}`}
+        </div>
+      )}
       {answer.truncated && (
         <div className="ai-asst__partial" role="status" aria-live="polite">
           {PARTIAL_RESULTS_MESSAGE}

@@ -2,6 +2,7 @@ import { PatientParameterTrendChart } from '../../operator/PatientParameterTrend
 import '../../operator/PatientParameterTrends.css';
 import type { PatientParameterReading } from '../../../lib/patientParameterReadings';
 import { TREND_PARAMETERS, type TrendParameter } from '../../../lib/patientParameterTrends';
+import { MILO_OPEN_ASSISTANT_EVENT } from '../../../lib/miloEvents';
 
 // Milo fase 3: blocchi visivi sotto la risposta. Arrivano già costruiti dal backend con i dati
 // letti (mai dal modello): qui si disegnano soltanto, come testo (nessun HTML grezzo).
@@ -36,7 +37,9 @@ export type MiloBlock =
       columns: Array<{ key: string; label: string }>;
       rows: Array<Record<string, string>>;
       truncated?: boolean;
-    };
+    }
+  // Passaggio a un altro flusso dell'app con il testo già pronto: Milo non esegue, apre soltanto.
+  | { type: 'handoff'; title: string; label: string; target: 'prescription'; message: string };
 
 const TREND_KEYS = new Set<string>(TREND_PARAMETERS.map((p) => p.key));
 
@@ -96,6 +99,26 @@ function TableBlock({ block }: { block: Extract<MiloBlock, { type: 'table' }> })
   );
 }
 
+function HandoffBlock({ block }: { block: Extract<MiloBlock, { type: 'handoff' }> }) {
+  return (
+    <section className="milo-block milo-block--handoff" aria-label={block.title}>
+      <h4 className="milo-block__title">{block.title}</h4>
+      <p className="milo-handoff__text">{block.message}</p>
+      <button
+        type="button"
+        className="btn-primary btn-sm"
+        onClick={() =>
+          window.dispatchEvent(
+            new CustomEvent(MILO_OPEN_ASSISTANT_EVENT, { detail: { message: block.message } }),
+          )
+        }
+      >
+        {block.label}
+      </button>
+    </section>
+  );
+}
+
 function TrendBlock({ block }: { block: Extract<MiloBlock, { type: 'parameter_trend' }> }) {
   const selected = block.params.filter((p): p is TrendParameter => TREND_KEYS.has(p));
   if (!selected.length) return null;
@@ -128,6 +151,7 @@ export function MiloBlocks({ blocks }: { blocks?: MiloBlock[] }) {
         if (block.type === 'kpi') return <KpiBlock key={i} block={block} />;
         if (block.type === 'table') return <TableBlock key={i} block={block} />;
         if (block.type === 'parameter_trend') return <TrendBlock key={i} block={block} />;
+        if (block.type === 'handoff') return <HandoffBlock key={i} block={block} />;
         return null;
       })}
     </div>

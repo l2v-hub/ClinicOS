@@ -186,6 +186,10 @@ function reasonFor(type: EventType, event: ProactiveEvent): string {
   if (type === 'vitals.news2_alert')
     return 'Sentinella NEWS2 sulle misure nuove del tuo ambito: promemoria, la valutazione resta del professionista';
   if (type === 'workflow.pending') return 'Anteprima preparata da te, in attesa del tuo «Conferma»';
+  if (type === 'therapy.completed')
+    return event.payload.mine
+      ? 'Terapia prescritta o inserita da te, arrivata alla data di fine'
+      : 'Terapia di un ospite del tuo ambito arrivata alla data di fine';
   if (def.audience === 'technical')
     return `Segnale tecnico del tuo ruolo (${def.capabilities.join(', ')})`;
   return `Ospite nel tuo ambito · permesso ${def.capabilities[0]}`;
@@ -328,6 +332,30 @@ function groupOf(e: ProactiveEvent): Omit<Group, 'events'> {
         title: () => `Prescrizione modificata: ${p.drug}`,
         detail: () => `stato ${p.status}`,
       };
+    case 'therapy.completed': {
+      const itDay = (iso: unknown) =>
+        String(iso ?? '')
+          .split('-')
+          .reverse()
+          .slice(0, 2)
+          .join('/');
+      return {
+        key: `therapy-done:${e.eventId.split(':')[1]}`,
+        type: e.type,
+        signal: 'FOLLOW_UP',
+        priority: p.mine ? 'alta' : 'normale',
+        priorityRule: 'regola: prescritta o inserita da chi guarda → alta; altrimenti normale',
+        title: () => `Terapia completata: ${p.drug}${p.mine ? ' (prescritta da te)' : ''}`,
+        detail: () =>
+          [
+            p.dose,
+            `dal ${itDay(p.from)} al ${itDay(p.to)}`,
+            p.mine || !p.prescriber ? null : `prescritta da ${p.prescriber}`,
+          ]
+            .filter(Boolean)
+            .join(' · '),
+      };
+    }
     case 'administration.recorded':
       return p.outcome === 'non_erogata'
         ? {
@@ -800,6 +828,7 @@ const AI_FACT: Record<string, string> = {
   'handover.open': 'urgenza da prendere in carico',
   'therapy.prescribed': 'nuova prescrizione di terapia',
   'therapy.changed': 'prescrizione di terapia modificata',
+  'therapy.completed': 'terapia arrivata alla data di fine',
   'administration.recorded': 'somministrazioni registrate o non erogate',
   'administration.due': 'somministrazioni previste o non ancora registrate',
   'document.added': 'nuovi documenti in cartella',

@@ -31,6 +31,16 @@ export const AGNOS_ACTION_CATALOG: Record<string, AgnosCatalogEntry> = {
     description:
       'Registra un parametro vitale (pressione, temperatura, saturazione…) con orario esplicito.',
   },
+  // Milo: una rilevazione con più parametri (pressione, frequenza, coscienza, evacuazione…) nella
+  // pagina Parametri, con lo stesso servizio e gli stessi limiti della pagina.
+  create_parameter_reading: {
+    name: 'create_parameter_reading',
+    kind: 'create',
+    entity: 'parameter_reading',
+    enabled: true,
+    description:
+      'Registra una rilevazione con più parametri nella pagina Parametri, con anteprima e conferma.',
+  },
   update_patient_demographics: {
     name: 'update_patient_demographics',
     kind: 'update',

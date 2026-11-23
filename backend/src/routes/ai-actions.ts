@@ -41,6 +41,15 @@ async function actionPolicy(
   return { allowsAction: (actionType) => authz.can(`agnos.action.${actionType}`).allowed };
 }
 
+/** Milo: può preparare una prescrizione chi può usare il flusso «Prepara prescrizione». */
+async function prescriptionPolicy(
+  req: AuthedRequest,
+): Promise<Pick<AgnosOperatorContext, 'canPrescribe'>> {
+  if (!enforcementEnabled()) return {};
+  const authz = authzOf(req) ?? (await ensureAuthorization(req).catch(() => undefined));
+  return { canPrescribe: !!authz && authz.can('diary.create_with_therapy').allowed };
+}
+
 export async function agnosOperatorFrom(req: AuthedRequest): Promise<AgnosOperatorContext> {
   const op = req.operator!; // requireOperator guarantees it
   return {
@@ -48,6 +57,7 @@ export async function agnosOperatorFrom(req: AuthedRequest): Promise<AgnosOperat
     operatorName: op.name?.trim() || op.id,
     gatewayCtx: await ctxFromOperator(req),
     ...(await actionPolicy(req)),
+    ...(await prescriptionPolicy(req)),
   };
 }
 

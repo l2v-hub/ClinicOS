@@ -51,6 +51,9 @@ const CLINICAL_ONLY: ReadonlySet<AssistantIntent> = new Set([
   'diary',
   'assessments',
   'administrations',
+  // Milo, casi d'uso
+  'patient_status',
+  'care_contacts',
 ]);
 
 export interface AgentProfile {

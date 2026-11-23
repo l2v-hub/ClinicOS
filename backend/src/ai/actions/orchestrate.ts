@@ -36,6 +36,16 @@ import {
   isConsegnaAction,
   type ConsegnaLookupDeps,
 } from './consegne.js';
+import {
+  matchParameterCommand,
+  groundParameterPlan,
+  isParameterAction,
+  type ParameterLookupDeps,
+} from './parameters.js';
+import { matchPrescriptionRequest, prescriptionHandoff } from './prescriptions.js';
+import { patientQueryOf } from './parameters.js';
+import { defaultGetPatient, defaultSearchPatients } from './appointments.js';
+import { facilityDate } from '../../lib/facility-time.js';
 import type { UserContext } from '../gateway/types.js';
 import { assertPatientAllowed } from '../gateway/context.js';
 import type { AssistantAnswer } from '../assistant/service.js';
@@ -64,6 +74,11 @@ export interface AgnosOperatorContext {
    * the same functional capability as the GUI, e.g. create_consegna → consegne.create)?
    */
   allowsAction?: (actionType: string) => boolean;
+  /**
+   * May this caller prepare a prescription (same capability as the «Prepara prescrizione» skill)?
+   * Undefined = policy enforcement off: the prescription flow itself still decides.
+   */
+  canPrescribe?: boolean;
 }
 
 export type AgnosPlan = ActionPlan & { channel: AgnosChannel };
@@ -88,7 +103,14 @@ function derivePlan(text: string, ctx: VoicePlanContext, genId?: () => string): 
     { currentPatientId: ctx.currentPatientId },
     { genId },
   );
-  return appointmentPlan ?? consegnaPlan ?? voicePlan;
+  // Milo: più parametri in un comando (o evacuazione/coscienza/ossigeno) → una rilevazione della
+  // pagina Parametri. Un solo parametro numerico resta al comando storico del planner vocale.
+  const parameterPlan = matchParameterCommand(
+    text,
+    { currentPatientId: ctx.currentPatientId },
+    { genId },
+  );
+  return appointmentPlan ?? consegnaPlan ?? parameterPlan ?? voicePlan;
 }
 
 // ── planCommand ─────────────────────────────────────────────────────────────
@@ -125,6 +147,75 @@ export interface PlanCommandDeps {
   appointmentLookup?: AppointmentLookupDeps;
   /** Issue #130: patient lookups for consegna grounding (tests inject stubs, no DB). */
   consegnaLookup?: ConsegnaLookupDeps;
+  /** Milo: patient lookups for the parameter reading (tests inject stubs, no DB). */
+  parameterLookup?: ParameterLookupDeps;
+  /** Milo: clock and configuration of the prescription hand-off (tests). */
+  now?: () => Date;
+  env?: NodeJS.ProcessEnv;
+}
+
+/** Risposta di Milo a una richiesta di prescrizione: testo preparato + pulsante verso il flusso. */
+async function prescriptionRead(
+  text: string,
+  request: NonNullable<ReturnType<typeof matchPrescriptionRequest>>,
+  input: PlanCommandInput,
+  deps: PlanCommandDeps,
+): Promise<AssistantAnswer> {
+  const permitted = input.operatorCtx.gatewayCtx.permittedPatientIds;
+  const search =
+    deps.parameterLookup?.searchPatients ?? ((q: string) => defaultSearchPatients(q, permitted));
+  const get =
+    deps.parameterLookup?.getPatient ?? ((id: string) => defaultGetPatient(id, permitted));
+  const named = patientQueryOf(text);
+  let patient: { id: string; firstName: string; lastName: string } | null = null;
+  if (named) {
+    const hits = await search(named);
+    patient = hits.length === 1 ? hits[0] : null;
+  } else if (input.currentPatientId) patient = await get(input.currentPatientId);
+  if (patient) assertPatientAllowed(input.operatorCtx.gatewayCtx, patient.id);
+  const handoff = prescriptionHandoff(
+    request,
+    patient ? `${patient.lastName} ${patient.firstName}`.trim() : null,
+  );
+  return {
+    intent: 'prescription_handoff',
+    scope: 'current_patient',
+    plan: {
+      intent: 'prescription_handoff',
+      scope: 'current_patient',
+      tools: [],
+      requiresCrossPatientAccess: false,
+    },
+    results: [],
+    sources: [],
+    navigation: [],
+    notFound: false,
+    truncated: false,
+    mode: 'deterministic',
+    answerText: handoff.text,
+    blocks: [
+      {
+        type: 'table',
+        title: 'Prescrizione da preparare',
+        columns: [
+          { key: 'campo', label: 'Campo' },
+          { key: 'valore', label: 'Valore' },
+        ],
+        rows: handoff.rows.map(([campo, valore]) => ({ campo, valore })),
+      },
+      ...(handoff.message
+        ? [
+            {
+              type: 'handoff' as const,
+              title: 'La conferma resta al medico',
+              label: 'Prepara la prescrizione',
+              target: 'prescription' as const,
+              message: handoff.message,
+            },
+          ]
+        : []),
+    ],
+  };
 }
 
 async function defaultRunRead(
@@ -180,6 +271,24 @@ export async function planCommand(
         : null;
   if (allows && governed && !allows(governed)) {
     throw new VoiceError('capability_denied', 'Azione non consentita al tuo ruolo.');
+  }
+
+  // Milo: richiesta di una NUOVA prescrizione («aggiungi un diuretico ogni 8 ore per 5 giorni»).
+  // Milo non prescrive: prepara il testo e passa al flusso del medico. Cancellazioni e richieste
+  // di giudizio clinico restano rifiuti; chi non può prescrivere riceve il rifiuto del ruolo.
+  const prescription =
+    plan.actionType === 'refuse_clinical' || plan.refusalKind === 'delete'
+      ? null
+      : matchPrescriptionRequest(text, facilityDate(deps.now?.() ?? new Date()), deps.env);
+  if (prescription) {
+    if (input.operatorCtx.canPrescribe === false) {
+      plan.actionType = 'refuse_forbidden';
+      plan.refusalReason =
+        'La prescrizione è riservata al medico: può prepararla con Milo o dalla scheda Terapia.';
+    } else {
+      const read = await prescriptionRead(text, prescription, input, deps);
+      return { plan: { ...plan, actionType: 'read', readQuery: text }, preview: null, read };
+    }
   }
 
   // Preview/read grounding must never become a side-channel for a patient outside the
@@ -244,6 +353,16 @@ export async function planCommand(
     return { plan, preview, read: null };
   }
 
+  // Milo: rilevazione con più parametri — paziente per nome o contesto, orario esplicito.
+  if (isParameterAction(plan.actionType)) {
+    const { preview } = await groundParameterPlan(
+      plan,
+      deps.parameterLookup,
+      input.operatorCtx.gatewayCtx.permittedPatientIds,
+    );
+    return { plan, preview, read: null };
+  }
+
   const loadCtx = deps.loadPreviewContext ?? defaultLoadPreviewContext;
   const pctx = await loadCtx(plan);
   return { plan, preview: buildPreview(plan, pctx), read: null };
@@ -271,6 +390,8 @@ export interface ExecuteCommandDeps {
   appointmentLookup?: AppointmentLookupDeps;
   /** Issue #130: patient lookups for consegna grounding (tests inject stubs, no DB). */
   consegnaLookup?: ConsegnaLookupDeps;
+  /** Milo: patient lookups for the parameter reading (tests inject stubs, no DB). */
+  parameterLookup?: ParameterLookupDeps;
 }
 
 /** Execute a CONFIRMED write command. The plan is ALWAYS re-derived server-side from the text
@@ -348,10 +469,19 @@ export async function executeCommand(
   // so a stale idempotency key cannot bypass a revoked patient scope. A conflict caused by the
   // already-applied write is harmless because a scoped replay returns before executeAction.
   if (
-    (isAppointmentAction(plan.actionType) || isConsegnaAction(plan.actionType)) &&
+    (isAppointmentAction(plan.actionType) ||
+      isConsegnaAction(plan.actionType) ||
+      isParameterAction(plan.actionType)) &&
     input.confirmed === true
   ) {
-    if (isAppointmentAction(plan.actionType))
+    if (isParameterAction(plan.actionType))
+      await groundParameterPlan(
+        plan,
+        deps.parameterLookup,
+        input.operatorCtx.gatewayCtx.permittedPatientIds,
+        new Date(nowISO),
+      );
+    else if (isAppointmentAction(plan.actionType))
       await groundAppointmentPlan(
         plan,
         input.operatorCtx.operatorId,
@@ -366,9 +496,11 @@ export async function executeCommand(
       ); // issue #130: same tamper-proof re-grounding with patient scope
     if (plan.patientId) {
       assertPatientAllowed(input.operatorCtx.gatewayCtx, plan.patientId);
-      const prior = isConsegnaAction(plan.actionType)
-        ? null
-        : store.get(plan.idempotencyKey, Date.parse(nowISO) || Date.now());
+      // Consegne e parametri hanno la ricevuta durevole nel servizio: il doppione si ferma lì.
+      const prior =
+        isConsegnaAction(plan.actionType) || isParameterAction(plan.actionType)
+          ? null
+          : store.get(plan.idempotencyKey, Date.parse(nowISO) || Date.now());
       if (prior) {
         voiceAudit(
           ctx,

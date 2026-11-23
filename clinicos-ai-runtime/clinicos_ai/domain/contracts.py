@@ -167,6 +167,9 @@ class TeamRequest(BaseModel):
     history: list[dict[str, Any]] = Field(default_factory=list, max_length=12)
     maxToolCalls: int = Field(default=10, ge=1, le=12)
     timeoutSeconds: float = Field(default=60.0, gt=0, le=120)
+    # Istruzioni approvate dall'amministratore che sostituiscono quelle della skill rilasciata
+    # ({"clinico": {"version": "...", "instructions": ["..."]}}). Solo testo: gli strumenti no.
+    skillOverrides: Optional[dict[str, Any]] = None
 
 
 class TeamResponse(BaseModel):
@@ -175,3 +178,4 @@ class TeamResponse(BaseModel):
     members: list[str] = Field(default_factory=list)
     toolCalls: list[dict[str, Any]] = Field(default_factory=list)
     model: str = ""
+    skillVersions: dict[str, str] = Field(default_factory=dict)

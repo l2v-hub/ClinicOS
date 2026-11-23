@@ -35,76 +35,16 @@ TEAM_MARKER = "MILO_TEAM_V1"
 MAX_TOOL_RESULT_CHARS = 6000
 MAX_HISTORY_TURNS = 6
 
-# ── Specialisti: nome, compito, strumenti (le loro skill) ────────────────────────────────────
+# ── Specialisti: le loro skill sono file versionati in clinicos_ai/skills ──────────────────────
 
-SPECIALISTS: dict[str, dict[str, Any]] = {
-    "clinico": {
-        "name": "Clinico paziente",
-        "role": "Situazione clinica di un paziente: storia, terapia, parametri e loro andamento, "
-                "diario, scale, somministrazioni, documenti.",
-        "instructions": [
-            "Rispondi sulla situazione clinica di UN paziente usando solo i dati degli strumenti.",
-            "Per andamenti e correlazioni usa get_patient_parameters (serie, aggregati per giorno, "
-            "variazione) e mettili in relazione con terapia, diario e somministrazioni dello stesso periodo.",
-            "Descrivi i fatti (valori, date, variazioni) e cita la fonte [S#] di ogni valore.",
-            "Non formulare diagnosi, prognosi né indicazioni di terapia: segnala al medico.",
-        ],
-        "tools": [
-            "get_patient_parameters", "get_patient_vital_signs", "get_patient_therapies",
-            "get_patient_allergies", "get_patient_timeline", "get_patient_diary",
-            "get_patient_assessments", "get_patient_administrations", "search_clinical_sections",
-            "search_documents", "get_patient_appointments", "search_patients",
-        ],
-    },
-    "sorveglianza": {
-        "name": "Sorveglianza clinica",
-        "role": "Punteggi di allerta (NEWS2) e segnali di deterioramento: quali valori li hanno "
-                "attivati e come sono cambiati nel tempo.",
-        "instructions": [
-            "Usa get_patient_news2: il punteggio lo calcola il backend secondo la fonte citata; "
-            "non ricalcolarlo e non stimarlo.",
-            "Se la rilevazione più recente è incompleta, dillo ed elenca i parametri mancanti.",
-            "Spiega quali parametri contribuiscono al punteggio e la risposta prevista dal protocollo, "
-            "come promemoria per il professionista: non è una valutazione clinica.",
-        ],
-        "tools": [
-            "get_patient_news2", "get_patient_parameters", "get_patient_assessments", "search_patients",
-        ],
-    },
-    "struttura": {
-        "name": "Struttura e personale",
-        "role": "Turni del personale, agenda e visite, compiti di oggi, occupazione di camere e letti, "
-                "elenco operatori.",
-        "instructions": [
-            "Rispondi su organizzazione e struttura: chi è di turno, quando passa il medico, cosa c'è "
-            "da fare, occupazione. Date nel formato YYYY-MM-DD.",
-            "Non riportare dati clinici dei pazienti.",
-        ],
-        "tools": [
-            "query_staff_shifts", "query_agenda", "query_staff_list", "get_facility_snapshot",
-            "get_operator_queue", "query_rooms_occupancy", "query_appointments_today", "query_data",
-        ],
-    },
-}
+from ..skills import COORDINATOR_ID, SPECIALIST_IDS, Skill, resolve_skill  # noqa: E402
 
 _log = logging.getLogger("clinicos_ai.runtime")
 
-COORDINATOR_INSTRUCTIONS = [
-    f"{TEAM_MARKER}",
-    "Sei Milo, l'assistente di ClinicOS (struttura sanitaria). Coordini un team di specialisti.",
-    "Capisci la domanda e affidala allo specialista giusto (anche a più di uno se serve), poi "
-    "componi la risposta finale in italiano, breve e concreta.",
-    "Usa SOLO dati restituiti dagli strumenti. Ogni valore citato deve avere la sua fonte [S#] "
-    "esattamente come compare nei risultati. Se un dato manca, dillo.",
-    "Scrivi in testo semplice: frasi brevi o un elenco con trattini «- ». Niente markdown (niente "
-    "asterischi, titoli o tabelle).",
-    "Quando riassumi la risposta di uno specialista CONSERVA i suoi riferimenti [S#] accanto ai "
-    "valori: senza riferimenti la risposta non può essere mostrata.",
-    "Non fornire diagnosi, prognosi, terapie o valutazioni cliniche personali: riporti i dati e, "
-    "dove esiste, il punteggio calcolato dal sistema con la sua fonte.",
-    "Non dichiarare mai di aver registrato, modificato o eseguito qualcosa: il team legge soltanto.",
-    UNTRUSTED_RULE,
-]
+
+def coordinator_instructions(skill: Skill) -> list[str]:
+    """Marcatore, istruzioni della skill del coordinatore e regola sui dati non attendibili."""
+    return [TEAM_MARKER, *skill.instructions, UNTRUSTED_RULE]
 
 
 # ── Ponte verso il backend ───────────────────────────────────────────────────────────────────
@@ -215,14 +155,16 @@ def make_tool(name: str, args: dict, description: str, gateway: GatewayClient, l
 
 
 TOOL_DESCRIPTIONS = {
-    "get_patient_parameters": "Parametri vitali di un paziente in un periodo: rilevazioni, serie per parametro, aggregati per giorno, variazione.",
+    "get_patient_parameters": "Parametri vitali di un paziente in un periodo: rilevazioni, serie per parametro, aggregati per giorno, variazione, e i punti da controllare calcolati dal sistema sul protocollo (attention).",
     "get_patient_news2": "NEWS2 calcolato dal sistema sulle rilevazioni complete del paziente, con la fonte del protocollo.",
     "get_patient_diary": "Voci del diario clinico di un paziente in un periodo.",
     "get_patient_assessments": "Scale e valutazioni finalizzate (Tinetti, MNA, GDS-15, PAINAD) con punteggio.",
     "get_patient_administrations": "Somministrazioni di farmaci (programmate e al bisogno) in un periodo.",
-    "query_staff_shifts": "Turni del personale in un giorno (date YYYY-MM-DD) o nella settimana; filtro ruolo.",
-    "query_agenda": "Agenda e visite della struttura in un periodo (from/to YYYY-MM-DD); filtro ruolo dell'operatore.",
+    "query_staff_shifts": "Turni del personale in un giorno (date YYYY-MM-DD) o nella settimana; filtro ruolo e persona (operator = nome).",
+    "query_agenda": "Agenda e visite della struttura in un periodo (from/to YYYY-MM-DD); filtro ruolo dell'operatore e paziente (patientId).",
     "search_patients": "Trova un paziente per nome: restituisce il patientId da usare negli altri strumenti.",
+    "get_patient_care_contacts": "Chi ha seguito il paziente: autore dell'ultima rilevazione, ultima visita e ultima nota del medico, con i turni settimanali di quelle persone.",
+    "query_rooms_occupancy": "Occupazione di camere e letti: totali, per tipo di camera (singola, doppia) e dimissioni previste con data e camera.",
 }
 
 
@@ -239,24 +181,32 @@ def build_tools(names: list[str], schema: list[dict], gateway: GatewayClient, le
 
 
 def build_team(model_factory: Callable[[], Any], schema: list[dict], gateway: GatewayClient,
-               ledger: SourceLedger, context_lines: list[str], max_tool_calls: int = 10):
-    """Coordinatore + specialisti. Uno specialista senza strumenti consentiti non entra nel team."""
+               ledger: SourceLedger, context_lines: list[str], max_tool_calls: int = 10,
+               skill_overrides: object = None):
+    """Coordinatore + specialisti. Uno specialista senza strumenti consentiti non entra nel team.
+    Restituisce (team, versioni delle skill usate)."""
     from ..models.providers.agno_team import team_member, team_object
 
     members = []
-    for key, spec in SPECIALISTS.items():
-        tools = build_tools(spec["tools"], schema, gateway, ledger)
+    versions: dict[str, str] = {}
+    for key in SPECIALIST_IDS:
+        skill = resolve_skill(key, skill_overrides)
+        tools = build_tools(list(skill.tools), schema, gateway, ledger)
         if not tools:
             continue
+        versions[key] = skill.version
         members.append(team_member(
-            key=key, name=spec["name"], role=spec["role"], model=model_factory(),
-            instructions=spec["instructions"] + context_lines, tools=tools,
+            key=key, name=skill.name, role=skill.role, model=model_factory(),
+            instructions=list(skill.instructions) + context_lines, tools=tools,
             tool_call_limit=max_tool_calls,
         ))
     if not members:
         raise RuntimeError_(ErrorKind.CAPABILITY, "Nessuno strumento consentito per questo ruolo")
-    return team_object(name="Milo", members=members, model=model_factory(),
-                     instructions=COORDINATOR_INSTRUCTIONS + context_lines, max_iterations=4)
+    coordinator = resolve_skill(COORDINATOR_ID, skill_overrides)
+    versions[COORDINATOR_ID] = coordinator.version
+    team = team_object(name="Milo", members=members, model=model_factory(),
+                       instructions=coordinator_instructions(coordinator) + context_lines, max_iterations=4)
+    return team, versions
 
 
 def context_lines_for(req: dict) -> list[str]:
@@ -295,8 +245,9 @@ async def run_milo_team(req: dict, model_factory: Callable[[], Any], timeout_sec
     """Esegue il team su una domanda. Errori normalizzati: il backend torna al percorso classico."""
     gateway = GatewayClient(str(req.get("grant") or ""), env=env)
     ledger = SourceLedger()
-    team = build_team(model_factory, req.get("toolSchema") or [], gateway, ledger,
-                      context_lines_for(req), int(req.get("maxToolCalls") or 10))
+    team, skill_versions = build_team(model_factory, req.get("toolSchema") or [], gateway, ledger,
+                                      context_lines_for(req), int(req.get("maxToolCalls") or 10),
+                                      req.get("skillOverrides"))
     try:
         text, members = await asyncio.wait_for(
             asyncio.to_thread(run_team_sync, team, str(req.get("question") or ""), req.get("history") or []),
@@ -318,6 +269,7 @@ async def run_milo_team(req: dict, model_factory: Callable[[], Any], timeout_sec
         "citedSources": cited,
         "members": members,
         "toolCalls": ledger.calls,
+        "skillVersions": skill_versions,
     }
 
 

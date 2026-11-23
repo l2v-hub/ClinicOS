@@ -29,6 +29,11 @@ export type AssistantIntent =
   | 'administrations'
   | 'staff_shifts'
   | 'agenda'
+  // Milo, casi d'uso
+  | 'patient_status'
+  | 'care_contacts'
+  // Passaggio guidato al flusso «Prepara prescrizione» (nessuna lettura, nessuna scrittura).
+  | 'prescription_handoff'
   | 'unknown';
 
 export type QueryScope = 'current_patient' | 'cross_patient';
@@ -183,6 +188,16 @@ const SHIFT_WORDS =
 const AGENDA_WORDS =
   /visit\w* (del|dei|della) (medic|dottor|special)|quando (passa|viene) il (medico|dottore)|agenda (di |della )?(domani|settimana|dopodomani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica)|appuntament\w* (di |per )?(domani|dopodomani|settimana|questa settimana|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica)/;
 const DOCTOR = /medic|dottor/;
+// «Chi ha fatto l'ultima visita / registrato i parametri…»: persone che hanno seguito il paziente.
+const CARE_CONTACT_WORDS =
+  /chi (ha|aveva|a) (fatto|registrat\w*|rilevat\w*|misurat\w*|visitat\w*|pres[oi]|inserit\w*|segnat\w*|controllat\w*)|chi (lo|la|l) ?(ha )?(visitat\w*|seguit\w*|vist\w*)|ultim[ao] (visita|registrazione|rilevazione)|da chi (e|è) stat[oa] (visitat\w*|vist\w*|seguit\w*)/;
+// «Come va il paziente… cosa devo controllare»: quadro del periodo + punti da protocollo.
+const PATIENT_STATUS_WORDS =
+  /come (va|sta|procede|si trova|e messo|è messo)\b|valori (dell ?ultim\w*|degli ultimi|di questa|della settimana)|cosa (devo|bisogna|dovrei|c ?e da|c'?è da) (controllare|indagare|monitorare|verificare|tenere)|da (controllare|indagare|tenere d ?occhio|monitorare)|fondamentale (indagare|controllare)/;
+/** La domanda chiede il quadro del paziente o che cosa controllare (vale per ogni percorso). */
+export function asksPatientStatus(question: string): boolean {
+  return PATIENT_STATUS_WORDS.test(norm(question));
+}
 /** Periodo in giorni chiesto per un andamento: «N giorni», settimana, mese, default 7. */
 function periodDays(q: string): number {
   const m = /(\d{1,3})\s*giorni/.exec(q);
@@ -233,6 +248,12 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
   // Milo fase 1 — struttura: turni del personale e agenda di un giorno (letture di struttura,
   // gated da canFacilityRead; nessun dato clinico).
   const day = ctx.today ? dayFromText(original, ctx.today) : null;
+  // Prima dei turni: «chi ha registrato i parametri di X e quali sono i suoi turni» è una domanda sul
+  // paziente (persone che lo hanno seguito, con i loro turni), non l'elenco dei turni di tutti.
+  if (ctx.currentPatientId && CARE_CONTACT_WORDS.test(q))
+    return base('care_contacts', [
+      { tool: 'get_patient_care_contacts', args: { patientId: ctx.currentPatientId } },
+    ]);
   if (SHIFT_WORDS.test(q) && !/terapi|farmac/.test(q)) {
     const ruolo = DOCTOR.test(q)
       ? 'medico'
@@ -291,6 +312,14 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
       return base('diary', [
         { tool: 'get_patient_diary', args: { patientId: pid, days: periodDays(q) } },
       ]);
+    // «Come va… cosa devo controllare»: parametri del periodo (con i punti da protocollo) e NEWS2.
+    if (PATIENT_STATUS_WORDS.test(q)) {
+      const days = periodDays(q);
+      return base('patient_status', [
+        { tool: 'get_patient_parameters', args: { patientId: pid, days } },
+        { tool: 'get_patient_news2', args: { patientId: pid, days } },
+      ]);
+    }
     // Andamento di più parametri, o «come sono i parametri»: serie unificate con aggregati.
     const keys = seriesKeysIn(q);
     if (
@@ -441,6 +470,57 @@ const NAME_STOPWORDS = new Set([
  *  2) uno o due token capitalizzati in coda (non iniziali di frase), es. «…assume Rossi».
  * Ritorna null quando nessun paziente è nominato (nessuna invenzione).
  */
+const LOWER_NAME_STOP = new Set([
+  'mi',
+  'ha',
+  'ho',
+  'e',
+  'è',
+  'che',
+  'con',
+  'per',
+  'dei',
+  'del',
+  'gli',
+  'i',
+  'il',
+  'la',
+  'le',
+  'lo',
+  'come',
+  'cosa',
+  'quali',
+  'quale',
+  'quando',
+  'dai',
+  'dammi',
+  'sono',
+  'sta',
+  'va',
+  'nel',
+  'nella',
+  'aperto',
+  'corrente',
+  'attuale',
+  'questo',
+  'questa',
+  'oggi',
+  'ieri',
+  'pressione',
+  'parametri',
+  'registra',
+  'aggiungi',
+  'una',
+  'uno',
+  'un',
+  'non',
+  'dell',
+  'della',
+  'degli',
+  'delle',
+  'chi',
+]);
+
 export function extractPatientName(question: string): string | null {
   const text = (question || '').trim();
   if (!text) return null;
@@ -450,6 +530,17 @@ export function extractPatientName(question: string): string | null {
     `\\b(?:di|del|della|dei|delle|per|al|allo|alla|paziente)\\s+(${NAME})`,
   ).exec(text);
   if (prep) return prep[1].trim();
+  // Dopo «paziente/ospite» il nome vale anche in minuscolo (digitazione o dettatura): «paziente
+  // bassi». Al massimo due parole, fermandosi alla prima che non può essere un nome.
+  const lower = /\b(?:paziente|ospite)\s+([a-zà-ÿ']{3,}(?:\s+[a-zà-ÿ']{3,})?)/i.exec(text);
+  if (lower) {
+    const words: string[] = [];
+    for (const word of lower[1].split(/\s+/)) {
+      if (LOWER_NAME_STOP.has(word.toLowerCase())) break;
+      words.push(word);
+    }
+    if (words.length) return words.join(' ');
+  }
 
   // token capitalizzati in coda, ma non se sono la prima parola della frase (verbo iniziale).
   const trailing = new RegExp(`(?:\\s)(${NAME})\\s*[?.!]*$`).exec(text);

@@ -30,6 +30,8 @@ export interface TeamRuntimeResponse {
   members?: string[];
   toolCalls?: Array<{ tool: string; ok: boolean }>;
   model?: string;
+  /** Versione della skill usata da ogni specialista (tracciabilità dei miglioramenti). */
+  skillVersions?: Record<string, string>;
 }
 export interface TeamAnswer {
   answerText: string;
@@ -41,6 +43,7 @@ export interface TeamAnswer {
   members: string[];
   tools: string[];
   model?: string;
+  skillVersions?: Record<string, string>;
 }
 export interface TeamDeps {
   callTeamRuntime: (req: TeamRuntimeRequest) => Promise<TeamRuntimeResponse>;
@@ -142,7 +145,12 @@ export async function teamAnswer(
     });
     if (rejected) return null;
     const accepted = acceptTeamAnswer(res, grant)!;
-    return { ...accepted, members: res.members ?? [], model: res.model };
+    return {
+      ...accepted,
+      members: res.members ?? [],
+      model: res.model,
+      skillVersions: res.skillVersions,
+    };
   } catch (error) {
     teamLog({
       outcome: 'error',

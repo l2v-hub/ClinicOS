@@ -249,8 +249,17 @@ test('016 F3: piano LLM con query_data + intent data_query è accettato (non cro
     },
     confidence: 0.9,
   });
-  const r = await planQueryLLM('quante camere occupate', {}, { callPlanRuntime: runtime });
+  // Una domanda generica sui dati resta al piano del modello; «quante camere occupate» ha invece
+  // una lettura dedicata (occupazione per tipo e liberazioni previste) che prevale.
+  const r = await planQueryLLM(
+    'quante assegnazioni letto ci sono in archivio',
+    {},
+    { callPlanRuntime: runtime },
+  );
   assert.equal(r.mode, 'llm');
   assert.equal(r.plan.tools[0].tool, 'query_data');
   assert.equal(r.plan.requiresCrossPatientAccess, false); // query_data non è un CROSS_TOOL
+  const rooms = await planQueryLLM('quante camere occupate', {}, { callPlanRuntime: runtime });
+  assert.equal(rooms.mode, 'deterministic');
+  assert.equal(rooms.plan.intent, 'rooms_occupancy');
 });

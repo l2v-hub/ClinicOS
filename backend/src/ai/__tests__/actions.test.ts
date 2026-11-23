@@ -42,6 +42,11 @@ function fakeWriter() {
       calls.push('vital');
       return 'rec-vital';
     },
+    async createParameterReading() {
+      const replayed = calls.includes('parameters');
+      calls.push('parameters');
+      return { id: 'rec-parameters', replayed };
+    },
     async updateDemographics() {
       calls.push('demo');
       return 'rec-demo';

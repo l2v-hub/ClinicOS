@@ -158,6 +158,19 @@
       "routes": []
     },
     {
+      "id": "agnos.action.create_parameter_reading",
+      "name": "Agnos action — create_parameter_reading",
+      "domain": "agnos",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "parameters.create_reading",
+      "routes": []
+    },
+    {
       "id": "agnos.action.create_vital_sign",
       "name": "Agnos action — create_vital_sign",
       "domain": "agnos",
@@ -632,6 +645,19 @@
       "legacyRoles": [],
       "gate": "policy",
       "governedBy": "operators.schedules",
+      "routes": []
+    },
+    {
+      "id": "ai.read.get_patient_care_contacts",
+      "name": "Agnos read tool — get_patient_care_contacts",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "parameters.list_readings",
       "routes": []
     },
     {

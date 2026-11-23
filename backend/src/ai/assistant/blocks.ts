@@ -4,6 +4,7 @@
 // uno strumento noto; uno strumento senza regola di visualizzazione non produce blocchi.
 
 import type { News2Overview, ParameterOverview } from '../gateway/clinical-reads.js';
+import type { CareContacts, PlannedRelease, TypeAvailability } from '../gateway/care-reads.js';
 
 export type BlockTone = 'ok' | 'info' | 'warning' | 'alarm' | 'neutral';
 export interface KpiItem {
@@ -35,7 +36,10 @@ export type MiloBlock =
       columns: Array<{ key: string; label: string }>;
       rows: Array<Record<string, string>>;
       truncated?: boolean;
-    };
+    }
+  // Passaggio a un altro flusso dell'app con il testo già pronto (es. «Prepara prescrizione»):
+  // un pulsante, mai un'azione eseguita da Milo.
+  | { type: 'handoff'; title: string; label: string; target: 'prescription'; message: string };
 
 const MAX_TABLE_ROWS = 50;
 const TREND_KEYS = ['pa', 'spo2', 'fc', 'fr', 'temperatura', 'dtx'];
@@ -104,7 +108,7 @@ const RISK_LABEL: Record<string, string> = {
   alto: 'rischio alto',
 };
 
-function parameterBlocks(o: ParameterOverview): MiloBlock[] {
+function parameterBlocks(o: ParameterOverview, withAttention = false): MiloBlock[] {
   if (!o.readings.length) return [];
   const present = TREND_KEYS.filter((k) => o.readings.some((r) => r.values[k] !== undefined));
   const items: KpiItem[] = o.series.map((s) => ({
@@ -132,6 +136,144 @@ function parameterBlocks(o: ParameterOverview): MiloBlock[] {
       })),
     });
   if (items.length) blocks.unshift({ type: 'kpi', title: 'Ultimi valori nel periodo', items });
+  // Punti da controllare: calcolati dal sistema sul protocollo, mai dal modello.
+  const points = withAttention ? (o.attention?.points ?? []) : [];
+  if (points.length)
+    blocks.unshift({
+      type: 'kpi',
+      title: 'Da controllare (promemoria da protocollo)',
+      items: points.slice(0, 10).map((p) => ({
+        label: p.label,
+        value: p.value,
+        tone: p.tone,
+        note: p.detail,
+      })),
+      source: o.attention.source,
+    });
+  return blocks;
+}
+
+const WEEK_ORDER = ['lunedi', 'martedi', 'mercoledi', 'giovedi', 'venerdi', 'sabato', 'domenica'];
+const DAY_LABEL: Record<string, string> = {
+  lunedi: 'lun',
+  martedi: 'mar',
+  mercoledi: 'mer',
+  giovedi: 'gio',
+  venerdi: 'ven',
+  sabato: 'sab',
+  domenica: 'dom',
+};
+const civilDate = (day: string) => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(day);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : day;
+};
+
+function careContactBlocks(c: CareContacts): MiloBlock[] {
+  const blocks: MiloBlock[] = [];
+  const rows: Array<Record<string, unknown>> = [];
+  if (c.lastReading)
+    rows.push({
+      cosa: 'Ultima rilevazione dei parametri',
+      quando: dayTime(c.lastReading.measuredAt),
+      chi: c.lastReading.author,
+      ruolo: c.lastReading.ruolo ?? '',
+    });
+  if (c.lastVisit)
+    rows.push({
+      cosa: 'Ultima visita',
+      quando: dayTime(c.lastVisit.scheduledAt),
+      chi: c.lastVisit.operator,
+      ruolo: c.lastVisit.ruolo ?? '',
+    });
+  if (c.lastDoctorNote)
+    rows.push({
+      cosa: 'Ultima nota del medico',
+      quando: dayTime(c.lastDoctorNote.entryDateTime),
+      chi: c.lastDoctorNote.author,
+      ruolo: 'medico',
+    });
+  const who = table(
+    'Chi ha seguito il paziente',
+    [
+      ['cosa', 'Cosa'],
+      ['quando', 'Quando'],
+      ['chi', 'Chi'],
+      ['ruolo', 'Ruolo'],
+    ],
+    rows,
+  );
+  if (who) blocks.push(who);
+  // Turni in forma compatta: una riga per persona, giorni con lo stesso orario raggruppati.
+  const shiftRows = c.people
+    .filter((p) => p.turni && p.turni.length)
+    .map((p) => {
+      const byHours = new Map<string, string[]>();
+      for (const t of [...p.turni!].sort(
+        (a, b) => WEEK_ORDER.indexOf(a.giorno) - WEEK_ORDER.indexOf(b.giorno),
+      )) {
+        const hours = `${t.oraInizio}–${t.oraFine}`;
+        byHours.set(hours, [...(byHours.get(hours) ?? []), DAY_LABEL[t.giorno] ?? t.giorno]);
+      }
+      return {
+        persona: p.name,
+        ruolo: p.ruolo ?? '',
+        turni: [...byHours.entries()].map(([h, days]) => `${days.join(', ')} ${h}`).join(' · '),
+      };
+    });
+  const shifts = table(
+    'Turni settimanali',
+    [
+      ['persona', 'Persona'],
+      ['ruolo', 'Ruolo'],
+      ['turni', 'Turni'],
+    ],
+    shiftRows,
+  );
+  if (shifts) blocks.push(shifts);
+  return blocks;
+}
+
+function occupancyBlocks(o: Record<string, unknown>): MiloBlock[] {
+  const blocks: MiloBlock[] = [];
+  const perTipo = (Array.isArray(o.perTipo) ? o.perTipo : []) as TypeAvailability[];
+  const releases = (
+    Array.isArray(o.liberazioniPreviste) ? o.liberazioniPreviste : []
+  ) as PlannedRelease[];
+  if (perTipo.length)
+    blocks.push({
+      type: 'kpi',
+      title: 'Camere per tipo',
+      items: perTipo.map((t) => ({
+        label: `Camere ${t.tipo === 'singola' ? 'singole' : t.tipo === 'doppia' ? 'doppie' : t.tipo}`,
+        value: `${t.camereOccupate} su ${t.camere} occupate`,
+        tone: t.lettiLiberi > 0 ? 'ok' : 'neutral',
+        note:
+          `${t.lettiLiberi} ${t.lettiLiberi === 1 ? 'letto libero' : 'letti liberi'} su ${t.letti}` +
+          (t.prossimoLettoLibero
+            ? ` · prossima dimissione prevista: camera ${t.prossimoLettoLibero.camera} il ${civilDate(t.prossimoLettoLibero.data)}`
+            : t.lettiLiberi === 0
+              ? ' · nessuna dimissione prevista'
+              : ''),
+      })),
+    });
+  const planned = table(
+    'Dimissioni previste',
+    [
+      ['data', 'Data'],
+      ['camera', 'Camera'],
+      ['tipo', 'Tipo'],
+      ['effetto', 'Cosa si libera'],
+    ],
+    releases.map((r) => ({
+      data: civilDate(r.data),
+      camera: r.camera,
+      tipo: r.tipo,
+      effetto: r.cameraLibera
+        ? 'tutta la camera'
+        : `${r.lettiLiberati} ${r.lettiLiberati === 1 ? 'letto' : 'letti'}`,
+    })),
+  );
+  if (planned) blocks.push(planned);
   return blocks;
 }
 
@@ -184,16 +326,29 @@ function news2Blocks(o: News2Overview): MiloBlock[] {
 }
 
 /** Blocchi da visualizzare per i risultati delle letture, nell'ordine in cui sono stati letti. */
-export function blocksFromResults(results: Array<{ tool: string; data: unknown[] }>): MiloBlock[] {
+export function blocksFromResults(
+  results: Array<{ tool: string; data: unknown[] }>,
+  /** attention: mostra «Da controllare» (solo quando la domanda chiede il quadro del paziente). */
+  options: { attention?: boolean } = {},
+): MiloBlock[] {
   const blocks: MiloBlock[] = [];
   for (const { tool, data } of results) {
     const rows = (Array.isArray(data) ? data : []).map(obj);
     switch (tool) {
       case 'get_patient_parameters':
-        if (rows[0]) blocks.push(...parameterBlocks(rows[0] as unknown as ParameterOverview));
+        if (rows[0])
+          blocks.push(
+            ...parameterBlocks(rows[0] as unknown as ParameterOverview, options.attention === true),
+          );
         break;
       case 'get_patient_news2':
         if (rows[0]) blocks.push(...news2Blocks(rows[0] as unknown as News2Overview));
+        break;
+      case 'get_patient_care_contacts':
+        if (rows[0]) blocks.push(...careContactBlocks(rows[0] as unknown as CareContacts));
+        break;
+      case 'query_rooms_occupancy':
+        if (rows[0]) blocks.push(...occupancyBlocks(rows[0]));
         break;
       case 'get_patient_vital_signs': {
         const b = table(

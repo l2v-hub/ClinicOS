@@ -973,3 +973,62 @@ test('V — Milo fase 5: NEWS2 sentinel → attention signal with the why, ack r
   assert.notEqual(again.status, 'preso_visione');
   assert.match(again.title, /^NEWS2 8 — rischio alto$/);
 });
+
+test('W — Milo: a therapy that reached its end date notifies the prescriber (alta), others in scope (normale)', async () => {
+  const dayOffset = (n: number) => {
+    const d = new Date(`${today}T12:00:00.000Z`);
+    d.setUTCDate(d.getUTCDate() + n);
+    return d.toISOString().slice(0, 10);
+  };
+  const therapy = (patientId: string, farmacoNome: string, extra: Record<string, unknown> = {}) =>
+    prisma.patientTherapy.create({
+      data: {
+        patientId,
+        farmacoNome,
+        dosaggio: '25 mg',
+        tipo: 'periodica',
+        stato: 'attiva',
+        dataInizio: dayOffset(-5),
+        dataFine: dayOffset(-1),
+        orarioSpecifico: '06:00,14:00,22:00',
+        prescrittore: 'Medico 1',
+        operatoreInseritore: 'Medico 1',
+        ...extra,
+      },
+    });
+  const mine = await therapy(ids.dX, `Diuretico${tag}`);
+  const theirs = await therapy(ids.nA, `Diuretico${tag}`);
+  await therapy(ids.dX, `Ancora${tag}`, { dataFine: dayOffset(2) }); // non ancora finita
+  await therapy(ids.dX, `Sospesa${tag}`, { stato: 'sospesa' }); // sospesa: non è «completata»
+
+  const done = (signals: any[]) => signals.filter((s) => s.eventType === 'therapy.completed');
+  const forDoctor = done((await inbox(doctor)).signals);
+  assert.deepEqual(
+    forDoctor.map((s) => s.title),
+    [`Terapia completata: Diuretico${tag} (prescritta da te)`],
+  );
+  assert.equal(forDoctor[0].residentId, ids.dX);
+  assert.equal(forDoctor[0].type, 'FOLLOW_UP');
+  assert.equal(forDoctor[0].priority, 'alta');
+  assert.match(forDoctor[0].detail, /^25 mg · dal \d{2}\/\d{2} al \d{2}\/\d{2}$/);
+  assert.match(forDoctor[0].reason, /prescritta o inserita da te/);
+  assert.ok(forDoctor[0].signalId.includes(mine.id) || forDoctor[0].rev);
+
+  const forNurse = done((await inbox(nurse)).signals);
+  assert.deepEqual(
+    forNurse.map((s) => [s.residentId, s.priority, s.title]),
+    [[ids.nA, 'normale', `Terapia completata: Diuretico${tag}`]],
+  );
+  assert.match(forNurse[0].detail, /prescritta da Medico 1$/);
+  assert.ok(theirs.id);
+  // L'amministratore non riceve segnali clinici.
+  assert.equal(done((await inbox(admin)).signals).length, 0);
+
+  // Presa visione: resta registrata e il segnale non torna da vedere.
+  const ack = await call(base, doctor, 'POST', '/skills/proactive/ack', {
+    acks: [{ signalId: forDoctor[0].signalId, rev: forDoctor[0].rev }],
+  });
+  assert.deepEqual(ack.body.acknowledged, [forDoctor[0].signalId]);
+  const after = done((await inbox(doctor)).signals)[0];
+  assert.equal(after.status, 'preso_visione');
+});
