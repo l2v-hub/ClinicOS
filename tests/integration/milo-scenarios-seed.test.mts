@@ -324,6 +324,6 @@ test(
       results.every((r) => r.pass),
       `\n${summarize(results)}`,
     );
-    assert.equal(results.length, 8);
+    assert.equal(results.length, 9);
   },
 );

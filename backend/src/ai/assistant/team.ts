@@ -23,6 +23,8 @@ export interface TeamRuntimeRequest {
   history: Array<{ role: 'user' | 'assistant'; text: string }>;
   maxToolCalls: number;
   timeoutSeconds: number;
+  /** Istruzioni approvate dall'amministratore, per competenza (solo testo: mai strumenti). */
+  skillOverrides?: Record<string, { version: string; instructions: string[] }>;
 }
 export interface TeamRuntimeResponse {
   answerText?: string;
@@ -47,6 +49,8 @@ export interface TeamAnswer {
 }
 export interface TeamDeps {
   callTeamRuntime: (req: TeamRuntimeRequest) => Promise<TeamRuntimeResponse>;
+  /** Istruzioni approvate oggi in uso (milo-skills/store). Assente o in errore: quelle rilasciate. */
+  loadSkillOverrides?: () => Promise<NonNullable<TeamRuntimeRequest['skillOverrides']>>;
 }
 
 const sameSource = (a: SourceReference, b: SourceReference) =>
@@ -120,6 +124,8 @@ export async function teamAnswer(
   });
   const startedAt = Date.now();
   try {
+    // Un errore nel leggere le istruzioni approvate non ferma la risposta: valgono quelle rilasciate.
+    const skillOverrides = (await deps.loadSkillOverrides?.().catch(() => null)) ?? {};
     const res = await deps.callTeamRuntime({
       question,
       grant: grant.id,
@@ -131,6 +137,7 @@ export async function teamAnswer(
       history: (opts.history ?? []).slice(-6),
       maxToolCalls: grant.maxCalls,
       timeoutSeconds: Math.round((opts.cfg.teamTimeoutMs ?? 60_000) / 1000),
+      ...(Object.keys(skillOverrides).length ? { skillOverrides } : {}),
     });
     const rejected = teamRejection(res, grant);
     // Diagnostica senza contenuti: motivo, letture, fonti, durata.

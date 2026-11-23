@@ -26,6 +26,7 @@ import { RoleView } from './role-permissions/RoleView';
 import { CapabilityView } from './role-permissions/CapabilityView';
 import { IdentitiesView } from './role-permissions/IdentitiesView';
 import { HistoryView } from './role-permissions/HistoryView';
+import { MiloSkillsView } from './role-permissions/MiloSkillsView';
 import { ImpactPanel, ImpactSummaryInline } from './role-permissions/ImpactPanel';
 import { ChangeBar } from './role-permissions/ChangeBar';
 import {
@@ -47,7 +48,7 @@ export interface RolePermissionsPageProps {
   onPolicyApplied?: () => void;
 }
 
-type View = 'matrix' | 'role' | 'capability' | 'identities' | 'history';
+type View = 'matrix' | 'role' | 'capability' | 'identities' | 'history' | 'milo';
 
 type Notice = { tone: 'success' | 'warning' | 'error'; text: string; reload?: boolean };
 
@@ -67,6 +68,7 @@ export function RolePermissionsPage({ onPolicyApplied }: RolePermissionsPageProp
   const [reloadTick, setReloadTick] = useState(0);
 
   const [view, setView] = useState<View>('matrix');
+  const [miloPending, setMiloPending] = useState(0);
   const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [roleId, setRoleId] = useState('');
   const [capabilityId, setCapabilityId] = useState<string | null>(null);
@@ -256,6 +258,8 @@ export function RolePermissionsPage({ onPolicyApplied }: RolePermissionsPageProp
       label: 'Storico',
       badge: versions.filter((version) => version.status === 'draft').length,
     },
+    // Milo: giudizi sulle risposte e istruzioni degli specialisti (stesso permesso della policy).
+    { key: 'milo', label: 'Competenze di Milo', badge: miloPending || undefined },
   ];
 
   const subtitle = policy
@@ -398,6 +402,7 @@ export function RolePermissionsPage({ onPolicyApplied }: RolePermissionsPageProp
                 onAssign={onAssign}
               />
             )}
+            {view === 'milo' && <MiloSkillsView onCounts={setMiloPending} />}
             {view === 'history' && (
               <HistoryView
                 versions={versions}

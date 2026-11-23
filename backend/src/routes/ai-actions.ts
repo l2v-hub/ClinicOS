@@ -177,6 +177,31 @@ actionsRouter.post('/plan', async (req: AuthedRequest, res) => {
   }
 });
 
+// POST /ai/actions/feedback  { answerId, rating, question, correction?, … } → { id, rating, status }
+// Milo: il giudizio di chi ha fatto la domanda sulla risposta ricevuta (👍/👎 con correzione).
+actionsRouter.post('/feedback', async (req: AuthedRequest, res) => {
+  try {
+    const { recordFeedback, MiloSkillError } = await import('../milo-skills/store.js');
+    try {
+      const identity = authzOf(req)?.identity;
+      const out = await recordFeedback(req.body ?? {}, {
+        operatorId: identity?.operatorId ?? req.operator!.id,
+        name: identity?.name ?? req.operator!.name,
+        roleId: identity?.roleId ?? req.operator!.role,
+      });
+      return res.status(200).json(out);
+    } catch (error) {
+      if (error instanceof MiloSkillError)
+        return res
+          .status(error.status)
+          .json({ error: { kind: error.code, message: error.message } });
+      throw error;
+    }
+  } catch (err) {
+    return fail(res, err);
+  }
+});
+
 // POST /ai/actions/execute  { text, channel, patientId, idempotencyKey, confirmed } → ExecuteResult
 actionsRouter.post('/execute', async (req: AuthedRequest, res) => {
   try {

@@ -53,6 +53,8 @@ export const WIPED_TABLES = [
   'ImportMutation',
   'ImportJob',
   'OperatorSchedule',
+  // Giudizi sulle risposte di Milo: testo scritto dalle persone, può citare un paziente.
+  'MiloAnswerFeedback',
 ] as const;
 
 /** Mai toccate dal wipe: senza queste non si accede più o si perde la traccia delle azioni. */
@@ -63,6 +65,8 @@ export const PRESERVED_TABLES = [
   'OperatorRosterPreference',
   'RosterEpoch',
   'AuthzPolicyVersion',
+  // Competenze di Milo approvate dall'amministratore: configurazione, come la policy.
+  'MiloSkillVersion',
   'AiAuditEvent',
   'Farmaco',
   'FarmacoPrincipioAttivo',

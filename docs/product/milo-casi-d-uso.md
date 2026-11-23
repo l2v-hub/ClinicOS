@@ -43,8 +43,30 @@ Il seed è ripetibile: rilanciarlo non crea doppioni e riporta le date «all'ult
 
 Le competenze del team stanno in file con versione, uno per specialista:
 `clinicos-ai-runtime/clinicos_ai/skills/{coordinatore,clinico,sorveglianza,struttura}.md`
-(`id`, `name`, `version`, `role`, `tools`, istruzioni). La versione usata compare nella risposta
-(`team.skills`). Una modifica alle istruzioni è una modifica di versione, verificata sui cinque casi.
+(`id`, `name`, `version`, `role`, `tools`, istruzioni «- …», regole fisse «! …»). La versione usata
+compare nella risposta (`team.skills`).
+
+### Giudizi e miglioramento («skill creator»)
+
+1. **Giudizio.** Sotto ogni risposta di Milo: «Questa risposta era utile?» Sì / No. Con «No» si
+   scrive che cosa mancava o era sbagliato (senza nomi né dati del paziente). Un giudizio per
+   risposta e per persona. Del contenuto della risposta non viene salvato nulla: solo domanda,
+   giudizio, correzione, percorso, specialisti e versioni usate.
+2. **Proposta.** L'amministratore apre **Ruoli → Competenze di Milo**: vede i giudizi aperti e, per
+   ogni specialista, le istruzioni in uso e le regole fisse. Può far scrivere a Milo una proposta
+   dai giudizi scelti («Proponi dai giudizi») oppure scriverla a mano.
+3. **Approvazione.** La proposta mostra che cosa cambia (righe nuove, tolte, invariate) e non ha
+   effetto finché l'amministratore non la approva. Da quel momento lo specialista la usa (versione
+   `1.2.0+r3` = terza revisione sulla versione rilasciata 1.2.0). «Torna alla versione rilasciata»
+   la disattiva.
+
+Una proposta è solo testo: strumenti, permessi e regole fisse (fonti, nessuna diagnosi o terapia,
+sola lettura) restano nel codice e non si possono cambiare da lì. Limiti: 20 istruzioni di 700
+caratteri, controllati nel backend e di nuovo nel servizio AI. Ogni passo è nell'audit.
+
+Dati: tabelle `MiloAnswerFeedback` (svuotata dal wipe dei dati di prova) e `MiloSkillVersion`
+(conservata, come la policy). Rotte: `POST /ai/actions/feedback`, `/authz/milo/*`
+(`backend/src/routes/milo-skills.ts`), solo con il permesso di gestire la policy.
 
 ## Prove misurabili delle competenze
 

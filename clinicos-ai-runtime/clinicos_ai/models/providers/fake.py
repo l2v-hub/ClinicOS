@@ -107,6 +107,8 @@ class _FakeRunner:
             return self._wrap(json.dumps(EMPTY_PLAN), prompt)
         if "ASSISTANT_COMPOSE_V1" in prompt:
             return self._wrap(json.dumps({"answerText": "", "citedSources": []}), prompt)
+        if "MILO_SKILL_PROPOSAL_V1" in prompt:
+            return self._wrap(json.dumps({"instructions": [], "rationale": ""}), prompt)
         return self._wrap(json.dumps(EMPTY_EXTRACTION), prompt)
 
     async def run_structured(self, prompt: str, schema: object, attachments: list[Attachment]) -> str:  # noqa: ARG002

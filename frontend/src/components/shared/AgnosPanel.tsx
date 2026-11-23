@@ -118,6 +118,7 @@ export function AgnosPanel({
     cancelPending,
     dismissPendingForEdit,
     retryNavigation,
+    sendFeedback,
   } = useAgnosChat({
     operatorId,
     operatorRole,
@@ -613,6 +614,7 @@ export function AgnosPanel({
                   }}
                   formatNavLabel={formatNavLabel}
                   {...readPinProps(t, i)}
+                  onFeedback={(rating, correction) => sendFeedback(i, rating, correction)}
                 />
               ))}
             </>

@@ -172,6 +172,23 @@ class TeamRequest(BaseModel):
     skillOverrides: Optional[dict[str, Any]] = None
 
 
+# Milo, «skill creator»: proposta di nuove istruzioni per uno specialista dai giudizi delle persone.
+class SkillProposalRequest(BaseModel):
+    skillId: str = Field(default="", max_length=40)
+    feedback: list[dict[str, Any]] = Field(default_factory=list, max_length=20)
+    # Istruzioni approvate oggi in uso (stessa forma di TeamRequest.skillOverrides).
+    skillOverrides: Optional[dict[str, Any]] = None
+
+
+class SkillProposalResponse(BaseModel):
+    skillId: str = ""
+    baseVersion: str = ""
+    instructions: list[str] = Field(default_factory=list)
+    rationale: str = ""
+    model: str = ""
+    ai: Optional[dict[str, Any]] = None
+
+
 class TeamResponse(BaseModel):
     answerText: str = ""
     citedSources: list[dict[str, Any]] = Field(default_factory=list)

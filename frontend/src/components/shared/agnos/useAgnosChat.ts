@@ -8,6 +8,7 @@ import {
   writeActionNavigation,
 } from './agnosActionNavigation';
 import { createAgnosRequestGate } from './agnosRequestGate';
+import { miloFeedbackBody, type MiloRating } from '../../../lib/miloFeedback';
 
 export type AgnosChannel = 'testo' | 'voce';
 export type AgnosAgent = 'facility' | 'clinical';
@@ -39,6 +40,8 @@ export interface AgnosTurn {
   preview?: AgnosPreview;
   plan?: AgnosPlan;
   status?: AgnosTurnStatus;
+  /** Identificativo della risposta, per il giudizio di chi ha fatto la domanda (uno per risposta). */
+  answerId?: string;
 }
 /**
  * Milo fase 2: ultimi scambi della conversazione da inviare con la domanda (contesto per il team,
@@ -326,7 +329,12 @@ export function useAgnosChat(options: UseAgnosChatOptions) {
         return;
       }
       if (data.read) {
-        patchTurn(index, { status: undefined, read: data.read, plan });
+        patchTurn(index, {
+          status: undefined,
+          read: data.read,
+          plan,
+          answerId: crypto.randomUUID(),
+        });
         const nav = readActionNavigation(text, data.read);
         if (nav && !(await navigateTo(nav, request))) return;
         if (gate.current.current(request.token))
@@ -505,7 +513,30 @@ export function useAgnosChat(options: UseAgnosChatOptions) {
     return { text: proposal.text, channel: proposal.channel };
   }, []);
 
+  /** Giudizio sulla risposta di un turno (👍/👎 con correzione). true = registrato. */
+  const sendFeedback = useCallback(
+    async (index: number, rating: MiloRating, correction: string): Promise<boolean> => {
+      const turn = turnsRef.current[index];
+      const asked = turnsRef.current[index - 1];
+      if (!turn?.read || !turn.answerId || asked?.role !== 'utente' || !asked.text) return false;
+      try {
+        const res = await fetch(`${API_URL}/ai/actions/feedback`, {
+          method: 'POST',
+          headers: buildAgnosHeaders(live.current),
+          body: JSON.stringify(
+            miloFeedbackBody(turn.answerId, asked.text, turn.read, rating, correction),
+          ),
+        });
+        return res.ok;
+      } catch {
+        return false;
+      }
+    },
+    [],
+  );
+
   return {
+    sendFeedback,
     turns,
     pending,
     phase,

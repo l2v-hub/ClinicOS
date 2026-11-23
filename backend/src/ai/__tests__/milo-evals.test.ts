@@ -32,6 +32,7 @@ test('the suite covers the five use cases with the right profiles', () => {
       ['caso-4-valori-mancanti', 'Infermiere 1', 'preview'],
       ['caso-5-classe-di-farmaci', 'Medico 1', 'handoff'],
       ['caso-5-prescrizione-preparata', 'Medico 1', 'handoff'],
+      ['caso-5-via-mancante', 'Medico 1', 'handoff'],
       ['caso-5-ruolo-senza-permesso', 'OSS 1', 'refusal'],
     ],
   );
@@ -171,4 +172,16 @@ test('prescription: a drug chosen by Milo, a missing button and a missing refusa
     'tipo di risposta: refusal',
   ]);
   assert.match(visibleText(handoff('abc', true)), /Prepara la prescrizione/);
+});
+
+test('time budget is checked only when a duration was measured', () => {
+  const testCase = byId('caso-1-come-va');
+  assert.equal(testCase.expect.maxSeconds, 45);
+  assert.equal(evaluateCase(testCase, teamAnswer).pass, true); // nei test: nessun tempo misurato
+  assert.equal(evaluateCase(testCase, teamAnswer, { seconds: 22.4 }).pass, true);
+  const slow = evaluateCase(testCase, teamAnswer, { seconds: 75.1 });
+  assert.deepEqual(
+    slow.checks.filter((c) => !c.pass).map((c) => `${c.name} → ${c.detail}`),
+    ['risposta entro 45 s → 75.1 s'],
+  );
 });

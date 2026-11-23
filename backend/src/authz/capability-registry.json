@@ -286,6 +286,10 @@
         {
           "method": "POST",
           "path": "/ai/actions/plan"
+        },
+        {
+          "method": "POST",
+          "path": "/ai/actions/feedback"
         }
       ]
     },

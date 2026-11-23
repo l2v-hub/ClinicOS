@@ -679,3 +679,178 @@ select.rp-assign__select--changed:not(#ds) {
   gap: 12px;
   flex-wrap: wrap;
 }
+
+/* ── Competenze di Milo ─────────────────────────────────────────────────────────────────── */
+.milo-skills {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-layout-gap, 16px);
+}
+.milo-skills__section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.milo-skills__section > h2,
+.milo-skills__section > p {
+  margin: 0;
+}
+.milo-skills__feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.milo-skills__feedback-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.milo-skills__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  margin: -10px -12px -10px -10px;
+  cursor: pointer;
+}
+.milo-skills__check input {
+  width: 18px;
+  height: 18px;
+}
+.milo-skills__feedback-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.milo-skills__feedback-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.milo-skills__question {
+  margin: 6px 0 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.milo-skills__correction {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+.milo-skills__columns {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 16px;
+}
+.milo-skills__columns h3 {
+  margin: 0 0 6px;
+}
+.milo-skills__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding-left: 20px;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+.milo-skills__list--locked {
+  color: var(--text-muted);
+}
+.milo-skills__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.milo-skills__editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.milo-skills__editor label {
+  font-weight: 600;
+  font-size: 13.5px;
+}
+.milo-skills__editor textarea,
+.milo-skills__editor input[type='text'] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  line-height: 1.45;
+}
+.milo-skills__editor textarea {
+  resize: vertical;
+}
+.milo-skills__problem {
+  margin: 0;
+  color: var(--red);
+  font-size: 13px;
+}
+.milo-skills__proposal {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--blue) 35%, var(--border));
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--blue) 4%, var(--surface));
+}
+.milo-skills__diff {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+.milo-skills__diff-row {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 10px;
+}
+.milo-skills__diff-tag {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.milo-skills__diff-row.is-added .milo-skills__diff-tag {
+  color: var(--ds-tone-ok, #0b6b60);
+}
+.milo-skills__diff-row.is-removed {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+.milo-skills__diff-row.is-removed .milo-skills__diff-tag {
+  text-decoration: none;
+}
+.milo-skills__history {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.milo-skills__history ul {
+  margin: 6px 0 0;
+  padding-left: 20px;
+}
+@media (max-width: 900px) {
+  .milo-skills__columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .milo-skills__feedback-item {
+    flex-wrap: wrap;
+  }
+}

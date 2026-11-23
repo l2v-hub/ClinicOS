@@ -81,8 +81,9 @@ try {
         response.status === 403
           ? { plan: { actionType: 'refuse_forbidden' }, preview: { refusal: 'ruolo' }, read: null }
           : response.body;
-      const result = evaluateCase(testCase, body);
-      results.push({ ...result, seconds: Math.round((Date.now() - started) / 100) / 10, role });
+      const seconds = Math.round((Date.now() - started) / 100) / 10;
+      const result = evaluateCase(testCase, body, { seconds });
+      results.push({ ...result, seconds, role });
       raw[testCase.id] = response;
       console.log(
         `${result.pass ? 'OK' : 'KO'}  ${testCase.id}  ${role}  ${results[results.length - 1].seconds}s`,

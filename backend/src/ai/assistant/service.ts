@@ -36,6 +36,7 @@ import { resolveAgent, type AgentId } from './agents.js';
 import { planQueryLLM, injectPatientId } from './llm-planner.js';
 import { composeAnswer } from './composer.js';
 import { callPlanRuntime, callComposeRuntime, callTeamRuntime } from './runtime-client.js';
+import { approvedOverrides } from '../../milo-skills/store.js';
 import { teamAnswer } from './team.js';
 import { loadAssistantLlmConfig } from './config.js';
 import { validateQueryPlan } from '../gateway/query/validate.js';
@@ -549,7 +550,10 @@ export async function assistantQuery(
         history: effectiveCtx.history,
         cfg,
       },
-      { callTeamRuntime: (req) => callTeamRuntime(req, cfg) },
+      {
+        callTeamRuntime: (req) => callTeamRuntime(req, cfg),
+        loadSkillOverrides: approvedOverrides,
+      },
     );
     if (team) {
       const navigationTeam = dedupeNav(team.citedSources.map(navFromSource));

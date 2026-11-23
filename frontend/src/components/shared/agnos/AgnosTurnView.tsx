@@ -1,5 +1,7 @@
 import { AnswerView, type AssistantNav } from '../AIAssistantButton';
 import type { AgnosTurn } from './useAgnosChat';
+import { MiloFeedback } from './MiloFeedback';
+import type { MiloRating } from '../../../lib/miloFeedback';
 
 interface TurnViewProps {
   turn: AgnosTurn;
@@ -17,6 +19,8 @@ interface TurnViewProps {
   question?: string;
   pinned?: boolean;
   onPin?: () => void;
+  /** Giudizio di chi ha fatto la domanda sulla risposta (👍/👎 con correzione). */
+  onFeedback?: (rating: MiloRating, correction: string) => Promise<boolean>;
 }
 
 export function TurnView({
@@ -34,6 +38,7 @@ export function TurnView({
   question,
   pinned,
   onPin,
+  onFeedback,
 }: TurnViewProps) {
   if (turn.role === 'utente') {
     return (
@@ -78,6 +83,9 @@ export function TurnView({
           pinned={pinned}
           onPin={onPin}
         />
+      )}
+      {turn.read && turn.answerId && onFeedback && (
+        <MiloFeedback key={turn.answerId} onSend={onFeedback} />
       )}
       {turn.preview && (
         <div

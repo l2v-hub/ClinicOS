@@ -158,6 +158,44 @@ test('a grounded team answer is returned with the sources the backend gave out',
   assert.equal(grants.activeGrantCount(), 0); // the grant ends with the question
 });
 
+test('approved skill instructions travel with the team request; a failing store falls back to the released ones', async () => {
+  const { teamAnswer } = await import('../../backend/src/ai/assistant/team.js');
+  const cfg = (await import('../../backend/src/ai/assistant/config.js')).loadAssistantLlmConfig(
+    ENV,
+  );
+  const seen: unknown[] = [];
+  const runtime = async (req: { grant: string; skillOverrides?: unknown }) => {
+    seen.push(req.skillOverrides);
+    const read = await readTool(req.grant, 'get_patient_parameters', { days: 1 });
+    return {
+      answerText: 'La pressione delle ultime ore è 145/88 mmHg [1].',
+      citedSources: [read.body.sourceRefs[0]],
+      members: ['clinico'],
+      skillVersions: { clinico: '1.2.0+r3' },
+    };
+  };
+  const overrides = { clinico: { version: '1.2.0+r3', instructions: ['Riporta la saturazione.'] } };
+  const ask = (loadSkillOverrides?: () => Promise<typeof overrides>) =>
+    teamAnswer(
+      'come va la pressione?',
+      ctx(() => true),
+      { today: '2026-11-23', currentPatientId: anna, cfg },
+      { callTeamRuntime: runtime as never, ...(loadSkillOverrides ? { loadSkillOverrides } : {}) },
+    );
+  const withApproved = await ask(async () => overrides);
+  assert.deepEqual(seen[0], overrides);
+  assert.equal(withApproved?.skillVersions?.clinico, '1.2.0+r3');
+  // Nessuna versione approvata, o archivio non raggiungibile: la richiesta parte senza il campo.
+  assert.ok(await ask(async () => ({}) as never));
+  assert.ok(
+    await ask(async () => {
+      throw new Error('database non raggiungibile');
+    }),
+  );
+  assert.ok(await ask());
+  assert.deepEqual(seen.slice(1), [undefined, undefined, undefined]);
+});
+
 test('invented sources, action claims or no reads are rejected; the classic path answers', async () => {
   const { teamAnswer } = await import('../../backend/src/ai/assistant/team.js');
   const cfg = (await import('../../backend/src/ai/assistant/config.js')).loadAssistantLlmConfig(

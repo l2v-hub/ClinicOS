@@ -1,0 +1,34 @@
+Verifica sulla demo — 2026-11-23 (ore UTC), dopo il rilascio del commit 1d7d6347f
+Sito: https://clinicos-eosin.vercel.app · Backend: clinicos-backend-production-df88.up.railway.app
+Rilasci: servizio AI c631573a (SUCCESS), backend 177399fa (SUCCESS), interfaccia clinicos-e02u89tb8 (prod).
+
+SEED (profilo Amministratore, POST /admin/synthetic-data/seed)
+21:38:36 prima: patients 1, rooms 13, parameterReadings 2, therapies 0, operatorSchedules 0
+21:38:39 seed: 200 status=seeded — patients 14, rooms 20, beds 28, roomAssignments 12, therapies 17, appointments 6, diaryEntries 6, parameterReadings 49, operatorSchedules 4, operators 10
+21:38:40 seed ripetuto: 200 — stessi conteggi (nessun doppione)
+
+PROVE (scripts/milo-evals/run.mts, 8/8) — vedi evidence/milo-evals-demo.json
+OK caso-1-come-va (llm) 11/11 · 75,1 s
+OK caso-2-chi-ha-seguito (team · clinico+struttura) 12/12 · 31,7 s
+OK caso-3-camere (team · struttura) 7/7 · 17,8 s
+OK caso-4-registra-parametri 8/8 · OK caso-4-valori-mancanti 5/5
+OK caso-5-classe-di-farmaci 11/11 · OK caso-5-prescrizione-preparata 8/8 · OK caso-5-ruolo-senza-permesso 1/1
+Competenze: clinico 1.1.0, sorveglianza 1.1.0, struttura 1.1.0, coordinatore 1.1.0
+
+A SCHERMO (Playwright)
+Caso 1 (Infermiere 1) 74,5 s — intent patient_status; blocchi: Da controllare (NEWS2 8 rischio alto; da 0 a 8; FR 2, SpO₂ 2, O₂ 2, FC 1, TC 1; ultima rilevazione incompleta), Ultimi valori, Andamento dei parametri (14 misure), Punteggio di allerta, Storico NEWS2 (13). Il team ha superato i 60 s (11–12 letture) e ha risposto il percorso classico.
+Caso 2 (Infermiere 1) 18,9 s — team clinico, get_patient_care_contacts; blocchi «Chi ha seguito il paziente» (3) e «Turni settimanali»; ultima visita: Stefano Galli 22/11 10:30.
+Caso 2 (Supervisore 1) 34,6 s — team clinico+struttura; anche «Turni del personale» (6).
+Caso 3 (Infermiere 1 / Supervisore 1) 19,9 s / 18,7 s — team struttura; «Camere per tipo»: doppie 5 su 9, singole 2 su 11; «Dimissioni previste» (4); prossima singola: camera 103, dimissione 26/11.
+Caso 4 (Infermiere 1)
+  - «Registra del paziente Bassi pressione, ha evacuato, stato vigile, battito»: anteprima con Coscienza Vigile (A), Evacuazione Sì; ⛔ Pressione: manca il valore; ⛔ Frequenza cardiaca: manca il valore; «Conferma e salva» disabilitato.
+  - «…pressione 128 su 76, ha evacuato, stato vigile, battito 81»: anteprima Pressione 128/76 mmHg, Frequenza cardiaca 81 bpm, Coscienza Vigile (A), Evacuazione Sì, Orario adesso; apertura pagina Parametri; conferma → «✓ Parametri registrati nella pagina Parametri.»
+  - GET /patients/SEED-PAZ-003/parameter-readings: rilevazioni 15 → 16; ultima: measuredAt 2026-11-23T21:43:52.000Z, values {fc 81, pa 128/76, coscienza A, evacuazione Sì}, autore «Infermiere 1».
+Caso 5 (Medico 1)
+  - GET /skills/proactive/inbox: «Terapia completata: Furosemide (prescritta da te)», priorità alta, «25 mg · dal 18/11 al 22/11», Ferrioli Mario.
+  - «…aggiunto un diuretico ogni 8 ore per 5 giorni…»: «diuretico» è una classe, non un farmaco; tabella con orari proposti e periodo; nessun pulsante.
+  - «prescrivi a Ferrioli furosemide 25 mg 1 cpr ogni 8 ore per 5 giorni…»: tabella (Furosemide, 25 mg, 1 cpr, 06:00/14:00/22:00, dal 23/11 al 27/11, avviso automatico) + «Prepara la prescrizione» → schermo intero con la bozza → anteprima «Nuova prescrizione (conferma del medico)», Azione clinica critica, Orari 06:00, 14:00, 22:00, Inizio 2026-11-23, Fine 2026-11-27. Annullata: nessuna terapia nuova per Ferrioli.
+  - Osservazione: senza via di somministrazione l'anteprima chiede di completarla nella scheda Terapia e non offre «Conferma» (corretto nel seguito: Milo chiede la via prima di preparare il testo).
+  - OSS 1: «La prescrizione è riservata al medico…» (rifiuto).
+Errori di console / risposte 5xx nelle sessioni: nessuno.
+  - Con la via indicata («…1 cpr per os ogni 8 ore per 5 giorni…»): bozza «Furosemide 25 mg 1 cpr per os ore 6, 14 e 22 dal 23/11 al 27/11» → anteprima con Via orale, Orari 06:00/14:00/22:00 (1 compressa), Inizio 2026-11-23, Fine 2026-11-27; pulsante «Conferma» presente e abilitato. Annullata: terapie di Ferrioli invariate.
