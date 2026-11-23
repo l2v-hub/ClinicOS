@@ -936,6 +936,55 @@ model AuthzPolicyVersion {
   @@index([status, version])
 }
 
+// ── Milo: giudizi sulle risposte e competenze approvate ───────────────────────
+// Il giudizio di una persona su una risposta di Milo (👍/👎 con correzione). Una riga per risposta
+// e per persona. Il testo della correzione resta qui: mai nei log né nell'audit.
+model MiloAnswerFeedback {
+  id            String   @id @default(cuid())
+  answerId      String // identificativo della risposta generato dal pannello
+  operatorId    String
+  operatorName  String?
+  operatorRole  String
+  rating        String // up | down
+  question      String
+  correction    String?
+  mode          String? // deterministic | llm | team
+  intent        String?
+  members       String[] // specialisti che hanno risposto
+  tools         String[] // letture usate
+  skillVersions Json? // versione delle competenze usate, per specialista
+  status        String   @default("open") // open | used | dismissed
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([answerId, operatorId])
+  @@index([status, createdAt])
+}
+
+// Istruzioni di uno specialista di Milo proposte (dal modello o a mano) e decise da un
+// amministratore. Vale solo la versione «approved» più recente; nessuna riga viene riscritta.
+// Strumenti e regole fisse non stanno qui: restano nel file rilasciato con il servizio AI.
+model MiloSkillVersion {
+  id            String    @id @default(cuid())
+  skillId       String // clinico | sorveglianza | struttura | coordinatore
+  version       Int // progressivo per competenza
+  baseVersion   String // versione del file rilasciato su cui si basa (es. 1.2.0)
+  status        String // proposed | approved | rejected | superseded
+  source        String // model | manual
+  instructions  Json // elenco di frasi
+  rationale     String?
+  feedbackIds   String[]
+  createdById   String
+  createdByName String?
+  createdAt     DateTime  @default(now())
+  decidedById   String?
+  decidedByName String?
+  decidedAt     DateTime?
+
+  @@unique([skillId, version])
+  @@index([skillId, status])
+}
+
 // ── Anagrafica farmaci AIFA ───────────────────────────────────────────────────
 // Copia locale della Banca Dati Farmaci (drive.aifa.gov.it), aggiornata periodicamente.
 // Serve locale e non via servizio esterno: la ricerca risponde mentre l'operatore digita,

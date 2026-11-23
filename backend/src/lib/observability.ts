@@ -131,6 +131,7 @@ export type AiCallKind =
   | 'assistant_plan'
   | 'assistant_compose'
   | 'assistant_team'
+  | 'skill_proposal'
   | 'briefing'
   | 'stt'
   | 'diary_therapy';

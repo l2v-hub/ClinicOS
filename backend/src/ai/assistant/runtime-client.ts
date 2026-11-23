@@ -115,3 +115,53 @@ export async function callTeamRuntime(
     cfg.teamTimeoutMs + 10_000,
   );
 }
+
+// Milo, «skill creator»: competenze rilasciate con il servizio AI e proposte di miglioramento.
+export interface ReleasedSkill {
+  id: string;
+  name: string;
+  version: string;
+  role: string;
+  tools: string[];
+  instructions: string[];
+  locked: string[];
+}
+
+export async function callSkillsRuntime(cfg: AssistantLlmConfig): Promise<ReleasedSkill[]> {
+  const token = process.env.AI_RUNTIME_SERVICE_TOKEN;
+  if (!cfg.runtimeUrl || !token) throw new Error('assistant skills runtime not configured');
+  const res = await fetch(`${cfg.runtimeUrl.replace(/\/$/, '')}/v1/assistant/skills`, {
+    headers: { Authorization: `Bearer ${token}`, ...correlationHeaders() },
+    signal: AbortSignal.timeout(Math.min(cfg.timeoutMs, 15_000)),
+  });
+  if (!res.ok) throw new Error(`assistant skills runtime HTTP ${res.status}`);
+  const body = (await res.json()) as { skills?: unknown };
+  return Array.isArray(body.skills) ? (body.skills as ReleasedSkill[]) : [];
+}
+
+export interface SkillProposalRuntimeResponse {
+  skillId: string;
+  baseVersion: string;
+  instructions: string[];
+  rationale: string;
+  model?: string;
+}
+
+export async function callSkillProposalRuntime(
+  req: {
+    skillId: string;
+    feedback: Array<{ question: string; rating: string; correction: string | null }>;
+    skillOverrides?: Record<string, { version: string; instructions: string[] }>;
+  },
+  cfg: AssistantLlmConfig,
+): Promise<SkillProposalRuntimeResponse> {
+  const token = process.env.AI_RUNTIME_SERVICE_TOKEN;
+  if (!cfg.runtimeUrl || !token) throw new Error('assistant skill proposal runtime not configured');
+  return runtimePost<SkillProposalRuntimeResponse>(
+    'skill_proposal',
+    `${cfg.runtimeUrl.replace(/\/$/, '')}/v1/assistant/skill-proposal`,
+    token,
+    req,
+    Math.max(cfg.timeoutMs, 60_000),
+  );
+}

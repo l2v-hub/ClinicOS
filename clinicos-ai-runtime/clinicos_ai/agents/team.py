@@ -44,7 +44,7 @@ _log = logging.getLogger("clinicos_ai.runtime")
 
 def coordinator_instructions(skill: Skill) -> list[str]:
     """Marcatore, istruzioni della skill del coordinatore e regola sui dati non attendibili."""
-    return [TEAM_MARKER, *skill.instructions, UNTRUSTED_RULE]
+    return [TEAM_MARKER, *skill.prompt_lines, UNTRUSTED_RULE]
 
 
 # ── Ponte verso il backend ───────────────────────────────────────────────────────────────────
@@ -197,7 +197,7 @@ def build_team(model_factory: Callable[[], Any], schema: list[dict], gateway: Ga
         versions[key] = skill.version
         members.append(team_member(
             key=key, name=skill.name, role=skill.role, model=model_factory(),
-            instructions=list(skill.instructions) + context_lines, tools=tools,
+            instructions=skill.prompt_lines + context_lines, tools=tools,
             tool_call_limit=max_tool_calls,
         ))
     if not members:

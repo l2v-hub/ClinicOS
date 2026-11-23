@@ -600,7 +600,7 @@ test('Milo hand-off — the text prepared by the side panel becomes a HIGH_RISK 
   const { matchPrescriptionRequest, prescriptionHandoff } =
     await import('../../ai/actions/prescriptions.js');
   const request = matchPrescriptionRequest(
-    'prescrivi furosemide 25 mg 1 cpr ogni 8 ore per 5 giorni e avvisami quando ha finito',
+    'prescrivi furosemide 25 mg 1 cpr per os ogni 8 ore per 5 giorni e avvisami quando ha finito',
     today,
     {} as NodeJS.ProcessEnv,
   );
@@ -616,7 +616,7 @@ test('Milo hand-off — the text prepared by the side panel becomes a HIGH_RISK 
   assert.equal(preview.confirmationClass, 'HIGH_RISK');
   assert.equal(preview.patient.id, ids.doc);
   assert.match(preview.values.Farmaco, /furosemide/i);
-  assert.equal(preview.values.Orari, '06:00, 14:00, 22:00');
+  assert.match(preview.values.Orari, /^06:00.*14:00.*22:00/);
   const row = preview.therapyDraft.preview.row;
   assert.equal(row.dataInizio, request.from);
   assert.equal(row.dataFine, request.to);

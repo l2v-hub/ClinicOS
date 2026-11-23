@@ -32,6 +32,8 @@ from ..agents.extraction import run_extraction
 from ..agents.assistant import run_assistant_plan, run_assistant_compose
 from ..agents.skill_router import run_skill_route
 from ..agents.team import run_milo_team
+from ..agents.skill_proposal import run_skill_proposal
+from ..skills import all_skills
 from ..voice.stt import SttError, stt_model, stt_realtime, stt_status, transcribe as stt_transcribe
 from ..models.errors import RuntimeError_, ErrorKind
 from ..models.env_config import safe_config_summary
@@ -41,7 +43,7 @@ from ..models.registry import ModelRegistry
 from ..domain.contracts import (
     CreateJobRequest, RunRequest, RetryRequest, AssistantPlanRequest, AssistantPlanResponse,
     AssistantComposeRequest, AssistantComposeResponse, SkillRouteRequest, SkillRouteResponse,
-    TeamRequest, TeamResponse,
+    TeamRequest, TeamResponse, SkillProposalRequest, SkillProposalResponse,
 )
 from .job_control import can_retry, current_attempt, existing_job
 
@@ -339,6 +341,32 @@ async def assistant_team(req: TeamRequest, authorization: str | None = Header(de
         raise HTTPException(status.HTTP_502_BAD_GATEWAY, {"error": "team error", "code": ai_error_code(ex)})
     except Exception as ex:  # pragma: no cover
         _log.error("assistant team failed: %s", type(ex).__name__)
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, "internal error")
+
+
+# Milo, «skill creator»: le competenze rilasciate (file con versione) e le proposte di miglioramento.
+@app.get("/v1/assistant/skills")
+def assistant_skills(authorization: str | None = Header(default=None)):
+    _auth(authorization)
+    return {"skills": [skill.public() for skill in all_skills()]}
+
+
+@app.post("/v1/assistant/skill-proposal", response_model=SkillProposalResponse)
+async def assistant_skill_proposal(req: SkillProposalRequest, authorization: str | None = Header(default=None)):
+    _auth(authorization)
+    if not ai_enabled(os.environ):
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, {"error": "AI disattivata"})
+    try:
+        out = await run_skill_proposal(_REGISTRY, req.skillId, req.feedback, req.skillOverrides)
+        _log.info("skill proposal ok skill=%s instructions=%d", out["skillId"], len(out["instructions"]))
+        return SkillProposalResponse(**out)
+    except ValueError:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, {"error": "skill sconosciuta"})
+    except RuntimeError_ as ex:
+        _log.warning("skill proposal runtime error: %s", ai_error_code(ex))
+        raise HTTPException(status.HTTP_502_BAD_GATEWAY, {"error": "proposal error", "code": ai_error_code(ex)})
+    except Exception as ex:  # pragma: no cover
+        _log.error("skill proposal failed: %s", type(ex).__name__)
         raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, "internal error")
 
 

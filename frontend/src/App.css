@@ -5908,6 +5908,57 @@ textarea.form-input {
   gap: 8px;
   margin: 4px 0 10px;
 }
+.milo-feedback {
+  margin: 4px 0 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.milo-feedback__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.milo-feedback__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.milo-feedback__form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.milo-feedback__label {
+  font-weight: 600;
+  color: var(--text);
+}
+.milo-feedback__text {
+  width: 100%;
+  min-height: 72px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  resize: vertical;
+}
+.milo-feedback__text:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+}
+.milo-feedback__hint {
+  margin: 0;
+  font-size: 12px;
+}
+.milo-feedback__error {
+  margin: 6px 0 0;
+  color: var(--red);
+}
+.milo-feedback--sent {
+  color: var(--text);
+}
 .milo-pins {
   margin-bottom: 12px;
 }
@@ -6147,6 +6198,7 @@ textarea.form-input {
     margin-bottom: 12px;
   }
   body.milo-printing .milo-print-target .milo-answer-tools,
+  body.milo-printing .milo-feedback,
   body.milo-printing .milo-print-target .ai-asst__actions {
     display: none;
   }

@@ -27,6 +27,7 @@ import aiAuditRouter from './routes/ai-audit.js';
 import farmaciRouter from './routes/farmaci.js';
 import { createToolRouter, isLargeBodyToolInvoke } from './tools/http.js';
 import { authzRouter, simulatorRouter } from './routes/authz.js';
+import { miloSkillsRouter } from './routes/milo-skills.js';
 import { capabilityRouteGate } from './authz/route-gate.js';
 import { authzOf, requireAuthorizationContext } from './authz/request-context.js';
 import { effectiveCapabilities, roleDefinition } from './authz/decision.js';
@@ -218,6 +219,8 @@ app.get('/auth/me', requireOperator, requireAuthorizationContext, (req, res) => 
 
 // Phase 2: Role Simulator (dev identity source) and the Role & Capability policy API.
 app.use('/auth/simulator', simulatorRouter);
+// Milo: governo delle competenze degli specialisti (stesso permesso della policy).
+app.use('/authz/milo', miloSkillsRouter);
 app.use('/authz', authzRouter);
 // Backend enforcement of the capability policy for every catalogued route, before any router.
 app.use(capabilityRouteGate);

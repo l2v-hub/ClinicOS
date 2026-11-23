@@ -35,6 +35,9 @@ class _MockRunner:
             return json.dumps({"skillId": None})
         if "ASSISTANT_COMPOSE_V1" in prompt:
             return json.dumps({"answerText": "", "citedSources": []})
+        # Milo, proposte di competenze: mai una proposta inventata.
+        if "MILO_SKILL_PROPOSAL_V1" in prompt:
+            return json.dumps({"instructions": [], "rationale": ""})
         return json.dumps(EMPTY_EXTRACTION)
 
 

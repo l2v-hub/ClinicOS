@@ -28,6 +28,8 @@ export interface EvalExpectation {
   };
   /** handoff: la risposta offre (o no) il pulsante verso il flusso di prescrizione. */
   button?: boolean;
+  /** Tempo massimo di risposta, misurato solo contro un sito (non nei test sui dati del seed). */
+  maxSeconds?: number;
 }
 
 export interface EvalCase {
@@ -54,6 +56,7 @@ export const MILO_EVAL_CASES: EvalCase[] = [
     question:
       "Come va il paziente Bassi mi dai i valori dell'ultima settimana. Cosa devo controllare che come dati è fondamentale indagare",
     expect: {
+      maxSeconds: 45,
       kind: 'read',
       tools: ['get_patient_parameters'],
       blocks: ['Da controllare (promemoria da protocollo)', 'Andamento dei parametri'],
@@ -69,6 +72,7 @@ export const MILO_EVAL_CASES: EvalCase[] = [
     question:
       'Chi ha fatto ultimo visita e registrazione parametri del paziente Bassi, quali sono stati i suoi turni',
     expect: {
+      maxSeconds: 45,
       kind: 'read',
       tools: ['get_patient_care_contacts'],
       blocks: ['Chi ha seguito il paziente', 'Turni settimanali'],
@@ -83,6 +87,7 @@ export const MILO_EVAL_CASES: EvalCase[] = [
     role: 'Supervisore 1',
     question: 'Quante camere sono occupate e quando si libererà una singola e una doppia',
     expect: {
+      maxSeconds: 45,
       kind: 'read',
       tools: ['query_rooms_occupancy'],
       blocks: ['Camere per tipo', 'Dimissioni previste'],
@@ -143,12 +148,23 @@ export const MILO_EVAL_CASES: EvalCase[] = [
     title: 'Farmaco e dose detti dal medico: testo pronto e passaggio al flusso di prescrizione',
     role: 'Medico 1',
     question:
-      'prescrivi a Ferrioli furosemide 25 mg 1 cpr ogni 8 ore per 5 giorni e avvisami quando ha completato la terapia',
+      'prescrivi a Ferrioli furosemide 25 mg 1 cpr per os ogni 8 ore per 5 giorni e avvisami quando ha completato la terapia',
     expect: {
       kind: 'handoff',
       button: true,
       blocks: ['Prescrizione da preparare'],
       includes: ['Furosemide', '25 mg', '06:00, 14:00, 22:00', 'Terapia completata'],
+    },
+  },
+  {
+    id: 'caso-5-via-mancante',
+    title: 'Senza la via di somministrazione Milo la chiede, non la deduce',
+    role: 'Medico 1',
+    question: 'prescrivi a Ferrioli furosemide 25 mg 1 cpr ogni 8 ore per 5 giorni',
+    expect: {
+      kind: 'handoff',
+      button: false,
+      includes: ['via di somministrazione'],
     },
   },
   {
@@ -217,7 +233,11 @@ function kindOf(response: unknown): EvalExpectation['kind'] | 'unknown' {
 }
 
 /** Valuta la risposta di `/ai/actions/plan` contro le attese del caso. */
-export function evaluateCase(testCase: EvalCase, response: unknown): EvalResult {
+export function evaluateCase(
+  testCase: EvalCase,
+  response: unknown,
+  measured: { seconds?: number } = {},
+): EvalResult {
   const expect = testCase.expect;
   const r = obj(response);
   const read = obj(r.read);
@@ -284,6 +304,13 @@ export function evaluateCase(testCase: EvalCase, response: unknown): EvalResult 
     for (const problem of p.ambiguities ?? [])
       add(`problema segnalato: ${problem}`, problems.includes(problem), problems.join(' | '));
   }
+
+  if (expect.maxSeconds !== undefined && measured.seconds !== undefined)
+    add(
+      `risposta entro ${expect.maxSeconds} s`,
+      measured.seconds <= expect.maxSeconds,
+      `${measured.seconds} s`,
+    );
 
   const skills = obj(team.skills);
   return {

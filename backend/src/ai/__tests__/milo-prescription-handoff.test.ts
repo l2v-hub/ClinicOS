@@ -55,12 +55,12 @@ test('«un diuretico» è una classe: Milo non sceglie il farmaco, propone orari
 
 test('farmaco e dose nominati: testo nella forma che il flusso di prescrizione legge davvero', () => {
   const r = matchPrescriptionRequest(
-    'prescrivi a Ferrioli furosemide 25 mg 1 cpr ogni 8 ore per 5 giorni e avvisami quando ha finito',
+    'prescrivi a Ferrioli furosemide 25 mg 1 cpr per os ogni 8 ore per 5 giorni e avvisami quando ha finito',
     TODAY,
     ENV,
   );
   assert.ok(r);
-  assert.equal(r.canonical, 'Furosemide 25 mg 1 cpr ore 6, 14 e 22 dal 23/11 al 27/11');
+  assert.equal(r.canonical, 'Furosemide 25 mg 1 cpr per os ore 6, 14 e 22 dal 23/11 al 27/11');
   const parsed = parseDiaryTherapyText(r.canonical, TODAY);
   assert.equal(parsed.row.farmacoNome, 'FUROSEMIDE');
   assert.equal(parsed.row.dosaggio, '25 mg');
@@ -69,7 +69,7 @@ test('farmaco e dose nominati: testo nella forma che il flusso di prescrizione l
   const h = prescriptionHandoff(r, 'Ferrioli Anna');
   assert.equal(
     h.message,
-    'Prepara una prescrizione per Ferrioli Anna: «Furosemide 25 mg 1 cpr ore 6, 14 e 22 dal 23/11 al 27/11»',
+    'Prepara una prescrizione per Ferrioli Anna: «Furosemide 25 mg 1 cpr per os ore 6, 14 e 22 dal 23/11 al 27/11»',
   );
   // Lo stesso messaggio, letto dall'interprete del flusso «Prepara prescrizione».
   assert.equal(extractPrescriptionText(h.message), r.canonical);
@@ -86,7 +86,7 @@ test('orari detti, orari configurati, intervallo senza orari standard', () => {
   assert.equal(said?.canonical, 'Lasix 25 mg per os ore 8 e 20 dal 23/11 al 25/11');
   assert.equal(said?.timesProposed, false);
   const configured = matchPrescriptionRequest(
-    'prescrivi furosemide 25 mg ogni 8 ore per 2 giorni',
+    'prescrivi furosemide 25 mg per os ogni 8 ore per 2 giorni',
     TODAY,
     { MILO_EVERY_8H: '07:00,15:00,23:00' } as NodeJS.ProcessEnv,
   );
@@ -111,7 +111,7 @@ test('non è una prescrizione nuova: domande, modifiche, sospensioni, parametri'
 test('pannello di Milo: tabella della prescrizione e pulsante verso il flusso del medico', async () => {
   const r = await planCommand(
     {
-      text: 'prescrivi a Ferrioli furosemide 25 mg 1 cpr ogni 8 ore per 5 giorni e avvisami quando ha finito',
+      text: 'prescrivi a Ferrioli furosemide 25 mg 1 cpr per os ogni 8 ore per 5 giorni e avvisami quando ha finito',
       channel: 'testo',
       operatorCtx: doctor,
     },
@@ -129,6 +129,7 @@ test('pannello di Milo: tabella della prescrizione e pulsante verso il flusso de
       'Farmaco: Furosemide',
       'Dose: 25 mg',
       'Quantità: 1 cpr',
+      'Via: per os',
       'Orari: 06:00, 14:00, 22:00 (proposti per «ogni 8 ore»: modificabili)',
       'Periodo: dal 23/11 al 27/11 (5 giorni)',
       'Avviso a fine terapia: sì, automatico',
@@ -178,4 +179,27 @@ test('cancellazioni e modifiche di una terapia esistente restano rifiuti', async
   );
   assert.equal(change.plan.actionType, 'refuse_forbidden');
   assert.equal(change.read, null);
+});
+
+test('senza la via di somministrazione Milo la chiede e non offre il pulsante', async () => {
+  const r = matchPrescriptionRequest(
+    'prescrivi a Ferrioli furosemide 25 mg 1 cpr ogni 8 ore per 5 giorni',
+    TODAY,
+    ENV,
+  );
+  assert.equal(r?.canonical, null);
+  assert.deepEqual(r?.missing, ['la via di somministrazione (per os, ev, im, sc)']);
+  const planned = await planCommand(
+    {
+      text: 'prescrivi a Ferrioli furosemide 25 mg 1 cpr ogni 8 ore per 5 giorni',
+      channel: 'testo',
+      operatorCtx: doctor,
+    },
+    deps,
+  );
+  assert.match(planned.read?.answerText ?? '', /via di somministrazione/);
+  assert.deepEqual(
+    (planned.read?.blocks ?? []).map((b) => b.type),
+    ['table'],
+  );
 });

@@ -710,11 +710,11 @@
     {
       "capability_id": "agnos.plan_command",
       "name": "Agnos — pianifica comando (testo/voce)",
-      "description": "Deriva il piano (letture → assistantQuery; scritture → grounding + preview) da testo libero; nessuna scrittura.",
+      "description": "Deriva il piano (letture → assistantQuery; scritture → grounding + preview) da testo libero; nessuna scrittura. Sulla stessa conversazione: giudizio della persona sulla risposta ricevuta (POST /ai/actions/feedback, 👍/👎 con correzione).",
       "domain": "agnos",
       "type": "action",
       "feature_ui": "frontend/src/components/shared/agnos/useAgnosChat.ts",
-      "entry_point": "POST /ai/actions/plan (backend/src/routes/ai-actions.ts:99)",
+      "entry_point": "POST /ai/actions/plan, POST /ai/actions/feedback (backend/src/routes/ai-actions.ts:99)",
       "services": ["backend/src/ai/actions/orchestrate.ts#planCommand"],
       "input": "body {text, channel testo|voce, currentPatientId?, agent?}",
       "output": "{plan, preview, read}",
@@ -728,7 +728,11 @@
       "risk": "403 se voce/Agnos disabilitato; preview può leggere dati del paziente.",
       "agno_integration": "Agnos orchestrator (planCommand)",
       "tool_candidate": null,
-      "files": ["backend/src/ai/actions/orchestrate.ts", "backend/src/routes/ai-actions.ts"],
+      "files": [
+        "backend/src/ai/actions/orchestrate.ts",
+        "backend/src/milo-skills/store.ts",
+        "backend/src/routes/ai-actions.ts"
+      ],
       "technical_state": "READY",
       "rationale": "Servizio esportato; è un orchestratore NL, non una capability di dominio: i tool di dominio ne sono gli esecutori.",
       "exposure": "NOT_EXPOSED",

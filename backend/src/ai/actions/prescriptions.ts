@@ -67,6 +67,8 @@ export interface PrescriptionRequest {
   drugClass: string | null;
   dose: string | null;
   quantity: string | null;
+  /** Via di somministrazione come detta dal medico («per os», «ev»…), mai dedotta. */
+  route: string | null;
   times: string[];
   /** true quando gli orari sono una proposta per «ogni N ore» (il medico li può cambiare). */
   timesProposed: boolean;
@@ -117,6 +119,7 @@ export function matchPrescriptionRequest(
       }`
     : null;
   const route = ROUTE.exec(q);
+  const routeText = route ? (/(os|orale)/.test(route[1]) ? 'per os' : route[1]) : null;
 
   const everyHours = every ? Number(every[1]) : null;
   const explicit = EXPLICIT_TIMES.exec(q);
@@ -148,18 +151,21 @@ export function matchPrescriptionRequest(
         ? `il farmaco e la dose: «${klass[1]}» è una classe, non un farmaco`
         : 'il farmaco e la dose',
     );
+  // Senza la via di somministrazione il flusso di prescrizione non offre la conferma: va chiesta
+  // qui, non dedotta dalla forma del farmaco.
+  if (drug && !route) missing.push('la via di somministrazione (per os, ev, im, sc)');
   if (!times.length)
     missing.push(
       everyHours ? `gli orari (per «ogni ${everyHours} ore» non ho orari standard)` : 'gli orari',
     );
 
   let canonical: string | null = null;
-  if (drug && doseText && times.length) {
+  if (drug && doseText && times.length && route) {
     canonical = [
       drug,
       doseText,
       quantity,
-      route ? (/(os|orale)/.test(route[1]) ? 'per os' : route[1]) : null,
+      routeText,
       timesClause,
       from && to ? `dal ${dayMonth(from)} al ${dayMonth(to)}` : null,
     ]
@@ -178,6 +184,7 @@ export function matchPrescriptionRequest(
     drugClass: klass?.[1] ?? null,
     dose: doseText,
     quantity,
+    route: routeText,
     times,
     timesProposed,
     everyHours,
@@ -214,6 +221,7 @@ export function prescriptionHandoff(
   ]);
   if (request.dose) rows.push(['Dose', request.dose]);
   if (request.quantity) rows.push(['Quantità', request.quantity]);
+  if (request.drug) rows.push(['Via', request.route ?? 'da indicare']);
   if (request.times.length)
     rows.push([
       'Orari',
@@ -237,7 +245,7 @@ export function prescriptionHandoff(
       message: null,
       text:
         `Per preparare la prescrizione mi serve ancora: ${missing.join('; ')}. ` +
-        'Scrivila per intero: «prescrivi a [paziente] [farmaco] [dose] ogni 8 ore per 5 giorni». ' +
+        'Scrivila per intero: «prescrivi a [paziente] [farmaco] [dose] [via] ogni 8 ore per 5 giorni». ' +
         'Non scelgo io il farmaco: la prescrizione la decide e la conferma il medico.',
     };
   }
