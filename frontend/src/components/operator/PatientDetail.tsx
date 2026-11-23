@@ -2681,7 +2681,12 @@ export function PatientDetail({
         {current === 'note' && renderNote()}
         {current === 'parametri' && (
           <PatientVitalSignsView
-            key={`${paziente.id}:${operatoreId}`}
+            // Una rilevazione registrata da Milo ricarica la pagina: si vede subito nello storico.
+            key={`${paziente.id}:${operatoreId}:${
+              assistantSectionRefresh?.actionType === 'create_parameter_reading'
+                ? assistantSectionRefresh.version
+                : 0
+            }`}
             operatoreId={operatoreId}
             cartella={cartella}
             paziente={paziente}

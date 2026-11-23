@@ -32,6 +32,7 @@ import {
   type UnifiedReading,
 } from './clinical-series.js';
 import { getPatientDiary, getPatientVitalSigns } from './services.js';
+import { attentionPoints, type AttentionSummary } from './clinical-attention.js';
 
 type Sourced<T> = { data: T[]; sourceRefs: SourceReference[]; truncated: boolean };
 
@@ -116,6 +117,8 @@ export interface ParameterOverview {
   to: string;
   readings: UnifiedReading[];
   series: ParameterSeries[];
+  /** Punti da controllare calcolati dal sistema sul protocollo NEWS2 (promemoria, non diagnosi). */
+  attention: AttentionSummary;
 }
 
 /** Parametri di un periodo: rilevazioni unificate + serie per parametro con aggregati per giorno. */
@@ -139,6 +142,8 @@ export async function getPatientParameters(
     to: window.to.toISOString(),
     readings: relevant,
     series: parameterSeries(relevant, keys.length ? keys : SERIES_KEYS),
+    // Sempre su tutte le rilevazioni del periodo: il NEWS2 richiede i sette parametri.
+    attention: attentionPoints(readings),
   };
   gatewayAudit(
     ctx,
@@ -470,7 +475,7 @@ const isShift = (
  * Solo nome, ruolo, qualifica, reparto e orari; nessun dato di pazienti. Lettura di struttura.
  */
 export async function queryStaffShifts(
-  args: { date?: unknown; ruolo?: unknown },
+  args: { date?: unknown; ruolo?: unknown; operator?: unknown },
   ctx: UserContext,
   env: NodeJS.ProcessEnv = process.env,
 ): Promise<Sourced<ShiftRow>> {
@@ -480,6 +485,11 @@ export async function queryStaffShifts(
   const date = isDay(args.date) ? args.date : null;
   const weekday = date ? weekdayOf(date) : null;
   const ruolo = typeof args.ruolo === 'string' ? args.ruolo.trim().toLowerCase() : '';
+  // Filtro per persona («i turni di Laura Bianchi»): tutte le parole del nome, in qualunque ordine.
+  const who =
+    typeof args.operator === 'string'
+      ? args.operator.trim().toLowerCase().split(/\s+/).filter(Boolean).slice(0, 4)
+      : [];
   const rows = await prisma.operatorSchedule.findMany({
     where: { operator: { user: { isActive: true } } },
     take: 500,
@@ -500,6 +510,7 @@ export async function queryStaffShifts(
   for (const row of rows) {
     const op = row.operator;
     if (ruolo && !`${op.ruolo ?? ''} ${op.qualifica ?? ''}`.toLowerCase().includes(ruolo)) continue;
+    if (who.length && !who.every((w) => op.user.fullName.toLowerCase().includes(w))) continue;
     const turni = (row.data as { turni?: unknown })?.turni;
     for (const shift of Array.isArray(turni) ? turni.filter(isShift) : []) {
       if (!shift.disponibile) continue;
@@ -549,7 +560,7 @@ export interface AgendaRow {
  * che li tiene (es. le visite del medico). Motivo e note NON escono: restano nella scheda.
  */
 export async function queryAgenda(
-  args: { from?: unknown; to?: unknown; ruolo?: unknown },
+  args: { from?: unknown; to?: unknown; ruolo?: unknown; patientId?: unknown },
   ctx: UserContext,
   env: NodeJS.ProcessEnv = process.env,
 ): Promise<Sourced<AgendaRow>> {
@@ -563,6 +574,9 @@ export async function queryAgenda(
     throw new GatewayError('bad_request', 'Periodo dell’agenda non valido (massimo 31 giorni)');
   if (ctx.permittedPatientIds?.length === 0) return { data: [], sourceRefs: [], truncated: false };
   const ruolo = typeof args.ruolo === 'string' ? args.ruolo.trim().toLowerCase() : '';
+  // Un solo paziente («le visite di Bassi»): deve essere nel perimetro.
+  const onePatient = typeof args.patientId === 'string' && args.patientId ? args.patientId : null;
+  if (onePatient) assertPatientAllowed(ctx, onePatient);
   const rows = await prisma.appointment.findMany({
     where: {
       // Giorni di struttura: margine di un giorno per il fuso, poi filtro esatto sul giorno locale.
@@ -570,7 +584,11 @@ export async function queryAgenda(
         gte: new Date(`${addDays(fromDay, -1)}T00:00:00.000Z`),
         lte: new Date(`${addDays(toDay, 1)}T23:59:59.999Z`),
       },
-      ...(ctx.permittedPatientIds === null ? {} : { patientId: { in: ctx.permittedPatientIds } }),
+      ...(onePatient
+        ? { patientId: onePatient }
+        : ctx.permittedPatientIds === null
+          ? {}
+          : { patientId: { in: ctx.permittedPatientIds } }),
     },
     orderBy: [{ scheduledAt: 'asc' }, { id: 'asc' }],
     take: 501,

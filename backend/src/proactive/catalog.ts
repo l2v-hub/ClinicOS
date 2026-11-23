@@ -28,6 +28,7 @@ export type EventType =
   | 'handover.open'
   | 'therapy.prescribed'
   | 'therapy.changed'
+  | 'therapy.completed'
   | 'administration.recorded'
   | 'administration.due'
   | 'document.added'
@@ -150,6 +151,23 @@ export const EVENT_CATALOG: EventTypeDef[] = [
     sensitivity: 'high',
     signal: 'STATE_CHANGE',
     priority: 'normale',
+    skillId: 'patient.overview',
+    starter: 'Dimmi tutto su questo ospite',
+    status: 'integrated',
+  },
+  {
+    // Milo, caso «avvisami quando ha completato la terapia»: una terapia periodica arrivata alla
+    // data di fine. È un fatto dei dati (dataFine), non una valutazione: chi l'ha prescritta la
+    // vede con priorità alta, gli altri dell'ambito come cambio di stato.
+    type: 'therapy.completed',
+    domain: 'therapy',
+    source:
+      'PatientTherapy periodica non sospesa con dataFine trascorsa (ultimo orario dell’ultimo giorno), negli ultimi PROACTIVE_THERAPY_COMPLETED_DAYS giorni (default 3)',
+    capabilities: ['administration.list_slots', CARE_FEED_CAPABILITY],
+    audience: 'care',
+    sensitivity: 'high',
+    signal: 'FOLLOW_UP',
+    priority: 'regola: prescritta o inserita da chi guarda → alta; altrimenti normale',
     skillId: 'patient.overview',
     starter: 'Dimmi tutto su questo ospite',
     status: 'integrated',

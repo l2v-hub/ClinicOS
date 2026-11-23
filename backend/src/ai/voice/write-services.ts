@@ -5,7 +5,7 @@
 import { Prisma } from '@prisma/client';
 import { hasFacilityPatientScope } from '../../patients/patient-scope.js';
 import { preserveTemporaryPsExits } from '../../patients/temporary-ps-exits.js';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { prisma } from '../../lib/prisma.js';
 import { validatePatientPhone } from '../../lib/patient-phone.js';
 import { parseDiaryCreateBody } from '../../patients/diary-write-validation.js';
@@ -19,6 +19,8 @@ import {
 } from '../sections/patient-narrative.js';
 import { createAppointment, updateAppointment } from '../../services/appointment-service.js';
 import { createConsegna as createConsegnaService } from '../../services/consegna-service.js';
+import { createParameterReading as createParameterReadingService } from '../../patients/parameter-readings.js';
+import { ParameterReadingError } from '../../patients/parameter-reading-input.js';
 import { VoiceError, type VoiceWriter, type WriteMeta } from './execute.js';
 
 const DEMOGRAPHIC_FIELDS = new Set([
@@ -35,6 +37,14 @@ function rilevatoFrom(meta: WriteMeta, timeHHMM: unknown): string {
   if (typeof timeHHMM === 'string' && /^\d{2}:\d{2}$/.test(timeHHMM))
     return `${datePart}T${timeHHMM}:00`;
   return meta.nowISO;
+}
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+/** La pagina Parametri vuole un UUID: una chiave d'azione diversa diventa un UUID stabile. */
+function stableRequestId(key: string): string {
+  if (UUID_RE.test(key)) return key.toLowerCase();
+  const h = createHash('sha256').update(key).digest('hex');
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-5${h.slice(13, 16)}-8${h.slice(17, 20)}-${h.slice(20, 32)}`;
 }
 
 export const prismaVoiceWriter: VoiceWriter = {
@@ -68,6 +78,33 @@ export const prismaVoiceWriter: VoiceWriter = {
       });
       return id;
     });
+  },
+
+  // Milo: la rilevazione passa dallo STESSO servizio della pagina Parametri (limiti, perimetro
+  // paziente, autore). Una conferma ripetuta ritrova la rilevazione già scritta, mai un doppione.
+  async createParameterReading(patientId, fields, meta) {
+    const requestId = stableRequestId(meta.requestId ?? randomUUID());
+    const prior = await prisma.$queryRaw<Array<{ id: string }>>`
+      SELECT "id" FROM "PatientParameterReading"
+      WHERE "patientId" = ${patientId} AND "requestId" = ${requestId}
+        AND "authorOperatorId" = ${meta.operatorId}`;
+    if (prior[0]) return { id: prior[0].id, replayed: true };
+    const measuredAt =
+      typeof fields.measuredAt === 'string'
+        ? fields.measuredAt
+        : new Date(Math.floor(Date.parse(meta.nowISO) / 1000) * 1000).toISOString();
+    try {
+      const created = await createParameterReadingService(
+        patientId,
+        { requestId, measuredAt, values: fields.values ?? {} },
+        { id: meta.operatorId, role: meta.operatorRole ?? 'operatore', name: meta.operatorName },
+      );
+      return { id: created.reading.id, replayed: created.replayed };
+    } catch (error) {
+      if (error instanceof ParameterReadingError)
+        throw new VoiceError('not_executable', error.message);
+      throw error;
+    }
   },
 
   async updateDemographics(patientId, field, value, _meta) {

@@ -595,3 +595,32 @@ test('J — Classic GUI regression: routes and Administrator minimisation', asyn
   assert.equal(supervisorSkills.body.role.label, 'Supervisore');
   assert.ok(supervisorSkills.body.starters.length > 0);
 });
+
+test('Milo hand-off — the text prepared by the side panel becomes a HIGH_RISK draft with hours and end date, nothing written', async () => {
+  const { matchPrescriptionRequest, prescriptionHandoff } =
+    await import('../../ai/actions/prescriptions.js');
+  const request = matchPrescriptionRequest(
+    'prescrivi furosemide 25 mg 1 cpr ogni 8 ore per 5 giorni e avvisami quando ha finito',
+    today,
+    {} as NodeJS.ProcessEnv,
+  );
+  assert.ok(request?.canonical);
+  const handoff = prescriptionHandoff(request, `Neri${Tag} Dario`);
+  assert.ok(handoff.message);
+  const before = await prisma.patientTherapy.count({ where: { patientId: ids.doc } });
+  // Aperto da un'altra pagina: il paziente arriva dal nome scritto nel messaggio.
+  const draft = await say(doctor, { message: handoff.message, ...ctx(null) });
+  assert.equal(draft.body.status, 'NEEDS_CONFIRMATION', JSON.stringify(draft.body));
+  assert.equal(draft.body.skillId, 'therapy.prescribe');
+  const preview = draft.body.preview;
+  assert.equal(preview.confirmationClass, 'HIGH_RISK');
+  assert.equal(preview.patient.id, ids.doc);
+  assert.match(preview.values.Farmaco, /furosemide/i);
+  assert.equal(preview.values.Orari, '06:00, 14:00, 22:00');
+  const row = preview.therapyDraft.preview.row;
+  assert.equal(row.dataInizio, request.from);
+  assert.equal(row.dataFine, request.to);
+  assert.equal(await prisma.patientTherapy.count({ where: { patientId: ids.doc } }), before);
+  const cancelled = await say(doctor, { workflowId: draft.body.workflowId, action: 'cancel' });
+  assert.equal(cancelled.body.status, 'CANCELLED');
+});

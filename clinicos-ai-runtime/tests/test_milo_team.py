@@ -149,6 +149,8 @@ class MiloTeamTests(unittest.TestCase):
         self.assertEqual(out["citedSources"], [SOURCE])
         self.assertEqual(out["toolCalls"], [{"tool": "get_patient_parameters", "ok": True}])
         self.assertEqual(out["members"], ["clinico"])
+        self.assertEqual(out["skillVersions"]["clinico"], "1.1.0")
+        self.assertIn("coordinatore", out["skillVersions"])
 
     def test_only_tools_offered_by_the_backend_reach_the_specialists(self):
         FakeModel.seen_tools.clear()
@@ -287,6 +289,49 @@ class FakeResponses(BaseHTTPRequestHandler):
         self._reply([{"type": "message", "id": "msg_1", "role": "assistant", "status": "completed",
                       "content": [{"type": "output_text", "annotations": [],
                                    "text": "La sistolica è salita da 130 a 150 mmHg in 7 giorni [S1]."}]}])
+
+
+
+class MiloSkillTests(unittest.TestCase):
+    """Le competenze degli specialisti sono file versionati; le proposte approvate cambiano solo il testo."""
+
+    def test_released_skills_are_versioned_and_cover_the_use_cases(self):
+        from clinicos_ai import skills
+
+        for skill_id in (*skills.SPECIALIST_IDS, skills.COORDINATOR_ID):
+            skill = skills.load_skill(skill_id)
+            self.assertRegex(skill.version, r"^\d+\.\d+\.\d+$")
+            self.assertTrue(skill.instructions)
+        clinico = skills.load_skill("clinico")
+        self.assertIn("get_patient_care_contacts", clinico.tools)
+        self.assertTrue(any("attention.points" in i for i in clinico.instructions))
+        struttura = skills.load_skill("struttura")
+        self.assertTrue(any("prossimaCameraLibera" in i for i in struttura.instructions))
+        self.assertEqual(skills.load_skill("coordinatore").tools, ())
+
+    def test_an_approved_override_replaces_instructions_but_never_tools(self):
+        from clinicos_ai import skills
+
+        base = skills.load_skill("clinico")
+        out = skills.resolve_skill("clinico", {"clinico": {
+            "version": "1.1.0+p3", "instructions": ["Solo dati degli strumenti.", "  ", 7],
+            "tools": ["create_vital_sign"]}})
+        self.assertEqual(out.instructions, ("Solo dati degli strumenti.",))
+        self.assertEqual(out.version, "1.1.0+p3")
+        self.assertEqual(out.tools, base.tools)  # gli strumenti restano quelli rilasciati
+        # Override vuoto o malformato: resta la skill rilasciata.
+        for bad in (None, {}, {"clinico": {"instructions": []}}, {"clinico": "x"}, {"altro": {}}):
+            self.assertEqual(skills.resolve_skill("clinico", bad), base)
+        long = skills.resolve_skill("clinico", {"clinico": {"instructions": ["x" * 5000] * 50}})
+        self.assertEqual(len(long.instructions), skills.MAX_OVERRIDE_INSTRUCTIONS)
+        self.assertEqual(len(long.instructions[0]), skills.MAX_OVERRIDE_CHARS)
+
+    def test_parse_rejects_broken_files(self):
+        from clinicos_ai import skills
+
+        for text in ("", "id: x", "---\nid: x\n---\n- a", "---\nid: x\nname: n\nversion: 1.0.0\nrole: r\n---\n"):
+            with self.assertRaises(ValueError):
+                skills.parse_skill(text)
 
 
 if __name__ == "__main__":

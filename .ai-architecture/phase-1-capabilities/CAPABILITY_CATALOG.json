@@ -398,6 +398,54 @@
       "notes": "reuse_vs_divergent: reuse. Equivalente Tool Layer: consegne.create. actions.test.ts (pass) copre orchestrazione con writer iniettato, non il writer Prisma."
     },
     {
+      "capability_id": "agnos.action.create_parameter_reading",
+      "name": "Agnos action — create_parameter_reading",
+      "description": "Azione create su parameter_reading del catalogo Agnos: una rilevazione con più parametri (pressione, frequenze, saturazione, temperatura, glicemia, ossigeno, coscienza, evacuazione) nella pagina Parametri, eseguita solo via plan → conferma → execute.",
+      "domain": "agnos",
+      "type": "write",
+      "feature_ui": "frontend/src/components/shared/agnos/useAgnosChat.ts",
+      "entry_point": "POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128)",
+      "services": [
+        "backend/src/ai/voice/write-services.ts#createParameterReading",
+        "backend/src/patients/parameter-readings.ts#createParameterReading"
+      ],
+      "input": "testo libero → ActionPlan.fields.values (parser deterministico backend/src/ai/actions/parameter-dictation.ts), paziente per nome o contesto, orario esplicito",
+      "output": "esito scrittura",
+      "validations": [
+        "backend/src/ai/actions/catalog.ts#isActionAllowed",
+        "confirmed===true",
+        "backend/src/ai/gateway/context.ts#assertPatientAllowed",
+        "backend/src/patients/parameter-reading-input.ts#parseParameterReading"
+      ],
+      "side_effects": ["scrittura PatientParameterReading", "AiAuditEvent (voiceAudit)"],
+      "dependencies": ["prisma"],
+      "sensitivity": "critical",
+      "risk": "Stessa validazione e stesso archivio della pagina Parametri; valori impossibili o mancanti bloccano la conferma.",
+      "agno_integration": "Agnos action create_parameter_reading (reuse del servizio della pagina Parametri)",
+      "tool_candidate": null,
+      "files": [
+        "backend/src/ai/actions/parameters.ts",
+        "backend/src/ai/actions/parameter-dictation.ts",
+        "backend/src/ai/voice/write-services.ts",
+        "backend/src/ai/actions/catalog.ts",
+        "backend/src/ai/actions/orchestrate.ts"
+      ],
+      "technical_state": "READY",
+      "rationale": "REUSE: scrive con patients/parameter-readings.ts#createParameterReading, lo stesso servizio di POST /patients/:id/parameter-readings (limiti, perimetro paziente, autore, requestId).",
+      "exposure": "AGNOS_INTERNAL",
+      "invocability": "TESTED",
+      "legacy_roles": [],
+      "patient_scoped": true,
+      "idempotency": "requestId",
+      "test": {
+        "file": "backend/src/ai/__tests__/milo-parameter-action.test.ts",
+        "cases": ["multi-parameter reading: plan, preview, confirm"],
+        "result": "pass",
+        "gui_parity": true
+      },
+      "notes": "reuse_vs_divergent: reuse. Equivalente Tool Layer: parameters.create_reading."
+    },
+    {
       "capability_id": "agnos.action.create_vital_sign",
       "name": "Agnos action — create_vital_sign",
       "description": "Azione create su vital_sign del catalogo Agnos (backend/src/ai/actions/catalog.ts AGNOS_ACTION_CATALOG), eseguita solo via plan → conferma → execute.",
@@ -1647,6 +1695,47 @@
       "invocability": "TESTED",
       "legacy_roles": [],
       "patient_scoped": false,
+      "idempotency": "natural",
+      "test": {
+        "file": "backend/src/ai/__tests__/milo-phase1-reads.test.ts",
+        "cases": ["planner and dispatch of the Milo phase 1 reads"],
+        "result": "pass",
+        "gui_parity": false
+      },
+      "notes": "Milo fase 1."
+    },
+    {
+      "capability_id": "ai.read.get_patient_care_contacts",
+      "name": "Agnos read tool — get_patient_care_contacts",
+      "description": "Chi ha seguito il paziente: autore dell'ultima rilevazione, ultima visita e ultima nota del medico, con i turni settimanali di quelle persone.",
+      "domain": "ai_read",
+      "type": "read",
+      "feature_ui": "Agnos (via assistant.query / agnos.plan_command)",
+      "entry_point": "ai/assistant/service.ts dispatch('get_patient_care_contacts') ← POST /ai/assistant/query, POST /ai/actions/plan",
+      "services": ["backend/src/ai/gateway/care-reads.ts#getPatientCareContacts"],
+      "input": "patientId, days?",
+      "output": "SourcedResult {data, sourceRefs, truncated}",
+      "validations": [
+        "backend/src/ai/gateway/context.ts#assertTenant/assertPatientAllowed",
+        "backend/src/ai/assistant/read-tools.ts#isReadTool"
+      ],
+      "side_effects": ["AiAuditEvent (gatewayAudit)"],
+      "dependencies": ["prisma"],
+      "sensitivity": "high",
+      "risk": "Patient-scoped: assertTenant/assertPatientAllowed.",
+      "agno_integration": "Agnos read tool get_patient_care_contacts (gateway impl, not REST handlers)",
+      "tool_candidate": null,
+      "files": [
+        "backend/src/ai/gateway/clinical-reads.ts",
+        "backend/src/ai/assistant/service.ts",
+        "backend/src/ai/assistant/read-tools.ts"
+      ],
+      "technical_state": "READY",
+      "rationale": "Milo fase 1 (docs/architecture/milo-ai-first.md): lettura nuova del gateway, raggiungibile solo tramite il dispatcher di assistantQuery.",
+      "exposure": "AGNOS_INTERNAL",
+      "invocability": "TESTED",
+      "legacy_roles": [],
+      "patient_scoped": true,
       "idempotency": "natural",
       "test": {
         "file": "backend/src/ai/__tests__/milo-phase1-reads.test.ts",

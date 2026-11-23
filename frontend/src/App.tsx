@@ -163,6 +163,7 @@ import { resolvePatientTab, type TabId } from './components/operator/tabGroups';
 import type { TherapyRoundsEntry } from './components/operator/TherapyRoundsPage';
 import type { AssistantNav } from './components/shared/AIAssistantButton';
 import { navigateAgnosTarget } from './components/shared/agnos/agnosActionNavigation';
+import { MILO_OPEN_ASSISTANT_EVENT } from './lib/miloEvents';
 import { classicScreenTarget } from './components/assistant/classicScreenTarget';
 import TeamsLikeSidebar from './components/shared/TeamsLikeSidebar';
 import { parseHandoverOverview } from './lib/handoverOverviewResponse';
@@ -499,6 +500,17 @@ export default function App() {
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [aiOpen, setAiOpen] = useState(false);
   const [assistantModeOpen, setAssistantModeOpen] = useState(false);
+  // Milo: testo preparato dal pannello (es. una prescrizione) con cui aprire lo schermo intero.
+  const [assistantModeDraft, setAssistantModeDraft] = useState('');
+  useEffect(() => {
+    const open = (event: Event) => {
+      const message = (event as CustomEvent<{ message?: unknown }>).detail?.message;
+      setAssistantModeDraft(typeof message === 'string' ? message.slice(0, 600) : '');
+      setAssistantModeOpen(true);
+    };
+    window.addEventListener(MILO_OPEN_ASSISTANT_EVENT, open);
+    return () => window.removeEventListener(MILO_OPEN_ASSISTANT_EVENT, open);
+  }, []);
   const [aiOpenTrigger, setAiOpenTrigger] = useState(0);
   const [aiLoaded, setAiLoaded] = useState(false);
   const [aiVisible, setAiVisible] = useState(false);
@@ -2517,6 +2529,7 @@ export default function App() {
     setAiLoaded(false);
     // Phase 6: the full-screen Assistant never reopens for the next operator.
     setAssistantModeOpen(false);
+    setAssistantModeDraft('');
     setToastMsg(null);
     setMobileNavOpen(false);
     setPazientiRicerca('');
@@ -4095,9 +4108,15 @@ export default function App() {
                     ? { id: pazienteSelezionato.id }
                     : null
                 }
-                onClose={() => setAssistantModeOpen(false)}
+                key={assistantModeDraft}
+                initialDraft={assistantModeDraft}
+                onClose={() => {
+                  setAssistantModeOpen(false);
+                  setAssistantModeDraft('');
+                }}
                 onOpenClassic={(screen) => {
                   setAssistantModeOpen(false);
+                  setAssistantModeDraft('');
                   const target = classicScreenTarget(screen);
                   if (target.kind === 'patient')
                     void openPatientAt({

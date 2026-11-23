@@ -6,6 +6,7 @@ import { deploymentTier, type DeploymentTier } from '../lib/deployment.js';
 import { seedDemoDataset } from './demo-dataset.js';
 import { seedFullDemoPatient } from './demo-patient.js';
 import { seedSyntheticExtras } from './extras.js';
+import { seedMiloScenarios } from './milo-scenarios.js';
 import { tableCounts, wipeOperationalData, type WipeResult } from './wipe.js';
 
 export const WIPE_CONFIRMATION = 'CANCELLA TUTTO';
@@ -101,6 +102,7 @@ export async function seedSyntheticData(prisma: PrismaClient): Promise<SeedResul
   await seedDemoDataset(prisma);
   const { patientId } = await seedFullDemoPatient(prisma);
   await seedSyntheticExtras(prisma);
+  await seedMiloScenarios(prisma);
   return { demoPatientId: patientId, counts: await syntheticDataCounts(prisma) };
 }
 

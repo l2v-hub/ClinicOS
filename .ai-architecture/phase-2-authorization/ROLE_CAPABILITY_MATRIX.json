@@ -130,6 +130,10 @@
       "governed_by": "consegne.create"
     },
     {
+      "capability_id": "agnos.action.create_parameter_reading",
+      "governed_by": "parameters.create_reading"
+    },
+    {
       "capability_id": "agnos.action.create_vital_sign",
       "governed_by": "parameters.create_reading"
     },
@@ -272,6 +276,10 @@
     {
       "capability_id": "ai.read.query_staff_shifts",
       "governed_by": "operators.schedules"
+    },
+    {
+      "capability_id": "ai.read.get_patient_care_contacts",
+      "governed_by": "parameters.list_readings"
     }
   ],
   "outside_role_policy": [

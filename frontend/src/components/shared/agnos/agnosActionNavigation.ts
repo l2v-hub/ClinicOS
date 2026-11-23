@@ -25,6 +25,7 @@ export function agnosItemTarget(nav: AssistantNav): AgnosItemTarget | undefined 
 
 const WRITE_DESTINATIONS: Record<string, { type: string; label: string }> = {
   create_vital_sign: { type: 'open_parameter', label: 'Parametri Vitali' },
+  create_parameter_reading: { type: 'open_parameter', label: 'Parametri' },
   update_patient_demographics: { type: 'open_profile', label: 'Profilo' },
   update_narrative_section: { type: 'open_section', label: 'Sezioni cliniche' },
   add_diary_note: { type: 'open_diary', label: 'Diario' },

@@ -53,6 +53,9 @@ interface Props {
   onClose: () => void;
   /** Fallback to the classic GUI (Prompt 4 §13). */
   onOpenClassic: (screen: ClassicScreen) => void;
+  /** Testo già scritto nel campo all'apertura (es. prescrizione preparata dal pannello di Milo):
+   *  resta una bozza, parte solo quando la persona lo invia. */
+  initialDraft?: string;
 }
 
 const VALUE_FIELDS: Array<{ key: string; label: string; placeholder: string }> = [
@@ -78,9 +81,9 @@ function resultReferences(result: unknown): string[] {
     .map(([key, value]) => `${key}: ${String(value).slice(0, 12)}…`);
 }
 
-export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
+export function AssistantMode({ pageResident, onClose, onOpenClassic, initialDraft }: Props) {
   const [state, dispatch] = useReducer(assistantReducer, initialAssistantState);
-  const [draft, setDraft] = useState('');
+  const [draft, setDraft] = useState(initialDraft ?? '');
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerQuery, setPickerQuery] = useState('');
   const [pickerResults, setPickerResults] = useState<AssistantResident[]>([]);
@@ -89,7 +92,10 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
   const [home, setHome] = useState<CopilotHomeData | null | undefined>(undefined);
   const homeSeq = useRef(0);
   const [round, setRound] = useState<CopilotShortcut | null>(null);
-  const [panelRequest, setPanelRequest] = useState<{ tab: 'da-vedere' | 'cambiato' | 'briefing'; n: number } | null>(null);
+  const [panelRequest, setPanelRequest] = useState<{
+    tab: 'da-vedere' | 'cambiato' | 'briefing';
+    n: number;
+  } | null>(null);
   const inFlight = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const mainEnd = useRef<HTMLDivElement>(null);
@@ -310,7 +316,10 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
     if (state.busy) return;
     const resumed = await resumeWorkflow(workflowId).catch(() => null);
     if (!resumed) {
-      dispatch({ type: 'request_failed', message: 'Anteprima non più disponibile: ricomincia la richiesta.' });
+      dispatch({
+        type: 'request_failed',
+        message: 'Anteprima non più disponibile: ricomincia la richiesta.',
+      });
       void refreshSession(residentId);
       return;
     }
@@ -319,7 +328,10 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
         const { resident } = await selectResident(resumed.resident.id); // backend scope check
         await changeResident(resident);
       } catch {
-        dispatch({ type: 'request_failed', message: 'Ospite non più nel tuo ambito: anteprima non riaperta.' });
+        dispatch({
+          type: 'request_failed',
+          message: 'Ospite non più nel tuo ambito: anteprima non riaperta.',
+        });
         return;
       }
     }
@@ -361,7 +373,10 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
     if (action.kind === 'resume_workflow') {
       const resumed = await resumeWorkflow(action.workflowId).catch(() => null);
       if (!resumed) {
-        dispatch({ type: 'request_failed', message: 'Anteprima non più disponibile: ricomincia la richiesta.' });
+        dispatch({
+          type: 'request_failed',
+          message: 'Anteprima non più disponibile: ricomincia la richiesta.',
+        });
         return;
       }
       dispatch({ type: 'response', response: resumed });
@@ -408,9 +423,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
         if (e.key === 'Escape' && !state.busy) {
           e.stopPropagation();
           // First Escape stops an open microphone / pending transcript; the next one closes.
-          if (
-            capturing(voice.audio.state) || voice.audio.state === 'TRANSCRIPT_READY'
-          ) {
+          if (capturing(voice.audio.state) || voice.audio.state === 'TRANSCRIPT_READY') {
             voice.cancel();
             return;
           }
@@ -440,7 +453,9 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
         <button type="button" className="ds-btn ds-btn--secondary am-back" onClick={onClose}>
           ← Torna all’applicazione
         </button>
-        <h1 className="am-title">Milo <small>Supporto agentico AI</small></h1>
+        <h1 className="am-title">
+          Milo <small>Supporto agentico AI</small>
+        </h1>
         <div className="am-identity" data-testid="am-identity">
           {session ? (
             <>
@@ -453,7 +468,10 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
         </div>
       </header>
 
-      <p className="am-support-note">Milo è un’intelligenza artificiale di supporto agentico: recupera informazioni e prepara proposte. Verifica sempre dati e azioni prima di confermare.</p>
+      <p className="am-support-note">
+        Milo è un’intelligenza artificiale di supporto agentico: recupera informazioni e prepara
+        proposte. Verifica sempre dati e azioni prima di confermare.
+      </p>
 
       <section className="am-resident" aria-label="Ospite attivo" data-testid="am-resident">
         <div className="am-resident__current">
@@ -740,17 +758,20 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
           />
         )}
 
-        {!active && session && home !== undefined && (!home || home.profile.sections.includes('signals')) && (
-          <ProactivePanel
-            key={home?.role.id ?? 'none'}
-            busy={state.busy}
-            onOpenSignal={(s) => void openSignal(s)}
-            initialTab={home?.profile.signals.defaultTab}
-            preferredEventTypes={home?.profile.signals.preferredEventTypes}
-            maxVisible={home?.profile.signals.maxVisible}
-            request={panelRequest}
-          />
-        )}
+        {!active &&
+          session &&
+          home !== undefined &&
+          (!home || home.profile.sections.includes('signals')) && (
+            <ProactivePanel
+              key={home?.role.id ?? 'none'}
+              busy={state.busy}
+              onOpenSignal={(s) => void openSignal(s)}
+              initialTab={home?.profile.signals.defaultTab}
+              preferredEventTypes={home?.profile.signals.preferredEventTypes}
+              maxVisible={home?.profile.signals.maxVisible}
+              request={panelRequest}
+            />
+          )}
 
         {!active && session && home === null && (
           <section className="am-starters" aria-label="Suggerimenti" data-testid="am-starters">

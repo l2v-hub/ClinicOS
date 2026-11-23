@@ -28,6 +28,8 @@ export const READ_TOOLS = [
   'get_patient_administrations',
   'query_staff_shifts',
   'query_agenda',
+  // Milo, casi d'uso: chi ha seguito il paziente (ultima rilevazione, visita, nota del medico + turni)
+  'get_patient_care_contacts',
 ] as const;
 
 export type ReadTool = (typeof READ_TOOLS)[number];
@@ -96,7 +98,15 @@ export const READ_TOOL_SCHEMA: Array<{ name: string; args: Record<string, string
   },
   { name: 'get_patient_administrations', args: { patientId: 'string', days: 'number?' } },
   // Turni del personale in un giorno (YYYY-MM-DD) o nella settimana; ruolo es. "medico", "infermiere".
-  { name: 'query_staff_shifts', args: { date: 'string?', ruolo: 'string?' } },
+  // operator: nome della persona («Laura Bianchi») per i turni di una sola persona.
+  { name: 'query_staff_shifts', args: { date: 'string?', ruolo: 'string?', operator: 'string?' } },
   // Agenda della struttura in un periodo (max 31 giorni); ruolo dell'operatore, es. "medico".
-  { name: 'query_agenda', args: { from: 'string?', to: 'string?', ruolo: 'string?' } },
+  // patientId: solo gli appuntamenti di quel paziente (anche passati, es. le ultime visite).
+  {
+    name: 'query_agenda',
+    args: { from: 'string?', to: 'string?', ruolo: 'string?', patientId: 'string?' },
+  },
+  // Chi ha registrato l'ultima rilevazione, chi ha fatto l'ultima visita e l'ultima nota del medico,
+  // con i turni settimanali di quelle persone.
+  { name: 'get_patient_care_contacts', args: { patientId: 'string' } },
 ];

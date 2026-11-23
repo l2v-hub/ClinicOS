@@ -50,6 +50,7 @@ const PATIENT_SCOPED = new Set([
   'get_patient_diary',
   'get_patient_assessments',
   'get_patient_administrations',
+  'get_patient_care_contacts',
 ]);
 
 /**
@@ -94,6 +95,9 @@ const INTENTS = new Set<AssistantIntent>([
   'administrations',
   'staff_shifts',
   'agenda',
+  // Milo, casi d'uso
+  'patient_status',
+  'care_contacts',
 ]);
 
 /** Valida la forma del piano LLM e i tool contro l'allowlist read. Ritorna null se non valido. */
@@ -131,6 +135,9 @@ export const PRECISE_INTENTS = new Set<string>([
   'diary',
   'assessments',
   'administrations',
+  'patient_status',
+  'care_contacts',
+  'rooms_occupancy',
 ]);
 
 export async function planQueryLLM(

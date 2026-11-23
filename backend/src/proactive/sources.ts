@@ -14,7 +14,7 @@ import { therapySlotPatientAccess } from '../routes/therapy.js';
 import { unreadNotesWhere } from '../routes/note.js';
 import type { WorkflowState } from '../skills/types.js';
 import type { EventType } from './catalog.js';
-import { romeInstant, romeParts } from './time.js';
+import { addDays, romeInstant, romeParts } from './time.js';
 import { news2Sentinel, sentinelConfig } from '../clinical/sentinels.js';
 
 export interface ProactiveEvent {
@@ -263,6 +263,76 @@ const therapies: Collector = async ({ operator, since, limit }) => {
   return events;
 };
 
+const sameName = (a: string | null | undefined, b: string | null | undefined) =>
+  !!a && !!b && a.trim().toLowerCase() === b.trim().toLowerCase();
+
+/** Terapie periodiche arrivate alla data di fine: il fatto è `dataFine`, mai una deduzione. */
+const therapiesCompleted: Collector = async ({ operator, now, limit, env }) => {
+  const today = romeParts(now).date;
+  const from = addDays(today, -intEnv(env, 'PROACTIVE_THERAPY_COMPLETED_DAYS', 3));
+  const [rows, me] = await Promise.all([
+    prisma.patientTherapy.findMany({
+      where: {
+        tipo: 'periodica',
+        stato: { not: 'sospesa' },
+        dataFine: { gte: from, lte: today },
+        patient: residentScopeWhere(operator),
+      },
+      orderBy: { dataFine: 'desc' },
+      take: limit,
+      select: {
+        id: true,
+        patientId: true,
+        farmacoNome: true,
+        dosaggio: true,
+        dataInizio: true,
+        dataFine: true,
+        orarioSpecifico: true,
+        prescrittore: true,
+        operatoreInseritore: true,
+        patient: patientSelect,
+      },
+    }),
+    prisma.operator.findUnique({
+      where: { id: operator.id },
+      select: { user: { select: { fullName: true } } },
+    }),
+  ]);
+  const myName = me?.user.fullName ?? null;
+  const events: ProactiveEvent[] = [];
+  for (const r of rows) {
+    if (!r.dataFine) continue;
+    // Conclusa dopo l'ultimo orario previsto dell'ultimo giorno (a fine giornata se non ha orari).
+    const times = (r.orarioSpecifico ?? '')
+      .split(',')
+      .map((t) => t.trim())
+      .filter((t) => /^\d{2}:\d{2}$/.test(t))
+      .sort();
+    const end = romeInstant(r.dataFine, times[times.length - 1] ?? '23:59');
+    if (end.getTime() > now.getTime()) continue;
+    const mine =
+      [r.prescrittore, r.operatoreInseritore].some((who) => sameName(who, myName)) ||
+      r.operatoreInseritore === operator.id;
+    events.push({
+      eventId: `therapy.completed:${r.id}:${r.dataFine}`,
+      type: 'therapy.completed',
+      occurredAt: end.toISOString(),
+      residentId: r.patientId,
+      residentLabel: label(r.patient),
+      actor: { kind: 'system', id: null, name: null },
+      payload: {
+        drug: short(r.farmacoNome, 60),
+        dose: short(r.dosaggio, 40),
+        from: r.dataInizio,
+        to: r.dataFine,
+        mine,
+        prescriber: short(r.prescrittore ?? r.operatoreInseritore, 60),
+      },
+    });
+  }
+  return events;
+};
+
 const administrationsRecorded: Collector = async ({ operator, since, limit }) => {
   const rows = await prisma.medicationAdministration.findMany({
     where: {
@@ -506,6 +576,7 @@ export const COLLECTORS: Record<EventType, Collector> = {
   'handover.open': handovers,
   'therapy.prescribed': therapies,
   'therapy.changed': async () => [], // produced by the therapies collector together with prescribed
+  'therapy.completed': therapiesCompleted,
   'administration.recorded': administrationsRecorded,
   'administration.due': administrationsDue,
   'document.added': documents,

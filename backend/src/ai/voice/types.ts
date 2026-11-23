@@ -7,6 +7,7 @@
 export type VoiceActionType =
   | 'read' // a question → delegated to the read-only assistant (REQ-040)
   | 'create_vital_sign'
+  | 'create_parameter_reading' // Milo: più parametri in una rilevazione della pagina Parametri
   | 'update_patient_demographics'
   | 'update_narrative_section'
   | 'add_diary_note'
@@ -20,6 +21,7 @@ export type VoiceActionType =
 // The only write tools enabled. Deletes and clinically-critical changes are intentionally absent.
 export const WRITE_ACTION_TYPES: readonly VoiceActionType[] = [
   'create_vital_sign',
+  'create_parameter_reading',
   'update_patient_demographics',
   'update_narrative_section',
   'add_diary_note',

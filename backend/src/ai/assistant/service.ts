@@ -8,6 +8,7 @@ import { prisma } from '../../lib/prisma.js';
 import { getFacilityOccupancy } from '../../rooms/occupancy-service.js';
 import * as svc from '../gateway/services.js';
 import * as clinical from '../gateway/clinical-reads.js';
+import * as care from '../gateway/care-reads.js';
 import { facilityToday } from '../../patients/parameter-reading-input.js';
 import { canCrossPatientSearch, canFacilityRead } from '../gateway/context.js';
 import { GatewayError, type SourceReference, type UserContext } from '../gateway/types.js';
@@ -24,6 +25,7 @@ import { dayKey, type ConsegnaRow, type TherapyDueItem } from './facility-signal
 import { consegnaUrgencyActiveSql } from '../../lib/urgency.js';
 import {
   planQuery,
+  asksPatientStatus,
   extractPatientName,
   pickResolvedPatient,
   type AssistantIntent,
@@ -63,7 +65,7 @@ export interface AssistantAnswer {
   /** Sub-agent che ha prodotto la risposta: lo decide l'intent, non la scelta dell'utente. */
   agent?: AgentId;
   /** Milo fase 2: specialisti coinvolti e strumenti usati dal team (nessun contenuto). */
-  team?: { members: string[]; tools: string[] };
+  team?: { members: string[]; tools: string[]; skills?: Record<string, string> };
   /** Milo fase 3: blocchi visivi (indicatori, tabelle, andamenti) costruiti dal backend dai dati letti. */
   blocks?: MiloBlock[];
 }
@@ -135,12 +137,18 @@ async function appointmentsTodayCount(ctx: UserContext, now: Date): Promise<numb
  *  ended stay must count as occupied here too, or the assistant's numbers would disagree with the
  *  admin panel's. Maintenance beds are counted separately (never as free). */
 async function roomsOccupancy(
+  ctx: UserContext,
   env: NodeJS.ProcessEnv,
 ): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
   if (!canFacilityRead(env))
     throw new GatewayError('forbidden', 'Funzioni di struttura non abilitate');
   const occupancy = await getFacilityOccupancy();
-  const data = [occupancy];
+  // Milo, caso d'uso «quando si libera una singola e una doppia»: per tipo di camera e con le
+  // dimissioni previste (solo conteggi, numeri di camera e date; nessun paziente).
+  const availability = await care.getRoomAvailability(ctx, env);
+  const data = [
+    { ...occupancy, perTipo: availability.perTipo, liberazioniPreviste: availability.liberazioni },
+  ];
   return {
     data,
     sourceRefs: [
@@ -313,7 +321,7 @@ async function facilitySnapshot(
   if (!canFacilityRead(env))
     throw new GatewayError('forbidden', 'Funzioni di struttura non abilitate');
 
-  const occ = await roomsOccupancy(env);
+  const occ = await roomsOccupancy(ctx, env);
   const therapies = await therapiesDue(ctx, now, 0);
   const consegneOverdue = await overdueConsegne(ctx, now);
   const appointmentsTodayTotal = await appointmentsTodayCount(ctx, now);
@@ -557,8 +565,8 @@ export async function assistantQuery(
         mode: 'team',
         answerText: team.answerText,
         composed: true,
-        team: { members: team.members, tools: team.tools },
-        blocks: blocksFromResults(team.reads),
+        team: { members: team.members, tools: team.tools, skills: team.skillVersions },
+        blocks: blocksFromResults(team.reads, { attention: asksPatientStatus(question) }),
       };
     }
   }
@@ -697,7 +705,7 @@ export async function assistantQuery(
     answerText,
     composed,
     agent: answeringAgent,
-    blocks: blocksFromResults(reads),
+    blocks: blocksFromResults(reads, { attention: asksPatientStatus(question) }),
   };
 }
 
@@ -744,6 +752,8 @@ async function dispatch(
       return await clinical.getPatientAssessments({ ...args, patientId: pid }, ctx);
     case 'get_patient_administrations':
       return await clinical.getPatientAdministrations({ ...args, patientId: pid }, ctx);
+    case 'get_patient_care_contacts':
+      return await care.getPatientCareContacts({ patientId: pid }, ctx, env);
     case 'query_staff_shifts':
       return await clinical.queryStaffShifts(args, ctx, env);
     case 'query_agenda':
@@ -790,7 +800,7 @@ async function dispatch(
     case 'query_appointments_today':
       return await appointmentsToday(ctx, env);
     case 'query_rooms_occupancy':
-      return await roomsOccupancy(env);
+      return await roomsOccupancy(ctx, env);
     case 'query_staff_list':
       return await staffList(env);
     case 'get_facility_snapshot':
@@ -831,6 +841,7 @@ const PATIENT_TOOLS = new Set([
   'get_patient_diary',
   'get_patient_assessments',
   'get_patient_administrations',
+  'get_patient_care_contacts',
 ]);
 
 export class ReadToolRefused extends Error {

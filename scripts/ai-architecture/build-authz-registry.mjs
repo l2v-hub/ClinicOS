@@ -35,6 +35,7 @@ const DERIVED = {
   'agnos.action.update_narrative_section': 'narrative.save',
   'agnos.action.add_diary_note': 'diary.create',
   'agnos.action.create_vital_sign': 'parameters.create_reading',
+  'agnos.action.create_parameter_reading': 'parameters.create_reading',
   'agnos.action.update_patient_demographics': 'patients.update_demographics',
   'ai.read.get_patient_allergies': 'clinical_record.get',
   'ai.read.get_patient_therapies': 'therapy.list',
@@ -59,6 +60,8 @@ const DERIVED = {
   'ai.read.get_patient_administrations': 'administration.history',
   'ai.read.query_staff_shifts': 'operators.schedules',
   'ai.read.query_agenda': 'appointments.list',
+  // Chi ha seguito il paziente: nasce dalle rilevazioni dei parametri.
+  'ai.read.get_patient_care_contacts': 'parameters.list_readings',
   'import_pages.add_files': 'import_jobs.add_files',
   'import_pages.cancel': 'import_jobs.cancel',
   'import_pages.create_session': 'import_jobs.create',

@@ -18,6 +18,7 @@ Object.assign(globalThis, { React });
 test('all seven writes map to exact patient page or agenda, unknown/deletes/missing IDs fail closed', async () => {
   const destinations: Record<string, string> = {
     create_vital_sign: 'parametri',
+    create_parameter_reading: 'parametri',
     update_patient_demographics: 'profilo',
     update_narrative_section: 'sezioni-narrative',
     add_diary_note: 'diario',
