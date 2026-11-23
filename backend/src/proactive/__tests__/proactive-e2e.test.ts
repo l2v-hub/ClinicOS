@@ -73,12 +73,14 @@ async function reading(
   patientId: string,
   author = 'SIM-OSS-1',
   values: Record<string, string> = { pa: '125/80' },
+  createdAt?: Date,
 ) {
   await prisma.patientParameterReading.create({
     data: {
       patientId,
       requestId: randomUUID(),
-      measuredAt: new Date(),
+      measuredAt: createdAt ?? new Date(),
+      ...(createdAt ? { createdAt } : {}),
       values,
       authorOperatorId: author,
       authorName: 'Fixture',
@@ -544,8 +546,12 @@ test('K — acknowledgement changes the view only, never the source fact; a new 
     0,
     'one operator acknowledging never acknowledges for another',
   );
-  await new Promise((r) => setTimeout(r, 1100));
-  await reading(ids.nB, 'SIM-OSS-1');
+  // The vital signal is keyed on the Rome day of the reading's createdAt. Stamp the new reading
+  // inside the acknowledged signal's day (the second its rev encodes) instead of the wall clock:
+  // a reading taken just before Rome midnight would otherwise land in the next day's signal.
+  // rev counts the events, so one more event in the same second is still a new revision.
+  const sameDay = new Date(Number(vit.rev.split('.')[0]) * 1000);
+  await reading(ids.nB, 'SIM-OSS-1', undefined, sameDay);
   const reopened = (await inbox(nurse)).signals.find((s) => s.signalId === vit.signalId);
   assert.notEqual(reopened.rev, vit.rev);
   assert.notEqual(reopened.status, 'preso_visione', 'new fact → visible again');
