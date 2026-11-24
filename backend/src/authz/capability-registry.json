@@ -3074,6 +3074,28 @@
       ]
     },
     {
+      "id": "patients.discharge",
+      "name": "Pazienti — dimetti e annulla dimissione",
+      "domain": "patients",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "GUI_ONLY",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/:id/discharge"
+        },
+        {
+          "method": "POST",
+          "path": "/patients/:id/discharge/undo"
+        }
+      ]
+    },
+    {
       "id": "patients.get",
       "name": "Pazienti — dettaglio",
       "domain": "patients",

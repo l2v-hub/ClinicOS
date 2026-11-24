@@ -3,6 +3,7 @@ import { prisma } from '../lib/prisma.js';
 import type { Operator } from '../ai/auth.js';
 import { hasFacilityPatientScope } from './patient-scope.js';
 import { preserveTemporaryPsExits } from './temporary-ps-exits.js';
+import { preserveDischargeState } from './discharge.js';
 
 export class CartellaUpdateError extends Error {
   constructor(
@@ -92,9 +93,12 @@ export async function saveCartella(patientId: string, value: unknown, actor: Ope
       throw new CartellaUpdateError('Paziente non trovato', 404, 'patient_not_found');
     const rows = await tx.$queryRaw<Array<{ data: Prisma.JsonValue }>>`
       SELECT data FROM "Cartella" WHERE "patientId" = ${patientId} FOR UPDATE`;
-    const protectedData = preserveTemporaryPsExits(
+    const protectedData = preserveDischargeState(
       rows[0]?.data,
-      preserveNrsHistory(rows[0]?.data, preserveTinettiHistory(rows[0]?.data, clinicalData)),
+      preserveTemporaryPsExits(
+        rows[0]?.data,
+        preserveNrsHistory(rows[0]?.data, preserveTinettiHistory(rows[0]?.data, clinicalData)),
+      ),
     );
     return tx.cartella.upsert({
       where: { patientId },

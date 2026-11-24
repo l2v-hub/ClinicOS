@@ -27,6 +27,7 @@ import {
 import { requirePatientScope } from '../patients/access.js';
 import { loadScopedPatientClinicalSummaries } from '../patients/clinical-summary-service.js';
 import { CartellaUpdateError, saveCartella } from '../patients/cartella-update.js';
+import { DischargeError, dischargePatient, undoDischarge } from '../patients/discharge.js';
 import { executeTemporaryPsExit, TemporaryPsExitError } from '../patients/temporary-ps-exits.js';
 import { hasFacilityPatientScope } from '../patients/patient-scope.js';
 import { DEMO_PATIENT_SECTIONS, seedFullDemoPatient } from '../synthetic/demo-patient.js';
@@ -643,6 +644,59 @@ router.put('/:id/cartella', requirePatientScope, async (req, res) => {
       return;
     }
     res.status(500).json({ error: 'Errore durante salvataggio cartella clinica' });
+  }
+});
+
+// ── POST /patients/:id/discharge — stato «dimesso» e posto letto liberato, insieme ──
+
+router.post('/:id/discharge', requirePatientScope, async (req, res) => {
+  const id = Array.isArray(req.params.id) ? (req.params.id[0] ?? '') : req.params.id;
+  // Una dimissione non parte mai da sola: chi la chiede dichiara di averla confermata.
+  if ((req.body as { confirmed?: unknown } | undefined)?.confirmed !== true) {
+    res.status(400).json({
+      error: 'La dimissione richiede una conferma esplicita.',
+      code: 'confirmation_required',
+    });
+    return;
+  }
+  try {
+    const result = await dischargePatient(id, (req as AuthedRequest).operator!);
+    console.log(
+      `POST /patients/${id}/discharge → dimesso (letti liberati: ${result.discharge.freedBeds.length})`,
+    );
+    res.status(200).json(result);
+  } catch (error) {
+    if (error instanceof DischargeError) {
+      res.status(error.status).json({ error: error.message, code: error.code });
+      return;
+    }
+    console.error('POST /patients/:id/discharge error:', error);
+    res.status(500).json({ error: 'Dimissione non registrata. Riprova.' });
+  }
+});
+
+// ── POST /patients/:id/discharge/undo — «Annulla dimissione» ──────────────
+
+router.post('/:id/discharge/undo', requirePatientScope, async (req, res) => {
+  const id = Array.isArray(req.params.id) ? (req.params.id[0] ?? '') : req.params.id;
+  if ((req.body as { confirmed?: unknown } | undefined)?.confirmed !== true) {
+    res.status(400).json({
+      error: 'L’annullamento della dimissione richiede una conferma esplicita.',
+      code: 'confirmation_required',
+    });
+    return;
+  }
+  try {
+    const result = await undoDischarge(id, (req as AuthedRequest).operator!);
+    console.log(`POST /patients/${id}/discharge/undo → ${result.undo.status || 'invariato'}`);
+    res.status(200).json(result);
+  } catch (error) {
+    if (error instanceof DischargeError) {
+      res.status(error.status).json({ error: error.message, code: error.code });
+      return;
+    }
+    console.error('POST /patients/:id/discharge/undo error:', error);
+    res.status(500).json({ error: 'Dimissione non annullata. Riprova.' });
   }
 });
 

@@ -6708,6 +6708,52 @@
       "dependencies": ["prisma"],
       "legacy_roles": [],
       "tool_candidate": null,
+      "invocability": "TESTED",
+      "test": {
+        "file": "backend/src/patients/__tests__/discharge.e2e.test.ts",
+        "result": "pass",
+        "cases": [
+          "medico e infermiere dimettono: stato «dimesso» e letto libero nella stessa operazione",
+          "coordinatore, amministratore e OSS: 403 e nulla cambia",
+          "ripetizione senza effetti; paziente fuori ambito non trovato"
+        ],
+        "gui_parity": true
+      },
+      "idempotency": "natural",
+      "capability_id": "patients.discharge",
+      "name": "Pazienti — dimetti e annulla dimissione",
+      "description": "Dimissione: mette la cartella in stato «dimesso» e libera il posto letto del paziente in una sola transazione.",
+      "domain": "patients",
+      "type": "write",
+      "feature_ui": "frontend/src/components/operator/cartella/DimissioneTab.tsx",
+      "entry_point": "POST /patients/:id/discharge, POST /patients/:id/discharge/undo (backend/src/routes/patients.ts)",
+      "services": [
+        "backend/src/patients/discharge.ts#dischargePatient",
+        "backend/src/patients/discharge.ts#undoDischarge"
+      ],
+      "input": "patientId + body {confirmed: true}",
+      "output": "{patientId, data, discharge: {alreadyDischarged, date, freedBeds}}",
+      "validations": [
+        "conferma esplicita obbligatoria (400 confirmation_required)",
+        "requirePatientScope + lock del paziente con ambito (404)"
+      ],
+      "side_effects": [
+        "Cartella upsert (statoRicovero = dimesso, camera e letto rimossi, dimissioneRegistrata)",
+        "PatientRoomAssignment: chiusura al giorno prima; rimozione di quelle iniziate oggi o future"
+      ],
+      "sensitivity": "critical",
+      "risk": "Toglie il paziente dalle liste dei presenti e libera il letto; annullabile solo riportando lo stato a «ricoverato» (il letto va riassegnato)",
+      "agno_integration": "none",
+      "files": ["backend/src/routes/patients.ts", "backend/src/patients/discharge.ts"],
+      "technical_state": "READY",
+      "rationale": "Operazione a sé con permesso proprio: nessun ruolo ha insieme salvataggio cartella e gestione letti. Libera solo il letto del paziente dimesso.",
+      "exposure": "GUI_ONLY",
+      "patient_scoped": true
+    },
+    {
+      "dependencies": ["prisma"],
+      "legacy_roles": [],
+      "tool_candidate": null,
       "invocability": "DISCOVERED",
       "test": null,
       "idempotency": "none",
