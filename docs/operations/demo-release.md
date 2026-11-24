@@ -62,6 +62,46 @@ curl -s https://clinicos-backend-production-df88.up.railway.app/health
 - Runtime AI: serve un rilascio («Deploy AI Runtime to Railway», anch'esso disattivato) solo se
   vuoi sulla demo anche la correzione della trascrizione vocale entrata con #532.
 
+### Scadenza del 1° dicembre 2026: dove stanno le impostazioni del servizio
+
+Railway ha ritirato i file `railway.json` / `railway.toml`
+([documentazione](https://docs.railway.com/infrastructure-as-code)): «Existing Config as Code files
+stop being read on 2026-12-01 (hard cutoff)». Fino a quella data, a ogni rilascio, i valori del file
+prevalgono su quelli salvati nel servizio (Railway → servizio → Settings); dopo valgono solo quelli
+salvati. Il formato nuovo (`.railway/railway.ts`) non è obbligatorio e gestisce l'intero progetto:
+applicandolo si possono eliminare le risorse non dichiarate (database, volumi). Qui non lo usiamo.
+
+Sulla demo le impostazioni salvate dei due servizi (ambiente `production`) sono state allineate ai
+file il 2026-11-24, con l'API `serviceInstanceUpdate` (non avvia un rilascio):
+
+| Servizio              | Impostazione     | Valore salvato (uguale al file)                                           | Prima del 2026-11-24                                          |
+| --------------------- | ---------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `clinicos-backend`    | Build command    | `npm install --include=dev --no-audit --no-fund && npm run build:backend` | `npm install && npx prisma generate && npm run build:backend` |
+| `clinicos-backend`    | Pre-deploy       | `npm run db:migrate`                                                      | `npx prisma migrate deploy`                                   |
+| `clinicos-backend`    | Start command    | `node backend/dist/server.js`                                             | `npm --prefix backend run start`                              |
+| `clinicos-backend`    | Healthcheck path | `/health`                                                                 | `/health`                                                     |
+| `clinicos-backend`    | Restart          | On failure, 3 tentativi                                                   | On failure, 10 tentativi                                      |
+| `clinicos-ai-runtime` | Dockerfile path  | `Dockerfile` (root directory `/clinicos-ai-runtime`)                      | `/clinicos-ai-runtime/Dockerfile`                             |
+| `clinicos-ai-runtime` | Start command    | `python -m clinicos_ai.main`                                              | vuoto                                                         |
+| `clinicos-ai-runtime` | Healthcheck path | `/v1/runtime/health`                                                      | `/v1/runtime/health`                                          |
+| `clinicos-ai-runtime` | Restart          | On failure, 3 tentativi                                                   | On failure, 10 tentativi                                      |
+
+Provato lo stesso giorno con un rilascio di entrambi i servizi da sorgenti senza i due
+`railway.json`: riusciti, nessun file di configurazione letto, impostazioni effettive identiche a
+quelle dei rilasci precedenti (evidenze in
+`artifacts/task-validation/railway-impostazioni-dei-servizi-prima-della-scadenza-del-1-dicembre/`).
+
+Da ricordare:
+
+- Dal 1° dicembre 2026 **la fonte delle impostazioni è il servizio su Railway**, non più il file.
+  Una modifica a build, migrazione, avvio, controllo di salute o riavvio va fatta lì (Settings del
+  servizio) e riportata in questa tabella.
+- I due `railway.json` restano nel repository perché sono citati dai flussi di rilascio, dalla
+  pipeline dei bug e dalla documentazione generata; dopo la scadenza Railway li ignora. Fino ad
+  allora prevalgono ancora: tenerli uguali alla tabella.
+- Il valore più delicato è la build del backend: il servizio ha `NODE_ENV=production`, quindi senza
+  `--include=dev` mancano gli strumenti di compilazione e la build fallisce.
+
 ## 2. Frontend (Vercel)
 
 Dalla radice del repository, su `main` aggiornato:

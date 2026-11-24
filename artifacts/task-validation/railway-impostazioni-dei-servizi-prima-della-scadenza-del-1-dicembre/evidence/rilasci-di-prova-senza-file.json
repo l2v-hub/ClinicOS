@@ -1,0 +1,90 @@
+{
+  "backend": {
+    "deploymentId": "c454e30d-98e5-46da-8495-fade6571ec1a",
+    "status": "SUCCESS",
+    "configFile": null,
+    "propertyFileMapping": {},
+    "serviceManifest": {
+      "build": {
+        "builder": "RAILPACK",
+        "buildCommand": "npm install --include=dev --no-audit --no-fund && npm run build:backend",
+        "nixpacksPlan": null,
+        "watchPatterns": [],
+        "dockerfilePath": null,
+        "buildEnvironment": "V3",
+        "nixpacksConfigPath": null
+      },
+      "deploy": {
+        "region": null,
+        "runtime": "V2",
+        "numReplicas": 1,
+        "cronSchedule": null,
+        "startCommand": "node backend/dist/server.js",
+        "limitOverride": null,
+        "overlapSeconds": null,
+        "drainingSeconds": null,
+        "healthcheckPath": "/health",
+        "preDeployCommand": [
+          "npm run db:migrate"
+        ],
+        "sleepApplication": false,
+        "useLegacyStacker": false,
+        "ipv6EgressEnabled": false,
+        "multiRegionConfig": {
+          "us-west2": {
+            "numReplicas": 1
+          }
+        },
+        "requiredMountPath": null,
+        "restartPolicyType": "ON_FAILURE",
+        "healthcheckTimeout": 30,
+        "registryCredentials": null,
+        "preDeployTimeoutSeconds": null,
+        "restartPolicyMaxRetries": 3
+      }
+    }
+  },
+  "servizio-ai": {
+    "deploymentId": "6f972d8e-6549-4d56-9774-6e5503388408",
+    "status": "SUCCESS",
+    "configFile": null,
+    "propertyFileMapping": {},
+    "serviceManifest": {
+      "build": {
+        "builder": "DOCKERFILE",
+        "buildCommand": null,
+        "nixpacksPlan": null,
+        "watchPatterns": [],
+        "dockerfilePath": "Dockerfile",
+        "buildEnvironment": "V3",
+        "nixpacksConfigPath": null
+      },
+      "deploy": {
+        "region": null,
+        "runtime": "V2",
+        "numReplicas": 1,
+        "cronSchedule": null,
+        "startCommand": "python -m clinicos_ai.main",
+        "limitOverride": null,
+        "overlapSeconds": null,
+        "drainingSeconds": null,
+        "healthcheckPath": "/v1/runtime/health",
+        "preDeployCommand": null,
+        "sleepApplication": false,
+        "useLegacyStacker": false,
+        "ipv6EgressEnabled": false,
+        "multiRegionConfig": {
+          "us-west2": {
+            "numReplicas": 1
+          }
+        },
+        "requiredMountPath": null,
+        "restartPolicyType": "ON_FAILURE",
+        "healthcheckTimeout": null,
+        "registryCredentials": null,
+        "preDeployTimeoutSeconds": null,
+        "restartPolicyMaxRetries": 3
+      }
+    }
+  }
+}

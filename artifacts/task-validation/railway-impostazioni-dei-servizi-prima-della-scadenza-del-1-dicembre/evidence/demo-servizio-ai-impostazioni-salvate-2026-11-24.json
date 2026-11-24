@@ -1,0 +1,18 @@
+{
+    "data": {
+        "serviceInstance": {
+            "serviceName": "clinicos-ai-runtime",
+            "railwayConfigFile": null,
+            "builder": "RAILPACK",
+            "buildCommand": null,
+            "startCommand": null,
+            "preDeployCommand": null,
+            "healthcheckPath": "/v1/runtime/health",
+            "healthcheckTimeout": null,
+            "restartPolicyType": "ON_FAILURE",
+            "restartPolicyMaxRetries": 10,
+            "dockerfilePath": "/clinicos-ai-runtime/Dockerfile",
+            "rootDirectory": "/clinicos-ai-runtime"
+        }
+    }
+}

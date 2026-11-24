@@ -70,11 +70,10 @@ Schema del database cambiato con il via libera esplicito dell'utente (2026-11-23
 Demo: servizio AI `2a1b6353`, backend `87e2b4ae` (commit `d013f4596`), interfaccia
 `clinicos-ejk2uok8c` in produzione. Dettaglio, con orari, in `logs/demo-verification.txt`.
 
-Stato lasciato sulla demo: clinico, sorveglianza e struttura alla versione rilasciata 1.2.0;
-coordinatore con la versione approvata 1.2.0+r2 (regola «conserva la forma della risposta dello
-specialista»). La stessa regola entra nel file rilasciato con la versione 1.3.0 del coordinatore
-(prossimo rilascio del servizio AI); a quel punto la versione approvata si ritira con «Torna alla
-versione rilasciata».
+Stato lasciato sulla demo (2026-11-24, dopo la PR #554 e il rilascio del servizio AI `3f4568ac`):
+tutte le competenze alla versione rilasciata — clinico, sorveglianza e struttura 1.2.0, coordinatore
+1.3.0 — nessuna versione approvata in uso, nessuna proposta in attesa, nessun giudizio aperto. Le
+prove contro il sito restano 9/9 (`evidence/milo-evals-demo-finale.json`; caso 1 in 26,5 s).
 
 Osservazione dal ciclo sulla demo: una modifica approvata per uno specialista non cambiava la
 risposta finale finché il coordinatore la riscriveva. Corretta con la regola qui sopra.

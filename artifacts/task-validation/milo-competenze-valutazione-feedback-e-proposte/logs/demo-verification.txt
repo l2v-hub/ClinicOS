@@ -41,3 +41,11 @@ OK caso-5-via-mancante 4/4 · OK caso-5-ruolo-senza-permesso 1/1
 Competenze: clinico 1.2.0, sorveglianza 1.2.0, struttura 1.2.0, coordinatore 1.2.0+r2
 
 Errori di console: solo i due 403 attesi del profilo Infermiere sulle rotte dell'amministratore.
+
+DOPO LA PR #554 — 2026-11-24 (ore UTC), servizio AI 3f4568ac (commit aba4385ca, coordinatore 1.3.0)
+00:45:12 «Torna alla versione rilasciata» sul coordinatore: restored true. In uso: clinico 1.2.0,
+         sorveglianza 1.2.0, struttura 1.2.0, coordinatore 1.3.0. Nessuna versione approvata in uso,
+         nessuna proposta in attesa, nessun giudizio aperto.
+Prove contro il sito, 9/9 — evidence/milo-evals-demo-finale.json
+OK caso-1-come-va (team · clinico) 12/12 · 26,5 s · OK caso-2-chi-ha-seguito (team · clinico+struttura) 13/13 · 28,1 s
+OK caso-3-camere (team · struttura) 8/8 · 14,5 s · casi 4 e 5: tutti OK
