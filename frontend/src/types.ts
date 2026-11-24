@@ -623,6 +623,14 @@ export interface CartellaPaziente {
   valutazioniTinetti?: ScalaTinettiValutazione[];
   valutazioniNRS?: ScalaNRSValutazione[];
   dimissione?: DimissioneInfermieristica;
+  /** Traccia scritta dal server alla dimissione (POST /patients/:id/discharge): chi, quando, letto. */
+  dimissioneRegistrata?: {
+    data: string; // YYYY-MM-DD
+    registrataIl?: string;
+    operatoreId?: string;
+    operatore?: string;
+    posti?: Array<{ room: string; bed: string }>;
+  };
   liberatoria?: Liberatoria;
   // Esami & Consulenze
   esamiEmatici?: EsameClinicoRecord[];

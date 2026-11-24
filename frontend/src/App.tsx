@@ -1,3 +1,4 @@
+import { parseDischargeResponse, type DischargeOutcome } from './lib/patientDischarge';
 import { facilityLocalDate } from './lib/facilityTime';
 import type {
   AgendaTherapyIdentity,
@@ -3038,6 +3039,85 @@ export default function App() {
     return confirmed;
   }
 
+  // Dimissione: una sola operazione del server (stato «dimesso» + posto letto liberato). Passa
+  // dalla stessa coda dei salvataggi della cartella, così un salvataggio in corso non la sovrascrive
+  // con una copia precedente, e in memoria entra solo la cartella confermata dal server.
+  async function runDischargeCommand(
+    patientId: string,
+    action: 'discharge' | 'undo',
+  ): Promise<DischargeOutcome> {
+    const epoch = sessionEpochRef.current;
+    const initial =
+      cartelle.find((record) => record.pazienteId === patientId) ??
+      createDefaultCartella(patientId);
+    const failed =
+      action === 'discharge'
+        ? 'Paziente non dimesso: operazione non riuscita. Riprova.'
+        : 'Dimissione non annullata: operazione non riuscita. Riprova.';
+    let outcome: DischargeOutcome = { ok: false, message: failed };
+    try {
+      const confirmed = await cartellaWrites.current.enqueueMutation(
+        `${epoch}:${patientId}`,
+        initial,
+        async () => {
+          if (epoch !== sessionEpochRef.current) throw new Error('session');
+          const response = await fetch(
+            `${API_URL}/patients/${patientId}/discharge${action === 'undo' ? '/undo' : ''}`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
+              body: JSON.stringify({ confirmed: true }),
+            },
+          );
+          const payload = await response.json().catch(() => null);
+          if (!response.ok) {
+            const denied = capabilityDeniedMessage(response.status, payload);
+            if (denied) outcome = { ok: false, message: `${failed.split(':')[0]}. ${denied}.` };
+            throw new Error('refused');
+          }
+          const parsed = parseDischargeResponse(patientId, payload, action);
+          if (!parsed || epoch !== sessionEpochRef.current) throw new Error('unverified');
+          outcome = { ok: true, freedBeds: parsed.freedBeds };
+          return {
+            ...createDefaultCartella(patientId),
+            ...parsed.data,
+            pazienteId: patientId,
+          } as CartellaPaziente;
+        },
+      );
+      setCartelle((previous) => {
+        if (epoch !== sessionEpochRef.current) return previous;
+        return previous.some((record) => record.pazienteId === patientId)
+          ? previous.map((record) => (record.pazienteId === patientId ? confirmed : record))
+          : [...previous, confirmed];
+      });
+      if (action === 'discharge') {
+        // L'intestazione della cartella legge il posto letto anche dal paziente in elenco: senza
+        // questo resterebbe scritto il letto appena liberato fino al prossimo caricamento.
+        setPazienteSelezionato((current) =>
+          current?.id === patientId
+            ? {
+                ...current,
+                location: {
+                  status: 'unassigned',
+                  source: null,
+                  room: null,
+                  bed: null,
+                  asOf: facilityLocalDate(),
+                },
+              }
+            : current,
+        );
+        void loadCamere(true, patientId);
+      }
+      // Conteggi di presenti e dimessi nelle panoramiche.
+      void loadClinicalOverview();
+    } catch {
+      /* outcome already says why */
+    }
+    return outcome;
+  }
+
   async function updateCartella(
     pazienteId: string,
     updates: Partial<CartellaPaziente>,
@@ -3148,11 +3228,24 @@ export default function App() {
       // Camera rimossa → chiudi l'assegnazione attiva
       if (!cameraNumero) {
         if (active) {
-          await fetch(`${API_URL}/patients/${pazienteId}/room-assignments/${active.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-            body: JSON.stringify({ endDate: today }),
-          });
+          const closeRes = await fetch(
+            `${API_URL}/patients/${pazienteId}/room-assignments/${active.id}`,
+            {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
+              body: JSON.stringify({ endDate: today }),
+            },
+          );
+          // Una chiusura rifiutata (es. ruolo senza permesso) non è una chiusura riuscita: il letto
+          // resta occupato e chi ha chiesto l'operazione deve saperlo.
+          if (!closeRes.ok) {
+            const failure = await closeRes.json().catch(() => null);
+            showToast(
+              capabilityDeniedMessage(closeRes.status, failure) ??
+                'Posto letto non liberato. Riprova.',
+            );
+            return { ok: false };
+          }
           void loadCamere(true, pazienteId);
         }
         return { ok: true };
@@ -4050,6 +4143,7 @@ export default function App() {
                             onTemporaryPsExit={updateTemporaryPsExit}
                             onUpdatePaziente={updatePaziente}
                             onAssignCamera={syncCameraAssignment}
+                            onDischargePatient={runDischargeCommand}
                             operatoreNome={utente.nome}
                             operatoreId={utenteId}
                             initialTab={pendingModuleTab}

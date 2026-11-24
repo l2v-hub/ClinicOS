@@ -1,3 +1,4 @@
+import type { DischargeOutcome } from '../../lib/patientDischarge';
 import { intakeDemographicErrors } from '../../lib/intakeDemographics';
 import { resolvePresaInCarico } from '../../lib/presaInCarico';
 import type { TemporaryPsExitCommand } from '../../lib/temporaryPsExit';
@@ -159,6 +160,11 @@ interface PatientDetailProps {
     cameraNumero?: string,
     bedId?: string,
   ) => Promise<{ ok: boolean; lettoLabel?: string }>;
+  /** Dimissione: stato «dimesso» e posto letto liberato in una sola operazione del server. */
+  onDischargePatient?: (
+    pazienteId: string,
+    action: 'discharge' | 'undo',
+  ) => Promise<DischargeOutcome>;
   operatoreNome: string;
   operatoreId: string;
   /** #243: land on this tab (e.g. a "Moduli" module) the first time this patient is shown,
@@ -304,6 +310,7 @@ export function PatientDetail({
   onTemporaryPsExit,
   onUpdatePaziente,
   onAssignCamera,
+  onDischargePatient,
   operatoreNome,
   operatoreId,
   operatoreRole,
@@ -2910,6 +2917,17 @@ export function PatientDetail({
             paziente={paziente}
             onUpdate={upd}
             operatoreNome={operatoreNome}
+            bedLabel={
+              placementValues.room
+                ? `Camera ${placementValues.room}${placementValues.bed ? ` · Letto ${placementValues.bed}` : ''}`
+                : null
+            }
+            onDischarge={
+              onDischargePatient ? () => onDischargePatient(paziente.id, 'discharge') : undefined
+            }
+            onUndoDischarge={
+              onDischargePatient ? () => onDischargePatient(paziente.id, 'undo') : undefined
+            }
           />
         )}
       </>

@@ -10,6 +10,16 @@ import type {
 } from '../../../types';
 import { todayStr, nowISO, nowTime, PrintButton } from './shared';
 import { ClinicalCard } from '../../shared/ClinicalCard';
+import { ConfirmDialog } from '../../shared/ConfirmDialog';
+import {
+  dischargeConfirmMessage,
+  dischargeDoneMessage,
+  dischargeRecordLabel,
+  isDischarged,
+  readmitConfirmMessage,
+  type DischargeOutcome,
+} from '../../../lib/patientDischarge';
+import { useCan } from '../../../lib/capabilities';
 import { ClinicalTable } from './ClinicalTable';
 import { formatFacilityLocalMinute } from '../../../lib/facilityTime';
 
@@ -18,6 +28,12 @@ interface Props {
   paziente: Paziente;
   onUpdate: (updates: Partial<CartellaPaziente>) => void;
   operatoreNome: string;
+  /** Posto letto assegnato oggi (es. «Camera 201 · Letto A»), null se non assegnato. */
+  bedLabel?: string | null;
+  /** Dimissione: una sola operazione del server (stato «dimesso» e letto liberato insieme). */
+  onDischarge?: () => Promise<DischargeOutcome>;
+  /** Annullo della dimissione: comando del server, il posto letto non viene riassegnato. */
+  onUndoDischarge?: () => Promise<DischargeOutcome>;
 }
 
 const EMPTY_DIM: DimissioneInfermieristica = {
@@ -558,7 +574,15 @@ function FormSection({ title, children }: { title: string; children: React.React
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
+export function DimissioneTab({
+  cartella,
+  paziente,
+  onUpdate,
+  operatoreNome,
+  bedLabel = null,
+  onDischarge,
+  onUndoDischarge,
+}: Props) {
   const dim = cartella.dimissione;
   const lib = cartella.liberatoria;
   const hasLegalForm = Boolean(lib?.compilatoAt && lib.data && lib.ora);
@@ -573,6 +597,45 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
     operatore: operatoreNome,
     ...lib,
   });
+  // Stato del ricovero: «Dimetti paziente» e «Annulla dimissione», sempre con conferma.
+  const discharged = isDischarged(cartella);
+  const [statusConfirm, setStatusConfirm] = useState<'discharge' | 'readmit' | null>(null);
+  const [statusBusy, setStatusBusy] = useState(false);
+  const [statusError, setStatusError] = useState<string | null>(null);
+  const [statusDone, setStatusDone] = useState<string | null>(null);
+  const patientName = `${paziente.lastName} ${paziente.firstName}`.trim();
+
+  // Il permesso di dimettere è proprio (patients.discharge): senza, lo stato si legge soltanto.
+  const canDischarge = useCan('patients.discharge');
+  const dischargeRecord = dischargeRecordLabel(cartella);
+
+  async function confirmStatusChange() {
+    if (!statusConfirm || statusBusy) return;
+    const action = statusConfirm;
+    setStatusBusy(true);
+    setStatusError(null);
+    setStatusDone(null);
+    try {
+      const outcome = await (action === 'discharge' ? onDischarge! : onUndoDischarge!)();
+      if (!outcome.ok) setStatusError(outcome.message);
+      else
+        setStatusDone(
+          action === 'discharge'
+            ? dischargeDoneMessage(outcome.freedBeds)
+            : 'Dimissione annullata: il paziente è di nuovo tra i presenti.',
+        );
+    } catch {
+      setStatusError(
+        action === 'discharge'
+          ? 'Paziente non dimesso: operazione non riuscita. Riprova.'
+          : 'Dimissione non annullata: operazione non riuscita. Riprova.',
+      );
+    } finally {
+      setStatusBusy(false);
+      setStatusConfirm(null);
+    }
+  }
+
   const [showAddUscita, setShowAddUscita] = useState(false);
   const [uscitaForm, setUscitaForm] = useState<Partial<UscitaLog>>({});
 
@@ -635,6 +698,74 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
 
       {/* ── Web view ── */}
       <div className="web-content">
+        {onDischarge && onUndoDischarge && (
+          <ClinicalCard title="Stato del ricovero">
+            <div className="discharge-status" data-testid="discharge-status">
+              <div className="discharge-status__main">
+                <span className={`ds-badge ${discharged ? '' : 'ds-badge--ok'}`}>
+                  {discharged ? 'Dimesso' : 'Presente'}
+                </span>
+                <p className="discharge-status__text">
+                  {discharged
+                    ? `${dischargeRecord ?? 'Il paziente è dimesso'}: non compare tra i presenti né nel giro. La cartella resta consultabile.`
+                    : bedLabel
+                      ? `Il paziente è tra i presenti · ${bedLabel}.`
+                      : 'Il paziente è tra i presenti · posto letto non assegnato.'}
+                </p>
+              </div>
+              {canDischarge && (
+                <button
+                  type="button"
+                  className={discharged ? 'btn-secondary' : 'btn-primary'}
+                  disabled={statusBusy}
+                  onClick={() => {
+                    setStatusError(null);
+                    setStatusDone(null);
+                    setStatusConfirm(discharged ? 'readmit' : 'discharge');
+                  }}
+                >
+                  {discharged ? 'Annulla dimissione' : 'Dimetti paziente'}
+                </button>
+              )}
+            </div>
+            {!canDischarge && (
+              <p className="discharge-status__note">
+                Il tuo profilo non registra la dimissione né il suo annullamento.
+              </p>
+            )}
+            {statusDone && (
+              <p className="discharge-status__note" role="status">
+                {statusDone}
+              </p>
+            )}
+            {statusError && (
+              <p className="discharge-status__note discharge-status__note--error" role="alert">
+                {statusError}
+              </p>
+            )}
+            <ConfirmDialog
+              open={statusConfirm !== null}
+              tone="primary"
+              title={
+                statusConfirm === 'readmit' ? 'Annullare la dimissione?' : 'Dimettere il paziente?'
+              }
+              message={
+                statusConfirm === 'readmit'
+                  ? readmitConfirmMessage(patientName)
+                  : dischargeConfirmMessage({
+                      patientName,
+                      bedLabel,
+                      dischargeFormCompiled: Boolean(dim?.compilatoAt),
+                    })
+              }
+              confirmLabel={statusConfirm === 'readmit' ? 'Annulla dimissione' : 'Dimetti paziente'}
+              cancelLabel="Torna indietro"
+              busy={statusBusy}
+              onConfirm={() => void confirmStatusChange()}
+              onCancel={() => setStatusConfirm(null)}
+            />
+          </ClinicalCard>
+        )}
         <ClinicalCard
           title="Dimissione Infermieristica"
           editLabel="Vista modulo"

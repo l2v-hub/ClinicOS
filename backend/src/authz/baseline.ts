@@ -242,6 +242,11 @@ function supervisor(cap: CapabilityEntry): Rule {
   if (cap.domain === 'assessments')
     return { effect: 'DENIED', review: 'Scale di valutazione compilate da medico/infermiere.' };
   if (cap.id === 'diary.delete_entry' || cap.id === 'patients.delete') return { effect: 'DENIED' };
+  if (cap.id === 'patients.discharge')
+    return {
+      effect: 'DENIED',
+      review: 'Dimissione: la registra medico o infermiere; il coordinatore gestisce i letti.',
+    };
   if (cap.id === 'diary.update_entry')
     return { effect: 'DENIED', review: 'La modifica voce diario non verifica l’autore (GAP).' };
   return { effect: 'ALLOWED' };
@@ -267,6 +272,7 @@ function doctor(cap: CapabilityEntry): Rule {
   if (cap.id === 'diary.update_entry')
     return { effect: 'ALLOWED', review: 'La modifica voce diario non verifica l’autore (GAP).' };
   if (cap.id === 'patients.delete') return { effect: 'DENIED' };
+  if (cap.id === 'patients.discharge') return { effect: 'ALLOWED_WITH_CONFIRMATION' };
   if (cap.id === 'intake.confirm_draft' || cap.id === 'import_jobs.confirm')
     return { effect: 'ALLOWED_WITH_CONFIRMATION' };
   if (cap.domain === 'room_assignments')
@@ -293,6 +299,11 @@ function nurse(cap: CapabilityEntry): Rule {
   if (cap.id === 'diary.delete_entry' || cap.id === 'patients.delete') return { effect: 'DENIED' };
   if (cap.id === 'diary.update_entry')
     return { effect: 'ALLOWED', review: 'La modifica voce diario non verifica l’autore (GAP).' };
+  if (cap.id === 'patients.discharge')
+    return {
+      effect: 'ALLOWED_WITH_CONFIRMATION',
+      review: 'Dimissione registrata dall’infermiere: libera anche il posto letto del paziente.',
+    };
   if (cap.id === 'patients.create')
     return { effect: 'DENIED', review: 'I pazienti nascono dall’ingresso (bozza confermata).' };
   if (cap.id === 'intake.confirm_draft' || cap.id === 'import_jobs.confirm')

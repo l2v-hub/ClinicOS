@@ -35,7 +35,7 @@
     {
       "id": "oss",
       "label": "OSS",
-      "description": "Operatore socio-sanitario: assistenza di base, parametri, diario assistenziale, consegne. Nessun accesso a farmaci e documenti clinici.",
+      "description": "Operatore socio-sanitario: assistenza di base, parametri, diario assistenziale, consegne. Nessun accesso a terapie e documenti clinici (l’anagrafica farmaci resta consultabile).",
       "legacyRole": "operatore",
       "uiShell": "operator"
     },
@@ -65,57 +65,57 @@
   },
   "counts": {
     "administrator": {
-      "ALLOWED": 32,
+      "ALLOWED": 34,
       "READ_ONLY": 10,
-      "ALLOWED_WITH_CONFIRMATION": 2,
-      "DENIED": 101,
-      "effectively_allowed": 44
+      "ALLOWED_WITH_CONFIRMATION": 3,
+      "DENIED": 102,
+      "effectively_allowed": 47
     },
     "supervisor": {
       "ALLOWED": 108,
       "READ_ONLY": 1,
       "ALLOWED_WITH_CONFIRMATION": 5,
-      "DENIED": 31,
+      "DENIED": 35,
       "effectively_allowed": 114
     },
     "doctor": {
       "ALLOWED": 98,
       "READ_ONLY": 0,
-      "ALLOWED_WITH_CONFIRMATION": 9,
-      "DENIED": 38,
-      "effectively_allowed": 107
+      "ALLOWED_WITH_CONFIRMATION": 10,
+      "DENIED": 41,
+      "effectively_allowed": 108
     },
     "nurse": {
       "ALLOWED": 98,
       "READ_ONLY": 1,
-      "ALLOWED_WITH_CONFIRMATION": 5,
-      "DENIED": 41,
-      "effectively_allowed": 103
+      "ALLOWED_WITH_CONFIRMATION": 6,
+      "DENIED": 44,
+      "effectively_allowed": 104
     },
     "oss": {
       "ALLOWED": 35,
       "READ_ONLY": 5,
       "ALLOWED_WITH_CONFIRMATION": 0,
-      "DENIED": 105,
+      "DENIED": 109,
       "effectively_allowed": 40
     },
     "operator": {
-      "ALLOWED": 113,
+      "ALLOWED": 114,
       "READ_ONLY": 0,
       "ALLOWED_WITH_CONFIRMATION": 0,
-      "DENIED": 32,
-      "effectively_allowed": 113
+      "DENIED": 35,
+      "effectively_allowed": 114
     },
     "legacy_admin": {
-      "ALLOWED": 145,
+      "ALLOWED": 149,
       "READ_ONLY": 0,
       "ALLOWED_WITH_CONFIRMATION": 0,
       "DENIED": 0,
-      "effectively_allowed": 145
+      "effectively_allowed": 149
     }
   },
-  "doubtful_total": 85,
-  "governed_capabilities": 145,
+  "doubtful_total": 90,
+  "governed_capabilities": 149,
   "derived_capabilities": [
     {
       "capability_id": "agnos.action.add_diary_note",
@@ -214,6 +214,38 @@
       "governed_by": "patients.search"
     },
     {
+      "capability_id": "ai.read.get_patient_administrations",
+      "governed_by": "administration.history"
+    },
+    {
+      "capability_id": "ai.read.get_patient_assessments",
+      "governed_by": "assessments.list"
+    },
+    {
+      "capability_id": "ai.read.get_patient_diary",
+      "governed_by": "diary.list"
+    },
+    {
+      "capability_id": "ai.read.get_patient_news2",
+      "governed_by": "parameters.list_readings"
+    },
+    {
+      "capability_id": "ai.read.get_patient_parameters",
+      "governed_by": "parameters.list_readings"
+    },
+    {
+      "capability_id": "ai.read.query_agenda",
+      "governed_by": "appointments.list"
+    },
+    {
+      "capability_id": "ai.read.query_staff_shifts",
+      "governed_by": "operators.schedules"
+    },
+    {
+      "capability_id": "ai.read.get_patient_care_contacts",
+      "governed_by": "parameters.list_readings"
+    },
+    {
       "capability_id": "import_pages.add_files",
       "governed_by": "import_jobs.add_files"
     },
@@ -248,38 +280,6 @@
     {
       "capability_id": "import_pages.retry",
       "governed_by": "import_jobs.retry"
-    },
-    {
-      "capability_id": "ai.read.get_patient_administrations",
-      "governed_by": "administration.history"
-    },
-    {
-      "capability_id": "ai.read.get_patient_assessments",
-      "governed_by": "assessments.list"
-    },
-    {
-      "capability_id": "ai.read.get_patient_diary",
-      "governed_by": "diary.list"
-    },
-    {
-      "capability_id": "ai.read.get_patient_news2",
-      "governed_by": "parameters.list_readings"
-    },
-    {
-      "capability_id": "ai.read.get_patient_parameters",
-      "governed_by": "parameters.list_readings"
-    },
-    {
-      "capability_id": "ai.read.query_agenda",
-      "governed_by": "appointments.list"
-    },
-    {
-      "capability_id": "ai.read.query_staff_shifts",
-      "governed_by": "operators.schedules"
-    },
-    {
-      "capability_id": "ai.read.get_patient_care_contacts",
-      "governed_by": "parameters.list_readings"
     }
   ],
   "outside_role_policy": [
@@ -325,6 +325,10 @@
     },
     {
       "capability_id": "internal_ai.assistant_query",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.agent_tools",
       "gate": "service"
     },
     {
@@ -2516,6 +2520,27 @@
       "doubtful": {}
     },
     {
+      "capability_id": "patients.discharge",
+      "name": "Pazienti — dimetti e annulla dimissione",
+      "domain": "patients",
+      "type": "write",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "ALLOWED_WITH_CONFIRMATION",
+        "nurse": "ALLOWED_WITH_CONFIRMATION",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Dimissione: la registra medico o infermiere; il coordinatore gestisce i letti.",
+        "nurse": "Dimissione registrata dall’infermiere: libera anche il posto letto del paziente."
+      }
+    },
+    {
       "capability_id": "patients.get",
       "name": "Pazienti — dettaglio",
       "domain": "patients",
@@ -3148,6 +3173,66 @@
       },
       "doubtful": {
         "administrator": "L’assistente legge dati clinici: minimo privilegio per l’amministratore tecnico."
+      }
+    },
+    {
+      "capability_id": "synthetic_data.status",
+      "name": "Dati sintetici — stato",
+      "domain": "dev",
+      "type": "read",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Solo ambienti di prova: rifiutato in produzione reale."
+      }
+    },
+    {
+      "capability_id": "synthetic_data.seed",
+      "name": "Dati sintetici — crea dataset di prova",
+      "domain": "dev",
+      "type": "action",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Solo ambienti di prova: rifiutato in produzione reale."
+      }
+    },
+    {
+      "capability_id": "synthetic_data.wipe",
+      "name": "Dati sintetici — svuota il sistema",
+      "domain": "dev",
+      "type": "action",
+      "sensitivity": "critical",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED_WITH_CONFIRMATION",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Svuota tutti i dati operativi. Solo ambienti di prova, con frase di conferma."
       }
     }
   ]
