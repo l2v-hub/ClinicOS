@@ -1,0 +1,29 @@
+22:40:31 bundle: index-DV20ljTw.js
+22:40:31 1. prima: {"stato":"dimesso","camera":null,"assegnazioniAttive":0}
+22:40:45 2. sezione: "Dimesso\n\nIl paziente è dimesso: non compare tra i presenti né nel giro. La cartella resta consultabile.\n\nAnnulla dimissione"
+22:40:45    conferma: "Annullare la dimissione?\n\nProva Milo torna tra i presenti, nel regime che aveva prima della dimissione. Il posto letto non viene riassegnato: va scelto di nuovo.\n\nTorna indietro\nAnnulla dimissione"
+22:40:50    dopo annullo: {"stato":"ricoverato","camera":null,"assegnazioniAttive":0} | ["Dimissione annullata: il paziente è di nuovo tra i presenti."]
+22:41:00 3. letto assegnato dal coordinatore: {"room":"10","bed":"A","bedId":"cmqc2aut1000o01rsikv4qsc3"}
+22:41:00    coordinatore POST discharge → 403 | undo → 403
+22:41:09    OSS POST discharge → 403
+22:41:18    amministratore POST discharge → 403
+22:41:18    infermiere senza conferma → 400
+22:41:18    stato invariato: {"stato":"ricoverato","camera":null,"assegnazioniAttive":1}
+22:41:38 4. sezione: "Presente\n\nIl paziente è tra i presenti · Camera 10 · Letto A.\n\nDimetti paziente"
+22:41:38    conferma: "Dimettere il paziente?\n\nProva Milo esce dalle liste dei presenti e dal giro. Il posto letto (Camera 10 · Letto A) viene liberato da oggi. La cartella resta consultabile tra i dimessi. La scheda di dimissione non è ancora compilata.\n\nTorna indietro\nDimetti paziente"
+22:41:43    scritture: ["POST /patients/cmws6cotz000e01rwl1jqb6u4/discharge"]
+22:41:43    sezione dopo: "Dimesso\n\nDimesso il 24/11/2026 da Infermiere 1: non compare tra i presenti né nel giro. La cartella resta consultabile.\n\nAnnulla dimissione" | ["Paziente dimesso: non compare più tra i presenti. Posto letto liberato: Camera 10 · Letto A."]
+22:41:43    intestazione: ["Prova, Milo","Posto letto non assegnato · 86 anni"]
+22:41:44 5. dopo la dimissione: {"stato":"dimesso","camera":null,"assegnazioniAttive":0}
+22:41:44    traccia: {"data":"2026-11-24","posti":[{"bed":"A","room":"10"}],"operatore":"Infermiere 1","operatoreId":"SIM-NURSE-1","registrataIl":"2026-11-24T22:41:38.935Z","statoPrecedente":"ricoverato"}
+22:41:44    assegnazione chiusa: [["2026-11-23","2026-11-23"]]
+22:41:44    letto di nuovo libero per il coordinatore: true
+22:41:44 6. salvataggio da copia precedente → 200 | stato dopo: {"stato":"dimesso","camera":null,"assegnazioniAttive":0}
+22:41:48 7. «Prova» tra i presenti (stessa sessione): 0
+22:42:00    sessione nuova, tra i «Non dimessi»: no
+22:42:03    in «Dimessi e archivio»: 2
+22:42:12 8. medico annulla → 200 {"alreadyPresent":false,"status":"ricoverato"}
+22:42:12    medico dimette → 200 {"alreadyDischarged":false,"date":"2026-11-24","freedBeds":[]}
+22:42:12    ripetizione → 200 {"alreadyDischarged":true,"date":"2026-11-24","freedBeds":[]}
+22:42:12 9. stato finale: {"stato":"dimesso","camera":null,"assegnazioniAttive":0}
+22:42:13    errori: ["Failed to load resource: the server responded with a status of 400 (Bad Request)","Failed to load resource: the server responded with a status of 403 (Forbidden)","Failed to load resource: the server responded with a status of 403 (Forbidden)"]
