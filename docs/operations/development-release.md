@@ -4,16 +4,16 @@ L'ambiente di lavoro è `https://clinicos-development-isolated.vercel.app`. È s
 
 ## Destinazioni
 
-| Componente | Destinazione dedicata |
-|---|---|
-| Frontend | progetto Vercel `clinicos-development-isolated`, `prj_521wrOk01zqRUqFym41yxJw5KS3u` |
-| API | `https://development-backend-development-a4a4.up.railway.app` |
-| Railway project | `30bfd0c6-2b4d-4fcd-b219-f1fbfe1d9820` |
-| Unico Railway environment | `development`, `e54fd397-76c8-4a14-ac03-4d8a4d580173` |
-| Backend | `f46547d5-1eb2-42a0-bd13-de2a1f7feca1` |
-| Runtime AI privato | `b3bf897a-4e0f-41a1-aa58-3687d9a66443` |
-| PostgreSQL | `8cc1c795-5a61-4ead-b6f4-020b2c29a91b` |
-| Volume PostgreSQL | `64536a4c-e0c1-4cff-ad76-7f8f33f18926`, `/var/lib/postgresql/data` |
+| Componente                | Destinazione dedicata                                                               |
+| ------------------------- | ----------------------------------------------------------------------------------- |
+| Frontend                  | progetto Vercel `clinicos-development-isolated`, `prj_521wrOk01zqRUqFym41yxJw5KS3u` |
+| API                       | `https://development-backend-development-a4a4.up.railway.app`                       |
+| Railway project           | `30bfd0c6-2b4d-4fcd-b219-f1fbfe1d9820`                                              |
+| Unico Railway environment | `development`, `e54fd397-76c8-4a14-ac03-4d8a4d580173`                               |
+| Backend                   | `f46547d5-1eb2-42a0-bd13-de2a1f7feca1`                                              |
+| Runtime AI privato        | `b3bf897a-4e0f-41a1-aa58-3687d9a66443`                                              |
+| PostgreSQL                | `8cc1c795-5a61-4ead-b6f4-020b2c29a91b`                                              |
+| Volume PostgreSQL         | `64536a4c-e0c1-4cff-ad76-7f8f33f18926`, `/var/lib/postgresql/data`                  |
 
 Vercel usa il proprio target di hosting `production` per l'URL stabile di questo progetto dedicato. L'applicazione rimane development sintetico. La futura produzione ClinicOS non è stata creata.
 
@@ -31,6 +31,17 @@ Per ogni modifica:
 6. Verificare cinque profili, permessi API/UI, funzioni interessate, dati ricaricati e persistenza pertinente. Registrare failure e risultati ignoti; dichiarare completato solo dopo il Validation Report verificato e la QA indipendente.
 
 I helper di questa prima installazione sono one-shot, legati ai loro predecessor e già consumati quando indicato dai receipt. Per una release successiva occorre una nuova operazione revisionata con nuovi input; non cancellare marker, azzerare contatori o modificare receipt storici per far ripartire quelli vecchi. Non attivare automaticamente workflow o controller protetti senza il percorso di approvazione richiesto dal repository.
+
+## Scadenza Railway del 1° dicembre 2026
+
+Dal 2026-12-01 Railway non legge più i file `railway.json` del repository: valgono le impostazioni
+salvate nel servizio (dettagli in `demo-release.md`). Stato letto il 2026-11-24, senza modificare
+nulla: per `development-backend` e `development-runtime` i valori salvati coincidono già con quelli
+dei file (build con `--include=dev`, pre-deploy `npm run db:migrate`, avvio
+`node backend/dist/server.js`; per il runtime Dockerfile `Dockerfile`, avvio
+`python -m clinicos_ai.main`; riavvio on failure, 3 tentativi). Non risulta altro da fare prima
+della scadenza; al primo rilascio successivo conviene controllare che la build e la migrazione
+partano come sempre.
 
 ## Recupero e dati
 

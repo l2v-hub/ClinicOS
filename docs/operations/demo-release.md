@@ -62,6 +62,39 @@ curl -s https://clinicos-backend-production-df88.up.railway.app/health
 - Runtime AI: serve un rilascio («Deploy AI Runtime to Railway», anch'esso disattivato) solo se
   vuoi sulla demo anche la correzione della trascrizione vocale entrata con #532.
 
+### Scadenza del 1° dicembre 2026: dove stanno le impostazioni del servizio
+
+Railway ha ritirato i file `railway.json` / `railway.toml`
+([documentazione](https://docs.railway.com/infrastructure-as-code)): «Existing Config as Code files
+stop being read on 2026-12-01 (hard cutoff)». Fino a quella data, a ogni rilascio, i valori del file
+prevalgono su quelli salvati nel servizio (Railway → servizio → Settings); dopo valgono solo quelli
+salvati. Il formato nuovo (`.railway/railway.ts`) non è obbligatorio e gestisce l'intero progetto:
+applicandolo si possono eliminare le risorse non dichiarate (database, volumi). Qui non lo usiamo.
+
+Perché un rilascio dopo il 1° dicembre si comporti come oggi, le impostazioni salvate dei due servizi
+della demo devono coincidere con i file. Stato letto il 2026-11-24 (ambiente `production`):
+
+| Servizio              | Impostazione     | Nel file (in uso oggi)                                                    | Salvata su Railway (in uso dal 1° dicembre)                   |
+| --------------------- | ---------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `clinicos-backend`    | Build command    | `npm install --include=dev --no-audit --no-fund && npm run build:backend` | `npm install && npx prisma generate && npm run build:backend` |
+| `clinicos-backend`    | Pre-deploy       | `npm run db:migrate`                                                      | `npx prisma migrate deploy`                                   |
+| `clinicos-backend`    | Start command    | `node backend/dist/server.js`                                             | `npm --prefix backend run start`                              |
+| `clinicos-backend`    | Healthcheck path | `/health`                                                                 | `/health`                                                     |
+| `clinicos-backend`    | Restart          | On failure, 3 tentativi                                                   | On failure, 10 tentativi                                      |
+| `clinicos-ai-runtime` | Dockerfile path  | `Dockerfile` (root directory `/clinicos-ai-runtime`)                      | `/clinicos-ai-runtime/Dockerfile`                             |
+| `clinicos-ai-runtime` | Start command    | `python -m clinicos_ai.main`                                              | vuoto (vale il `CMD` del Dockerfile, che è lo stesso comando) |
+| `clinicos-ai-runtime` | Healthcheck path | `/v1/runtime/health`                                                      | `/v1/runtime/health`                                          |
+| `clinicos-ai-runtime` | Restart          | On failure, 3 tentativi                                                   | On failure, 10 tentativi                                      |
+
+Da fare prima del 1° dicembre, sulla demo: portare la colonna «Salvata su Railway» ai valori della
+colonna «Nel file» (Settings del servizio, oppure API `serviceInstanceUpdate`); la modifica non avvia
+un rilascio. Poi provarla: un rilascio da sorgenti senza i due `railway.json` deve riuscire e mostrare
+le stesse impostazioni effettive. Solo dopo i file si possono togliere dal repository.
+
+Il punto più delicato è la build del backend: senza `--include=dev`, se il servizio ha
+`NODE_ENV=production`, mancano gli strumenti di compilazione e la build può fallire. In quel caso
+Railway lascia in funzione la versione precedente: il sito non cade, ma il rilascio non passa.
+
 ## 2. Frontend (Vercel)
 
 Dalla radice del repository, su `main` aggiornato:
