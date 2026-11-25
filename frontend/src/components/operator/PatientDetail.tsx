@@ -72,8 +72,15 @@ import {
   bedDisplayLabel,
   currentPatientPlacement,
   patientPlacementValues,
-  isValidBedSelection,
+  canSaveStay,
+  dischargeBedNotice,
+  needsDischargeConfirmation,
+  saveStay as saveStayChange,
+  statoRicoveroLabel,
+  stayDialogHint,
+  STATO_RICOVERO_LABEL,
 } from '../../lib/roomAssignmentModel';
+import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
 import {
   CHART_SECTIONS,
@@ -501,6 +508,10 @@ export function PatientDetail({
   const [cameraEditing, setCameraEditing] = useState(false);
   const [cameraModalForm, setCameraModalForm] = useState<Partial<CartellaPaziente>>({});
   const [cameraModalBedId, setCameraModalBedId] = useState('');
+  // Dimissione e suo annullamento: una sola conferma, chiesta dal tab «Dimissione» e dalla
+  // finestra «Camera e Assegnazione».
+  const [stayConfirm, setStayConfirm] = useState<'dimetti' | 'riammetti' | null>(null);
+  const [stayBusy, setStayBusy] = useState(false);
   const closeCardModal = useCallback(() => {
     setCardModal(null);
     setCameraEditing(false);
@@ -539,6 +550,8 @@ export function PatientDetail({
     setVisitaForm({});
     setShowAddConsegna(false);
     setCardModal(null);
+    // Come cardModal: una conferma di dimissione rimasta aperta colpirebbe il nuovo paziente.
+    setStayConfirm(null);
     setModalVitaleShow(false);
     setVitaleForm({});
     setModalConsegnaShow(false);
@@ -562,6 +575,10 @@ export function PatientDetail({
   // Issue #128: proponi solo camere con almeno un letto libero (o già occupate da questo paziente)
   const currentPlacement = currentPatientPlacement(camere, paziente.id);
   const roomDataReady = camereLoadState === 'ready';
+  // Assegnare o chiudere un letto è un permesso del ruolo (di norma del coordinatore).
+  const canCreateBedAssignments = useCan('room_assignments.create');
+  const canUpdateBedAssignments = useCan('room_assignments.update');
+  const canManageBeds = canAssignRooms && canCreateBedAssignments && canUpdateBedAssignments;
   const placementValues = patientPlacementValues(currentPlacement, cartella);
   const placementPending =
     canAssignRooms && !roomDataReady
@@ -794,22 +811,71 @@ export function PatientDetail({
     }
   }
 
-  // Camera save from modal
-  // Issue #128: prima crea/chiude l'assegnazione letto reale (occupazione), poi salva la cartella
+  // Stato del ricovero, camera e letto: un solo percorso di salvataggio.
+  // Issue #128: prima crea/chiude l'assegnazione letto reale (occupazione), poi salva la cartella.
+  // Con «Dimesso» l'assegnazione attiva viene chiusa: un paziente dimesso non tiene il letto.
+  // Chi non gestisce i posti letto (permesso del ruolo) cambia soltanto lo stato: il letto resta
+  // assegnato finché non lo libera chi li coordina (decisione del product owner, 2026-11-25).
+  // Chi li gestisce ma non modifica la cartella (coordinatore) salva soltanto il posto letto.
+  function saveStay(form: Partial<CartellaPaziente>, bedId: string): Promise<boolean> {
+    return saveStayChange(
+      {
+        canManageBeds,
+        canSaveChart: canSaveClinicalRecord,
+        assignBed: (room, bed) => onAssignCamera(paziente.id, room, bed),
+        saveChart: updConEsito,
+      },
+      form,
+      bedId,
+    );
+  }
+
+  function resetCameraForm() {
+    setCameraEditing(false);
+    setCameraModalForm({});
+    setCameraModalBedId('');
+  }
+
   async function saveCameraFromModal() {
-    const cam = cameraModalForm.cameraNumero || undefined;
-    const res = await onAssignCamera(paziente.id, cam, cameraModalBedId || undefined);
-    if (!res.ok) return;
-    const ok = await updConEsito({
-      ...cameraModalForm,
-      cameraNumero: cam,
-      lettoNumero: cam ? (res.lettoLabel ?? cameraModalForm.lettoNumero) : undefined,
-    });
-    if (ok) {
-      setCameraEditing(false);
-      setCameraModalForm({});
-      setCameraModalBedId('');
+    if (stayBusy) return;
+    // Solo chi modifica la cartella dimette: per gli altri lo stato non è modificabile.
+    if (
+      canSaveClinicalRecord &&
+      needsDischargeConfirmation(cartella.statoRicovero, cameraModalForm.statoRicovero)
+    ) {
+      setStayConfirm('dimetti');
+      return;
     }
+    // `saving` copre solo la scrittura della cartella: `stayBusy` copre anche quella del letto.
+    setStayBusy(true);
+    try {
+      if (await saveStay(cameraModalForm, cameraModalBedId)) resetCameraForm();
+    } finally {
+      setStayBusy(false);
+    }
+  }
+
+  async function confirmStayChange() {
+    if (!stayConfirm || stayBusy) return;
+    setStayBusy(true);
+    try {
+      const ok =
+        stayConfirm === 'dimetti'
+          ? await saveStay({ statoRicovero: 'dimesso' }, '')
+          : await updConEsito({ statoRicovero: 'ricoverato' });
+      if (!ok) return;
+      setStayConfirm(null);
+      // La finestra, se aperta, si chiude: il fuoco torna al pulsante dell'intestazione.
+      closeCardModal();
+      setCameraModalForm({});
+    } finally {
+      setStayBusy(false);
+    }
+  }
+
+  function openStayDialog() {
+    resetCameraForm();
+    setCardModal('camera');
   }
 
   // ── Card modals rendering ──────────────────────────────────────────────────
@@ -1226,14 +1292,34 @@ export function PatientDetail({
       (candidate) => candidate.numero === cameraModalForm.cameraNumero,
     );
     const bedChoices = assignableBeds(selectedRoom, paziente.id);
-    const validSelection =
-      Boolean(cameraModalForm.cameraNumero && cameraModalBedId) &&
-      isValidBedSelection(
+    const discharging = cameraModalForm.statoRicovero === 'dimesso';
+    const bedsLocked = discharging || !canManageBeds;
+    // Il fuoco va sul primo campo davvero modificabile (mai su un controllo disabilitato).
+    const bedsEditable = !bedsLocked && roomDataReady;
+    // Chi gestisce solo i letti, su un paziente dimesso, può soltanto chiudere il letto attuale.
+    // Finché le camere non sono state lette il letto attuale non è noto: la chiusura resta
+    // possibile (il server non ha bisogno di quell'elenco).
+    const noBed = roomDataReady && !currentPlacement;
+    const nothingToClose = discharging && !canSaveClinicalRecord && noBed;
+    const stayHint = stayDialogHint({
+      canManageBeds,
+      canSaveChart: canSaveClinicalRecord,
+      discharging,
+      hasBed: !noBed,
+    });
+    const canSave =
+      canSaveStay(
         camere,
         paziente.id,
-        cameraModalForm.cameraNumero,
+        cameraModalForm,
         cameraModalBedId || undefined,
-      );
+        canManageBeds,
+      ) &&
+      (bedsLocked || roomDataReady) &&
+      !nothingToClose &&
+      // Chi cambia solo lo stato salva quando lo stato è cambiato davvero.
+      (canManageBeds || cameraModalForm.statoRicovero !== cartella.statoRicovero);
+    const busy = saving || stayBusy;
     const displayedRoom = placementValues.room;
     const displayedBed = placementValues.bed;
     const displayedWard = currentPlacement?.room.reparto ?? cartella.repartoRicovero;
@@ -1243,7 +1329,7 @@ export function PatientDetail({
         describedBy="patient-camera-dialog-description"
         onClose={closeCardModal}
         className="modal-box--edit-card"
-        dismissible={!saving}
+        dismissible={!busy}
       >
         <div className="modal-header">
           <div>
@@ -1260,7 +1346,7 @@ export function PatientDetail({
             onClick={closeCardModal}
             aria-label="Chiudi"
             data-dialog-initial-focus
-            disabled={saving}
+            disabled={busy}
           >
             <IcoX />
           </button>
@@ -1289,13 +1375,14 @@ export function PatientDetail({
               <div className="ec-modal-item">
                 <div className="ec-modal-item__main">
                   <span className="ec-modal-item__title">Stato ricovero</span>
-                  <span className="ec-modal-item__sub">
-                    {cartella.statoRicovero.replace('_', ' ')}
+                  <span className="ec-modal-item__sub" data-stay-status={cartella.statoRicovero}>
+                    {statoRicoveroLabel(cartella.statoRicovero)}
                   </span>
                 </div>
               </div>
-              {canAssignRooms && (
+              {(canManageBeds || canSaveClinicalRecord) && (
                 <button
+                  type="button"
                   className="btn-secondary btn-sm"
                   style={{ marginTop: 4 }}
                   onClick={() => {
@@ -1309,13 +1396,13 @@ export function PatientDetail({
                     setCameraEditing(true);
                   }}
                 >
-                  <IcoEdit /> Modifica assegnazione
+                  <IcoEdit /> {canManageBeds ? 'Modifica assegnazione' : 'Modifica stato ricovero'}
                 </button>
               )}
             </div>
           ) : (
             <div className="op-form-grid">
-              <RoomDataNotice />
+              {canManageBeds && <RoomDataNotice />}
               <div className="form-field">
                 <label className="form-label" htmlFor="patient-room-ward">
                   Reparto
@@ -1323,7 +1410,8 @@ export function PatientDetail({
                 <select
                   id="patient-room-ward"
                   className="form-select"
-                  disabled={!roomDataReady}
+                  disabled={!roomDataReady || bedsLocked}
+                  autoFocus={bedsEditable}
                   value={selectedWard}
                   onChange={(e) => {
                     setCameraModalForm((p) => ({
@@ -1334,7 +1422,6 @@ export function PatientDetail({
                     }));
                     setCameraModalBedId('');
                   }}
-                  autoFocus
                 >
                   <option value="">— Seleziona reparto —</option>
                   {assignableWards(camere, paziente.id).map((reparto) => (
@@ -1351,7 +1438,7 @@ export function PatientDetail({
                 <select
                   id="patient-room-number"
                   className="form-select"
-                  disabled={!roomDataReady || !selectedWard}
+                  disabled={!roomDataReady || !selectedWard || bedsLocked}
                   value={form.cameraNumero ?? ''}
                   aria-describedby="patient-room-number-help"
                   onChange={(e) => {
@@ -1383,7 +1470,7 @@ export function PatientDetail({
                 <select
                   id="patient-room-bed"
                   className="form-select"
-                  disabled={!roomDataReady || !selectedRoom}
+                  disabled={!roomDataReady || !selectedRoom || bedsLocked}
                   value={cameraModalBedId}
                   aria-describedby="patient-room-bed-help"
                   onChange={(e) => {
@@ -1415,6 +1502,9 @@ export function PatientDetail({
                   id="patient-room-status"
                   className="form-select"
                   value={cameraModalForm.statoRicovero ?? 'ambulatoriale'}
+                  aria-describedby={stayHint ? 'patient-room-status-help' : undefined}
+                  disabled={!canSaveClinicalRecord}
+                  autoFocus={!bedsEditable && canSaveClinicalRecord}
                   onChange={(e) =>
                     setCameraModalForm((p) => ({
                       ...p,
@@ -1422,11 +1512,17 @@ export function PatientDetail({
                     }))
                   }
                 >
-                  <option value="ricoverato">Ricoverato</option>
-                  <option value="ambulatoriale">Ambulatoriale</option>
-                  <option value="day_hospital">Day Hospital</option>
-                  <option value="dimesso">Dimesso</option>
+                  {Object.entries(STATO_RICOVERO_LABEL).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
                 </select>
+                {stayHint && (
+                  <small id="patient-room-status-help" className="form-hint">
+                    {stayHint}
+                  </small>
+                )}
               </div>
             </div>
           )}
@@ -1439,16 +1535,18 @@ export function PatientDetail({
                 <button
                   className="btn-secondary"
                   onClick={() => setCameraEditing(false)}
-                  disabled={saving}
+                  disabled={busy}
+                  // Nessun campo modificabile (solo chiusura del letto): il fuoco resta nella finestra.
+                  autoFocus={!bedsEditable && !canSaveClinicalRecord}
                 >
                   Annulla
                 </button>
                 <button
                   className="btn-success"
                   onClick={saveCameraFromModal}
-                  disabled={saving || !roomDataReady || !validSelection}
+                  disabled={busy || !canSave}
                 >
-                  <IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}
+                  <IcoCheck /> {busy ? 'Salvataggio…' : 'Salva'}
                 </button>
               </>
             ) : (
@@ -1474,10 +1572,9 @@ export function PatientDetail({
       contattoEmergenzaRel: cartella.contattoEmergenzaRel,
       medicoCurante: cartella.medicoCurante,
       operatoreId: cartella.operatoreId,
-      cameraNumero: cartella.cameraNumero,
-      lettoNumero: cartella.lettoNumero,
-      repartoRicovero: cartella.repartoRicovero,
-      statoRicovero: cartella.statoRicovero,
+      // Camera, letto, reparto e stato del ricovero NON entrano in questa copia: il profilo non
+      // ha campi per modificarli e, salvando, riscriverebbe i valori letti all'apertura,
+      // annullando (o applicando) una dimissione fatta nel frattempo, senza conferma.
       dataRicovero: cartella.dataRicovero,
       noteGenerali: cartella.noteGenerali,
       email: paziente.email ?? '',
@@ -2350,13 +2447,17 @@ export function PatientDetail({
       : placementPending
         ? `Posto letto ${placementPending.toLowerCase()}`
         : patientLocationLabel(paziente.location);
-  const patientSubtitle = [
-    headerLocation,
-    (() => {
-      const years = patientAge(paziente.dateOfBirth);
-      return years === null ? 'Età non disponibile' : `${years} anni`;
-    })(),
-  ].join(' · ');
+  const headerAge = (() => {
+    const years = patientAge(paziente.dateOfBirth);
+    return years === null ? 'Età non disponibile' : `${years} anni`;
+  })();
+  // Un paziente dimesso si riconosce dall'intestazione su ogni scheda della cartella.
+  const headerStay =
+    cartella.statoRicovero === 'dimesso'
+      ? currentPlacement
+        ? `Dimesso · ${headerLocation}`
+        : 'Dimesso'
+      : headerLocation;
 
   const patientTitle = (
     <div className="page-header__titles patient-topbar-title">
@@ -2415,13 +2516,27 @@ export function PatientDetail({
         )}{' '}
       </div>
       <div className="patient-topbar-context">
-        <span
-          className="page-header__subtitle"
-          title={
-            paziente.dateOfBirth ? `Nato/a il ${formatBirthDate(paziente.dateOfBirth)}` : undefined
-          }
-        >
-          {patientSubtitle}
+        <span className="page-header__subtitle patient-topbar-stay">
+          {/* Unico ingresso a «Camera e Assegnazione»: camera, letto e stato del ricovero. */}
+          <button
+            type="button"
+            className="ds-link"
+            onClick={openStayDialog}
+            data-stay-open
+            aria-haspopup="dialog"
+            aria-label={`${headerStay}. Apri camera, letto e stato del ricovero`}
+          >
+            {headerStay}
+          </button>
+          <span
+            title={
+              paziente.dateOfBirth
+                ? `Nato/a il ${formatBirthDate(paziente.dateOfBirth)}`
+                : undefined
+            }
+          >
+            · {headerAge}
+          </span>
         </span>
         <DemographicsStatus
           value={paziente}
@@ -2910,6 +3025,9 @@ export function PatientDetail({
             paziente={paziente}
             onUpdate={upd}
             operatoreNome={operatoreNome}
+            onDischarge={canSaveClinicalRecord ? () => setStayConfirm('dimetti') : undefined}
+            onReadmit={canSaveClinicalRecord ? () => setStayConfirm('riammetti') : undefined}
+            stayBusy={stayBusy || saving}
           />
         )}
       </>
@@ -3057,6 +3175,38 @@ export function PatientDetail({
       {cardModal === 'consegne' && renderConsegneModal()}
       {cardModal === 'allergie' && renderAllergieModal()}
       {cardModal === 'camera' && renderCameraModal()}
+      <ConfirmDialog
+        open={stayConfirm !== null}
+        tone="primary"
+        busy={stayBusy}
+        title={
+          stayConfirm === 'riammetti' ? 'Annullare la dimissione?' : `Dimettere ${patientLabel}?`
+        }
+        message={
+          stayConfirm === 'riammetti' ? (
+            <>
+              Il paziente torna fra i non dimessi con stato «Ricoverato» e ricompare negli elenchi
+              di reparto. Il posto letto non cambia: se la dimissione lo ha chiuso, va assegnato di
+              nuovo.
+            </>
+          ) : (
+            <>
+              Il paziente esce dagli elenchi di reparto e passa in «Dimessi e archivio».{' '}
+              {dischargeBedNotice({
+                canManageBeds,
+                placementKnown: roomDataReady,
+                room: placementValues.room,
+                bed: placementValues.bed,
+              })}{' '}
+              La dimissione si può annullare dal tab «Dimissione».
+            </>
+          )
+        }
+        confirmLabel={stayConfirm === 'riammetti' ? 'Annulla dimissione' : 'Dimetti paziente'}
+        cancelLabel={stayConfirm === 'riammetti' ? 'Indietro' : 'Annulla'}
+        onConfirm={() => void confirmStayChange()}
+        onCancel={() => setStayConfirm(null)}
+      />
       {showPrintDialog && (
         <PatientRecordPrintDialog
           paziente={paziente}

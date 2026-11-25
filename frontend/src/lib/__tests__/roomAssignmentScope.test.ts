@@ -80,8 +80,17 @@ test('room consumers never present a failed load as zero occupancy or an empty a
   assert.match(dashboardSource, /ultimi dati/);
   assert.match(dashboardSource, /onClick=\{onRetryCamere\}/);
   assert.match(dashboardSource, /Riprova occupazione/);
-  assert.match(patientDetailSource, /canAssignRooms && \(\s*<button[\s\S]+Modifica assegnazione/);
-  assert.match(patientDetailSource, /disabled=\{!roomDataReady\}/);
+  // Il posto letto si modifica solo con `canAssignRooms` e il permesso del ruolo; chi può solo
+  // modificare la cartella apre la stessa finestra per il solo stato del ricovero.
+  assert.match(
+    patientDetailSource,
+    /const canManageBeds = canAssignRooms && canCreateBedAssignments && canUpdateBedAssignments;/,
+  );
+  assert.match(
+    patientDetailSource,
+    /\(canManageBeds \|\| canSaveClinicalRecord\) && \(\s*<button[\s\S]+Modifica assegnazione/,
+  );
+  assert.match(patientDetailSource, /disabled=\{!roomDataReady \|\| bedsLocked\}/);
   assert.match(patientDetailSource, /<RoomDataNotice \/>/);
 });
 
@@ -90,5 +99,11 @@ test('patient assignment editor uses dependent labelled selects and an exact bed
   assert.match(patientDetailSource, /htmlFor="patient-room-number"/);
   assert.match(patientDetailSource, /htmlFor="patient-room-bed"/);
   assert.match(patientDetailSource, /setCameraModalBedId\(e\.target\.value\)/);
-  assert.match(patientDetailSource, /onAssignCamera\(paziente\.id, cam, cameraModalBedId/);
+  // L'id esatto del letto arriva all'assegnazione attraverso l'unico salvataggio (`saveStay`,
+  // provato in roomAssignmentModel.test.ts).
+  assert.match(patientDetailSource, /saveStay\(cameraModalForm, cameraModalBedId\)/);
+  assert.match(
+    patientDetailSource,
+    /assignBed: \(room, bed\) => onAssignCamera\(paziente\.id, room, bed\)/,
+  );
 });

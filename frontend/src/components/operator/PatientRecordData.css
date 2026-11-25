@@ -738,3 +738,42 @@
 .patient-topbar-title .cr-alert-strip {
   min-height: var(--ds-control-h);
 }
+
+/* Camera/letto nell'intestazione: apre «Camera e Assegnazione» (stato del ricovero compreso).
+   Il sottotitolo taglia ciò che esce dal suo riquadro: qui deve restare visibile l'anello di
+   fuoco del pulsante. */
+.topbar-title .patient-topbar-context .patient-topbar-stay {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0 4px;
+  overflow: visible;
+}
+/* Il pulsante resta il link canonico (`.ds-link`, alto --ds-control-h: aspetto e area di tocco
+   li decide design-system.css). Qui solo il layout: i margini negativi gli fanno occupare la riga
+   del sottotitolo, così l'intestazione non cresce di 20px per i pazienti con la banda allergie. */
+.patient-topbar-stay .ds-link {
+  margin-block: calc((20px - var(--ds-control-h)) / 2);
+}
+/* Tab «Dimissione»: stato del ricovero e azione che lo cambia sulla stessa riga. */
+.stay-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+}
+.stay-status__text {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  flex: 1 1 320px;
+  min-width: 0;
+}
+.stay-status__hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+}

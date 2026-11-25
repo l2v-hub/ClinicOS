@@ -12,12 +12,18 @@ import { todayStr, nowISO, nowTime, PrintButton } from './shared';
 import { ClinicalCard } from '../../shared/ClinicalCard';
 import { ClinicalTable } from './ClinicalTable';
 import { formatFacilityLocalMinute } from '../../../lib/facilityTime';
+import { StayStatusCard } from './StayStatusCard';
 
 interface Props {
   cartella: CartellaPaziente;
   paziente: Paziente;
   onUpdate: (updates: Partial<CartellaPaziente>) => void;
   operatoreNome: string;
+  /** Dimissione e suo annullamento: la conferma e il salvataggio sono della cartella. Assenti
+   *  quando il ruolo non può modificare la cartella: lo stato resta visibile, senza azione. */
+  onDischarge?: () => void;
+  onReadmit?: () => void;
+  stayBusy?: boolean;
 }
 
 const EMPTY_DIM: DimissioneInfermieristica = {
@@ -558,7 +564,15 @@ function FormSection({ title, children }: { title: string; children: React.React
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
+export function DimissioneTab({
+  cartella,
+  paziente,
+  onUpdate,
+  operatoreNome,
+  onDischarge,
+  onReadmit,
+  stayBusy,
+}: Props) {
   const dim = cartella.dimissione;
   const lib = cartella.liberatoria;
   const hasLegalForm = Boolean(lib?.compilatoAt && lib.data && lib.ora);
@@ -635,6 +649,12 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
 
       {/* ── Web view ── */}
       <div className="web-content">
+        <StayStatusCard
+          statoRicovero={cartella.statoRicovero}
+          onDischarge={onDischarge}
+          onReadmit={onReadmit}
+          busy={stayBusy}
+        />
         <ClinicalCard
           title="Dimissione Infermieristica"
           editLabel="Vista modulo"

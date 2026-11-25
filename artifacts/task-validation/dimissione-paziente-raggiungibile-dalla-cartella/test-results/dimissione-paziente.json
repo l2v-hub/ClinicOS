@@ -1,0 +1,248 @@
+{
+  "front": "http://127.0.0.1:5211",
+  "api": "http://127.0.0.1:3111",
+  "total": 40,
+  "failed": 0,
+  "results": [
+    {
+      "id": "A0",
+      "name": "Stato iniziale: paziente non dimesso",
+      "result": "PASS",
+      "detail": "stato=ricoverato"
+    },
+    {
+      "id": "A1",
+      "name": "«Non dimessi» contiene il paziente",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "A2",
+      "name": "Intestazione: camera/letto è un controllo",
+      "result": "PASS",
+      "detail": "Camera 102 · Letto A"
+    },
+    {
+      "id": "A3",
+      "name": "La finestra «Camera e Assegnazione» si apre dall’intestazione",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "A4",
+      "name": "La finestra mostra lo stato del ricovero",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "A5",
+      "name": "Ruolo senza gestione letti: camera e letto bloccati, stato modificabile",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "A6",
+      "name": "Tab «Dimissione»: azione «Dimetti paziente» visibile",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "A7",
+      "name": "Conferma esplicita con le conseguenze",
+      "result": "PASS",
+      "detail": "Dimettere Mancini, Roberto? Il paziente esce dagli elenchi di reparto e passa in «Dimessi e archivio». Il posto letto (camera 102, letto A) resta assegnato: il tuo ruolo non gestisce i posti letto, lo libera chi li coord"
+    },
+    {
+      "id": "A8",
+      "name": "«Annulla» non salva nulla",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "A9",
+      "name": "PUT /patients/:id/cartella invia statoRicovero \"dimesso\"",
+      "result": "PASS",
+      "detail": "statoRicovero=dimesso"
+    },
+    {
+      "id": "A10",
+      "name": "Ruolo senza gestione letti: nessuna scrittura sulle assegnazioni, letto invariato",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "A11",
+      "name": "Il tab mostra «Dimesso» e offre «Annulla dimissione»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "A12",
+      "name": "Intestazione: «Dimesso»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "A12b",
+      "name": "Il profilo aperto prima della dimissione, salvato dopo, non la annulla",
+      "result": "PASS",
+      "detail": "statoRicovero inviato=dimesso"
+    },
+    {
+      "id": "A13",
+      "name": "Il paziente è uscito da «Non dimessi»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "A14",
+      "name": "Il paziente è in «Dimessi e archivio»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "A15",
+      "name": "Dopo il ricaricamento lo stato resta «dimesso» (elenchi e API)",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "B0",
+      "name": "Stato iniziale: dimesso dall’infermiere, letto ancora assegnato",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "B1",
+      "name": "Intestazione: «Dimesso» con il letto ancora assegnato",
+      "result": "PASS",
+      "detail": "Dimesso · Camera 102 · Letto A"
+    },
+    {
+      "id": "B2",
+      "name": "Ruolo che non modifica la cartella: stato visibile, nessuna azione di dimissione",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "B3",
+      "name": "Finestra: stato non modificabile, «Salva» chiude il posto letto del paziente dimesso",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "B4",
+      "name": "L’assegnazione attiva viene chiusa (PUT room-assignments con endDate)",
+      "result": "PASS",
+      "detail": "{\"endDate\":\"2026-11-25\"}"
+    },
+    {
+      "id": "B5",
+      "name": "Nessuna scrittura sulla cartella da parte del supervisore; lo stato resta «dimesso»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "C1",
+      "name": "Annullamento: conferma esplicita",
+      "result": "PASS",
+      "detail": "Annullare la dimissione? Il paziente torna fra i non dimessi con stato «Ricoverato» e ricompare negli elenchi di reparto. Il posto letto non cambia: se la dimissione lo ha chiuso, va assegnato di nuovo. Indietro Annulla "
+    },
+    {
+      "id": "C2",
+      "name": "Annullamento: PUT con statoRicovero \"ricoverato\", salvato",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "C3",
+      "name": "Il paziente è tornato in «Non dimessi»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "D0",
+      "name": "Stato iniziale: non dimesso, con un letto assegnato",
+      "result": "PASS",
+      "detail": "stato=ricoverato"
+    },
+    {
+      "id": "D1",
+      "name": "Finestra: con «Dimesso» il salvataggio non richiede camera e letto",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "D2",
+      "name": "Finestra: stessa conferma, con la chiusura del letto dichiarata",
+      "result": "PASS",
+      "detail": "Dimettere Gatti, Lucia? Il paziente esce dagli elenchi di reparto e passa in «Dimessi e archivio». L’assegnazione del posto letto (camera 301, letto B) viene chiusa con la data di oggi. La dimissione si può annullare dal"
+    },
+    {
+      "id": "D3",
+      "name": "Prima della conferma nessun salvataggio",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "D4",
+      "name": "L’assegnazione attiva viene chiusa (PUT room-assignments con endDate)",
+      "result": "PASS",
+      "detail": "{\"endDate\":\"2026-11-25\"}"
+    },
+    {
+      "id": "D5",
+      "name": "PUT cartella: statoRicovero \"dimesso\", senza cameraNumero/lettoNumero",
+      "result": "PASS",
+      "detail": "statoRicovero=dimesso"
+    },
+    {
+      "id": "D6",
+      "name": "Stato salvato sul server",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "D6b",
+      "name": "Dopo la conferma la finestra si chiude e il fuoco torna al pulsante dell’intestazione",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "D7",
+      "name": "Annullamento: stato «ricoverato», il letto non viene riassegnato da solo",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "D7b",
+      "name": "Riassegnare il letto lo stesso giorno riapre l’assegnazione (endDate: null)",
+      "result": "PASS",
+      "detail": "{\"bedId\":\"SEED-BED-301-B\",\"endDate\":null}"
+    },
+    {
+      "id": "D8",
+      "name": "Chiusura del letto fallita: messaggio all’operatore, conferma ancora aperta",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "D9",
+      "name": "Chiusura del letto fallita: lo stato del ricovero NON cambia",
+      "result": "PASS",
+      "detail": "stato=undefined"
+    },
+    {
+      "id": "Z1",
+      "name": "Nessun errore in console",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "Z2",
+      "name": "Nessuna risposta 4xx/5xx inattesa",
+      "result": "PASS",
+      "detail": ""
+    }
+  ]
+}

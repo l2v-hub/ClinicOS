@@ -3148,11 +3148,23 @@ export default function App() {
       // Camera rimossa → chiudi l'assegnazione attiva
       if (!cameraNumero) {
         if (active) {
-          await fetch(`${API_URL}/patients/${pazienteId}/room-assignments/${active.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-            body: JSON.stringify({ endDate: today }),
-          });
+          const closeRes = await fetch(
+            `${API_URL}/patients/${pazienteId}/room-assignments/${active.id}`,
+            {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
+              body: JSON.stringify({ endDate: today }),
+            },
+          );
+          // Senza conferma del server il letto resterebbe occupato: chi chiama non prosegue
+          // (es. la dimissione non cambia lo stato del ricovero).
+          if (!closeRes.ok) {
+            showToast('Impossibile chiudere l’assegnazione del posto letto');
+            return { ok: false };
+          }
+          // Il letto resta del paziente fino a fine giornata: senza questo messaggio chi chiude
+          // solo l'assegnazione (coordinatore) non vedrebbe alcun esito.
+          showToast('Assegnazione del posto letto chiusa con la data di oggi');
           void loadCamere(true, pazienteId);
         }
         return { ok: true };
@@ -3182,7 +3194,11 @@ export default function App() {
         return { ok: false };
       }
 
-      if (active && active.bedId === bed.id) {
+      // Un'assegnazione chiusa oggi (dimissione, camera tolta) resta attiva fino a mezzanotte:
+      // riassegnare un letto la riapre, altrimenti scadrebbe da sola a fine giornata lasciando
+      // il paziente senza letto. Le date di fine future (pianificate) non vengono toccate.
+      const closedToday = active?.endDate === today;
+      if (active && active.bedId === bed.id && !closedToday) {
         return {
           ok: true,
           lettoLabel: bed.label ?? 'ABCDEFGH'[bed.numero - 1] ?? String(bed.numero),
@@ -3195,7 +3211,11 @@ export default function App() {
       const res = await fetch(assignmentUrl, {
         method: active ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify(active ? { bedId: bed.id } : { bedId: bed.id, startDate: today }),
+        body: JSON.stringify(
+          active
+            ? { bedId: bed.id, ...(closedToday ? { endDate: null } : {}) }
+            : { bedId: bed.id, startDate: today },
+        ),
       });
       if (!res.ok) {
         const err = (await res.json().catch(() => null)) as { error?: string } | null;
