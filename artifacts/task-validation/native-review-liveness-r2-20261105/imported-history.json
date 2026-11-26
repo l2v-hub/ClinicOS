@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "kind": "local-source-history-not-native-round-assignment",
+  "native529Subject": "absent-at-last-reconciliation",
+  "sourceRevisions": [
+    {
+      "label": "initial-tested-code",
+      "sha": "d632085ef8ba5b6c8f53d00a272276d20c685332",
+      "evidenceHead": "65ab406e08327c21d669f2d6ba3e5a871b3459ec"
+    },
+    {
+      "label": "correction-after-Max-advisory",
+      "sha": "bdb1877976ee2524d78cf8c71072731bd87f8849"
+    }
+  ],
+  "reviews": [
+    {
+      "kind": "actual-local-Claude-Max-advisory",
+      "sha": "65ab406e08327c21d669f2d6ba3e5a871b3459ec",
+      "verdict": "changes-requested",
+      "report": "prior-Max-advisory.json",
+      "nativeReview": false
+    }
+  ],
+  "nativeAllowanceAdded": false,
+  "implementationAllowanceAdded": false,
+  "oldHistoryReset": false,
+  "failedNativeRun": 41937588247,
+  "failedQualificationInference": "unknown",
+  "futureProduction": "deferred-until-explicit-user-decision"
+}

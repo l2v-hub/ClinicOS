@@ -1,0 +1,44 @@
+{
+  "scope": "native-review-liveness-r4-20261105",
+  "sourceCommit": "b3708634d1a4a3d094daeb1dcc3acd6a40d26565",
+  "reviewSubject": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+  "advisoryOrdinal": 4,
+  "advisoryCeiling": 4,
+  "remaining": 0,
+  "nativeReview": false,
+  "approval": false,
+  "preflightWasModifiedAfterStart": true,
+  "files": [
+    {
+      "name": "review529-r3-Max-input.txt",
+      "bytes": 805305,
+      "sha256": "a9ed46d60598929469f17710ccb28fbb2284d2e86bab58a45b3c36ab8ffab71a"
+    },
+    {
+      "name": "review529-r3-Max-preflight.json",
+      "bytes": 24566,
+      "sha256": "92c6bc83090a85a8154a64bf112145af7df41922d617ce1b29a8e8315fcce545"
+    },
+    {
+      "name": "review529-r3-Max-started.json",
+      "bytes": 1445,
+      "sha256": "82cb6ff8f344e3423ef133e58e4b32e56aad4a164a9356d29a555be5195c0dc4"
+    },
+    {
+      "name": "review529-r3-Max-process.json",
+      "bytes": 468,
+      "sha256": "2a86ab4e4d05e24f7f27fe8092e262af3472abee2ebc01c55105e949281764be"
+    },
+    {
+      "name": "review529-r3-Max-result.json",
+      "bytes": 12912,
+      "sha256": "ea38533157f4930e0c1c85125748beff51cb91f57299f2d70c31c049e1134d7d"
+    },
+    {
+      "name": "review529-r3-Max-context-limitation.json",
+      "bytes": 2216,
+      "sha256": "8a4a0a62d35f0b6814847ad36580c2845b18eab7aa0adb5fb82b6993522a6059"
+    }
+  ],
+  "extractedResultUtf8Sha256": "42fd51d9c107555e783a6114afabb9596331ce22e363ab64142df625da042848"
+}

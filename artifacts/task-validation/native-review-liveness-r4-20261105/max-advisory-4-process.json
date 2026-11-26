@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-05T20:11:54.917Z",
+  "pr": 529,
+  "sha": "d3a876dbc005ea16c2c88cf35e5bb3e7ebb23d47",
+  "pid": 17920,
+  "consumptionNonce": "ce3e59af-1796-4726-a616-1cf7ca0e6853",
+  "code": 0,
+  "signal": null,
+  "reason": null,
+  "stdoutBytes": 12912,
+  "stderrBytes": 0,
+  "resultSha256": "ea38533157f4930e0c1c85125748beff51cb91f57299f2d70c31c049e1134d7d",
+  "invocationsConsumed": 1,
+  "retryAllowed": false,
+  "nativeReview": false,
+  "releaseApproval": false
+}

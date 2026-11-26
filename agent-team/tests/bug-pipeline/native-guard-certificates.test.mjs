@@ -8,6 +8,89 @@ import {
 } from '../../src/bug-pipeline/native-guard-certificates.mjs';
 import { EventEmitter } from 'node:events';
 import { PassThrough } from 'node:stream';
+import { mkdtemp, readdir, rm } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import { isCleanupFailure } from '../../src/bug-pipeline/native-guard-outcome.mjs';
+test('failed generation removes its owned public directory', async () => {
+  const parent = await mkdtemp(path.join(os.tmpdir(), 'cert-test-'));
+  try {
+    await assert.rejects(
+      createNativeGuardCertificates({
+        parentDirectory: parent,
+        spawnImpl: () => {
+          throw Error('synthetic');
+        },
+      }),
+    );
+    assert.deepEqual(await readdir(parent), []);
+  } finally {
+    await rm(parent, { recursive: true, force: true });
+  }
+});
+test('failed public directory removal is reported as cleanup failure', async () => {
+  const parent = await mkdtemp(path.join(os.tmpdir(), 'cert-test-'));
+  try {
+    await assert.rejects(
+      createNativeGuardCertificates({
+        parentDirectory: parent,
+        spawnImpl: () => {
+          throw Error('synthetic');
+        },
+        removeImpl: async () => {
+          throw Error('private');
+        },
+      }),
+      (error) => isCleanupFailure(error) && !String(error).includes('private'),
+    );
+    assert.equal((await readdir(parent)).length, 1);
+  } finally {
+    await rm(parent, { recursive: true, force: true });
+  }
+});
+test('failed generation zeros the key before an indefinitely pending removal', async () => {
+  const parent = await mkdtemp(path.join(os.tmpdir(), 'cert-test-'));
+  let captured, releaseRemoval, removalStarted;
+  const started = new Promise((resolve) => {
+    removalStarted = resolve;
+  });
+  const spawnImpl = () => {
+    const p = new EventEmitter();
+    p.stdin = new PassThrough();
+    p.stdout = new PassThrough();
+    p.stderr = new PassThrough();
+    p.kill = () => {};
+    p.stdin.end = (value) => {
+      captured = value;
+      queueMicrotask(() => p.emit('close', 1));
+    };
+    return p;
+  };
+  const removeImpl = async (...args) => {
+    removalStarted();
+    await new Promise((resolve) => {
+      releaseRemoval = resolve;
+    });
+    return rm(...args);
+  };
+  try {
+    const result = createNativeGuardCertificates({
+      parentDirectory: parent,
+      spawnImpl,
+      removeImpl,
+    });
+    const rejected = assert.rejects(result);
+    await started;
+    assert.ok(Buffer.isBuffer(captured));
+    assert.ok(captured.every((byte) => byte === 0));
+    releaseRemoval();
+    await rejected;
+    assert.deepEqual(await readdir(parent), []);
+  } finally {
+    releaseRemoval?.();
+    await rm(parent, { recursive: true, force: true });
+  }
+});
 test('certificate commands use anonymous FIFO stdin key path, only public CSR/CA filenames', () => {
   const c = certificateCommands('0123456789abcdef0123456789abcdef');
   assert.equal(c.length, 3);
@@ -103,6 +186,7 @@ test(
       assert.ok(c.tlsOptions.key.length > 1000);
     } finally {
       c.dispose();
+      await c.cleanup();
     }
   },
 );

@@ -1,0 +1,22 @@
+{
+  "at": "2026-11-05T18:18:24.375Z",
+  "pr": 529,
+  "sha": "65ab406e08327c21d669f2d6ba3e5a871b3459ec",
+  "main": "b5e79ae7bec869af894f12ed6676547f21172db4",
+  "stateBlobBefore": "99e3794f3fdcfc28870746b4ce127aac721d5107",
+  "stateBlobAfter": "99e3794f3fdcfc28870746b4ce127aac721d5107",
+  "allSubjectsDigestBefore": "94e56e37eea10c9159e458dcf70f242a718385c2e873719463ae77c1d0a623ec",
+  "allSubjectsDigestAfter": "94e56e37eea10c9159e458dcf70f242a718385c2e873719463ae77c1d0a623ec",
+  "nativeSubjectsAndBudgetsUnchanged": true,
+  "native529Subject": false,
+  "nativeHumanReviews": 0,
+  "localWorktreeClean": true,
+  "modelReviewInvocationsConsumed": 1,
+  "additionalAuthorizedInvocationsRemaining": 0,
+  "codeChanges": 0,
+  "implementationAllowanceAdded": 0,
+  "nativeCanonicalWrites": 0,
+  "nativeReview": false,
+  "releaseApproval": false,
+  "failed41937588247Preserved": true
+}

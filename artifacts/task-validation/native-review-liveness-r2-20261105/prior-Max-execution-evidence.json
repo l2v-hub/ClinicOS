@@ -1,0 +1,74 @@
+{
+  "at": "2026-11-05T18:16:30.078Z",
+  "sha": "65ab406e08327c21d669f2d6ba3e5a871b3459ec",
+  "verdict": "changes-requested",
+  "classification": "advisory-only",
+  "auth": "existing-claude.ai-Max",
+  "model": "claude-opus-5-5[1m]",
+  "canonicalModel": "claude-opus-5-5",
+  "numTurns": 1,
+  "contextWindow": 1000000,
+  "outputTokens": 31370,
+  "thinkingTokens": 28971,
+  "sessionId": "81a6b927-312a-4549-aa11-211f4c2ac1c7",
+  "inputSha256": "56060dacb4d2f6488ee9853967c9dcca56d6164b27bafcdfa419e6b279a5087c",
+  "resultSha256": "43c03091130a837e1d3ecd43d98a14761ab6bea2d7562d85babeb3cac58ce3f9",
+  "findings": [
+    {
+      "severity": "medium",
+      "file": "agent-team/src/bug-pipeline/native-guard-session.mjs",
+      "line": 424,
+      "sourceLine": "      await stopNativeResources(proxy, container);",
+      "nearby": [
+        "    const resolvedRoot = await realpath(root);",
+        "    let certificates, proxy, container;",
+        "    const close = boundedCleanup(async () => {",
+        "      await stopNativeResources(proxy, container);",
+        "      certificates?.dispose();",
+        "      // Only the exact private mkdtemp created by this invocation. Never prune",
+        "      // Docker, images/volumes, a checkout, user HOME or a caller-selected path.",
+        "      assert.equal(await realpath(root), resolvedRoot);"
+      ]
+    },
+    {
+      "severity": "medium",
+      "file": "agent-team/src/bug-pipeline/native-guard-session.mjs",
+      "line": 191,
+      "sourceLine": "  const cleanup = boundedCleanup(async () => {",
+      "nearby": [
+        "    expireReject(new Error('native-session-rejected'));",
+        "    reject();",
+        "  }, timeoutMs);",
+        "  const cleanup = boundedCleanup(async () => {",
+        "    await runtime?.close();",
+        "  }, cleanupTimeoutMs);",
+        "  const close = (reason = new Error('native-session-rejected')) => {",
+        "    closed = true;"
+      ]
+    },
+    {
+      "severity": "low",
+      "file": "agent-team/src/bug-pipeline/cloud-review-worker.mjs",
+      "line": 756,
+      "sourceLine": "  } catch {",
+      "nearby": [
+        "      actor: reviewActor,",
+        "      expectedFeedbackFingerprint,",
+        "    });",
+        "  } catch {",
+        "    // An unexpected native transition never authorizes old prompt inference or",
+        "    // failure of somebody else's reservation. Keep it for authorized recovery.",
+        "    await nativeSession?.close();",
+        "    return preclaimChanged(true);"
+      ]
+    }
+  ],
+  "verifiedModelInvocation": true,
+  "nativeReview": false,
+  "nativeHumanApproval": false,
+  "releaseApproval": false,
+  "controllerWrites": 0,
+  "additionalImplementationAllowance": 0,
+  "invocationsConsumed": 1,
+  "additionalInvocationsRemaining": 0
+}
